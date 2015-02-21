@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.ComponentModel;
 using System.Linq;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using Vector3 = SharpDX.Vector3;
@@ -60,26 +61,6 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         #endregion
 
         #region Information
-
-        /// <summary>
-        ///     Returns the unit's health percentage (From 0 to 100).
-        /// </summary>
-        /// <param name="unit">Extended unit</param>
-        /// <returns>Returns the unit's health percentage in float-units</returns>
-        public static float HealthPercentage(this Obj_AI_Base unit)
-        {
-            return unit.Health / unit.MaxHealth * 100;
-        }
-
-        /// <summary>
-        ///     Returns the unit's mana percentage (From 0 to 100).
-        /// </summary>
-        /// <param name="unit">Extended unit</param>
-        /// <returns>Returns the unit's mana percentage in float-units</returns>
-        public static float ManaPercentage(this Obj_AI_Base unit)
-        {
-            return unit.Mana / unit.MaxMana * 100;
-        }
 
         /// <summary>
         ///     Returns the unit's total magic damage.
@@ -146,6 +127,64 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         public static bool IsBothFacing(this Obj_AI_Base source, Obj_AI_Base target)
         {
             return source.IsFacing(target) && target.IsFacing(source);
+        }
+
+        #endregion
+
+        #region Distance
+
+        /// <summary>
+        ///     Gets the distance between two GameObjects
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="target">Target</param>
+        /// <returns>The distance between the two objects</returns>
+        public static float Distance(this GameObject source, GameObject target)
+        {
+            return source.Position.Distance(target.Position);
+        }
+
+        /// <summary>
+        ///     Gets the distance squared between two GameObjects
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="target">Target</param>
+        /// <returns>The squared distance between the two objects</returns>
+        public static float DistanceSquared(this GameObject source, GameObject target)
+        {
+            return source.Position.Distance(target.Position);
+        }
+
+        #endregion
+
+        #region Count Heroes
+
+        /// <summary>
+        ///     Counts the number of allies(according to the source) in range.
+        /// </summary>
+        /// <param name="source">Hero to count allies around.</param>
+        /// <param name="range">Range</param>
+        /// <returns>The number of allies in range</returns>
+        public static int CountAlliesInRange(this Obj_AI_Hero source, float range)
+        {
+            return
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .FindAll(x => x.Team == source.Team && x.Distance(source) < range)
+                    .Count;
+        }
+
+        /// <summary>
+        ///     Counts the number of enemies(according to the source) in range.
+        /// </summary>
+        /// <param name="source">Hero to count enemies around</param>
+        /// <param name="range">Range</param>
+        /// <returns>The number of enemies in raange</returns>
+        public static int CountEnemiesInRange(this Obj_AI_Hero source, float range)
+        {
+            return
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .FindAll(x => x.Team != source.Team && x.Distance(source) < range)
+                    .Count;
         }
 
         #endregion
