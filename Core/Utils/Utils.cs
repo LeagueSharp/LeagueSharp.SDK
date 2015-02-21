@@ -14,15 +14,14 @@ namespace LeagueSharp.CommonEx.Core.Utils
     /// </summary>
     public class Utils
     {
-
         private static string _leagueSharpDirectory;
 
         /// <summary>
         ///     Safe TickCount.
         /// </summary>
-        public static int TickCount
+        public static long TickCount
         {
-            get { return Environment.TickCount & int.MaxValue; }
+            get { return Stopwatch.GetTimestamp(); }
         }
 
         /// <summary>

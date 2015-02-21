@@ -1,6 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
+
+#endregion
 
 namespace LeagueSharp.CommonEx.Core.Utils
 {
@@ -9,12 +14,18 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <summary>
         ///     The directory where logs will be created.
         /// </summary>
-        public static string LogDir { get { return Path.Combine(Utils.LeagueSharpDirectory, "Logs"); } }
+        public static string LogDir
+        {
+            get { return Path.Combine(Utils.LeagueSharpDirectory, "Logs"); }
+        }
 
         /// <summary>
         ///     The current filename that the logger will write to.
         /// </summary>
-        public static string LogFileName { get { return DateTime.Now.Date.ToString(CultureInfo.InvariantCulture).Replace('/', '.') + ".log"; } }
+        public static string LogFileName
+        {
+            get { return DateTime.Now.Date.ToString(CultureInfo.InvariantCulture).Replace('/', '.') + ".log"; }
+        }
 
         /// <summary>
         ///     Logs information to console(always), and optionaly logs it to a file.
@@ -24,7 +35,11 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="function">Optional, what function the info is coming from</param>
         /// <param name="logToFile">Optional, writes this data to a file</param>
         /// <param name="printColor">Prints pretty color to the console.</param>
-        public static void Write(LogLevel level, string message, string function = "", bool logToFile = false, bool printColor = true)
+        public static void Write(LogLevel level,
+            string message,
+            [CallerMemberName] string function = "",
+            bool logToFile = false,
+            bool printColor = true)
         {
             var text = string.Format("[{0} - {1}]: ({2}) -> {3}", DateTime.Now.TimeOfDay, level, function, message);
 
@@ -77,7 +92,6 @@ namespace LeagueSharp.CommonEx.Core.Utils
                 {
                     writer.WriteLine(text);
                 }
-
             }
             catch (Exception exception)
             {

@@ -78,7 +78,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
             /// <summary>
             ///     Time.
             /// </summary>
-            public int Time;
+            public long Time;
 
             /// <summary>
             ///     Action Constructor.

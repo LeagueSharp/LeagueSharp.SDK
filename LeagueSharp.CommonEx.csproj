@@ -61,6 +61,7 @@
     <Compile Include="Core\Extensions\Unit.cs" />
     <Compile Include="Core\Utils\DelayAction.cs" />
     <Compile Include="Core\Utils\Logging.cs" />
+    <Compile Include="Core\Utils\Performance.cs" />
     <Compile Include="Core\Utils\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
