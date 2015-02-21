@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using Vector3 = SharpDX.Vector3;
 
