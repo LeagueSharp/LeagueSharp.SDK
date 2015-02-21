@@ -1,7 +1,8 @@
 ﻿#region
 
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using Vector3 = SharpDX.Vector3;
 
@@ -152,12 +153,34 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         /// <returns>The squared distance between the two objects</returns>
         public static float DistanceSquared(this GameObject source, GameObject target)
         {
-            return source.Position.Distance(target.Position);
+            return source.Position.DistanceSquared(target.Position);
+        }
+
+        /// <summary>
+        ///     Gets the distance between two Obj_AI_Bases using ServerPosition
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="target">Target</param>
+        /// <returns>Distance</returns>
+        public static float Distance(this Obj_AI_Base source, Obj_AI_Base target)
+        {
+            return source.ServerPosition.Distance(target.ServerPosition);
+        }
+
+        /// <summary>
+        ///     Gets the distance squared between two Obj_AI_Bases using ServerPosition
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="target">Target</param>
+        /// <returns>Distance Squared</returns>
+        public static float DistanceSquared(this Obj_AI_Base source, Obj_AI_Base target)
+        {
+            return source.ServerPosition.DistanceSquared(target.ServerPosition);
         }
 
         #endregion
 
-        #region Count Heroes
+        #region Get/Count Heroes
 
         /// <summary>
         ///     Counts the number of allies(according to the source) in range.
@@ -185,6 +208,28 @@ namespace LeagueSharp.CommonEx.Core.Extensions
                 ObjectManager.Get<Obj_AI_Hero>()
                     .FindAll(x => x.Team != source.Team && x.Distance(source) < range)
                     .Count;
+        }
+
+        /// <summary>
+        ///     Gets all the allies(according to the source) in the range.
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="range">Range</param>
+        /// <returns>List of allies</returns>
+        public static List<Obj_AI_Hero> GetAlliesInRange(this Obj_AI_Hero source, float range)
+        {
+            return ObjectManager.Get<Obj_AI_Hero>().FindAll(x => x.Team == source.Team && x.Distance(source) < range);
+        }
+
+        /// <summary>
+        ///     Gets all the enemies(according to the source) in the range
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="range">Range</param>
+        /// <returns>List of enemies</returns>
+        public static List<Obj_AI_Hero> GetEnemiesInRange(this Obj_AI_Hero source, float range)
+        {
+            return ObjectManager.Get<Obj_AI_Hero>().FindAll(x => x.Team != source.Team && x.Distance(source) < range);
         }
 
         #endregion
