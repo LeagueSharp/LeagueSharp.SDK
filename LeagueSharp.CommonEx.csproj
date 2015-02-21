@@ -60,6 +60,7 @@
     <Compile Include="Core\Extensions\SharpDX\Vector4.cs" />
     <Compile Include="Core\Extensions\Unit.cs" />
     <Compile Include="Core\Utils\DelayAction.cs" />
+    <Compile Include="Core\Utils\Logging.cs" />
     <Compile Include="Core\Utils\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

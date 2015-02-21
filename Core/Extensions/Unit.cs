@@ -191,7 +191,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         {
             return
                 ObjectManager.Get<Obj_AI_Hero>()
-                    .FindAll(x => x.Team == source.Team && x.Distance(source) < range)
+                    .FindAll(x => x.Team == source.Team && x.Distance(source) < range && !x.IsMe)
                     .Count;
         }
 
@@ -217,7 +217,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         /// <returns>List of allies</returns>
         public static List<Obj_AI_Hero> GetAlliesInRange(this Obj_AI_Hero source, float range)
         {
-            return ObjectManager.Get<Obj_AI_Hero>().FindAll(x => x.Team == source.Team && x.Distance(source) < range);
+            return ObjectManager.Get<Obj_AI_Hero>().FindAll(x => x.Team == source.Team && x.Distance(source) < range && !x.IsMe);
         }
 
         /// <summary>
