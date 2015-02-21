@@ -53,6 +53,9 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Extensions\SharpDX\Vector2.cs" />
+    <Compile Include="Core\Extensions\SharpDX\Vector3.cs" />
+    <Compile Include="Core\Extensions\SharpDX\Vector4.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -60,8 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\Events\" />
-    <Folder Include="Core\Extensions\" />
-    <Folder Include="Core\Maths\" />
+    <Folder Include="Core\Math\" />
     <Folder Include="Core\Render\" />
     <Folder Include="Core\Utils\" />
     <Folder Include="Core\Wrappers\" />
