@@ -28,13 +28,20 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         /// <param name="unit">Unit</param>
         /// <param name="range">Range</param>
         /// <param name="from">Check From</param>
+        /// <param name="checkTeam">Checks if the target is an enemy from the Player's side</param>
         /// <returns>Boolean</returns>
         public static bool IsValidTarget(this AttackableUnit unit,
             float range = float.MaxValue,
-            Vector3 from = new Vector3())
+            Vector3 from = new Vector3(),
+            bool checkTeam = true)
         {
             if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable ||
-                !unit.IsInvulnerable)
+                unit.IsInvulnerable)
+            {
+                return false;
+            }
+
+            if (checkTeam && ObjectManager.Player.Team == unit.Team)
             {
                 return false;
             }
