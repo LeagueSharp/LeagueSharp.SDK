@@ -53,20 +53,22 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Events\OnGameLoad.cs" />
+    <Compile Include="Core\Extensions\Enumerable.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector2.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector3.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector4.cs" />
     <Compile Include="Core\Extensions\Unit.cs" />
+    <Compile Include="Core\Utils\DelayAction.cs" />
+    <Compile Include="Core\Utils\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\Events\" />
     <Folder Include="Core\Math\" />
     <Folder Include="Core\Render\" />
-    <Folder Include="Core\Utils\" />
     <Folder Include="Core\Wrappers\" />
     <Folder Include="Third_Party\" />
   </ItemGroup>

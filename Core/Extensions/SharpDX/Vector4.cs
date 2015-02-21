@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
 {
     /// <summary>
-    ///     SharpDX/Vector4 Extensions
+    ///     SharpDX/Vector4 Extensions.
     /// </summary>
     public static class Vector4
     {
@@ -23,7 +23,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         }
 
         /// <summary>
-        ///     Normalizes a Vector4
+        ///     Normalizes a Vector4.
         /// </summary>
         /// <param name="vector4">SharpDX Vector4</param>
         /// <returns>Normalized Vector4</returns>
@@ -34,7 +34,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         }
 
         /// <summary>
-        ///     Returns the Perpendicular Vector4 to the Extended Vector4
+        ///     Returns the Perpendicular Vector4 to the Extended Vector4.
         /// </summary>
         /// <param name="vector4">Extended SharpDX Vector4</param>
         /// <param name="offset">Axis Offset (0 = X, 1 = Y)</param>
@@ -47,7 +47,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         }
 
         /// <summary>
-        ///     Rotates the Vector4 to a set angle
+        ///     Rotates the Vector4 to a set angle.
         /// </summary>
         /// <param name="vector4">Extended SharpDX Vector2</param>
         /// <param name="angle">Angle (in radians)</param>
@@ -90,7 +90,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         #region AngleBetween
 
         /// <summary>
-        ///     Returns the angle between two vectors
+        ///     Returns the angle between two vectors.
         /// </summary>
         /// <param name="vector4">Extended SharpDX Vector4</param>
         /// <param name="toVector4">SharpDX Vector4</param>
@@ -110,7 +110,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         }
 
         /// <summary>
-        ///     Returns the angle between two vectors
+        ///     Returns the angle between two vectors.
         /// </summary>
         /// <param name="vector4">Extended SharpDX Vector4</param>
         /// <param name="toVector2">SharpDX Vector2</param>
@@ -130,7 +130,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         }
 
         /// <summary>
-        ///     Returns the angle between two vectors
+        ///     Returns the angle between two vectors.
         /// </summary>
         /// <param name="vector4">Extended SharpDX Vector4</param>
         /// <param name="toVector3">SharpDX Vector3</param>
@@ -154,7 +154,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         #region Closest
 
         /// <summary>
-        ///     Seeks for the closest Vector4 to the extended Vector4
+        ///     Seeks for the closest Vector4 to the extended Vector4.
         /// </summary>
         /// <param name="vector4">Extended SharpDX Vector4</param>
         /// <param name="array">Vector4 Collection</param>
@@ -179,7 +179,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         }
 
         /// <summary>
-        ///     Seeks for the closest Vector3 to the extended Vector4
+        ///     Seeks for the closest Vector3 to the extended Vector4.
         /// </summary>
         /// <param name="vector4">Extended SharpDX Vector4</param>
         /// <param name="array">Vector3 Collection</param>
@@ -204,7 +204,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         }
 
         /// <summary>
-        ///     Seeks for the closest Vector2 to the extended Vector4
+        ///     Seeks for the closest Vector2 to the extended Vector4.
         /// </summary>
         /// <param name="vector4">Extended SharpDX Vector4</param>
         /// <param name="array">Vector2 Collection</param>
@@ -233,7 +233,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         #region Extend
 
         /// <summary>
-        ///     Extends a Vector4 to another Vector4
+        ///     Extends a Vector4 to another Vector4.
         /// </summary>
         /// <param name="vector4">Extended SharpDX Vector4 (From)</param>
         /// <param name="toVector4">SharpDX Vector4 (To)</param>
@@ -247,7 +247,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         }
 
         /// <summary>
-        ///     Extends a Vector4 to a Vector2
+        ///     Extends a Vector4 to a Vector2.
         /// </summary>
         /// <param name="vector4">Extended SharpDX Vector4 (From)</param>
         /// <param name="toVector2">SharpDX Vector2 (To)</param>
@@ -261,7 +261,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         }
 
         /// <summary>
-        ///     Extends a Vector4 to a Vector3
+        ///     Extends a Vector4 to a Vector3.
         /// </summary>
         /// <param name="vector4">Extended SharpDX Vector4 (From)</param>
         /// <param name="toVector3">SharpDX Vector3 (To)</param>
@@ -279,7 +279,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         #region ToVector
 
         /// <summary>
-        ///     Transforms an extended Vector4 into a Vector2
+        ///     Transforms an extended Vector4 into a Vector2.
         /// </summary>
         /// <param name="vector4">SharpDX Vector3</param>
         /// <returns>Vector2</returns>
@@ -289,7 +289,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         }
 
         /// <summary>
-        ///     Transforms an extended Vector3 into a Vector4
+        ///     Transforms an extended Vector3 into a Vector4.
         /// </summary>
         /// <param name="vector4">SharpDX Vector4</param>
         /// <returns>Vector4</returns>

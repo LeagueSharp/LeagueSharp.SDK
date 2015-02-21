@@ -9,7 +9,7 @@ using Vector3 = SharpDX.Vector3;
 namespace LeagueSharp.CommonEx.Core.Extensions
 {
     /// <summary>
-    ///     Provides helpful extensions to Units
+    ///     Provides helpful extensions to Units.
     /// </summary>
     public static class Unit
     {
@@ -26,7 +26,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         }
 
         /// <summary>
-        ///     Checks if the target unit is valid
+        ///     Checks if the target unit is valid.
         /// </summary>
         /// <param name="unit">Unit</param>
         /// <param name="range">Range</param>
@@ -82,7 +82,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         }
 
         /// <summary>
-        ///     Returns the unit's total magic damage
+        ///     Returns the unit's total magic damage.
         /// </summary>
         /// <param name="unit">Extended unit</param>
         /// <returns>Returns the unit's total magic damage in float units</returns>
@@ -92,7 +92,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         }
 
         /// <summary>
-        ///     Returns the unit's total attack damage
+        ///     Returns the unit's total attack damage.
         /// </summary>
         /// <param name="unit">Extended unit</param>
         /// <returns>Returns the unit's total attack damage in float units</returns>
@@ -102,7 +102,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         }
 
         /// <summary>
-        ///     Returns the unit's total attack range
+        ///     Returns the unit's total attack range.
         /// </summary>
         /// <param name="unit">Extended unit</param>
         /// <returns>Returns the unit's total attack range in float units</returns>
@@ -112,7 +112,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         }
 
         /// <summary>
-        ///     Returns if the unit is recalling
+        ///     Returns if the unit is recalling.
         /// </summary>
         /// <param name="unit">Extended unit</param>
         /// <returns>Returns if the unit is recalling (boolean)</returns>
