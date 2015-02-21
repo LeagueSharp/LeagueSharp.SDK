@@ -53,6 +53,7 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Core\Events\OnGameLoad.cs" />
     <Compile Include="Core\Extensions\Enumerable.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector2.cs" />

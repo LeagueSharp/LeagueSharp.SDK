@@ -1,7 +1,6 @@
 ﻿#region
 
 using System;
-using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
 
@@ -9,24 +8,11 @@ using System.Runtime.CompilerServices;
 
 namespace LeagueSharp.CommonEx.Core.Utils
 {
+    /// <summary>
+    ///     Logging class for LeagueSharp.CommonEx, used to log output data into a file.
+    /// </summary>
     public class Logging
     {
-        /// <summary>
-        ///     The directory where logs will be created.
-        /// </summary>
-        public static string LogDir
-        {
-            get { return Path.Combine(Utils.LeagueSharpDirectory, "Logs"); }
-        }
-
-        /// <summary>
-        ///     The current filename that the logger will write to.
-        /// </summary>
-        public static string LogFileName
-        {
-            get { return DateTime.Now.Date.ToString(CultureInfo.InvariantCulture).Replace('/', '.') + ".log"; }
-        }
-
         /// <summary>
         ///     Logs information to console(always), and optionaly logs it to a file.
         /// </summary>
@@ -81,12 +67,12 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
             try
             {
-                if (!Directory.Exists(LogDir))
+                if (!Directory.Exists(Constants.LogDir))
                 {
-                    Directory.CreateDirectory(LogDir);
+                    Directory.CreateDirectory(Constants.LogDir);
                 }
 
-                var path = Path.Combine(Utils.LeagueSharpDirectory, "Logs", LogFileName);
+                var path = Path.Combine(Constants.LeagueSharpDirectory, "Logs", Constants.LogFileName);
 
                 using (var writer = new StreamWriter(path, true))
                 {

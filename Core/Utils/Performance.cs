@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 namespace LeagueSharp.CommonEx.Core.Utils
 {
     /// <summary>
-    ///     Performance class, measures how much does a function takes to execute.
+    ///     Performance class, measures how much time does a function takes to execute.
     /// </summary>
     public class Performance
     {
