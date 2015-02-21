@@ -59,7 +59,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
             Console.WriteLine(text);
             Console.ResetColor();
 
-            // Default write to file if is
+            // Default write to file if is warn or higher
             if (!logToFile && (int) level < 3)
             {
                 return;
