@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using LeagueSharp.CommonEx.Core.Utils;
 
 #endregion
 
@@ -57,8 +58,8 @@ namespace LeagueSharp.CommonEx
                     }
                     catch (Exception ee)
                     {
-                        Console.WriteLine(@"Could not resolve LeagueSharp directory: " + ee);
                         _leagueSharpDirectory = Directory.GetCurrentDirectory();
+                        Logging.Write()(LogLevel.Error, "Could not resolve LeagueSharp directory: ", ee);
                     }
                 }
 

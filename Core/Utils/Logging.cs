@@ -14,25 +14,56 @@ namespace LeagueSharp.CommonEx.Core.Utils
     public class Logging
     {
         /// <summary>
-        ///     Logs information to console(always), and optionaly logs it to a file.
+        ///     Write Delegate, used to state the logging data.
         /// </summary>
-        /// <param name="level">The level of the information being loggged</param>
-        /// <param name="message">Message</param>
-        /// <param name="function">Optional, what function the info is coming from</param>
-        /// <param name="logToFile">Optional, writes this data to a file</param>
-        /// <param name="printColor">Prints pretty color to the console.</param>
-        public static void Write(LogLevel level,
-            string message,
-            [CallerMemberName] string function = "",
-            bool logToFile = false,
-            bool printColor = true)
-        {
-            var text = string.Format("[{0} - {1}]: ({2}) -> {3}", DateTime.Now.TimeOfDay, level, function, message);
+        /// <param name="logLevel">Level of the log</param>
+        /// <param name="message">Message Format</param>
+        /// <param name="args">Message Format Arguments</param>
+        public delegate void WriteDelegate(LogLevel logLevel, string message, params object[] args);
 
-            var color = Console.ForegroundColor;
+        /// <summary>
+        ///     Execute a logging write through the Write Delegate.
+        /// </summary>
+        /// <param name="logToFile">Write logging data to file. (Optional)</param>
+        /// <param name="printColor">Print to Console with colors. (Optional)</param>
+        /// <param name="memberName">Function name (Auto / Optional)</param>
+        /// <returns></returns>
+        public static WriteDelegate Write(bool logToFile = false,
+            bool printColor = true,
+            [CallerMemberName] string memberName = "")
+        {
+            return (logLevel, message, args) =>
+            {
+                string finalMessage;
+                try
+                {
+                    finalMessage = string.Format(message, args);
+                }
+                catch (Exception)
+                {
+                    finalMessage = message;
+                }
+                Write(logLevel, finalMessage, logToFile, printColor, memberName);
+            };
+        }
+
+        /// <summary>
+        ///     Logs information to Console(always), and optionaly logs it to the logging file.
+        /// </summary>
+        /// <param name="logLevel">Level of the log</param>
+        /// <param name="message">Message Format</param>
+        /// <param name="logToFile">Write logging data to file.</param>
+        /// <param name="printColor">Print to Console with colors.</param>
+        /// <param name="memberName">Function name</param>
+        private static void Write(LogLevel logLevel, string message, bool logToFile, bool printColor, string memberName)
+        {
+            var format = string.Format(
+                "[{0} - {1}]: ({2}) -> {3}", DateTime.Now.TimeOfDay, logLevel, memberName, message);
+
             if (printColor)
             {
-                switch (level)
+                var color = Console.ForegroundColor;
+                switch (logLevel)
                 {
                     case LogLevel.Debug:
                         color = ConsoleColor.White;
@@ -53,14 +84,13 @@ namespace LeagueSharp.CommonEx.Core.Utils
                         color = ConsoleColor.Yellow;
                         break;
                 }
+                Console.ForegroundColor = color;
             }
 
-            Console.ForegroundColor = color;
-            Console.WriteLine(text);
+            Console.WriteLine(format);
             Console.ResetColor();
 
-            // Default write to file if is warn or higher
-            if (!logToFile && (int) level < 3)
+            if (!logToFile && (int) logLevel < 3)
             {
                 return;
             }
@@ -76,7 +106,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
                 using (var writer = new StreamWriter(path, true))
                 {
-                    writer.WriteLine(text);
+                    writer.WriteLine(format);
                 }
             }
             catch (Exception exception)

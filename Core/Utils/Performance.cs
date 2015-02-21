@@ -34,19 +34,16 @@ namespace LeagueSharp.CommonEx.Core.Utils
                 funcCallback();
                 stopwatch.Stop();
 
-                Logging.Write(
-                    LogLevel.Info,
-                    string.Format(
-                        "{0} has taken {1} elapsed ticks to execute, and was executed successfuly.", memberName,
-                        stopwatch.ElapsedTicks));
+                Logging.Write()(
+                    LogLevel.Info, "{0} has taken {1} elapsed ticks to execute, and was executed successfuly.",
+                    memberName, stopwatch.ElapsedTicks);
 
                 return stopwatch.ElapsedTicks;
             }
             catch (Exception)
             {
-                Logging.Write(
-                    LogLevel.Error,
-                    string.Format("{0} had an error during execution and was unable to be measured.", memberName));
+                Logging.Write()(
+                    LogLevel.Error, "{0} had an error during execution and was unable to be measured.", memberName);
                 return -1L;
             }
         }
@@ -67,19 +64,16 @@ namespace LeagueSharp.CommonEx.Core.Utils
                 funcCallback();
                 stopwatch.Stop();
 
-                Logging.Write(
-                    LogLevel.Info,
-                    string.Format(
-                        "{0} has taken {1} elapsed milliseconds to execute, and was executed successfuly.", memberName,
-                        stopwatch.ElapsedMilliseconds));
+                Logging.Write()(
+                    LogLevel.Info, "{0} has taken {1} elapsed milliseconds to execute, and was executed successfuly.",
+                    memberName, stopwatch.ElapsedMilliseconds);
 
                 return stopwatch.ElapsedMilliseconds;
             }
             catch (Exception)
             {
-                Logging.Write(
-                    LogLevel.Error,
-                    string.Format("{0} had an error during execution and was unable to be measured.", memberName));
+                Logging.Write()(
+                    LogLevel.Error, "{0} had an error during execution and was unable to be measured.", memberName);
                 return -1L;
             }
         }
@@ -100,19 +94,16 @@ namespace LeagueSharp.CommonEx.Core.Utils
                 funcCallback();
                 stopwatch.Stop();
 
-                Logging.Write(
-                    LogLevel.Info,
-                    string.Format(
-                        "{0} has taken {1} elapsed time span to execute, and was executed successfuly.", memberName,
-                        stopwatch.Elapsed));
+                Logging.Write()(
+                    LogLevel.Info, "{0} has taken {1} elapsed time span to execute, and was executed successfuly.",
+                    memberName, stopwatch.Elapsed);
 
                 return stopwatch.Elapsed;
             }
             catch (Exception)
             {
-                Logging.Write(
-                    LogLevel.Error,
-                    string.Format("{0} had an error during execution and was unable to be measured.", memberName));
+                Logging.Write()(
+                    LogLevel.Error, "{0} had an error during execution and was unable to be measured.", memberName);
                 return TimeSpan.Zero;
             }
         }
