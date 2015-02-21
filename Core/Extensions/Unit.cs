@@ -8,6 +8,9 @@ using Vector3 = SharpDX.Vector3;
 
 namespace LeagueSharp.CommonEx.Core.Extensions
 {
+    /// <summary>
+    ///     Provides helpful extensions to Units
+    /// </summary>
     public static class Unit
     {
         #region IsValid
