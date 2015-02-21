@@ -61,6 +61,95 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
                 (float) (vector3.X * cos - vector3.Y * sin), (float) (vector3.Y * cos + vector3.X * sin), vector3.Z);
         }
 
+        /// <summary>
+        ///     Returns the polar for vector angle (in Degrees).
+        /// </summary>
+        /// <param name="vector3">Extended SharpDX Vector2</param>
+        /// <returns>Polar for Vector Angle (Degrees)</returns>
+        public static float Polar(this global::SharpDX.Vector3 vector3)
+        {
+            if (Math.Abs(vector3.X - 0) <= (float) 1e-9)
+            {
+                return (vector3.Y > 0) ? 90 : (vector3.Y < 0) ? 270 : 0;
+            }
+
+            var theta = (float) (Math.Atan((vector3.Y) / (vector3.X)) * (180 / Math.PI));
+            if (vector3.X < 0)
+            {
+                theta += 180;
+            }
+            if (theta < 0)
+            {
+                theta += 180;
+            }
+
+            return theta;
+        }
+
+        #region AngleBetween
+
+        /// <summary>
+        ///     Returns the angle between two vectors
+        /// </summary>
+        /// <param name="vector3">Extended SharpDX Vector3</param>
+        /// <param name="toVector2">SharpDX Vector3</param>
+        /// <returns>Angle between two vectors in float-units</returns>
+        public static float AngleBetween(this global::SharpDX.Vector3 vector3, global::SharpDX.Vector3 toVector2)
+        {
+            var theta = vector3.Polar() - toVector2.Polar();
+            if (theta < 0)
+            {
+                theta += 360;
+            }
+            if (theta > 180)
+            {
+                theta = 360 - theta;
+            }
+            return theta;
+        }
+
+        /// <summary>
+        ///     Returns the angle between two vectors
+        /// </summary>
+        /// <param name="vector3">Extended SharpDX Vector3</param>
+        /// <param name="toVector2">SharpDX Vector2</param>
+        /// <returns>Angle between two vectors in float-units</returns>
+        public static float AngleBetween(this global::SharpDX.Vector3 vector3, global::SharpDX.Vector2 toVector2)
+        {
+            var theta = vector3.Polar() - toVector2.Polar();
+            if (theta < 0)
+            {
+                theta += 360;
+            }
+            if (theta > 180)
+            {
+                theta = 360 - theta;
+            }
+            return theta;
+        }
+
+        /// <summary>
+        ///     Returns the angle between two vectors
+        /// </summary>
+        /// <param name="vector3">Extended SharpDX Vector3</param>
+        /// <param name="toVector4">SharpDX Vector4</param>
+        /// <returns>Angle between two vectors in float-units</returns>
+        public static float AngleBetween(this global::SharpDX.Vector3 vector3, global::SharpDX.Vector4 toVector4)
+        {
+            var theta = vector3.Polar() - toVector4.Polar();
+            if (theta < 0)
+            {
+                theta += 360;
+            }
+            if (theta > 180)
+            {
+                theta = 360 - theta;
+            }
+            return theta;
+        }
+
+        #endregion
+
         #region Closest
 
         /// <summary>
@@ -244,6 +333,43 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         public static float Distance(this global::SharpDX.Vector3 vector3, global::SharpDX.Vector4 toVector4)
         {
             return global::SharpDX.Vector3.Distance(vector3, toVector4.ToVector3());
+        }
+
+        #endregion
+
+        #region Distance Squared
+
+        /// <summary>
+        ///     Calculates the squared distance between two vectors.
+        /// </summary>
+        /// <param name="vector3">Extended SharpDX Vector3</param>
+        /// <param name="toVector3">SharpDX Vector3</param>
+        /// <returns>The squared distance between the two vectors.</returns>
+        public static float DistanceSquared(this global::SharpDX.Vector3 vector3, global::SharpDX.Vector3 toVector3)
+        {
+            return global::SharpDX.Vector3.DistanceSquared(vector3, toVector3);
+        }
+
+        /// <summary>
+        ///     Calculates the squared distance between two vectors.
+        /// </summary>
+        /// <param name="vector3">Extended SharpDX Vector3</param>
+        /// <param name="toVector2">SharpDX Vector2</param>
+        /// <returns>The squared distance between the two vectors.</returns>
+        public static float DistanceSquared(this global::SharpDX.Vector3 vector3, global::SharpDX.Vector2 toVector2)
+        {
+            return global::SharpDX.Vector3.DistanceSquared(vector3, toVector2.ToVector3());
+        }
+
+        /// <summary>
+        ///     Calculates the squared distance between two vectors.
+        /// </summary>
+        /// <param name="vector3">Extended SharpDX Vector3</param>
+        /// <param name="toVector4">SharpDX Vector4</param>
+        /// <returns>The squared distance between the two vectors.</returns>
+        public static float DistanceSquared(this global::SharpDX.Vector3 vector3, global::SharpDX.Vector4 toVector4)
+        {
+            return global::SharpDX.Vector3.DistanceSquared(vector3, toVector4.ToVector3());
         }
 
         #endregion
