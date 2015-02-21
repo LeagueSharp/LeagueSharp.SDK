@@ -27,7 +27,9 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="logToFile">Write logging data to file. (Optional)</param>
         /// <param name="printColor">Print to Console with colors. (Optional)</param>
         /// <param name="memberName">Function name (Auto / Optional)</param>
-        /// <returns></returns>
+        /// <see cref="WriteDelegate"/>
+        /// <example>Write()(LogLevel.Debug, "I am a debug, arguments: {0}, {1}.", "arg1", 123);</example>
+        /// <returns>Created WriteDelegate</returns>
         public static WriteDelegate Write(bool logToFile = false,
             bool printColor = true,
             [CallerMemberName] string memberName = "")
@@ -45,6 +47,27 @@ namespace LeagueSharp.CommonEx.Core.Utils
                 }
                 Write(logLevel, finalMessage, logToFile, printColor, memberName);
             };
+        }
+
+        /// <summary>
+        ///     Execute a logging write through the Write Delegate.
+        /// </summary>
+        /// <param name="logLevel">Level of the log</param>
+        /// <param name="message">Message Format</param>
+        /// <param name="args">Message Format Arguments</param>
+        /// <param name="logToFile">Write logging data to file. (Optional)</param>
+        /// <param name="printColor">Print to Console with colors. (Optional)</param>
+        /// <param name="memberName">Function name (Auto / Optional)</param>
+        /// <see cref="WriteDelegate"/>
+        /// <example>Write(LogLevel.Debug, "I am a debug, arguments: {0}, {1}.", new object[] { "arg1", 123 });</example>
+        public static void Write(LogLevel logLevel,
+            string message,
+            object[] args,
+            bool logToFile = false,
+            bool printColor = true,
+            [CallerMemberName] string memberName = "")
+        {
+            Write(logLevel, string.Format(message, args), logToFile, printColor, memberName);
         }
 
         /// <summary>
