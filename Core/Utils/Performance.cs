@@ -9,103 +9,127 @@ using System.Runtime.CompilerServices;
 namespace LeagueSharp.CommonEx.Core.Utils
 {
     /// <summary>
-    ///     Performance class, measures how much time does a function takes to execute.
+    ///     Performance block class, for block method performance logging.
     /// </summary>
-    public class Performance
+    /// <example>
+    ///     using(var performance = new Performance())
+    ///     {
+    ///         Game.PrintChat("Test");
+    ///         var elapsedTicks = performance.GetTickCount();
+    ///         Logging.Write()("Game.PrintChat took {0} ticks!", elapsedTicks);
+    ///     }
+    /// </example>
+    public class Performance : IDisposable
     {
         /// <summary>
-        ///     Callback delegate.
+        ///     Private, Stopwatch instance, this will track the time it takes to execute functions inside the block.
         /// </summary>
-        public delegate void Callback();
+        private Stopwatch stopwatch;
 
         /// <summary>
-        ///     Measures and returns the elapsed ticks the function takes.
-        ///     (Caution: This will execute the function in realtime)
+        ///     Private, string contains the calling member name.
         /// </summary>
-        /// <param name="funcCallback">Function to be executed and measured</param>
-        /// <param name="memberName">Member name of the function that called the measurement request.</param>
-        /// <returns>Elapsed Ticks the function took (long-units)</returns>
-        public static long MeasureTicks(Callback funcCallback, [CallerMemberName] string memberName = "")
+        private readonly string memberName;
+
+        /// <summary>
+        ///     Private, final performance type to print once block ends.
+        /// </summary>
+        private readonly PerformanceType performanceType;
+
+        /// <summary>
+        ///     Performance Constructor, starting a new Stopwatch.
+        /// </summary>
+        private Performance(PerformanceType performanceType, [CallerMemberName] string memberName = "")
         {
-            try
-            {
-                var stopwatch = Stopwatch.StartNew();
-
-                funcCallback();
-                stopwatch.Stop();
-
-                Logging.Write()(
-                    LogLevel.Info, "{0} has taken {1} elapsed ticks to execute, and was executed successfuly.",
-                    memberName, stopwatch.ElapsedTicks);
-
-                return stopwatch.ElapsedTicks;
-            }
-            catch (Exception)
-            {
-                Logging.Write()(
-                    LogLevel.Error, "{0} had an error during execution and was unable to be measured.", memberName);
-                return -1L;
-            }
+            this.memberName = memberName;
+            this.performanceType = performanceType;
+            stopwatch = Stopwatch.StartNew();
         }
 
         /// <summary>
-        ///     Measures and returns the elapsed milliseconds the function takes.
-        ///     (Caution: This will execute the function in realtime)
+        ///     Disposable requirement, redirects to a safe disposable function.
         /// </summary>
-        /// <param name="funcCallback">Function to be executed and measured</param>
-        /// <param name="memberName">Member name of the function that called the measurement request.</param>
-        /// <returns>Elapsed Milliseconds the function took (long-units)</returns>
-        public static long MeasureMilliseconds(Callback funcCallback, [CallerMemberName] string memberName = "")
+        public void Dispose()
         {
-            try
-            {
-                var stopwatch = Stopwatch.StartNew();
-
-                funcCallback();
-                stopwatch.Stop();
-
-                Logging.Write()(
-                    LogLevel.Info, "{0} has taken {1} elapsed milliseconds to execute, and was executed successfuly.",
-                    memberName, stopwatch.ElapsedMilliseconds);
-
-                return stopwatch.ElapsedMilliseconds;
-            }
-            catch (Exception)
-            {
-                Logging.Write()(
-                    LogLevel.Error, "{0} had an error during execution and was unable to be measured.", memberName);
-                return -1L;
-            }
+            Dispose(true);
         }
 
         /// <summary>
-        ///     Measures and returns the elapsed time span the function takes.
-        ///     (Caution: This will execute the function in realtime)
+        ///     Returns the tick count from the start of the block.
         /// </summary>
-        /// <param name="funcCallback">Function to be executed and measured</param>
-        /// <param name="memberName">Member name of the function that called the measurement request.</param>
-        /// <returns>Elapsed Time Span the function took (long-units)</returns>
-        public static TimeSpan MeasureTimeSpan(Callback funcCallback, [CallerMemberName] string memberName = "")
+        /// <returns>Tick count from the start of the block.</returns>
+        public long GetTickCount()
         {
-            try
-            {
-                var stopwatch = Stopwatch.StartNew();
-
-                funcCallback();
-                stopwatch.Stop();
-
-                Logging.Write()(
-                    LogLevel.Info, "{0} has taken {1} elapsed time span to execute, and was executed successfuly.",
-                    memberName, stopwatch.Elapsed);
-
-                return stopwatch.Elapsed;
-            }
-            catch (Exception)
-            {
-                Logging.Write()(
-                    LogLevel.Error, "{0} had an error during execution and was unable to be measured.", memberName);
-                return TimeSpan.Zero;
-            }
+            return stopwatch.ElapsedTicks;
         }
+
+        /// <summary>
+        ///     Returns the milliseconds count from the start of the block.
+        /// </summary>
+        /// <returns>Milliseconds count from the start of the block.</returns>
+        public long GetMilliseconds()
+        {
+            return stopwatch.ElapsedMilliseconds;
+        }
+
+        /// <summary>
+        ///     Returns the TimeSpan count data from the start of the block.
+        /// </summary>
+        /// <returns>TimeSpan count data from the start of the block.</returns>
+        public TimeSpan GetTimeSpan()
+        {
+            return stopwatch.Elapsed;
+        }
+
+        /// <summary>
+        ///     Finalization Dispose.
+        /// </summary>
+        ~Performance()
+        {
+            Dispose(false);
+        }
+
+        /// <summary>
+        ///     Safe Dispose method.
+        /// </summary>
+        /// <param name="safe">Is Safe (Is not finalized by GC).</param>
+        private void Dispose(bool safe)
+        {
+            if (!safe)
+            {
+                Logging.Write()(LogLevel.Info, "Performance was finailized by GC. ({0})", memberName ?? "unknown");
+                return;
+            }
+
+            stopwatch.Stop();
+
+            var format = "{0} has taken {1} elapsed ticks to execute, and was executed successfuly.";
+            var argument = GetTickCount();
+
+            switch (performanceType)
+            {
+                case PerformanceType.Milliseconds:
+                    format = "{0} has taken {1} elapsed milliseconds to execute, and was executed successfuly.";
+                    argument = GetTickCount();
+                    break;
+                case PerformanceType.TimeSpan:
+                    format = "{0} has taken {1} elapsed time span to execute, and was executed successfuly.";
+                    argument = GetTickCount();
+                    break;
+            }
+
+            Logging.Write()(LogLevel.Info, format, memberName, argument);
+            stopwatch = null;
+        }
+    }
+
+    /// <summary>
+    ///     Performance Type to log.
+    /// </summary>
+    public enum PerformanceType
+    {
+        TickCount,
+        Milliseconds,
+        TimeSpan
     }
 }

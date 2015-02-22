@@ -10,7 +10,7 @@ using LeagueSharp.CommonEx.Core.Utils;
 
 #endregion
 
-namespace LeagueSharp.CommonEx
+namespace LeagueSharp.CommonEx.Core
 {
     /// <summary>
     ///     Constant values of LeagueSharp.CommonEx
