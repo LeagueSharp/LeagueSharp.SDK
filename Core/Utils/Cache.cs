@@ -6,6 +6,9 @@ using System.Runtime.Caching;
 
 namespace LeagueSharp.CommonEx.Core.Utils
 {
+    /// <summary>
+    ///     Provides an implementation of ObjectCache, for any object.
+    /// </summary>
     public class Cache : ObjectCache
     {
         //TODO: Fully implement monitors | Asignee - Chewy
