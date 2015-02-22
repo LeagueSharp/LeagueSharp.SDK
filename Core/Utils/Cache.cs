@@ -8,7 +8,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
 {
     public class Cache : ObjectCache
     {
-        //TODO: Add monitors | Asignee - Chewy
+        //TODO: Fully implement monitors | Asignee - Chewy
 
         #region Singleton
 

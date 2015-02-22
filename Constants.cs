@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.Caching;
 using LeagueSharp.CommonEx.Core.Utils;
 
 #endregion
@@ -17,16 +18,17 @@ namespace LeagueSharp.CommonEx
     public static class Constants
     {
         /// <summary>
-        ///     Saved instance of LeagueSharpDirectory
-        /// </summary>
-        private static string _leagueSharpDirectory;
-
-        /// <summary>
         ///     The directory where logs will be created.
         /// </summary>
         public static string LogDir
         {
-            get { return Path.Combine(LeagueSharpDirectory, "Logs"); }
+            get
+            {
+                return
+                    Cache.Instance.AddOrGetExisting(
+                        "LogDir", Path.Combine(LeagueSharpDirectory, "Logs"), ObjectCache.InfiniteAbsoluteExpiration)
+                        .ToString();
+            }
         }
 
         /// <summary>
@@ -34,7 +36,14 @@ namespace LeagueSharp.CommonEx
         /// </summary>
         public static string LogFileName
         {
-            get { return DateTime.Now.Date.ToString(CultureInfo.InvariantCulture).Replace('/', '.') + ".log"; }
+            get
+            {
+                return
+                    Cache.Instance.AddOrGetExisting(
+                        "LogFileName",
+                        DateTime.Now.Date.ToString(CultureInfo.InvariantCulture).Replace('/', '.') + ".log",
+                        ObjectCache.InfiniteAbsoluteExpiration).ToString();
+            }
         }
 
         /// <summary>
@@ -44,26 +53,14 @@ namespace LeagueSharp.CommonEx
         {
             get
             {
-                if (_leagueSharpDirectory == null)
-                {
-                    try
-                    {
-                        _leagueSharpDirectory =
+                return
+                    Cache.Instance.AddOrGetExisting(
+                        "LeagueSharpDir",
+                        Directory.GetParent(
                             Process.GetCurrentProcess()
                                 .Modules.Cast<ProcessModule>()
                                 .First(p => Path.GetFileName(p.ModuleName) == "Leaguesharp.Core.dll")
-                                .FileName;
-                        _leagueSharpDirectory =
-                            Directory.GetParent(Path.GetDirectoryName(_leagueSharpDirectory)).FullName;
-                    }
-                    catch (Exception ee)
-                    {
-                        _leagueSharpDirectory = Directory.GetCurrentDirectory();
-                        Logging.Write()(LogLevel.Error, "Could not resolve LeagueSharp directory: ", ee);
-                    }
-                }
-
-                return _leagueSharpDirectory;
+                                .FileName).FullName, ObjectCache.InfiniteAbsoluteExpiration).ToString();
             }
         }
     }
