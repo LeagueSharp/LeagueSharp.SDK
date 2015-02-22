@@ -27,7 +27,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="logToFile">Write logging data to file. (Optional)</param>
         /// <param name="printColor">Print to Console with colors. (Optional)</param>
         /// <param name="memberName">Function name (Auto / Optional)</param>
-        /// <see cref="WriteDelegate"/>
+        /// <see cref="WriteDelegate" />
         /// <example>Write()(LogLevel.Debug, "I am a debug, arguments: {0}, {1}.", "arg1", 123);</example>
         /// <returns>Created WriteDelegate</returns>
         public static WriteDelegate Write(bool logToFile = false,
@@ -58,7 +58,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="logToFile">Write logging data to file. (Optional)</param>
         /// <param name="printColor">Print to Console with colors. (Optional)</param>
         /// <param name="memberName">Function name (Auto / Optional)</param>
-        /// <see cref="WriteDelegate"/>
+        /// <see cref="WriteDelegate" />
         /// <example>Write(LogLevel.Debug, "I am a debug, arguments: {0}, {1}.", new object[] { "arg1", 123 });</example>
         public static void Write(LogLevel logLevel,
             string message,
