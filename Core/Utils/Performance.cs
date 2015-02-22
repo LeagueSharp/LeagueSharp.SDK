@@ -107,5 +107,46 @@ namespace LeagueSharp.CommonEx.Core.Utils
                 return TimeSpan.Zero;
             }
         }
+        
+        public class Block : IDisposable
+        {
+            private readonly string _blockName;
+            private readonly Stopwatch _stopWatch;
+            private bool _isDisposed;
+
+            #region Usage
+
+            public Block(string blockName)
+            {
+                _blockName = blockName;
+                _stopWatch = new Stopwatch();
+                _stopWatch.Start();
+            }
+            #endregion
+
+            public void Dispose()
+            {
+                if (!_isDisposed)
+                {
+                    _isDisposed = true; // Todo: add some hotkey/bool
+                    if (_stopWatch != null)
+                    {
+                        _stopWatch.Stop();
+                        if (_stopWatch.Elapsed.Ticks > 0)
+                        {
+                            Console.WriteLine("(Performance) Execution of the block " + _blockName +
+                                              " took " + _stopWatch.Elapsed.TotalMilliseconds + " ms.");
+
+                        }
+                    }
+                }
+            }
+
+            ~Block()
+            {         
+                Dispose();
+            }
+        }
+    }        
     }
 }
