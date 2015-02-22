@@ -14,6 +14,9 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
         private static Cache _instance;
 
+        /// <summary>
+        ///     Gets the instance of Cache
+        /// </summary>
         public static Cache Instance
         {
             get
@@ -452,6 +455,13 @@ namespace LeagueSharp.CommonEx.Core.Utils
         private readonly string regionName;
         private readonly int random;
 
+        /// <summary>
+        ///     Creates new CacheEntryMonitor
+        /// </summary>
+        /// <param name="keys">Keys</param>
+        /// <param name="lastModified">Key's values last changed</param>
+        /// <param name="regionName">The name of the region in the cache</param>
+        /// <param name="random">Unique ID</param>
         public CacheEntryMonitor(ReadOnlyCollection<string> keys,
             DateTimeOffset lastModified,
             string regionName,
