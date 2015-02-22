@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Caching;
 
@@ -8,6 +9,8 @@ namespace LeagueSharp.CommonEx.Core.Utils
     public class Cache : ObjectCache
     {
         //TODO: Add monitors | Asignee - Chewy
+
+        #region Singleton
 
         private static Cache _instance;
 
@@ -25,22 +28,71 @@ namespace LeagueSharp.CommonEx.Core.Utils
             }
         }
 
-        private readonly Dictionary<string, Object> cache;        
+        #endregion
+
+        /// <summary>
+        ///     Main Cache
+        /// </summary>
+        private readonly Dictionary<string, object> cache;
+
+        /// <summary>
+        ///     Holds callbacks that are called before cached item is removed
+        /// </summary>
+        private readonly Dictionary<string, CacheEntryUpdateCallback> cacheEntryUpdateCallbacks;
+
+        /// <summary>
+        ///     Holds callbacks that are called after cached item is removed
+        /// </summary>
+        private readonly Dictionary<string, CacheEntryRemovedCallback> cacheRemovedCallbacks;
 
         private Cache()
         {
             cache = new Dictionary<string, object>();
+            cacheEntryUpdateCallbacks = new Dictionary<string, CacheEntryUpdateCallback>();
+            cacheRemovedCallbacks = new Dictionary<string, CacheEntryRemovedCallback>();
         }
 
         /// <summary>
-        ///     NOT SUPPORTED(Yet)
+        ///     Calls the <see cref="CacheEntryUpdateCallback"/> for the selected key.
         /// </summary>
-        /// <param name="keys"></param>
-        /// <param name="regionName"></param>
-        /// <returns></returns>
-        public override CacheEntryChangeMonitor CreateCacheEntryChangeMonitor(IEnumerable<string> keys, string regionName = null)
+        /// <param name="key">Key</param>
+        /// <param name="reason">Reason why the value was removed</param>
+        /// <param name="regionName">The name of the region in the cache</param>
+        private void CallEntryUpdates(string key,
+            CacheEntryRemovedReason reason = CacheEntryRemovedReason.Removed,
+            string regionName = null)
         {
-            throw new NotSupportedException();
+            if (cacheEntryUpdateCallbacks.ContainsKey(key + regionName))
+            {
+                cacheEntryUpdateCallbacks[key + regionName].Invoke(
+                    new CacheEntryUpdateArguments(this, reason, key, regionName));
+            }
+        }
+
+        private void CallEntryRemoved(string key,
+            object value,
+            CacheEntryRemovedReason reason = CacheEntryRemovedReason.Removed,
+            string regionName = null)
+        {
+            if (cacheRemovedCallbacks.ContainsKey(key + regionName))
+            {
+                cacheRemovedCallbacks[key + regionName].Invoke(
+                    new CacheEntryRemovedArguments(this, reason, new CacheItem(key, value, regionName)));
+            }
+        }
+
+        /// <summary>
+        ///     Creats an <see cref="CacheEntryChangeMonitor"/> of the selected keys
+        /// </summary>
+        /// <param name="keys">Keys</param>
+        /// <param name="regionName">The name of the region in the cache</param>
+        /// <returns></returns>
+        public override CacheEntryChangeMonitor CreateCacheEntryChangeMonitor(IEnumerable<string> keys,
+            string regionName = null)
+        {
+            return new CacheEntryMonitor(
+                keys as ReadOnlyCollection<string>, InfiniteAbsoluteExpiration, regionName,
+                new Random(Environment.TickCount).Next());
         }
 
         /// <summary>
@@ -71,7 +123,10 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="absoluteExpiration">Time the keypair expires</param>
         /// <param name="regionName">The name of the region in the cache</param>
         /// <returns>The object stored in the cache</returns>
-        public override object AddOrGetExisting(string key, object value, DateTimeOffset absoluteExpiration, string regionName = null)
+        public override object AddOrGetExisting(string key,
+            object value,
+            DateTimeOffset absoluteExpiration,
+            string regionName = null)
         {
             if (!cache.ContainsKey(key + regionName))
             {
@@ -79,10 +134,16 @@ namespace LeagueSharp.CommonEx.Core.Utils
                 DelayAction.Add(
                     (int) (absoluteExpiration - DateTime.Now).TotalMilliseconds, delegate
                     {
-                        if (cache.ContainsKey(key + regionName))
+                        if (!cache.ContainsKey(key + regionName))
                         {
-                            cache.Remove(key + regionName);
+                            return;
                         }
+
+                        var cacheValue = cache[key + regionName];
+
+                        CallEntryUpdates(key, CacheEntryRemovedReason.Expired, regionName);
+                        cache.Remove(key + regionName);
+                        CallEntryRemoved(key, cacheValue, CacheEntryRemovedReason.Expired, regionName);
                     });
             }
             else
@@ -105,13 +166,23 @@ namespace LeagueSharp.CommonEx.Core.Utils
             {
                 cache.Add(value.Key + value.RegionName, value.Value);
 
-                DelayAction.Add((int) (policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds, delegate
-                {
-                    if (cache.ContainsKey(value.Key + value.RegionName))
+                cacheEntryUpdateCallbacks[value.Key + value.RegionName] = policy.UpdateCallback;
+                cacheRemovedCallbacks[value.Key + value.RegionName] = policy.RemovedCallback;
+
+                DelayAction.Add(
+                    (int) (policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds, delegate
                     {
+                        if (!cache.ContainsKey(value.Key + value.RegionName))
+                        {
+                            return;
+                        }
+
+                        var cachedValue = cache[value.Key + value.RegionName];
+
+                        CallEntryUpdates(value.Key, CacheEntryRemovedReason.Expired, value.RegionName);
                         cache.Remove(value.Key + value.RegionName);
-                    }
-                });
+                        CallEntryRemoved(value.Key, cachedValue, CacheEntryRemovedReason.Expired, value.RegionName);
+                    });
             }
 
             value.Value = cache[value.Key];
@@ -126,19 +197,31 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="policy">Policy</param>
         /// <param name="regionName">The name of the region in the cache</param>
         /// <returns>Cached value</returns>
-        public override object AddOrGetExisting(string key, object value, CacheItemPolicy policy, string regionName = null)
+        public override object AddOrGetExisting(string key,
+            object value,
+            CacheItemPolicy policy,
+            string regionName = null)
         {
             if (!cache.ContainsKey(key + regionName))
             {
                 cache.Add(key + regionName, value);
 
+                cacheEntryUpdateCallbacks[key + regionName] = policy.UpdateCallback;
+                cacheRemovedCallbacks[key + regionName] = policy.RemovedCallback;
+
                 DelayAction.Add(
                     (int) (policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds, delegate
                     {
-                        if (cache.ContainsKey(key + regionName))
+                        if (!cache.ContainsKey(key + regionName))
                         {
-                            cache.Remove(key + regionName);
+                            return;
                         }
+
+                        var cachedValue = cache[key + regionName];
+
+                        CallEntryUpdates(key, CacheEntryRemovedReason.Expired, regionName);
+                        cache.Remove(key + regionName);
+                        CallEntryRemoved(key, cachedValue, CacheEntryRemovedReason.Expired, regionName);
                     });
             }
             else
@@ -182,13 +265,20 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             cache[key + regionName] = value;
 
-            DelayAction.Add((int) (absoluteExpiration - DateTime.Now).TotalMilliseconds, delegate
-            {
-                if (cache.ContainsKey(key))
+            DelayAction.Add(
+                (int) (absoluteExpiration - DateTime.Now).TotalMilliseconds, delegate
                 {
+                    if (!cache.ContainsKey(key))
+                    {
+                        return;
+                    }
+
+                    var cachedValue = cache[key + regionName];
+
+                    CallEntryUpdates(key, CacheEntryRemovedReason.Expired, regionName);
                     cache.Remove(key + regionName);
-                }
-            });
+                    CallEntryRemoved(key, cachedValue, CacheEntryRemovedReason.Expired, regionName);
+                });
         }
 
         /// <summary>
@@ -200,13 +290,20 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             cache[item.Key + item.RegionName] = item.Value;
 
-            DelayAction.Add((int) (policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds, delegate
-            {
-                if(cache.ContainsKey(item.Key + item.RegionName))
+            DelayAction.Add(
+                (int) (policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds, delegate
                 {
+                    if (!cache.ContainsKey(item.Key + item.RegionName))
+                    {
+                        return;
+                    }
+
+                    var cachedValue = cache[item.Key + item.RegionName];
+
+                    CallEntryUpdates(item.Key, CacheEntryRemovedReason.Expired, item.RegionName);
                     cache.Remove(item.Key + item.RegionName);
-                }
-            });
+                    CallEntryRemoved(item.Key, cachedValue, CacheEntryRemovedReason.Expired, item.RegionName);
+                });
         }
 
         /// <summary>
@@ -220,13 +317,20 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             cache[key + regionName] = value;
 
-            DelayAction.Add((int) (policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds, delegate
-            {
-                if (cache.ContainsKey(key + regionName))
+            DelayAction.Add(
+                (int) (policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds, delegate
                 {
+                    if (!cache.ContainsKey(key + regionName))
+                    {
+                        return;
+                    }
+
+                    var cachedValue = cache[key + regionName];
+
+                    CallEntryUpdates(key, CacheEntryRemovedReason.Expired, regionName);
                     cache.Remove(key + regionName);
-                }
-            });
+                    CallEntryRemoved(key, cachedValue, CacheEntryRemovedReason.Expired, regionName);
+                });
         }
 
         /// <summary>
@@ -248,15 +352,28 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <returns>The value of the key being removed</returns>
         public override object Remove(string key, string regionName = null)
         {
-            if (cache.ContainsKey(key + regionName))
+            if (!cache.ContainsKey(key + regionName))
             {
-                var value = cache[key + regionName];
-                cache.Remove(key + regionName);
-
-                return value;
+                return null;
             }
 
-            return null;
+            if (cacheEntryUpdateCallbacks.ContainsKey(key + regionName))
+            {
+                cacheEntryUpdateCallbacks[key + regionName].Invoke(
+                    new CacheEntryUpdateArguments(this, CacheEntryRemovedReason.Removed, key, regionName));
+            }
+
+            var value = cache[key + regionName];
+            cache.Remove(key + regionName);
+
+            if (cacheRemovedCallbacks.ContainsKey(key + regionName))
+            {
+                cacheRemovedCallbacks[key + regionName].Invoke(
+                    new CacheEntryRemovedArguments(
+                        this, CacheEntryRemovedReason.Removed, new CacheItem(key, value, regionName)));
+            }
+
+            return value;
         }
 
         /// <summary>
@@ -270,11 +387,16 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
-        ///     The capabilities of this instance of ObjectCache
+        ///     The capabilities of this implementation of ObjectCache
         /// </summary>
         public override DefaultCacheCapabilities DefaultCacheCapabilities
         {
-            get { return DefaultCacheCapabilities.AbsoluteExpirations | DefaultCacheCapabilities.CacheRegions; }
+            get
+            {
+                return DefaultCacheCapabilities.AbsoluteExpirations | DefaultCacheCapabilities.CacheRegions |
+                       DefaultCacheCapabilities.CacheEntryRemovedCallback |
+                       DefaultCacheCapabilities.CacheEntryUpdateCallback;
+            }
         }
 
         /// <summary>
@@ -294,6 +416,62 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             get { return cache[key]; }
             set { cache[key] = value; }
+        }
+    }
+
+    /// <summary>
+    ///     Not fully implemented, implementation of CacheEntryChangeMonitor 
+    /// </summary>
+    public class CacheEntryMonitor : CacheEntryChangeMonitor
+    {
+        private readonly ReadOnlyCollection<string> keys;
+        private readonly DateTimeOffset lastModified;
+        private readonly string regionName;
+        private readonly int random;
+
+        public CacheEntryMonitor(ReadOnlyCollection<string> keys,
+            DateTimeOffset lastModified,
+            string regionName,
+            int random)
+        {
+            this.keys = keys;
+            this.lastModified = lastModified;
+            this.regionName = regionName;
+            this.random = random;
+        }
+
+        protected override void Dispose(bool disposing) {}
+
+        /// <summary>
+        ///     Gets the unique id of this monitor
+        /// </summary>
+        public override string UniqueId
+        {
+            get { return "CommonEX Cache" + random; }
+        }
+
+        /// <summary>
+        ///     Keys this monitor is monitoring
+        /// </summary>
+        public override ReadOnlyCollection<string> CacheKeys
+        {
+            get { return keys; }
+        }
+
+        /// <summary>
+        ///     Last time keys were modified
+        /// </summary>
+        public override DateTimeOffset LastModified
+        {
+            get { return lastModified; }
+        }
+
+        /// <summary>
+        ///     Region Name
+        /// </summary>
+        public override string RegionName
+        {
+            get { return regionName; }
         }
     }
 }
