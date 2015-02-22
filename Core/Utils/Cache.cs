@@ -5,7 +5,7 @@ using System.Runtime.Caching;
 
 namespace LeagueSharp.CommonEx.Core.Utils
 {
-    class Cache : ObjectCache
+    public class Cache : ObjectCache
     {
         //TODO: Add monitors | Asignee - Chewy
 
