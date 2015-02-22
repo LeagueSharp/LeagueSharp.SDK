@@ -64,11 +64,26 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             if (cacheEntryUpdateCallbacks.ContainsKey(key + regionName))
             {
-                cacheEntryUpdateCallbacks[key + regionName].Invoke(
-                    new CacheEntryUpdateArguments(this, reason, key, regionName));
+                try
+                {
+                    cacheEntryUpdateCallbacks[key + regionName].Invoke(
+                        new CacheEntryUpdateArguments(this, reason, key, regionName));
+                }
+                catch (Exception e)
+                {
+                    Logging.Write()(
+                        LogLevel.Error, "An exception occured while invoking the EntryUpdateCallbacks: {0}", e);
+                }
             }
         }
 
+        /// <summary>
+        ///     Calls the <see cref="CacheEntryRemovedCallback"/> for the selected key.
+        /// </summary>
+        /// <param name="key">Key</param>
+        /// <param name="value">Value</param>
+        /// <param name="reason">Reason why the value was removed</param>
+        /// <param name="regionName">The name of the region in the cache</param>
         private void CallEntryRemoved(string key,
             object value,
             CacheEntryRemovedReason reason = CacheEntryRemovedReason.Removed,
@@ -76,8 +91,16 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             if (cacheRemovedCallbacks.ContainsKey(key + regionName))
             {
-                cacheRemovedCallbacks[key + regionName].Invoke(
-                    new CacheEntryRemovedArguments(this, reason, new CacheItem(key, value, regionName)));
+                try
+                {
+                    cacheRemovedCallbacks[key + regionName].Invoke(
+                        new CacheEntryRemovedArguments(this, reason, new CacheItem(key, value, regionName)));
+                }
+                catch (Exception e)
+                {
+                    Logging.Write()(
+                        LogLevel.Error, "An exception occured while invoking the CacheEntryRemovedCallback: {0}", e);
+                }
             }
         }
 
