@@ -10,12 +10,6 @@ namespace LeagueSharp.CommonEx.Core.Events
     public class OnGameLoad
     {
         /// <summary>
-        ///     OnGameLoaded delegate.
-        /// </summary>
-        /// <param name="args">System.EventArgs</param>
-        public delegate void OnGameLoaded(EventArgs args);
-
-        /// <summary>
         ///     Static constructor.
         /// </summary>
         static OnGameLoad()
@@ -34,7 +28,7 @@ namespace LeagueSharp.CommonEx.Core.Events
         ///     OnGameLoad is getting called when you get ingame (doesn't matter if started or restarted while game is already
         ///     running) and when reloading an assembly.
         /// </summary>
-        public static event OnGameLoaded EOnGameLoad;
+        public static event Action<EventArgs> EOnGameLoad;
 
         private static void Game_OnGameStart(EventArgs args)
         {
