@@ -1,6 +1,6 @@
 ﻿#region
 
-using System.Diagnostics;
+using System;
 
 #endregion
 
@@ -16,7 +16,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// </summary>
         public static long TickCount
         {
-            get { return Stopwatch.GetTimestamp(); }
+            get { return DateTime.Now.Ticks; }
         }
     }
 }
