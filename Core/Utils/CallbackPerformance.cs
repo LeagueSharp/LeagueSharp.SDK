@@ -17,18 +17,13 @@ namespace LeagueSharp.CommonEx.Core.Utils
     public class CallbackPerformance
     {
         /// <summary>
-        ///     Callback delegate.
-        /// </summary>
-        public delegate void Callback();
-
-        /// <summary>
         ///     Measures and returns the elapsed ticks the function takes.
         ///     (Caution: This will execute the function in realtime)
         /// </summary>
         /// <param name="funcCallback">Function to be executed and measured</param>
         /// <param name="memberName">Member name of the function that called the measurement request.</param>
         /// <returns>Elapsed Ticks the function took (long-units)</returns>
-        public static long MeasureTicks(Callback funcCallback, [CallerMemberName] string memberName = "")
+        public static long MeasureTicks(Action funcCallback, [CallerMemberName] string memberName = "")
         {
             try
             {
@@ -58,7 +53,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="funcCallback">Function to be executed and measured</param>
         /// <param name="memberName">Member name of the function that called the measurement request.</param>
         /// <returns>Elapsed Milliseconds the function took (long-units)</returns>
-        public static long MeasureMilliseconds(Callback funcCallback, [CallerMemberName] string memberName = "")
+        public static long MeasureMilliseconds(Action funcCallback, [CallerMemberName] string memberName = "")
         {
             try
             {
@@ -88,7 +83,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="funcCallback">Function to be executed and measured</param>
         /// <param name="memberName">Member name of the function that called the measurement request.</param>
         /// <returns>Elapsed Time Span the function took (long-units)</returns>
-        public static TimeSpan MeasureTimeSpan(Callback funcCallback, [CallerMemberName] string memberName = "")
+        public static TimeSpan MeasureTimeSpan(Action funcCallback, [CallerMemberName] string memberName = "")
         {
             try
             {

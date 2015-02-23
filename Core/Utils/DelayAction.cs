@@ -13,38 +13,33 @@ namespace LeagueSharp.CommonEx.Core.Utils
     public class DelayAction
     {
         /// <summary>
-        ///     Callback delegate.
-        /// </summary>
-        public delegate void Callback();
-
-        /// <summary>
         ///     Action List.
         /// </summary>
-        public static List<Action> ActionList = new List<Action>();
+        public static List<KeyValuePair<Action, long>> ActionList = new List<KeyValuePair<Action, long>>();
 
         /// <summary>
         ///     Static constructor.
         /// </summary>
         static DelayAction()
         {
-            Game.OnGameUpdate += GameOnOnGameUpdate;
+            Game.OnGameUpdate += GameOnGameUpdate;
         }
 
         /// <summary>
         ///     OnGameUpdate called event (per game-tick).
         /// </summary>
         /// <param name="args">System.EventArgs</param>
-        private static void GameOnOnGameUpdate(EventArgs args)
+        private static void GameOnGameUpdate(EventArgs args)
         {
             for (var i = ActionList.Count - 1; i >= 0; i--)
             {
-                if (ActionList[i].Time <= Utils.TickCount)
+                if (ActionList[i].Value <= Utils.TickCount)
                 {
                     try
                     {
-                        if (ActionList[i].CallbackObject != null)
+                        if (ActionList[i].Key != null)
                         {
-                            ActionList[i].CallbackObject();
+                            ActionList[i].Key();
                         }
                     }
                     catch (Exception)
@@ -62,37 +57,9 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// </summary>
         /// <param name="time">Delayed Time</param>
         /// <param name="func">Callback Function</param>
-        public static void Add(int time, Callback func)
+        public static void Add(int time, Action func)
         {
-            var action = new Action(time, func);
-            ActionList.Add(action);
-        }
-
-        /// <summary>
-        ///     Action Class, contains information about time of execution and the callback to execute.
-        /// </summary>
-        public class Action
-        {
-            /// <summary>
-            ///     Callback Object.
-            /// </summary>
-            public Callback CallbackObject;
-
-            /// <summary>
-            ///     Time.
-            /// </summary>
-            public long Time;
-
-            /// <summary>
-            ///     Action Constructor.
-            /// </summary>
-            /// <param name="time">Time (int)</param>
-            /// <param name="callback">Callback</param>
-            public Action(int time, Callback callback)
-            {
-                Time = time + Utils.TickCount;
-                CallbackObject = callback;
-            }
+            ActionList.Add(new KeyValuePair<Action, long>(func, time + Utils.TickCount));
         }
     }
 }
