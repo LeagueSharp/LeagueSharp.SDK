@@ -145,6 +145,18 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
+        ///     Adds a key and a value, in the cache region. However, if the item exists, it will return the cached item. This KeyValuePair does not expire.
+        /// </summary>
+        /// <param name="key">Key</param>
+        /// <param name="value">Value</param>
+        /// <param name="regionName">The anme of the region in the cache.</param>
+        /// <returns>The cahced value.</returns>
+        public object AddOrGetExisting(string key, object value, string regionName = null)
+        {
+            return AddOrGetExisting(key, value, InfiniteAbsoluteExpiration, regionName);
+        }
+
+        /// <summary>
         ///     Adds a key, a value, and an expiration to the cache, returns the value if the key exists
         /// </summary>
         /// <param name="key">Key</param>

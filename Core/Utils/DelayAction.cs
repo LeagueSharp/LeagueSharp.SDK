@@ -7,6 +7,9 @@ using System.Collections.Generic;
 
 namespace LeagueSharp.CommonEx.Core.Utils
 {
+    /// <summary>
+    ///     Delays actions by a set time.
+    /// </summary>
     public class DelayAction
     {
         /// <summary>

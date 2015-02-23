@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 namespace LeagueSharp.CommonEx.Core.Utils
 {
     /// <summary>
-    ///     Logging class for LeagueSharp.CommonEx, used to log output data into a file.
+    ///     Logging class for LeagueSharp.CommonEx, used to log output data into a file and the console.
     /// </summary>
     public class Logging
     {
