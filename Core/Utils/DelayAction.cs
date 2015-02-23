@@ -69,9 +69,9 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
-        ///     Action Struct.
+        ///     Action Class, contains information about time of execution and the callback to execute.
         /// </summary>
-        public struct Action
+        public class Action
         {
             /// <summary>
             ///     Callback Object.

@@ -16,7 +16,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// </summary>
         public static long TickCount
         {
-            get { return DateTime.Now.Ticks; }
+            get { return DateTime.Now.Ticks / 10000; }
         }
     }
 }

@@ -39,7 +39,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <summary>
         ///     Performance Constructor, starting a new Stopwatch.
         /// </summary>
-        private Performance(PerformanceType performanceType, [CallerMemberName] string memberName = "")
+        public Performance(PerformanceType performanceType, [CallerMemberName] string memberName = "")
         {
             this.memberName = memberName;
             this.performanceType = performanceType;
