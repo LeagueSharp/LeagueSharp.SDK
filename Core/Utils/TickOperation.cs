@@ -14,7 +14,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         private long nextTick;
 
         /// <summary>
-        ///     Constructor for a new Tick Operation instance.
+        ///     Constructor for a new Tick Operation instance, auto-starts by default.
         /// </summary>
         /// <param name="tickDelay">A set delay between ticks the action should be executed.</param>
         /// <param name="action">The executed action.</param>
@@ -24,9 +24,9 @@ namespace LeagueSharp.CommonEx.Core.Utils
             Action = action;
             TickDelay = tickDelay;
 
-            nextTick = Utils.TickCount + tickDelay;
-
-            Start(runOnce);
+            nextTick = (runOnce) ? Utils.TickCount : Utils.TickCount + tickDelay;
+            IsRunning = true;
+            Game.OnGameUpdate += OnTick;
         }
 
         /// <summary>
@@ -40,36 +40,23 @@ namespace LeagueSharp.CommonEx.Core.Utils
         public int TickDelay { get; set; }
 
         /// <summary>
+        ///     Returns if the Tick Operation is currently running
+        /// </summary>
+        public bool IsRunning { get; set; }
+
+        /// <summary>
         ///     Disposal of the Tick Operation.
         /// </summary>
         public void Dispose()
         {
-            try
+            if (IsRunning)
             {
                 Game.OnGameUpdate -= OnTick;
-            }
-            catch (Exception)
-            {
-                // Ignored Exception
             }
             Action = null;
             TickDelay = 0;
             nextTick = 0L;
-        }
-
-        /// <summary>
-        ///     Finalization of the Tick Operation.
-        /// </summary>
-        ~TickOperation()
-        {
-            try
-            {
-                Game.OnGameUpdate -= OnTick;
-            }
-            catch (Exception)
-            {
-                // Ignored Exception
-            }
+            IsRunning = false;
         }
 
         /// <summary>
@@ -79,7 +66,10 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <returns>Tick Operation instance.</returns>
         public TickOperation Start(bool runOnce = false)
         {
-            Game.OnGameUpdate += OnTick;
+            if (!IsRunning)
+            {
+                Game.OnGameUpdate += OnTick;
+            }
             return this;
         }
 
@@ -93,6 +83,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
             if (nextTick <= Utils.TickCount)
             {
                 Action();
+
                 nextTick = Utils.TickCount + TickDelay;
             }
         }
@@ -103,13 +94,9 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <returns>Tick Operation instance.</returns>
         public TickOperation Stop()
         {
-            try
+            if (IsRunning)
             {
                 Game.OnGameUpdate -= OnTick;
-            }
-            catch (Exception)
-            {
-                // Ignored Exception
             }
             return this;
         }
