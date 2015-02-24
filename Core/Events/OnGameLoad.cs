@@ -7,6 +7,9 @@ using LeagueSharp.CommonEx.Core.Utils;
 
 namespace LeagueSharp.CommonEx.Core.Events
 {
+    /// <summary>
+    ///     Provides an event for when the game starts.
+    /// </summary>
     public class OnGameLoad
     {
         /// <summary>

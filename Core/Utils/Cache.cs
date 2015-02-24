@@ -11,7 +11,6 @@ namespace LeagueSharp.CommonEx.Core.Utils
     /// </summary>
     public class Cache : ObjectCache
     {
-      
         #region Singleton
 
         private static Cache _instance;
@@ -516,6 +515,10 @@ namespace LeagueSharp.CommonEx.Core.Utils
             this.random = random;
         }
 
+        /// <summary>
+        ///     Disposes the CacheEntryMonitor.
+        /// </summary>
+        /// <param name="disposing">Indicates whether the method call comes from a Dispose method (true) or from a finalizer (false).</param>
         protected override void Dispose(bool disposing) {}
 
         /// <summary>

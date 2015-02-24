@@ -128,8 +128,19 @@ namespace LeagueSharp.CommonEx.Core.Utils
     /// </summary>
     public enum PerformanceType
     {
+        /// <summary>
+        ///     Logs the Tick Count(CPU Ticks)
+        /// </summary>
         TickCount,
+
+        /// <summary>
+        ///     Logs the number of miliseconds
+        /// </summary>
         Milliseconds,
+
+        /// <summary>
+        ///     Logs the time spanned in TimeSpam format
+        /// </summary>
         TimeSpan
     }
 }
