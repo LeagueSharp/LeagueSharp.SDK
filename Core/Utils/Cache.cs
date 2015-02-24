@@ -11,7 +11,8 @@ using System.Runtime.Caching;
 namespace LeagueSharp.CommonEx.Core.Utils
 {
     /// <summary>
-    ///     Provides an implementation of ObjectCache, for any object. Check <see cref="DefaultCacheCapabilities"/> for implemented abilities.
+    ///     Provides an implementation of ObjectCache, for any object. Check <see cref="DefaultCacheCapabilities" /> for
+    ///     implemented abilities.
     /// </summary>
     public class Cache : ObjectCache
     {
@@ -96,8 +97,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
             }
             catch (Exception e)
             {
-                Logging.Write()(
-                    LogLevel.Error, "An exception occured while invoking the EntryUpdateCallbacks: {0}", e);
+                Logging.Write()(LogLevel.Error, "An exception occured while invoking the EntryUpdateCallbacks: {0}", e);
             }
         }
 

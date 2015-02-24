@@ -63,8 +63,9 @@
     <Compile Include="Core\Extensions\SharpDX\Vector3.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector4.cs" />
     <Compile Include="Core\Extensions\Unit.cs" />
-    <Compile Include="Core\Render\Line.cs" />
+    <Compile Include="Core\Render\2D\Line.cs" />
     <Compile Include="Core\Render\Rectangle.cs" />
+    <Compile Include="Core\Render\Vertex.cs" />
     <Compile Include="Core\Utils\Cache.cs" />
     <Compile Include="Core\Utils\DelayAction.cs" />
     <Compile Include="Core\Utils\Logging.cs" />
@@ -76,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\Math\" />
