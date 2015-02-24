@@ -1,8 +1,12 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Caching;
+
+#endregion
 
 namespace LeagueSharp.CommonEx.Core.Utils
 {
@@ -11,29 +15,6 @@ namespace LeagueSharp.CommonEx.Core.Utils
     /// </summary>
     public class Cache : ObjectCache
     {
-        #region Singleton
-
-        private static Cache _instance;
-
-        /// <summary>
-        ///     Gets the instance of Cache
-        /// </summary>
-        public static Cache Instance
-        {
-            get
-            {
-                if (_instance != null)
-                {
-                    return _instance;
-                }
-
-                _instance = new Cache();
-                return _instance;
-            }
-        }
-
-        #endregion
-
         /// <summary>
         ///     Main Cache
         /// </summary>
@@ -60,7 +41,39 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
-        ///     Calls the <see cref="CacheEntryUpdateCallback"/> for the selected key.
+        ///     The capabilities of this implementation of ObjectCache
+        /// </summary>
+        public override DefaultCacheCapabilities DefaultCacheCapabilities
+        {
+            get
+            {
+                return DefaultCacheCapabilities.AbsoluteExpirations | DefaultCacheCapabilities.CacheRegions |
+                       DefaultCacheCapabilities.CacheEntryRemovedCallback |
+                       DefaultCacheCapabilities.CacheEntryUpdateCallback;
+            }
+        }
+
+        /// <summary>
+        ///     Returns the name of the Cache
+        /// </summary>
+        public override string Name
+        {
+            get { return "CommonEX Cache"; }
+        }
+
+        /// <summary>
+        ///     Gets/Sets the value of a key in the Cache, using the default region name
+        /// </summary>
+        /// <param name="key">Key</param>
+        /// <returns>Value matching the key</returns>
+        public override object this[string key]
+        {
+            get { return cache["Default"][key]; }
+            set { cache["Default"][key] = value; }
+        }
+
+        /// <summary>
+        ///     Calls the <see cref="CacheEntryUpdateCallback" /> for the selected key.
         /// </summary>
         /// <param name="key">Key</param>
         /// <param name="reason">Reason why the value was removed</param>
@@ -85,7 +98,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
-        ///     Calls the <see cref="CacheEntryRemovedCallback"/> for the selected key.
+        ///     Calls the <see cref="CacheEntryRemovedCallback" /> for the selected key.
         /// </summary>
         /// <param name="key">Key</param>
         /// <param name="value">Value</param>
@@ -121,7 +134,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
-        ///     Creats an <see cref="CacheEntryChangeMonitor"/> of the selected keys
+        ///     Creats an <see cref="CacheEntryChangeMonitor" /> of the selected keys
         /// </summary>
         /// <param name="keys">Keys</param>
         /// <param name="regionName">The name of the region in the cache</param>
@@ -155,7 +168,8 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
-        ///     Adds a key and a value, in the cache region. However, if the item exists, it will return the cached item. This KeyValuePair does not expire.
+        ///     Adds a key and a value, in the cache region. However, if the item exists, it will return the cached item. This
+        ///     KeyValuePair does not expire.
         /// </summary>
         /// <param name="key">Key</param>
         /// <param name="value">Value</param>
@@ -454,48 +468,39 @@ namespace LeagueSharp.CommonEx.Core.Utils
             return cache[regionName].Count;
         }
 
+        #region Singleton
+
+        private static Cache _instance;
+
         /// <summary>
-        ///     The capabilities of this implementation of ObjectCache
+        ///     Gets the instance of Cache
         /// </summary>
-        public override DefaultCacheCapabilities DefaultCacheCapabilities
+        public static Cache Instance
         {
             get
             {
-                return DefaultCacheCapabilities.AbsoluteExpirations | DefaultCacheCapabilities.CacheRegions |
-                       DefaultCacheCapabilities.CacheEntryRemovedCallback |
-                       DefaultCacheCapabilities.CacheEntryUpdateCallback;
+                if (_instance != null)
+                {
+                    return _instance;
+                }
+
+                _instance = new Cache();
+                return _instance;
             }
         }
 
-        /// <summary>
-        ///     Returns the name of the Cache
-        /// </summary>
-        public override string Name
-        {
-            get { return "CommonEX Cache"; }
-        }
-
-        /// <summary>
-        ///     Gets/Sets the value of a key in the Cache, using the default region name
-        /// </summary>
-        /// <param name="key">Key</param>
-        /// <returns>Value matching the key</returns>
-        public override object this[string key]
-        {
-            get { return cache["Default"][key]; }
-            set { cache["Default"][key] = value; }
-        }
+        #endregion
     }
 
     /// <summary>
-    ///     Not fully implemented, implementation of CacheEntryChangeMonitor 
+    ///     Not fully implemented, implementation of CacheEntryChangeMonitor
     /// </summary>
     public class CacheEntryMonitor : CacheEntryChangeMonitor
     {
         private readonly ReadOnlyCollection<string> keys;
         private readonly DateTimeOffset lastModified;
-        private readonly string regionName;
         private readonly int random;
+        private readonly string regionName;
 
         /// <summary>
         ///     Creates new CacheEntryMonitor
@@ -514,12 +519,6 @@ namespace LeagueSharp.CommonEx.Core.Utils
             this.regionName = regionName;
             this.random = random;
         }
-
-        /// <summary>
-        ///     Disposes the CacheEntryMonitor.
-        /// </summary>
-        /// <param name="disposing">Indicates whether the method call comes from a Dispose method (true) or from a finalizer (false).</param>
-        protected override void Dispose(bool disposing) {}
 
         /// <summary>
         ///     Gets the unique id of this monitor
@@ -552,5 +551,14 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             get { return regionName; }
         }
+
+        /// <summary>
+        ///     Disposes the CacheEntryMonitor.
+        /// </summary>
+        /// <param name="disposing">
+        ///     Indicates whether the method call comes from a Dispose method (true) or from a finalizer
+        ///     (false).
+        /// </param>
+        protected override void Dispose(bool disposing) {}
     }
 }
