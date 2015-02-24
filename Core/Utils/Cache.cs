@@ -52,7 +52,10 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
         private Cache()
         {
+            // We have to create the default region, else we get exceptions :^(
             cache = new SortedDictionary<string, SortedDictionary<string, object>>();
+            cache["Default"] = new SortedDictionary<string, object>();
+
             cacheEntryUpdateCallbacks = new SortedDictionary<string, CacheEntryUpdateCallback>();
             cacheRemovedCallbacks = new SortedDictionary<string, CacheEntryRemovedCallback>();
         }
@@ -107,6 +110,15 @@ namespace LeagueSharp.CommonEx.Core.Utils
                         LogLevel.Error, "An exception occured while invoking the CacheEntryRemovedCallback: {0}", e);
                 }
             }
+        }
+
+        /// <summary>
+        ///     Creates a new region to use. The default region is automatically created.
+        /// </summary>
+        /// <param name="regionName">The name of the region in the cache</param>
+        public void CreateRegion(string regionName)
+        {
+            cache[regionName] = new SortedDictionary<string, object>();
         }
 
         /// <summary>
