@@ -49,7 +49,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
             {
                 return DefaultCacheCapabilities.AbsoluteExpirations | DefaultCacheCapabilities.CacheRegions |
                        DefaultCacheCapabilities.CacheEntryRemovedCallback |
-                       DefaultCacheCapabilities.CacheEntryUpdateCallback | DefaultCacheCapabilities.CacheEntryUpdateCallback;
+                       DefaultCacheCapabilities.CacheEntryUpdateCallback;
             }
         }
 
