@@ -1,5 +1,9 @@
-﻿using SharpDX;
+﻿#region
+
+using SharpDX;
 using Color = System.Drawing.Color;
+
+#endregion
 
 namespace LeagueSharp.CommonEx.Core.Render._2D
 {

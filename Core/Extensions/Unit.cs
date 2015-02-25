@@ -178,59 +178,5 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         }
 
         #endregion
-
-        #region Get/Count Heroes
-
-        /// <summary>
-        ///     Counts the number of allies(according to the source) in range.
-        /// </summary>
-        /// <param name="source">Hero to count allies around.</param>
-        /// <param name="range">Range</param>
-        /// <returns>The number of allies in range</returns>
-        public static int CountAlliesInRange(this Obj_AI_Hero source, float range)
-        {
-            return
-                ObjectManager.Get<Obj_AI_Hero>()
-                    .FindAll(x => x.Team == source.Team && x.Distance(source) < range && !x.IsMe)
-                    .Count;
-        }
-
-        /// <summary>
-        ///     Counts the number of enemies(according to the source) in range.
-        /// </summary>
-        /// <param name="source">Hero to count enemies around</param>
-        /// <param name="range">Range</param>
-        /// <returns>The number of enemies in raange</returns>
-        public static int CountEnemiesInRange(this Obj_AI_Hero source, float range)
-        {
-            return
-                ObjectManager.Get<Obj_AI_Hero>()
-                    .FindAll(x => x.Team != source.Team && x.Distance(source) < range)
-                    .Count;
-        }
-
-        /// <summary>
-        ///     Gets all the allies(according to the source) in the range.
-        /// </summary>
-        /// <param name="source">Source</param>
-        /// <param name="range">Range</param>
-        /// <returns>List of allies</returns>
-        public static List<Obj_AI_Hero> GetAlliesInRange(this Obj_AI_Hero source, float range)
-        {
-            return ObjectManager.Get<Obj_AI_Hero>().FindAll(x => x.Team == source.Team && x.Distance(source) < range && !x.IsMe);
-        }
-
-        /// <summary>
-        ///     Gets all the enemies(according to the source) in the range
-        /// </summary>
-        /// <param name="source">Source</param>
-        /// <param name="range">Range</param>
-        /// <returns>List of enemies</returns>
-        public static List<Obj_AI_Hero> GetEnemiesInRange(this Obj_AI_Hero source, float range)
-        {
-            return ObjectManager.Get<Obj_AI_Hero>().FindAll(x => x.Team != source.Team && x.Distance(source) < range);
-        }
-
-        #endregion
     }
 }

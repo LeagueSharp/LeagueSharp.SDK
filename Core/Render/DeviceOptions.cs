@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using SharpDX;
 using SharpDX.Direct3D9;
+
+#endregion
 
 namespace LeagueSharp.CommonEx.Core.Render
 {
@@ -10,16 +14,6 @@ namespace LeagueSharp.CommonEx.Core.Render
     /// </summary>
     public class DeviceOptions : IDisposable
     {
-        private readonly Device device;
-        private readonly VertexFormat format;
-        private readonly int offsetInBytes;
-        private readonly DeviceOptionsType options;
-        private readonly PixelShader pixelShader;
-        private readonly Dictionary<RenderState, int> states = new Dictionary<RenderState, int>();
-        private readonly int stride;
-        private readonly BaseTexture texture;
-        private readonly VertexBuffer vertexBuffer;
-
         /// <summary>
         ///     Creates a new Device Options handle, commonly used as a block on draw.
         /// </summary>
@@ -41,6 +35,7 @@ namespace LeagueSharp.CommonEx.Core.Render
                     #region 2D Circle
 
                 case DeviceOptionsType._2DCircle:
+                {
                     texture = device.GetTexture(0);
                     pixelShader = device.PixelShader;
 
@@ -68,7 +63,7 @@ namespace LeagueSharp.CommonEx.Core.Render
                     device.SetRenderState(RenderState.SourceBlend, RenderState.SourceBlendAlpha);
                     device.SetRenderState(RenderState.DestinationBlend, RenderState.DestinationBlendAlpha);
 
-                    device.GetStreamSource(0, out vertexBuffer, out offsetInBytes, out stride);
+                    device.GetStreamSource(0, out vertexBuffer, out vertexBufferoffsetInBytes, out vertexBufferStride);
                     if (extraObjects.Length > 1 && extraObjects[1] is VertexBuffer)
                     {
                         device.SetStreamSource(0, (VertexBuffer) extraObjects[1], 0, Utilities.SizeOf<Vertex>());
@@ -78,6 +73,7 @@ namespace LeagueSharp.CommonEx.Core.Render
                     device.VertexFormat = VertexFormat.PositionRhw | VertexFormat.Diffuse;
 
                     break;
+                }
 
                     #endregion
             }
@@ -92,7 +88,7 @@ namespace LeagueSharp.CommonEx.Core.Render
             {
                 device.SetTexture(0, texture);
                 device.PixelShader = pixelShader;
-                device.SetStreamSource(0, vertexBuffer, offsetInBytes, stride);
+                device.SetStreamSource(0, vertexBuffer, vertexBufferoffsetInBytes, vertexBufferStride);
                 device.VertexFormat = format;
             }
             foreach (var state in states)
@@ -100,6 +96,55 @@ namespace LeagueSharp.CommonEx.Core.Render
                 device.SetRenderState(state.Key, state.Value);
             }
         }
+
+        #region Fields
+
+        /// <summary>
+        ///     Device Handle.
+        /// </summary>
+        private readonly Device device;
+
+        /// <summary>
+        ///     Old VertexFormat.
+        /// </summary>
+        private readonly VertexFormat format;
+
+        /// <summary>
+        ///     Device Options Type.
+        /// </summary>
+        private readonly DeviceOptionsType options;
+
+        /// <summary>
+        ///     Old PixelShader.
+        /// </summary>
+        private readonly PixelShader pixelShader;
+
+        /// <summary>
+        ///     Saved RenderStates.
+        /// </summary>
+        private readonly Dictionary<RenderState, int> states = new Dictionary<RenderState, int>();
+
+        /// <summary>
+        ///     Old Texture
+        /// </summary>
+        private readonly BaseTexture texture;
+
+        /// <summary>
+        ///     Old VertexBuffer
+        /// </summary>
+        private readonly VertexBuffer vertexBuffer;
+
+        /// <summary>
+        ///     Old VertexBuffer offsetInBytes.
+        /// </summary>
+        private readonly int vertexBufferoffsetInBytes;
+
+        /// <summary>
+        ///     Old VertexBuffer stride.
+        /// </summary>
+        private readonly int vertexBufferStride;
+
+        #endregion
     }
 
     /// <summary>

@@ -53,7 +53,6 @@ namespace LeagueSharp.CommonEx.Core.Extensions
 
         #endregion
 
-
         #region MaxOrDefault
 
         /// <summary>
@@ -68,7 +67,9 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         {
             var enumerator = container.GetEnumerator();
             if (!enumerator.MoveNext())
+            {
                 return default(T);
+            }
 
             var maxElem = enumerator.Current;
             var maxVal = comparer(maxElem);
@@ -91,7 +92,6 @@ namespace LeagueSharp.CommonEx.Core.Extensions
 
         #endregion
 
-
         #region Find
 
         /// <summary>
@@ -108,6 +108,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         #endregion
 
         #region In
+
         /// <summary>
         ///     Determines if a list contains any of the values.
         /// </summary>
@@ -167,6 +168,5 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         }
 
         #endregion
-
     }
 }
