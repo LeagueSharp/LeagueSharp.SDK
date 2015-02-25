@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\LeagueSharp.CommonEx.XML</DocumentationFile>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -33,6 +34,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\LeagueSharp.CommonEx.XML</DocumentationFile>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -51,9 +53,7 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Runtime.Caching" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Constants.cs" />
@@ -63,7 +63,9 @@
     <Compile Include="Core\Extensions\SharpDX\Vector3.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector4.cs" />
     <Compile Include="Core\Extensions\Unit.cs" />
+    <Compile Include="Core\Render\2D\Circle.cs" />
     <Compile Include="Core\Render\2D\Line.cs" />
+    <Compile Include="Core\Render\DeviceOptions.cs" />
     <Compile Include="Core\Render\Rectangle.cs" />
     <Compile Include="Core\Render\Vertex.cs" />
     <Compile Include="Core\Utils\Cache.cs" />

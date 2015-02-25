@@ -222,7 +222,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         #region Line, Vector2, Vector2, Float, Bool, Color
 
         /// <summary>
-        ///     Line Constructor.
+        ///     Draw a line directly without instancing a new line, external drawing method.
         /// </summary>
         /// <param name="line">Line Instance [Can be NULL]</param>
         /// <param name="start">Starting Vector</param>
@@ -241,7 +241,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         }
 
         /// <summary>
-        ///     Line Constructor.
+        ///     Draw a line directly without instancing a new line, external drawing method.
         /// </summary>
         /// <param name="line">Line Instance [Can be NULL]</param>
         /// <param name="start">Starting Vector</param>
@@ -264,7 +264,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         #region Line, Vector4, Float, Bool, Color
 
         /// <summary>
-        ///     Line Constructor.
+        ///     Draw a line directly without instancing a new line, external drawing method.
         /// </summary>
         /// <param name="line">Line Instance [Can be NULL]</param>
         /// <param name="vector4">Starting Vector (X,Y) and Ending Vector (Z,W)</param>
@@ -279,7 +279,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         }
 
         /// <summary>
-        ///     Line Constructor.
+        ///     Draw a line directly without instancing a new line, external drawing method.
         /// </summary>
         /// <param name="line">Line Instance [Can be NULL]</param>
         /// <param name="vector4">Starting Vector (X,Y) and Ending Vector (Z,W)</param>
@@ -302,7 +302,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         #region Line, Float, Float, Float, Float, Float, Color
 
         /// <summary>
-        ///     Line Constructor.
+        ///     Draw a line directly without instancing a new line, external drawing method.
         /// </summary>
         /// <param name="line">Line Instance [Can be NULL]</param>
         /// <param name="sX">Starting X-axis</param>
@@ -325,7 +325,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         }
 
         /// <summary>
-        ///     Line Constructor.
+        ///     Draw a line directly without instancing a new line, external drawing method.
         /// </summary>
         /// <param name="line">Line Instance [Can be NULL]</param>
         /// <param name="sX">Starting X-axis</param>
@@ -353,7 +353,15 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
 
         #region Base :: Line, Vector2[], Float, Bool, Color
 
-        private static void Draw(SharpDX.Direct3D9.Line line,
+        /// <summary>
+        ///     Draw a line directly without instancing a new line, external drawing method.
+        /// </summary>
+        /// <param name="line">Line Instance [Can be NULL]</param>
+        /// <param name="vertices">Vertices that contain the correct data to draw the line.</param>
+        /// <param name="width">Line Width</param>
+        /// <param name="antialias">Line Antialias</param>
+        /// <param name="color">Line Color</param>
+        public static void Draw(SharpDX.Direct3D9.Line line,
             Vector2[] vertices,
             float width,
             bool antialias,
