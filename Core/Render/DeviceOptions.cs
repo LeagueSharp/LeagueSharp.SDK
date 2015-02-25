@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using SharpDX;
+using System.Linq;
 using SharpDX.Direct3D9;
 
 #endregion
@@ -15,12 +15,21 @@ namespace LeagueSharp.CommonEx.Core.Render
     public class DeviceOptions : IDisposable
     {
         /// <summary>
+        ///     Device Pointer/Instance.
+        /// </summary>
+        private readonly Device device;
+
+        /// <summary>
+        ///     Device Option list.
+        /// </summary>
+        private readonly List<DeviceOption> options;
+
+        /// <summary>
         ///     Creates a new Device Options handle, commonly used as a block on draw.
         /// </summary>
-        /// <param name="device">Device to modify</param>
-        /// <param name="options">Built-in device options</param>
-        /// <param name="extraObjects">Extra objects</param>
-        public DeviceOptions(Device device, DeviceOptionsType options, params object[] extraObjects)
+        /// <param name="device">Device</param>
+        /// <param name="options">Options</param>
+        public DeviceOptions(Device device, params DeviceOption[] options)
         {
             if (device == null || device.IsDisposed)
             {
@@ -28,138 +37,166 @@ namespace LeagueSharp.CommonEx.Core.Render
             }
 
             this.device = device;
-            this.options = options;
+            this.options = options.ToList();
 
-            switch (options)
+            foreach (var option in options)
             {
-                    #region 2D Circle
-
-                case DeviceOptionsType._2DCircle:
+                switch (option.Type)
                 {
-                    texture = device.GetTexture(0);
-                    pixelShader = device.PixelShader;
+                    case DeviceOptionIdentity.RenderState:
+                        option.OldValue = device.GetRenderState((RenderState) option.Key);
+                        device.SetRenderState((RenderState) option.Key, (int) option.Value);
+                        break;
+                    case DeviceOptionIdentity.Texture:
+                        var stage = option.Key as int? ?? 0;
+                        option.OldValue = device.GetTexture(stage);
+                        device.SetTexture(stage, (BaseTexture) option.Value);
+                        break;
+                    default:
+                        if (option.Type == DeviceOptionIdentity.Texture)
+                        {
+                            option.OldValue = device.PixelShader;
+                            device.PixelShader = (PixelShader) option.Value;
+                        }
+                        else if (option.Type == DeviceOptionIdentity.StreamSource && ((object[]) option.Value).Length > 2)
+                        {
+                            VertexBuffer streamDataOut;
+                            int offsetInBytesRef;
+                            int stride;
+                            device.GetStreamSource(0, out streamDataOut, out offsetInBytesRef, out stride);
 
-                    device.SetTexture(0, null);
-                    device.PixelShader = null;
+                            option.OldValue = new object[] { streamDataOut, offsetInBytesRef, stride };
 
-                    var smooth = extraObjects.Length > 0 && extraObjects[0] is Boolean && (bool) extraObjects[0];
-
-                    if (smooth)
-                    {
-                        states.Add(
-                            RenderState.MultisampleAntialias, device.GetRenderState(RenderState.MultisampleAntialias));
-                        states.Add(
-                            RenderState.AntialiasedLineEnable, device.GetRenderState(RenderState.AntialiasedLineEnable));
-
-                        device.SetRenderState(RenderState.MultisampleAntialias, true);
-                        device.SetRenderState(RenderState.AntialiasedLineEnable, true);
-                    }
-
-                    states.Add(RenderState.AlphaBlendEnable, device.GetRenderState(RenderState.AlphaBlendEnable));
-                    states.Add(RenderState.SourceBlend, device.GetRenderState(RenderState.SourceBlend));
-                    states.Add(RenderState.DestinationBlend, device.GetRenderState(RenderState.DestinationBlend));
-
-                    device.SetRenderState(RenderState.AlphaBlendEnable, true);
-                    device.SetRenderState(RenderState.SourceBlend, RenderState.SourceBlendAlpha);
-                    device.SetRenderState(RenderState.DestinationBlend, RenderState.DestinationBlendAlpha);
-
-                    device.GetStreamSource(0, out vertexBuffer, out vertexBufferoffsetInBytes, out vertexBufferStride);
-                    if (extraObjects.Length > 1 && extraObjects[1] is VertexBuffer)
-                    {
-                        device.SetStreamSource(0, (VertexBuffer) extraObjects[1], 0, Utilities.SizeOf<Vertex>());
-                    }
-
-                    format = device.VertexFormat;
-                    device.VertexFormat = VertexFormat.PositionRhw | VertexFormat.Diffuse;
-
-                    break;
+                            var value = ((object[]) option.Value);
+                            device.SetStreamSource(0, (VertexBuffer) value[0], (int) value[1], (int) value[2]);
+                        }
+                        else if (option.Type == DeviceOptionIdentity.VertexFormat)
+                        {
+                            option.OldValue = device.VertexFormat;
+                            device.VertexFormat = (VertexFormat) option.Value;
+                        }
+                        break;
                 }
-
-                    #endregion
             }
         }
 
         /// <summary>
-        ///     Disposal of the DeviceOptions block, returning all original values to the device.
+        ///     Dispose of the DeviceOptions and returning the device to default values.
         /// </summary>
         public void Dispose()
         {
-            if (options == DeviceOptionsType._2DCircle)
+            foreach (var option in options)
             {
-                device.SetTexture(0, texture);
-                device.PixelShader = pixelShader;
-                device.SetStreamSource(0, vertexBuffer, vertexBufferoffsetInBytes, vertexBufferStride);
-                device.VertexFormat = format;
+                switch (option.Type)
+                {
+                    case DeviceOptionIdentity.RenderState:
+                        device.SetRenderState((RenderState) option.Key, (int) option.OldValue);
+                        break;
+                    case DeviceOptionIdentity.Texture:
+                        device.SetTexture(option.Key as int? ?? 0, (BaseTexture) option.OldValue);
+                        break;
+                    default:
+                        if (option.Type == DeviceOptionIdentity.Texture)
+                        {
+                            device.PixelShader = (PixelShader) option.OldValue;
+                        }
+                        else if (option.Type == DeviceOptionIdentity.StreamSource && ((object[]) option.Value).Length > 2)
+                        {
+                            var value = ((object[]) option.OldValue);
+                            device.SetStreamSource(0, (VertexBuffer) value[0], (int) value[1], (int) value[2]);
+                        }
+                        else if (option.Type == DeviceOptionIdentity.VertexFormat)
+                        {
+                            device.VertexFormat = (VertexFormat) option.OldValue;
+                        }
+                        break;
+                }
             }
-            foreach (var state in states)
-            {
-                device.SetRenderState(state.Key, state.Value);
-            }
+
+            options.Clear();
         }
-
-        #region Fields
-
-        /// <summary>
-        ///     Device Handle.
-        /// </summary>
-        private readonly Device device;
-
-        /// <summary>
-        ///     Old VertexFormat.
-        /// </summary>
-        private readonly VertexFormat format;
-
-        /// <summary>
-        ///     Device Options Type.
-        /// </summary>
-        private readonly DeviceOptionsType options;
-
-        /// <summary>
-        ///     Old PixelShader.
-        /// </summary>
-        private readonly PixelShader pixelShader;
-
-        /// <summary>
-        ///     Saved RenderStates.
-        /// </summary>
-        private readonly Dictionary<RenderState, int> states = new Dictionary<RenderState, int>();
-
-        /// <summary>
-        ///     Old Texture
-        /// </summary>
-        private readonly BaseTexture texture;
-
-        /// <summary>
-        ///     Old VertexBuffer
-        /// </summary>
-        private readonly VertexBuffer vertexBuffer;
-
-        /// <summary>
-        ///     Old VertexBuffer offsetInBytes.
-        /// </summary>
-        private readonly int vertexBufferoffsetInBytes;
-
-        /// <summary>
-        ///     Old VertexBuffer stride.
-        /// </summary>
-        private readonly int vertexBufferStride;
-
-        #endregion
     }
 
     /// <summary>
-    ///     Built in device options types to switch for specific drawing methods.
+    ///     DeviceOption class, used to mark which options to change on the device and to restore later on.
     /// </summary>
-    public enum DeviceOptionsType
+    public class DeviceOption
     {
         /// <summary>
-        ///     No Device Option Type.
+        ///     DeviceOption RenderState constructor.
         /// </summary>
-        None,
+        /// <param name="state">RenderState</param>
+        /// <param name="value">New Value</param>
+        public DeviceOption(RenderState state, object value)
+        {
+            Type = DeviceOptionIdentity.RenderState;
+
+            Key = state;
+            Value = value;
+        }
 
         /// <summary>
-        ///     Switch to the correct rendering states for drawing the 2D Circle.
+        ///     Identity constructor.
         /// </summary>
-        _2DCircle
+        /// <param name="identity">Device Option Identity</param>
+        /// <param name="value">New Value</param>
+        /// <param name="key">Key [Optional]</param>
+        public DeviceOption(DeviceOptionIdentity identity, object value, object key = null)
+        {
+            Type = identity;
+            Value = value;
+            Key = key;
+        }
+
+        /// <summary>
+        ///     The type of the device option, (identity).
+        /// </summary>
+        public DeviceOptionIdentity Type { get; set; }
+
+        /// <summary>
+        ///     The key of the device option.
+        /// </summary>
+        public object Key { get; set; }
+
+        /// <summary>
+        ///     The new value to be set on changes request.
+        /// </summary>
+        public object Value { get; set; }
+
+        /// <summary>
+        ///     The old value reference.
+        /// </summary>
+        public object OldValue { get; set; }
+    }
+
+    /// <summary>
+    ///     Device Option Indetity types.
+    /// </summary>
+    public enum DeviceOptionIdentity
+    {
+        /// <summary>
+        ///     RenderState Type
+        /// </summary>
+        RenderState,
+
+        /// <summary>
+        ///     Texture Type
+        /// </summary>
+        Texture,
+
+        /// <summary>
+        ///     PixelShader Type
+        /// </summary>
+        PixelShader,
+
+        /// <summary>
+        ///     StreamSource Type
+        /// </summary>
+        StreamSource,
+
+        /// <summary>
+        ///     VertexFormat Type
+        /// </summary>
+        VertexFormat
     }
 }

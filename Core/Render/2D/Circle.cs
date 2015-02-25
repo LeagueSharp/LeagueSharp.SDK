@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D9;
@@ -32,7 +33,30 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// </summary>
         public void Draw()
         {
-            using (new DeviceOptions(Drawing.Direct3DDevice, DeviceOptionsType._2DCircle, Smooth, buffer))
+            var device = Drawing.Direct3DDevice;
+            var deviceOptions = new[]
+            {
+                new DeviceOption(DeviceOptionIdentity.Texture, null, 0),
+                new DeviceOption(DeviceOptionIdentity.PixelShader, null),
+                new DeviceOption(RenderState.AlphaBlendEnable, true),
+                new DeviceOption(RenderState.SourceBlend, device.GetRenderState(RenderState.SourceBlendAlpha)),
+                new DeviceOption(RenderState.DestinationBlend, device.GetRenderState(RenderState.DestinationBlendAlpha)),
+                new DeviceOption(
+                    DeviceOptionIdentity.StreamSource, new object[] { buffer, 0, Utilities.SizeOf<Vertex>() }),
+                new DeviceOption(DeviceOptionIdentity.VertexFormat, VertexFormat.PositionRhw | VertexFormat.Diffuse)
+            };
+
+            if (Smooth)
+            {
+                var @fixed = deviceOptions.ToList();
+
+                @fixed.Add(new DeviceOption(RenderState.MultisampleAntialias, true));
+                @fixed.Add(new DeviceOption(RenderState.AntialiasedLineEnable, true));
+
+                deviceOptions = @fixed.ToArray();
+            }
+
+            using (new DeviceOptions(device, deviceOptions))
             {
                 Drawing.Direct3DDevice.DrawPrimitives(PrimitiveType.LineStrip, 0, Resolution);
             }
@@ -360,10 +384,36 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
 
             #endregion
 
-            using (new DeviceOptions(device, DeviceOptionsType._2DCircle, smooth, buffer))
+            #region Draw
+
+            var deviceOptions = new[]
             {
-                device.DrawPrimitives(PrimitiveType.LineStrip, 0, resolution);
+                new DeviceOption(DeviceOptionIdentity.Texture, null, 0),
+                new DeviceOption(DeviceOptionIdentity.PixelShader, null),
+                new DeviceOption(RenderState.AlphaBlendEnable, true),
+                new DeviceOption(RenderState.SourceBlend, device.GetRenderState(RenderState.SourceBlendAlpha)),
+                new DeviceOption(RenderState.DestinationBlend, device.GetRenderState(RenderState.DestinationBlendAlpha)),
+                new DeviceOption(
+                    DeviceOptionIdentity.StreamSource, new object[] { buffer, 0, Utilities.SizeOf<Vertex>() }),
+                new DeviceOption(DeviceOptionIdentity.VertexFormat, VertexFormat.PositionRhw | VertexFormat.Diffuse)
+            };
+
+            if (smooth)
+            {
+                var @fixed = deviceOptions.ToList();
+
+                @fixed.Add(new DeviceOption(RenderState.MultisampleAntialias, true));
+                @fixed.Add(new DeviceOption(RenderState.AntialiasedLineEnable, true));
+
+                deviceOptions = @fixed.ToArray();
             }
+
+            using (new DeviceOptions(device, deviceOptions))
+            {
+                Drawing.Direct3DDevice.DrawPrimitives(PrimitiveType.LineStrip, 0, resolution);
+            }
+
+            #endregion
 
             buffer.Dispose();
         }
