@@ -1,7 +1,6 @@
 ﻿#region
 
 using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D9;
@@ -15,7 +14,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
     ///     Circle class, holds information for drawing a line onto the screen using SharpDX (Direct3D9 cover) and/or
     ///     draws a circle.
     /// </summary>
-    public class Circle
+    public class CircleFilled
     {
         #region Private Fields
 
@@ -23,6 +22,15 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         ///     Ready VertexBuffer to draw.
         /// </summary>
         private VertexBuffer buffer;
+
+        #endregion
+
+        #region Public Fields
+
+        /// <summary>
+        ///     Circle Resolution
+        /// </summary>
+        public int Resolution { get; set; }
 
         #endregion
 
@@ -46,35 +54,11 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
                 new DeviceOption(DeviceOptionIdentity.VertexFormat, VertexFormat.PositionRhw | VertexFormat.Diffuse)
             };
 
-            if (Smooth)
-            {
-                var @fixed = deviceOptions.ToList();
-
-                @fixed.Add(new DeviceOption(RenderState.MultisampleAntialias, true));
-                @fixed.Add(new DeviceOption(RenderState.AntialiasedLineEnable, true));
-
-                deviceOptions = @fixed.ToArray();
-            }
-
             using (new DeviceOptions(device, deviceOptions))
             {
-                device.DrawPrimitives(PrimitiveType.LineStrip, 0, Resolution);
+                device.DrawPrimitives(PrimitiveType.TriangleFan, 0, Resolution);
             }
         }
-
-        #endregion
-
-        #region Public Fields
-
-        /// <summary>
-        ///     Returns if the Circle would be smooth.
-        /// </summary>
-        public bool Smooth { get; set; }
-
-        /// <summary>
-        ///     Circle Resolution
-        /// </summary>
-        public int Resolution { get; set; }
 
         #endregion
 
@@ -89,18 +73,11 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// <param name="radius">Circle Radius</param>
         /// <param name="rotate">Circle Rotation</param>
         /// <param name="type">Circle Type</param>
-        /// <param name="smooth">Smooth Circle</param>
         /// <param name="resolution">Circle Resolution</param>
         /// <param name="color">Circle Color</param>
-        public Circle(Vector2 position,
-            float radius,
-            int rotate,
-            CircleType type,
-            bool smooth,
-            int resolution,
-            ColorBGRA color)
+        public CircleFilled(Vector2 position, float radius, int rotate, CircleType type, int resolution, ColorBGRA color)
         {
-            Base(position, radius, rotate, type, smooth, resolution, color);
+            Base(position, radius, rotate, type, resolution, color);
         }
 
         /// <summary>
@@ -110,18 +87,11 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// <param name="radius">Circle Radius</param>
         /// <param name="rotate">Circle Rotation</param>
         /// <param name="type">Circle Type</param>
-        /// <param name="smooth">Smooth Circle</param>
         /// <param name="resolution">Circle Resolution</param>
         /// <param name="color">Circle Color</param>
-        public Circle(Vector2 position,
-            float radius,
-            int rotate,
-            CircleType type,
-            bool smooth,
-            int resolution,
-            Color color)
+        public CircleFilled(Vector2 position, float radius, int rotate, CircleType type, int resolution, Color color)
         {
-            Base(position, radius, rotate, type, smooth, resolution, new ColorBGRA(color.R, color.G, color.B, color.A));
+            Base(position, radius, rotate, type, resolution, new ColorBGRA(color.R, color.G, color.B, color.A));
         }
 
         #endregion
@@ -134,12 +104,11 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// <param name="position">Circle Position and Radius</param>
         /// <param name="rotate">Circle Rotation</param>
         /// <param name="type">Circle Type</param>
-        /// <param name="smooth">Smooth Circle</param>
         /// <param name="resolution">Circle Resolution</param>
         /// <param name="color">Circle Color</param>
-        public Circle(Vector3 position, int rotate, CircleType type, bool smooth, int resolution, ColorBGRA color)
+        public CircleFilled(Vector3 position, int rotate, CircleType type, int resolution, ColorBGRA color)
         {
-            Base(Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, smooth, resolution, color);
+            Base(Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, resolution, color);
         }
 
         /// <summary>
@@ -148,13 +117,12 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// <param name="position">Circle Position and Radius</param>
         /// <param name="rotate">Circle Rotation</param>
         /// <param name="type">Circle Type</param>
-        /// <param name="smooth">Smooth Circle</param>
         /// <param name="resolution">Circle Resolution</param>
         /// <param name="color">Circle Color</param>
-        public Circle(Vector3 position, int rotate, CircleType type, bool smooth, int resolution, Color color)
+        public CircleFilled(Vector3 position, int rotate, CircleType type, int resolution, Color color)
         {
             Base(
-                Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, smooth, resolution,
+                Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, resolution,
                 new ColorBGRA(color.R, color.G, color.B, color.A));
         }
 
@@ -169,18 +137,10 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// <param name="radius">Circle Radius</param>
         /// <param name="rotate">Circle Rotation</param>
         /// <param name="type">Circle Type</param>
-        /// <param name="smooth">Smooth Circle</param>
         /// <param name="resolution">Circle Resolution</param>
         /// <param name="color">Circle Color</param>
-        private void Base(Vector2 position,
-            float radius,
-            int rotate,
-            CircleType type,
-            bool smooth,
-            int resolution,
-            ColorBGRA color)
+        private void Base(Vector2 position, float radius, int rotate, CircleType type, int resolution, ColorBGRA color)
         {
-            Smooth = smooth;
             Resolution = resolution;
 
             var vertexVertices = new Vertex[resolution + 2];
@@ -192,10 +152,16 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
 
             #region Circle
 
-            for (var i = 0; i < vertexVertices.Length; ++i)
+            vertexVertices[0].X = x;
+            vertexVertices[0].Y = y;
+            vertexVertices[0].Z = 0;
+            vertexVertices[0].Rhw = 1;
+            vertexVertices[0].Color = color.ToRgba();
+
+            for (var i = 1; i < vertexVertices.Length; ++i)
             {
-                vertexVertices[i].X = (float) (x - radius * Math.Cos(i * (2 * pi / resolution)));
-                vertexVertices[i].Y = (float) (y - radius * Math.Sin(i * (2 * pi / resolution)));
+                vertexVertices[i].X = (float) (x - radius * Math.Cos(pi * ((i - 1) / (resolution / 2.0f))));
+                vertexVertices[i].Y = (float) (y - radius * Math.Sin(pi * ((i - 1) / (resolution / 2.0f))));
                 vertexVertices[i].Z = 0;
                 vertexVertices[i].Rhw = 1;
                 vertexVertices[i].Color = color.ToRgba();
@@ -254,17 +220,11 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// <param name="position">Circle Position and Radius</param>
         /// <param name="rotate">Circle Rotation</param>
         /// <param name="type">Circle Type</param>
-        /// <param name="smooth">Smooth Circle</param>
         /// <param name="resolution">Ricle Resolution</param>
         /// <param name="color">Circle Color</param>
-        public static void Draw(Vector3 position,
-            int rotate,
-            CircleType type,
-            bool smooth,
-            int resolution,
-            ColorBGRA color)
+        public static void Draw(Vector3 position, int rotate, CircleType type, int resolution, ColorBGRA color)
         {
-            Draw(Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, smooth, resolution, color);
+            Draw(Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, resolution, color);
         }
 
         /// <summary>
@@ -273,13 +233,12 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// <param name="position">Circle Position and Radius</param>
         /// <param name="rotate">Circle Rotation</param>
         /// <param name="type">Circle Type</param>
-        /// <param name="smooth">Smooth Circle</param>
         /// <param name="resolution">Ricle Resolution</param>
         /// <param name="color">Circle Color</param>
-        public static void Draw(Vector3 position, int rotate, CircleType type, bool smooth, int resolution, Color color)
+        public static void Draw(Vector3 position, int rotate, CircleType type, int resolution, Color color)
         {
             Draw(
-                Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, smooth, resolution,
+                Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, resolution,
                 new ColorBGRA(color.R, color.G, color.B, color.A));
         }
 
@@ -294,18 +253,11 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// <param name="radius">Circle Radius</param>
         /// <param name="rotate">Circle Rotation</param>
         /// <param name="type">Circle Type</param>
-        /// <param name="smooth">Smooth Circle</param>
         /// <param name="resolution">Circle Resolution</param>
         /// <param name="color">Circle Color</param>
-        public static void Draw(Vector2 position,
-            float radius,
-            int rotate,
-            CircleType type,
-            bool smooth,
-            int resolution,
-            Color color)
+        public static void Draw(Vector2 position, float radius, int rotate, CircleType type, int resolution, Color color)
         {
-            Draw(position, radius, rotate, type, smooth, resolution, new ColorBGRA(color.R, color.G, color.B, color.A));
+            Draw(position, radius, rotate, type, resolution, new ColorBGRA(color.R, color.G, color.B, color.A));
         }
 
         #endregion
@@ -319,14 +271,12 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// <param name="radius">Circle Radius</param>
         /// <param name="rotate">Circle Rotation</param>
         /// <param name="type">Circle Type</param>
-        /// <param name="smooth">Smooth Circle</param>
         /// <param name="resolution">Circle Resolution</param>
         /// <param name="color">Circle Color</param>
         public static void Draw(Vector2 position,
             float radius,
             int rotate,
             CircleType type,
-            bool smooth,
             int resolution,
             ColorBGRA color)
         {
@@ -339,10 +289,16 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
 
             #region Circle
 
-            for (var i = 0; i < vertexVertices.Length; ++i)
+            vertexVertices[0].X = x;
+            vertexVertices[0].Y = y;
+            vertexVertices[0].Z = 0;
+            vertexVertices[0].Rhw = 1;
+            vertexVertices[0].Color = color.ToRgba();
+
+            for (var i = 1; i < vertexVertices.Length; ++i)
             {
-                vertexVertices[i].X = (float) (x - radius * Math.Cos(i * (2 * pi / resolution)));
-                vertexVertices[i].Y = (float) (y - radius * Math.Sin(i * (2 * pi / resolution)));
+                vertexVertices[i].X = (float) (x - radius * Math.Cos(pi * ((i - 1) / (resolution / 2.0f))));
+                vertexVertices[i].Y = (float) (y - radius * Math.Sin(pi * ((i - 1) / (resolution / 2.0f))));
                 vertexVertices[i].Z = 0;
                 vertexVertices[i].Rhw = 1;
                 vertexVertices[i].Color = color.ToRgba();
@@ -398,19 +354,9 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
                 new DeviceOption(DeviceOptionIdentity.VertexFormat, VertexFormat.PositionRhw | VertexFormat.Diffuse)
             };
 
-            if (smooth)
-            {
-                var @fixed = deviceOptions.ToList();
-
-                @fixed.Add(new DeviceOption(RenderState.MultisampleAntialias, true));
-                @fixed.Add(new DeviceOption(RenderState.AntialiasedLineEnable, true));
-
-                deviceOptions = @fixed.ToArray();
-            }
-
             using (new DeviceOptions(device, deviceOptions))
             {
-                device.DrawPrimitives(PrimitiveType.LineStrip, 0, resolution);
+                device.DrawPrimitives(PrimitiveType.TriangleFan, 0, resolution);
             }
 
             #endregion

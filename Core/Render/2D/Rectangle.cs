@@ -1,4 +1,4 @@
-﻿namespace LeagueSharp.CommonEx.Core.Render
+﻿namespace LeagueSharp.CommonEx.Core.Render._2D
 {
     /// <summary>
     ///     Rectangle class, holds information for drawing a rectangle onto the screen using SharpDX (Direct3D9 cover) and/or

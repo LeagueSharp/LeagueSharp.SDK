@@ -64,9 +64,11 @@
     <Compile Include="Core\Extensions\SharpDX\Vector4.cs" />
     <Compile Include="Core\Extensions\Unit.cs" />
     <Compile Include="Core\Render\2D\Circle.cs" />
+    <Compile Include="Core\Render\2D\CircleFilled.cs" />
     <Compile Include="Core\Render\2D\Line.cs" />
+    <Compile Include="Core\Render\CircleType.cs" />
     <Compile Include="Core\Render\DeviceOptions.cs" />
-    <Compile Include="Core\Render\Rectangle.cs" />
+    <Compile Include="Core\Render\2D\Rectangle.cs" />
     <Compile Include="Core\Render\Vertex.cs" />
     <Compile Include="Core\Utils\Cache.cs" />
     <Compile Include="Core\Utils\DelayAction.cs" />

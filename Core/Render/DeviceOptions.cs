@@ -52,13 +52,12 @@ namespace LeagueSharp.CommonEx.Core.Render
                         option.OldValue = device.GetTexture(stage);
                         device.SetTexture(stage, (BaseTexture) option.Value);
                         break;
-                    default:
-                        if (option.Type == DeviceOptionIdentity.Texture)
-                        {
-                            option.OldValue = device.PixelShader;
-                            device.PixelShader = (PixelShader) option.Value;
-                        }
-                        else if (option.Type == DeviceOptionIdentity.StreamSource && ((object[]) option.Value).Length > 2)
+                    case DeviceOptionIdentity.PixelShader:
+                        option.OldValue = device.PixelShader;
+                        device.PixelShader = (PixelShader) option.Value;
+                        break;
+                    case DeviceOptionIdentity.StreamSource:
+                        if (((object[]) option.Value).Length > 2)
                         {
                             VertexBuffer streamDataOut;
                             int offsetInBytesRef;
@@ -70,11 +69,10 @@ namespace LeagueSharp.CommonEx.Core.Render
                             var value = ((object[]) option.Value);
                             device.SetStreamSource(0, (VertexBuffer) value[0], (int) value[1], (int) value[2]);
                         }
-                        else if (option.Type == DeviceOptionIdentity.VertexFormat)
-                        {
-                            option.OldValue = device.VertexFormat;
-                            device.VertexFormat = (VertexFormat) option.Value;
-                        }
+                        break;
+                    case DeviceOptionIdentity.VertexFormat:
+                        option.OldValue = device.VertexFormat;
+                        device.VertexFormat = (VertexFormat) option.Value;
                         break;
                 }
             }
@@ -95,20 +93,18 @@ namespace LeagueSharp.CommonEx.Core.Render
                     case DeviceOptionIdentity.Texture:
                         device.SetTexture(option.Key as int? ?? 0, (BaseTexture) option.OldValue);
                         break;
-                    default:
-                        if (option.Type == DeviceOptionIdentity.Texture)
-                        {
-                            device.PixelShader = (PixelShader) option.OldValue;
-                        }
-                        else if (option.Type == DeviceOptionIdentity.StreamSource && ((object[]) option.Value).Length > 2)
+                    case DeviceOptionIdentity.PixelShader:
+                        device.PixelShader = (PixelShader) option.OldValue;
+                        break;
+                    case DeviceOptionIdentity.StreamSource:
+                        if (((object[]) option.OldValue).Length > 2)
                         {
                             var value = ((object[]) option.OldValue);
                             device.SetStreamSource(0, (VertexBuffer) value[0], (int) value[1], (int) value[2]);
                         }
-                        else if (option.Type == DeviceOptionIdentity.VertexFormat)
-                        {
-                            device.VertexFormat = (VertexFormat) option.OldValue;
-                        }
+                        break;
+                    case DeviceOptionIdentity.VertexFormat:
+                        device.VertexFormat = (VertexFormat) option.OldValue;
                         break;
                 }
             }
