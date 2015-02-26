@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.Caching;
 using LeagueSharp.CommonEx.Core.Utils;
 
 #endregion
@@ -25,8 +24,7 @@ namespace LeagueSharp.CommonEx.Core
             get
             {
                 return
-                    Cache.Instance.AddOrGetExisting(
-                        "LogDir", Path.Combine(LeagueSharpDirectory, "Logs"), ObjectCache.InfiniteAbsoluteExpiration)
+                    Cache.Instance.AddOrGetExisting("LogDir", () => Path.Combine(LeagueSharpDirectory, "Logs"))
                         .ToString();
             }
         }
@@ -41,8 +39,8 @@ namespace LeagueSharp.CommonEx.Core
                 return
                     Cache.Instance.AddOrGetExisting(
                         "LogFileName",
-                        DateTime.Now.Date.ToString(CultureInfo.InvariantCulture).Replace('/', '.') + ".log",
-                        ObjectCache.InfiniteAbsoluteExpiration).ToString();
+                        () => DateTime.Now.Date.ToString(CultureInfo.InvariantCulture).Replace('/', '.') + ".log")
+                        .ToString();
             }
         }
 
@@ -56,11 +54,12 @@ namespace LeagueSharp.CommonEx.Core
                 return
                     Cache.Instance.AddOrGetExisting(
                         "LeagueSharpDir",
-                        Directory.GetParent(
-                            Process.GetCurrentProcess()
-                                .Modules.Cast<ProcessModule>()
-                                .First(p => Path.GetFileName(p.ModuleName) == "Leaguesharp.Core.dll")
-                                .FileName).FullName, ObjectCache.InfiniteAbsoluteExpiration).ToString();
+                        () =>
+                            Directory.GetParent(
+                                Process.GetCurrentProcess()
+                                    .Modules.Cast<ProcessModule>()
+                                    .First(p => Path.GetFileName(p.ModuleName) == "Leaguesharp.Core.dll")
+                                    .FileName).FullName).ToString();
             }
         }
     }
