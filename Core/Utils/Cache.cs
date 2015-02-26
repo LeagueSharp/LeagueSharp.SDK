@@ -177,6 +177,31 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
+        ///     Adds or Gets an existing key/value, executing the function if the key does not exist.
+        /// </summary>
+        /// <param name="key">Key</param>
+        /// <param name="function">Function that will get the value</param>
+        /// <param name="regionName">The name of the region in the cache</param>
+        /// <returns></returns>
+        public object AddOrGetExisting(string key, Func<object> function, string regionName = null)
+        {
+            regionName = regionName ?? "Default";
+
+            object cachedObject;
+            var contains = cache[regionName].TryGetValue(key, out cachedObject);
+
+            if (contains)
+            {
+                return cachedObject;
+            }
+
+            var result = function();
+
+            cache[regionName].Add(key, result);
+            return result;
+        }
+
+        /// <summary>
         ///     Adds a key and a value, in the cache region. However, if the item exists, it will return the cached item. This
         ///     KeyValuePair does not expire.
         /// </summary>

@@ -137,6 +137,22 @@ namespace LeagueSharp.CommonEx.Core.Utils
                 Console.WriteLine(exception.Message);
             }
         }
+
+        /// <summary>
+        ///     Logs all exceptions that happen in the current app domain.
+        /// </summary>
+        public static void LogAllExceptions()
+        {
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+            {
+                if (!(args.ExceptionObject is Exception))
+                {
+                    return;
+                }
+
+                Write(true)(LogLevel.Error, ((Exception) args.ExceptionObject).Message);
+            };
+        }
     }
 
     /// <summary>
