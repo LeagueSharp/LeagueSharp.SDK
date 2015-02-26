@@ -1,7 +1,6 @@
 ﻿#region
 
 using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D9;
@@ -34,29 +33,22 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         public void Draw()
         {
             var device = Drawing.Direct3DDevice;
-            var deviceOptions = new[]
-            {
-                new DeviceOption(DeviceOptionIdentity.Texture, null, 0),
-                new DeviceOption(DeviceOptionIdentity.PixelShader, null),
-                new DeviceOption(RenderState.AlphaBlendEnable, true),
-                new DeviceOption(RenderState.SourceBlend, device.GetRenderState(RenderState.SourceBlendAlpha)),
-                new DeviceOption(RenderState.DestinationBlend, device.GetRenderState(RenderState.DestinationBlendAlpha)),
-                new DeviceOption(
-                    DeviceOptionIdentity.StreamSource, new object[] { buffer, 0, Utilities.SizeOf<Vertex>() }),
-                new DeviceOption(DeviceOptionIdentity.VertexFormat, VertexFormat.PositionRhw | VertexFormat.Diffuse)
-            };
+            var deviceOptions =
+                new DeviceOption(device).AddRenderState(RenderState.AlphaBlendEnable, true)
+                    .AddTexture(0, null)
+                    .AddPixelShader(null)
+                    .AddRenderState(RenderState.SourceBlend, RenderState.SourceBlendAlpha)
+                    .AddRenderState(RenderState.DestinationBlend, RenderState.DestinationBlendAlpha)
+                    .AddStreamSource(0, buffer, 0, Utilities.SizeOf<Vertex>())
+                    .AddVertexFormat(VertexFormat.PositionRhw | VertexFormat.Diffuse);
 
             if (Smooth)
             {
-                var @fixed = deviceOptions.ToList();
-
-                @fixed.Add(new DeviceOption(RenderState.MultisampleAntialias, true));
-                @fixed.Add(new DeviceOption(RenderState.AntialiasedLineEnable, true));
-
-                deviceOptions = @fixed.ToArray();
+                deviceOptions.AddRenderState(RenderState.MultisampleAntialias, true);
+                deviceOptions.AddRenderState(RenderState.AntialiasedLineEnable, true);
             }
 
-            using (new DeviceOptions(device, deviceOptions))
+            using (new DeviceOptions(deviceOptions))
             {
                 device.DrawPrimitives(PrimitiveType.LineStrip, 0, Resolution);
             }
@@ -223,16 +215,11 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
                 device, vertexVertices.Length * Utilities.SizeOf<Vertex>(), Usage.WriteOnly,
                 VertexFormat.PositionRhw | VertexFormat.Diffuse, Pool.Default);
 
-            var vertices = newBuffer.LockToPointer(0, vertexVertices.Length * Utilities.SizeOf<Vertex>(), 0);
-            var pointers = new IntPtr[vertexVertices.Length];
-            var result = Marshal.AllocHGlobal(IntPtr.Size * vertexVertices.Length * Utilities.SizeOf<Vertex>());
-            for (var i = 0; i < vertexVertices.Length; i++)
+            var vertices = newBuffer.Lock(0, vertexVertices.Length * Utilities.SizeOf<Vertex>(), LockFlags.None);
+            foreach (var v in vertexVertices)
             {
-                pointers[i] = Marshal.AllocHGlobal(IntPtr.Size);
-                Marshal.StructureToPtr(vertexVertices[i], pointers[i], true);
-                Marshal.WriteIntPtr(result, i * IntPtr.Size, pointers[i]);
+                vertices.Write(v);
             }
-            Marshal.Copy(vertices, pointers, 0, (vertexVertices.Length * Utilities.SizeOf<Vertex>()));
             newBuffer.Unlock();
 
             #endregion
@@ -386,29 +373,22 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
 
             #region Draw
 
-            var deviceOptions = new[]
-            {
-                new DeviceOption(DeviceOptionIdentity.Texture, null, 0),
-                new DeviceOption(DeviceOptionIdentity.PixelShader, null),
-                new DeviceOption(RenderState.AlphaBlendEnable, true),
-                new DeviceOption(RenderState.SourceBlend, device.GetRenderState(RenderState.SourceBlendAlpha)),
-                new DeviceOption(RenderState.DestinationBlend, device.GetRenderState(RenderState.DestinationBlendAlpha)),
-                new DeviceOption(
-                    DeviceOptionIdentity.StreamSource, new object[] { buffer, 0, Utilities.SizeOf<Vertex>() }),
-                new DeviceOption(DeviceOptionIdentity.VertexFormat, VertexFormat.PositionRhw | VertexFormat.Diffuse)
-            };
+            var deviceOptions =
+                new DeviceOption(device).AddRenderState(RenderState.AlphaBlendEnable, true)
+                    .AddTexture(0, null)
+                    .AddPixelShader(null)
+                    .AddRenderState(RenderState.SourceBlend, RenderState.SourceBlendAlpha)
+                    .AddRenderState(RenderState.DestinationBlend, RenderState.DestinationBlendAlpha)
+                    .AddStreamSource(0, buffer, 0, Utilities.SizeOf<Vertex>())
+                    .AddVertexFormat(VertexFormat.PositionRhw | VertexFormat.Diffuse);
 
             if (smooth)
             {
-                var @fixed = deviceOptions.ToList();
-
-                @fixed.Add(new DeviceOption(RenderState.MultisampleAntialias, true));
-                @fixed.Add(new DeviceOption(RenderState.AntialiasedLineEnable, true));
-
-                deviceOptions = @fixed.ToArray();
+                deviceOptions.AddRenderState(RenderState.MultisampleAntialias, true);
+                deviceOptions.AddRenderState(RenderState.AntialiasedLineEnable, true);
             }
 
-            using (new DeviceOptions(device, deviceOptions))
+            using (new DeviceOptions(deviceOptions))
             {
                 device.DrawPrimitives(PrimitiveType.LineStrip, 0, resolution);
             }

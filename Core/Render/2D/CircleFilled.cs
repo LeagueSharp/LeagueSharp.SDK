@@ -42,19 +42,16 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         public void Draw()
         {
             var device = Drawing.Direct3DDevice;
-            var deviceOptions = new[]
-            {
-                new DeviceOption(DeviceOptionIdentity.Texture, null, 0),
-                new DeviceOption(DeviceOptionIdentity.PixelShader, null),
-                new DeviceOption(RenderState.AlphaBlendEnable, true),
-                new DeviceOption(RenderState.SourceBlend, device.GetRenderState(RenderState.SourceBlendAlpha)),
-                new DeviceOption(RenderState.DestinationBlend, device.GetRenderState(RenderState.DestinationBlendAlpha)),
-                new DeviceOption(
-                    DeviceOptionIdentity.StreamSource, new object[] { buffer, 0, Utilities.SizeOf<Vertex>() }),
-                new DeviceOption(DeviceOptionIdentity.VertexFormat, VertexFormat.PositionRhw | VertexFormat.Diffuse)
-            };
+            var deviceOptions =
+                new DeviceOption(device).AddRenderState(RenderState.AlphaBlendEnable, true)
+                    .AddTexture(0, null)
+                    .AddPixelShader(null)
+                    .AddRenderState(RenderState.SourceBlend, RenderState.SourceBlendAlpha)
+                    .AddRenderState(RenderState.DestinationBlend, RenderState.DestinationBlendAlpha)
+                    .AddStreamSource(0, buffer, 0, Utilities.SizeOf<Vertex>())
+                    .AddVertexFormat(VertexFormat.PositionRhw | VertexFormat.Diffuse);
 
-            using (new DeviceOptions(device, deviceOptions))
+            using (new DeviceOptions(deviceOptions))
             {
                 device.DrawPrimitives(PrimitiveType.TriangleFan, 0, Resolution);
             }
@@ -342,19 +339,16 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
 
             #region Draw
 
-            var deviceOptions = new[]
-            {
-                new DeviceOption(DeviceOptionIdentity.Texture, null, 0),
-                new DeviceOption(DeviceOptionIdentity.PixelShader, null),
-                new DeviceOption(RenderState.AlphaBlendEnable, true),
-                new DeviceOption(RenderState.SourceBlend, device.GetRenderState(RenderState.SourceBlendAlpha)),
-                new DeviceOption(RenderState.DestinationBlend, device.GetRenderState(RenderState.DestinationBlendAlpha)),
-                new DeviceOption(
-                    DeviceOptionIdentity.StreamSource, new object[] { buffer, 0, Utilities.SizeOf<Vertex>() }),
-                new DeviceOption(DeviceOptionIdentity.VertexFormat, VertexFormat.PositionRhw | VertexFormat.Diffuse)
-            };
+            var deviceOptions =
+                new DeviceOption(device).AddRenderState(RenderState.AlphaBlendEnable, true)
+                    .AddTexture(0, null)
+                    .AddPixelShader(null)
+                    .AddRenderState(RenderState.SourceBlend, RenderState.SourceBlendAlpha)
+                    .AddRenderState(RenderState.DestinationBlend, RenderState.DestinationBlendAlpha)
+                    .AddStreamSource(0, buffer, 0, Utilities.SizeOf<Vertex>())
+                    .AddVertexFormat(VertexFormat.PositionRhw | VertexFormat.Diffuse);
 
-            using (new DeviceOptions(device, deviceOptions))
+            using (new DeviceOptions(deviceOptions))
             {
                 device.DrawPrimitives(PrimitiveType.TriangleFan, 0, resolution);
             }
