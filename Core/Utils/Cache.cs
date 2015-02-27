@@ -357,6 +357,19 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
+        ///     Gets a value from the cache, and casts it to the type.
+        /// </summary>
+        /// <typeparam name="T">Type to cast to</typeparam>
+        /// <param name="key">Key</param>
+        /// <param name="regionName">The name of the region in the cache</param>
+        /// <returns>The object casted into T</returns>
+        public T Get<T>(string key, string regionName = null)
+        {
+            regionName = regionName ?? "Default";
+            return cache[regionName][key] is T ? (T) cache[regionName][key] : default(T);
+        }
+
+        /// <summary>
         ///     Gets the CacheItem from the Key
         /// </summary>
         /// <param name="key"></param>
