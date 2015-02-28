@@ -3,7 +3,7 @@
     /// <summary>
     ///     Utilities for Packets.
     /// </summary>
-    public static class Utils
+    public static class NetworkUtils
     {
         /// <summary>
         ///     Gets the header of the packet.
