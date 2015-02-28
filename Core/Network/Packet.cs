@@ -11,6 +11,7 @@
             Emote = 0x2C,
             GamePlay = 0x4F,
             Chat = 0x68,
+            InteractObject = 0x90,
             ScoreScreen = 0x96,
             PauseGame = 0x97,
             LevelSpell = 0x9A,
