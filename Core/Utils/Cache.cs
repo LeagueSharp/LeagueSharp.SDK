@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Caching;
 
@@ -142,7 +141,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
-        ///     Creats an <see cref="CacheEntryChangeMonitor" /> of the selected keys
+        ///     Not supported. Please use the events.
         /// </summary>
         /// <param name="keys">Keys</param>
         /// <param name="regionName">The name of the region in the cache</param>
@@ -150,9 +149,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         public override CacheEntryChangeMonitor CreateCacheEntryChangeMonitor(IEnumerable<string> keys,
             string regionName = null)
         {
-            return new CacheEntryMonitor(
-                keys as ReadOnlyCollection<string>, InfiniteAbsoluteExpiration, regionName,
-                new Random(Environment.TickCount).Next());
+            throw new NotSupportedException("CacheEntryChangeMonitors are not implemented.");
         }
 
         /// <summary>
@@ -196,8 +193,13 @@ namespace LeagueSharp.CommonEx.Core.Utils
             }
 
             var result = function();
-
             cache[regionName].Add(key, result);
+
+            if (OnEntryAdded != null)
+            {
+                OnEntryAdded(key, result, regionName);
+            }
+
             return result;
         }
 
@@ -237,6 +239,11 @@ namespace LeagueSharp.CommonEx.Core.Utils
                 return internalValue;
             }
 
+            if (OnEntryAdded != null)
+            {
+                OnEntryAdded(key, value, regionName);
+            }
+
             cache[regionName].Add(key, value);
 
             DelayAction.Add(
@@ -273,6 +280,11 @@ namespace LeagueSharp.CommonEx.Core.Utils
             if (contains)
             {
                 return new CacheItem(value.Key, internalValue, regionName);
+            }
+
+            if (OnEntryAdded != null)
+            {
+                OnEntryAdded(value.Key, value.Value, value.RegionName);
             }
 
             cache[regionName].Add(value.Key, value.Value);
@@ -319,6 +331,11 @@ namespace LeagueSharp.CommonEx.Core.Utils
             if (contains)
             {
                 return internalValue;
+            }
+
+            if (OnEntryAdded != null)
+            {
+                OnEntryAdded(key, value, regionName);
             }
 
             cache[regionName].Add(key, value);
@@ -392,6 +409,11 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             regionName = regionName ?? "Default";
 
+            if (OnValueChanged != null && cache[regionName].ContainsKey(key))
+            {
+                OnValueChanged(new ValueChangedArgs(key, cache[regionName][key], value, regionName));
+            }
+
             cache[regionName][key] = value;
 
             DelayAction.Add(
@@ -418,6 +440,11 @@ namespace LeagueSharp.CommonEx.Core.Utils
         public override void Set(CacheItem item, CacheItemPolicy policy)
         {
             var regionName = item.RegionName ?? "Default";
+
+            if (OnValueChanged != null && cache[regionName].ContainsKey(item.Key))
+            {
+                OnValueChanged(new ValueChangedArgs(item.Key, cache[regionName][item.Key], item.Value, regionName));
+            }
 
             cache[regionName][item.Key] = item.Value;
 
@@ -447,6 +474,12 @@ namespace LeagueSharp.CommonEx.Core.Utils
         public override void Set(string key, object value, CacheItemPolicy policy, string regionName = null)
         {
             regionName = regionName ?? "Default";
+
+            if (OnValueChanged != null && cache[regionName].ContainsKey(key))
+            {
+                OnValueChanged(new ValueChangedArgs(key, cache[regionName][key], value, regionName));
+            }
+
             cache[regionName][key] = value;
 
             DelayAction.Add(
@@ -522,6 +555,42 @@ namespace LeagueSharp.CommonEx.Core.Utils
             return cache[regionName].Count;
         }
 
+        #region Events
+
+        #region OnEntryAdded
+
+        /// <summary>
+        ///     Delegate when a value is added
+        /// </summary>
+        /// <param name="key">Key</param>
+        /// <param name="value">Value</param>
+        /// <param name="regionName">The name of the region in the cache</param>
+        public delegate void OnEntryAddedDelegate(string key, object value, string regionName);
+
+        /// <summary>
+        ///     Gets called when a new value is added to the cache.
+        /// </summary>
+        public static event OnEntryAddedDelegate OnEntryAdded;
+
+        #endregion OnEntryAdded
+
+        #region OnValueChanged
+
+        /// <summary>
+        ///     Delegate for <see cref="OnValueChanged" />
+        /// </summary>
+        /// <param name="args">Arguements</param>
+        public delegate void OnValueChangedDelegate(ValueChangedArgs args);
+
+        /// <summary>
+        ///     Called when an entry in the cache is modified
+        /// </summary>
+        public static event OnValueChangedDelegate OnValueChanged;
+
+        #endregion OnValueChanged
+
+        #endregion Events
+
         #region Singleton
 
         private static Cache _instance;
@@ -547,72 +616,36 @@ namespace LeagueSharp.CommonEx.Core.Utils
     }
 
     /// <summary>
-    ///     Not fully implemented, implementation of CacheEntryChangeMonitor
+    ///     Arguements for the Cache.OnValueChanged event
     /// </summary>
-    public class CacheEntryMonitor : CacheEntryChangeMonitor
+    public struct ValueChangedArgs
     {
-        private readonly ReadOnlyCollection<string> keys;
-        private readonly DateTimeOffset lastModified;
-        private readonly int random;
-        private readonly string regionName;
+        /// <summary>
+        ///     Key
+        /// </summary>
+        public string Key;
 
         /// <summary>
-        ///     Creates new CacheEntryMonitor
+        ///     The new value after it was changed
         /// </summary>
-        /// <param name="keys">Keys</param>
-        /// <param name="lastModified">Key's values last changed</param>
-        /// <param name="regionName">The name of the region in the cache</param>
-        /// <param name="random">Unique ID</param>
-        public CacheEntryMonitor(ReadOnlyCollection<string> keys,
-            DateTimeOffset lastModified,
-            string regionName,
-            int random)
+        public object NewValue;
+
+        /// <summary>
+        ///     The old value prior to changing
+        /// </summary>
+        public object OldValue;
+
+        /// <summary>
+        ///     The name of the region in the cache
+        /// </summary>
+        public string RegionName;
+
+        internal ValueChangedArgs(string key, object oldValue, object newValue, string regionName)
         {
-            this.keys = keys;
-            this.lastModified = lastModified;
-            this.regionName = regionName;
-            this.random = random;
+            Key = key;
+            OldValue = oldValue;
+            NewValue = newValue;
+            RegionName = regionName;
         }
-
-        /// <summary>
-        ///     Gets the unique id of this monitor
-        /// </summary>
-        public override string UniqueId
-        {
-            get { return "CommonEx CacheEntryChangeMonitor" + random; }
-        }
-
-        /// <summary>
-        ///     Keys this monitor is monitoring
-        /// </summary>
-        public override ReadOnlyCollection<string> CacheKeys
-        {
-            get { return keys; }
-        }
-
-        /// <summary>
-        ///     Last time keys were modified
-        /// </summary>
-        public override DateTimeOffset LastModified
-        {
-            get { return lastModified; }
-        }
-
-        /// <summary>
-        ///     Region Name
-        /// </summary>
-        public override string RegionName
-        {
-            get { return regionName; }
-        }
-
-        /// <summary>
-        ///     Disposes the CacheEntryMonitor.
-        /// </summary>
-        /// <param name="disposing">
-        ///     Indicates whether the method call comes from a Dispose method (true) or from a finalizer
-        ///     (false).
-        /// </param>
-        protected override void Dispose(bool disposing) {}
     }
 }
