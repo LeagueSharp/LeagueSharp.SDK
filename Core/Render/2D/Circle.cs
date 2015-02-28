@@ -176,18 +176,18 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
             Resolution = resolution;
 
             var vertexVertices = new Vertex[resolution + 2];
-            var angle = rotate * Math.PI / 180;
+            var angle = rotate * System.Math.PI / 180;
             var x = position.X;
             var y = position.Y;
-            var pi = (type == CircleType.Full) ? Math.PI : (type == CircleType.Half) ? Math.PI / 2 : Math.PI / 4;
+            var pi = (type == CircleType.Full) ? System.Math.PI : (type == CircleType.Half) ? System.Math.PI / 2 : System.Math.PI / 4;
             var device = Drawing.Direct3DDevice;
 
             #region Circle
 
             for (var i = 0; i < vertexVertices.Length; ++i)
             {
-                vertexVertices[i].X = (float) (x - radius * Math.Cos(i * (2 * pi / resolution)));
-                vertexVertices[i].Y = (float) (y - radius * Math.Sin(i * (2 * pi / resolution)));
+                vertexVertices[i].X = (float)(x - radius * System.Math.Cos(i * (2 * pi / resolution)));
+                vertexVertices[i].Y = (float)(y - radius * System.Math.Sin(i * (2 * pi / resolution)));
                 vertexVertices[i].Z = 0;
                 vertexVertices[i].Rhw = 1;
                 vertexVertices[i].Color = color.ToRgba();
@@ -201,10 +201,10 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
             {
                 vertexVertices[i].X =
                     (float)
-                        (x + Math.Cos(angle) * (vertexVertices[i].X - x) - Math.Sin(angle) * (vertexVertices[i].Y - y));
+                        (x + System.Math.Cos(angle) * (vertexVertices[i].X - x) - System.Math.Sin(angle) * (vertexVertices[i].Y - y));
                 vertexVertices[i].Y =
                     (float)
-                        (y + Math.Sin(angle) * (vertexVertices[i].X - x) - Math.Cos(angle) * (vertexVertices[i].Y - y));
+                        (y + System.Math.Sin(angle) * (vertexVertices[i].X - x) - System.Math.Cos(angle) * (vertexVertices[i].Y - y));
             }
 
             #endregion
@@ -318,18 +318,18 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
             ColorBGRA color)
         {
             var vertexVertices = new Vertex[resolution + 2];
-            var angle = rotate * Math.PI / 180;
+            var angle = rotate * System.Math.PI / 180;
             var x = position.X;
             var y = position.Y;
-            var pi = (type == CircleType.Full) ? Math.PI : (type == CircleType.Half) ? Math.PI / 2 : Math.PI / 4;
+            var pi = (type == CircleType.Full) ? System.Math.PI : (type == CircleType.Half) ? System.Math.PI / 2 : System.Math.PI / 4;
             var device = Drawing.Direct3DDevice;
 
             #region Circle
 
             for (var i = 0; i < vertexVertices.Length; ++i)
             {
-                vertexVertices[i].X = (float) (x - radius * Math.Cos(i * (2 * pi / resolution)));
-                vertexVertices[i].Y = (float) (y - radius * Math.Sin(i * (2 * pi / resolution)));
+                vertexVertices[i].X = (float)(x - radius * System.Math.Cos(i * (2 * pi / resolution)));
+                vertexVertices[i].Y = (float)(y - radius * System.Math.Sin(i * (2 * pi / resolution)));
                 vertexVertices[i].Z = 0;
                 vertexVertices[i].Rhw = 1;
                 vertexVertices[i].Color = color.ToRgba();
@@ -343,10 +343,10 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
             {
                 vertexVertices[i].X =
                     (float)
-                        (x + Math.Cos(angle) * (vertexVertices[i].X - x) - Math.Sin(angle) * (vertexVertices[i].Y - y));
+                        (x + System.Math.Cos(angle) * (vertexVertices[i].X - x) - System.Math.Sin(angle) * (vertexVertices[i].Y - y));
                 vertexVertices[i].Y =
                     (float)
-                        (y + Math.Sin(angle) * (vertexVertices[i].X - x) - Math.Cos(angle) * (vertexVertices[i].Y - y));
+                        (y + System.Math.Sin(angle) * (vertexVertices[i].X - x) - System.Math.Cos(angle) * (vertexVertices[i].Y - y));
             }
 
             #endregion

@@ -76,6 +76,9 @@
     <Compile Include="Core\Math\Polygons\Rectangle.cs" />
     <Compile Include="Core\Math\Polygons\Ring.cs" />
     <Compile Include="Core\Math\Polygons\Sector.cs" />
+	<Compile Include="Core\Network\GamePacket.cs" />
+    <Compile Include="Core\Network\Packet.cs" />
+    <Compile Include="Core\Network\Utils.cs" />
     <Compile Include="Core\Render\2D\Circle.cs" />
     <Compile Include="Core\Render\2D\CircleFilled.cs" />
     <Compile Include="Core\Render\2D\Line.cs" />
