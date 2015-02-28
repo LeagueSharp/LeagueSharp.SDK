@@ -34,7 +34,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             // We have to create the default region, else we get exceptions :^(
             cache = new SortedDictionary<string, SortedDictionary<string, object>>();
-            cache["Default"] = new SortedDictionary<string, object>();
+            CreateRegion("Default");
 
             cacheEntryUpdateCallbacks = new SortedDictionary<string, CacheEntryUpdateCallback>();
             cacheRemovedCallbacks = new SortedDictionary<string, CacheEntryRemovedCallback>();
@@ -383,7 +383,9 @@ namespace LeagueSharp.CommonEx.Core.Utils
         public T Get<T>(string key, string regionName = null)
         {
             regionName = regionName ?? "Default";
-            return cache[regionName][key] is T ? (T) cache[regionName][key] : default(T);
+
+            var value = cache[regionName][key];
+            return value is T ? (T) value : default(T);
         }
 
         /// <summary>
@@ -616,7 +618,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
     }
 
     /// <summary>
-    ///     Arguements for the Cache.OnValueChanged event
+    ///     Arguements for the <see cref="Cache.OnValueChanged"/> event
     /// </summary>
     public struct ValueChangedArgs
     {
