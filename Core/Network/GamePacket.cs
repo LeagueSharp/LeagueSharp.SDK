@@ -37,75 +37,106 @@ namespace LeagueSharp.CommonEx.Core.Network
     public class GamePacket
     {
         private readonly byte _header;
-        private readonly BinaryReader Br;
-        private readonly BinaryWriter Bw;
-        private readonly MemoryStream Ms;
+        private readonly MemoryStream _memoryStream;
+        private readonly BinaryReader _reader;
+        private readonly BinaryWriter _writer;
         private readonly byte[] rawPacket;
+
+        /// <summary>
+        ///     The channel this packet is sent on.
+        /// </summary>
         public PacketChannel Channel = PacketChannel.C2S;
+
+        /// <summary>
+        ///     The protocol that packet is sent on.
+        /// </summary>
         public PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
 
+        /// <summary>
+        ///     Creates a <see cref="GamePacket" /> with the packet data.
+        /// </summary>
+        /// <param name="data">Bytes of the packet</param>
         public GamePacket(byte[] data)
         {
             Block = false;
-            Ms = new MemoryStream(data);
-            Br = new BinaryReader(Ms);
-            Bw = new BinaryWriter(Ms);
+            _memoryStream = new MemoryStream(data);
+            _reader = new BinaryReader(_memoryStream);
+            _writer = new BinaryWriter(_memoryStream);
 
-            Br.BaseStream.Position = 0;
-            Bw.BaseStream.Position = 0;
+            _reader.BaseStream.Position = 0;
+            _writer.BaseStream.Position = 0;
             rawPacket = data;
             _header = data[0];
         }
 
+        /// <summary>
+        ///     Creates a <see cref="GamePacket" /> with the event arguements for packets.
+        /// </summary>
+        /// <param name="args"></param>
         public GamePacket(GamePacketEventArgs args)
         {
             Block = false;
-            Ms = new MemoryStream(args.PacketData);
-            Br = new BinaryReader(Ms);
-            Bw = new BinaryWriter(Ms);
+            _memoryStream = new MemoryStream(args.PacketData);
+            _reader = new BinaryReader(_memoryStream);
+            _writer = new BinaryWriter(_memoryStream);
 
-            Br.BaseStream.Position = 0;
-            Bw.BaseStream.Position = 0;
+            _reader.BaseStream.Position = 0;
+            _writer.BaseStream.Position = 0;
             rawPacket = args.PacketData;
             _header = args.PacketData[0];
             Channel = args.Channel;
             Flags = args.ProtocolFlag;
         }
 
+        /// <summary>
+        ///     Creates a <see cref="GamePacket" /> with a header, channel, and protocol.
+        /// </summary>
+        /// <param name="header">Header of the packet</param>
+        /// <param name="channel">Channel</param>
+        /// <param name="flags">Protocol to send packet</param>
         public GamePacket(byte header,
             PacketChannel channel = PacketChannel.C2S,
             PacketProtocolFlags flags = PacketProtocolFlags.Reliable)
         {
             Block = false;
-            Ms = new MemoryStream();
-            Br = new BinaryReader(Ms);
-            Bw = new BinaryWriter(Ms);
+            _memoryStream = new MemoryStream();
+            _reader = new BinaryReader(_memoryStream);
+            _writer = new BinaryWriter(_memoryStream);
 
-            Br.BaseStream.Position = 0;
-            Bw.BaseStream.Position = 0;
+            _reader.BaseStream.Position = 0;
+            _writer.BaseStream.Position = 0;
             WriteByte(header);
             _header = header;
             Channel = channel;
             Flags = flags;
         }
 
+        /// <summary>
+        ///     Gets the Header of the packet(The first byte)
+        /// </summary>
         public byte Header
         {
             get { return ReadByte(0); } //Better in case header changes, but also resets position.
         }
 
+        /// <summary>
+        ///     Gets/Sets the position of the reader.
+        /// </summary>
         public long Position
         {
-            get { return Br.BaseStream.Position; }
+            get { return _reader.BaseStream.Position; }
             set
             {
                 if (value >= 0L)
                 {
-                    Br.BaseStream.Position = value;
+                    _reader.BaseStream.Position = value;
                 }
             }
         }
 
+        /// <summary>
+        ///     Blocks sending and processing the packet.
+        /// </summary>
         public bool Block { get; set; }
 
         /// <summary>
@@ -113,48 +144,58 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// </summary>
         public long Size()
         {
-            return Br.BaseStream.Length;
+            return _reader.BaseStream.Length;
         }
 
         /// <summary>
         ///     Reads a byte from the packet and increases the position by 1.
         /// </summary>
+        /// <param name="position">Position to read at</param>
+        /// <returns>The read byte</returns>
         public byte ReadByte(long position = -1)
         {
             Position = position;
-            return Br.ReadBytes(1)[0];
+            return _reader.ReadBytes(1)[0];
         }
 
         /// <summary>
         ///     Reads and returns a double byte.
         /// </summary>
+        /// <param name="position">Position to read at</param>
+        /// <returns>The read short</returns>
         public short ReadShort(long position = -1)
         {
             Position = position;
-            return BitConverter.ToInt16(Br.ReadBytes(2), 0);
+            return BitConverter.ToInt16(_reader.ReadBytes(2), 0);
         }
 
         /// <summary>
         ///     Reads and returns a float.
         /// </summary>
+        /// <param name="position">Position to read at</param>
+        /// <returns>The read float</returns>
         public float ReadFloat(long position = -1)
         {
             Position = position;
-            return BitConverter.ToSingle(Br.ReadBytes(4), 0);
+            return BitConverter.ToSingle(_reader.ReadBytes(4), 0);
         }
 
         /// <summary>
         ///     Reads and returns an integer.
         /// </summary>
+        /// <param name="position">Position to read at</param>
+        /// <returns>The read integer</returns>
         public int ReadInteger(long position = -1)
         {
             Position = position;
-            return BitConverter.ToInt32(Br.ReadBytes(4), 0);
+            return BitConverter.ToInt32(_reader.ReadBytes(4), 0);
         }
 
         /// <summary>
         ///     Reads and returns a string.
         /// </summary>
+        /// <param name="position">Position to read at</param>
+        /// <returns>The read string</returns>
         public string ReadString(long position = -1)
         {
             Position = position;
@@ -177,41 +218,47 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <summary>
         ///     Writes a byte.
         /// </summary>
-        public void WriteByte(byte b, int repeat = 1)
+        /// <param name="byte">Byte to write</param>
+        /// <param name="repeat">Times to write the byte</param>
+        public void WriteByte(byte @byte, int repeat = 1)
         {
             for (var i = 0; i < repeat; i++)
             {
-                Bw.Write(b);
+                _writer.Write(@byte);
             }
         }
 
         /// <summary>
         ///     Writes a short.
         /// </summary>
+        /// <param name="s">Short to write</param>
         public void WriteShort(short s)
         {
-            Bw.Write(s);
+            _writer.Write(s);
         }
 
         /// <summary>
         ///     Writes a float.
         /// </summary>
+        /// <param name="f">Float to write</param>
         public void WriteFloat(float f)
         {
-            Bw.Write(f);
+            _writer.Write(f);
         }
 
         /// <summary>
         ///     Writes an integer.
         /// </summary>
+        /// <param name="i">Integer to write</param>
         public void WriteInteger(int i)
         {
-            Bw.Write(i);
+            _writer.Write(i);
         }
 
         /// <summary>
         ///     Writes the hex string as bytes to the packet.
         /// </summary>
+        /// <param name="hex">Hex string to write</param>
         public void WriteHexString(string hex)
         {
             hex = hex.Replace(" ", string.Empty);
@@ -221,7 +268,7 @@ namespace LeagueSharp.CommonEx.Core.Network
                 hex = "0" + hex;
             }
 
-            Bw.Write(
+            _writer.Write(
                 Enumerable.Range(0, hex.Length)
                     .Where(x => x % 2 == 0)
                     .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
@@ -231,9 +278,10 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <summary>
         ///     Writes the string.
         /// </summary>
+        /// <param name="str">String to write</param>
         public void WriteString(string str)
         {
-            Bw.Write(Encoding.UTF8.GetBytes(str));
+            _writer.Write(Encoding.UTF8.GetBytes(str));
         }
 
         /* public int[] SearchByte(byte num)
@@ -280,23 +328,26 @@ namespace LeagueSharp.CommonEx.Core.Network
         }*/
 
         /// <summary>
-        ///     returns the raw packet hex
+        ///     Returns the raw packet bytes
         /// </summary>
+        /// <returns>Bytes of the packet</returns>
         public byte[] GetRawPacket()
         {
-            return Ms.ToArray();
+            return _memoryStream.ToArray();
         }
 
         /// <summary>
         ///     Sends the packet
         /// </summary>
+        /// <param name="channel">Channel to send the packet on</param>
+        /// <param name="flags">Protocol to send to packet on</param>
         public void Send(PacketChannel channel = PacketChannel.C2S,
             PacketProtocolFlags flags = PacketProtocolFlags.Reliable)
         {
             if (!Block)
             {
                 Game.SendPacket(
-                    Ms.ToArray(), Channel == PacketChannel.C2S ? channel : Channel,
+                    _memoryStream.ToArray(), Channel == PacketChannel.C2S ? channel : Channel,
                     Flags == PacketProtocolFlags.Reliable ? flags : Flags);
             }
         }
@@ -304,20 +355,22 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <summary>
         ///     Receives the packet.
         /// </summary>
+        /// <param name="channel">Channel to process the packet on</param>
         public void Process(PacketChannel channel = PacketChannel.S2C)
         {
             if (!Block)
             {
-                Game.ProcessPacket(Ms.ToArray(), channel);
+                Game.ProcessPacket(_memoryStream.ToArray(), channel);
             }
         }
 
         /// <summary>
         ///     Dumps the packet.
         /// </summary>
+        /// <param name="additionalInfo">Prints the data, channel, and flags(if true)</param>
         public string Dump(bool additionalInfo = false)
         {
-            var s = string.Concat(Ms.ToArray().Select(b => b.ToString("X2") + " "));
+            var s = string.Concat(_memoryStream.ToArray().Select(b => b.ToString("X2") + " "));
             if (additionalInfo)
             {
                 s = "Data: " + s + " Channel: " + Channel + " Flags: " + Flags;
@@ -328,6 +381,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <summary>
         ///     Saves the packet dump to a file
         /// </summary>
+        /// <param name="filePath">Path to save the file to</param>
         public void SaveToFile(string filePath)
         {
             var w = File.AppendText(filePath);
