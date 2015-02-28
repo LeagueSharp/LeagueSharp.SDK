@@ -1,6 +1,5 @@
 ﻿#region
 
-using System;
 using System.Collections.Generic;
 using SharpDX;
 
@@ -55,8 +54,8 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <returns>Rotated Vector3</returns>
         public static Vector3 Rotated(this Vector3 vector3, float angle)
         {
-            var cos = Math.Cos(angle);
-            var sin = Math.Sin(angle);
+            var cos = System.Math.Cos(angle);
+            var sin = System.Math.Sin(angle);
 
             return new Vector3(
                 (float) (vector3.X * cos - vector3.Y * sin), (float) (vector3.Y * cos + vector3.X * sin), vector3.Z);
@@ -69,12 +68,12 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <returns>Polar for Vector Angle (Degrees)</returns>
         public static float Polar(this Vector3 vector3)
         {
-            if (Math.Abs(vector3.X - 0) <= (float) 1e-9)
+            if (System.Math.Abs(vector3.X - 0) <= (float) 1e-9)
             {
                 return (vector3.Y > 0) ? 90 : (vector3.Y < 0) ? 270 : 0;
             }
 
-            var theta = (float) (Math.Atan((vector3.Y) / (vector3.X)) * (180 / Math.PI));
+            var theta = (float) (System.Math.Atan((vector3.Y) / (vector3.X)) * (180 / System.Math.PI));
             if (vector3.X < 0)
             {
                 theta += 180;
@@ -85,6 +84,35 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
             }
 
             return theta;
+        }
+
+        /// <summary>
+        ///     Converts the points to 2D, then returns the projection of the Vector2 on the segment.
+        /// </summary>
+        /// <param name="point">Point</param>
+        /// <param name="segmentStart">Start of Segment</param>
+        /// <param name="segmentEnd">End of Segment</param>
+        /// <returns><see cref="ProjectionInfo" /> containing the projection.</returns>
+        public static ProjectionInfo ProjectOn(this Vector3 point, Vector3 segmentStart, Vector3 segmentEnd)
+        {
+            return point.ToVector2().ProjectOn(segmentStart.ToVector2(), segmentEnd.ToVector2());
+        }
+
+        /// <summary>
+        ///     Gets the total distance of a list of vectors.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns>Total distance of the path</returns>
+        public static float GetPathLength(this List<Vector3> path)
+        {
+            var distance = 0f;
+
+            for (var i = 0; i < path.Count - 1; i++)
+            {
+                distance += path[i].Distance(path[i + 1]);
+            }
+
+            return distance;
         }
 
         #region AngleBetween

@@ -43,6 +43,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="clipper_library">
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\clipper_library.dll</HintPath>
+    </Reference>
     <Reference Include="LeagueSharp">
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
@@ -66,6 +69,13 @@
     <Compile Include="Core\Extensions\SharpDX\Vector3Extensions.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector4Extensions.cs" />
     <Compile Include="Core\Extensions\Unit.cs" />
+    <Compile Include="Core\Math\Polygons\Arc.cs" />
+    <Compile Include="Core\Math\Polygons\Circle.cs" />
+    <Compile Include="Core\Math\Polygons\Line.cs" />
+    <Compile Include="Core\Math\Polygons\Polygon.cs" />
+    <Compile Include="Core\Math\Polygons\Rectangle.cs" />
+    <Compile Include="Core\Math\Polygons\Ring.cs" />
+    <Compile Include="Core\Math\Polygons\Sector.cs" />
     <Compile Include="Core\Render\2D\Circle.cs" />
     <Compile Include="Core\Render\2D\CircleFilled.cs" />
     <Compile Include="Core\Render\2D\Line.cs" />
@@ -86,7 +96,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\Math\" />
     <Folder Include="Core\Wrappers\" />
     <Folder Include="Third_Party\" />
   </ItemGroup>

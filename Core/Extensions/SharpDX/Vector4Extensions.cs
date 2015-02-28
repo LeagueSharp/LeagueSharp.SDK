@@ -1,6 +1,5 @@
 ﻿#region
 
-using System;
 using System.Collections.Generic;
 using SharpDX;
 
@@ -55,8 +54,8 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <returns>Rotated Vector4</returns>
         public static Vector4 Rotated(this Vector4 vector4, float angle)
         {
-            var cos = Math.Cos(angle);
-            var sin = Math.Sin(angle);
+            var cos = System.Math.Cos(angle);
+            var sin = System.Math.Sin(angle);
 
             return new Vector4(
                 (float) (vector4.X * cos - vector4.Y * sin), (float) (vector4.Y * cos + vector4.X * sin), vector4.Z,
@@ -70,12 +69,12 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <returns>Polar for Vector Angle (Degrees)</returns>
         public static float Polar(this Vector4 vector4)
         {
-            if (Math.Abs(vector4.X - 0) <= (float) 1e-9)
+            if (System.Math.Abs(vector4.X - 0) <= (float) 1e-9)
             {
                 return (vector4.Y > 0) ? 90 : (vector4.Y < 0) ? 270 : 0;
             }
 
-            var theta = (float) (Math.Atan((vector4.Y) / (vector4.X)) * (180 / Math.PI));
+            var theta = (float) (System.Math.Atan((vector4.Y) / (vector4.X)) * (180 / System.Math.PI));
             if (vector4.X < 0)
             {
                 theta += 180;
