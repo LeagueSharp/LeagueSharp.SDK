@@ -1,7 +1,7 @@
 ﻿#region
 
 using System;
-using System.Runtime.InteropServices;
+using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using SharpDX;
 using SharpDX.Direct3D9;
 using Color = System.Drawing.Color;
@@ -132,7 +132,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// <param name="color">Circle Color</param>
         public Circle(Vector3 position, int rotate, CircleType type, bool smooth, int resolution, ColorBGRA color)
         {
-            Base(Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, smooth, resolution, color);
+            Base(position.ToVector2(), position.Z, rotate, type, smooth, resolution, color);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         public Circle(Vector3 position, int rotate, CircleType type, bool smooth, int resolution, Color color)
         {
             Base(
-                Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, smooth, resolution,
+                position.ToVector2(), position.Z, rotate, type, smooth, resolution,
                 new ColorBGRA(color.R, color.G, color.B, color.A));
         }
 
@@ -177,10 +177,12 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
             Resolution = resolution;
 
             var vertexVertices = new Vertex[resolution + 2];
-            var angle = rotate * Math.PI / 180;
+            var angle = rotate * System.Math.PI / 180;
             var x = position.X;
             var y = position.Y;
-            var pi = (type == CircleType.Full) ? Math.PI : (type == CircleType.Half) ? Math.PI / 2 : Math.PI / 4;
+            var pi = (type == CircleType.Full)
+                ? System.Math.PI
+                : (type == CircleType.Half) ? System.Math.PI / 2 : System.Math.PI / 4;
             var device = Drawing.Direct3DDevice;
 
             #region Circle
@@ -192,8 +194,8 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
             {
                 vertexVertices[i] = new Vertex
                 {
-                    X = (float) (x - radius * Math.Cos(i * (2 * pi / resolution))),
-                    Y = (float) (y - radius * Math.Sin(i * (2 * pi / resolution))),
+                    X = (float) (x - radius * System.Math.Cos(i * (2 * pi / resolution))),
+                    Y = (float) (y - radius * System.Math.Sin(i * (2 * pi / resolution))),
                     Z = 0f,
                     Rhw = 1f,
                     Color = bgr
@@ -208,10 +210,12 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
             {
                 vertexVertices[i].X =
                     (float)
-                        (x + Math.Cos(angle) * (vertexVertices[i].X - x) - Math.Sin(angle) * (vertexVertices[i].Y - y));
+                        (x + System.Math.Cos(angle) * (vertexVertices[i].X - x) -
+                         System.Math.Sin(angle) * (vertexVertices[i].Y - y));
                 vertexVertices[i].Y =
                     (float)
-                        (y + Math.Sin(angle) * (vertexVertices[i].X - x) - Math.Cos(angle) * (vertexVertices[i].Y - y));
+                        (y + System.Math.Sin(angle) * (vertexVertices[i].X - x) -
+                         System.Math.Cos(angle) * (vertexVertices[i].Y - y));
             }
 
             #endregion
@@ -219,8 +223,8 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
             #region Buffer
 
             buffer = new VertexBuffer(
-                device, vertexVertices.Length * Utilities.SizeOf<Vertex>(), Usage.WriteOnly,
-                VertexFormat.Diffuse, Pool.Default);
+                device, vertexVertices.Length * Utilities.SizeOf<Vertex>(), Usage.WriteOnly, VertexFormat.Diffuse,
+                Pool.Default);
 
             var vertices = buffer.Lock(0, vertexVertices.Length * Utilities.SizeOf<Vertex>(), LockFlags.None);
             foreach (var v in vertexVertices)
@@ -256,7 +260,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
             int resolution,
             ColorBGRA color)
         {
-            Draw(Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, smooth, resolution, color);
+            Draw(position.ToVector2(), position.Z, rotate, type, smooth, resolution, color);
         }
 
         /// <summary>
@@ -271,7 +275,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         public static void Draw(Vector3 position, int rotate, CircleType type, bool smooth, int resolution, Color color)
         {
             Draw(
-                Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, smooth, resolution,
+                position.ToVector2(), position.Z, rotate, type, smooth, resolution,
                 new ColorBGRA(color.R, color.G, color.B, color.A));
         }
 
@@ -323,10 +327,12 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
             ColorBGRA color)
         {
             var vertexVertices = new Vertex[resolution + 2];
-            var angle = rotate * Math.PI / 180;
+            var angle = rotate * System.Math.PI / 180;
             var x = position.X;
             var y = position.Y;
-            var pi = (type == CircleType.Full) ? Math.PI : (type == CircleType.Half) ? Math.PI / 2 : Math.PI / 4;
+            var pi = (type == CircleType.Full)
+                ? System.Math.PI
+                : (type == CircleType.Half) ? System.Math.PI / 2 : System.Math.PI / 4;
             var device = Drawing.Direct3DDevice;
 
             #region Circle
@@ -338,8 +344,8 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
             {
                 vertexVertices[i] = new Vertex
                 {
-                    X = (float)(x - radius * Math.Cos(i * (2 * pi / resolution))),
-                    Y = (float)(y - radius * Math.Sin(i * (2 * pi / resolution))),
+                    X = (float) (x - radius * System.Math.Cos(i * (2 * pi / resolution))),
+                    Y = (float) (y - radius * System.Math.Sin(i * (2 * pi / resolution))),
                     Z = 0f,
                     Rhw = 1f,
                     Color = bgr
@@ -354,10 +360,12 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
             {
                 vertexVertices[i].X =
                     (float)
-                        (x + Math.Cos(angle) * (vertexVertices[i].X - x) - Math.Sin(angle) * (vertexVertices[i].Y - y));
+                        (x + System.Math.Cos(angle) * (vertexVertices[i].X - x) -
+                         System.Math.Sin(angle) * (vertexVertices[i].Y - y));
                 vertexVertices[i].Y =
                     (float)
-                        (y + Math.Sin(angle) * (vertexVertices[i].X - x) - Math.Cos(angle) * (vertexVertices[i].Y - y));
+                        (y + System.Math.Sin(angle) * (vertexVertices[i].X - x) -
+                         System.Math.Cos(angle) * (vertexVertices[i].Y - y));
             }
 
             #endregion
@@ -365,19 +373,14 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
             #region Buffer
 
             var buffer = new VertexBuffer(
-                device, vertexVertices.Length * Utilities.SizeOf<Vertex>(), Usage.WriteOnly,
-                VertexFormat.PositionRhw | VertexFormat.Diffuse, Pool.Default);
+                device, vertexVertices.Length * Utilities.SizeOf<Vertex>(), Usage.WriteOnly, VertexFormat.Diffuse,
+                Pool.Default);
 
-            var vertices = buffer.LockToPointer(0, vertexVertices.Length * Utilities.SizeOf<Vertex>(), 0);
-            var pointers = new IntPtr[vertexVertices.Length];
-            var result = Marshal.AllocHGlobal(IntPtr.Size * vertexVertices.Length * Utilities.SizeOf<Vertex>());
-            for (var i = 0; i < vertexVertices.Length; i++)
+            var vertices = buffer.Lock(0, vertexVertices.Length * Utilities.SizeOf<Vertex>(), LockFlags.None);
+            foreach (var v in vertexVertices)
             {
-                pointers[i] = Marshal.AllocHGlobal(IntPtr.Size);
-                Marshal.StructureToPtr(vertexVertices[i], pointers[i], true);
-                Marshal.WriteIntPtr(result, i * IntPtr.Size, pointers[i]);
+                vertices.Write(v);
             }
-            Marshal.Copy(vertices, pointers, 0, (vertexVertices.Length * Utilities.SizeOf<Vertex>()));
             buffer.Unlock();
 
             #endregion
