@@ -6,7 +6,7 @@
     public struct Vertex
     {
         /// <summary>
-        ///     RBGA Color value.
+        ///     Color value.
         /// </summary>
         public int Color;
 

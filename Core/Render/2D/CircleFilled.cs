@@ -149,19 +149,28 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
 
             #region Circle
 
-            vertexVertices[0].X = x;
-            vertexVertices[0].Y = y;
-            vertexVertices[0].Z = 0;
-            vertexVertices[0].Rhw = 1;
-            vertexVertices[0].Color = color.ToRgba();
+            byte[] b = { color.R, color.G, color.B, color.A };
+            var bgr = BitConverter.ToInt32(b, 0);
+
+            vertexVertices[0] = new Vertex
+            {
+                X = x,
+                Y = y,
+                Z = 0f,
+                Rhw = 1f,
+                Color = bgr
+            };
 
             for (var i = 1; i < vertexVertices.Length; ++i)
             {
-                vertexVertices[i].X = (float) (x - radius * Math.Cos(pi * ((i - 1) / (resolution / 2.0f))));
-                vertexVertices[i].Y = (float) (y - radius * Math.Sin(pi * ((i - 1) / (resolution / 2.0f))));
-                vertexVertices[i].Z = 0;
-                vertexVertices[i].Rhw = 1;
-                vertexVertices[i].Color = color.ToRgba();
+                vertexVertices[i] = new Vertex
+                {
+                    X = (float)(x - radius * Math.Cos(pi * ((i - 1) / (resolution / 2.0f)))),
+                    Y = (float)(y - radius * Math.Sin(pi * ((i - 1) / (resolution / 2.0f)))),
+                    Z = 0f,
+                    Rhw = 1f,
+                    Color = bgr
+                };
             }
 
             #endregion
@@ -286,19 +295,28 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
 
             #region Circle
 
-            vertexVertices[0].X = x;
-            vertexVertices[0].Y = y;
-            vertexVertices[0].Z = 0;
-            vertexVertices[0].Rhw = 1;
-            vertexVertices[0].Color = color.ToRgba();
+            byte[] b = { color.R, color.G, color.B, color.A };
+            var bgr = BitConverter.ToInt32(b, 0);
+
+            vertexVertices[0] = new Vertex
+            {
+                X = x,
+                Y = y,
+                Z = 0f,
+                Rhw = 1f,
+                Color = bgr
+            };
 
             for (var i = 1; i < vertexVertices.Length; ++i)
             {
-                vertexVertices[i].X = (float) (x - radius * Math.Cos(pi * ((i - 1) / (resolution / 2.0f))));
-                vertexVertices[i].Y = (float) (y - radius * Math.Sin(pi * ((i - 1) / (resolution / 2.0f))));
-                vertexVertices[i].Z = 0;
-                vertexVertices[i].Rhw = 1;
-                vertexVertices[i].Color = color.ToRgba();
+                vertexVertices[i] = new Vertex
+                {
+                    X = (float) (x - radius * Math.Cos(pi * ((i - 1) / (resolution / 2.0f)))),
+                    Y = (float) (y - radius * Math.Sin(pi * ((i - 1) / (resolution / 2.0f)))),
+                    Z = 0f,
+                    Rhw = 1f,
+                    Color = bgr
+                };
             }
 
             #endregion

@@ -40,7 +40,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
                     .AddRenderState(RenderState.SourceBlend, RenderState.SourceBlendAlpha)
                     .AddRenderState(RenderState.DestinationBlend, RenderState.DestinationBlendAlpha)
                     .AddStreamSource(0, buffer, 0, Utilities.SizeOf<Vertex>())
-                    .AddVertexFormat(VertexFormat.PositionRhw | VertexFormat.Diffuse);
+                    .AddVertexFormat(VertexFormat.Diffuse | VertexFormat.PositionRhw);
 
             if (Smooth)
             {
@@ -48,6 +48,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
                 deviceOptions.AddRenderState(RenderState.AntialiasedLineEnable, true);
             }
 
+            device.Clear(ClearFlags.Target, new ColorBGRA(255f, 255f, 255f, 255f), 0f, 1);
             using (new DeviceOptions(deviceOptions))
             {
                 device.DrawPrimitives(PrimitiveType.LineStrip, 0, Resolution);
@@ -184,13 +185,19 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
 
             #region Circle
 
+            byte[] b = { color.R, color.G, color.B, color.A };
+            var bgr = BitConverter.ToInt32(b, 0);
+
             for (var i = 0; i < vertexVertices.Length; ++i)
             {
-                vertexVertices[i].X = (float) (x - radius * Math.Cos(i * (2 * pi / resolution)));
-                vertexVertices[i].Y = (float) (y - radius * Math.Sin(i * (2 * pi / resolution)));
-                vertexVertices[i].Z = 0;
-                vertexVertices[i].Rhw = 1;
-                vertexVertices[i].Color = color.ToRgba();
+                vertexVertices[i] = new Vertex
+                {
+                    X = (float) (x - radius * Math.Cos(i * (2 * pi / resolution))),
+                    Y = (float) (y - radius * Math.Sin(i * (2 * pi / resolution))),
+                    Z = 0f,
+                    Rhw = 1f,
+                    Color = bgr
+                };
             }
 
             #endregion
@@ -211,20 +218,18 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
 
             #region Buffer
 
-            var newBuffer = new VertexBuffer(
+            buffer = new VertexBuffer(
                 device, vertexVertices.Length * Utilities.SizeOf<Vertex>(), Usage.WriteOnly,
-                VertexFormat.PositionRhw | VertexFormat.Diffuse, Pool.Default);
+                VertexFormat.Diffuse, Pool.Default);
 
-            var vertices = newBuffer.Lock(0, vertexVertices.Length * Utilities.SizeOf<Vertex>(), LockFlags.None);
+            var vertices = buffer.Lock(0, vertexVertices.Length * Utilities.SizeOf<Vertex>(), LockFlags.None);
             foreach (var v in vertexVertices)
             {
                 vertices.Write(v);
             }
-            newBuffer.Unlock();
+            buffer.Unlock();
 
             #endregion
-
-            buffer = newBuffer;
         }
 
         #endregion
@@ -326,13 +331,19 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
 
             #region Circle
 
+            byte[] b = { color.R, color.G, color.B, color.A };
+            var bgr = BitConverter.ToInt32(b, 0);
+
             for (var i = 0; i < vertexVertices.Length; ++i)
             {
-                vertexVertices[i].X = (float) (x - radius * Math.Cos(i * (2 * pi / resolution)));
-                vertexVertices[i].Y = (float) (y - radius * Math.Sin(i * (2 * pi / resolution)));
-                vertexVertices[i].Z = 0;
-                vertexVertices[i].Rhw = 1;
-                vertexVertices[i].Color = color.ToRgba();
+                vertexVertices[i] = new Vertex
+                {
+                    X = (float)(x - radius * Math.Cos(i * (2 * pi / resolution))),
+                    Y = (float)(y - radius * Math.Sin(i * (2 * pi / resolution))),
+                    Z = 0f,
+                    Rhw = 1f,
+                    Color = bgr
+                };
             }
 
             #endregion
