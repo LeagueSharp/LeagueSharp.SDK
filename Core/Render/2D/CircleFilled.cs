@@ -105,7 +105,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// <param name="color">Circle Color</param>
         public CircleFilled(Vector3 position, int rotate, CircleType type, int resolution, ColorBGRA color)
         {
-            Base(Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, resolution, color);
+            Base(Extensions.SharpDX.Vector3Extensions.ToVector2(position), position.Z, rotate, type, resolution, color);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         public CircleFilled(Vector3 position, int rotate, CircleType type, int resolution, Color color)
         {
             Base(
-                Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, resolution,
+                Extensions.SharpDX.Vector3Extensions.ToVector2(position), position.Z, rotate, type, resolution,
                 new ColorBGRA(color.R, color.G, color.B, color.A));
         }
 
@@ -221,7 +221,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// <param name="color">Circle Color</param>
         public static void Draw(Vector3 position, int rotate, CircleType type, int resolution, ColorBGRA color)
         {
-            Draw(Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, resolution, color);
+            Draw(Extensions.SharpDX.Vector3Extensions.ToVector2(position), position.Z, rotate, type, resolution, color);
         }
 
         /// <summary>
@@ -235,7 +235,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         public static void Draw(Vector3 position, int rotate, CircleType type, int resolution, Color color)
         {
             Draw(
-                Extensions.SharpDX.Vector3.ToVector2(position), position.Z, rotate, type, resolution,
+                Extensions.SharpDX.Vector3Extensions.ToVector2(position), position.Z, rotate, type, resolution,
                 new ColorBGRA(color.R, color.G, color.B, color.A));
         }
 

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using SharpDX;
 
 #endregion
 
@@ -10,16 +11,16 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
     /// <summary>
     ///     SharpDX/Vector2 Extensions.
     /// </summary>
-    public static class Vector2
+    public static class Vector2Extensions
     {
         /// <summary>
         ///     Checks for if the extended Vector2 is valid.
         /// </summary>
         /// <param name="vector2">SharpDX Vector2</param>
         /// <returns>Boolean</returns>
-        public static bool IsValid(this global::SharpDX.Vector2 vector2)
+        public static bool IsValid(this Vector2 vector2)
         {
-            return vector2 != global::SharpDX.Vector2.Zero;
+            return vector2 != Vector2.Zero;
         }
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// </summary>
         /// <param name="vector2">SharpDX Vector2</param>
         /// <returns>Normalized Vector2</returns>
-        public static global::SharpDX.Vector2 Normalized(this global::SharpDX.Vector2 vector2)
+        public static Vector2 Normalized(this Vector2 vector2)
         {
             vector2.Normalize();
             return vector2;
@@ -39,11 +40,9 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="vector2">Extended SharpDX Vector2</param>
         /// <param name="offset">Axis Offset (0 = X, 1 = Y)</param>
         /// <returns>Perpendicular Vector2</returns>
-        public static global::SharpDX.Vector2 Perpendicular(this global::SharpDX.Vector2 vector2, int offset = 0)
+        public static Vector2 Perpendicular(this Vector2 vector2, int offset = 0)
         {
-            return (offset == 0)
-                ? new global::SharpDX.Vector2(-vector2.X, vector2.Y)
-                : new global::SharpDX.Vector2(vector2.X, -vector2.Y);
+            return (offset == 0) ? new Vector2(-vector2.X, vector2.Y) : new Vector2(vector2.X, -vector2.Y);
         }
 
         /// <summary>
@@ -52,13 +51,12 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="vector2">Extended SharpDX Vector2</param>
         /// <param name="angle">Angle (in radians)</param>
         /// <returns>Rotated Vector2</returns>
-        public static global::SharpDX.Vector2 Rotated(this global::SharpDX.Vector2 vector2, float angle)
+        public static Vector2 Rotated(this Vector2 vector2, float angle)
         {
             var cos = Math.Cos(angle);
             var sin = Math.Sin(angle);
 
-            return new global::SharpDX.Vector2(
-                (float) (vector2.X * cos - vector2.Y * sin), (float) (vector2.Y * cos + vector2.X * sin));
+            return new Vector2((float) (vector2.X * cos - vector2.Y * sin), (float) (vector2.Y * cos + vector2.X * sin));
         }
 
         /// <summary>
@@ -66,7 +64,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// </summary>
         /// <param name="vector2">Extended SharpDX Vector2</param>
         /// <returns>Polar for Vector Angle (Degrees)</returns>
-        public static float Polar(this global::SharpDX.Vector2 vector2)
+        public static float Polar(this Vector2 vector2)
         {
             if (Math.Abs(vector2.X - 0) <= (float) 1e-9)
             {
@@ -94,7 +92,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="vector2">Extended SharpDX Vector2</param>
         /// <param name="toVector2">SharpDX Vector2</param>
         /// <returns>Angle between two vectors in float-units</returns>
-        public static float AngleBetween(this global::SharpDX.Vector2 vector2, global::SharpDX.Vector2 toVector2)
+        public static float AngleBetween(this Vector2 vector2, Vector2 toVector2)
         {
             var theta = vector2.Polar() - toVector2.Polar();
             if (theta < 0)
@@ -114,7 +112,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="vector2">Extended SharpDX Vector2</param>
         /// <param name="toVector3">SharpDX Vector3</param>
         /// <returns>Angle between two vectors in float-units</returns>
-        public static float AngleBetween(this global::SharpDX.Vector2 vector2, global::SharpDX.Vector3 toVector3)
+        public static float AngleBetween(this Vector2 vector2, global::SharpDX.Vector3 toVector3)
         {
             var theta = vector2.Polar() - toVector3.Polar();
             if (theta < 0)
@@ -134,7 +132,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="vector2">Extended SharpDX Vector2</param>
         /// <param name="toVector4">SharpDX Vector4</param>
         /// <returns>Angle between two vectors in float-units</returns>
-        public static float AngleBetween(this global::SharpDX.Vector2 vector2, global::SharpDX.Vector4 toVector4)
+        public static float AngleBetween(this Vector2 vector2, global::SharpDX.Vector4 toVector4)
         {
             var theta = vector2.Polar() - toVector4.Polar();
             if (theta < 0)
@@ -158,10 +156,9 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="vector2">Extended SharpDX Vector2</param>
         /// <param name="array">Vector2 Collection</param>
         /// <returns>Closest Vector2</returns>
-        public static global::SharpDX.Vector2 Closest(this global::SharpDX.Vector2 vector2,
-            IEnumerable<global::SharpDX.Vector2> array)
+        public static Vector2 Closest(this Vector2 vector2, IEnumerable<Vector2> array)
         {
-            var result = global::SharpDX.Vector2.Zero;
+            var result = Vector2.Zero;
             var distance = float.MaxValue;
 
             foreach (var vector in array)
@@ -183,8 +180,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="vector2">Extended SharpDX Vector2</param>
         /// <param name="array">Vector3 Collection</param>
         /// <returns>Closest Vector3</returns>
-        public static global::SharpDX.Vector3 Closest(this global::SharpDX.Vector2 vector2,
-            IEnumerable<global::SharpDX.Vector3> array)
+        public static global::SharpDX.Vector3 Closest(this Vector2 vector2, IEnumerable<global::SharpDX.Vector3> array)
         {
             var result = global::SharpDX.Vector3.Zero;
             var distance = float.MaxValue;
@@ -208,8 +204,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="vector2">Extended SharpDX Vector2</param>
         /// <param name="array">Vector4 Collection</param>
         /// <returns>Closest Vector4</returns>
-        public static global::SharpDX.Vector4 Closest(this global::SharpDX.Vector2 vector2,
-            IEnumerable<global::SharpDX.Vector4> array)
+        public static global::SharpDX.Vector4 Closest(this Vector2 vector2, IEnumerable<global::SharpDX.Vector4> array)
         {
             var result = global::SharpDX.Vector4.Zero;
             var distance = float.MaxValue;
@@ -238,9 +233,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="toVector2">SharpDX Vector2 (To)</param>
         /// <param name="distance">Distance (float units)</param>
         /// <returns>Extended Vector2</returns>
-        public static global::SharpDX.Vector2 Extend(this global::SharpDX.Vector2 vector2,
-            global::SharpDX.Vector2 toVector2,
-            float distance)
+        public static Vector2 Extend(this Vector2 vector2, Vector2 toVector2, float distance)
         {
             return vector2 + distance * (toVector2 - vector2).Normalized();
         }
@@ -252,9 +245,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="toVector3">SharpDX Vector3 (To)</param>
         /// <param name="distance">Distance (float units)</param>
         /// <returns>Extended Vector2</returns>
-        public static global::SharpDX.Vector2 Extend(this global::SharpDX.Vector2 vector2,
-            global::SharpDX.Vector3 toVector3,
-            float distance)
+        public static Vector2 Extend(this Vector2 vector2, global::SharpDX.Vector3 toVector3, float distance)
         {
             return vector2 + distance * (toVector3.ToVector2() - vector2).Normalized();
         }
@@ -266,9 +257,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="toVector4">SharpDX Vector4 (To)</param>
         /// <param name="distance">Distance (float units)</param>
         /// <returns>Extended Vector2</returns>
-        public static global::SharpDX.Vector2 Extend(this global::SharpDX.Vector2 vector2,
-            global::SharpDX.Vector4 toVector4,
-            float distance)
+        public static Vector2 Extend(this Vector2 vector2, global::SharpDX.Vector4 toVector4, float distance)
         {
             return vector2 + distance * (toVector4.ToVector2() - vector2).Normalized();
         }
@@ -283,7 +272,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="vector2">SharpDX Vector2</param>
         /// <param name="z">Float Z-axis (default = 0f)</param>
         /// <returns>Vector3</returns>
-        public static global::SharpDX.Vector3 ToVector3(this global::SharpDX.Vector2 vector2, float z = 0f)
+        public static global::SharpDX.Vector3 ToVector3(this Vector2 vector2, float z = 0f)
         {
             return new global::SharpDX.Vector3(vector2, z);
         }
@@ -295,7 +284,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="z">Float Z-axis (default = 0f)</param>
         /// <param name="w">Float W-axis (default = 0f)</param>
         /// <returns>Vector4</returns>
-        public static global::SharpDX.Vector4 ToVector4(this global::SharpDX.Vector2 vector2, float z = 0f, float w = 1f)
+        public static global::SharpDX.Vector4 ToVector4(this Vector2 vector2, float z = 0f, float w = 1f)
         {
             return new global::SharpDX.Vector4(vector2, z, w);
         }
@@ -310,9 +299,9 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="vector2">SharpDX Vector2 (From)</param>
         /// <param name="toVector2">SharpDX Vector2 (To)</param>
         /// <returns>Float Units</returns>
-        public static float Distance(this global::SharpDX.Vector2 vector2, global::SharpDX.Vector2 toVector2)
+        public static float Distance(this Vector2 vector2, Vector2 toVector2)
         {
-            return global::SharpDX.Vector2.Distance(vector2, toVector2);
+            return Vector2.Distance(vector2, toVector2);
         }
 
         /// <summary>
@@ -321,9 +310,9 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="vector2">SharpDX Vector2 (From)</param>
         /// <param name="toVector3">SharpDX Vector3 (To)</param>
         /// <returns>Float Units</returns>
-        public static float Distance(this global::SharpDX.Vector2 vector2, global::SharpDX.Vector3 toVector3)
+        public static float Distance(this Vector2 vector2, global::SharpDX.Vector3 toVector3)
         {
-            return global::SharpDX.Vector2.Distance(vector2, toVector3.ToVector2());
+            return Vector2.Distance(vector2, toVector3.ToVector2());
         }
 
         /// <summary>
@@ -332,9 +321,9 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="vector2">SharpDX Vector2 (From)</param>
         /// <param name="toVector4">SharpDX Vector4 (To)</param>
         /// <returns>Float Units</returns>
-        public static float Distance(this global::SharpDX.Vector2 vector2, global::SharpDX.Vector4 toVector4)
+        public static float Distance(this Vector2 vector2, global::SharpDX.Vector4 toVector4)
         {
-            return global::SharpDX.Vector2.Distance(vector2, toVector4.ToVector2());
+            return Vector2.Distance(vector2, toVector4.ToVector2());
         }
 
         #endregion
@@ -347,9 +336,9 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="vector2">Extended SharpDX Vector2</param>
         /// <param name="toVector2">SharpDX Vector2</param>
         /// <returns>The squared distance between the two vectors.</returns>
-        public static float DistanceSquared(this global::SharpDX.Vector2 vector2, global::SharpDX.Vector2 toVector2)
+        public static float DistanceSquared(this Vector2 vector2, Vector2 toVector2)
         {
-            return global::SharpDX.Vector2.DistanceSquared(vector2, toVector2);
+            return Vector2.DistanceSquared(vector2, toVector2);
         }
 
         /// <summary>
@@ -358,9 +347,9 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="vector2">Extended SharpDX Vector2</param>
         /// <param name="toVector3">SharpDX Vector3</param>
         /// <returns>The squared distance between the two vectors.</returns>
-        public static float DistanceSquared(this global::SharpDX.Vector2 vector2, global::SharpDX.Vector3 toVector3)
+        public static float DistanceSquared(this Vector2 vector2, global::SharpDX.Vector3 toVector3)
         {
-            return global::SharpDX.Vector2.DistanceSquared(vector2, toVector3.ToVector2());
+            return Vector2.DistanceSquared(vector2, toVector3.ToVector2());
         }
 
         /// <summary>
@@ -369,9 +358,9 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <param name="vector2">Extended SharpDX Vector2</param>
         /// <param name="toVector4">SharpDX Vector4</param>
         /// <returns>The squared distance between the two vectors.</returns>
-        public static float DistanceSquared(this global::SharpDX.Vector2 vector2, global::SharpDX.Vector4 toVector4)
+        public static float DistanceSquared(this Vector2 vector2, global::SharpDX.Vector4 toVector4)
         {
-            return global::SharpDX.Vector2.DistanceSquared(vector2, toVector4.ToVector2());
+            return Vector2.DistanceSquared(vector2, toVector4.ToVector2());
         }
 
         #endregion
