@@ -69,6 +69,7 @@
     <Compile Include="Core\Extensions\SharpDX\Vector3Extensions.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector4Extensions.cs" />
     <Compile Include="Core\Extensions\Unit.cs" />
+    <Compile Include="Core\Math\Geometry.cs" />
     <Compile Include="Core\Math\Polygons\Arc.cs" />
     <Compile Include="Core\Math\Polygons\Circle.cs" />
     <Compile Include="Core\Math\Polygons\Line.cs" />
