@@ -94,13 +94,13 @@
     <Compile Include="Core\Utils\Performance.cs" />
     <Compile Include="Core\Utils\TickOperation.cs" />
     <Compile Include="Core\Utils\Utils.cs" />
+    <Compile Include="Core\Wrappers\Map.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\Wrappers\" />
     <Folder Include="Third_Party\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
