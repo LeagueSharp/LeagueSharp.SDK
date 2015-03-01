@@ -98,6 +98,7 @@
     <Compile Include="Core\Utils\Version.cs" />
     <Compile Include="Core\Variables.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
+    <Compile Include="Core\Wrappers\MinionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
