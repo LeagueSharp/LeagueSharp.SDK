@@ -141,6 +141,19 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
+        ///     Tries to get the value, returns false if the cache does not contain that key.
+        /// </summary>
+        /// <param name="key">Key</param>
+        /// <param name="value">Value(Null if doesnt exist)</param>
+        /// <param name="regionName">The name of the region in the cache</param>
+        /// <returns>If the cache contains the value</returns>
+        public bool TryGetValue(string key, out object value, string regionName = null)
+        {
+            regionName = regionName ?? "Default";
+            return cache[regionName].TryGetValue(key, out value);
+        }
+
+        /// <summary>
         ///     Not supported. Please use the events.
         /// </summary>
         /// <param name="keys">Keys</param>
