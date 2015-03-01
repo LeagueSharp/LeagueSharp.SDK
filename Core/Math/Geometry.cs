@@ -3,7 +3,6 @@ using System.Linq;
 using ClipperLib;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.Math.Polygons;
-using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.Math
