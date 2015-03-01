@@ -94,6 +94,7 @@
     <Compile Include="Core\Utils\Performance.cs" />
     <Compile Include="Core\Utils\TickOperation.cs" />
     <Compile Include="Core\Utils\Utils.cs" />
+    <Compile Include="Core\Utils\Version.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
