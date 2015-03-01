@@ -33,7 +33,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             for (var i = ActionList.Count - 1; i >= 0; i--)
             {
-                if (ActionList[i].Value <= Utils.TickCount)
+                if (ActionList[i].Value <= Variables.TickCount)
                 {
                     try
                     {
@@ -59,7 +59,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="func">Callback Function</param>
         public static void Add(int time, Action func)
         {
-            ActionList.Add(new KeyValuePair<Action, long>(func, time + Utils.TickCount));
+            ActionList.Add(new KeyValuePair<Action, long>(func, time + Variables.TickCount));
         }
     }
 }

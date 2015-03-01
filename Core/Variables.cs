@@ -1,15 +1,11 @@
-﻿#region
+﻿using System;
 
-using System;
-
-#endregion
-
-namespace LeagueSharp.CommonEx.Core.Utils
+namespace LeagueSharp.CommonEx.Core
 {
     /// <summary>
-    ///     General Utils.
+    ///     Class that contains helpful variables.
     /// </summary>
-    public class Utils
+    public class Variables
     {
         /// <summary>
         ///     Safe TickCount.

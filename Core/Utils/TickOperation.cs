@@ -24,7 +24,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
             Action = action;
             TickDelay = tickDelay;
 
-            nextTick = (runOnce) ? Utils.TickCount : Utils.TickCount + tickDelay;
+            nextTick = (runOnce) ? Variables.TickCount : Variables.TickCount + tickDelay;
             IsRunning = true;
             Game.OnGameUpdate += OnTick;
         }
@@ -80,11 +80,11 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="args">System.EventArgs</param>
         private void OnTick(EventArgs args)
         {
-            if (nextTick <= Utils.TickCount)
+            if (nextTick <= Variables.TickCount)
             {
                 Action();
 
-                nextTick = Utils.TickCount + TickDelay;
+                nextTick = Variables.TickCount + TickDelay;
             }
         }
 

@@ -3,6 +3,7 @@ using System.Linq;
 using ClipperLib;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.Math.Polygons;
+using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.Math
@@ -85,6 +86,68 @@ namespace LeagueSharp.CommonEx.Core.Math
             c.Execute(ClipType.ctUnion, solution, PolyFillType.pftPositive, PolyFillType.pftEvenOdd);
 
             return solution;
+        }
+
+        /// <summary>
+        ///     Removes vectors past a distance from a list.
+        /// </summary>
+        /// <param name="path">Path</param>
+        /// <param name="distance">Distance</param>
+        /// <returns>The paths in range</returns>
+        public static List<Vector2> CutPath(this List<Vector2> path, float distance)
+        {
+            var result = new List<Vector2>();
+            for (var i = 0; i < path.Count - 1; i++)
+            {
+                var dist = path[i].Distance(path[i + 1]);
+                if (dist > distance)
+                {
+                    result.Add(path[i] + distance * (path[i + 1] - path[i]).Normalized());
+
+                    for (var j = i + 1; j < path.Count; j++)
+                    {
+                        result.Add(path[j]);
+                    }
+
+                    break;
+                }
+
+                distance -= dist;
+            }
+            return result.Count > 0 ? result : new List<Vector2> { path.Last() };
+        }
+
+        /// <summary>
+        ///     Returns the path of the unit appending the ServerPosition at the start, works even if the unit just entered fow.
+        /// </summary>
+        /// <param name="unit">Unit to get the waypoints for</param>
+        /// <returns>List of waypoints(<see cref="Vector2"/>)</returns>
+        public static List<Vector2> GetWaypoints(this Obj_AI_Base unit)
+        {
+            var result = new List<Vector2>();
+
+            if (unit.IsVisible)
+            {
+                result.Add(unit.ServerPosition.ToVector2());
+                result.AddRange(unit.Path.Select(point => point.ToVector2()));
+            }
+            else if (WaypointTracker.StoredPaths.ContainsKey(unit.NetworkId))
+            {
+                var path = WaypointTracker.StoredPaths[unit.NetworkId];
+                var timePassed = (Variables.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
+                if (path.GetPathLength() >= unit.MoveSpeed * timePassed)
+                {
+                    result = CutPath(path, (int)(unit.MoveSpeed * timePassed));
+                }
+            }
+
+            return result;
+        }
+
+        internal static class WaypointTracker
+        {
+            public static readonly Dictionary<int, List<Vector2>> StoredPaths = new Dictionary<int, List<Vector2>>();
+            public static readonly Dictionary<int, int> StoredTick = new Dictionary<int, int>();
         }
     }
 }
