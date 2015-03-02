@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\Events\OnGameLoad.cs" />
+    <Compile Include="Core\Events\Stealth.cs" />
     <Compile Include="Core\Extensions\Enumerable.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector2Extensions.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector3Extensions.cs" />
