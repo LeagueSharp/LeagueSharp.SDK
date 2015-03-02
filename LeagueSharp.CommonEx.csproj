@@ -69,6 +69,7 @@
     <Compile Include="Core\Extensions\SharpDX\Vector3Extensions.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector4Extensions.cs" />
     <Compile Include="Core\Extensions\Unit.cs" />
+    <Compile Include="Core\Managers\HeroManager.cs" />
     <Compile Include="Core\Math\MathUtils.cs" />
     <Compile Include="Core\Math\MEC.cs" />
     <Compile Include="Core\Math\Polygons\Arc.cs" />

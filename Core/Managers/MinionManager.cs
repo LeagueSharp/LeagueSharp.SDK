@@ -5,7 +5,7 @@ using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.Math;
 using SharpDX;
 
-namespace LeagueSharp.CommonEx.Core.Wrappers
+namespace LeagueSharp.CommonEx.Core.Managers
 {
     /// <summary>
     ///     Enum that specifies how to order minions
