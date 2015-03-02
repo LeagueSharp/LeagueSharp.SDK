@@ -48,7 +48,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         }
 
         /// <summary>
-        ///     Creates a new <see cref="Spell"/> instance, taking the 
+        ///     Creates a new <see cref="Spell"/> instance, with the option to take data from <see cref="SpellData"/>
         /// </summary>
         /// <param name="slot">The <see cref="SpellSlot"/></param>
         /// <param name="takeFromSpellData">Get the data(speed, range, etc) from SpellData.</param>

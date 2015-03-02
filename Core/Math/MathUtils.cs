@@ -10,7 +10,7 @@ namespace LeagueSharp.CommonEx.Core.Math
     /// <summary>
     ///     Provides helpful extension and methods concerning Geometry.
     /// </summary>
-    public static class Geometry
+    public static class MathUtils
     {
         /// <summary>
         ///     Converts a list of lists of <see cref="IntPoint" /> to a polygon.

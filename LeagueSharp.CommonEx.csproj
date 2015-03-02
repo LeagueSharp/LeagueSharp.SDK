@@ -69,7 +69,7 @@
     <Compile Include="Core\Extensions\SharpDX\Vector3Extensions.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector4Extensions.cs" />
     <Compile Include="Core\Extensions\Unit.cs" />
-    <Compile Include="Core\Math\Geometry.cs" />
+    <Compile Include="Core\Math\MathUtils.cs" />
     <Compile Include="Core\Math\MEC.cs" />
     <Compile Include="Core\Math\Polygons\Arc.cs" />
     <Compile Include="Core\Math\Polygons\Circle.cs" />
@@ -98,7 +98,7 @@
     <Compile Include="Core\Utils\Version.cs" />
     <Compile Include="Core\Variables.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
-    <Compile Include="Core\Wrappers\MinionManager.cs" />
+    <Compile Include="Core\Managers\MinionManager.cs" />
     <Compile Include="Core\Wrappers\Spell.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
