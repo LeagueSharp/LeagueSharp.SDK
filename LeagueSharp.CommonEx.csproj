@@ -99,6 +99,7 @@
     <Compile Include="Core\Variables.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
     <Compile Include="Core\Wrappers\MinionManager.cs" />
+    <Compile Include="Core\Wrappers\Spell.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
