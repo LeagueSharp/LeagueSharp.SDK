@@ -1,9 +1,8 @@
 ﻿#region
 
-using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
-using Vector3 = SharpDX.Vector3;
+using SharpDX;
 
 #endregion
 
@@ -145,14 +144,25 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         }
 
         /// <summary>
-        ///     Gets the distance squared between two GameObjects
+        ///     Gets the distance between a <see cref="GameObject" /> and a <see cref="Vector3" />
         /// </summary>
         /// <param name="source">Source</param>
-        /// <param name="target">Target</param>
-        /// <returns>The squared distance between the two objects</returns>
-        public static float DistanceSquared(this GameObject source, GameObject target)
+        /// <param name="position">Position</param>
+        /// <returns>The distance between a <see cref="GameObject" /> and a <see cref="Vector3" /></returns>
+        public static float Distance(this GameObject source, Vector3 position)
         {
-            return source.Position.DistanceSquared(target.Position);
+            return source.Position.Distance(position);
+        }
+
+        /// <summary>
+        ///     Gets the distance between a <see cref="GameObject" /> and a <see cref="Vector2" />
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="position">Position</param>
+        /// <returns>The distance between a <see cref="GameObject" /> and a <see cref="Vector2" /></returns>
+        public static float Distance(this GameObject source, Vector2 position)
+        {
+            return source.Position.Distance(position);
         }
 
         /// <summary>
@@ -164,6 +174,83 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         public static float Distance(this Obj_AI_Base source, Obj_AI_Base target)
         {
             return source.ServerPosition.Distance(target.ServerPosition);
+        }
+
+        /// <summary>
+        ///     Gets the distance between a <see cref="Obj_AI_Base" /> and a <see cref="Vector3" />
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="position">Position</param>
+        /// <returns>The distance between a <see cref="Obj_AI_Base" /> and a <see cref="Vector3" /></returns>
+        public static float Distance(this Obj_AI_Base source, Vector3 position)
+        {
+            return source.ServerPosition.Distance(position);
+        }
+
+        /// <summary>
+        ///     Gets the distance between a <see cref="Obj_AI_Base" /> and a <see cref="Vector2" />
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="position">Position</param>
+        /// <returns>The distance between a <see cref="Obj_AI_Base" /> and a <see cref="Vector2" /></returns>
+        public static float Distance(this Obj_AI_Base source, Vector2 position)
+        {
+            return source.ServerPosition.Distance(position);
+        }
+
+        /// <summary>
+        ///     Gets the distance squared between two GameObjects
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="target">Target</param>
+        /// <returns>The squared distance between the two objects</returns>
+        public static float DistanceSquared(this GameObject source, GameObject target)
+        {
+            return source.Position.DistanceSquared(target.Position);
+        }
+
+        /// <summary>
+        ///     Gets the distance squared between a <see cref="GameObject" /> and a <see cref="Vector3" />
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="position">Position</param>
+        /// <returns>The distance squared between a <see cref="GameObject" /> and a <see cref="Vector3" /></returns>
+        public static float DistanceSquared(this GameObject source, Vector3 position)
+        {
+            return source.Position.DistanceSquared(position);
+        }
+
+        /// <summary>
+        ///     Gets the distance squared between a <see cref="GameObject" /> and a <see cref="Vector2" />
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="position">Position</param>
+        /// <returns>The distance squared between a <see cref="GameObject" /> and a <see cref="Vector2" /></returns>
+        public static float DistanceSquared(this GameObject source, Vector2 position)
+        {
+            return source.Position.DistanceSquared(position);
+        }
+
+        /// <summary>
+        ///     Gets the distance squared between a <see cref="Obj_AI_Base" /> and a <see cref="Vector3" />
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="position">Position</param>
+        /// <returns>The distance squared between a <see cref="Obj_AI_Base" /> and a <see cref="Vector3" /></returns>
+        public static float DistanceSquared(this Obj_AI_Base source, Vector3 position)
+        {
+            return source.ServerPosition.DistanceSquared(position);
+        }
+
+        /// <summary>
+        ///     Gets the distance squared between a <see cref="Obj_AI_Base" /> and a <see cref="Vector2" />
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="position">Position</param>
+        /// <returns>The distance squared between a <see cref="Obj_AI_Base" /> and a <see cref="Vector2" /></returns>
+        public static float DistanceSquared(this Obj_AI_Base source, Vector2 position)
+        {
+            return source.ServerPosition.DistanceSquared(position);
         }
 
         /// <summary>
