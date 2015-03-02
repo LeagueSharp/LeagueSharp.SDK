@@ -104,26 +104,34 @@ namespace LeagueSharp.CommonEx.Core.Managers
             MinionTeam team = MinionTeam.Enemy,
             MinionOrderTypes order = MinionOrderTypes.Health)
         {
-            var result = (from minion in ObjectManager.Get<Obj_AI_Minion>()
-                where minion.IsValidTarget(range, false, @from)
-                let minionTeam = minion.Team
-                where
-                    team == MinionTeam.Neutral && minionTeam == GameObjectTeam.Neutral ||
-                    team == MinionTeam.Ally &&
-                    minionTeam ==
-                    (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Chaos : GameObjectTeam.Order) ||
-                    team == MinionTeam.Enemy &&
-                    minionTeam ==
-                    (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Order : GameObjectTeam.Chaos) ||
-                    team == MinionTeam.NotAlly && minionTeam != ObjectManager.Player.Team ||
-                    team == MinionTeam.NotAllyForEnemy &&
-                    (minionTeam == ObjectManager.Player.Team || minionTeam == GameObjectTeam.Neutral) ||
-                    team == MinionTeam.All
-                where
-                    minion.CombatType == GameObjectCombatType.Melee && type == MinionTypes.Melee || minion.CombatType != GameObjectCombatType.Melee && type == MinionTypes.Ranged ||
-                    type == MinionTypes.All
-                where IsMinion(minion) || minionTeam == GameObjectTeam.Neutral
-                select minion).Cast<Obj_AI_Base>().ToList();
+            var result =
+                (ObjectManager.Get<Obj_AI_Minion>()
+                    .Where(minion => minion.IsValidTarget(range, false, @from))
+                    .Select(minion => new { minion, minionTeam = minion.Team })
+                    .Where(
+                        @t =>
+                            team == MinionTeam.Neutral && @t.minionTeam == GameObjectTeam.Neutral ||
+                            team == MinionTeam.Ally &&
+                            @t.minionTeam ==
+                            (ObjectManager.Player.Team == GameObjectTeam.Chaos
+                                ? GameObjectTeam.Chaos
+                                : GameObjectTeam.Order) ||
+                            team == MinionTeam.Enemy &&
+                            @t.minionTeam ==
+                            (ObjectManager.Player.Team == GameObjectTeam.Chaos
+                                ? GameObjectTeam.Order
+                                : GameObjectTeam.Chaos) ||
+                            team == MinionTeam.NotAlly && @t.minionTeam != ObjectManager.Player.Team ||
+                            team == MinionTeam.NotAllyForEnemy &&
+                            (@t.minionTeam == ObjectManager.Player.Team || @t.minionTeam == GameObjectTeam.Neutral) ||
+                            team == MinionTeam.All)
+                    .Where(
+                        @t =>
+                            @t.minion.CombatType == GameObjectCombatType.Melee && type == MinionTypes.Melee ||
+                            @t.minion.CombatType != GameObjectCombatType.Melee && type == MinionTypes.Ranged ||
+                            type == MinionTypes.All)
+                    .Where(@t => IsMinion(@t.minion) || @t.minionTeam == GameObjectTeam.Neutral)
+                    .Select(@t => @t.minion)).Cast<Obj_AI_Base>().ToList();
 
             switch (order)
             {
@@ -142,9 +150,9 @@ namespace LeagueSharp.CommonEx.Core.Managers
         ///     Gets the minions in the range, by type, team and orders them.
         /// </summary>
         /// <param name="range">Range</param>
-        /// <param name="type">Type of minion. <see cref="MinionTypes"/></param>
-        /// <param name="team">Team of minion. <see cref="MinionTeam"/></param>
-        /// <param name="order">Orders the minions. <see cref="MinionOrderTypes"/></param>
+        /// <param name="type">Type of minion. <see cref="MinionTypes" /></param>
+        /// <param name="team">Team of minion. <see cref="MinionTeam" /></param>
+        /// <param name="order">Orders the minions. <see cref="MinionOrderTypes" /></param>
         /// <returns>List of minions.</returns>
         public static List<Obj_AI_Base> GetMinions(float range,
             MinionTypes type = MinionTypes.All,
@@ -155,11 +163,11 @@ namespace LeagueSharp.CommonEx.Core.Managers
         }
 
         /// <summary>
-        ///     Tells whether the <see cref="Obj_AI_Minion"/> is an actual minion.
+        ///     Tells whether the <see cref="Obj_AI_Minion" /> is an actual minion.
         /// </summary>
         /// <param name="minion">Minion</param>
         /// <param name="includeWards">Whether to include wards.</param>
-        /// <returns>Whether the <see cref="Obj_AI_Minion"/> is an actual minion.</returns>
+        /// <returns>Whether the <see cref="Obj_AI_Minion" /> is an actual minion.</returns>
         public static bool IsMinion(Obj_AI_Minion minion, bool includeWards = false)
         {
             var name = minion.BaseSkinName.ToLower();
@@ -172,8 +180,8 @@ namespace LeagueSharp.CommonEx.Core.Managers
         /// <param name="minionPositions">List of minion positions</param>
         /// <param name="width">Width of the circle</param>
         /// <param name="range">Minions in the range of the circle.</param>
-        /// <param name="useMecMax">MEC maximum. <see cref="MEC"/></param>
-        /// <returns>The best <see cref="FarmLocation"/></returns>
+        /// <param name="useMecMax">MEC maximum. <see cref="MEC" /></param>
+        /// <returns>The best <see cref="FarmLocation" /></returns>
         public static FarmLocation GetBestCircularFarmLocation(List<Vector2> minionPositions,
             float width,
             float range,
@@ -242,7 +250,7 @@ namespace LeagueSharp.CommonEx.Core.Managers
         /// <param name="minionPositions"></param>
         /// <param name="width">Width of the line</param>
         /// <param name="range">Range of the line</param>
-        /// <returns>Best <see cref="FarmLocation"/></returns>
+        /// <returns>Best <see cref="FarmLocation" /></returns>
         public static FarmLocation GetBestLineFarmLocation(List<Vector2> minionPositions, float width, float range)
         {
             var result = new Vector2();
@@ -322,7 +330,7 @@ namespace LeagueSharp.CommonEx.Core.Managers
         /// <summary>
         ///     Returns all the subgroup combinations that can be made from a group
         /// </summary>
-        /// <param name="allValues">List of <see cref="Vector2"/></param>
+        /// <param name="allValues">List of <see cref="Vector2" /></param>
         /// <returns>Double list of vectors.</returns>
         private static IEnumerable<List<Vector2>> GetCombinations(IReadOnlyCollection<Vector2> allValues)
         {
@@ -347,7 +355,7 @@ namespace LeagueSharp.CommonEx.Core.Managers
             ///     The number of minions in the AOE.
             /// </summary>
             public int MinionsHit;
-                
+
             /// <summary>
             ///     Best farm location position.
             /// </summary>
