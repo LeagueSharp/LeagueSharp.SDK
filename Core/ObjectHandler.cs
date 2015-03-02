@@ -37,7 +37,7 @@ namespace LeagueSharp.CommonEx.Core
             {
                 return
                     (IEnumerable<Obj_AI_Hero>)
-                        Cache.Instance.AddOrGetExisting("AllHeroes", () => ObjectManager.Get<Obj_AI_Hero>(), "HeroManager");
+                        Cache.Instance.AddOrGetExisting("AllHeroes", ObjectManager.Get<Obj_AI_Hero>, "ObjectHandler");
             }
         }
 
@@ -50,7 +50,7 @@ namespace LeagueSharp.CommonEx.Core
             {
                 return
                     (IEnumerable<Obj_AI_Hero>)
-                        Cache.Instance.AddOrGetExisting("Enemies", () => AllHeroes.Where(x => x.IsEnemy), "HeroManager");
+                        Cache.Instance.AddOrGetExisting("Enemies", () => AllHeroes.Where(x => x.IsEnemy), "ObjectHandler");
             }
         }
 
@@ -63,7 +63,7 @@ namespace LeagueSharp.CommonEx.Core
             {
                 return
                     (IEnumerable<Obj_AI_Hero>)
-                        Cache.Instance.AddOrGetExisting("Allies", () => AllHeroes.Where(x => x.IsAlly), "HeroManager");
+                        Cache.Instance.AddOrGetExisting("Allies", () => AllHeroes.Where(x => x.IsAlly), "ObjectHandler");
             }
         }
 

@@ -39,7 +39,7 @@ namespace LeagueSharp.CommonEx.Core
                 return
                     Cache.Instance.AddOrGetExisting(
                         "LogFileName",
-                        () => DateTime.Now.Date.ToString(CultureInfo.InvariantCulture).Replace('/', '.') + ".log")
+                        () => DateTime.Now.ToString("d").Replace('/', '-') + ".log")
                         .ToString();
             }
         }
