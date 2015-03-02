@@ -69,7 +69,6 @@
     <Compile Include="Core\Extensions\SharpDX\Vector3Extensions.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector4Extensions.cs" />
     <Compile Include="Core\Extensions\Unit.cs" />
-    <Compile Include="Core\Managers\HeroManager.cs" />
     <Compile Include="Core\Math\MathUtils.cs" />
     <Compile Include="Core\Math\MEC.cs" />
     <Compile Include="Core\Math\Polygons\Arc.cs" />
@@ -82,6 +81,7 @@
     <Compile Include="Core\Network\GamePacket.cs" />
     <Compile Include="Core\Network\Packet.cs" />
     <Compile Include="Core\Network\NetworkUtils.cs" />
+    <Compile Include="Core\ObjectHandler.cs" />
     <Compile Include="Core\Render\2D\Circle.cs" />
     <Compile Include="Core\Render\2D\CircleFilled.cs" />
     <Compile Include="Core\Render\2D\Line.cs" />
