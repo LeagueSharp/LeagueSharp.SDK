@@ -74,7 +74,7 @@ namespace LeagueSharp.CommonEx.Core
 
             if (!contains)
             {
-                Logging.Write()(LogLevel.Warn, "Cache did not have the type of object created.");
+                // Obj_LampBulb op :D
                 return;
             }
 
@@ -88,7 +88,7 @@ namespace LeagueSharp.CommonEx.Core
         {
             object obj;
             var contains = Cache.Instance.TryGetValue(sender.Type.ToString(), out obj, "ObjectHandler");
-
+ 
             if (!contains)
             {
                 obj = Cache.Instance.AddOrGetExisting(
