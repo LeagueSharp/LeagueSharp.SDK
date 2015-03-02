@@ -20,8 +20,11 @@ namespace LeagueSharp.CommonEx.Core
                 return;
             }
 
+            Cache.Instance.CreateRegion("ObjectHandler");
+
             GameObject.OnCreate += GameObject_OnCreate;
             GameObject.OnDelete += GameObjectOnOnDelete;
+
             Loaded = true;
         }
 
@@ -34,7 +37,7 @@ namespace LeagueSharp.CommonEx.Core
             {
                 return
                     (IEnumerable<Obj_AI_Hero>)
-                        Cache.Instance.AddOrGetExisting("AllHeroes", ObjectManager.Get<Obj_AI_Hero>, "HeroManager");
+                        Cache.Instance.AddOrGetExisting("AllHeroes", () => ObjectManager.Get<Obj_AI_Hero>(), "HeroManager");
             }
         }
 
