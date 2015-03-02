@@ -115,6 +115,16 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
             return distance;
         }
 
+        /// <summary>
+        ///     Returns the calculated mangitude of the given Vector3.
+        /// </summary>
+        /// <param name="vector3">Extended SharpDX Vector3</param>
+        /// <returns>Magnitude in float-units</returns>
+        public static float Magnitude(this Vector3 vector3)
+        {
+            return (float) System.Math.Sqrt((vector3.X * vector3.X) + (vector3.Y * vector3.Y) + (vector3.Z * vector3.Z));
+        }
+
         #region AngleBetween
 
         /// <summary>
@@ -167,7 +177,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// </summary>
         /// <param name="vector3">Extended SharpDX Vector3</param>
         /// <param name="toVector3">SharpDX Vector3</param>
-        /// <returns></returns>
+        /// <returns>Returns if the angle is orthogonal</returns>
         public static bool IsOrthogonal(Vector3 vector3, Vector3 toVector3)
         {
             return System.Math.Abs((vector3.X * toVector3.X) + (vector3.Y * toVector3.Y)) < float.Epsilon;
@@ -178,7 +188,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// </summary>
         /// <param name="vector3">Extended SharpDX Vector3</param>
         /// <param name="toVector2">SharpDX Vector2</param>
-        /// <returns></returns>
+        /// <returns>Returns if the angle is orthogonal</returns>
         public static bool IsOrthogonal(Vector3 vector3, Vector2 toVector2)
         {
             return IsOrthogonal(vector3, toVector2.ToVector3());
@@ -189,7 +199,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// </summary>
         /// <param name="vector3">Extended SharpDX Vector3</param>
         /// <param name="toVector4">SharpDX Vector2</param>
-        /// <returns></returns>
+        /// <returns>Returns if the angle is orthogonal</returns>
         public static bool IsOrthogonal(Vector3 vector3, Vector4 toVector4)
         {
             return IsOrthogonal(vector3, toVector4.ToVector3());

@@ -87,12 +87,22 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
             return theta;
         }
 
+        /// <summary>
+        ///     Returns the calculated mangitude of the given Vector4.
+        /// </summary>
+        /// <param name="vector4">Extended SharpDX Vector4</param>
+        /// <returns>Magnitude in float-units</returns>
+        public static float Magnitude(this Vector4 vector4)
+        {
+            return (float) System.Math.Sqrt((vector4.X * vector4.X) + (vector4.Y * vector4.Y) + (vector4.Z * vector4.Z));
+        }
+
         #region AngleBetween
 
         /// <summary>
         ///     Returns the angle between two vectors.
         /// </summary>
-        /// <param name="vector4">Extended SharpDX Vector3</param>
+        /// <param name="vector4">Extended SharpDX Vector4</param>
         /// <param name="toVector4">SharpDX Vector4</param>
         /// <returns>Angle between two vectors in float-units</returns>
         public static float AngleBetween(this Vector4 vector4, Vector4 toVector4)
@@ -103,7 +113,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <summary>
         ///     Returns the angle between two vectors.
         /// </summary>
-        /// <param name="vector4">Extended SharpDX Vector3</param>
+        /// <param name="vector4">Extended SharpDX Vector4</param>
         /// <param name="toVector2">SharpDX Vector2</param>
         /// <returns>Angle between two vectors in float-units</returns>
         public static float AngleBetween(this Vector4 vector4, Vector2 toVector2)
@@ -114,7 +124,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <summary>
         ///     Returns the angle between two vectors.
         /// </summary>
-        /// <param name="vector4">Extended SharpDX Vector3</param>
+        /// <param name="vector4">Extended SharpDX Vector4</param>
         /// <param name="toVector3">SharpDX Vector3</param>
         /// <returns>Angle between two vectors in float-units</returns>
         public static float AngleBetween(this Vector4 vector4, Vector3 toVector3)
@@ -136,7 +146,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <summary>
         ///     Returns if the angle is orthogonal.
         /// </summary>
-        /// <param name="vector4">Extended SharpDX Vector3</param>
+        /// <param name="vector4">Extended SharpDX Vector4</param>
         /// <param name="toVector4">SharpDX Vector2</param>
         /// <returns></returns>
         public static bool IsOrthogonal(this Vector4 vector4, Vector4 toVector4)
@@ -147,7 +157,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <summary>
         ///     Returns if the angle is orthogonal.
         /// </summary>
-        /// <param name="vector4">Extended SharpDX Vector3</param>
+        /// <param name="vector4">Extended SharpDX Vector4</param>
         /// <param name="toVector2">SharpDX Vector2</param>
         /// <returns></returns>
         public static bool IsOrthogonal(this Vector4 vector4, Vector2 toVector2)
@@ -158,7 +168,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <summary>
         ///     Returns if the angle is orthogonal.
         /// </summary>
-        /// <param name="vector4">Extended SharpDX Vector3</param>
+        /// <param name="vector4">Extended SharpDX Vector4</param>
         /// <param name="toVector3">SharpDX Vector3</param>
         /// <returns></returns>
         public static bool IsOrthogonal(this Vector4 vector4, Vector3 toVector3)
