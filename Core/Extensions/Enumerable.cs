@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp.CommonEx.Core.Utils;
+using SharpDX;
 
 #endregion
 
@@ -168,5 +169,32 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         }
 
         #endregion
+
+        #region GetCombinations
+
+        /*
+         from: https://stackoverflow.com/questions/10515449/generate-all-combinations-for-a-list-of-strings :^)
+         */
+
+        /// <summary>
+        ///     Returns all the subgroup combinations that can be made from a group
+        /// </summary>
+        /// <param name="allValues">List of <see cref="Vector2" /></param>
+        /// <returns>Double list of vectors.</returns>
+        public static IEnumerable<List<Vector2>> GetCombinations(this IReadOnlyCollection<Vector2> allValues)
+        {
+            var collection = new List<List<Vector2>>();
+
+            for (var counter = 0; counter < (1 << allValues.Count); ++counter)
+            {
+                var combination = allValues.Where((t, i) => (counter & (1 << i)) == 0).ToList();
+
+                collection.Add(combination);
+            }
+
+            return collection;
+        }
+
+        #endregion GetCombinations
     }
 }

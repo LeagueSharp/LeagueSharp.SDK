@@ -105,7 +105,7 @@ namespace LeagueSharp.CommonEx.Core.Managers
             MinionOrderTypes order = MinionOrderTypes.Health)
         {
             var result =
-                (ObjectManager.Get<Obj_AI_Minion>()
+                ObjectHandler.GetFast<Obj_AI_Minion>()
                     .Where(minion => minion.IsValidTarget(range, false, @from))
                     .Select(minion => new { minion, minionTeam = minion.Team })
                     .Where(
@@ -131,7 +131,7 @@ namespace LeagueSharp.CommonEx.Core.Managers
                             @t.minion.CombatType != GameObjectCombatType.Melee && type == MinionTypes.Ranged ||
                             type == MinionTypes.All)
                     .Where(@t => IsMinion(@t.minion) || @t.minionTeam == GameObjectTeam.Neutral)
-                    .Select(@t => @t.minion)).Cast<Obj_AI_Base>().ToList();
+                    .Select(@t => @t.minion).Cast<Obj_AI_Base>().ToList();
 
             switch (order)
             {
@@ -201,7 +201,7 @@ namespace LeagueSharp.CommonEx.Core.Managers
             /* Use MEC to get the best positions only when there are less than 9 positions because it causes lag with more. */
             if (minionPositions.Count <= useMecMax)
             {
-                var subGroups = GetCombinations(minionPositions);
+                var subGroups = minionPositions.GetCombinations();
                 foreach (var subGroup in subGroups)
                 {
                     if (subGroup.Count <= 0)
@@ -323,28 +323,7 @@ namespace LeagueSharp.CommonEx.Core.Managers
                 select pos.UnitPosition.To2D()).ToList();
         }*/
 
-        /*
-         from: https://stackoverflow.com/questions/10515449/generate-all-combinations-for-a-list-of-strings :^)
-         */
-
-        /// <summary>
-        ///     Returns all the subgroup combinations that can be made from a group
-        /// </summary>
-        /// <param name="allValues">List of <see cref="Vector2" /></param>
-        /// <returns>Double list of vectors.</returns>
-        private static IEnumerable<List<Vector2>> GetCombinations(IReadOnlyCollection<Vector2> allValues)
-        {
-            var collection = new List<List<Vector2>>();
-
-            for (var counter = 0; counter < (1 << allValues.Count); ++counter)
-            {
-                var combination = allValues.Where((t, i) => (counter & (1 << i)) == 0).ToList();
-
-                collection.Add(combination);
-            }
-
-            return collection;
-        }
+       
 
         /// <summary>
         ///     Struct with the best farm locations
