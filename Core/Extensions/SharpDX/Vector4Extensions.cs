@@ -92,61 +92,78 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         /// <summary>
         ///     Returns the angle between two vectors.
         /// </summary>
-        /// <param name="vector4">Extended SharpDX Vector4</param>
+        /// <param name="vector4">Extended SharpDX Vector3</param>
         /// <param name="toVector4">SharpDX Vector4</param>
         /// <returns>Angle between two vectors in float-units</returns>
         public static float AngleBetween(this Vector4 vector4, Vector4 toVector4)
         {
-            var theta = vector4.Polar() - toVector4.Polar();
-            if (theta < 0)
-            {
-                theta += 360;
-            }
-            if (theta > 180)
-            {
-                theta = 360 - theta;
-            }
-            return theta;
+            return AngleBetween(vector4, toVector4.ToVector3());
         }
 
         /// <summary>
         ///     Returns the angle between two vectors.
         /// </summary>
-        /// <param name="vector4">Extended SharpDX Vector4</param>
+        /// <param name="vector4">Extended SharpDX Vector3</param>
         /// <param name="toVector2">SharpDX Vector2</param>
         /// <returns>Angle between two vectors in float-units</returns>
         public static float AngleBetween(this Vector4 vector4, Vector2 toVector2)
         {
-            var theta = vector4.Polar() - toVector2.Polar();
-            if (theta < 0)
-            {
-                theta += 360;
-            }
-            if (theta > 180)
-            {
-                theta = 360 - theta;
-            }
-            return theta;
+            return AngleBetween(vector4, toVector2.ToVector3());
         }
 
         /// <summary>
         ///     Returns the angle between two vectors.
         /// </summary>
-        /// <param name="vector4">Extended SharpDX Vector4</param>
+        /// <param name="vector4">Extended SharpDX Vector3</param>
         /// <param name="toVector3">SharpDX Vector3</param>
         /// <returns>Angle between two vectors in float-units</returns>
         public static float AngleBetween(this Vector4 vector4, Vector3 toVector3)
         {
-            var theta = vector4.Polar() - toVector3.Polar();
-            if (theta < 0)
-            {
-                theta += 360;
-            }
-            if (theta > 180)
-            {
-                theta = 360 - theta;
-            }
-            return theta;
+            var magnitudeA = System.Math.Sqrt((vector4.X * vector4.X) + (vector4.Y * vector4.Y));
+            var magnitudeB =
+                System.Math.Sqrt(
+                    (toVector3.X * toVector3.X) + (toVector3.Y * toVector3.Y) + (toVector3.Z * toVector3.Z));
+
+            var dotProduct = (vector4.X * toVector3.X) + (vector4.Y * toVector3.Y);
+
+            return (float) System.Math.Cos(dotProduct / magnitudeA * magnitudeB);
+        }
+
+        #endregion
+
+        #region IsOrthogonal
+
+        /// <summary>
+        ///     Returns if the angle is orthogonal.
+        /// </summary>
+        /// <param name="vector4">Extended SharpDX Vector3</param>
+        /// <param name="toVector4">SharpDX Vector2</param>
+        /// <returns></returns>
+        public static bool IsOrthogonal(this Vector4 vector4, Vector4 toVector4)
+        {
+            return IsOrthogonal(vector4, toVector4.ToVector3());
+        }
+
+        /// <summary>
+        ///     Returns if the angle is orthogonal.
+        /// </summary>
+        /// <param name="vector4">Extended SharpDX Vector3</param>
+        /// <param name="toVector2">SharpDX Vector2</param>
+        /// <returns></returns>
+        public static bool IsOrthogonal(this Vector4 vector4, Vector2 toVector2)
+        {
+            return IsOrthogonal(vector4, toVector2.ToVector3());
+        }
+
+        /// <summary>
+        ///     Returns if the angle is orthogonal.
+        /// </summary>
+        /// <param name="vector4">Extended SharpDX Vector3</param>
+        /// <param name="toVector3">SharpDX Vector3</param>
+        /// <returns></returns>
+        public static bool IsOrthogonal(this Vector4 vector4, Vector3 toVector3)
+        {
+            return System.Math.Abs((vector4.X * toVector3.X) + (vector4.Y * toVector3.Y)) < float.Epsilon;
         }
 
         #endregion
