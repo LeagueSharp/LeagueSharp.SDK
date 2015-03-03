@@ -80,7 +80,7 @@ namespace LeagueSharp.CommonEx.Core.Managers
         Melee,
 
         /// <summary>
-        ///     All minions(Ranged & Melee)
+        ///     All minions(Ranged and Melee)
         /// </summary>
         All,
 

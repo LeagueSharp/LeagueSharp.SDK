@@ -44,10 +44,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="clipper_library">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\clipper_library.dll</HintPath>
+      <HintPath>..\System\clipper_library.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>..\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
@@ -63,7 +63,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Constants.cs" />
-    <Compile Include="Core\Events\OnGameLoad.cs" />
+    <Compile Include="Core\Events\Dash.cs" />
+    <Compile Include="Core\Events\GameEnd.cs" />
+    <Compile Include="Core\Events\GameLoad.cs" />
     <Compile Include="Core\Events\Stealth.cs" />
     <Compile Include="Core\Extensions\Enumerable.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector2Extensions.cs" />
@@ -98,6 +100,7 @@
     <Compile Include="Core\Utils\TickOperation.cs" />
     <Compile Include="Core\Utils\Utility.cs" />
     <Compile Include="Core\Utils\Version.cs" />
+    <Compile Include="Core\Utils\WeightedRandom.cs" />
     <Compile Include="Core\Variables.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
     <Compile Include="Core\Managers\MinionManager.cs" />
