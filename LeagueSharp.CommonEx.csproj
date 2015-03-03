@@ -44,10 +44,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="clipper_library">
-      <HintPath>..\System\clipper_library.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\clipper_library.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp">
-      <HintPath>..\System\LeagueSharp.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
@@ -100,7 +100,6 @@
     <Compile Include="Core\Utils\TickOperation.cs" />
     <Compile Include="Core\Utils\Utility.cs" />
     <Compile Include="Core\Utils\Version.cs" />
-    <Compile Include="Core\Utils\WeightedRandom.cs" />
     <Compile Include="Core\Variables.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
     <Compile Include="Core\Managers\MinionManager.cs" />
