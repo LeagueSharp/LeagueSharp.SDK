@@ -9,7 +9,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
     /// <summary>
     ///     Holds information about the last casted spell a unit did.
     /// </summary>
-    public struct LastCastedSpellEntry
+    public class LastCastedSpellEntry
     {
         /// <summary>
         ///     The name of the spell last casted.
@@ -36,6 +36,11 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// </summary>
         public SpellData SpellData;
 
+        /// <summary>
+        ///     Gets if the spell data is valid, and not empty.
+        /// </summary>
+        public bool IsValid;
+
         internal LastCastedSpellEntry(GameObjectProcessSpellCastEventArgs args)
         {
             Name = args.SData.Name;
@@ -43,6 +48,17 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
             StartTime = args.TimeCast;
             EndTime = args.TimeSpellEnd;
             SpellData = args.SData;
+            IsValid = true;
+        }
+
+        internal LastCastedSpellEntry()
+        {
+            Name = "";
+            Target = null;
+            StartTime = 0;
+            EndTime = 0;
+            SpellData = null;
+            IsValid = false;
         }
     }
 
@@ -77,7 +93,10 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// <returns><see cref="LastCastedSpellEntry"/></returns>
         public static LastCastedSpellEntry GetLastCastedSpell(this Obj_AI_Hero target)
         {
-            return CastedSpells[target.NetworkId];
+            LastCastedSpellEntry entry;
+            var contains = CastedSpells.TryGetValue(target.NetworkId, out entry);
+
+            return contains ? entry : new LastCastedSpellEntry();
         }
         
     }

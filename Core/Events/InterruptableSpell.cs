@@ -8,13 +8,13 @@ namespace LeagueSharp.CommonEx.Core.Events
     /// <summary>
     ///     Provides events for interrupting spells.
     /// </summary>
-    public class Interrupter
+    public class InterruptableSpell
     {
         /// <summary>
         ///     Delegate for <see cref="OnInterruptableTarget" />
         /// </summary>
-        /// <param name="sender"><see cref="Obj_AI_Hero" /> that is casting the interruptable spell.</param>
-        /// <param name="args">Arguements detailing the spell</param>
+        /// <param name="sender"><see cref="Obj_AI_Hero" /> that is casting the interruptable spellData.</param>
+        /// <param name="args">Arguements detailing the spellData</param>
         public delegate void InterruptableTargetDelegate(Obj_AI_Hero sender, InterruptableTargetEventArgs args);
 
         /// <summary>
@@ -38,11 +38,11 @@ namespace LeagueSharp.CommonEx.Core.Events
             High
         }
 
-        static Interrupter()
+        static InterruptableSpell()
         {
             // Initialize Properties
-            InterruptableSpells = new Dictionary<string, List<InterruptableSpell>>();
-            CastingInterruptableSpell = new Dictionary<int, InterruptableSpell>();
+            InterruptableSpells = new Dictionary<string, List<InterruptableSpellData>>();
+            CastingInterruptableSpell = new Dictionary<int, InterruptableSpellData>();
 
             InitializeSpells();
 
@@ -55,11 +55,11 @@ namespace LeagueSharp.CommonEx.Core.Events
             Spellbook.OnStopCast += Spellbook_OnStopCast;
         }
 
-        private static Dictionary<string, List<InterruptableSpell>> InterruptableSpells { get; set; }
-        private static Dictionary<int, InterruptableSpell> CastingInterruptableSpell { get; set; }
+        private static Dictionary<string, List<InterruptableSpellData>> InterruptableSpells { get; set; }
+        private static Dictionary<int, InterruptableSpellData> CastingInterruptableSpell { get; set; }
 
         /// <summary>
-        ///     Gets fired when an enemy is casting a spell that should be interrupted.
+        ///     Gets fired when an enemy is casting a spellData that should be interrupted.
         /// </summary>
         public static event InterruptableTargetDelegate OnInterruptableTarget;
 
@@ -67,46 +67,46 @@ namespace LeagueSharp.CommonEx.Core.Events
         {
             #region Spells
 
-            RegisterSpell("Caitlyn", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("FiddleSticks", new InterruptableSpell(SpellSlot.W, DangerLevel.Medium));
-            RegisterSpell("FiddleSticks", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Galio", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Janna", new InterruptableSpell(SpellSlot.R, DangerLevel.Low));
-            RegisterSpell("Karthus", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Katarina", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Lucian", new InterruptableSpell(SpellSlot.R, DangerLevel.High, false));
-            RegisterSpell("Malzahar", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("MasterYi", new InterruptableSpell(SpellSlot.W, DangerLevel.Low));
-            RegisterSpell("MissFortune", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Nunu", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Pantheon", new InterruptableSpell(SpellSlot.E, DangerLevel.Low));
-            RegisterSpell("Pantheon", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("RekSai", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Sion", new InterruptableSpell(SpellSlot.R, DangerLevel.Low));
-            RegisterSpell("Shen", new InterruptableSpell(SpellSlot.R, DangerLevel.Low));
-            RegisterSpell("TwistedFate", new InterruptableSpell(SpellSlot.R, DangerLevel.Medium));
-            RegisterSpell("Urgot", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Velkoz", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Warwick", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Xerath", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Varus", new InterruptableSpell(SpellSlot.Q, DangerLevel.Low, false));
+            RegisterSpell("Caitlyn", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("FiddleSticks", new InterruptableSpellData(SpellSlot.W, DangerLevel.Medium));
+            RegisterSpell("FiddleSticks", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("Galio", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("Janna", new InterruptableSpellData(SpellSlot.R, DangerLevel.Low));
+            RegisterSpell("Karthus", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("Katarina", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("Lucian", new InterruptableSpellData(SpellSlot.R, DangerLevel.High, false));
+            RegisterSpell("Malzahar", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("MasterYi", new InterruptableSpellData(SpellSlot.W, DangerLevel.Low));
+            RegisterSpell("MissFortune", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("Nunu", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("Pantheon", new InterruptableSpellData(SpellSlot.E, DangerLevel.Low));
+            RegisterSpell("Pantheon", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("RekSai", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("Sion", new InterruptableSpellData(SpellSlot.R, DangerLevel.Low));
+            RegisterSpell("Shen", new InterruptableSpellData(SpellSlot.R, DangerLevel.Low));
+            RegisterSpell("TwistedFate", new InterruptableSpellData(SpellSlot.R, DangerLevel.Medium));
+            RegisterSpell("Urgot", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("Velkoz", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("Warwick", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("Xerath", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("Varus", new InterruptableSpellData(SpellSlot.Q, DangerLevel.Low, false));
 
             #endregion
         }
 
-        private static void RegisterSpell(string champName, InterruptableSpell spell)
+        private static void RegisterSpell(string champName, InterruptableSpellData spellData)
         {
             if (!InterruptableSpells.ContainsKey(champName))
             {
-                InterruptableSpells.Add(champName, new List<InterruptableSpell>());
+                InterruptableSpells.Add(champName, new List<InterruptableSpellData>());
             }
 
-            InterruptableSpells[champName].Add(spell);
+            InterruptableSpells[champName].Add(spellData);
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            // Remove heros that have finished casting their interruptable spell
+            // Remove heros that have finished casting their interruptable spellData
             foreach (var hero in
                 ObjectHandler.AllHeroes.Where(
                     hero =>
@@ -146,7 +146,7 @@ namespace LeagueSharp.CommonEx.Core.Events
                 return;
             }
 
-            // Get the interruptable spell
+            // Get the interruptable spellData
             var spell = InterruptableSpells[target.ChampionName].Find(
                 s =>
                 {
@@ -156,7 +156,7 @@ namespace LeagueSharp.CommonEx.Core.Events
 
             if (spell != null)
             {
-                // Mark champ as casting interruptable spell
+                // Mark champ as casting interruptable spellData
                 CastingInterruptableSpell.Add(target.NetworkId, spell);
             }
         }
@@ -170,7 +170,7 @@ namespace LeagueSharp.CommonEx.Core.Events
                 return;
             }
 
-            // Check if the spell itself stopped casting (interrupted)
+            // Check if the spellData itself stopped casting (interrupted)
             if (!target.Spellbook.IsCastingSpell && !target.Spellbook.IsChanneling && !target.Spellbook.IsCharging)
             {
                 CastingInterruptableSpell.Remove(target.NetworkId);
@@ -181,8 +181,8 @@ namespace LeagueSharp.CommonEx.Core.Events
         ///     Checks if the unit is casting a spell that can be interrupted.
         /// </summary>
         /// <param name="target">Unit</param>
-        /// <param name="checkMovementInterruption">Checks if moving cancels the spell.</param>
-        /// <returns>If the unit is casting an interruptable spell.</returns>
+        /// <param name="checkMovementInterruption">Checks if moving cancels the spellData.</param>
+        /// <returns>If the unit is casting an interruptable spellData.</returns>
         public static bool IsCastingInterruptableSpell(Obj_AI_Hero target, bool checkMovementInterruption = false)
         {
             var data = GetInterruptableTargetData(target);
@@ -205,7 +205,7 @@ namespace LeagueSharp.CommonEx.Core.Events
 
             if (CastingInterruptableSpell.ContainsKey(target.NetworkId))
             {
-                // Return the args with spell end time
+                // Return the args with spellData end time
                 return new InterruptableTargetEventArgs(
                     CastingInterruptableSpell[target.NetworkId].DangerLevel, target.Spellbook.CastEndTime,
                     CastingInterruptableSpell[target.NetworkId].MovementInterrupts);
@@ -227,24 +227,24 @@ namespace LeagueSharp.CommonEx.Core.Events
             }
 
             /// <summary>
-            ///     Gets the <see cref="DangerLevel" /> of the spell.
+            ///     Gets the <see cref="DangerLevel" /> of the spellData.
             /// </summary>
             public DangerLevel DangerLevel { get; private set; }
 
             /// <summary>
-            ///     Gets the time the spell ends.
+            ///     Gets the time the spellData ends.
             /// </summary>
             public float EndTime { get; private set; }
 
             /// <summary>
-            ///     Gets whether moving caused the spell to be interrupted.
+            ///     Gets whether moving caused the spellData to be interrupted.
             /// </summary>
             public bool MovementInterrupts { get; private set; }
         }
 
-        private class InterruptableSpell
+        private class InterruptableSpellData
         {
-            public InterruptableSpell(SpellSlot slot, DangerLevel dangerLevel, bool movementInterrupts = true)
+            public InterruptableSpellData(SpellSlot slot, DangerLevel dangerLevel, bool movementInterrupts = true)
             {
                 Slot = slot;
                 DangerLevel = dangerLevel;
