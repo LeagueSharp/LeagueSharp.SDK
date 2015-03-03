@@ -66,6 +66,7 @@
     <Compile Include="Core\Events\Dash.cs" />
     <Compile Include="Core\Events\GameEnd.cs" />
     <Compile Include="Core\Events\GameLoad.cs" />
+    <Compile Include="Core\Events\Interrupter.cs" />
     <Compile Include="Core\Events\Stealth.cs" />
     <Compile Include="Core\Extensions\Enumerable.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector2Extensions.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Core\Utils\Utility.cs" />
     <Compile Include="Core\Utils\Version.cs" />
     <Compile Include="Core\Variables.cs" />
+    <Compile Include="Core\Wrappers\LastCastedSpell.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
     <Compile Include="Core\Managers\MinionManager.cs" />
     <Compile Include="Core\Wrappers\Spell.cs" />
