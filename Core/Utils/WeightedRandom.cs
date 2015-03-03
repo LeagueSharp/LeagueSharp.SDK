@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LeagueSharp.CommonEx.Core.Extensions;
+using Enumerable = System.Linq.Enumerable;
 
 namespace LeagueSharp.CommonEx.Core.Utils
 {
@@ -34,18 +36,6 @@ namespace LeagueSharp.CommonEx.Core.Utils
             var randStdNormal = System.Math.Sqrt(-2.0 * System.Math.Log(v1)) *
                                 System.Math.Sin(2.0 * System.Math.PI * v2);
             return (int) (mean + stdDev * randStdNormal);
-        }
-
-        /// <summary>
-        ///     Standard Devitation of the values list.
-        /// </summary>
-        /// <param name="values">Values list</param>
-        /// <returns>Standard Devitation</returns>
-        public static double StandardDeviation(this IEnumerable<int> values)
-        {
-            var enumerable = values as int[] ?? values.ToArray();
-            var avg = enumerable.Average();
-            return System.Math.Sqrt(enumerable.Average(v => System.Math.Pow(v - avg, 2)));
         }
     }
 }

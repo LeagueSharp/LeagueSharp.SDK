@@ -196,5 +196,21 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         }
 
         #endregion GetCombinations
+
+        #region Standard Deviation
+
+        /// <summary>
+        ///     Standard Devitation of the values list.
+        /// </summary>
+        /// <param name="values">Values list</param>
+        /// <returns>Standard Devitation</returns>
+        public static double StandardDeviation(this IEnumerable<int> values)
+        {
+            var enumerable = values as int[] ?? values.ToArray();
+            var avg = enumerable.Average();
+            return System.Math.Sqrt(enumerable.Average(v => System.Math.Pow(v - avg, 2)));
+        }
+
+        #endregion
     }
 }
