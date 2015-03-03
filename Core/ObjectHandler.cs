@@ -22,6 +22,25 @@ namespace LeagueSharp.CommonEx.Core
 
             Cache.Instance.CreateRegion("ObjectHandler");
 
+            // Add all of the existing objects into the cache.
+            foreach (var gameObj in ObjectManager.Get<GameObject>())
+            {
+                object obj;
+                var contains = Cache.Instance.TryGetValue(gameObj.Type.ToString(), out obj, "ObjectHandler");
+
+                if (!contains)
+                {
+                    obj = Cache.Instance.AddOrGetExisting(
+                        gameObj.Type.ToString(), new List<GameObject>(), ObjectCache.InfiniteAbsoluteExpiration,
+                        "ObjectHandler");
+                }
+
+                var list = (List<GameObject>)obj;
+                list.Add(gameObj);
+
+                Cache.Instance.Set(gameObj.Type.ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
+            }
+
             GameObject.OnCreate += GameObject_OnCreate;
             GameObject.OnDelete += GameObjectOnOnDelete;
 
@@ -120,7 +139,6 @@ namespace LeagueSharp.CommonEx.Core
         public static IEnumerable<T> GetFast<T>() where T : GameObject, new()
         {
             var gameObj = (GameObject) Convert.ChangeType(typeof(T), typeof(GameObject));
-
             return (IEnumerable<T>) Cache.Instance.Get<List<GameObject>>(gameObj.Type.ToString(), "ObjectHandler");
         }
     }
