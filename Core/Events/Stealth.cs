@@ -10,13 +10,17 @@ namespace LeagueSharp.CommonEx.Core.Events
         /// <summary>
         ///     Delegate for the <see cref="OnStealth" /> event.
         /// </summary>
-        /// <param name="sender"></param>
+        /// <param name="sender">The hero who went invisible. Can be ally/enemy.</param>
         public delegate void OnStealthDelegate(Obj_AI_Hero sender);
 
         /// <summary>
         ///     All of the spells which make the unit invisible.
         /// </summary>
-        public static string[] StealthSpells = { "khazixR" };
+        public static string[] StealthSpells =
+        {
+            "KhazixR", "RengarR", "AkaliSmokeBomb", "Decieve", "TalonR",
+            "TwitchHideInShadows", "MonkeyKingW"
+        };
 
         static Stealth()
         {
