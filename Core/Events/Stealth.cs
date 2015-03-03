@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace LeagueSharp.CommonEx.Core.Events
 {
@@ -14,23 +13,28 @@ namespace LeagueSharp.CommonEx.Core.Events
         /// <param name="sender"></param>
         public delegate void OnStealthDelegate(Obj_AI_Hero sender);
 
+        /// <summary>
+        ///     All of the spells which make the unit invisible.
+        /// </summary>
+        public static string[] StealthSpells = { "khazixR" };
+
         static Stealth()
         {
-            Game.OnGameUpdate += GameOnOnGameUpdate;
+            Obj_AI_Base.OnProcessSpellCast += ObjAiBaseOnOnProcessSpellCast;
+        }
+
+        private static void ObjAiBaseOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (StealthSpells.Any(x => x == args.SData.Name))
+            {
+                FireOnStealth((Obj_AI_Hero) sender);
+            }
         }
 
         /// <summary>
         ///     Gets fired when any hero is invisible.
         /// </summary>
         public static event OnStealthDelegate OnStealth;
-
-        private static void GameOnOnGameUpdate(EventArgs args)
-        {
-            foreach (var hero in ObjectHandler.AllHeroes.Where(hero => hero.HasBuffOfType(BuffType.Invisibility)))
-            {
-                FireOnStealth(hero);
-            }
-        }
 
         private static void FireOnStealth(Obj_AI_Hero sender)
         {
