@@ -18,7 +18,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <summary>
         ///     Main Cache
         /// </summary>
-        private readonly SortedDictionary<string, SortedDictionary<string, object>> cache;
+        private readonly Dictionary<string, Dictionary<string, object>> cache;
 
         /// <summary>
         ///     Holds callbacks that are called before cached item is removed
@@ -33,7 +33,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         private Cache()
         {
             // We have to create the default region, else we get exceptions :^(
-            cache = new SortedDictionary<string, SortedDictionary<string, object>>();
+            cache = new Dictionary<string, Dictionary<string, object>>();
             CreateRegion("Default");
 
             cacheEntryUpdateCallbacks = new SortedDictionary<string, CacheEntryUpdateCallback>();
@@ -137,7 +137,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="regionName">The name of the region in the cache</param>
         public void CreateRegion(string regionName)
         {
-            cache[regionName] = new SortedDictionary<string, object>();
+            cache[regionName] = new Dictionary<string, object>();
         }
 
         /// <summary>
