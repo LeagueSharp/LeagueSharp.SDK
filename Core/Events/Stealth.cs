@@ -19,7 +19,7 @@ namespace LeagueSharp.CommonEx.Core.Events
         ///     Function is called when a <see cref="GameObject" /> gets an integer property change and is called by an event.
         /// </summary>
         /// <param name="sender">GameObject</param>
-        /// <param name="args">INteger Property Change Data</param>
+        /// <param name="args">Integer Property Change Data</param>
         private static void GameObject_OnIntegerPropertyChange(GameObject sender,
             GameObjectIntegerPropertyChangeEventArgs args)
         {

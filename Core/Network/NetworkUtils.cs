@@ -12,7 +12,7 @@
         /// <returns>The header</returns>
         public static short GetHeader(this GamePacketEventArgs args)
         {
-            return args.PacketData[0];
+            return (short) ((args.PacketData[1] << 8) | (args.PacketData[0] << 0));
         }
 
         /// <summary>
