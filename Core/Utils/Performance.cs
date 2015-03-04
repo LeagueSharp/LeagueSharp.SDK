@@ -104,17 +104,17 @@ namespace LeagueSharp.CommonEx.Core.Utils
             stopwatch.Stop();
 
             var format = "{0} has taken {1} elapsed ticks to execute, and was executed successfuly.";
-            var argument = GetTickCount();
+            var argument = GetTickCount().ToString();
 
             switch (performanceType)
             {
                 case PerformanceType.Milliseconds:
                     format = "{0} has taken {1} elapsed milliseconds to execute, and was executed successfuly.";
-                    argument = GetTickCount();
+                    argument = GetMilliseconds().ToString();
                     break;
                 case PerformanceType.TimeSpan:
                     format = "{0} has taken {1} elapsed time span to execute, and was executed successfuly.";
-                    argument = GetTickCount();
+                    argument = GetTimeSpan().ToString("g");
                     break;
             }
 
