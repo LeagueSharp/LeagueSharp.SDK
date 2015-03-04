@@ -97,7 +97,6 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             if (!safe)
             {
-                Logging.Write()(LogLevel.Info, "Performance was finailized by GC. ({0})", memberName ?? "unknown");
                 return;
             }
 
