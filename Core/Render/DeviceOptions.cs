@@ -194,7 +194,7 @@ namespace LeagueSharp.CommonEx.Core.Render
         }
 
         /// <summary>
-        ///  Adds a render state change to the device.
+        ///     Adds a render state change to the device.
         /// </summary>
         /// <param name="renderState">RenderState to change</param>
         /// <param name="newValue">New value for the RenderState</param>

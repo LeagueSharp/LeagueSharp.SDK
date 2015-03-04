@@ -64,8 +64,6 @@
   <ItemGroup>
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\Events\Dash.cs" />
-    <Compile Include="Core\Events\GameEnd.cs" />
-    <Compile Include="Core\Events\GameLoad.cs" />
     <Compile Include="Core\Events\InterruptableSpell.cs" />
     <Compile Include="Core\Events\Stealth.cs" />
     <Compile Include="Core\Extensions\Enumerable.cs" />

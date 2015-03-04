@@ -37,16 +37,6 @@ namespace LeagueSharp.CommonEx.Core.Network
     public class GamePacket
     {
         /// <summary>
-        ///     The channel this packet is sent on.
-        /// </summary>
-        public PacketChannel Channel = PacketChannel.C2S;
-
-        /// <summary>
-        ///     The protocol that packet is sent on.
-        /// </summary>
-        public PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
-
-        /// <summary>
         ///     Packet Header
         /// </summary>
         private readonly byte _header;
@@ -70,6 +60,16 @@ namespace LeagueSharp.CommonEx.Core.Network
         ///     Raw Packet contents.
         /// </summary>
         private readonly byte[] rawPacket;
+
+        /// <summary>
+        ///     The channel this packet is sent on.
+        /// </summary>
+        public PacketChannel Channel = PacketChannel.C2S;
+
+        /// <summary>
+        ///     The protocol that packet is sent on.
+        /// </summary>
+        public PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
 
         /// <summary>
         ///     Creates a <see cref="GamePacket" /> with the packet data.

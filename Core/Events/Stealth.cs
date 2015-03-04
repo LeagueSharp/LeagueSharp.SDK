@@ -35,7 +35,7 @@ namespace LeagueSharp.CommonEx.Core.Events
                 newState.HasFlag(GameObjectCharacterState.IsStealth))
             {
                 FireOnStealth(
-                    new OnStealthEventArgs { Sender = (Obj_AI_Hero) sender, StartTime = Game.Time, IsStealthed = true });
+                    new OnStealthEventArgs { Sender = (Obj_AI_Hero) sender, Time = Game.Time, IsStealthed = true });
             }
             else if (oldState.HasFlag(GameObjectCharacterState.IsStealth) &&
                      !newState.HasFlag(GameObjectCharacterState.IsStealth))
@@ -79,7 +79,7 @@ namespace LeagueSharp.CommonEx.Core.Events
             /// <summary>
             ///     Spell Start Time
             /// </summary>
-            public float StartTime;
+            public float Time;
         }
     }
 }

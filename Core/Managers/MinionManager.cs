@@ -131,7 +131,9 @@ namespace LeagueSharp.CommonEx.Core.Managers
                             @t.minion.CombatType != GameObjectCombatType.Melee && type == MinionTypes.Ranged ||
                             type == MinionTypes.All)
                     .Where(@t => IsMinion(@t.minion) || @t.minionTeam == GameObjectTeam.Neutral)
-                    .Select(@t => @t.minion).Cast<Obj_AI_Base>().ToList();
+                    .Select(@t => @t.minion)
+                    .Cast<Obj_AI_Base>()
+                    .ToList();
 
             switch (order)
             {
@@ -323,7 +325,6 @@ namespace LeagueSharp.CommonEx.Core.Managers
                 select pos.UnitPosition.To2D()).ToList();
         }*/
 
-       
 
         /// <summary>
         ///     Struct with the best farm locations

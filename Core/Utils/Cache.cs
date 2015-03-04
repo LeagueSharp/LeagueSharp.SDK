@@ -631,7 +631,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
     }
 
     /// <summary>
-    ///     Arguements for the <see cref="Cache.OnValueChanged"/> event
+    ///     Arguements for the <see cref="Cache.OnValueChanged" /> event
     /// </summary>
     public struct ValueChangedArgs
     {

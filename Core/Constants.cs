@@ -2,7 +2,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using LeagueSharp.CommonEx.Core.Utils;
@@ -38,9 +37,7 @@ namespace LeagueSharp.CommonEx.Core
             {
                 return
                     Cache.Instance.AddOrGetExisting(
-                        "LogFileName",
-                        () => DateTime.Now.ToString("d").Replace('/', '-') + ".log")
-                        .ToString();
+                        "LogFileName", () => DateTime.Now.ToString("d").Replace('/', '-') + ".log").ToString();
             }
         }
 

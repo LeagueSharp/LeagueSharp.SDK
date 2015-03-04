@@ -35,10 +35,11 @@ namespace LeagueSharp.CommonEx.Core
                         "ObjectHandler");
                 }
 
-                var list = (List<GameObject>)obj;
+                var list = (List<GameObject>) obj;
                 list.Add(gameObj);
 
-                Cache.Instance.Set(gameObj.Type.ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
+                Cache.Instance.Set(
+                    gameObj.Type.ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
             }
 
             GameObject.OnCreate += GameObject_OnCreate;
@@ -69,7 +70,8 @@ namespace LeagueSharp.CommonEx.Core
             {
                 return
                     (IEnumerable<Obj_AI_Hero>)
-                        Cache.Instance.AddOrGetExisting("Enemies", () => AllHeroes.Where(x => x.IsEnemy), "ObjectHandler");
+                        Cache.Instance.AddOrGetExisting(
+                            "Enemies", () => AllHeroes.Where(x => x.IsEnemy), "ObjectHandler");
             }
         }
 
@@ -107,7 +109,7 @@ namespace LeagueSharp.CommonEx.Core
         {
             object obj;
             var contains = Cache.Instance.TryGetValue(sender.Type.ToString(), out obj, "ObjectHandler");
- 
+
             if (!contains)
             {
                 obj = Cache.Instance.AddOrGetExisting(

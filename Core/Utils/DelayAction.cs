@@ -22,7 +22,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// </summary>
         static DelayAction()
         {
-            Game.OnGameUpdate += GameOnGameUpdate;
+            Game.OnUpdate += GameOnGameUpdate;
         }
 
         /// <summary>

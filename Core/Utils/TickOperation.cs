@@ -26,7 +26,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
             nextTick = (runOnce) ? Variables.TickCount : Variables.TickCount + tickDelay;
             IsRunning = true;
-            Game.OnGameUpdate += OnTick;
+            Game.OnUpdate += OnTick;
         }
 
         /// <summary>

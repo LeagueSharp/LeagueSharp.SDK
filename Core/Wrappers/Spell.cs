@@ -10,47 +10,9 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
     public class Spell
     {
         /// <summary>
-        ///     Gets/Sets the Range of the spell.
+        ///     Creates a new <see cref="Spell" /> instance, with the option to take data from <see cref="SpellData" />
         /// </summary>
-        public float Range { get; set; }
-
-        /// <summary>
-        ///     Gets/Sets the Width(Radius) of the spell.
-        /// </summary>
-        public float Width { get; set; }
-
-        /// <summary>
-        ///     Gets/Sets the Missle Speed of the spell.
-        /// </summary>
-        public float Speed { get; set; }
-
-        /// <summary>
-        ///     Gets/Sets the delay in seconds.
-        /// </summary>
-        public float Delay { get; set; }
-
-        /// <summary>
-        ///     Gets/Sets whether the spell has collision.
-        /// </summary>
-        public bool Collision { get; set; }
-
-        /// <summary>
-        ///     Gets/Sets the <see cref="SpellSlot"/>.
-        /// </summary>
-        public SpellSlot Slot { get; set; }
-
-        /// <summary>
-        ///     Gets the <see cref="SpellDataInst"/>.
-        /// </summary>
-        public SpellDataInst Instance
-        {
-            get { return ObjectManager.Player.Spellbook.GetSpell(Slot); }
-        }
-
-        /// <summary>
-        ///     Creates a new <see cref="Spell"/> instance, with the option to take data from <see cref="SpellData"/>
-        /// </summary>
-        /// <param name="slot">The <see cref="SpellSlot"/></param>
+        /// <param name="slot">The <see cref="SpellSlot" /></param>
         /// <param name="takeFromSpellData">Get the data(speed, range, etc) from SpellData.</param>
         public Spell(SpellSlot slot, bool takeFromSpellData)
         {
@@ -80,6 +42,44 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         {
             Slot = slot;
             Range = range;
+        }
+
+        /// <summary>
+        ///     Gets/Sets the Range of the spell.
+        /// </summary>
+        public float Range { get; set; }
+
+        /// <summary>
+        ///     Gets/Sets the Width(Radius) of the spell.
+        /// </summary>
+        public float Width { get; set; }
+
+        /// <summary>
+        ///     Gets/Sets the Missle Speed of the spell.
+        /// </summary>
+        public float Speed { get; set; }
+
+        /// <summary>
+        ///     Gets/Sets the delay in seconds.
+        /// </summary>
+        public float Delay { get; set; }
+
+        /// <summary>
+        ///     Gets/Sets whether the spell has collision.
+        /// </summary>
+        public bool Collision { get; set; }
+
+        /// <summary>
+        ///     Gets/Sets the <see cref="SpellSlot" />.
+        /// </summary>
+        public SpellSlot Slot { get; set; }
+
+        /// <summary>
+        ///     Gets the <see cref="SpellDataInst" />.
+        /// </summary>
+        public SpellDataInst Instance
+        {
+            get { return ObjectManager.Player.Spellbook.GetSpell(Slot); }
         }
 
         // TODO: Add SetSkillShot, etc when we get prediciton
@@ -124,7 +124,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         }
 
         /// <summary>
-        ///     Casts the spell on the <see cref="GameObject"/> with/without prediction
+        ///     Casts the spell on the <see cref="GameObject" /> with/without prediction
         /// </summary>
         /// <param name="gameObject">The object to cast to</param>
         /// <param name="castOnUnit">Will do prediction on the object if this is false.</param>
@@ -162,30 +162,32 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         }
 
         /// <summary>
-        ///    Checks if the <see cref="GameObject"/> is in range of the spell.
+        ///     Checks if the <see cref="GameObject" /> is in range of the spell.
         /// </summary>
-        /// <param name="gameObject"><see cref="GameObject"/></param>
-        /// <returns>If the <see cref="GameObject"/> is in range of the spell.</returns>
+        /// <param name="gameObject">
+        ///     <see cref="GameObject" />
+        /// </param>
+        /// <returns>If the <see cref="GameObject" /> is in range of the spell.</returns>
         public bool IsInRange(GameObject gameObject)
         {
             return ObjectManager.Player.Distance(gameObject) < Range;
         }
 
         /// <summary>
-        ///    Checks if the <see cref="Vector3"/> is in range of the spell.
+        ///     Checks if the <see cref="Vector3" /> is in range of the spell.
         /// </summary>
         /// <param name="position">Position></param>
-        /// <returns>If the <see cref="Vector3"/> is in range of the spell.</returns>
+        /// <returns>If the <see cref="Vector3" /> is in range of the spell.</returns>
         public bool IsInRange(Vector3 position)
         {
             return ObjectManager.Player.Distance(position) < Range;
         }
 
         /// <summary>
-        ///    Checks if the <see cref="Vector2"/> is in range of the spell.
+        ///     Checks if the <see cref="Vector2" /> is in range of the spell.
         /// </summary>
         /// <param name="position">Position></param>
-        /// <returns>If the <see cref="Vector2"/> is in range of the spell.</returns>
+        /// <returns>If the <see cref="Vector2" /> is in range of the spell.</returns>
         public bool IsInRange(Vector2 position)
         {
             return ObjectManager.Player.Distance(position) < Range;

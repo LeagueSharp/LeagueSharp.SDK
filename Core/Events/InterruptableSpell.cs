@@ -44,7 +44,7 @@ namespace LeagueSharp.CommonEx.Core.Events
 
             ObjectManager.Player.GetLastCastedSpell();
 
-            Game.OnGameUpdate += Game_OnGameUpdate;
+            Game.OnUpdate += Game_OnGameUpdate;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Spellbook.OnStopCast += Spellbook_OnStopCast;
         }

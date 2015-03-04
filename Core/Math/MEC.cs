@@ -28,7 +28,9 @@ namespace LeagueSharp.CommonEx.Core.Math
         ///     Returns the mininimum enclosing circle from a list of points.
         /// </summary>
         /// <param name="points">List of points</param>
-        /// <returns><see cref="MecCircle"/></returns>
+        /// <returns>
+        ///     <see cref="MecCircle" />
+        /// </returns>
         public static MecCircle GetMec(List<Vector2> points)
         {
             Vector2 center;
@@ -43,10 +45,10 @@ namespace LeagueSharp.CommonEx.Core.Math
         ///     Find the points nearest the upper left, upper right, lower left, and lower right corners.
         /// </summary>
         /// <param name="points">Points</param>
-        /// <param name="upperLeft">Upper left <see cref="Vector2"/></param>
-        /// <param name="upperRight">Upper right <see cref="Vector2"/></param>
-        /// <param name="lowerLeft">Lower left <see cref="Vector2"/></param>
-        /// <param name="lowerRight">Lower right <see cref="Vector2"/></param>
+        /// <param name="upperLeft">Upper left <see cref="Vector2" /></param>
+        /// <param name="upperRight">Upper right <see cref="Vector2" /></param>
+        /// <param name="lowerLeft">Lower left <see cref="Vector2" /></param>
+        /// <param name="lowerRight">Lower right <see cref="Vector2" /></param>
         private static void GetMinMaxCorners(IReadOnlyList<Vector2> points,
             ref Vector2 upperLeft,
             ref Vector2 upperRight,
@@ -87,7 +89,9 @@ namespace LeagueSharp.CommonEx.Core.Math
         ///     Find a box that fits inside the MinMax quadrilateral.
         /// </summary>
         /// <param name="points">Points</param>
-        /// <returns><see cref="RectangleF"/></returns>
+        /// <returns>
+        ///     <see cref="RectangleF" />
+        /// </returns>
         private static RectangleF GetMinMaxBox(IReadOnlyList<Vector2> points)
         {
             // Find the MinMax quadrilateral.
@@ -125,10 +129,11 @@ namespace LeagueSharp.CommonEx.Core.Math
         }
 
         /// <summary>
-        ///     Cull points out of the convex hull that lie inside the trapezoid defined by the vertices with smallest and largest X and Y coordinates. Return the points that are not culled.
+        ///     Cull points out of the convex hull that lie inside the trapezoid defined by the vertices with smallest and largest
+        ///     X and Y coordinates. Return the points that are not culled.
         /// </summary>
         /// <param name="points">Points</param>
-        /// <returns>List of <see cref="Vector2"/></returns>
+        /// <returns>List of <see cref="Vector2" /></returns>
         private static List<Vector2> HullCull(IReadOnlyList<Vector2> points)
         {
             // Find a culling box.
@@ -150,7 +155,7 @@ namespace LeagueSharp.CommonEx.Core.Math
         ///     Return the points that make up a polygon's convex hull. This method leaves the points list unchanged.
         /// </summary>
         /// <param name="points">Points</param>
-        /// <returns>List of <see cref="Vector2"/></returns>
+        /// <returns>List of <see cref="Vector2" /></returns>
         public static List<Vector2> MakeConvexHull(List<Vector2> points)
         {
             // Cull.
@@ -159,12 +164,11 @@ namespace LeagueSharp.CommonEx.Core.Math
             // Find the remaining point with the smallest Y value.
             // if (there's a tie, take the one with the smaller X value.
             Vector2[] bestPt = { points[0] };
-            foreach (
-                var pt in
-                    points.Where(
-                        pt =>
-                            (pt.Y < bestPt[0].Y) ||
-                            ((System.Math.Abs(pt.Y - bestPt[0].Y) < float.Epsilon) && (pt.X < bestPt[0].X))))
+            foreach (var pt in
+                points.Where(
+                    pt =>
+                        (pt.Y < bestPt[0].Y) ||
+                        ((System.Math.Abs(pt.Y - bestPt[0].Y) < float.Epsilon) && (pt.X < bestPt[0].X))))
             {
                 bestPt[0] = pt;
             }
@@ -224,17 +228,16 @@ namespace LeagueSharp.CommonEx.Core.Math
         }
 
         /// <summary>
-        ///  Return a number that gives the ordering of angles
-        /// WRST horizontal from the point (x1, y1) to (x2, y2).
-        /// In other words, AngleValue(x1, y1, x2, y2) is not
-        /// the angle, but if:
-        ///   Angle(x1, y1, x2, y2) > Angle(x1, y1, x2, y2)
-        /// then
-        ///   AngleValue(x1, y1, x2, y2) > AngleValue(x1, y1, x2, y2)
-        /// this angle is greater than the angle for another set
-        /// of points,) this number for
-        ///
-        /// This function is dy / (dy + dx).
+        ///     Return a number that gives the ordering of angles
+        ///     WRST horizontal from the point (x1, y1) to (x2, y2).
+        ///     In other words, AngleValue(x1, y1, x2, y2) is not
+        ///     the angle, but if:
+        ///     Angle(x1, y1, x2, y2) > Angle(x1, y1, x2, y2)
+        ///     then
+        ///     AngleValue(x1, y1, x2, y2) > AngleValue(x1, y1, x2, y2)
+        ///     this angle is greater than the angle for another set
+        ///     of points,) this number for
+        ///     This function is dy / (dy + dx).
         /// </summary>
         /// <param name="x1">First X</param>
         /// <param name="y1">First Y</param>

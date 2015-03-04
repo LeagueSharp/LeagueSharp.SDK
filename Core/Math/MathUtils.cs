@@ -120,7 +120,7 @@ namespace LeagueSharp.CommonEx.Core.Math
         ///     Returns the path of the unit appending the ServerPosition at the start, works even if the unit just entered fow.
         /// </summary>
         /// <param name="unit">Unit to get the waypoints for</param>
-        /// <returns>List of waypoints(<see cref="Vector2"/>)</returns>
+        /// <returns>List of waypoints(<see cref="Vector2" />)</returns>
         public static List<Vector2> GetWaypoints(this Obj_AI_Base unit)
         {
             var result = new List<Vector2>();
@@ -136,7 +136,7 @@ namespace LeagueSharp.CommonEx.Core.Math
                 var timePassed = (Variables.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
                 if (path.GetPathLength() >= unit.MoveSpeed * timePassed)
                 {
-                    result = CutPath(path, (int)(unit.MoveSpeed * timePassed));
+                    result = CutPath(path, (int) (unit.MoveSpeed * timePassed));
                 }
             }
 

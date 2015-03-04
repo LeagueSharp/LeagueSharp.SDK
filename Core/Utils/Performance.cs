@@ -22,11 +22,6 @@ namespace LeagueSharp.CommonEx.Core.Utils
     public class Performance : IDisposable
     {
         /// <summary>
-        ///     Private, Stopwatch instance, this will track the time it takes to execute functions inside the block.
-        /// </summary>
-        private Stopwatch stopwatch;
-
-        /// <summary>
         ///     Private, string contains the calling member name.
         /// </summary>
         private readonly string memberName;
@@ -35,6 +30,11 @@ namespace LeagueSharp.CommonEx.Core.Utils
         ///     Private, final performance type to print once block ends.
         /// </summary>
         private readonly PerformanceType performanceType;
+
+        /// <summary>
+        ///     Private, Stopwatch instance, this will track the time it takes to execute functions inside the block.
+        /// </summary>
+        private Stopwatch stopwatch;
 
         /// <summary>
         ///     Performance Constructor, starting a new Stopwatch.
