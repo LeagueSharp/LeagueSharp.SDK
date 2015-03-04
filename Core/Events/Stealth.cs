@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace LeagueSharp.CommonEx.Core.Events
 {
@@ -9,39 +8,39 @@ namespace LeagueSharp.CommonEx.Core.Events
     public class Stealth
     {
         /// <summary>
-        ///     All of the spells which make the unit invisible.
-        /// </summary>
-        public static string[] StealthSpells =
-        {
-            "KhazixR", "RengarR", "AkaliSmokeBomb", "Decieve", "TalonR",
-            "TwitchHideInShadows", "MonkeyKingW"
-        };
-
-        /// <summary>
         ///     Static constructor.
         /// </summary>
         static Stealth()
         {
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            GameObject.OnIntegerPropertyChange += GameObject_OnIntegerPropertyChange;
         }
 
         /// <summary>
-        ///     Function is called when a notify event comes from the OnprocessSpellCast delegate, on a spell execution.
+        ///     Function is called when a <see cref="GameObject" /> gets an integer property change and is called by an event.
         /// </summary>
-        /// <param name="sender">Sender in Obj_AI_Base form</param>
-        /// <param name="args">Spell Data</param>
-        private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        /// <param name="sender">GameObject</param>
+        /// <param name="args">INteger Property Change Data</param>
+        private static void GameObject_OnIntegerPropertyChange(GameObject sender,
+            GameObjectIntegerPropertyChangeEventArgs args)
         {
-            if (StealthSpells.Any(x => x == args.SData.Name))
+            if (!args.Property.Equals("ActionState"))
+            {
+                return;
+            }
+
+            var oldState = (GameObjectCharacterState) args.OldValue;
+            var newState = (GameObjectCharacterState) args.NewValue;
+
+            if (!oldState.HasFlag(GameObjectCharacterState.IsStealth) &&
+                newState.HasFlag(GameObjectCharacterState.IsStealth))
             {
                 FireOnStealth(
-                    new OnStealthEventArgs
-                    {
-                        Sender = (Obj_AI_Hero) sender,
-                        Spell = args.SData,
-                        StartTime = args.TimeCast,
-                        EndTime = args.TimeSpellEnd
-                    });
+                    new OnStealthEventArgs { Sender = (Obj_AI_Hero) sender, StartTime = Game.Time, IsStealthed = true });
+            }
+            else if (oldState.HasFlag(GameObjectCharacterState.IsStealth) &&
+                     !newState.HasFlag(GameObjectCharacterState.IsStealth))
+            {
+                FireOnStealth(new OnStealthEventArgs { Sender = (Obj_AI_Hero) sender, IsStealthed = false });
             }
         }
 
@@ -68,19 +67,14 @@ namespace LeagueSharp.CommonEx.Core.Events
         public struct OnStealthEventArgs
         {
             /// <summary>
-            ///     Spell Time End
+            ///     Returns if the unit is stealthed or not.
             /// </summary>
-            public float EndTime;
+            public bool IsStealthed;
 
             /// <summary>
             ///     Stealth Sender
             /// </summary>
             public Obj_AI_Hero Sender;
-
-            /// <summary>
-            ///     Stealth Spell Data
-            /// </summary>
-            public SpellData Spell;
 
             /// <summary>
             ///     Spell Start Time
