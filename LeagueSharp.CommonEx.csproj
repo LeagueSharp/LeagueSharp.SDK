@@ -93,6 +93,7 @@
     <Compile Include="Core\Render\Vertex.cs" />
     <Compile Include="Core\Utils\Cache.cs" />
     <Compile Include="Core\Utils\DelayAction.cs" />
+    <Compile Include="Core\Utils\HpBarDamageIndicator.cs" />
     <Compile Include="Core\Utils\Logging.cs" />
     <Compile Include="Core\Utils\CallbackPerformance.cs" />
     <Compile Include="Core\Utils\Performance.cs" />
