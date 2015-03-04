@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="args">Packet arguements from event</param>
         /// <returns>The header</returns>
-        public static byte GetHeader(this GamePacketEventArgs args)
+        public static short GetHeader(this GamePacketEventArgs args)
         {
             return args.PacketData[0];
         }
