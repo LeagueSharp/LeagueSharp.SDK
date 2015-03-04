@@ -55,39 +55,37 @@ namespace LeagueSharp.CommonEx.Core.Events
         /// <param name="args">OnStealthEventArgs <see cref="OnStealthEventArgs" /></param>
         private static void FireOnStealth(OnStealthEventArgs args)
         {
-            var handler = OnStealth;
-
-            if (handler != null)
+            if (OnStealth != null)
             {
-                handler(args);
+                OnStealth(args);
             }
         }
-    }
-
-    /// <summary>
-    ///     On Stealth Event Data, contains useful information that is passed with OnStealth
-    ///     <seealso cref="Stealth.OnStealth" />
-    /// </summary>
-    public struct OnStealthEventArgs
-    {
-        /// <summary>
-        ///     Spell Time End
-        /// </summary>
-        public float EndTime;
 
         /// <summary>
-        ///     Stealth Sender
+        ///     On Stealth Event Data, contains useful information that is passed with OnStealth
+        ///     <seealso cref="OnStealth" />
         /// </summary>
-        public Obj_AI_Hero Sender;
+        public struct OnStealthEventArgs
+        {
+            /// <summary>
+            ///     Spell Time End
+            /// </summary>
+            public float EndTime;
 
-        /// <summary>
-        ///     Stealth Spell Data
-        /// </summary>
-        public SpellData Spell;
+            /// <summary>
+            ///     Stealth Sender
+            /// </summary>
+            public Obj_AI_Hero Sender;
 
-        /// <summary>
-        ///     Spell Start Time
-        /// </summary>
-        public float StartTime;
+            /// <summary>
+            ///     Stealth Spell Data
+            /// </summary>
+            public SpellData Spell;
+
+            /// <summary>
+            ///     Spell Start Time
+            /// </summary>
+            public float StartTime;
+        }
     }
 }

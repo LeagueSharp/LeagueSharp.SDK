@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp.CommonEx.Core.Wrappers;
@@ -11,14 +12,7 @@ namespace LeagueSharp.CommonEx.Core.Events
     public class InterruptableSpell
     {
         /// <summary>
-        ///     Delegate for <see cref="OnInterruptableTarget" />
-        /// </summary>
-        /// <param name="sender"><see cref="Obj_AI_Hero" /> that is casting the interruptable spellData.</param>
-        /// <param name="args">Arguements detailing the spellData</param>
-        public delegate void InterruptableTargetDelegate(Obj_AI_Hero sender, InterruptableTargetEventArgs args);
-
-        /// <summary>
-        ///     The dang
+        ///     The danger level of the spell.
         /// </summary>
         public enum DangerLevel
         {
@@ -38,31 +32,41 @@ namespace LeagueSharp.CommonEx.Core.Events
             High
         }
 
+        /// <summary>
+        ///     Static constructor
+        /// </summary>
         static InterruptableSpell()
         {
-            // Initialize Properties
-            InterruptableSpells = new Dictionary<string, List<InterruptableSpellData>>();
-            CastingInterruptableSpell = new Dictionary<int, InterruptableSpellData>();
+            InterruptableSpells = new ConcurrentDictionary<string, List<InterruptableSpellData>>();
+            CastingInterruptableSpell = new ConcurrentDictionary<int, InterruptableSpellData>();
 
             InitializeSpells();
 
-            // Trigger LastCastedSpell
             ObjectManager.Player.GetLastCastedSpell();
 
-            // Listen to required events
             Game.OnGameUpdate += Game_OnGameUpdate;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Spellbook.OnStopCast += Spellbook_OnStopCast;
         }
 
-        private static Dictionary<string, List<InterruptableSpellData>> InterruptableSpells { get; set; }
-        private static Dictionary<int, InterruptableSpellData> CastingInterruptableSpell { get; set; }
+        /// <summary>
+        ///     Interruptable Spells.
+        /// </summary>
+        private static ConcurrentDictionary<string, List<InterruptableSpellData>> InterruptableSpells { get; set; }
+
+        /// <summary>
+        ///     Casting Interruptable Spells.
+        /// </summary>
+        private static ConcurrentDictionary<int, InterruptableSpellData> CastingInterruptableSpell { get; set; }
 
         /// <summary>
         ///     Gets fired when an enemy is casting a spellData that should be interrupted.
         /// </summary>
-        public static event InterruptableTargetDelegate OnInterruptableTarget;
+        public static event Action<InterruptableTargetEventArgs> OnInterruptableTarget;
 
+        /// <summary>
+        ///     Initializer for the spells
+        /// </summary>
         private static void InitializeSpells()
         {
             #region Spells
@@ -94,44 +98,54 @@ namespace LeagueSharp.CommonEx.Core.Events
             #endregion
         }
 
+        /// <summary>
+        ///     Registers an interrupterable spell.
+        /// </summary>
+        /// <param name="champName">Champion Name</param>
+        /// <param name="spellData">Spell Data <see cref="InterruptableSpellData" /></param>
         private static void RegisterSpell(string champName, InterruptableSpellData spellData)
         {
             if (!InterruptableSpells.ContainsKey(champName))
             {
-                InterruptableSpells.Add(champName, new List<InterruptableSpellData>());
+                InterruptableSpells.TryAdd(champName, new List<InterruptableSpellData>());
             }
 
             InterruptableSpells[champName].Add(spellData);
         }
 
+        /// <summary>
+        ///     Function called by update tick event.
+        /// </summary>
+        /// <param name="args">System.EventArgs</param>
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            // Remove heros that have finished casting their interruptable spellData
             foreach (var hero in
                 ObjectHandler.AllHeroes.Where(
                     hero =>
                         CastingInterruptableSpell.ContainsKey(hero.NetworkId) && !hero.Spellbook.IsCastingSpell &&
                         !hero.Spellbook.IsChanneling && !hero.Spellbook.IsCharging))
             {
-                CastingInterruptableSpell.Remove(hero.NetworkId);
+                InterruptableSpellData value;
+                CastingInterruptableSpell.TryRemove(hero.NetworkId, out value);
             }
 
-            // Trigger OnInterruptableTarget event if needed
             if (OnInterruptableTarget == null)
             {
                 return;
             }
 
-            foreach (var enemy in ObjectHandler.Enemies)
+            foreach (var newArgs in
+                ObjectHandler.Enemies.Select(GetInterruptableTargetData).Where(newArgs => newArgs != null))
             {
-                var newArgs = GetInterruptableTargetData(enemy);
-                if (newArgs != null)
-                {
-                    OnInterruptableTarget(enemy, newArgs);
-                }
+                OnInterruptableTarget(newArgs);
             }
         }
 
+        /// <summary>
+        ///     Function called by OnProcessSpellCast event
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="args">Processed Spell Cast Data</param>
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             var target = sender as Obj_AI_Hero;
@@ -140,13 +154,11 @@ namespace LeagueSharp.CommonEx.Core.Events
                 return;
             }
 
-            // Check if the target is known to have interruptable spells
             if (!InterruptableSpells.ContainsKey(target.ChampionName))
             {
                 return;
             }
 
-            // Get the interruptable spellData
             var spell = InterruptableSpells[target.ChampionName].Find(
                 s =>
                 {
@@ -156,11 +168,15 @@ namespace LeagueSharp.CommonEx.Core.Events
 
             if (spell != null)
             {
-                // Mark champ as casting interruptable spellData
-                CastingInterruptableSpell.Add(target.NetworkId, spell);
+                CastingInterruptableSpell.TryAdd(target.NetworkId, spell);
             }
         }
 
+        /// <summary>
+        ///     Function called by the stop cast event.
+        /// </summary>
+        /// <param name="sender">Sender spellbook</param>
+        /// <param name="args">Spellbok Stop Data</param>
         private static void Spellbook_OnStopCast(Spellbook sender, SpellbookStopCastEventArgs args)
         {
             var target = sender.Owner as Obj_AI_Hero;
@@ -170,10 +186,10 @@ namespace LeagueSharp.CommonEx.Core.Events
                 return;
             }
 
-            // Check if the spellData itself stopped casting (interrupted)
             if (!target.Spellbook.IsCastingSpell && !target.Spellbook.IsChanneling && !target.Spellbook.IsCharging)
             {
-                CastingInterruptableSpell.Remove(target.NetworkId);
+                InterruptableSpellData value;
+                CastingInterruptableSpell.TryRemove(target.NetworkId, out value);
             }
         }
 
@@ -205,9 +221,8 @@ namespace LeagueSharp.CommonEx.Core.Events
 
             if (CastingInterruptableSpell.ContainsKey(target.NetworkId))
             {
-                // Return the args with spellData end time
                 return new InterruptableTargetEventArgs(
-                    CastingInterruptableSpell[target.NetworkId].DangerLevel, target.Spellbook.CastEndTime,
+                    target, CastingInterruptableSpell[target.NetworkId].DangerLevel, target.Spellbook.CastEndTime,
                     CastingInterruptableSpell[target.NetworkId].MovementInterrupts);
             }
 
@@ -219,8 +234,19 @@ namespace LeagueSharp.CommonEx.Core.Events
         /// </summary>
         public class InterruptableTargetEventArgs
         {
-            internal InterruptableTargetEventArgs(DangerLevel dangerLevel, float endTime, bool movementInterrupts)
+            /// <summary>
+            ///     Interruptable Target Data internal constructor
+            /// </summary>
+            /// <param name="sender">Sender or classifed Target</param>
+            /// <param name="dangerLevel">Danger Level</param>
+            /// <param name="endTime">Ending time of the spell</param>
+            /// <param name="movementInterrupts">Does Movement Interrupts the spell</param>
+            internal InterruptableTargetEventArgs(Obj_AI_Hero sender,
+                DangerLevel dangerLevel,
+                float endTime,
+                bool movementInterrupts)
             {
+                Sender = sender;
                 DangerLevel = dangerLevel;
                 EndTime = endTime;
                 MovementInterrupts = movementInterrupts;
@@ -240,10 +266,24 @@ namespace LeagueSharp.CommonEx.Core.Events
             ///     Gets whether moving caused the spellData to be interrupted.
             /// </summary>
             public bool MovementInterrupts { get; private set; }
+
+            /// <summary>
+            ///     The sender or classifed target of the interruptable spell.
+            /// </summary>
+            public Obj_AI_Hero Sender { get; private set; }
         }
 
+        /// <summary>
+        ///     Interruptable Spell Data
+        /// </summary>
         private class InterruptableSpellData
         {
+            /// <summary>
+            ///     Interruptable Spell Data Constructor.
+            /// </summary>
+            /// <param name="slot">Spell Slot</param>
+            /// <param name="dangerLevel">Danger Level</param>
+            /// <param name="movementInterrupts">Does movement interrupt the spell</param>
             public InterruptableSpellData(SpellSlot slot, DangerLevel dangerLevel, bool movementInterrupts = true)
             {
                 Slot = slot;
@@ -251,8 +291,19 @@ namespace LeagueSharp.CommonEx.Core.Events
                 MovementInterrupts = movementInterrupts;
             }
 
+            /// <summary>
+            ///     Spell Slot.
+            /// </summary>
             public SpellSlot Slot { get; private set; }
+
+            /// <summary>
+            ///     Spell Danger Level.
+            /// </summary>
             public DangerLevel DangerLevel { get; private set; }
+
+            /// <summary>
+            ///     Spell Interruptable by Movement by caster.
+            /// </summary>
             public bool MovementInterrupts { get; private set; }
         }
     }

@@ -13,6 +13,22 @@ namespace LeagueSharp.CommonEx.Core.Extensions
     /// </summary>
     public static class Unit
     {
+        #region Information
+
+        /// <summary>
+        ///     Returns if the unit is recalling.
+        /// </summary>
+        /// <param name="unit">Extended unit</param>
+        /// <returns>Returns if the unit is recalling (boolean)</returns>
+        public static bool IsRecalling(this Obj_AI_Hero unit)
+        {
+            return
+                unit.Buffs.Any(
+                    buff => buff.Name.ToLower().Contains("recall") && !buff.Name.ToLower().Contains("override"));
+        }
+
+        #endregion
+
         #region IsValid
 
         /// <summary>
@@ -55,50 +71,6 @@ namespace LeagueSharp.CommonEx.Core.Extensions
             return (@from.IsValid())
                 ? @from.DistanceSquared(unitPosition) < range * range
                 : ObjectManager.Player.ServerPosition.DistanceSquared(unitPosition) < range * range;
-        }
-
-        #endregion
-
-        #region Information
-
-        /// <summary>
-        ///     Returns the unit's total magic damage.
-        /// </summary>
-        /// <param name="unit">Extended unit</param>
-        /// <returns>Returns the unit's total magic damage in float units</returns>
-        public static float TotalMagicalDamage(this Obj_AI_Hero unit)
-        {
-            return unit.BaseAbilityDamage + unit.FlatMagicDamageMod;
-        }
-
-        /// <summary>
-        ///     Returns the unit's total attack damage.
-        /// </summary>
-        /// <param name="unit">Extended unit</param>
-        /// <returns>Returns the unit's total attack damage in float units</returns>
-        public static float TotalAttackDamage(this Obj_AI_Hero unit)
-        {
-            return unit.BaseAttackDamage + unit.FlatPhysicalDamageMod;
-        }
-
-        /// <summary>
-        ///     Returns the unit's total attack range.
-        /// </summary>
-        /// <param name="unit">Extended unit</param>
-        /// <returns>Returns the unit's total attack range in float units</returns>
-        public static float TotalAttackRange(this Obj_AI_Hero unit)
-        {
-            return unit.AttackRange + unit.BoundingRadius;
-        }
-
-        /// <summary>
-        ///     Returns if the unit is recalling.
-        /// </summary>
-        /// <param name="unit">Extended unit</param>
-        /// <returns>Returns if the unit is recalling (boolean)</returns>
-        public static bool IsRecalling(this Obj_AI_Hero unit)
-        {
-            return unit.Buffs.Any(buff => buff.Name.ToLower().Contains("recall"));
         }
 
         #endregion

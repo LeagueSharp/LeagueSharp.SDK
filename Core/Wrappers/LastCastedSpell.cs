@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace LeagueSharp.CommonEx.Core.Wrappers
 {
@@ -12,14 +8,24 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
     public class LastCastedSpellEntry
     {
         /// <summary>
+        ///     End time of the cast.
+        /// </summary>
+        public float EndTime;
+
+        /// <summary>
+        ///     Gets if the spell data is valid, and not empty.
+        /// </summary>
+        public bool IsValid;
+
+        /// <summary>
         ///     The name of the spell last casted.
         /// </summary>
         public string Name;
 
         /// <summary>
-        ///     Target
+        ///     The <see cref="SpellData" /> of the spell casted.
         /// </summary>
-        public Obj_AI_Base Target;
+        public SpellData SpellData;
 
         /// <summary>
         ///     Start time of the cast.
@@ -27,20 +33,14 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         public float StartTime;
 
         /// <summary>
-        ///     End time of the cast.
+        ///     Target
         /// </summary>
-        public float EndTime;
+        public Obj_AI_Base Target;
 
         /// <summary>
-        ///     The <see cref="SpellData"/> of the spell casted.
+        ///     Internal Constructor for Last Casted Spell Entry.
         /// </summary>
-        public SpellData SpellData;
-
-        /// <summary>
-        ///     Gets if the spell data is valid, and not empty.
-        /// </summary>
-        public bool IsValid;
-
+        /// <param name="args">Processed Casted Spell Data</param>
         internal LastCastedSpellEntry(GameObjectProcessSpellCastEventArgs args)
         {
             Name = args.SData.Name;
@@ -51,9 +51,12 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
             IsValid = true;
         }
 
+        /// <summary>
+        ///     Internal Constructor for Last Casted Spell Entry.
+        /// </summary>
         internal LastCastedSpellEntry()
         {
-            Name = "";
+            Name = string.Empty;
             Target = null;
             StartTime = 0;
             EndTime = 0;
@@ -63,34 +66,51 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
     }
 
     /// <summary>
-    ///     Extension for getting the last casted spell of an <see cref="Obj_AI_Hero"/>
+    ///     Extension for getting the last casted spell of an <see cref="Obj_AI_Hero" />
     /// </summary>
     public static class LastCastedSpell
     {
+        /// <summary>
+        ///     Casted Spells of the champions
+        /// </summary>
         internal static readonly Dictionary<int, LastCastedSpellEntry> CastedSpells =
             new Dictionary<int, LastCastedSpellEntry>();
 
+        /// <summary>
+        ///     Static constructor
+        /// </summary>
         static LastCastedSpell()
         {
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
         }
 
+        /// <summary>
+        ///     Function that is called by the OnProcessSpellCast event.
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="args">Processed Spell Cast Data</param>
         private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!(sender is Obj_AI_Hero))
             {
-                return;
-            }
+                var entry = new LastCastedSpellEntry(args);
+                if (!CastedSpells.ContainsKey(sender.NetworkId))
+                {
+                    CastedSpells.Add(sender.NetworkId, entry);
+                    return;
+                }
 
-            var entry = new LastCastedSpellEntry(args);
-            CastedSpells[sender.NetworkId] = entry;
+                CastedSpells[sender.NetworkId] = entry;
+            }
         }
 
         /// <summary>
-        ///     Gets the <see cref="LastCastedSpellEntry"/> of the unit.
+        ///     Gets the <see cref="LastCastedSpellEntry" /> of the unit.
         /// </summary>
         /// <param name="target">Target</param>
-        /// <returns><see cref="LastCastedSpellEntry"/></returns>
+        /// <returns>
+        ///     <see cref="LastCastedSpellEntry" />
+        /// </returns>
         public static LastCastedSpellEntry GetLastCastedSpell(this Obj_AI_Hero target)
         {
             LastCastedSpellEntry entry;
@@ -98,6 +118,5 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
 
             return contains ? entry : new LastCastedSpellEntry();
         }
-        
     }
 }
