@@ -20,8 +20,6 @@ namespace LeagueSharp.CommonEx.Core
                 return;
             }
 
-            Cache.Instance.CreateRegion("ObjectHandler");
-
             // Add all of the existing objects into the cache.
             foreach (var gameObj in ObjectManager.Get<GameObject>())
             {
