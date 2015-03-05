@@ -31,7 +31,11 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <example>X.X.X.1</example>
         public static int Revision;
 
-        private static readonly int[] VersionArray;
+        /// <summary>
+        ///     Current version.
+        /// </summary>
+        /// <example>X.X.X.X</example>
+        public static System.Version CurrentVersion;
 
         static Version()
         {
@@ -40,8 +44,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
             MinorVersion = Convert.ToInt32(d[1]);
             Build = Convert.ToInt32(d[2]);
             Revision = Convert.ToInt32(d[3]);
-
-            VersionArray = new[] { MajorVersion, MinorVersion, Build, Revision };
+            CurrentVersion = new System.Version(MajorVersion, MinorVersion, Build, Revision);
         }
 
         /// <summary>
@@ -51,8 +54,18 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <returns>String is older then the current one.</returns>
         public static bool IsOlder(string version)
         {
-            var d = version.Split('.');
-            return MinorVersion < Convert.ToInt32(d[1]);
+            var d = new System.Version(version);
+            return CurrentVersion < d;
+        }
+
+        /// <summary>
+        ///     Checks if the Version is older then the current one.
+        /// </summary>
+        /// <param name="version">Version</param>
+        /// <returns>Version is older then the current one.</returns>
+        public static bool IsOlder(System.Version version)
+        {
+            return CurrentVersion < version;
         }
 
         /// <summary>
@@ -62,8 +75,18 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <returns>String is newer then the current one.</returns>
         public static bool IsNewer(string version)
         {
-            var d = version.Split('.');
-            return MinorVersion > Convert.ToInt32(d[1]);
+            var d = new System.Version(version);
+            return CurrentVersion > d;
+        }
+
+        /// <summary>
+        ///     Checks if the Version is newer then the current one.
+        /// </summary>
+        /// <param name="version">Version</param>
+        /// <returns>Version is newer then the current one.</returns>
+        public static bool IsNewer(System.Version version)
+        {
+            return CurrentVersion > version;
         }
 
         /// <summary>
@@ -73,17 +96,18 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <returns>String is equal to the current one.</returns>
         public static bool IsEqual(string version)
         {
-            var d = version.Split('.');
+            var d = new System.Version(version);
+            return CurrentVersion.Equals(d);
+        }
 
-            for (var i = 0; i <= d.Length; i++)
-            {
-                if (d[i] == null || Convert.ToInt32(d[i]) != VersionArray[i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
+        /// <summary>
+        ///     Checks if the version is equal to the current one.
+        /// </summary>
+        /// <param name="version">Version</param>
+        /// <returns>Version is equal to the current one.</returns>
+        public static bool IsEqual(System.Version version)
+        {
+            return CurrentVersion.Equals(version);
         }
     }
 }
