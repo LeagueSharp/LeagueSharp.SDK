@@ -26,12 +26,12 @@ namespace LeagueSharp.CommonEx.Core
             foreach (var gameObj in ObjectManager.Get<GameObject>())
             {
                 object obj;
-                var contains = Cache.Instance.TryGetValue(gameObj.Type.ToString(), out obj, "ObjectHandler");
+                var contains = Cache.Instance.TryGetValue(gameObj.GetType().ToString(), out obj, "ObjectHandler");
 
                 if (!contains)
                 {
                     obj = Cache.Instance.AddOrGetExisting(
-                        gameObj.Type.ToString(), new List<GameObject>(), ObjectCache.InfiniteAbsoluteExpiration,
+                        gameObj.GetType().ToString(), new List<GameObject>(), ObjectCache.InfiniteAbsoluteExpiration,
                         "ObjectHandler");
                 }
 
@@ -39,7 +39,7 @@ namespace LeagueSharp.CommonEx.Core
                 list.Add(gameObj);
 
                 Cache.Instance.Set(
-                    gameObj.Type.ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
+                    gameObj.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
             }
 
             GameObject.OnCreate += GameObject_OnCreate;
@@ -91,7 +91,7 @@ namespace LeagueSharp.CommonEx.Core
         private static void GameObjectOnOnDelete(GameObject sender, EventArgs args)
         {
             object obj;
-            var contains = Cache.Instance.TryGetValue(sender.Type.ToString(), out obj, "ObjectHandler");
+            var contains = Cache.Instance.TryGetValue(sender.GetType().ToString(), out obj, "ObjectHandler");
 
             if (!contains)
             {
@@ -102,25 +102,25 @@ namespace LeagueSharp.CommonEx.Core
             var list = (List<GameObject>) obj;
             list.Remove(sender);
 
-            Cache.Instance.Set(sender.Type.ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
+            Cache.Instance.Set(sender.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
         }
 
         private static void GameObject_OnCreate(GameObject sender, EventArgs args)
         {
             object obj;
-            var contains = Cache.Instance.TryGetValue(sender.Type.ToString(), out obj, "ObjectHandler");
+            var contains = Cache.Instance.TryGetValue(sender.GetType().ToString(), out obj, "ObjectHandler");
 
             if (!contains)
             {
                 obj = Cache.Instance.AddOrGetExisting(
-                    sender.Type.ToString(), new List<GameObject>(), ObjectCache.InfiniteAbsoluteExpiration,
+                    sender.GetType().ToString(), new List<GameObject>(), ObjectCache.InfiniteAbsoluteExpiration,
                     "ObjectHandler");
             }
 
             var list = (List<GameObject>) obj;
             list.Add(sender);
 
-            Cache.Instance.Set(sender.Type.ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
+            Cache.Instance.Set(sender.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
         }
 
         /// <summary>
@@ -138,10 +138,9 @@ namespace LeagueSharp.CommonEx.Core
         /// </summary>
         /// <typeparam name="T">Type of object to get, must be a <see cref="GameObject" /></typeparam>
         /// <returns>IEnumerable of the type.</returns>
-        public static IEnumerable<T> GetFast<T>() where T : GameObject, new()
+        public static IEnumerable<T> GetFast<T>() where T: GameObject, new()
         {
-            var gameObj = (GameObject) Convert.ChangeType(typeof(T), typeof(GameObject));
-            return (IEnumerable<T>) Cache.Instance.Get<List<GameObject>>(gameObj.Type.ToString(), "ObjectHandler");
+            return (IEnumerable<T>) Cache.Instance.Get<List<GameObject>>(typeof(T).ToString(), "ObjectHandler");
         }
     }
 }
