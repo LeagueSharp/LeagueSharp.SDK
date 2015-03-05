@@ -10,12 +10,17 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <summary>
         ///     Sent on buying an item
         /// </summary>
-        public static Packet BuyItem = new Packet(0xD7);
+        public static Packet BuyItem = new Packet(0xD7, PacketChannel.C2S);
+
+        /// <summary>
+        ///     Sent on moving camera or zooming.
+        /// </summary>
+        public static Packet Camera = new Packet(0x10, PacketChannel.C2S, PacketProtocolFlags.NoFlags);
 
         /// <summary>
         ///     Sent on a spell cast
         /// </summary>
-        public static Packet CastSpell = new Packet(0xE4);
+        public static Packet CastSpell = new Packet(0xE4, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on a chat message(in the game, not client)
@@ -25,7 +30,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <summary>
         ///     Sent on an emote
         /// </summary>
-        public static Packet Emote = new Packet(0x2C);
+        public static Packet Emote = new Packet(0x2C, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on heartbeat
@@ -35,52 +40,57 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <summary>
         ///     Sent on using objects(Clicking thresh lantern)
         /// </summary>
-        public static Packet UseObject = new Packet(0x90);
+        public static Packet UseObject = new Packet(0x90, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on an issue order(move to, hold position)
         /// </summary>
-        public static Packet IssueOrder = new Packet(0xB5);
+        public static Packet IssueOrder = new Packet(0xB5, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on leveling spell
         /// </summary>
-        public static Packet LevelSpell = new Packet(0x9A);
+        public static Packet LevelSpell = new Packet(0x9A, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on locking camera.
         /// </summary>
-        public static Packet LockCamera = new Packet(0xFD);
+        public static Packet LockCamera = new Packet(0xFD, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on pausing games(tournament mode, custom games)
         /// </summary>
-        public static Packet PauseGame = new Packet(0x97);
+        public static Packet PauseGame = new Packet(0x97, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on game ping
         /// </summary>
-        public static Packet Ping = new Packet(0x22);
+        public static Packet Ping = new Packet(0x122, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on when game resumes from pause
         /// </summary>
-        public static Packet ResumeGame = new Packet(0x19);
+        public static Packet ResumeGame = new Packet(0x19, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent when opening score board.
         /// </summary>
-        public static Packet ScoreScreen = new Packet(0x96);
+        public static Packet ScoreScreen = new Packet(0x96, PacketChannel.C2S);
+
+        /// <summary>
+        ///     Sent on selling an item.
+        /// </summary>
+        public static Packet SellItem = new Packet(0x32, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on left clicking target.
         /// </summary>
-        public static Packet SetTarget = new Packet(0xA9);
+        public static Packet SetTarget = new Packet(0xA9, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on pressing the undo button in the shop.
         /// </summary>
-        public static Packet UndoBuy = new Packet(0x1C);
+        public static Packet UndoBuy = new Packet(0x1C, PacketChannel.C2S);
 
         /// <summary>
         ///     The channel of the packet.
@@ -103,9 +113,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <param name="id">Packet Id</param>
         /// <param name="channel">Packet Channel</param>
         /// <param name="flags">Packet Flags</param>
-        public Packet(short id,
-            PacketChannel channel = PacketChannel.C2S,
-            PacketProtocolFlags flags = PacketProtocolFlags.Reliable)
+        public Packet(short id, PacketChannel channel, PacketProtocolFlags flags = PacketProtocolFlags.Reliable)
         {
             Id = id;
             Channel = channel;
@@ -138,6 +146,14 @@ namespace LeagueSharp.CommonEx.Core.Network
                     UseObject
                 };
             }
+        }
+
+        /// <summary>
+        ///     Creates a <see cref="GamePacket" /> with the packet data.
+        /// </summary>
+        public GamePacket GetGamePacket()
+        {
+            return new GamePacket(this);
         }
     }
 
