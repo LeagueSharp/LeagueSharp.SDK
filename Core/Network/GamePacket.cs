@@ -1,26 +1,4 @@
-﻿#region LICENSE
-
-/*
- Copyright 2014 - 2014 LeagueSharp
- GamePacket.cs is part of LeagueSharp.Common.
- 
- LeagueSharp.Common is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- LeagueSharp.Common is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-#endregion
-
-#region
+﻿#region
 
 using System;
 using System.IO;
@@ -39,7 +17,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <summary>
         ///     Packet Header
         /// </summary>
-        private readonly byte _header;
+        private readonly short _header;
 
         /// <summary>
         ///     Packet Memory Stream
@@ -55,11 +33,6 @@ namespace LeagueSharp.CommonEx.Core.Network
         ///     Packet Binary Writer instance
         /// </summary>
         private readonly BinaryWriter _writer;
-
-        /// <summary>
-        ///     Raw Packet contents.
-        /// </summary>
-        private readonly byte[] rawPacket;
 
         /// <summary>
         ///     The channel this packet is sent on.
@@ -84,8 +57,8 @@ namespace LeagueSharp.CommonEx.Core.Network
 
             _reader.BaseStream.Position = 0;
             _writer.BaseStream.Position = 0;
-            rawPacket = data;
-            _header = data[0];
+            var rawPacket = data;
+            _header = (short) ((rawPacket[1] << 8) | (rawPacket[0] << 0));
         }
 
         /// <summary>
@@ -101,8 +74,8 @@ namespace LeagueSharp.CommonEx.Core.Network
 
             _reader.BaseStream.Position = 0;
             _writer.BaseStream.Position = 0;
-            rawPacket = args.PacketData;
-            _header = args.PacketData[0];
+            var rawPacket = args.PacketData;
+            _header = (short) ((rawPacket[1] << 8) | (rawPacket[0] << 0));
             Channel = args.Channel;
             Flags = args.ProtocolFlag;
         }
@@ -113,7 +86,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <param name="header">Header of the packet</param>
         /// <param name="channel">Channel</param>
         /// <param name="flags">Protocol to send packet</param>
-        public GamePacket(byte header,
+        public GamePacket(short header,
             PacketChannel channel = PacketChannel.C2S,
             PacketProtocolFlags flags = PacketProtocolFlags.Reliable)
         {
@@ -124,7 +97,7 @@ namespace LeagueSharp.CommonEx.Core.Network
 
             _reader.BaseStream.Position = 0;
             _writer.BaseStream.Position = 0;
-            WriteByte(header);
+            WriteShort(header);
             _header = header;
             Channel = channel;
             Flags = flags;
@@ -133,9 +106,9 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <summary>
         ///     Gets the Header of the packet(The first byte)
         /// </summary>
-        public byte Header
+        public short Header
         {
-            get { return ReadByte(0); } //Better in case header changes, but also resets position.
+            get { return _header; }
         }
 
         /// <summary>

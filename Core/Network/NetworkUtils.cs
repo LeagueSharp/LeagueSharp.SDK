@@ -8,21 +8,21 @@
         /// <summary>
         ///     Gets the packet id.
         /// </summary>
-        /// <param name="args">Packet arguments from event</param>
-        /// <returns>The packet id</returns>
+        /// <param name="args">Packet arguements from event</param>
+        /// <returns>The packet ID</returns>
         public static short GetPacketId(this GamePacketEventArgs args)
         {
-            return (short)((args.PacketData[1] << 8) | (args.PacketData[0] << 0));
+            return (short) ((args.PacketData[1] << 8) | (args.PacketData[0] << 0));
         }
 
         /// <summary>
         ///     Gets the packet id.
         /// </summary>
         /// <param name="data">Raw packet data</param>
-        /// <returns>The packet id</returns>
+        /// <returns>The packet ID</returns>
         public static short GetPacketId(this byte[] data)
         {
-            return (short)((data[1] << 8) | (data[0] << 0));
+            return (short) ((data[1] << 8) | (data[0] << 0));
         }
 
         /// <summary>
@@ -30,7 +30,7 @@
         /// </summary>
         /// <param name="args">Packet arguements from event</param>
         /// <param name="packet">Packet</param>
-        /// <returns>Whether the packets have the same id</returns>
+        /// <returns>Whether the packets have the same ID</returns>
         public static bool Equals(this GamePacketEventArgs args, Packet packet)
         {
             return args.GetPacketId() == packet.Id;
