@@ -12,6 +12,7 @@ namespace LeagueSharp.CommonEx.Core
     public class ObjectHandler
     {
         private static readonly bool Loaded;
+        private static readonly List<string> SavedTypes;
 
         static ObjectHandler()
         {
@@ -21,10 +22,13 @@ namespace LeagueSharp.CommonEx.Core
             }
 
             Cache.Instance.CreateRegion("ObjectHandler");
+            SavedTypes = new List<string>();
 
             // Add all of the existing objects into the cache.
             foreach (var gameObj in ObjectManager.Get<GameObject>())
             {
+                AddSavedType(gameObj);
+
                 object obj;
                 var contains = Cache.Instance.TryGetValue(gameObj.GetType().ToString(), out obj, "ObjectHandler");
 
@@ -90,6 +94,8 @@ namespace LeagueSharp.CommonEx.Core
 
         private static void GameObjectOnOnDelete(GameObject sender, EventArgs args)
         {
+            AddSavedType(sender);
+
             object obj;
             var contains = Cache.Instance.TryGetValue(sender.GetType().ToString(), out obj, "ObjectHandler");
 
@@ -102,11 +108,14 @@ namespace LeagueSharp.CommonEx.Core
             var list = (List<GameObject>) obj;
             list.Remove(sender);
 
-            Cache.Instance.Set(sender.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
+            Cache.Instance.Set(
+                sender.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
         }
 
         private static void GameObject_OnCreate(GameObject sender, EventArgs args)
         {
+            AddSavedType(sender);
+
             object obj;
             var contains = Cache.Instance.TryGetValue(sender.GetType().ToString(), out obj, "ObjectHandler");
 
@@ -120,7 +129,16 @@ namespace LeagueSharp.CommonEx.Core
             var list = (List<GameObject>) obj;
             list.Add(sender);
 
-            Cache.Instance.Set(sender.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
+            Cache.Instance.Set(
+                sender.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
+        }
+
+        private static void AddSavedType(GameObject gameObject)
+        {
+            if (!SavedTypes.Contains(gameObject.GetType().ToString()))
+            {
+                SavedTypes.Add(gameObject.GetType().ToString());
+            }
         }
 
         /// <summary>
@@ -138,9 +156,22 @@ namespace LeagueSharp.CommonEx.Core
         /// </summary>
         /// <typeparam name="T">Type of object to get, must be a <see cref="GameObject" /></typeparam>
         /// <returns>IEnumerable of the type.</returns>
-        public static IEnumerable<T> GetFast<T>() where T: GameObject, new()
+        public static IEnumerable<T> GetFast<T>() where T : GameObject, new()
         {
-            return (IEnumerable<T>) Cache.Instance.Get<List<GameObject>>(typeof(T).ToString(), "ObjectHandler");
+            // Quick and simple workaround for getting GameObjects, since no gameobject will be type LeagueSharp.GameObject.
+            if (typeof(T).ToString() != "LeagueSharp.GameObject")
+            {
+                return (IEnumerable<T>) Cache.Instance.Get<List<GameObject>>(typeof(T).ToString(), "ObjectHandler");
+            }
+
+            var list = new List<T>();
+
+            foreach (var savedType in SavedTypes)
+            {
+                list.AddRange((IEnumerable<T>) Cache.Instance.Get<List<GameObject>>(savedType, "ObjectHandler"));
+            }
+
+            return list;
         }
     }
 }
