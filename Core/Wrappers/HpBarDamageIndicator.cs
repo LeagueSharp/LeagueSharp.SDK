@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Linq;
 
-namespace LeagueSharp.CommonEx.Core.Utils
+namespace LeagueSharp.CommonEx.Core.Wrappers
 {
     /// <summary>
     ///     Utility which displays the damage done to a unit with a Line + Damage.
@@ -22,16 +22,16 @@ namespace LeagueSharp.CommonEx.Core.Utils
         private const int Height = 8;
 
         /// <summary>
-        ///     Color of the line drawing on the HP Bar.
-        /// </summary>
-        public static Color Color = Color.Lime;
-
-        /// <summary>
         ///     Gets/Sets whether the HpBarDamageIndicator is enabled.
         /// </summary>
         public static bool Enabled = true;
 
         private static DamageToUnitDelegate _damageToUnit;
+
+        /// <summary>
+        ///     Color of the line drawing on the HP Bar.
+        /// </summary>
+        public static Color Color = Color.Lime;
 
         /// <summary>
         ///     Gets the damage to the unit.

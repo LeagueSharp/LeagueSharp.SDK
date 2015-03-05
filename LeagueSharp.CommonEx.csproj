@@ -65,6 +65,7 @@
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\Events\Dash.cs" />
     <Compile Include="Core\Events\InterruptableSpell.cs" />
+    <Compile Include="Core\Events\Load.cs" />
     <Compile Include="Core\Events\Stealth.cs" />
     <Compile Include="Core\Extensions\Enumerable.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector2Extensions.cs" />
@@ -90,10 +91,10 @@
     <Compile Include="Core\Render\CircleType.cs" />
     <Compile Include="Core\Render\DeviceOptions.cs" />
     <Compile Include="Core\Render\2D\Rectangle.cs" />
+    <Compile Include="Core\Render\Text.cs" />
     <Compile Include="Core\Render\Vertex.cs" />
     <Compile Include="Core\Utils\Cache.cs" />
     <Compile Include="Core\Utils\DelayAction.cs" />
-    <Compile Include="Core\Render\HpBarDamageIndicator.cs" />
     <Compile Include="Core\Utils\Logging.cs" />
     <Compile Include="Core\Utils\CallbackPerformance.cs" />
     <Compile Include="Core\Utils\Performance.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Core\Utils\Utility.cs" />
     <Compile Include="Core\Utils\Version.cs" />
     <Compile Include="Core\Variables.cs" />
+    <Compile Include="Core\Wrappers\HpBarDamageIndicator.cs" />
     <Compile Include="Core\Wrappers\LastCastedSpell.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
     <Compile Include="Core\Managers\MinionManager.cs" />
