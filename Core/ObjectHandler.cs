@@ -61,14 +61,14 @@ namespace LeagueSharp.CommonEx.Core
             {
                 return
                     (IEnumerable<Obj_AI_Hero>)
-                        Cache.Instance.AddOrGetExisting("AllHeroes", ObjectManager.Get<Obj_AI_Hero>, "ObjectHandler");
+                        Cache.Instance.AddOrGetExisting("AllHeroes", GetFast<Obj_AI_Hero>, "ObjectHandler");
             }
         }
 
         /// <summary>
         ///     Gets all of the enemy <see cref="Obj_AI_Hero" />s.
         /// </summary>
-        public static IEnumerable<Obj_AI_Hero> Enemies
+        public static IEnumerable<Obj_AI_Hero> EnemyHeroes
         {
             get
             {
@@ -82,7 +82,7 @@ namespace LeagueSharp.CommonEx.Core
         /// <summary>
         ///     Gets all of the ally <see cref="Obj_AI_Hero" />s.
         /// </summary>
-        public static IEnumerable<Obj_AI_Hero> Allies
+        public static IEnumerable<Obj_AI_Hero> AllyHeroes
         {
             get
             {
@@ -90,6 +90,22 @@ namespace LeagueSharp.CommonEx.Core
                     (IEnumerable<Obj_AI_Hero>)
                         Cache.Instance.AddOrGetExisting("Allies", () => AllHeroes.Where(x => x.IsAlly), "ObjectHandler");
             }
+        }
+
+        /// <summary>
+        ///     Gets all of the ally <see cref="Obj_AI_Base" />s.
+        /// </summary>
+        public static IEnumerable<Obj_AI_Base> Allies
+        {
+            get { return GetFast<Obj_AI_Base>().Where(x => x.IsAlly); }
+        }
+
+        /// <summary>
+        ///     Gets all of the ally <see cref="Obj_AI_Base" />s.
+        /// </summary>
+        public static IEnumerable<Obj_AI_Base> Enemies
+        {
+            get { return GetFast<Obj_AI_Base>().Where(x => x.IsEnemy); }
         }
 
         private static void GameObjectOnOnDelete(GameObject sender, EventArgs args)
