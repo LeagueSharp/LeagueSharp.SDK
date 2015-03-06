@@ -21,7 +21,7 @@ namespace LeagueSharp.CommonEx.Core
             get
             {
                 return
-                    Cache.Instance.AddOrGetExisting("LogDir", () => Path.Combine(LeagueSharpDirectory, "Logs"))
+                    Cache.Instance.AddOrGetExisting("LogDirectory", () => Path.Combine(LeagueSharpDirectory, "Logs"))
                         .ToString();
             }
         }
