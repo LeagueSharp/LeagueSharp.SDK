@@ -135,7 +135,7 @@ namespace LeagueSharp.CommonEx.Core.Events
             }
 
             foreach (var newArgs in
-                ObjectHandler.Enemies.Select(GetInterruptableTargetData).Where(newArgs => newArgs != null))
+                ObjectHandler.EnemyHeroes.Select(GetInterruptableTargetData).Where(newArgs => newArgs != null))
             {
                 OnInterruptableTarget(newArgs);
             }

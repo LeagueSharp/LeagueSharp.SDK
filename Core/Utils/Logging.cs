@@ -120,9 +120,9 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
             try
             {
-                if (!Directory.Exists(Constants.LogDir))
+                if (!Directory.Exists(Constants.LogDirectory))
                 {
-                    Directory.CreateDirectory(Constants.LogDir);
+                    Directory.CreateDirectory(Constants.LogDirectory);
                 }
 
                 var path = Path.Combine(Constants.LeagueSharpDirectory, "Logs", Constants.LogFileName);
