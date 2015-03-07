@@ -158,20 +158,14 @@ namespace LeagueSharp.CommonEx.Core
         /// <returns>IEnumerable of the type.</returns>
         public static IEnumerable<T> GetFast<T>() where T : GameObject, new()
         {
-            // Quick and simple workaround for getting GameObjects, since no gameobject will be type LeagueSharp.GameObject.
-            if (typeof(T).ToString() != "LeagueSharp.GameObject")
-            {
-                return (IEnumerable<T>) Cache.Instance.Get<List<GameObject>>(typeof(T).ToString(), "ObjectHandler");
-            }
-
-            var list = new List<T>();
+            var list = new List<GameObject>();
 
             foreach (var savedType in SavedTypes)
             {
-                list.AddRange((IEnumerable<T>) Cache.Instance.Get<List<GameObject>>(savedType, "ObjectHandler"));
+                list.AddRange(Cache.Instance.Get<List<GameObject>>(savedType, "ObjectHandler").OfType<T>());
             }
 
-            return list;
+            return (IEnumerable<T>) list;
         }
     }
 }
