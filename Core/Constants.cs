@@ -1,9 +1,7 @@
 ﻿#region
 
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using LeagueSharp.CommonEx.Core.Utils;
 
 #endregion
@@ -18,12 +16,12 @@ namespace LeagueSharp.CommonEx.Core
         /// <summary>
         ///     The directory where logs will be created.
         /// </summary>
-        public static string LogDir
+        public static string LogDirectory
         {
             get
             {
                 return
-                    Cache.Instance.AddOrGetExisting("LogDir", () => Path.Combine(LeagueSharpDirectory, "Logs"))
+                    Cache.Instance.AddOrGetExisting("LogDirectory", () => Path.Combine(LeagueSharpDirectory, "Logs"))
                         .ToString();
             }
         }
@@ -49,14 +47,8 @@ namespace LeagueSharp.CommonEx.Core
             get
             {
                 return
-                    Cache.Instance.AddOrGetExisting(
-                        "LeagueSharpDir",
-                        () =>
-                            Directory.GetParent(
-                                Process.GetCurrentProcess()
-                                    .Modules.Cast<ProcessModule>()
-                                    .First(p => Path.GetFileName(p.ModuleName) == "Leaguesharp.Core.dll")
-                                    .FileName).FullName).ToString();
+                    Cache.Instance.AddOrGetExisting("LeagueSharpDir", () => AppDomain.CurrentDomain.BaseDirectory)
+                        .ToString();
             }
         }
     }
