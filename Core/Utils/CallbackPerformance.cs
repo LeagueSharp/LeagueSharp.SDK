@@ -21,15 +21,22 @@ namespace LeagueSharp.CommonEx.Core.Utils
         ///     (Caution: This will execute the function in realtime)
         /// </summary>
         /// <param name="funcCallback">Function to be executed and measured</param>
+        /// <param name="iterations">Number of Times to run the callback</param>
         /// <param name="memberName">Member name of the function that called the measurement request.</param>
         /// <returns>Elapsed Ticks the function took (long-units)</returns>
-        public static long MeasureTicks(Action funcCallback, [CallerMemberName] string memberName = "")
+        public static long MeasureTicks(Action funcCallback,
+            int iterations = 1,
+            [CallerMemberName] string memberName = "")
         {
             try
             {
                 var stopwatch = Stopwatch.StartNew();
 
-                funcCallback();
+                for (var i = 0; i < iterations; ++i)
+                {
+                    funcCallback();
+                }
+
                 stopwatch.Stop();
 
                 Logging.Write()(
@@ -51,15 +58,22 @@ namespace LeagueSharp.CommonEx.Core.Utils
         ///     (Caution: This will execute the function in realtime)
         /// </summary>
         /// <param name="funcCallback">Function to be executed and measured</param>
+        /// <param name="iterations">Number of Times to run the callback</param>
         /// <param name="memberName">Member name of the function that called the measurement request.</param>
         /// <returns>Elapsed Milliseconds the function took (long-units)</returns>
-        public static long MeasureMilliseconds(Action funcCallback, [CallerMemberName] string memberName = "")
+        public static long MeasureMilliseconds(Action funcCallback,
+            int iterations = 1,
+            [CallerMemberName] string memberName = "")
         {
             try
             {
                 var stopwatch = Stopwatch.StartNew();
 
-                funcCallback();
+                for (var i = 0; i < iterations; ++i)
+                {
+                    funcCallback();
+                }
+
                 stopwatch.Stop();
 
                 Logging.Write()(
@@ -81,15 +95,22 @@ namespace LeagueSharp.CommonEx.Core.Utils
         ///     (Caution: This will execute the function in realtime)
         /// </summary>
         /// <param name="funcCallback">Function to be executed and measured</param>
+        /// <param name="iterations">Number of Times to run the callback</param>
         /// <param name="memberName">Member name of the function that called the measurement request.</param>
         /// <returns>Elapsed Time Span the function took (long-units)</returns>
-        public static TimeSpan MeasureTimeSpan(Action funcCallback, [CallerMemberName] string memberName = "")
+        public static TimeSpan MeasureTimeSpan(Action funcCallback,
+            int iterations = 1,
+            [CallerMemberName] string memberName = "")
         {
             try
             {
                 var stopwatch = Stopwatch.StartNew();
 
-                funcCallback();
+                for (var i = 0; i < iterations; ++i)
+                {
+                    funcCallback();
+                }
+
                 stopwatch.Stop();
 
                 Logging.Write()(

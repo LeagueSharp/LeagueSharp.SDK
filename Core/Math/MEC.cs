@@ -232,9 +232,9 @@ namespace LeagueSharp.CommonEx.Core.Math
         ///     WRST horizontal from the point (x1, y1) to (x2, y2).
         ///     In other words, AngleValue(x1, y1, x2, y2) is not
         ///     the angle, but if:
-        ///     Angle(x1, y1, x2, y2) > Angle(x1, y1, x2, y2)
+        ///         Angle(x1, y1, x2, y2) > Angle(x1, y1, x2, y2)
         ///     then
-        ///     AngleValue(x1, y1, x2, y2) > AngleValue(x1, y1, x2, y2)
+        ///         AngleValue(x1, y1, x2, y2) > AngleValue(x1, y1, x2, y2)
         ///     this angle is greater than the angle for another set
         ///     of points,) this number for
         ///     This function is dy / (dy + dx).
@@ -357,7 +357,16 @@ namespace LeagueSharp.CommonEx.Core.Math
             }
         }
 
-        // Return true if the indicated circle encloses all of the points.
+        /// <summary>
+        ///     Returns whether the indicated circle encloses all of the points.
+        /// </summary>
+        /// <param name="center">Center of the Circle</param>
+        /// <param name="radius2">Circle Radius</param>
+        /// <param name="points">Points List</param>
+        /// <param name="skip1">Skip certain point 1</param>
+        /// <param name="skip2">Skip ceratin point 2</param>
+        /// <param name="skip3">Skip ceratin point 3</param>
+        /// <returns></returns>
         private static bool CircleEnclosesPoints(Vector2 center,
             float radius2,
             IEnumerable<Vector2> points,
@@ -371,7 +380,14 @@ namespace LeagueSharp.CommonEx.Core.Math
                 select dx * dx + dy * dy).All(testRadius2 => !(testRadius2 > radius2));
         }
 
-        // Find a circle through the three points.
+        /// <summary>
+        ///     Find a circle through three Vector2 points
+        /// </summary>
+        /// <param name="a">Vector2 point A</param>
+        /// <param name="b">Vector2 point B</param>
+        /// <param name="c">Vector2 point C</param>
+        /// <param name="center">Returned Vector2 Center</param>
+        /// <param name="radius2">Retuned Circle Radius</param>
         private static void FindCircle(Vector2 a, Vector2 b, Vector2 c, out Vector2 center, out float radius2)
         {
             // Get the perpendicular bisector of (x1, y1) and (x2, y2).

@@ -1,6 +1,8 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using SharpDX;
 
 #endregion
@@ -145,6 +147,58 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
             }
 
             return distance;
+        }
+
+        /// <summary>
+        ///     Returns the total distance of a path.
+        /// </summary>
+        public static float PathLength(this List<Vector2> path)
+        {
+            var distance = 0f;
+            for (var i = 0; i < path.Count - 1; i++)
+            {
+                distance += path[i].Distance(path[i + 1]);
+            }
+            return distance;
+        }
+
+        /// <summary>
+        ///     Returns the cross product Z value.
+        /// </summary>
+        public static float CrossProduct(this Vector2 self, Vector2 other)
+        {
+            return other.Y * self.X - other.X * self.Y;
+        }
+
+        /// <summary>
+        ///     Returns if the Vector2 is on the screen.
+        /// </summary>
+        /// <param name="vector2">Extended SharpDX Vector2</param>
+        /// <returns>Is Vector2 on screen</returns>
+        public static bool IsOnScreen(this Vector2 vector2)
+        {
+            return vector2.ToVector3().IsOnScreen();
+        }
+
+        /// <summary>
+        ///     Returns if the Vector2 position is a wall.
+        /// </summary>
+        /// <param name="vector2">Extended SharpDX Vector2</param>
+        /// <returns>Is Vector2 position a wall position</returns>
+        public static bool IsWall(this Vector2 vector2)
+        {
+            return vector2.ToVector3().IsWall();
+        }
+
+        /// <summary>
+        ///     Returns whether the given position is under a turret
+        /// </summary>
+        /// <param name="position">Extended SharpDX Vector2</param>
+        /// <param name="enemyTurretsOnly">Include Enemy Turret Only</param>
+        /// <returns>Is Position under a turret</returns>
+        public static bool IsUnderTurret(this Vector2 position, bool enemyTurretsOnly)
+        {
+            return position.ToVector3().IsUnderTurret(enemyTurretsOnly);
         }
 
         #region AngleBetween
@@ -369,6 +423,24 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
             return new Vector4(vector2, z, w);
         }
 
+        /// <summary>
+        ///     Transforms an extended Vector2 List into a Vector3 List.
+        /// </summary>
+        /// <returns>Vector3 List</returns>
+        public static List<Vector3> ToVector3(this List<Vector2> path)
+        {
+            return path.Select(point => point.ToVector3()).ToList();
+        }
+
+        /// <summary>
+        ///     Transforms an extended Vector2 List into a Vector4 List.
+        /// </summary>
+        /// <returns>Vector4 List</returns>
+        public static List<Vector4> ToVector4(this List<Vector2> path)
+        {
+            return path.Select(point => point.ToVector4()).ToList();
+        }
+
         #endregion
 
         #region Distance
@@ -404,6 +476,24 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         public static float Distance(this Vector2 vector2, Vector4 toVector4)
         {
             return Vector2.Distance(vector2, toVector4.ToVector2());
+        }
+
+        /// <summary>
+        ///     Returns the distance to the line segment.
+        /// </summary>
+        /// <param name="point">Extended SharpDX Vector2</param>
+        /// <param name="segmentStart">Vector2 Segment Start</param>
+        /// <param name="segmentEnd">Vector2 Segment End</param>
+        /// <param name="onlyIfOnSegment">Only if Segment</param>
+        /// <returns>The distance between the point and the segment.</returns>
+        public static float Distance(this Vector2 point,
+            Vector2 segmentStart,
+            Vector2 segmentEnd,
+            bool onlyIfOnSegment = false)
+        {
+            var objects = point.ProjectOn(segmentStart, segmentEnd);
+
+            return (objects.IsOnSegment || onlyIfOnSegment == false) ? Vector2.Distance(objects.SegmentPoint, point) : float.MaxValue;
         }
 
         #endregion
@@ -443,6 +533,216 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
             return Vector2.DistanceSquared(vector2, toVector4.ToVector2());
         }
 
+        /// <summary>
+        ///     Returns the squared distance to the line segment.
+        /// </summary>
+        /// <param name="point">Extended SharpDX Vector2</param>
+        /// <param name="segmentStart">Vector2 Segment Start</param>
+        /// <param name="segmentEnd">Vector2 Segment End</param>
+        /// <param name="onlyIfOnSegment">Only if Segment</param>
+        /// <returns>The squared distance between the point and the segment.</returns>
+        public static float DistanceSquared(this Vector2 point,
+            Vector2 segmentStart,
+            Vector2 segmentEnd,
+            bool onlyIfOnSegment = false)
+        {
+            var objects = point.ProjectOn(segmentStart, segmentEnd);
+
+            return (objects.IsOnSegment || onlyIfOnSegment == false) ? Vector2.DistanceSquared(objects.SegmentPoint, point) : float.MaxValue;
+        }
+
+        #endregion
+
+        #region Intersection
+
+        /// <summary>
+        ///     Intersects two line segments.
+        /// </summary>
+        /// <param name="lineSegment1Start">Line Segment 1 (Start)</param>
+        /// <param name="lineSegment1End">Line Segment 1 (End)</param>
+        /// <param name="lineSegment2Start">Line Segment 2 (Start)></param>
+        /// <param name="lineSegment2End">Line Segment 2 (End)</param>
+        /// <returns></returns>
+        public static IntersectionResult Intersection(this Vector2 lineSegment1Start,
+            Vector2 lineSegment1End,
+            Vector2 lineSegment2Start,
+            Vector2 lineSegment2End)
+        {
+            double deltaACy = lineSegment1Start.Y - lineSegment2Start.Y;
+            double deltaDCx = lineSegment2End.X - lineSegment2Start.X;
+            double deltaACx = lineSegment1Start.X - lineSegment2Start.X;
+            double deltaDCy = lineSegment2End.Y - lineSegment2Start.Y;
+            double deltaBAx = lineSegment1End.X - lineSegment1Start.X;
+            double deltaBAy = lineSegment1End.Y - lineSegment1Start.Y;
+
+            var denominator = deltaBAx * deltaDCy - deltaBAy * deltaDCx;
+            var numerator = deltaACy * deltaDCx - deltaACx * deltaDCy;
+
+            if (System.Math.Abs(denominator) < float.Epsilon)
+            {
+                if (System.Math.Abs(numerator) < float.Epsilon)
+                {
+                    // collinear. Potentially infinite intersection points.
+                    // Check and return one of them.
+                    if (lineSegment1Start.X >= lineSegment2Start.X && lineSegment1Start.X <= lineSegment2End.X)
+                    {
+                        return new IntersectionResult(true, lineSegment1Start);
+                    }
+                    if (lineSegment2Start.X >= lineSegment1Start.X && lineSegment2Start.X <= lineSegment1End.X)
+                    {
+                        return new IntersectionResult(true, lineSegment2Start);
+                    }
+                    return new IntersectionResult();
+                }
+                // parallel
+                return new IntersectionResult();
+            }
+
+            var r = numerator / denominator;
+            if (r < 0 || r > 1)
+            {
+                return new IntersectionResult();
+            }
+
+            var s = (deltaACy * deltaBAx - deltaACx * deltaBAy) / denominator;
+            if (s < 0 || s > 1)
+            {
+                return new IntersectionResult();
+            }
+
+            return new IntersectionResult(
+                true,
+                new Vector2((float)(lineSegment1Start.X + r * deltaBAx), (float)(lineSegment1Start.Y + r * deltaBAy)));
+        }
+
+        #endregion
+
+        #region Vector Movement Collision
+
+        /// <summary>
+        ///     Calculates movement collision between two vectors points.
+        /// </summary>
+        /// <param name="startPoint1">Starting Point 1</param>
+        /// <param name="endPoint1">Ending Point 1</param>
+        /// <param name="v1">Velociy 1</param>
+        /// <param name="startPoint2">Starting Point 2</param>
+        /// <param name="v2">Velociy 2</param>
+        /// <param name="delay">Delay</param>
+        /// <returns>Object contains a float and a vector2.</returns>
+        public static Object[] VectorMovementCollision(this Vector2 startPoint1,
+            Vector2 endPoint1,
+            float v1,
+            Vector2 startPoint2,
+            float v2,
+            float delay = 0f)
+        {
+            float sP1X = startPoint1.X,
+                sP1Y = startPoint1.Y,
+                eP1X = endPoint1.X,
+                eP1Y = endPoint1.Y,
+                sP2X = startPoint2.X,
+                sP2Y = startPoint2.Y;
+
+            float d = eP1X - sP1X, e = eP1Y - sP1Y;
+            float dist = (float)System.Math.Sqrt(d * d + e * e), t1 = float.NaN;
+            float s = System.Math.Abs(dist) > float.Epsilon ? v1 * d / dist : 0,
+                k = (System.Math.Abs(dist) > float.Epsilon) ? v1 * e / dist : 0f;
+
+            float r = sP2X - sP1X, j = sP2Y - sP1Y;
+            var c = r * r + j * j;
+
+
+            if (dist > 0f)
+            {
+                if (System.Math.Abs(v1 - float.MaxValue) < float.Epsilon)
+                {
+                    var t = dist / v1;
+                    t1 = v2 * t >= 0f ? t : float.NaN;
+                }
+                else if (System.Math.Abs(v2 - float.MaxValue) < float.Epsilon)
+                {
+                    t1 = 0f;
+                }
+                else
+                {
+                    float a = s * s + k * k - v2 * v2, b = -r * s - j * k;
+
+                    if (System.Math.Abs(a) < float.Epsilon)
+                    {
+                        if (System.Math.Abs(b) < float.Epsilon)
+                        {
+                            t1 = (System.Math.Abs(c) < float.Epsilon) ? 0f : float.NaN;
+                        }
+                        else
+                        {
+                            var t = -c / (2 * b);
+                            t1 = (v2 * t >= 0f) ? t : float.NaN;
+                        }
+                    }
+                    else
+                    {
+                        var sqr = b * b - a * c;
+                        if (sqr >= 0)
+                        {
+                            var nom = (float)System.Math.Sqrt(sqr);
+                            var t = (-nom - b) / a;
+                            t1 = v2 * t >= 0f ? t : float.NaN;
+                            t = (nom - b) / a;
+                            var t2 = (v2 * t >= 0f) ? t : float.NaN;
+
+                            if (!float.IsNaN(t2) && !float.IsNaN(t1))
+                            {
+                                if (t1 >= delay && t2 >= delay)
+                                {
+                                    t1 = System.Math.Min(t1, t2);
+                                }
+                                else if (t2 >= delay)
+                                {
+                                    t1 = t2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (System.Math.Abs(dist) < float.Epsilon)
+            {
+                t1 = 0f;
+            }
+
+            return new Object[] { t1, (!float.IsNaN(t1)) ? new Vector2(sP1X + s * t1, sP1Y + k * t1) : new Vector2() };
+        }
+
+        #endregion
+
+        #region Circle to Circle Intersection
+
+        /// <summary>
+        ///     Returns the two intersection points between two circles.
+        /// </summary>
+        /// <param name="center1">Center of Circle 1</param>
+        /// <param name="center2">Center of Circle 2</param>
+        /// <param name="radius1">Circle 1 Radius</param>
+        /// <param name="radius2">Circle 2 Radius</param>
+        /// <returns></returns>
+        public static Vector2[] CircleCircleIntersection(this Vector2 center1, Vector2 center2, float radius1, float radius2)
+        {
+            var d = center1.Distance(center2);
+
+            if (d > radius1 + radius2 || (d <= System.Math.Abs(radius1 - radius2)))
+            {
+                return new Vector2[] { };
+            }
+
+            var a = (radius1 * radius1 - radius2 * radius2 + d * d) / (2 * d);
+            var h = (float)System.Math.Sqrt(radius1 * radius1 - a * a);
+            var direction = (center2 - center1).Normalized();
+            var pa = center1 + a * direction;
+            var s1 = pa + h * direction.Perpendicular();
+            var s2 = pa - h * direction.Perpendicular();
+            return new[] { s1, s2 };
+        }
+
         #endregion
     }
 
@@ -471,6 +771,33 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
             IsOnSegment = isOnSegment;
             SegmentPoint = segmentPoint;
             LinePoint = linePoint;
+        }
+    }
+
+    /// <summary>
+    ///     Holds info for the <see cref="Vector2Extensions.Intersection"/> method.
+    /// </summary>
+    public struct IntersectionResult
+    {
+        /// <summary>
+        ///     Returns if both of the points intersect.
+        /// </summary>
+        public bool Intersects;
+
+        /// <summary>
+        ///     Intersection point
+        /// </summary>
+        public Vector2 Point;
+
+        /// <summary>
+        ///     Constructor for Intersection Result
+        /// </summary>
+        /// <param name="intersects">Intersection of input</param>
+        /// <param name="point">Intersection Point</param>
+        public IntersectionResult(bool intersects = false, Vector2 point = new Vector2())
+        {
+            Intersects = intersects;
+            Point = point;
         }
     }
 }

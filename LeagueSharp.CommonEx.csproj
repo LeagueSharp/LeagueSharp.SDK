@@ -62,7 +62,16 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Enumerations\DamageType.cs" />
+    <Compile Include="Core\Events\Gapcloser.cs" />
+    <Compile Include="Core\Math\Prediction\Health.cs" />
+    <Compile Include="Core\Spells.cs" />
+    <Compile Include="Core\Utils\AutoAttack.cs" />
+    <Compile Include="Core\Utils\CallbackPerformance.cs" />
     <Compile Include="Core\Constants.cs" />
+    <Compile Include="Core\Enumerations\CollisionableObjects.cs" />
+    <Compile Include="Core\Enumerations\HitChance.cs" />
+    <Compile Include="Core\Enumerations\SkillshotType.cs" />
     <Compile Include="Core\Events\Dash.cs" />
     <Compile Include="Core\Events\InterruptableSpell.cs" />
     <Compile Include="Core\Events\Load.cs" />
@@ -72,6 +81,7 @@
     <Compile Include="Core\Extensions\SharpDX\Vector3Extensions.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector4Extensions.cs" />
     <Compile Include="Core\Extensions\Unit.cs" />
+    <Compile Include="Core\Math\Collision.cs" />
     <Compile Include="Core\Math\MathUtils.cs" />
     <Compile Include="Core\Math\MEC.cs" />
     <Compile Include="Core\Math\Polygons\Arc.cs" />
@@ -81,6 +91,9 @@
     <Compile Include="Core\Math\Polygons\Rectangle.cs" />
     <Compile Include="Core\Math\Polygons\Ring.cs" />
     <Compile Include="Core\Math\Polygons\Sector.cs" />
+    <Compile Include="Core\Math\Prediction\Cluster.cs" />
+    <Compile Include="Core\Math\Prediction\Movement.cs" />
+    <Compile Include="Core\Math\Prediction\Path.cs" />
     <Compile Include="Core\Network\GamePacket.cs" />
     <Compile Include="Core\Network\Packet.cs" />
     <Compile Include="Core\Network\NetworkUtils.cs" />
@@ -96,7 +109,6 @@
     <Compile Include="Core\Utils\Cache.cs" />
     <Compile Include="Core\Utils\DelayAction.cs" />
     <Compile Include="Core\Utils\Logging.cs" />
-    <Compile Include="Core\Utils\CallbackPerformance.cs" />
     <Compile Include="Core\Utils\Performance.cs" />
     <Compile Include="Core\Utils\TickOperation.cs" />
     <Compile Include="Core\Utils\Utility.cs" />
@@ -107,6 +119,7 @@
     <Compile Include="Core\Wrappers\Map.cs" />
     <Compile Include="Core\Managers\MinionManager.cs" />
     <Compile Include="Core\Wrappers\Spell.cs" />
+    <Compile Include="Core\Wrappers\SpellDataWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

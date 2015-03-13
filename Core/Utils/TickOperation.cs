@@ -51,7 +51,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             if (IsRunning)
             {
-                Game.OnGameUpdate -= OnTick;
+                Game.OnUpdate -= OnTick;
             }
             Action = null;
             TickDelay = 0;
@@ -68,7 +68,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             if (!IsRunning)
             {
-                Game.OnGameUpdate += OnTick;
+                Game.OnUpdate += OnTick;
             }
             return this;
         }
@@ -96,7 +96,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             if (IsRunning)
             {
-                Game.OnGameUpdate -= OnTick;
+                Game.OnUpdate -= OnTick;
             }
             return this;
         }

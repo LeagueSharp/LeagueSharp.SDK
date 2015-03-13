@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Collections.Generic;
+using System.Linq;
 using SharpDX;
 
 #endregion
@@ -123,6 +124,71 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         public static float Magnitude(this Vector3 vector3)
         {
             return (float) System.Math.Sqrt((vector3.X * vector3.X) + (vector3.Y * vector3.Y) + (vector3.Z * vector3.Z));
+        }
+
+        /// <summary>
+        ///     Returns the modifed Vector3 with a quick changed Z-axis value.
+        /// </summary>
+        /// <param name="v">Extended SharpDX Vector3</param>
+        /// <param name="value">Switched Z value in float-units</param>
+        /// <returns>Modified Vector3.</returns>
+        public static Vector3 SetZ(this Vector3 v, float? value = null)
+        {
+            if (value == null)
+            {
+                v.Z = Game.CursorPos.Z;
+            }
+            else
+            {
+                v.Z = (float)value;
+            }
+            return v;
+        }
+
+        /// <summary>
+        ///     Returns the total distance of a path.
+        /// </summary>
+        public static float PathLength(this List<Vector3> path)
+        {
+            var distance = 0f;
+            for (var i = 0; i < path.Count - 1; i++)
+            {
+                distance += path[i].Distance(path[i + 1]);
+            }
+            return distance;
+        }
+
+        /// <summary>
+        ///     Returns if the Vector3 is on the screen.
+        /// </summary>
+        /// <param name="vector3">Extended SharpDX Vector3</param>
+        /// <returns>Is Vector3 on screen</returns>
+        public static bool IsOnScreen(this Vector3 vector3)
+        {
+            var pos = Drawing.WorldToScreen(vector3);
+            return pos.X > 0 && pos.X <= Drawing.Width && pos.Y > 0 && pos.Y <= Drawing.Height;
+        }
+
+        /// <summary>
+        ///     Returns if the Vector3 position is a wall.
+        /// </summary>
+        /// <param name="vector3">Extended SharpDX Vector3</param>
+        /// <returns>Is Vector3 position a wall position</returns>
+        public static bool IsWall(this Vector3 vector3)
+        {
+            return NavMesh.GetCollisionFlags(vector3).HasFlag(CollisionFlags.Wall);
+        }
+
+        /// <summary>
+        ///     Returns whether the given position is under a turret
+        /// </summary>
+        /// <param name="position">Extended SharpDX Vector3</param>
+        /// <param name="enemyTurretsOnly">Include Enemy Turret Only</param>
+        /// <returns>Is Position under a turret</returns>
+        public static bool IsUnderTurret(this Vector3 position, bool enemyTurretsOnly)
+        {
+            return
+                ObjectManager.Get<Obj_AI_Turret>().Any(turret => turret.IsValidTarget(950, enemyTurretsOnly, position));
         }
 
         #region AngleBetween
@@ -344,6 +410,24 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         public static Vector4 ToVector4(this Vector3 vector3, float w = 1f)
         {
             return new Vector4(vector3, w);
+        }
+
+        /// <summary>
+        ///     Transforms an extended Vector3 List into a Vector2 List.
+        /// </summary>
+        /// <returns>Vector2 List</returns>
+        public static List<Vector2> ToVector2(this List<Vector3> path)
+        {
+            return path.Select(point => point.ToVector2()).ToList();
+        }
+
+        /// <summary>
+        ///     Transforms an extended Vector3 List into a Vector4 List.
+        /// </summary>
+        /// <returns>Vector4 List</returns>
+        public static List<Vector4> ToVector4(this List<Vector3> path)
+        {
+            return path.Select(point => point.ToVector4()).ToList();
         }
 
         #endregion

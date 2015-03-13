@@ -16,9 +16,24 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// <returns>Amount of damage done.</returns>
         public delegate float DamageToUnitDelegate(Obj_AI_Hero hero);
 
+        /// <summary>
+        ///     X-Axis Offset of the HP Bar
+        /// </summary>
         private const int XOffset = 10;
+
+        /// <summary>
+        ///     Y-Axis Offset of the HP Bar
+        /// </summary>
         private const int YOffset = 20;
+
+        /// <summary>
+        ///     Width of the HP Bar
+        /// </summary>
         private const int Width = 103;
+
+        /// <summary>
+        ///     Height of the HP Bar
+        /// </summary>
         private const int Height = 8;
 
         /// <summary>

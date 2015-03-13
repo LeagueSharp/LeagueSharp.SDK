@@ -1,8 +1,8 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
- GamePacket.cs is part of LeagueSharp.Common.
+ Copyright 2014 - 2015 LeagueSharp
+ GamePacket.cs is part of LeagueSharp.CommonEx.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -108,22 +108,22 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// </summary>
         public long Position
         {
-            get { return reader.BaseStream.Position; }
+            get { return Reader.BaseStream.Position; }
             set
             {
                 if (value >= 0L)
                 {
-                    reader.BaseStream.Position = value;
+                    Reader.BaseStream.Position = value;
                 }
             }
         }
 
-        private BinaryWriter writer
+        private BinaryWriter Writer
         {
             get { return packetData.Writer; }
         }
 
-        private BinaryReader reader
+        private BinaryReader Reader
         {
             get { return packetData.Reader; }
         }
@@ -138,7 +138,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// </summary>
         public long Size
         {
-            get { return reader.BaseStream.Length; }
+            get { return Reader.BaseStream.Length; }
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         public byte ReadByte(long position = -1)
         {
             Position = position;
-            return reader.ReadBytes(1)[0];
+            return Reader.ReadBytes(1)[0];
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         public short ReadShort(long position = -1)
         {
             Position = position;
-            return BitConverter.ToInt16(reader.ReadBytes(2), 0);
+            return BitConverter.ToInt16(Reader.ReadBytes(2), 0);
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         public float ReadFloat(long position = -1)
         {
             Position = position;
-            return BitConverter.ToSingle(reader.ReadBytes(4), 0);
+            return BitConverter.ToSingle(Reader.ReadBytes(4), 0);
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         public int ReadInteger(long position = -1)
         {
             Position = position;
-            return BitConverter.ToInt32(reader.ReadBytes(4), 0);
+            return BitConverter.ToInt32(Reader.ReadBytes(4), 0);
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         {
             for (var i = 0; i < repeat; i++)
             {
-                writer.Write(@byte);
+                Writer.Write(@byte);
             }
         }
 
@@ -237,7 +237,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <param name="s">Short to write</param>
         public void WriteShort(short s)
         {
-            writer.Write(s);
+            Writer.Write(s);
         }
 
         /// <summary>
@@ -246,7 +246,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <param name="f">Float to write</param>
         public void WriteFloat(float f)
         {
-            writer.Write(f);
+            Writer.Write(f);
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <param name="i">Integer to write</param>
         public void WriteInteger(int i)
         {
-            writer.Write(i);
+            Writer.Write(i);
         }
 
         /// <summary>
@@ -265,7 +265,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         public void WriteHexString(string hex)
         {
             hex = hex.Trim();
-            writer.Write(
+            Writer.Write(
                 Enumerable.Range(0, hex.Length)
                     .Where(x => x % 2 == 0)
                     .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
@@ -278,7 +278,7 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <param name="str">String to write</param>
         public void WriteString(string str)
         {
-            writer.Write(Encoding.UTF8.GetBytes(str));
+            Writer.Write(Encoding.UTF8.GetBytes(str));
         }
 
         /// <summary>

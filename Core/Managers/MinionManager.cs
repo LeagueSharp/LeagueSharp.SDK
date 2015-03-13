@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.Extensions;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.Math;
+using LeagueSharp.CommonEx.Core.Math.Prediction;
 using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.Managers
@@ -292,8 +294,20 @@ namespace LeagueSharp.CommonEx.Core.Managers
             return new FarmLocation(result, minionCount);
         }
 
-        //TODO: Fix this once we have predicition
-        /*public static List<Vector2> GetMinionsPredictedPositions(List<Obj_AI_Base> minions,
+        /// <summary>
+        ///     Returns a list of predicted minion positions.
+        /// </summary>
+        /// <param name="minions">Given Mininon List</param>
+        /// <param name="delay">Skillshot Delay</param>
+        /// <param name="width">Skillshot Width</param>
+        /// <param name="speed">Skillshot Speed</param>
+        /// <param name="from">From</param>
+        /// <param name="range">Skillshot Range</param>
+        /// <param name="collision">Has Collision Flag</param>
+        /// <param name="stype">Skillshot Type</param>
+        /// <param name="rangeCheckFrom">Range check from Vector3 source</param>
+        /// <returns></returns>
+        public static List<Vector2> GetMinionsPredictedPositions(List<Obj_AI_Base> minions,
             float delay,
             float width,
             float speed,
@@ -307,7 +321,7 @@ namespace LeagueSharp.CommonEx.Core.Managers
 
             return (from minion in minions
                 select
-                    Prediction.GetPrediction(
+                    Movement.GetPrediction(
                         new PredictionInput
                         {
                             Unit = minion,
@@ -322,8 +336,8 @@ namespace LeagueSharp.CommonEx.Core.Managers
                         })
                 into pos
                 where pos.Hitchance >= HitChance.High
-                select pos.UnitPosition.To2D()).ToList();
-        }*/
+                select pos.UnitPosition.ToVector2()).ToList();
+        }
 
 
         /// <summary>

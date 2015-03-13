@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Collections.Generic;
+using System.Linq;
 using SharpDX;
 
 #endregion
@@ -95,6 +96,88 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         public static float Magnitude(this Vector4 vector4)
         {
             return (float) System.Math.Sqrt((vector4.X * vector4.X) + (vector4.Y * vector4.Y) + (vector4.Z * vector4.Z));
+        }
+
+        /// <summary>
+        ///     Returns the modifed Vector4 with a quick changed Z-axis value.
+        /// </summary>
+        /// <param name="v">Extended SharpDX Vector4</param>
+        /// <param name="value">Switched Z value in float-units</param>
+        /// <returns>Modified Vector4.</returns>
+        public static Vector4 SetZ(this Vector4 v, float? value = null)
+        {
+            if (value == null)
+            {
+                v.Z = Game.CursorPos.Z;
+            }
+            else
+            {
+                v.Z = (float)value;
+            }
+            return v;
+        }
+
+        /// <summary>
+        ///     Returns the modifed Vector4 with a quick changed W-axis value.
+        /// </summary>
+        /// <param name="v">Extended SharpDX Vector4</param>
+        /// <param name="value">Switched W value in float-units</param>
+        /// <returns>Modified Vector4.</returns>
+        public static Vector4 SetW(this Vector4 v, float? value = null)
+        {
+            if (value == null)
+            {
+                v.W = 1.0f;
+            }
+            else
+            {
+                v.W = (float)value;
+            }
+            return v;
+        }
+
+        /// <summary>
+        ///     Returns the total distance of a path.
+        /// </summary>
+        public static float PathLength(this List<Vector4> path)
+        {
+            var distance = 0f;
+            for (var i = 0; i < path.Count - 1; i++)
+            {
+                distance += path[i].Distance(path[i + 1]);
+            }
+            return distance;
+        }
+
+        /// <summary>
+        ///     Returns if the Vector4 is on the screen.
+        /// </summary>
+        /// <param name="vector4">Extended SharpDX Vector4</param>
+        /// <returns>Is Vector4 on screen</returns>
+        public static bool IsOnScreen(this Vector4 vector4)
+        {
+            return vector4.ToVector3().IsOnScreen();
+        }
+
+        /// <summary>
+        ///     Returns if the Vector4 position is a wall.
+        /// </summary>
+        /// <param name="vector4">Extended SharpDX Vector4</param>
+        /// <returns>Is Vector4 position a wall position</returns>
+        public static bool IsWall(this Vector4 vector4)
+        {
+            return vector4.ToVector3().IsWall();
+        }
+
+        /// <summary>
+        ///     Returns whether the given position is under a turret
+        /// </summary>
+        /// <param name="position">Extended SharpDX Vector4</param>
+        /// <param name="enemyTurretsOnly">Include Enemy Turret Only</param>
+        /// <returns>Is Position under a turret</returns>
+        public static bool IsUnderTurret(this Vector4 position, bool enemyTurretsOnly)
+        {
+            return position.ToVector3().IsUnderTurret(enemyTurretsOnly);
         }
 
         #region AngleBetween
@@ -314,6 +397,24 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         public static Vector3 ToVector3(this Vector4 vector4)
         {
             return new Vector3(vector4.X, vector4.Y, vector4.Z);
+        }
+
+        /// <summary>
+        ///     Transforms an extended Vector4 List into a Vector2 List.
+        /// </summary>
+        /// <returns>Vector3 List</returns>
+        public static List<Vector2> ToVector2(this List<Vector4> path)
+        {
+            return path.Select(point => point.ToVector2()).ToList();
+        }
+
+        /// <summary>
+        ///     Transforms an extended Vector4 List into a Vector3 List.
+        /// </summary>
+        /// <returns>Vector4 List</returns>
+        public static List<Vector3> ToVector3(this List<Vector4> path)
+        {
+            return path.Select(point => point.ToVector3()).ToList();
         }
 
         #endregion
