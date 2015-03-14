@@ -432,11 +432,13 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// </summary>
         public void StartCharging()
         {
-            if (!IsCharging && Variables.TickCount - _chargedReqSentT > 400 + Game.Ping)
+            if (IsCharging || Variables.TickCount - _chargedReqSentT <= 400 + Game.Ping)
             {
-                ObjectManager.Player.Spellbook.CastSpell(Slot);
-                _chargedReqSentT = Variables.TickCount;
+                return;
             }
+
+            ObjectManager.Player.Spellbook.CastSpell(Slot);
+            _chargedReqSentT = Variables.TickCount;
         }
 
         /// <summary>
@@ -444,11 +446,13 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// </summary>
         public void StartCharging(Vector3 position)
         {
-            if (!IsCharging && Variables.TickCount - _chargedReqSentT > 400 + Game.Ping)
+            if (IsCharging || Variables.TickCount - _chargedReqSentT <= 400 + Game.Ping)
             {
-                ObjectManager.Player.Spellbook.CastSpell(Slot, position);
-                _chargedReqSentT = Variables.TickCount;
+                return;
             }
+
+            ObjectManager.Player.Spellbook.CastSpell(Slot, position);
+            _chargedReqSentT = Variables.TickCount;
         }
 
         /// <summary>
@@ -1035,12 +1039,16 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         ///     Please make sure to set the Spell.DamageType Property to the type of damage this spell does (if not done on
         ///     initialization).
         /// </summary>
-        /// <param name="extraRange">Extran Range</param>
+        /// <param name="extraRange">Extra Range</param>
+        /// <param name="acccountForCollision">If true, will get a target that can be hit by the spell.</param>
         /// <param name="champsToIgnore">Champions to Ignore</param>
-        public Obj_AI_Hero GetTarget(float extraRange = 0, IEnumerable<Obj_AI_Hero> champsToIgnore = null)
+        public Obj_AI_Hero GetTarget(float extraRange = 0,
+            bool acccountForCollision = false,
+            IEnumerable<Obj_AI_Hero> champsToIgnore = null)
         {
-            //return TargetSelector.GetTarget(Range + extraRange, DamageType, true, champsToIgnore, From);
-            return null; // TODO: TargetSelector
+            return acccountForCollision
+                ? TargetSelector.GetTargetNoCollision(this, champsToIgnore)
+                : TargetSelector.GetTarget(Range + extraRange, DamageType, From);
         }
 
         #endregion

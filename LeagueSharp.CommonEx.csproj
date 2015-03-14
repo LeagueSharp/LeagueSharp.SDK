@@ -126,6 +126,7 @@
     <Compile Include="Core\Managers\MinionManager.cs" />
     <Compile Include="Core\Wrappers\Spell.cs" />
     <Compile Include="Core\Wrappers\SpellDataWrapper.cs" />
+    <Compile Include="Core\Wrappers\TargetSelector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
