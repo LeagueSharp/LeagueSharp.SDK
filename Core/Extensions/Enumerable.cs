@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
+using LeagueSharp.CommonEx.Core.Enumerations;
 
 #endregion
 

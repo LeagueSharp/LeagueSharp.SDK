@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LeagueSharp.CommonEx.Core.Enumerations;
 using SharpDX.Direct3D9;
 
 #endregion
@@ -277,31 +278,5 @@ namespace LeagueSharp.CommonEx.Core.Render
 
             return this;
         }
-    }
-
-    /// <summary>
-    ///     Device Option Indetity types.
-    /// </summary>
-    public enum DeviceOptionIdentity
-    {
-        /// <summary>
-        ///     Texture Type
-        /// </summary>
-        Texture,
-
-        /// <summary>
-        ///     PixelShader Type
-        /// </summary>
-        PixelShader,
-
-        /// <summary>
-        ///     StreamSource Type
-        /// </summary>
-        StreamSource,
-
-        /// <summary>
-        ///     VertexFormat Type
-        /// </summary>
-        VertexFormat
     }
 }

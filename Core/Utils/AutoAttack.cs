@@ -24,41 +24,11 @@ namespace LeagueSharp.CommonEx.Core.Utils
         };
 
         /// <summary>
-        ///     Spells which are not attacks but contain the "attack" word.
-        /// </summary>
-        private static readonly string[] NoAttacks =
-        {
-            "jarvanivcataclysmattack", "monkeykingdoubleattack",
-            "shyvanadoubleattack", "shyvanadoubleattackdragon", "zyragraspingplantattack", "zyragraspingplantattack2",
-            "zyragraspingplantattackfire", "zyragraspingplantattack2fire"
-        };
-
-        /// <summary>
-        ///     Spells that are attacks, which don't contain the "attack" word.
-        /// </summary>
-        private static readonly string[] Attacks =
-        {
-            "caitlynheadshotmissile", "frostarrow", "garenslash2",
-            "kennenmegaproc", "lucianpassiveattack", "masteryidoublestrike", "quinnwenhanced", "renektonexecute",
-            "renektonsuperexecute", "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust", "xenzhaothrust2",
-            "xenzhaothrust3"
-        };
-
-        /// <summary>
         ///     Returns true if the spellname resets the attack timer.
         /// </summary>
         public static bool IsAutoAttackReset(string name)
         {
             return AttackResets.Contains(name.ToLower());
-        }
-
-        /// <summary>
-        ///     Returns true if the spellname is an auto-attack.
-        /// </summary>
-        public static bool IsAutoAttack(string name)
-        {
-            return (name.ToLower().Contains("attack") && !NoAttacks.Contains(name.ToLower())) ||
-                   Attacks.Contains(name.ToLower());
         }
 
         /// <summary>

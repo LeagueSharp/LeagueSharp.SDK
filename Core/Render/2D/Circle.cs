@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using SharpDX;
 using SharpDX.Direct3D9;

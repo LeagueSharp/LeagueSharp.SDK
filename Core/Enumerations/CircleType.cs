@@ -1,4 +1,4 @@
-﻿namespace LeagueSharp.CommonEx.Core.Render
+﻿namespace LeagueSharp.CommonEx.Core.Enumerations
 {
     /// <summary>
     ///     Circle Type to draw.

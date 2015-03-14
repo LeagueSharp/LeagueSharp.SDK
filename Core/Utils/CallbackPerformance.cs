@@ -3,6 +3,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using LeagueSharp.CommonEx.Core.Enumerations;
 
 #endregion
 

@@ -63,6 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Enumerations\DamageType.cs" />
+    <Compile Include="Core\Enumerations\DeviceOptionIdentity.cs" />
+    <Compile Include="Core\Enumerations\LogLevel.cs" />
+    <Compile Include="Core\Enumerations\MinionOrderTypes.cs" />
+    <Compile Include="Core\Enumerations\MinionTeam.cs" />
+    <Compile Include="Core\Enumerations\MinionTypes.cs" />
+    <Compile Include="Core\Enumerations\PerformanceType.cs" />
     <Compile Include="Core\Events\Gapcloser.cs" />
     <Compile Include="Core\Math\Prediction\Health.cs" />
     <Compile Include="Core\Spells.cs" />
@@ -101,7 +107,7 @@
     <Compile Include="Core\Render\2D\Circle.cs" />
     <Compile Include="Core\Render\2D\CircleFilled.cs" />
     <Compile Include="Core\Render\2D\Line.cs" />
-    <Compile Include="Core\Render\CircleType.cs" />
+    <Compile Include="Core\Enumerations\CircleType.cs" />
     <Compile Include="Core\Render\DeviceOptions.cs" />
     <Compile Include="Core\Render\2D\Rectangle.cs" />
     <Compile Include="Core\Render\Text.cs" />
@@ -111,7 +117,7 @@
     <Compile Include="Core\Utils\Logging.cs" />
     <Compile Include="Core\Utils\Performance.cs" />
     <Compile Include="Core\Utils\TickOperation.cs" />
-    <Compile Include="Core\Utils\Utility.cs" />
+    <Compile Include="Core\Utils\Spells.cs" />
     <Compile Include="Core\Utils\Version.cs" />
     <Compile Include="Core\Variables.cs" />
     <Compile Include="Core\Wrappers\HpBarDamageIndicator.cs" />

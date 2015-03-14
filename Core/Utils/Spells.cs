@@ -9,7 +9,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
     /// <summary>
     ///     General Utils.
     /// </summary>
-    public static class Utility
+    public static class Spells
     {
         /// <summary>
         ///     Returns if the spell is ready to use.

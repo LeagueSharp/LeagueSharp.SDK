@@ -3,6 +3,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using LeagueSharp.CommonEx.Core.Enumerations;
 
 #endregion
 
@@ -120,26 +121,5 @@ namespace LeagueSharp.CommonEx.Core.Utils
             Logging.Write()(LogLevel.Info, format, memberName, argument);
             stopwatch = null;
         }
-    }
-
-    /// <summary>
-    ///     Performance Type to log.
-    /// </summary>
-    public enum PerformanceType
-    {
-        /// <summary>
-        ///     Logs the Tick Count(CPU Ticks)
-        /// </summary>
-        TickCount,
-
-        /// <summary>
-        ///     Logs the number of miliseconds
-        /// </summary>
-        Milliseconds,
-
-        /// <summary>
-        ///     Logs the time spanned in TimeSpam format
-        /// </summary>
-        TimeSpan
     }
 }

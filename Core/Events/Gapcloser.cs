@@ -659,7 +659,9 @@ namespace LeagueSharp.CommonEx.Core.Events
                     TickCount = Variables.TickCount,
                     SkillType =
                         (args.Target != null && args.Target.IsMe) ? GapcloserType.Targeted : GapcloserType.Skillshot,
-                    Slot = ((Obj_AI_Hero) sender).GetSpellSlot(args.SData.Name)
+                    Slot = ((Obj_AI_Hero) sender).GetSpellSlot(args.SData.Name),
+                    IsDirectedToPlayer =
+                        ObjectManager.Player.Distance(args.End) < ObjectManager.Player.Distance(args.Start)
                 });
         }
 
@@ -721,6 +723,11 @@ namespace LeagueSharp.CommonEx.Core.Events
             ///     Tick of Gapcloser start
             /// </summary>
             public long TickCount;
+
+            /// <summary>
+            ///     Returns if the direction of the gapcloser is towards the player
+            /// </summary>
+            public bool IsDirectedToPlayer;
         }
 
         /// <summary>
