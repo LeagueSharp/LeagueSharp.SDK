@@ -10,17 +10,17 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <summary>
         ///     Sent on buying an item
         /// </summary>
-        public static Packet BuyItem = new Packet(0xD7, PacketChannel.C2S);
+        public static Packet BuyItem = new Packet(0xAD, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on moving camera or zooming.
         /// </summary>
-        public static Packet Camera = new Packet(0x10, PacketChannel.C2S, PacketProtocolFlags.NoFlags);
+        public static Packet Camera = new Packet(0x63, PacketChannel.C2S, PacketProtocolFlags.NoFlags);
 
         /// <summary>
         ///     Sent on a spell cast
         /// </summary>
-        public static Packet CastSpell = new Packet(0xE4, PacketChannel.C2S);
+        public static Packet CastSpell = new Packet(0x53, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on a chat message(in the game, not client)
@@ -30,67 +30,67 @@ namespace LeagueSharp.CommonEx.Core.Network
         /// <summary>
         ///     Sent on an emote
         /// </summary>
-        public static Packet Emote = new Packet(0x2C, PacketChannel.C2S);
+        public static Packet Emote = new Packet(0x12E, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on heartbeat
         /// </summary>
-        public static Packet HeartBeat = new Packet(0x4F, PacketChannel.GamePlay);
+        public static Packet HeartBeat = new Packet(0x8E, PacketChannel.GamePlay);
 
         /// <summary>
         ///     Sent on using objects(Clicking thresh lantern)
         /// </summary>
-        public static Packet UseObject = new Packet(0x90, PacketChannel.C2S);
+        public static Packet UseObject = new Packet(0x7A, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on an issue order(move to, hold position)
         /// </summary>
-        public static Packet IssueOrder = new Packet(0xB5, PacketChannel.C2S);
+        public static Packet IssueOrder = new Packet(0xD1, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on leveling spell
         /// </summary>
-        public static Packet LevelSpell = new Packet(0x9A, PacketChannel.C2S);
+        public static Packet LevelSpell = new Packet(0x12D, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on locking camera.
         /// </summary>
-        public static Packet LockCamera = new Packet(0xFD, PacketChannel.C2S);
+        public static Packet LockCamera = new Packet(0xA2, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on pausing games(tournament mode, custom games)
         /// </summary>
-        public static Packet PauseGame = new Packet(0x97, PacketChannel.C2S);
+        public static Packet PauseGame = new Packet(0x8F, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on game ping
         /// </summary>
-        public static Packet Ping = new Packet(0x122, PacketChannel.C2S);
+        public static Packet Ping = new Packet(0xD3, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on when game resumes from pause
         /// </summary>
-        public static Packet ResumeGame = new Packet(0x19, PacketChannel.C2S);
+        public static Packet ResumeGame = new Packet(0x7E, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent when opening score board.
         /// </summary>
-        public static Packet ScoreScreen = new Packet(0x96, PacketChannel.C2S);
+        public static Packet ScoreScreen = new Packet(0x91, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on selling an item.
         /// </summary>
-        public static Packet SellItem = new Packet(0x32, PacketChannel.C2S);
+        public static Packet SellItem = new Packet(0xAC, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on left clicking target.
         /// </summary>
-        public static Packet SetTarget = new Packet(0xA9, PacketChannel.C2S);
+        public static Packet SetTarget = new Packet(0x104, PacketChannel.C2S);
 
         /// <summary>
         ///     Sent on pressing the undo button in the shop.
         /// </summary>
-        public static Packet UndoBuy = new Packet(0x1C, PacketChannel.C2S);
+        public static Packet UndoBuy = new Packet(0xBB, PacketChannel.C2S);
 
         /// <summary>
         ///     The channel of the packet.
