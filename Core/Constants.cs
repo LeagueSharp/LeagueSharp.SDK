@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using LeagueSharp.CommonEx.Core.Utils;
+using SharpDX.Direct3D9;
 
 #endregion
 
@@ -51,5 +52,13 @@ namespace LeagueSharp.CommonEx.Core
                         .ToString();
             }
         }
+
+        /// <summary>
+        ///     LeagueSharp Font.
+        /// </summary>
+        public static Font LeagueSharpFont = new Font(
+            Drawing.Direct3DDevice, 14, 0, FontWeight.DoNotCare, 0, false, FontCharacterSet.Default,
+            FontPrecision.Default, FontQuality.Default, FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative,
+            "Tahoma");
     }
 }

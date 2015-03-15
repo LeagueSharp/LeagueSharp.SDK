@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
+using LeagueSharp.CommonEx.Core.Enumerations;
 using SharpDX;
+
+#endregion
 
 namespace LeagueSharp.CommonEx.Core.Wrappers
 {
@@ -8,37 +13,6 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
     /// </summary>
     public class Map
     {
-        /// <summary>
-        ///     Enum of the names of maps.
-        /// </summary>
-        public enum MapType
-        {
-            /// <summary>
-            ///     Crystal Scar(Dominion)
-            /// </summary>
-            CrystalScar,
-
-            /// <summary>
-            ///     Howling Abyss(ARAM)
-            /// </summary>
-            HowlingAbyss,
-
-            /// <summary>
-            ///     Summoners Rift(5v5)
-            /// </summary>
-            SummonersRift,
-
-            /// <summary>
-            ///     Twisted Tree Line(3v3)
-            /// </summary>
-            TwistedTreeline,
-
-            /// <summary>
-            ///     Unknown map.(New gamemode/Map)
-            /// </summary>
-            Unknown
-        }
-
         private static readonly IDictionary<int, Map> MapById = new Dictionary<int, Map>
         {
             {

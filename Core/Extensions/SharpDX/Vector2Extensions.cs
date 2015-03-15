@@ -201,6 +201,19 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
             return position.ToVector3().IsUnderTurret(enemyTurretsOnly);
         }
 
+        /// <summary>
+        ///     Returns true if the point is under the rectangle
+        /// </summary>
+        /// <param name="point">Extended SharpDX Vector2</param>
+        /// <param name="x">Rectangle X-axis</param>
+        /// <param name="y">Rectangle Y-axis</param>
+        /// <param name="width">Rectangle width</param>
+        /// <param name="height">Rectangle height</param>
+        public static bool IsUnderRectangle(this Vector2 point, float x, float y, float width, float height)
+        {
+            return (point.X > x && point.X < x + width && point.Y > y && point.Y < y + height);
+        }
+
         #region AngleBetween
 
         /// <summary>

@@ -62,13 +62,16 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Enumerations\CastStates.cs" />
     <Compile Include="Core\Enumerations\DamageType.cs" />
     <Compile Include="Core\Enumerations\DeviceOptionIdentity.cs" />
     <Compile Include="Core\Enumerations\LogLevel.cs" />
+    <Compile Include="Core\Enumerations\MapType.cs" />
     <Compile Include="Core\Enumerations\MinionOrderTypes.cs" />
     <Compile Include="Core\Enumerations\MinionTeam.cs" />
     <Compile Include="Core\Enumerations\MinionTypes.cs" />
     <Compile Include="Core\Enumerations\PerformanceType.cs" />
+    <Compile Include="Core\Enumerations\TargetSelectorMode.cs" />
     <Compile Include="Core\Events\Gapcloser.cs" />
     <Compile Include="Core\Math\Prediction\Health.cs" />
     <Compile Include="Core\Spells.cs" />
@@ -88,7 +91,8 @@
     <Compile Include="Core\Extensions\SharpDX\Vector4Extensions.cs" />
     <Compile Include="Core\Extensions\Unit.cs" />
     <Compile Include="Core\Math\Collision.cs" />
-    <Compile Include="Core\Math\MathUtils.cs" />
+    <Compile Include="Core\Utils\Cursor.cs" />
+    <Compile Include="Core\Utils\Math.cs" />
     <Compile Include="Core\Math\MEC.cs" />
     <Compile Include="Core\Math\Polygons\Arc.cs" />
     <Compile Include="Core\Math\Polygons\Circle.cs" />
@@ -102,7 +106,7 @@
     <Compile Include="Core\Math\Prediction\Path.cs" />
     <Compile Include="Core\Network\GamePacket.cs" />
     <Compile Include="Core\Network\Packet.cs" />
-    <Compile Include="Core\Network\NetworkUtils.cs" />
+    <Compile Include="Core\Utils\Network.cs" />
     <Compile Include="Core\ObjectHandler.cs" />
     <Compile Include="Core\Render\2D\Circle.cs" />
     <Compile Include="Core\Render\2D\CircleFilled.cs" />
@@ -117,7 +121,7 @@
     <Compile Include="Core\Utils\Logging.cs" />
     <Compile Include="Core\Utils\Performance.cs" />
     <Compile Include="Core\Utils\TickOperation.cs" />
-    <Compile Include="Core\Utils\Spells.cs" />
+    <Compile Include="Core\Utils\Spell.cs" />
     <Compile Include="Core\Utils\Version.cs" />
     <Compile Include="Core\Variables.cs" />
     <Compile Include="Core\Wrappers\HpBarDamageIndicator.cs" />

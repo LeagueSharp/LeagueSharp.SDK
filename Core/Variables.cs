@@ -10,9 +10,9 @@ namespace LeagueSharp.CommonEx.Core
         /// <summary>
         ///     Safe TickCount.
         /// </summary>
-        public static long TickCount
+        public static int TickCount
         {
-            get { return DateTime.Now.Ticks / 10000; }
+            get { return (int)(Game.ClockTime * 1000); }
         }
     }
 }

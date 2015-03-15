@@ -15,21 +15,21 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <summary>
         ///     Action List.
         /// </summary>
-        public static List<KeyValuePair<Action, long>> ActionList = new List<KeyValuePair<Action, long>>();
+        public static List<KeyValuePair<Action, int>> ActionList = new List<KeyValuePair<Action, int>>();
 
         /// <summary>
         ///     Static constructor.
         /// </summary>
         static DelayAction()
         {
-            Game.OnUpdate += GameOnGameUpdate;
+            Game.OnUpdate += Game_OnUpdate;
         }
 
         /// <summary>
         ///     OnGameUpdate called event (per game-tick).
         /// </summary>
         /// <param name="args">System.EventArgs</param>
-        private static void GameOnGameUpdate(EventArgs args)
+        private static void Game_OnUpdate(EventArgs args)
         {
             for (var i = ActionList.Count - 1; i >= 0; i--)
             {
@@ -59,7 +59,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="func">Callback Function</param>
         public static void Add(int time, Action func)
         {
-            ActionList.Add(new KeyValuePair<Action, long>(func, time + Variables.TickCount));
+            ActionList.Add(new KeyValuePair<Action, int>(func, time + Variables.TickCount));
         }
     }
 }

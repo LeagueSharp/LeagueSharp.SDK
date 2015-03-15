@@ -5,7 +5,7 @@ using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.Math.Polygons;
 using SharpDX;
 
-namespace LeagueSharp.CommonEx.Core.Math
+namespace LeagueSharp.CommonEx.Core.Utils
 {
     /// <summary>
     ///     Provides helpful extension and methods concerning Geometry.

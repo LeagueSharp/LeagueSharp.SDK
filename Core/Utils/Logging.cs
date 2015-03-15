@@ -126,9 +126,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
                     Directory.CreateDirectory(Constants.LogDirectory);
                 }
 
-                var path = Path.Combine(Constants.LeagueSharpDirectory, "Logs", Constants.LogFileName);
-
-                using (var writer = new StreamWriter(path, true))
+                using (var writer = new StreamWriter(Constants.LogDirectory, true))
                 {
                     writer.WriteLine(format);
                 }

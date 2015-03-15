@@ -1,4 +1,6 @@
-﻿namespace LeagueSharp.CommonEx.Core.Network
+﻿using LeagueSharp.CommonEx.Core.Network;
+
+namespace LeagueSharp.CommonEx.Core.Utils
 {
     /// <summary>
     ///     Utilities for Packets.

@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.Wrappers;
 using SharpDX;
@@ -50,7 +51,7 @@ namespace LeagueSharp.CommonEx.Core.Extensions
         {
             float fountainRange = 562500; //750 * 750
             var map = Map.GetMap();
-            if (map != null && map.Type == Map.MapType.SummonersRift)
+            if (map != null && map.Type == MapType.SummonersRift)
             {
                 fountainRange = 1102500; //1050 * 1050
             }

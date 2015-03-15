@@ -15,52 +15,6 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
     public class TargetSelector
     {
         /// <summary>
-        ///     Enum that defines the priority in which the target selector should organize targets.
-        /// </summary>
-        public enum Mode
-        {
-            /// <summary>
-            ///     Focuses targets based on how many auto attacks it takes to kill the units.
-            /// </summary>
-            LessAttacksToKill,
-
-            /// <summary>
-            ///     Focuses targets based on the amount of AP they have.
-            /// </summary>
-            MostAbilityPower,
-
-            /// <summary>
-            ///     Focuses targets based on the amount of AD they have.
-            /// </summary>
-            MostAttackDamage,
-
-            /// <summary>
-            ///     Focuses targets based on the distance between the player and target.
-            /// </summary>
-            Closest,
-
-            /// <summary>
-            ///     Focuses targets base on the distance between the target and the mouse.
-            /// </summary>
-            NearMouse,
-
-            /// <summary>
-            ///     Focuses targets based on the amount skills needed to use to kill the target.
-            /// </summary>
-            LessCastPriority,
-
-            /// <summary>
-            ///     Focuses targets by their class.
-            /// </summary>
-            AutoPriority,
-
-            /// <summary>
-            ///     Focuses targets by their health.
-            /// </summary>
-            LeastHealth
-        }
-
-        /// <summary>
         ///     Champions that should be prioritzed fourth(last). (4)
         /// </summary>
         private static readonly string[] LowestPriority =
@@ -106,7 +60,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// <summary>
         ///     The current mode the TS is using.
         /// </summary>
-        private static Mode _mode = Mode.AutoPriority;
+        private static TargetSelectorMode _mode = TargetSelectorMode.AutoPriority;
 
         /// <summary>
         ///     Gets the priority of the champion. (1 being the highest, 4 being the lowest)
@@ -134,10 +88,10 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         }
 
         /// <summary>
-        ///     Sets the <see cref="Mode" /> of the target selector.
+        ///     Sets the <see cref="TargetSelectorMode" /> of the target selector.
         /// </summary>
         /// <param name="mode">Mode</param>
-        public static void SetPriorityMode(Mode mode)
+        public static void SetPriorityMode(TargetSelectorMode mode)
         {
             //TODO: Replace this with menu code.
             _mode = mode;
@@ -185,28 +139,28 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
             switch (_mode)
             {
                 // TODO: Use Damage.cs
-                case Mode.LessAttacksToKill:
+                case TargetSelectorMode.LessAttacksToKill:
                     return heroes.MinOrDefault(x => x.Health / ObjectManager.Player.TotalAttackDamage);
 
-                case Mode.MostAbilityPower:
+                case TargetSelectorMode.MostAbilityPower:
                     return heroes.MaxOrDefault(x => x.TotalMagicalDamage);
 
-                case Mode.MostAttackDamage:
+                case TargetSelectorMode.MostAttackDamage:
                     return heroes.MaxOrDefault(x => x.TotalAttackDamage);
 
-                case Mode.Closest:
+                case TargetSelectorMode.Closest:
                     return heroes.MinOrDefault(x => x.Distance(ObjectManager.Player));
 
-                case Mode.NearMouse:
+                case TargetSelectorMode.NearMouse:
                     return heroes.MinOrDefault(x => x.Distance(Game.CursorPos));
 
-                case Mode.LessCastPriority:
+                case TargetSelectorMode.LessCastPriority:
                     throw new NotImplementedException("Damage.cs is not implemented yet. (Mode.LessCastPriority)");
 
-                case Mode.AutoPriority:
+                case TargetSelectorMode.AutoPriority:
                     return heroes.MinOrDefault(x => GetPriority(x.ChampionName));
 
-                case Mode.LeastHealth:
+                case TargetSelectorMode.LeastHealth:
                     return heroes.MinOrDefault(x => x.Health);
             }
 
