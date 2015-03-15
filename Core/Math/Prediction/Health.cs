@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp.CommonEx.Core.Extensions;
-using LeagueSharp.CommonEx.Core.Utils;
 
 #endregion
 
@@ -23,7 +22,7 @@ namespace LeagueSharp.CommonEx.Core.Math.Prediction
         /// <summary>
         ///     Last Tick Update
         /// </summary>
-        private static long _lastTick;
+        private static int _lastTick;
 
         /// <summary>
         ///     Static Construcor
@@ -190,7 +189,7 @@ namespace LeagueSharp.CommonEx.Core.Math.Prediction
             /// <summary>
             ///     Start Tick
             /// </summary>
-            public readonly long StartTick;
+            public readonly int StartTick;
 
             /// <summary>
             ///     Target
@@ -209,7 +208,7 @@ namespace LeagueSharp.CommonEx.Core.Math.Prediction
             /// <param name="damage">Damage</param>
             public PredictedDamage(Obj_AI_Base source,
                 Obj_AI_Base target,
-                long startTick,
+                int startTick,
                 float delay,
                 float animationTime,
                 int projectileSpeed,

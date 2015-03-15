@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.Extensions;
 using SharpDX;
 
@@ -15,22 +16,6 @@ namespace LeagueSharp.CommonEx.Core.Events
     /// </summary>
     public class Gapcloser
     {
-        /// <summary>
-        ///     Gapcloser Spell Type
-        /// </summary>
-        public enum GapcloserType
-        {
-            /// <summary>
-            ///     Skillshot Spell
-            /// </summary>
-            Skillshot,
-
-            /// <summary>
-            ///     Targetted Spell
-            /// </summary>
-            Targeted
-        }
-
         /// <summary>
         ///     OnGapCloser Event.
         /// </summary>
@@ -722,7 +707,7 @@ namespace LeagueSharp.CommonEx.Core.Events
             /// <summary>
             ///     Tick of Gapcloser start
             /// </summary>
-            public long TickCount;
+            public int TickCount;
 
             /// <summary>
             ///     Returns if the direction of the gapcloser is towards the player

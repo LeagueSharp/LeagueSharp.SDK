@@ -22,7 +22,7 @@ namespace LeagueSharp.CommonEx.Core.Math
         /// <summary>
         ///     Wall Cast Tick (for Yasuo)
         /// </summary>
-        private static long _wallCastT;
+        private static int _wallCastT;
 
         /// <summary>
         ///     Yasuo's wall position in Vector2 format.

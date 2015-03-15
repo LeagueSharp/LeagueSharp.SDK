@@ -97,7 +97,7 @@ namespace LeagueSharp.CommonEx.Core.Events
             /// <summary>
             ///     Dash Duration
             /// </summary>
-            public long Duration;
+            public int Duration;
 
             /// <summary>
             ///     Dash Ending Position
@@ -107,7 +107,7 @@ namespace LeagueSharp.CommonEx.Core.Events
             /// <summary>
             ///     Dash End Tick
             /// </summary>
-            public long EndTick;
+            public int EndTick;
 
             /// <summary>
             ///     Is a Blinking (Game Mechanic) Dash.
@@ -132,7 +132,7 @@ namespace LeagueSharp.CommonEx.Core.Events
             /// <summary>
             ///     Dash Starting Tick
             /// </summary>
-            public long StartTick;
+            public int StartTick;
 
             /// <summary>
             ///     Dash Unit

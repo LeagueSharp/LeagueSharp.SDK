@@ -65,6 +65,7 @@
     <Compile Include="Core\Enumerations\CastStates.cs" />
     <Compile Include="Core\Enumerations\DamageType.cs" />
     <Compile Include="Core\Enumerations\DeviceOptionIdentity.cs" />
+    <Compile Include="Core\Enumerations\GapcloserType.cs" />
     <Compile Include="Core\Enumerations\LogLevel.cs" />
     <Compile Include="Core\Enumerations\MapType.cs" />
     <Compile Include="Core\Enumerations\MinionOrderTypes.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Core\Utils\TickOperation.cs" />
     <Compile Include="Core\Utils\Spell.cs" />
     <Compile Include="Core\Utils\Version.cs" />
+    <Compile Include="Core\Utils\WeightedRandom.cs" />
     <Compile Include="Core\Variables.cs" />
     <Compile Include="Core\Wrappers\HpBarDamageIndicator.cs" />
     <Compile Include="Core\Wrappers\LastCastedSpell.cs" />

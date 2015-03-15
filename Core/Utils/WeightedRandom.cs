@@ -14,7 +14,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <summary>
         ///     Global Random that is being used by WeightedRandom.
         /// </summary>
-        public static Random Random = new Random(Environment.TickCount);
+        public static Random Random = new Random(Variables.TickCount);
 
         /// <summary>
         ///     Returns a random integer

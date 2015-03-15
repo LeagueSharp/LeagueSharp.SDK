@@ -19,58 +19,17 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
     /// </summary>
     public class Spell
     {
-        /// <summary>
-        ///     Cast States
-        /// </summary>
-        public enum CastStates
-        {
-            /// <summary>
-            ///     Spell Successfully Casted
-            /// </summary>
-            SuccessfullyCasted,
-
-            /// <summary>
-            ///     Spell Not Ready
-            /// </summary>
-            NotReady,
-
-            /// <summary>
-            ///     Spell Not Casted
-            /// </summary>
-            NotCasted,
-
-            /// <summary>
-            ///     Spell Out of Range
-            /// </summary>
-            OutOfRange,
-
-            /// <summary>
-            ///     Spell Collision
-            /// </summary>
-            Collision,
-
-            /// <summary>
-            ///     Spell Not Enough Targets
-            /// </summary>
-            NotEnoughTargets,
-
-            /// <summary>
-            ///     Spell Low Hit Chance
-            /// </summary>
-            LowHitChance
-        }
-
         #region Private Data Members
 
         /// <summary>
         ///     Charged Cast Tick
         /// </summary>
-        private long _chargedCastedT;
+        private int _chargedCastedT;
 
         /// <summary>
         ///     Charged Request Sent Tick
         /// </summary>
-        private long _chargedReqSentT;
+        private int _chargedReqSentT;
 
         /// <summary>
         ///     From Vector3 Source
@@ -144,7 +103,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// <summary>
         ///     Last Casted Attempt Tick
         /// </summary>
-        public long LastCastAttemptT { get; set; }
+        public int LastCastAttemptT { get; set; }
 
         /// <summary>
         ///     Minimum Hit Chance

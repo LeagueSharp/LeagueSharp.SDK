@@ -27,7 +27,7 @@ namespace LeagueSharp.CommonEx.Core.Math.Prediction
             /// <summary>
             ///     Tick of the stored path.
             /// </summary>
-            public long Tick;
+            public int Tick;
 
             /// <summary>
             ///     Currect tick of the path.

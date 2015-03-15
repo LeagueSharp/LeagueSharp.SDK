@@ -11,7 +11,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         ///     Contains the next tick value that Action should be executed.
         ///     <seealso cref="Action" />
         /// </summary>
-        private long nextTick;
+        private int nextTick;
 
         /// <summary>
         ///     Constructor for a new Tick Operation instance, auto-starts by default.
@@ -55,7 +55,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
             }
             Action = null;
             TickDelay = 0;
-            nextTick = 0L;
+            nextTick = 0;
             IsRunning = false;
         }
 
