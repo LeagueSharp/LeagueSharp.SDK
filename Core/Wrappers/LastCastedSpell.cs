@@ -45,8 +45,8 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         {
             Name = args.SData.Name;
             Target = (Obj_AI_Base) args.Target;
-            StartTime = args.TimeCast;
-            EndTime = args.TimeSpellEnd;
+            StartTime = Variables.TickCount;
+            EndTime = Variables.TickCount + args.SData.SpellCastTime;
             SpellData = args.SData;
             IsValid = true;
         }
