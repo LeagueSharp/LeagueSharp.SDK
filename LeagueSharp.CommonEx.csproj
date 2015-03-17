@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Enumerations\CastStates.cs" />
+    <Compile Include="Core\Enumerations\CollisionableObjects.cs" />
     <Compile Include="Core\Enumerations\DamageType.cs" />
     <Compile Include="Core\Enumerations\DeviceOptionIdentity.cs" />
     <Compile Include="Core\Enumerations\GapcloserType.cs" />
@@ -79,7 +80,6 @@
     <Compile Include="Core\Utils\AutoAttack.cs" />
     <Compile Include="Core\Utils\CallbackPerformance.cs" />
     <Compile Include="Core\Constants.cs" />
-    <Compile Include="Core\Enumerations\CollisionableObjects.cs" />
     <Compile Include="Core\Enumerations\HitChance.cs" />
     <Compile Include="Core\Enumerations\SkillshotType.cs" />
     <Compile Include="Core\Events\Dash.cs" />
