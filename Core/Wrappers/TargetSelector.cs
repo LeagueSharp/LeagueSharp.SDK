@@ -155,7 +155,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     return heroes.MinOrDefault(x => x.Distance(Game.CursorPos));
 
                 case TargetSelectorMode.LessCastPriority:
-                    throw new NotImplementedException("Damage.cs is not implemented yet. (Mode.LessCastPriority)");
+                    return heroes.MinOrDefault(x => x.Health / ObjectManager.Player.TotalMagicalDamage);
 
                 case TargetSelectorMode.AutoPriority:
                     return heroes.MinOrDefault(x => GetPriority(x.ChampionName));

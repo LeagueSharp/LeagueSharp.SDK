@@ -110,8 +110,6 @@ namespace LeagueSharp.CommonEx.Core
 
         private static void GameObjectOnOnDelete(GameObject sender, EventArgs args)
         {
-            AddSavedType(sender);
-
             object obj;
             var contains = Cache.Instance.TryGetValue(sender.GetType().ToString(), out obj, "ObjectHandler");
 
