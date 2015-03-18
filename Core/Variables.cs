@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LeagueSharp.CommonEx.Core
+﻿namespace LeagueSharp.CommonEx.Core
 {
     /// <summary>
     ///     Class that contains helpful variables.
@@ -12,7 +10,7 @@ namespace LeagueSharp.CommonEx.Core
         /// </summary>
         public static int TickCount
         {
-            get { return (int)(Game.ClockTime * 1000); }
+            get { return (int) (Game.ClockTime * 1000); }
         }
     }
 }
