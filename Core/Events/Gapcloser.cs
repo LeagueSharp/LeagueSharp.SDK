@@ -19,7 +19,7 @@ namespace LeagueSharp.CommonEx.Core.Events
         /// <summary>
         ///     OnGapCloser Event.
         /// </summary>
-        public static Action<GapCloserEventArgs> OnGapCloser;
+        public static event Action<GapCloserEventArgs> OnGapCloser;
 
         /// <summary>
         ///     List of Spells to trigger OnGapCloser for.

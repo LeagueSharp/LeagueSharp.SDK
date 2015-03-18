@@ -19,7 +19,7 @@ namespace LeagueSharp.CommonEx.Core.Events
         /// <summary>
         ///     OnDash Event
         /// </summary>
-        public static Action<DashContainer> OnDash;
+        public static event Action<DashContainer> OnDash;
 
         /// <summary>
         ///     Static Constructor.

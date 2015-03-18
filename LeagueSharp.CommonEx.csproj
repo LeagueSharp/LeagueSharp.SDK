@@ -60,6 +60,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Enumerations\CastStates.cs" />
@@ -72,10 +73,13 @@
     <Compile Include="Core\Enumerations\MinionOrderTypes.cs" />
     <Compile Include="Core\Enumerations\MinionTeam.cs" />
     <Compile Include="Core\Enumerations\MinionTypes.cs" />
+    <Compile Include="Core\Enumerations\OrbwalkerMode.cs" />
     <Compile Include="Core\Enumerations\PerformanceType.cs" />
     <Compile Include="Core\Enumerations\TargetSelectorMode.cs" />
+    <Compile Include="Core\Enumerations\WindowsMessages.cs" />
     <Compile Include="Core\Events\Gapcloser.cs" />
     <Compile Include="Core\Math\Prediction\Health.cs" />
+    <Compile Include="Core\Orbwalker.cs" />
     <Compile Include="Core\Spells.cs" />
     <Compile Include="Core\Utils\AutoAttack.cs" />
     <Compile Include="Core\Utils\CallbackPerformance.cs" />
@@ -93,6 +97,7 @@
     <Compile Include="Core\Extensions\Unit.cs" />
     <Compile Include="Core\Math\Collision.cs" />
     <Compile Include="Core\Utils\Cursor.cs" />
+    <Compile Include="Core\Utils\WindowsKeys.cs" />
     <Compile Include="Core\Utils\Math.cs" />
     <Compile Include="Core\Math\MEC.cs" />
     <Compile Include="Core\Math\Polygons\Arc.cs" />
