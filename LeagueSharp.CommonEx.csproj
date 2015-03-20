@@ -49,6 +49,9 @@
     <Reference Include="LeagueSharp">
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX">
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
@@ -80,6 +83,7 @@
     <Compile Include="Core\Enumerations\TargetSelectorMode.cs" />
     <Compile Include="Core\Enumerations\WindowsMessages.cs" />
     <Compile Include="Core\Events\Gapcloser.cs" />
+    <Compile Include="Core\Extensions\Streams.cs" />
     <Compile Include="Core\Math\Prediction\Health.cs" />
     <Compile Include="Core\Orbwalker.cs" />
     <Compile Include="Core\Spells.cs" />
@@ -133,6 +137,7 @@
     <Compile Include="Core\Utils\Version.cs" />
     <Compile Include="Core\Utils\WeightedRandom.cs" />
     <Compile Include="Core\Variables.cs" />
+    <Compile Include="Core\Wrappers\Damage.cs" />
     <Compile Include="Core\Wrappers\HpBarDamageIndicator.cs" />
     <Compile Include="Core\Wrappers\LastCastedSpell.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
@@ -144,6 +149,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EmbeddedResource Include="Core\Damages.json" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Third_Party\" />
