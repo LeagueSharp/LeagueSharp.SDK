@@ -11,6 +11,7 @@ namespace LeagueSharp.CommonEx.Core
     /// </summary>
     public class ObjectHandler
     {
+        private const string CacheRegionName = "ObjectHandler";
         private static readonly bool Loaded;
         private static readonly List<string> SavedTypes;
 
@@ -21,7 +22,7 @@ namespace LeagueSharp.CommonEx.Core
                 return;
             }
 
-            Cache.Instance.CreateRegion("ObjectHandler");
+            Cache.Instance.CreateRegion(CacheRegionName);
             SavedTypes = new List<string>();
 
             // Add all of the existing objects into the cache.
@@ -30,20 +31,20 @@ namespace LeagueSharp.CommonEx.Core
                 AddSavedType(gameObj);
 
                 object obj;
-                var contains = Cache.Instance.TryGetValue(gameObj.GetType().ToString(), out obj, "ObjectHandler");
+                var contains = Cache.Instance.TryGetValue(gameObj.GetType().ToString(), out obj, CacheRegionName);
 
                 if (!contains)
                 {
                     obj = Cache.Instance.AddOrGetExisting(
                         gameObj.GetType().ToString(), new List<GameObject>(), ObjectCache.InfiniteAbsoluteExpiration,
-                        "ObjectHandler");
+                        CacheRegionName);
                 }
 
                 var list = (List<GameObject>) obj;
                 list.Add(gameObj);
 
                 Cache.Instance.Set(
-                    gameObj.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
+                    gameObj.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, CacheRegionName);
             }
 
             GameObject.OnCreate += GameObject_OnCreate;
@@ -61,7 +62,7 @@ namespace LeagueSharp.CommonEx.Core
             {
                 return
                     (IEnumerable<Obj_AI_Hero>)
-                        Cache.Instance.AddOrGetExisting("AllHeroes", GetFast<Obj_AI_Hero>, "ObjectHandler");
+                        Cache.Instance.AddOrGetExisting("AllHeroes", GetFast<Obj_AI_Hero>, CacheRegionName);
             }
         }
 
@@ -75,7 +76,7 @@ namespace LeagueSharp.CommonEx.Core
                 return
                     (IEnumerable<Obj_AI_Hero>)
                         Cache.Instance.AddOrGetExisting(
-                            "Enemies", () => AllHeroes.Where(x => x.IsEnemy), "ObjectHandler");
+                            "Enemies", () => AllHeroes.Where(x => x.IsEnemy), CacheRegionName);
             }
         }
 
@@ -88,7 +89,7 @@ namespace LeagueSharp.CommonEx.Core
             {
                 return
                     (IEnumerable<Obj_AI_Hero>)
-                        Cache.Instance.AddOrGetExisting("Allies", () => AllHeroes.Where(x => x.IsAlly), "ObjectHandler");
+                        Cache.Instance.AddOrGetExisting("Allies", () => AllHeroes.Where(x => x.IsAlly), CacheRegionName);
             }
         }
 
@@ -101,7 +102,7 @@ namespace LeagueSharp.CommonEx.Core
         }
 
         /// <summary>
-        ///     Gets all of the ally <see cref="Obj_AI_Base" />s.
+        ///     Gets all of the enemy <see cref="Obj_AI_Base" />s.
         /// </summary>
         public static IEnumerable<Obj_AI_Base> Enemies
         {
@@ -111,7 +112,7 @@ namespace LeagueSharp.CommonEx.Core
         private static void GameObjectOnOnDelete(GameObject sender, EventArgs args)
         {
             object obj;
-            var contains = Cache.Instance.TryGetValue(sender.GetType().ToString(), out obj, "ObjectHandler");
+            var contains = Cache.Instance.TryGetValue(sender.GetType().ToString(), out obj, CacheRegionName);
 
             if (!contains)
             {
@@ -123,7 +124,7 @@ namespace LeagueSharp.CommonEx.Core
             list.Remove(sender);
 
             Cache.Instance.Set(
-                sender.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
+                sender.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, CacheRegionName);
         }
 
         private static void GameObject_OnCreate(GameObject sender, EventArgs args)
@@ -131,20 +132,20 @@ namespace LeagueSharp.CommonEx.Core
             AddSavedType(sender);
 
             object obj;
-            var contains = Cache.Instance.TryGetValue(sender.GetType().ToString(), out obj, "ObjectHandler");
+            var contains = Cache.Instance.TryGetValue(sender.GetType().ToString(), out obj, CacheRegionName);
 
             if (!contains)
             {
                 obj = Cache.Instance.AddOrGetExisting(
                     sender.GetType().ToString(), new List<GameObject>(), ObjectCache.InfiniteAbsoluteExpiration,
-                    "ObjectHandler");
+                    CacheRegionName);
             }
 
             var list = (List<GameObject>) obj;
             list.Add(sender);
 
             Cache.Instance.Set(
-                sender.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, "ObjectHandler");
+                sender.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, CacheRegionName);
         }
 
         private static void AddSavedType(GameObject gameObject)
@@ -176,7 +177,7 @@ namespace LeagueSharp.CommonEx.Core
 
             foreach (var savedType in SavedTypes)
             {
-                list.AddRange(Cache.Instance.Get<List<GameObject>>(savedType, "ObjectHandler").OfType<T>());
+                list.AddRange(Cache.Instance.Get<List<GameObject>>(savedType, CacheRegionName).OfType<T>());
             }
 
             return (IEnumerable<T>) list;
