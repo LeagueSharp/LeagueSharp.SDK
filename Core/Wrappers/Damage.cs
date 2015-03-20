@@ -15,6 +15,73 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
     public static class Damage
     {
         /// <summary>
+        ///     Enum that contains items that deal damage.
+        /// </summary>
+        public enum DamageItems
+        {
+            /// <summary>
+            ///     Hextech Gunblade
+            /// </summary>
+            HextechGunblade,
+
+            /// <summary>
+            ///     Blade of the Ruined King
+            /// </summary>
+            BladeOfTheRuinedKing,
+
+            /// <summary>
+            ///     Bilgewater Cutlass
+            /// </summary>
+            BilgewaterCutlass,
+
+            /// <summary>
+            ///     Tiamat
+            /// </summary>
+            Tiamat,
+
+            /// <summary>
+            ///     Ravenous Hydra
+            /// </summary>
+            RavenousHydra,
+
+            /// <summary>
+            ///     Black Fire Torch
+            /// </summary>
+            BlackFireTorch,
+
+            /// <summary>
+            ///     Odyn's Veil
+            /// </summary>
+            OdynsVeil,
+
+            /// <summary>
+            ///     Frost Queen's Claim
+            /// </summary>
+            FrostQueenClaim,
+
+            /// <summary>
+            ///     Liandry's Torment
+            /// </summary>
+            LiandrysTorment
+        }
+
+        /// <summary>
+        ///     Enum that contains summoner spells that deal damage
+        /// </summary>
+        public enum SummonerSpell
+        {
+            /// <summary>
+            ///     Ignite.
+            /// </summary>
+            Ignite,
+
+            /// <summary>
+            ///     Smite. Detects which smite the source has.
+            /// </summary>
+            Smite
+        }
+
+        /// <summary>
         ///     The DDragon JSON file.
         /// </summary>
         private static JObject _damageFile;
@@ -31,6 +98,98 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         }
 
         /// <summary>
+        ///     Gets the Auto Attack damage,
+        /// </summary>
+        /// <param name="source"><see cref="Obj_AI_Base" /> where the damage is coming from.</param>
+        /// <param name="target"><see cref="Obj_AI_Base" /> where the damage is going to.</param>
+        /// <param name="includePassive">Includes passives, such as Botrk, and masteries.</param>
+        /// <returns>The calculated Auto Attack damage.</returns>
+        public static double GetAutoAttackDamage(this Obj_AI_Base source,
+            Obj_AI_Base target,
+            bool includePassive = false)
+        {
+            // TODO: Include Attack Passives
+            return CalculatePhysicalDamage(source, target, source.TotalAttackDamage) + 2;
+        }
+
+        /// <summary>
+        ///     Gets the damage of an Item.
+        /// </summary>
+        /// <param name="source"><see cref="Obj_AI_Base" /> where the damage is coming from.</param>
+        /// <param name="target"><see cref="Obj_AI_Base" /> where the damage is going to.</param>
+        /// <param name="damageItem">Item</param>
+        /// <returns>Damage of the item.</returns>
+        public static double GetItemDamage(this Obj_AI_Hero source, Obj_AI_Base target, DamageItems damageItem)
+        {
+            switch (damageItem)
+            {
+                case DamageItems.BilgewaterCutlass:
+                    return source.CalculateDamage(target, DamageType.Magical, 100);
+                case DamageItems.BlackFireTorch:
+                    return source.CalculateDamage(target, DamageType.Magical, target.MaxHealth * 0.2);
+                case DamageItems.BladeOfTheRuinedKing:
+                    return source.CalculateDamage(target, DamageType.Physical, target.MaxHealth * 0.1);
+                case DamageItems.FrostQueenClaim:
+                    return source.CalculateDamage(target, DamageType.Magical, 50 + 5 * source.Level);
+                case DamageItems.HextechGunblade:
+                    return source.CalculateDamage(target, DamageType.Magical, 150 + 0.4 * source.FlatMagicDamageMod);
+                case DamageItems.RavenousHydra:
+                    return source.CalculateDamage(
+                        target, DamageType.Physical, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
+                case DamageItems.OdynsVeil:
+                    return source.CalculateDamage(target, DamageType.Magical, 200);
+                case DamageItems.Tiamat:
+                    return source.CalculateDamage(
+                        target, DamageType.Physical, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
+                case DamageItems.LiandrysTorment:
+                    var d = target.Health * .2f * 3f;
+                    return (target.CanMove || target.HasBuffOfType(BuffType.Slow)) ? d : d * 2;
+            }
+            return 0d;
+        }
+
+        /// <summary>
+        ///     Gets the summoner spell damage.
+        /// </summary>
+        /// <param name="source"><see cref="Obj_AI_Base" /> where the damage is coming from.</param>
+        /// <param name="target"><see cref="Obj_AI_Base" /> where the damage is going to.</param>
+        /// <param name="spell">
+        ///     <see cref="SummonerSpell" />
+        /// </param>
+        /// <returns>Summoner spell damage</returns>
+        public static double GetSummonerSpellDamage(this Obj_AI_Hero source, Obj_AI_Base target, SummonerSpell spell)
+        {
+            switch (spell)
+            {
+                case SummonerSpell.Ignite:
+                    return 50 + 20 * source.Level - (target.HPRegenRate / 5 * 3);
+
+                case SummonerSpell.Smite:
+                    if (!(target is Obj_AI_Hero))
+                    {
+                        return
+                            new double[]
+                            {
+                                390, 410, 430, 450, 480, 510, 540, 570, 600, 640, 680, 720, 760, 800, 850, 900, 950, 1000
+                            }[source.Level - 1];
+                    }
+
+                    if (source.Spellbook.Spells.Any(x => x.Name == "s5_summonersmiteplayerganker"))
+                    {
+                        return 8 * source.Level + 20;
+                    }
+
+                    if (source.Spellbook.Spells.Any(x => x.Name == "s5_summonersmiteduel"))
+                    {
+                        return 6 * source.Level + 54;
+                    }
+                    break;
+            }
+
+            return 0d;
+        }
+
+        /// <summary>
         ///     Calculates the "real" damage done to a target.
         /// </summary>
         /// <param name="source"><see cref="Obj_AI_Base" /> where the damage is coming from.</param>
@@ -38,10 +197,10 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// <param name="damage">The amount of damage</param>
         /// <param name="damageType">Damage Type</param>
         /// <returns>The real damage done after calculations.</returns>
-        public static double CalculateDamage(Obj_AI_Base source,
+        public static double CalculateDamage(this Obj_AI_Base source,
             Obj_AI_Base target,
-            double damage,
-            DamageType damageType)
+            DamageType damageType,
+            double damage)
         {
             switch (damageType)
             {
@@ -55,6 +214,13 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
             return 0d;
         }
 
+        /// <summary>
+        ///     Calculates Magical Damage to a target.
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="target">Target</param>
+        /// <param name="amount">Amount of damage</param>
+        /// <returns>The "Real" Magical damage done to a target.</returns>
         private static double CalculateMagicDamage(Obj_AI_Base source, Obj_AI_Base target, double amount)
         {
             var magicResist = target.SpellBlock;
@@ -83,6 +249,13 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
             return k * amount;
         }
 
+        /// <summary>
+        ///     Calculates Physical Damage to a target.
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="target">Target</param>
+        /// <param name="amount">Amount of damage</param>
+        /// <returns>The "Real" physical damage done to a target</returns>
         private static double CalculatePhysicalDamage(Obj_AI_Base source, Obj_AI_Base target, double amount)
         {
             double armorPenPercent = source.PercentArmorPenetrationMod;
@@ -195,10 +368,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
 
         private static double PassivePercentMod(Obj_AI_Base source, Obj_AI_Base target, double k)
         {
-            var siegeMinionList = new List<string>
-            {
-                "Red_Minion_MechCannon", "Blue_Minion_MechCannon"
-            };
+            var siegeMinionList = new List<string> { "Red_Minion_MechCannon", "Blue_Minion_MechCannon" };
 
             var normalMinionList = new List<string>
             {
