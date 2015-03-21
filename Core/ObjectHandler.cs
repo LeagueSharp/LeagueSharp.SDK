@@ -62,7 +62,7 @@ namespace LeagueSharp.CommonEx.Core
             {
                 return
                     (IEnumerable<Obj_AI_Hero>)
-                        Cache.Instance.AddOrGetExisting("AllHeroes", GetFast<Obj_AI_Hero>, CacheRegionName);
+                         Cache.Instance.AddOrGetExisting("AllHeroes", GetFast<Obj_AI_Hero>, CacheRegionName);
             }
         }
 
@@ -180,7 +180,7 @@ namespace LeagueSharp.CommonEx.Core
                 list.AddRange(Cache.Instance.Get<List<GameObject>>(savedType, CacheRegionName).OfType<T>());
             }
 
-            return (IEnumerable<T>) list;
+            return list.ConvertAll(input => input as T);
         }
     }
 }
