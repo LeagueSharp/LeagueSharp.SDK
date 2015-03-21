@@ -84,17 +84,53 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// <summary>
         ///     The DDragon JSON file.
         /// </summary>
-        private static JObject _damageFile;
+        private static readonly JObject DamageFile;
 
         static Damage()
         {
             // Load JSON file
-            _damageFile =
+            DamageFile =
                 JObject.Parse(
                     Encoding.UTF8.GetString(
                         Assembly.GetExecutingAssembly()
                             .GetManifestResourceStream("LeagueSharp.CommonEx.Damages.json")
                             .GetAllBytes()));
+        }
+
+        /// <summary>
+        ///     Gets the damage of the spell against a target.
+        /// </summary>
+        /// <param name="source"><see cref="Obj_AI_Base" /> where the damage is coming from.</param>
+        /// <param name="target"><see cref="Obj_AI_Base" /> where the damage is going to.</param>
+        /// <param name="slot">Slot</param>
+        /// <returns>The damage of the spell against a target.</returns>
+        public static double GetSpellDamage(this Obj_AI_Hero source, Obj_AI_Base target, SpellSlot slot)
+        {
+            // Spell JSON Element
+            var spell = DamageFile["data"][source.ChampionName]["spells"].Children().ToArray()[(int) slot];
+
+            // Gets first effect where the key equals "a1", and converts it into an int arry and selects the level.
+            var damage =
+                spell["effect"].Children()
+                    .First(x => x["key"] != null && x["key"].ToObject<string>() == "a1")
+                    .ToObject<int[]>()[source.Spellbook.GetSpell(slot).Level - 1];
+
+            // Name of variable that the coefficient should be multiplied by.
+            var link = spell["vars"].Children().First()["link"].ToObject<string>();
+            // Percent in decimal
+            var coeff = spell["vars"].Children().First()["coeff"].ToObject<float>();
+
+            switch (link)
+            {
+                case "spelldamage":
+                    return CalculateMagicDamage(source, target, damage + source.TotalMagicalDamage * coeff);
+                case "bonusattackdamage":
+                    return CalculatePhysicalDamage(source, target, damage + source.FlatPhysicalDamageMod * coeff);
+                case "attackdamage":
+                    return CalculatePhysicalDamage(source, target, damage + source.TotalAttackDamage * coeff);
+            }
+
+            return 0;
         }
 
         /// <summary>
