@@ -93,7 +93,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                 JObject.Parse(
                     Encoding.UTF8.GetString(
                         Assembly.GetExecutingAssembly()
-                            .GetManifestResourceStream("LeagueSharp.CommonEx.Damages.json")
+                            .GetManifestResourceStream("LeagueSharp.CommonEx.ChampionData.json")
                             .GetAllBytes()));
         }
 
@@ -111,14 +111,16 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
 
             // Gets first effect where the key equals "a1", and converts it into an int arry and selects the level.
             var damage =
-                spell["effect"].Children()
-                    .First(x => x["key"] != null && x["key"].ToObject<string>() == "a1")
-                    .ToObject<int[]>()[source.Spellbook.GetSpell(slot).Level - 1];
+                spell["effect"].Children().ToArray()[1].ToObject<int[]>()[source.Spellbook.GetSpell(slot).Level - 1];
 
             // Name of variable that the coefficient should be multiplied by.
-            var link = spell["vars"].Children().First()["link"].ToObject<string>();
+            var link =
+                spell["vars"].Children().First(x => x["key"].ToObject<string>().StartsWith("a"))["link"]
+                    .ToObject<string>();
             // Percent in decimal
-            var coeff = spell["vars"].Children().First()["coeff"].ToObject<float>();
+            var coeff =
+                spell["vars"].Children().First(x => x["key"].ToObject<string>().StartsWith("a"))["coeff"]
+                    .ToObject<float>();
 
             switch (link)
             {
