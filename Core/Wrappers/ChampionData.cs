@@ -47,20 +47,20 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// <summary>
         ///     Gets the ID of the champion.
         /// </summary>
-        /// <returns>ID</returns>
-        public int GetId()
+        /// <value>ID</value>
+        public int Id
         {
-            return championToken["id"].ToObject<int>();
+            get { return championToken["id"].ToObject<int>(); }
         }
 
         /// <summary>
         ///     Gets the title of the champion.
         /// </summary>
         /// <example>"Ezreal" - "the Prodigal Explorer"</example>
-        /// <returns></returns>
-        public string GetTitle()
+        /// <value>Title of champion</value>
+        public string Title
         {
-            return championToken["title"].ToObject<string>();
+            get { return championToken["title"].ToObject<string>(); }
         }
 
         /// <summary>
@@ -91,46 +91,149 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// <summary>
         ///     Gets the name of the spell.
         /// </summary>
-        /// <returns>Name of the spell.</returns>
-        public string GetName()
+        /// <value>Name of the spell.</value>
+        public string Name
         {
-            return spellToken["name"].ToObject<string>();
+            get { return spellToken["name"].ToObject<string>(); }
         }
 
         /// <summary>
         ///     Gets the description of the spell.
         /// </summary>
-        /// <returns>Description</returns>
-        public string GetDescription()
+        /// <value>Description</value>
+        public string Description
         {
-            return spellToken["description"].ToObject<string>();
+            get { return spellToken["description"].ToObject<string>(); }
         }
 
         /// <summary>
         ///     Gets the sanitized description of the spell.
         /// </summary>
-        /// <returns>Sanitized Description</returns>
-        public string GetSanitizedDescription()
+        /// <value>Sanitized Description</value>
+        public string SanitizedDescription
         {
-            return spellToken["sanitizedDescription"].ToObject<string>();
+            get { return spellToken["sanitizedDescription"].ToObject<string>(); }
         }
 
         /// <summary>
         ///     Gets the string showed when you hover over the ability.
         /// </summary>
-        /// <returns>Tool tip</returns>
-        public string GetToolTip()
+        /// <value>Tool tip</value>
+        public string ToolTip
         {
-            return spellToken["tooltip"].ToObject<string>();
+            get { return spellToken["tooltip"].ToObject<string>(); }
         }
 
         /// <summary>
         ///     Gets the sanitized string showed when you hover over the ability.
         /// </summary>
-        /// <returns>Sanitized Tool Tip</returns>
-        public string GetSanitizedToolTip()
+        /// <value>Sanitized Tool Tip</value>
+        public string SanitizedToolTip
         {
-            return spellToken["sanitizedTooltip"].ToObject<string>();
+            get { return spellToken["sanitizedTooltip"].ToObject<string>(); }
+        }
+
+        /// <summary>
+        ///     Gets the max rank which you can no longed upgrade the spell.
+        /// </summary>
+        /// <value>Max Rank of the spell</value>
+        public int MaxRank
+        {
+            get { return spellToken["maxrank"].ToObject<int>(); }
+        }
+
+        /// <summary>
+        ///     Gets an array, containing the cost of the spell. The array matches the level of the spell.
+        /// </summary>
+        /// <value>Int[] of spell clost.</value>
+        public int[] Cost
+        {
+            get { return spellToken["cost"].ToObject<int[]>(); }
+        }
+
+        /// <summary>
+        ///     Gets the type of cost needed to cast the spell.
+        /// </summary>
+        /// <example>Mana</example>
+        /// <value>Type of cost</value>
+        public string CostType
+        {
+            get { return spellToken["costType"].ToObject<string>(); }
+        }
+
+        /// <summary>
+        ///     Gets the cost of the spell, with a '/' between each cost.
+        /// </summary>
+        /// <example>1/2/3/4/5</example>
+        /// <value>Cost of the spell as a string.</value>
+        public string CostString
+        {
+            get { return spellToken["costBurn"].ToObject<string>(); }
+        }
+
+        /// <summary>
+        ///     Gets the cooldown of the spell as an array. The array matches the level of the spell.
+        /// </summary>
+        /// <value>Cooldown of the spell.</value>
+        public float[] Cooldown
+        {
+            get { return spellToken["cooldown"].ToObject<float[]>(); }
+        }
+
+        /// <summary>
+        ///     Gets the cooldown of the spell, with a '/' between each cooldown.
+        /// </summary>
+        /// <example>1/2/3/4/5</example>
+        /// <value>Cooldown of the spell as a string.</value>
+        public string CooldownString
+        {
+            get { return spellToken["cooldownBurn"].ToObject<string>(); }
+        }
+
+        /// <summary>
+        ///     Gets the damage of the spell as an array. The array matches the level of the spell.
+        /// </summary>
+        /// <value>Damage of the spell.</value>
+        public int[] Damage
+        {
+            get { return spellToken["effect"].Children().ToArray()[1].ToObject<int[]>(); }
+        }
+
+        /// <summary>
+        ///     Gets the damage of the spell, with a '/' between each damage.
+        /// </summary>
+        /// <example>1/2/3/4/5</example>
+        /// <value>Damage of the spell as a string.</value>
+        public string DamageString
+        {
+            get { return spellToken["effectBurn"].Children().ToArray()[1].ToObject<string>(); }
+        }
+
+        /// <summary>
+        ///     Gets the range of the spell as an array. The array matches the level of the spell.
+        /// </summary>
+        /// <value>Range of the spell.</value>
+        public int[] RangeArray
+        {
+            get { return spellToken["range"].ToObject<int[]>(); }
+        }
+
+        /// <summary>
+        ///     Gets the range of the spell.
+        /// </summary>
+        /// <value>Range</value>
+        public int Range
+        {
+            get { return Convert.ToInt32(spellToken["rangeBurn"].ToObject<string>()); }
+        }
+
+        /// <summary>
+        ///     Gets the name of the spell.
+        /// </summary>
+        /// <value>Name of the spel.</value>
+        public string Key
+        {
+            get { return spellToken["key"].ToObject<string>(); }
         }
 
         /// <summary>
@@ -166,109 +269,6 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                         spellToken["image"]["full"].ToObject<string>())).Result;
 
             return new Bitmap(new MemoryStream(data));
-        }
-
-        /// <summary>
-        ///     Gets the max rank which you can no longed upgrade the spell.
-        /// </summary>
-        /// <returns>Max Rank of the spell</returns>
-        public int GetMaxRank()
-        {
-            return spellToken["maxrank"].ToObject<int>();
-        }
-
-        /// <summary>
-        ///     Gets an array, containing the cost of the spell. The array matches the level of the spell.
-        /// </summary>
-        /// <returns>Int[] of spell clost.</returns>
-        public int[] GetCost()
-        {
-            return spellToken["cost"].ToObject<int[]>();
-        }
-
-        /// <summary>
-        ///     Gets the type of cost needed to cast the spell.
-        /// </summary>
-        /// <example>Mana</example>
-        /// <returns>Type of cost</returns>
-        public string GetCostType()
-        {
-            return spellToken["costType"].ToObject<string>();
-        }
-
-        /// <summary>
-        ///     Gets the cost of the spell, with a '/' between each cost.
-        /// </summary>
-        /// <example>1/2/3/4/5</example>
-        /// <returns>Cost of the spell as a string.</returns>
-        public string GetCostString()
-        {
-            return spellToken["costBurn"].ToObject<string>();
-        }
-
-        /// <summary>
-        ///     Gets the cooldown of the spell as an array. The array matches the level of the spell.
-        /// </summary>
-        /// <returns>Cooldown of the spell.</returns>
-        public float[] GetCooldown()
-        {
-            return spellToken["cooldown"].ToObject<float[]>();
-        }
-
-        /// <summary>
-        ///     Gets the cooldown of the spell, with a '/' between each cooldown.
-        /// </summary>
-        /// <example>1/2/3/4/5</example>
-        /// <returns>Cooldown of the spell as a string.</returns>
-        public string GetCooldownString()
-        {
-            return spellToken["cooldownBurn"].ToObject<string>();
-        }
-
-        /// <summary>
-        ///     Gets the damage of the spell as an array. The array matches the level of the spell.
-        /// </summary>
-        /// <returns>Damage of the spell.</returns>
-        public int[] GetDamage()
-        {
-            return spellToken["effect"].Children().ToArray()[1].ToObject<int[]>();
-        }
-
-        /// <summary>
-        ///     Gets the damage of the spell, with a '/' between each damage.
-        /// </summary>
-        /// <example>1/2/3/4/5</example>
-        /// <returns>Damage of the spell as a string.</returns>
-        public string GetDamageString()
-        {
-            return spellToken["effectBurn"].Children().ToArray()[1].ToObject<string>();
-        }
-
-        /// <summary>
-        ///     Gets the range of the spell as an array. The array matches the level of the spell.
-        /// </summary>
-        /// <returns>Range of the spell.</returns>
-        public int[] GetRangeArray()
-        {
-            return spellToken["range"].ToObject<int[]>();
-        }
-
-        /// <summary>
-        ///     Gets the range of the spell.
-        /// </summary>
-        /// <returns>Range</returns>
-        public int GetRange()
-        {
-            return Convert.ToInt32(spellToken["rangeBurn"].ToObject<string>());
-        }
-
-        /// <summary>
-        ///     Gets the name of the spell.
-        /// </summary>
-        /// <returns>Name of the spel.</returns>
-        public string GetKey()
-        {
-            return spellToken["key"].ToObject<string>();
         }
     }
 }
