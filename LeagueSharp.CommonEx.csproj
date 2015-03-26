@@ -88,6 +88,14 @@
     <Compile Include="Core\Math\Prediction\Health.cs" />
     <Compile Include="Core\Orbwalker.cs" />
     <Compile Include="Core\Spells.cs" />
+    <Compile Include="Core\UI\Developer\Developer.cs" />
+    <Compile Include="Core\UI\Menu\Abstracts\AMenuComponent.cs" />
+    <Compile Include="Core\UI\Menu\Abstracts\AMenuValue.cs" />
+    <Compile Include="Core\UI\Menu\Menu.cs" />
+    <Compile Include="Core\UI\Menu\MenuFactory.cs" />
+    <Compile Include="Core\UI\Menu\MenuItem.cs" />
+    <Compile Include="Core\UI\Menu\Values\MenuBool.cs" />
+    <Compile Include="Core\UI\Notifications\Notifications.cs" />
     <Compile Include="Core\Utils\AutoAttack.cs" />
     <Compile Include="Core\Utils\CallbackPerformance.cs" />
     <Compile Include="Core\Constants.cs" />
