@@ -646,7 +646,8 @@ namespace LeagueSharp.CommonEx.Core.Events
                         (args.Target != null && args.Target.IsMe) ? GapcloserType.Targeted : GapcloserType.Skillshot,
                     Slot = ((Obj_AI_Hero) sender).GetSpellSlot(args.SData.Name),
                     IsDirectedToPlayer =
-                        ObjectManager.Player.Distance(args.End) < ObjectManager.Player.Distance(args.Start)
+                        ObjectManager.Player.Distance(args.End) < ObjectManager.Player.Distance(args.Start),
+                    SpellName = args.SData.Name
                 });
         }
 
@@ -713,6 +714,11 @@ namespace LeagueSharp.CommonEx.Core.Events
             ///     Returns if the direction of the gapcloser is towards the player
             /// </summary>
             public bool IsDirectedToPlayer;
+            
+            /// <summary>
+            ///     Spell name
+            /// </summary>
+            public string SpellName;
         }
 
         /// <summary>
