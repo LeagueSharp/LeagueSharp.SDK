@@ -12,12 +12,12 @@ namespace LeagueSharp.CommonEx.Core.Math.Prediction
     /// <summary>
     ///     Path class, contains path tracker and a containter
     /// </summary>
-    internal class Path
+    public class Path
     {
         /// <summary>
         ///     Stored Path Container, contains a stored path
         /// </summary>
-        internal class StoredPath
+        public class StoredPath
         {
             /// <summary>
             ///     Vector2 list of the path.
@@ -65,7 +65,7 @@ namespace LeagueSharp.CommonEx.Core.Math.Prediction
         /// <summary>
         ///     Path Tracker class, tracks a given path.
         /// </summary>
-        internal static class PathTracker
+        public static class PathTracker
         {
             /// <summary>
             ///     Maximum time of a path track.

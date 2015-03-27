@@ -8,9 +8,6 @@
         /// <summary>
         ///     External attachment handle for the AppDomainManager
         /// </summary>
-        public static void Init()
-        {
-            Orbwalker.Active = Orbwalker.Attack = Orbwalker.Move = true;
-        }
+        public static void Init() {}
     }
 }

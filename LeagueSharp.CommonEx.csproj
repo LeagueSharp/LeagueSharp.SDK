@@ -68,13 +68,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Bootstrap.cs" />
+    <Compile Include="Core\Config.cs" />
     <Compile Include="Core\Enumerations\CastStates.cs" />
     <Compile Include="Core\Enumerations\CollisionableObjects.cs" />
     <Compile Include="Core\Enumerations\DamageType.cs" />
     <Compile Include="Core\Enumerations\DeviceOptionIdentity.cs" />
     <Compile Include="Core\Enumerations\GapcloserType.cs" />
+    <Compile Include="Core\Enumerations\KeyBindType.cs" />
     <Compile Include="Core\Enumerations\LogLevel.cs" />
     <Compile Include="Core\Enumerations\MapType.cs" />
+    <Compile Include="Core\Enumerations\MenuState.cs" />
     <Compile Include="Core\Enumerations\MinionOrderTypes.cs" />
     <Compile Include="Core\Enumerations\MinionTeam.cs" />
     <Compile Include="Core\Enumerations\MinionTypes.cs" />
@@ -87,6 +90,10 @@
     <Compile Include="Core\Extensions\Streams.cs" />
     <Compile Include="Core\Math\Prediction\Health.cs" />
     <Compile Include="Core\Orbwalker.cs" />
+    <Compile Include="Core\UI\Menu\Values\MenuInputText.cs" />
+    <Compile Include="Core\UI\Menu\Values\MenuKeyBind.cs" />
+    <Compile Include="Core\UI\Menu\Values\MenuSlider.cs" />
+    <Compile Include="Core\UI\Root.cs" />
     <Compile Include="Core\Spells.cs" />
     <Compile Include="Core\UI\Developer\Developer.cs" />
     <Compile Include="Core\UI\Menu\Abstracts\AMenuComponent.cs" />
@@ -159,10 +166,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EmbeddedResource Include="Core\ChampionData.json" />
+    <EmbeddedResource Include="Resources\Data\ChampionData.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Resources\Images\" />
     <Folder Include="Third_Party\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

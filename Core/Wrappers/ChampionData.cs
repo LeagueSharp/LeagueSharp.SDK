@@ -33,7 +33,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                 JObject.Parse(
                     Encoding.UTF8.GetString(
                         Assembly.GetExecutingAssembly()
-                            .GetManifestResourceStream("LeagueSharp.CommonEx.ChampionData.json")
+                            .GetManifestResourceStream("LeagueSharp.CommonEx.Resources.Data.ChampionData.json")
                             .GetAllBytes()));
 
             championToken = damageFile["data"][championName];

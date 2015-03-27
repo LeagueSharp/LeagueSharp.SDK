@@ -46,6 +46,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         public MenuItem(string name, string displayName) : base(name, displayName)
         {
             MenuFactory.Create<T>();
+            Enabled = Visible = true;
         }
 
         /// <summary>
@@ -74,19 +75,19 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <summary>
         ///     Returns the item visibility.
         /// </summary>
-        public override bool Visible { get; set; }
+        public override sealed bool Visible { get; set; }
 
         /// <summary>
         ///     Returns if the item is enabled.
         /// </summary>
-        public override bool Enabled { get; set; }
+        public override sealed bool Enabled { get; set; }
 
         /// <summary>
         ///     Returns the item value as a generic object.
         /// </summary>
         public override object ValueAsObject
         {
-            get { return _value; }
+            get { return Value; }
         }
 
         /// <summary>
@@ -103,7 +104,14 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <summary>
         ///     Item Windows Process Messages callback.
         /// </summary>
-        /// <param name="args"><see cref="WindowsKeys"/></param>
+        /// <param name="args">
+        ///     <see cref="WindowsKeys" />
+        /// </param>
         public override void OnWndProc(WindowsKeys args) {}
+
+        /// <summary>
+        ///     Item Update callback.
+        /// </summary>
+        public override void OnUpdate() {}
     }
 }

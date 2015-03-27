@@ -743,6 +743,21 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         {
             var currentHitchance = MinHitChance;
             MinHitChance = hitChance;
+            var castResult = Cast(unit, false, true);
+            MinHitChance = currentHitchance;
+            return castResult == CastStates.SuccessfullyCasted;
+        }
+
+        /// <summary>
+        ///     Cast Spell if HitChance is more than the minimum to input HitChance
+        /// </summary>
+        /// <param name="unit">Target</param>
+        /// <param name="hitChance">HitChance</param>
+        /// <returns>Was Spell Casted</returns>
+        public bool CastIfHitchanceMinimum(Obj_AI_Base unit, HitChance hitChance)
+        {
+            var currentHitchance = MinHitChance;
+            MinHitChance = hitChance;
             var castResult = Cast(unit);
             MinHitChance = currentHitchance;
             return castResult == CastStates.SuccessfullyCasted;

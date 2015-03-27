@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.UI.Values;
 
@@ -18,7 +19,12 @@ namespace LeagueSharp.CommonEx.Core.UI
         ///     Default Menu Values.
         /// </summary>
         private static readonly IDictionary<Type, Func<AMenuValue>> DefaultMenuValueByType =
-            new Dictionary<Type, Func<AMenuValue>> { { typeof(MenuBool), () => new MenuBool() } };
+            new Dictionary<Type, Func<AMenuValue>>
+            {
+                { typeof(MenuBool), () => new MenuBool() },
+                { typeof(MenuKeyBind), () => new MenuKeyBind() },
+                { typeof(MenuSlider), () => new MenuSlider() }
+            };
 
         /// <summary>
         ///     Creates a new value out of the given type.
@@ -32,6 +38,22 @@ namespace LeagueSharp.CommonEx.Core.UI
                 return (T) DefaultMenuValueByType[typeof(T)].Invoke();
             }
             return default(T);
+        }
+
+        /// <summary>
+        ///     Stores the new factory values into the menu factory container.
+        /// </summary>
+        /// <typeparam name="T"><see cref="AMenuValue"/> to contain into the factory value container</typeparam>
+        /// <param name="value">Standard build for the constructor</param>
+        /// <returns></returns>
+        public static bool CreateFactory<T>(AMenuValue value) where T : AMenuValue
+        {
+            if (!DefaultMenuValueByType.ContainsKey(typeof(T)))
+            {
+                DefaultMenuValueByType.Add(typeof(T), () => value);
+                return true;
+            }
+            return false;
         }
     }
 }

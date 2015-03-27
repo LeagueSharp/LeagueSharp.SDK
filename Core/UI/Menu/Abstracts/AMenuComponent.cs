@@ -25,9 +25,15 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         /// <param name="displayName">Menu Display Name</param>
         protected AMenuComponent(string name, string displayName)
         {
+            Id = Guid.NewGuid().ToString("N");
             Name = name;
             DisplayName = displayName;
         }
+
+        /// <summary>
+        ///     Menu Component Id
+        /// </summary>
+        public string Id { get; private set; }
 
         /// <summary>
         ///     Menu Component Name
@@ -61,7 +67,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         }
 
         /// <summary>
-        ///     Component Dynamic Object accessability.
+        ///     Component Sub Object accessability.
         /// </summary>
         /// <param name="name">Child Menu Component name</param>
         /// <returns>Child Menu Component of this component.</returns>
@@ -87,6 +93,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         /// </summary>
         /// <param name="args"></param>
         public abstract void OnWndProc(WindowsKeys args);
+
+        /// <summary>
+        ///     Component Update callback.
+        /// </summary>
+        public abstract void OnUpdate();
 
         /// <summary>
         ///     Dynamic Object Member Resolver.

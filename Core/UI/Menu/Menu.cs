@@ -30,7 +30,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         }
 
         /// <summary>
-        ///     Component Dynamic Object accessability.
+        ///     Component Sub Object accessability.
         /// </summary>
         /// <param name="name">Child Menu Component name</param>
         /// <returns>Child Menu Component of this component.</returns>
@@ -48,6 +48,15 @@ namespace LeagueSharp.CommonEx.Core.UI
         ///     Returns if the menu is enabled.
         /// </summary>
         public override bool Enabled { get; set; }
+
+        /// <summary>
+        ///     Attaches the menu towards the main menu.
+        /// </summary>
+        /// <returns>Menu Instance</returns>
+        public Menu AttachMenu()
+        {
+            return this;
+        }
 
         /// <summary>
         ///     Add a menu component to this menu.
@@ -82,5 +91,10 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// </summary>
         /// <param name="args"></param>
         public override void OnWndProc(WindowsKeys args) {}
+
+        /// <summary>
+        ///     Menu Update callback.
+        /// </summary>
+        public override void OnUpdate() {}
     }
 }

@@ -8,10 +8,19 @@ using LeagueSharp.CommonEx.Core.Utils;
 namespace LeagueSharp.CommonEx.Core.UI.Values
 {
     /// <summary>
-    ///     Menu Bool Value.
+    ///     Menu Bool.
     /// </summary>
     public class MenuBool : AMenuValue
     {
+        /// <summary>
+        ///     Constructor for MenuBool
+        /// </summary>
+        /// <param name="value">Bool Value</param>
+        public MenuBool(bool value = false)
+        {
+            Value = value;
+        }
+
         /// <summary>
         ///     Boolean Item Width requirement.
         /// </summary>
@@ -23,7 +32,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         /// <summary>
         ///     Bool Value.
         /// </summary>
-        public bool Bool { get; set; }
+        public bool Value { get; set; }
 
         /// <summary>
         ///     Boolean Item Draw callback.
