@@ -880,10 +880,11 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         ///     Returns Spell Damage.
         /// </summary>
         /// <param name="target">Target</param>
+        /// <param name="stage">The "stage" of the spell.</param>
         /// <returns></returns>
-        public float GetDamage(Obj_AI_Base target)
+        public float GetDamage(Obj_AI_Base target, int stage = 0)
         {
-            return (float) ObjectManager.Player.GetSpellDamage(target, Slot);
+            return (float) ObjectManager.Player.GetSpellDamage(target, Slot, stage);
         }
 
         /// <summary>
@@ -1016,6 +1017,16 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
             return acccountForCollision
                 ? TargetSelector.GetTargetNoCollision(this, champsToIgnore)
                 : TargetSelector.GetTarget(Range + extraRange, DamageType, From);
+        }
+
+        /// <summary>
+        ///     Gets all of the units that this spell can hit that is greater then or equal to the <see cref="HitChance"/> provided.
+        /// </summary>
+        /// <param name="minimumHitChance">Minimum HitChance</param>
+        /// <returns>All of the units that this spell can hit that is greater then or equal to the <see cref="HitChance"/> provided.</returns>
+        public IEnumerable<Obj_AI_Base> GetUnitsByHitChance(HitChance minimumHitChance = HitChance.High)
+        {
+            return ObjectHandler.Enemies.Where(unit => WillHit(unit, ObjectManager.Player.ServerPosition, 0, minimumHitChance));
         }
 
         #endregion
