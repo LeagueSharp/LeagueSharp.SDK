@@ -1,4 +1,8 @@
-﻿using LeagueSharp.CommonEx.Core.UI;
+﻿using System.Threading.Tasks;
+using LeagueSharp.CommonEx.Core.Enumerations;
+using LeagueSharp.CommonEx.Core.UI;
+using LeagueSharp.CommonEx.Core.Utils;
+using LeagueSharp.CommonEx.Core.Wrappers;
 
 namespace LeagueSharp.CommonEx.Core
 {
@@ -12,7 +16,15 @@ namespace LeagueSharp.CommonEx.Core
         /// </summary>
         public static void Init()
         {
+            // Load the Damage class async.
+            Task.Factory.StartNew(Damage.LoadDamage)
+                .ContinueWith(task => Logging.Write()(LogLevel.Info, "Damage loaded!"));
+
+            // Load the menu
             Root.Init();
+
+            // Log all of the exceptions
+            Logging.LogAllExceptions();
         }
     }
 }
