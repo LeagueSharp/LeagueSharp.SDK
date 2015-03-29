@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.Utils;
+using SharpDX;
 
 #endregion
 
@@ -49,12 +50,15 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// </summary>
         public override bool Enabled { get; set; }
 
+        public override Vector2 Position { get; set; }
+
         /// <summary>
         ///     Attaches the menu towards the main menu.
         /// </summary>
         /// <returns>Menu Instance</returns>
         public Menu AttachMenu()
         {
+            //UI.Root.Add(this);
             return this;
         }
 

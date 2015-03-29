@@ -3,7 +3,7 @@
     /// <summary>
     ///     LeagueSharp CommonEx Configuration.
     /// </summary>
-    public class Config
+    public class Configuration
     {
         /// <summary>
         ///     The type of the menu.

@@ -239,13 +239,16 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         ///     Instances a new Spell
         /// </summary>
         /// <param name="spellDataWrapper">SpellSlot Wrapper</param>
-        public Spell(SpellDataWrapper spellDataWrapper)
+        /// <param name="hitChance">Minimum Hit Chance</param>
+        public Spell(SpellDataWrapper spellDataWrapper, HitChance hitChance = HitChance.Medium)
         {
             Slot = spellDataWrapper.Slot;
             Range = spellDataWrapper.Range;
             Width = spellDataWrapper.Width;
             Speed = spellDataWrapper.Speed;
             Delay = spellDataWrapper.Delay;
+
+            MinHitChance = hitChance;
         }
 
         /// <summary>
@@ -253,7 +256,8 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// </summary>
         /// <param name="slot">SpellSlot</param>
         /// <param name="loadFromGame">Load SpellData From Game</param>
-        public Spell(SpellSlot slot, bool loadFromGame)
+        /// <param name="hitChance">Minimum Hit Chance</param>
+        public Spell(SpellSlot slot, bool loadFromGame, HitChance hitChance = HitChance.Medium)
         {
             Slot = slot;
 
@@ -268,6 +272,8 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
             Width = spellData.LineWidth.Equals(0) ? spellData.CastRadius : spellData.LineWidth;
             Speed = spellData.MissileSpeed;
             Delay = spellData.DelayTotalTimePercent;
+
+            MinHitChance = hitChance;
         }
 
         /// <summary>
@@ -540,68 +546,68 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         #region Cast
 
         /// <summary>
-        ///     Cast the Spell
+        ///     Casts the spell.
         /// </summary>
-        /// <param name="unit">Target</param>
-        /// <param name="aoe">Area-of-Effect</param>
-        /// <param name="exactHitChance">Exact Hit Chance</param>
-        /// <param name="minTargets">Minimum Targets to hit</param>
-        /// <returns>CastState. <seealso cref="CastStates" /></returns>
-        public CastStates Cast(Obj_AI_Base unit, bool aoe = false, bool exactHitChance = false, int minTargets = -1)
+        /// <param name="unit">Unit to cast on</param>
+        /// <param name="exactHitChance">Is exact hitchance</param>
+        /// <param name="areaOfEffect">Is Area of Effect</param>
+        /// <param name="minTargets">Minimum of Targets</param>
+        /// <param name="tempHitChance">Temporary HitChance Override</param>
+        /// <returns></returns>
+        public CastStates Cast(Obj_AI_Base unit,
+            bool exactHitChance = false,
+            bool areaOfEffect = false,
+            int minTargets = -1,
+            HitChance tempHitChance = HitChance.None)
         {
-            //Spell not ready.
+            if (!unit.IsValid())
+            {
+                return CastStates.InvalidTarget;
+            }
             if (!Slot.IsReady())
             {
                 return CastStates.NotReady;
             }
 
-            if (minTargets != -1)
+            if (!areaOfEffect && minTargets != -1)
             {
-                aoe = true;
+                areaOfEffect = true;
             }
 
-            //Targetted spell.
             if (!IsSkillshot)
             {
-                //Target out of range
                 if (RangeCheckFrom.DistanceSquared(unit.ServerPosition) > RangeSqr)
                 {
                     return CastStates.OutOfRange;
                 }
 
                 LastCastAttemptT = Variables.TickCount;
-                //Cant cast the Spell.
-                if (!ObjectManager.Player.Spellbook.CastSpell(Slot, unit))
-                {
-                    return CastStates.NotCasted;
-                }
 
-
-                return CastStates.SuccessfullyCasted;
+                return !ObjectManager.Player.Spellbook.CastSpell(Slot, unit)
+                    ? CastStates.NotCasted
+                    : CastStates.SuccessfullyCasted;
             }
 
-            //Get the best position to cast the spell.
-            var prediction = GetPrediction(unit, aoe);
+            var prediction = GetPrediction(unit, areaOfEffect);
 
             if (minTargets != -1 && prediction.AoeTargetsHitCount <= minTargets)
             {
                 return CastStates.NotEnoughTargets;
             }
 
-            //Skillshot collides.
             if (prediction.CollisionObjects.Count > 0)
             {
                 return CastStates.Collision;
             }
 
-            //Target out of range.
             if (RangeCheckFrom.DistanceSquared(prediction.CastPosition) > RangeSqr)
             {
                 return CastStates.OutOfRange;
             }
 
-            //The hitchance is too low.
-            if (prediction.Hitchance < MinHitChance || (exactHitChance && prediction.Hitchance != MinHitChance))
+            if (prediction.Hitchance < ((tempHitChance == HitChance.None) ? (MinHitChance) : (tempHitChance)) ||
+                (exactHitChance &&
+                 prediction.Hitchance != ((tempHitChance == HitChance.None) ? (MinHitChance) : (tempHitChance))))
             {
                 return CastStates.LowHitChance;
             }
@@ -621,7 +627,6 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
             }
             else
             {
-                //Cant cast the spell (actually should not happen).
                 if (!ObjectManager.Player.Spellbook.CastSpell(Slot, prediction.CastPosition))
                 {
                     return CastStates.NotCasted;
@@ -739,13 +744,9 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// <param name="unit">Target</param>
         /// <param name="hitChance">HitChance</param>
         /// <returns>Was Spell Casted</returns>
-        public bool CastIfHitchanceEquals(Obj_AI_Base unit, HitChance hitChance)
+        public CastStates CastIfHitchanceEquals(Obj_AI_Base unit, HitChance hitChance)
         {
-            var currentHitchance = MinHitChance;
-            MinHitChance = hitChance;
-            var castResult = Cast(unit, false, true);
-            MinHitChance = currentHitchance;
-            return castResult == CastStates.SuccessfullyCasted;
+            return Cast(unit, true, false, -1, hitChance);
         }
 
         /// <summary>
@@ -754,13 +755,9 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// <param name="unit">Target</param>
         /// <param name="hitChance">HitChance</param>
         /// <returns>Was Spell Casted</returns>
-        public bool CastIfHitchanceMinimum(Obj_AI_Base unit, HitChance hitChance)
+        public CastStates CastIfHitchanceMinimum(Obj_AI_Base unit, HitChance hitChance)
         {
-            var currentHitchance = MinHitChance;
-            MinHitChance = hitChance;
-            var castResult = Cast(unit);
-            MinHitChance = currentHitchance;
-            return castResult == CastStates.SuccessfullyCasted;
+            return Cast(unit, false, false, -1, hitChance);
         }
 
         /// <summary>
@@ -769,22 +766,21 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// <param name="unit">Main Target</param>
         /// <param name="minTargets">Minimum Targets</param>
         /// <returns>Was Spell Casted</returns>
-        public bool CastIfWillHit(Obj_AI_Base unit, int minTargets = 5)
+        public CastStates CastIfWillHit(Obj_AI_Base unit, int minTargets = 5)
         {
-            var castResult = Cast(unit, true, false, minTargets);
-            return castResult == CastStates.SuccessfullyCasted;
+            return Cast(unit, false, true, minTargets);
         }
 
         /// <summary>
         ///     Cast Spell on best Target.
         /// </summary>
         /// <param name="extraRange">Extra Range</param>
-        /// <param name="aoe">Area-of-Effect</param>
+        /// <param name="areaOfEffect">Area-of-Effect</param>
+        /// <param name="minTargets">Minimum Area-of-Effect targets</param>
         /// <returns>CastState. <seealso cref="CastStates" /></returns>
-        public CastStates CastOnBestTarget(float extraRange = 0, bool aoe = false)
+        public CastStates CastOnBestTarget(float extraRange = 0, bool areaOfEffect = false, int minTargets = -1)
         {
-            var target = GetTarget(extraRange);
-            return target != null ? Cast(target, aoe) : CastStates.NotCasted;
+            return Cast(GetTarget(extraRange), false, areaOfEffect, minTargets);
         }
 
         #endregion
@@ -881,27 +877,24 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         }
 
         /// <summary>
-        ///     Returns skillshot Damage.
+        ///     Returns Spell Damage.
         /// </summary>
         /// <param name="target">Target</param>
-        /// <param name="stage">Skillshot Stage</param>
         /// <returns></returns>
-        public float GetDamage(Obj_AI_Base target, int stage = 0)
+        public float GetDamage(Obj_AI_Base target)
         {
-            //return (float)ObjectManager.Player.GetSpellDamage(target, Slot, stage);
-            return 0f; // TODO: Damage.cs
+            return (float) ObjectManager.Player.GetSpellDamage(target, Slot);
         }
 
         /// <summary>
-        ///     Gets the damage that the skillshot will deal to the target using the damage lib and returns if the target is
+        ///     Gets the damage that the spell will deal to the target using the damage lib and returns if the target is
         ///     killable or not.
         /// </summary>
         /// <param name="target">Target</param>
         /// <param name="stage">Spell Stage</param>
         public bool IsKillable(Obj_AI_Base target, int stage = 0)
         {
-            //return ObjectManager.Player.GetSpellDamage(target, Slot, stage) > target.Health;
-            return false; // TODO: Damage.cs
+            return ObjectManager.Player.GetSpellDamage(target, Slot) > target.Health;
         }
 
         /// <summary>

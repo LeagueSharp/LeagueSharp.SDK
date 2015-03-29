@@ -3,6 +3,7 @@
 using System;
 using System.Dynamic;
 using LeagueSharp.CommonEx.Core.Utils;
+using SharpDX;
 
 #endregion
 
@@ -82,6 +83,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         ///     Component Enable Flag.
         /// </summary>
         public abstract bool Enabled { get; set; }
+
+        /// <summary>
+        ///     Component Position
+        /// </summary>
+        public abstract Vector2 Position { get; set; }
 
         /// <summary>
         ///     Component Drawing callback.

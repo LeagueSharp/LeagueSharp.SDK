@@ -1,8 +1,8 @@
 ﻿#region
 
-
-
 #endregion
+
+using LeagueSharp.CommonEx.Core.Enumerations;
 
 namespace LeagueSharp.CommonEx.Core.Utils
 {
@@ -47,6 +47,16 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             var s = ObjectManager.Player.Spellbook.GetSpell(slot);
             return s != null && IsReady(s, t);
+        }
+
+        /// <summary>
+        ///     Converts a spell cast state into a boolean.
+        /// </summary>
+        /// <param name="castState">Spell Cast State</param>
+        /// <returns>Boolean</returns>
+        public static bool ToBoolean(this CastStates castState)
+        {
+            return castState == CastStates.SuccessfullyCasted;
         }
     }
 }

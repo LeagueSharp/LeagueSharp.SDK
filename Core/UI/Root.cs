@@ -1,10 +1,16 @@
 ﻿#region
 
 using System;
-using System.Collections.Concurrent;
+using System.Drawing;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Windows.Forms;
 using LeagueSharp.CommonEx.Core.Enumerations;
-using LeagueSharp.CommonEx.Core.UI.Abstracts;
+using LeagueSharp.CommonEx.Core.Extensions;
+using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.Utils;
+using LeagueSharp.CommonEx.Properties;
 using SharpDX;
 using SharpDX.Direct3D9;
 
@@ -13,113 +19,49 @@ using SharpDX.Direct3D9;
 namespace LeagueSharp.CommonEx.Core.UI
 {
     /// <summary>
-    ///     User Interface Root class
+    ///     Root of the User Interface.
     /// </summary>
     public class Root
     {
-        /// <summary>
-        ///     Menu List Holder
-        /// </summary>
-        private static readonly ConcurrentDictionary<string, AMenuComponent> MenuList =
-            new ConcurrentDictionary<string, AMenuComponent>();
+        private static bool Show;
 
-        /// <summary>
-        ///     Menu State
-        /// </summary>
-        private static MenuState _state;
-
-        /// <summary>
-        ///     Static Constructor
-        /// </summary>
         static Root()
         {
             Game.OnUpdate += Game_OnUpdate;
-            Drawing.OnDraw += Drawing_OnDraw;
+            Drawing.OnEndScene += Drawing_OnDraw;
             Game.OnWndProc += Game_OnWndProc;
-
-            _state = MenuState.HomePage;
         }
 
-        /// <summary>
-        ///     Windows Process Messages callback
-        /// </summary>
-        /// <param name="args">
-        ///     <see cref="WndEventArgs" />
-        /// </param>
         private static void Game_OnWndProc(WndEventArgs args)
         {
-            if (_state == MenuState.Assemblies)
+            var keys = new WindowsKeys(args);
+            if (keys.SingleKey == Keys.ShiftKey)
             {
-                foreach (var menu in MenuList)
-                {
-                    menu.Value.OnWndProc(new WindowsKeys(args));
-                }
+                Show = keys.Msg == WindowsMessages.KEYDOWN;
             }
-            else if (_state == MenuState.HomePage) {}
         }
 
-        /// <summary>
-        ///     Drawing callback
-        /// </summary>
-        /// <param name="args">
-        ///     <see cref="EventArgs" />
-        /// </param>
         private static void Drawing_OnDraw(EventArgs args)
         {
-            Menu.OnDraw();
-
-            if (_state == MenuState.Assemblies)
+            if (!Show)
             {
-                foreach (var menu in MenuList)
-                {
-                    menu.Value.OnDraw();
-                }
+                Menu.OnDraw();
             }
         }
 
-        /// <summary>
-        ///     Update callback
-        /// </summary>
-        /// <param name="args">
-        ///     <see cref="EventArgs" />
-        /// </param>
-        private static void Game_OnUpdate(EventArgs args)
+        private static void Game_OnUpdate(EventArgs args) {}
+
+        public static void Init()
         {
-            if (_state == MenuState.Assemblies)
-            {
-                foreach (var menu in MenuList)
-                {
-                    menu.Value.OnUpdate();
-                }
-            }
+            Menu.LoadBitmap(Menu.BitmapType.LogoHeader, Resources.skin0_img000);
+            Menu.LoadBitmap(Menu.BitmapType.LogoIcon, Resources.skin0_img001);
+            Menu.LoadBitmap(Menu.BitmapType.AssembliesIcon, Resources.skin0_img002);
+            Menu.LoadBitmap(Menu.BitmapType.SettingsIcon, Resources.skin0_img003);
+            Menu.LoadBitmap(Menu.BitmapType.LogoFooter, Resources.skin0_img004);
         }
 
-        /// <summary>
-        ///     Adds a menu component.
-        /// </summary>
-        /// <param name="component">Menu Component</param>
-        /// <returns>If the action was successful</returns>
-        public static bool Add(AMenuComponent component)
-        {
-            return !MenuList.ContainsKey(component.Id) && component.Parent == null && component.Root != null &&
-                   MenuList.TryAdd(component.Id, component);
-        }
+        #region Menu
 
-        /// <summary>
-        ///     Removes a menu component.
-        /// </summary>
-        /// <param name="component">Menu Component</param>
-        /// <returns>If the action was successful</returns>
-        public static bool Remove(AMenuComponent component)
-        {
-            return MenuList.ContainsKey(component.Id) && MenuList.TryRemove(component.Id, out component);
-        }
-
-        #region Menu Setup
-
-        /// <summary>
-        ///     Menu Setup container
-        /// </summary>
         private static class Menu
         {
             /// <summary>
@@ -127,30 +69,62 @@ namespace LeagueSharp.CommonEx.Core.UI
             /// </summary>
             private static readonly Sprite Sprite = new Sprite(Drawing.Direct3DDevice);
 
-            /// <summary>
-            ///     Menu SubBox Color
-            /// </summary>
-            private static readonly ColorBGRA ColorSubBox = new ColorBGRA(0, 0, 0, 127.5f);
-
-            /// <summary>
-            ///     Menu MainBox Color
-            /// </summary>
-            private static readonly ColorBGRA ColorMainBox = new ColorBGRA(0, 0, 0, 63.75f);
+            private static Bitmap LogoBitmap { get; set; }
+            private static Texture LogoTexture { get; set; }
+            private static float Rotation { set; get; }
+            private static Vector2 Scale { get { return new Vector2(1,1); } }
 
             /// <summary>
             ///     Menu Draw callback
             /// </summary>
             public static void OnDraw()
             {
-                Sprite.Begin();
+                Sprite.Begin(SpriteFlags.AlphaBlend);
 
                 SubBox.Begin();
-                SubBox.Draw(VerticesSubBox, ColorSubBox);
+                SubBox.Draw(VerticesSubBox, new ColorBGRA(224, 255, 255, 255 / 2));
                 SubBox.End();
 
                 MainBox.Begin();
-                MainBox.Draw(VerticesMainBox, ColorMainBox);
+                MainBox.Draw(VerticesMainBox, new ColorBGRA(0, 0, 0, (byte) (255 / 1.7f)));
                 MainBox.End();
+
+                var line = new Line(Drawing.Direct3DDevice) { Antialias = true, GLLines = true, Width = 1f };
+                if (LogoBitmap != null && LogoTexture != null)
+                {
+                    var matrix = Sprite.Transform;
+                    var nMatrix = (Matrix.Scaling(Scale.X, Scale.Y, 0)) * Matrix.RotationZ(Rotation) *
+                                  Matrix.Translation(Position.X+15f, Position.Y+5f, 0);
+                    Sprite.Transform = nMatrix;
+                    Sprite.Draw(LogoTexture, new ColorBGRA(255, 255, 255, 255));
+                    Sprite.Transform = matrix;
+
+                    line.Begin();
+                    line.Draw(
+                        new[]
+                        {
+                            new Vector2(Position.X, Position.Y + LogoBitmap.Height + 10f),
+                            new Vector2(Position.X + MainBox.Width + 1f, Position.Y + LogoBitmap.Height + 10f),
+                        },
+                        new ColorBGRA(255, 255, 255, 255));
+                    line.End();
+                }
+
+                line = new Line(Drawing.Direct3DDevice) { Antialias = true, GLLines = true, Width = 1f };
+                line.Begin();
+                line.Draw(
+                    new[]
+                    {
+                        new Vector2(Position.X, Position.Y + Drawing.Height - 200),
+                        new Vector2(Position.X + MainBox.Width + 1f, Position.Y + Drawing.Height - 200),
+                    },
+                    new ColorBGRA(255, 255, 255, 255));
+                line.End();
+                line.Dispose();
+
+                Constants.LeagueSharpFont.DrawText(
+                    Sprite, "\"Accounts are like girls, they come, steal your money and go.\" -iMeh",
+                    35, Drawing.Height-190, new ColorBGRA(255, 255, 255, 255));
 
                 Sprite.End();
             }
@@ -162,7 +136,7 @@ namespace LeagueSharp.CommonEx.Core.UI
             {
                 Antialias = true,
                 GLLines = true,
-                Width = 350f
+                Width = 8f
             };
 
             /// <summary>
@@ -172,7 +146,7 @@ namespace LeagueSharp.CommonEx.Core.UI
             {
                 Antialias = true,
                 GLLines = true,
-                Width = 325f
+                Width = 455f
             };
 
             /// <summary>
@@ -185,8 +159,8 @@ namespace LeagueSharp.CommonEx.Core.UI
             /// </summary>
             private static readonly Vector2[] VerticesSubBox =
             {
-                new Vector2(Position.X + SubBox.Width / 2, Position.Y),
-                new Vector2(Position.X + SubBox.Width / 2, Position.Y + Drawing.Height)
+                new Vector2(Position.X + (Position.X + MainBox.Width) + SubBox.Width / 2, Position.Y),
+                new Vector2(Position.X + (Position.X + MainBox.Width) + SubBox.Width / 2, Position.Y + Drawing.Height)
             };
 
             /// <summary>
@@ -197,6 +171,36 @@ namespace LeagueSharp.CommonEx.Core.UI
                 new Vector2(Position.X + MainBox.Width / 2, Position.Y),
                 new Vector2(Position.X + MainBox.Width / 2, Position.Y + Drawing.Height)
             };
+
+            public static void LoadBitmap(BitmapType bitmapType, Bitmap bitmap)
+            {
+                switch (bitmapType)
+                {
+                    case BitmapType.LogoHeader:
+                        if (LogoBitmap != null)
+                        {
+                            LogoBitmap.Dispose();
+                            LogoBitmap = null;
+                        }
+
+                        LogoBitmap = bitmap;
+                        LogoTexture = Texture.FromMemory(
+                            Drawing.Direct3DDevice, (byte[]) new ImageConverter().ConvertTo(LogoBitmap, typeof(byte[])),
+                            (int) (LogoBitmap.Width * Scale.X), (int) (LogoBitmap.Height * Scale.Y), 0, Usage.None,
+                            Format.A1, Pool.Managed, Filter.Default, Filter.Default, 0);
+
+                        break;
+                }
+            }
+
+            public enum BitmapType
+            {
+                LogoHeader,
+                LogoIcon,
+                AssembliesIcon,
+                SettingsIcon,
+                LogoFooter
+            }
         }
 
         #endregion

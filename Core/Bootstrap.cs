@@ -1,4 +1,6 @@
-﻿namespace LeagueSharp.CommonEx.Core
+﻿using LeagueSharp.CommonEx.Core.UI;
+
+namespace LeagueSharp.CommonEx.Core
 {
     /// <summary>
     ///     Bootstrap is an init pointer for the AppDomainManager to initialize the library correctly once loaded in game.
@@ -8,6 +10,9 @@
         /// <summary>
         ///     External attachment handle for the AppDomainManager
         /// </summary>
-        public static void Init() {}
+        public static void Init()
+        {
+            Root.Init();
+        }
     }
 }

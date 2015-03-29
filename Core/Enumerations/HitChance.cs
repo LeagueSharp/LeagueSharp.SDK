@@ -48,6 +48,11 @@
         /// <summary>
         ///     Collision before hit onto target.
         /// </summary>
-        Collision = 0
+        Collision = 0,
+
+        /// <summary>
+        ///     No HitChance.
+        /// </summary>
+        None = -1
     }
 }

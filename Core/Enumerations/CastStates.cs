@@ -38,6 +38,11 @@
         /// <summary>
         ///     Spell Low Hit Chance
         /// </summary>
-        LowHitChance
+        LowHitChance,
+
+        /// <summary>
+        ///     Spell Invalid Target
+        /// </summary>
+        InvalidTarget
     }
 }

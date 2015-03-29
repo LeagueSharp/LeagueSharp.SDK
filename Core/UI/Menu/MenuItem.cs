@@ -2,6 +2,7 @@
 
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.Utils;
+using SharpDX;
 
 #endregion
 
@@ -81,6 +82,8 @@ namespace LeagueSharp.CommonEx.Core.UI
         ///     Returns if the item is enabled.
         /// </summary>
         public override sealed bool Enabled { get; set; }
+
+        public override Vector2 Position { get; set; }
 
         /// <summary>
         ///     Returns the item value as a generic object.
