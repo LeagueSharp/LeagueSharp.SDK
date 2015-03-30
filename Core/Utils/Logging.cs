@@ -138,9 +138,9 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
-        ///     Logs all exceptions that happen in the current app domain.
+        ///     Logs all exceptions that happen in the current AppDomain.
         /// </summary>
-        public static void LogAllExceptions()
+        internal static void LogAllExceptions()
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
