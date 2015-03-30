@@ -44,19 +44,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="clipper_library">
-      <HintPath>C:\Users\Admin\Desktop\Files\Awesome Folder\System\clipper_library.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\clipper_library.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp">
-      <HintPath>C:\Users\Admin\Desktop\Files\Awesome Folder\System\LeagueSharp.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>C:\Users\Admin\Desktop\Files\Awesome Folder\System\Newtonsoft.Json.dll</HintPath>
+      <HintPath>packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\Users\Admin\Desktop\Files\Awesome Folder\System\SharpDX.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>C:\Users\Admin\Desktop\Files\Awesome Folder\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -70,6 +70,7 @@
     <Compile Include="Core\Bootstrap.cs" />
     <Compile Include="Core\Configuration.cs" />
     <Compile Include="Core\Enumerations\CastStates.cs" />
+    <Compile Include="Core\Enumerations\CenteredFlags.cs" />
     <Compile Include="Core\Enumerations\CollisionableObjects.cs" />
     <Compile Include="Core\Enumerations\DamageType.cs" />
     <Compile Include="Core\Enumerations\DeviceOptionIdentity.cs" />
@@ -88,8 +89,12 @@
     <Compile Include="Core\Enumerations\WindowsMessages.cs" />
     <Compile Include="Core\Events\Gapcloser.cs" />
     <Compile Include="Core\Extensions\Streams.cs" />
+    <Compile Include="Core\Math\Geometry.cs" />
     <Compile Include="Core\Math\Prediction\Health.cs" />
     <Compile Include="Core\Orbwalker.cs" />
+    <Compile Include="Core\UI\Menu\MenuInterface.cs" />
+    <Compile Include="Core\UI\Menu\MenuSkins.cs" />
+    <Compile Include="Core\UI\Menu\MenuSprite.cs" />
     <Compile Include="Core\UI\Menu\Values\MenuInputText.cs" />
     <Compile Include="Core\UI\Menu\Values\MenuKeyBind.cs" />
     <Compile Include="Core\UI\Menu\Values\MenuSlider.cs" />
@@ -184,9 +189,13 @@
   <ItemGroup>
     <Content Include="Resources\Menu\Skin0\img_000.png" />
     <Content Include="Resources\Menu\Skin0\img_001.png" />
+    <Content Include="Resources\Menu\Skin0\img_001_sub.png" />
     <Content Include="Resources\Menu\Skin0\img_002.png" />
+    <Content Include="Resources\Menu\Skin0\img_002_sub.png" />
     <Content Include="Resources\Menu\Skin0\img_003.png" />
+    <Content Include="Resources\Menu\Skin0\img_003_sub.png" />
     <Content Include="Resources\Menu\Skin0\img_004.png" />
+    <Content Include="Resources\Menu\Special\F3VD2VG.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

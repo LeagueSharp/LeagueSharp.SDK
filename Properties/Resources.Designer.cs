@@ -83,9 +83,29 @@ namespace LeagueSharp.CommonEx.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap skin0_img001_sub {
+            get {
+                object obj = ResourceManager.GetObject("skin0_img001_sub", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap skin0_img002 {
             get {
                 object obj = ResourceManager.GetObject("skin0_img002", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap skin0_img002_sub {
+            get {
+                object obj = ResourceManager.GetObject("skin0_img002_sub", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +123,29 @@ namespace LeagueSharp.CommonEx.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap skin0_img003_sub {
+            get {
+                object obj = ResourceManager.GetObject("skin0_img003_sub", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap skin0_img004 {
             get {
                 object obj = ResourceManager.GetObject("skin0_img004", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap special_F3VD2VG {
+            get {
+                object obj = ResourceManager.GetObject("special_F3VD2VG", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

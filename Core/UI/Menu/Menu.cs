@@ -50,6 +50,9 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// </summary>
         public override bool Enabled { get; set; }
 
+        /// <summary>
+        ///     Menu Position
+        /// </summary>
         public override Vector2 Position { get; set; }
 
         /// <summary>

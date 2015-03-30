@@ -51,7 +51,11 @@ namespace LeagueSharp.CommonEx.Core.Render
         ///     If the function succeeds, the return value is the height of the text in logical units. If the function fails,
         ///     the return value is zero.
         /// </returns>
-        public static int DrawText(this Font font, Sprite sprite, string text, Vector2 vector2, ColorBGRA color)
+        public static int DrawText(this Font font,
+            SharpDX.Direct3D9.Sprite sprite,
+            string text,
+            Vector2 vector2,
+            ColorBGRA color)
         {
             return font.DrawText(sprite, text, (int) vector2.X, (int) vector2.Y, color);
         }
@@ -74,7 +78,11 @@ namespace LeagueSharp.CommonEx.Core.Render
         /// </param>
         /// <param name="color">Color of the text.</param>
         /// <returns></returns>
-        public static int DrawText(this Font font, Sprite sprite, string text, Vector2 vector2, Color color)
+        public static int DrawText(this Font font,
+            SharpDX.Direct3D9.Sprite sprite,
+            string text,
+            Vector2 vector2,
+            Color color)
         {
             return font.DrawText(
                 sprite, text, (int) vector2.X, (int) vector2.Y, new ColorBGRA(color.R, color.G, color.B, color.A));
@@ -100,7 +108,12 @@ namespace LeagueSharp.CommonEx.Core.Render
         /// <param name="y">Y-Axis on the screen projector to draw on.</param>
         /// <param name="color">Color of the text.</param>
         /// <returns></returns>
-        public static int DrawText(this Font font, Sprite sprite, string text, int x, int y, Color color)
+        public static int DrawText(this Font font,
+            SharpDX.Direct3D9.Sprite sprite,
+            string text,
+            int x,
+            int y,
+            Color color)
         {
             return font.DrawText(sprite, text, x, y, new ColorBGRA(color.R, color.G, color.B, color.A));
         }
@@ -139,7 +152,7 @@ namespace LeagueSharp.CommonEx.Core.Render
         ///     to the bottom) of the drawn text. If the function fails, the return value is zero.
         /// </returns>
         public static int DrawText(this Font font,
-            Sprite spriteRef,
+            SharpDX.Direct3D9.Sprite spriteRef,
             string stringRef,
             int count,
             IntPtr rectRef,
@@ -179,7 +192,7 @@ namespace LeagueSharp.CommonEx.Core.Render
         ///     to the bottom) of the drawn text. If the function fails, the return value is zero.
         /// </returns>
         public static int DrawText(this Font font,
-            Sprite sprite,
+            SharpDX.Direct3D9.Sprite sprite,
             string text,
             Rectangle rect,
             FontDrawFlags drawFlags,

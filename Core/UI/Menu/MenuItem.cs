@@ -83,6 +83,9 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// </summary>
         public override sealed bool Enabled { get; set; }
 
+        /// <summary>
+        ///     Item Position
+        /// </summary>
         public override Vector2 Position { get; set; }
 
         /// <summary>
