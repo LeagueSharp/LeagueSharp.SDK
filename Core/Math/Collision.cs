@@ -84,7 +84,7 @@ namespace LeagueSharp.CommonEx.Core.Math
                 if (input.CollisionObjects.HasFlag(CollisionableObjects.Heroes))
                 {
                     foreach (var hero in
-                                ObjectHandler.Enemies.Where(
+                                ObjectHandler.EnemyHeroes.Where(
                                     hero =>
                                         hero.IsValidTarget(
                                             System.Math.Min(input.Range + input.Radius + 100, 2000), true,

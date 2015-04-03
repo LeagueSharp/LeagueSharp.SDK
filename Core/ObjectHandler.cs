@@ -12,49 +12,97 @@ namespace LeagueSharp.CommonEx.Core
     public class ObjectHandler
     {
         private const string CacheRegionName = "ObjectHandler";
-        private static readonly bool Loaded;
         private static readonly List<string> SavedTypes;
 
         static ObjectHandler()
         {
-            if (Loaded)
+            // Create the CacheRegion
+            Cache.Instance.CreateRegion(CacheRegionName);
+
+            // Initialize the saved type list
+            SavedTypes = new List<string>();
+
+            // Create initial list
+            foreach (var gameObj in ObjectManager.Get<GameObject>())
+            {
+                AddSavedType(gameObj.GetType().ToString());
+                GetList(gameObj.GetType().ToString()).Add(gameObj);
+            }
+
+
+            // Subscribe to events
+            GameObject.OnCreate += GameObjectOnOnCreate;
+            GameObject.OnDelete += GameObjectOnOnDelete;
+        }
+
+        #region Cache Methods
+
+        /// <summary>
+        ///     Gets the List of the object from the Cache.
+        /// </summary>
+        /// <param name="name">Name of the list(Typically the type)</param>
+        /// <returns>List of GameObjects</returns>
+        private static List<GameObject> GetList(string name)
+        {
+            // Gets the internal list, creating it if nessecary.
+            object list;
+
+            var contains = Cache.Instance.TryGetValue(name, out list, CacheRegionName);
+
+            if (!contains)
+            {
+                list = Cache.Instance.AddOrGetExisting(
+                    name, new List<GameObject>(), ObjectCache.InfiniteAbsoluteExpiration, CacheRegionName);
+            }
+
+            return (List<GameObject>) list;
+        }
+
+        /// <summary>
+        ///     Adds a saved type to the list.
+        /// </summary>
+        /// <param name="typeName">Name of the type.</param>
+        private static void AddSavedType(string typeName)
+        {
+            if (SavedTypes.Contains(typeName))
             {
                 return;
             }
 
-            Cache.Instance.CreateRegion(CacheRegionName);
-            SavedTypes = new List<string>();
-
-            // Add all of the existing objects into the cache.
-            foreach (var gameObj in ObjectManager.Get<GameObject>())
-            {
-                AddSavedType(gameObj);
-
-                object obj;
-                var contains = Cache.Instance.TryGetValue(gameObj.GetType().ToString(), out obj, CacheRegionName);
-
-                if (!contains)
-                {
-                    obj = Cache.Instance.AddOrGetExisting(
-                        gameObj.GetType().ToString(), new List<GameObject>(), ObjectCache.InfiniteAbsoluteExpiration,
-                        CacheRegionName);
-                }
-
-                var list = (List<GameObject>) obj;
-                list.Add(gameObj);
-
-                Cache.Instance.Set(
-                    gameObj.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, CacheRegionName);
-            }
-
-            GameObject.OnCreate += GameObject_OnCreate;
-            GameObject.OnDelete += GameObjectOnOnDelete;
-
-            Loaded = true;
+            SavedTypes.Add(typeName);
         }
 
+        #endregion
+
+        #region GameObject Events
+
+        private static void GameObjectOnOnCreate(GameObject sender, EventArgs args)
+        {
+            // Get the list from the Cache
+            var list = GetList(sender.Type.ToString());
+
+            // Add the object
+            list.Add(sender);
+
+            // Add the saved type
+            AddSavedType(sender.Type.ToString());
+        }
+
+        private static void GameObjectOnOnDelete(GameObject sender, EventArgs args)
+        {
+            // Get the list from the Cache
+            var list = GetList(sender.Type.ToString());
+
+            // Remove the object
+            list.RemoveAll(x => x.NetworkId == sender.NetworkId);
+        }
+
+        #endregion
+
+        #region API / Public Methods
+
         /// <summary>
-        ///     Gets all of the <see cref="Obj_AI_Hero" />s.
+        ///     Gets all of the heroes in the game, using the Cache.
         /// </summary>
         public static IEnumerable<Obj_AI_Hero> AllHeroes
         {
@@ -62,125 +110,67 @@ namespace LeagueSharp.CommonEx.Core
             {
                 return
                     (IEnumerable<Obj_AI_Hero>)
-                         Cache.Instance.AddOrGetExisting("AllHeroes", GetFast<Obj_AI_Hero>, CacheRegionName);
+                        Cache.Instance.AddOrGetExisting("AllHeroes", GetFast<Obj_AI_Hero>, CacheRegionName);
             }
         }
 
         /// <summary>
-        ///     Gets all of the enemy <see cref="Obj_AI_Hero" />s.
+        ///     Gets all of the heroes in the game that are an enemy, using the Cache.
         /// </summary>
         public static IEnumerable<Obj_AI_Hero> EnemyHeroes
         {
-            get
-            {
-                return
-                    (IEnumerable<Obj_AI_Hero>)
-                        Cache.Instance.AddOrGetExisting(
-                            "Enemies", () => AllHeroes.Where(x => x.IsEnemy), CacheRegionName);
-            }
+            get { return AllHeroes.Where(x => x.IsEnemy); }
         }
 
         /// <summary>
-        ///     Gets all of the ally <see cref="Obj_AI_Hero" />s.
+        ///     Gets all of the heroes in the game that are an ally, using the Cache.
         /// </summary>
         public static IEnumerable<Obj_AI_Hero> AllyHeroes
         {
-            get
-            {
-                return
-                    (IEnumerable<Obj_AI_Hero>)
-                        Cache.Instance.AddOrGetExisting("Allies", () => AllHeroes.Where(x => x.IsAlly), CacheRegionName);
-            }
+            get { return AllHeroes.Where(x => x.IsAlly); }
         }
 
         /// <summary>
-        ///     Gets all of the ally <see cref="Obj_AI_Base" />s.
+        ///     Gets all of the <see cref="Obj_AI_Base" />'s in the game that are an enemy, using the Cache.
         /// </summary>
-        public static IEnumerable<Obj_AI_Base> Allies
+        public static IEnumerable<Obj_AI_Base> AllEnemies
+        {
+            // TODO: Conduct speed test using .Where or using Cache
+            get { return GetFast<Obj_AI_Base>().Where(x => x.IsEnemy); }
+        }
+
+        /// <summary>
+        ///     Gets all of the <see cref="Obj_AI_Base" />'s in the game that are an ally, using the Cache.
+        /// </summary>
+        public static IEnumerable<Obj_AI_Base> AllAllies
         {
             get { return GetFast<Obj_AI_Base>().Where(x => x.IsAlly); }
         }
 
         /// <summary>
-        ///     Gets all of the enemy <see cref="Obj_AI_Base" />s.
+        ///     Gets the Player, for easy replacing ObjectManager -> ObjectHandler
         /// </summary>
-        public static IEnumerable<Obj_AI_Base> Enemies
+        public static Obj_AI_Hero Player
         {
-            get { return GetFast<Obj_AI_Base>().Where(x => x.IsEnemy); }
-        }
-
-        private static void GameObjectOnOnDelete(GameObject sender, EventArgs args)
-        {
-            object obj;
-            var contains = Cache.Instance.TryGetValue(sender.GetType().ToString(), out obj, CacheRegionName);
-
-            if (!contains)
-            {
-                // Obj_LampBulb op :D
-                return;
-            }
-
-            var list = (List<GameObject>) obj;
-            list.Remove(sender);
-
-            Cache.Instance.Set(
-                sender.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, CacheRegionName);
-        }
-
-        private static void GameObject_OnCreate(GameObject sender, EventArgs args)
-        {
-            AddSavedType(sender);
-
-            object obj;
-            var contains = Cache.Instance.TryGetValue(sender.GetType().ToString(), out obj, CacheRegionName);
-
-            if (!contains)
-            {
-                obj = Cache.Instance.AddOrGetExisting(
-                    sender.GetType().ToString(), new List<GameObject>(), ObjectCache.InfiniteAbsoluteExpiration,
-                    CacheRegionName);
-            }
-
-            var list = (List<GameObject>) obj;
-            list.Add(sender);
-
-            Cache.Instance.Set(
-                sender.GetType().ToString(), list, ObjectCache.InfiniteAbsoluteExpiration, CacheRegionName);
-        }
-
-        private static void AddSavedType(GameObject gameObject)
-        {
-            if (!SavedTypes.Contains(gameObject.GetType().ToString()))
-            {
-                SavedTypes.Add(gameObject.GetType().ToString());
-            }
+            get { return ObjectManager.Player; }
         }
 
         /// <summary>
-        ///     Queries <see cref="ObjectManager" />. This is considered slow, and should not be used.
+        ///     Queries the <see cref="Cache" /> to retrieve objects of the specific type.
         /// </summary>
-        /// <typeparam name="T">Type of object to get</typeparam>
-        /// <returns>IEnumerable of the objects.</returns>
-        public static IEnumerable<T> Get<T>() where T : GameObject, new()
-        {
-            return ObjectManager.Get<T>();
-        }
-
-        /// <summary>
-        ///     Queries the <see cref="Cache" /> for objects of the type.
-        /// </summary>
-        /// <typeparam name="T">Type of object to get, must be a <see cref="GameObject" /></typeparam>
-        /// <returns>IEnumerable of the type.</returns>
+        /// <returns>IEnumerable of those objects.</returns>
         public static IEnumerable<T> GetFast<T>() where T : GameObject, new()
         {
             var list = new List<GameObject>();
 
-            foreach (var savedType in SavedTypes)
+            foreach (var type in SavedTypes)
             {
-                list.AddRange(Cache.Instance.Get<List<GameObject>>(savedType, CacheRegionName).OfType<T>());
+                list.AddRange(GetList(type).OfType<T>());
             }
 
-            return list.ConvertAll(input => input as T);
+            return list.ConvertAll(x => x as T);
         }
+
+        #endregion
     }
 }

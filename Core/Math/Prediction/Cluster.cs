@@ -57,7 +57,7 @@ namespace LeagueSharp.CommonEx.Core.Math.Prediction
             var result = new List<PossibleTarget>();
             var originalUnit = input.Unit;
             foreach (var enemy in
-                ObjectHandler.Enemies.Where(
+                ObjectHandler.AllEnemies.Where(
                     h =>
                         h.NetworkId != originalUnit.NetworkId &&
                         h.IsValidTarget((input.Range + 200 + input.RealRadius), true, input.RangeCheckFrom)))

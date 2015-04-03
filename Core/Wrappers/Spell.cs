@@ -538,7 +538,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// <returns>Hit Count</returns>
         public float GetHitCount(HitChance hitChance = HitChance.High)
         {
-            return ObjectHandler.Enemies.Select(e => GetPrediction(e)).Count(p => p.Hitchance >= hitChance);
+            return ObjectHandler.EnemyHeroes.Select(e => GetPrediction(e)).Count(p => p.Hitchance >= hitChance);
         }
 
         #endregion
@@ -1026,7 +1026,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// <returns>All of the units that this spell can hit that is greater then or equal to the <see cref="HitChance"/> provided.</returns>
         public IEnumerable<Obj_AI_Base> GetUnitsByHitChance(HitChance minimumHitChance = HitChance.High)
         {
-            return ObjectHandler.Enemies.Where(unit => WillHit(unit, ObjectManager.Player.ServerPosition, 0, minimumHitChance));
+            return ObjectHandler.AllEnemies.Where(unit => WillHit(unit, ObjectManager.Player.ServerPosition, 0, minimumHitChance));
         }
 
         #endregion
