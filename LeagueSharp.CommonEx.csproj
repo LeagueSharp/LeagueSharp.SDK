@@ -88,6 +88,7 @@
     <Compile Include="Core\Enumerations\TargetSelectorMode.cs" />
     <Compile Include="Core\Enumerations\WindowsMessages.cs" />
     <Compile Include="Core\Events\Gapcloser.cs" />
+    <Compile Include="Core\Events\Turret.cs" />
     <Compile Include="Core\Extensions\Streams.cs" />
     <Compile Include="Core\Math\Geometry.cs" />
     <Compile Include="Core\Math\Prediction\Health.cs" />
