@@ -92,7 +92,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         /// <summary>
         ///     Component Drawing callback.
         /// </summary>
-        public abstract void OnDraw();
+        public abstract void OnDraw(Vector2 position);
 
         /// <summary>
         ///     Component Windows Process Messages callback.

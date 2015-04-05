@@ -99,11 +99,11 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <summary>
         ///     Item Draw callback.
         /// </summary>
-        public override void OnDraw()
+        public override void OnDraw(Vector2 position)
         {
             if (Visible)
             {
-                _value.OnDraw();
+                _value.OnDraw(position);
             }
         }
 

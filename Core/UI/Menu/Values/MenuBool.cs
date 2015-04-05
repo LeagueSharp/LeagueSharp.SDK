@@ -1,7 +1,9 @@
 ﻿#region
 
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
+using LeagueSharp.CommonEx.Core.UI.Skins;
 using LeagueSharp.CommonEx.Core.Utils;
+using SharpDX;
 
 #endregion
 
@@ -37,7 +39,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         /// <summary>
         ///     Boolean Item Draw callback.
         /// </summary>
-        public override void OnDraw() {}
+        public override void OnDraw(Vector2 position)
+        {
+            SkinIndex.Skin[Configuration.MenuSkin < SkinIndex.Skin.Length ? Configuration.MenuSkin : 0].OnBoolDraw(
+                position);
+        }
 
         /// <summary>
         ///     Boolean Item Windows Process Messages callback.

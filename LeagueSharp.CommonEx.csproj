@@ -94,8 +94,15 @@
     <Compile Include="Core\Math\Prediction\Health.cs" />
     <Compile Include="Core\Orbwalker.cs" />
     <Compile Include="Core\UI\Menu\MenuInterface.cs" />
-    <Compile Include="Core\UI\Menu\MenuSkins.cs" />
+    <Compile Include="Core\UI\Menu\MenuSettings.cs" />
     <Compile Include="Core\UI\Menu\MenuSprite.cs" />
+    <Compile Include="Core\UI\Menu\Skins\Battlecry\BattlecrySkin.cs" />
+    <Compile Include="Core\UI\Menu\Skins\Battlecry\BoolRender.cs" />
+    <Compile Include="Core\UI\Menu\Skins\Biolight\BiolightSkin.cs" />
+    <Compile Include="Core\UI\Menu\Skins\Biolight\BoolRender.cs" />
+    <Compile Include="Core\UI\Menu\Skins\Default\BoolRender.cs" />
+    <Compile Include="Core\UI\Menu\Skins\Default\DefaultSkin.cs" />
+    <Compile Include="Core\UI\Menu\Skins\SkinIndex.cs" />
     <Compile Include="Core\UI\Menu\Values\MenuInputText.cs" />
     <Compile Include="Core\UI\Menu\Values\MenuKeyBind.cs" />
     <Compile Include="Core\UI\Menu\Values\MenuSlider.cs" />

@@ -1,6 +1,7 @@
 ﻿#region
 
 using LeagueSharp.CommonEx.Core.Utils;
+using SharpDX;
 
 #endregion
 
@@ -24,7 +25,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         /// <summary>
         ///     Drawing callback.
         /// </summary>
-        public abstract void OnDraw();
+        public abstract void OnDraw(Vector2 position);
 
         /// <summary>
         ///     Windows Process Messages callback.

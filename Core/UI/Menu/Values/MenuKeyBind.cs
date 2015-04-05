@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.Utils;
+using SharpDX;
 
 #endregion
 
@@ -65,7 +66,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         /// <summary>
         ///     KeyBind Item Draw callback.
         /// </summary>
-        public override void OnDraw() {}
+        public override void OnDraw(Vector2 position) {}
 
         /// <summary>
         ///     KeyBind Item Windows Process Messages callback.

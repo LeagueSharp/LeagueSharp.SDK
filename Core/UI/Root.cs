@@ -30,12 +30,20 @@ namespace LeagueSharp.CommonEx.Core.UI
             var keys = new WindowsKeys(args);
             if (keys.SingleKey == Keys.ShiftKey)
             {
-                if (keys.Msg == WindowsMessages.KEYDOWN && !_showMenu)
+                var value = keys.Msg == WindowsMessages.KEYDOWN;
+
+                _showMenu = value;
+
+                if (value)
                 {
-                    MenuInterface.QuoteContainer.Next();
+                    MenuInterface.OnMenuOpen();
                 }
-                _showMenu = keys.Msg == WindowsMessages.KEYDOWN;
+                else
+                {
+                    MenuInterface.OnMenuClose();
+                }
             }
+
             MenuInterface.OnWndProc(keys);
         }
 

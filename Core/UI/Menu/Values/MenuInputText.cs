@@ -2,6 +2,7 @@
 
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.Utils;
+using SharpDX;
 
 #endregion
 
@@ -42,7 +43,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         /// <summary>
         ///     InputText Item Draw callback.
         /// </summary>
-        public override void OnDraw() {}
+        public override void OnDraw(Vector2 position) {}
 
         /// <summary>
         ///     InputText Item Windows Process Messages callback.

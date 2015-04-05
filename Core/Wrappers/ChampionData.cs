@@ -3,10 +3,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using LeagueSharp.CommonEx.Core.Extensions;
+using LeagueSharp.CommonEx.Properties;
 using Newtonsoft.Json.Linq;
 
 namespace LeagueSharp.CommonEx.Core.Wrappers
@@ -29,12 +28,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// <param name="championName">Champion Name</param>
         public ChampionData(string championName)
         {
-            var damageFile =
-                JObject.Parse(
-                    Encoding.UTF8.GetString(
-                        Assembly.GetExecutingAssembly()
-                            .GetManifestResourceStream("LeagueSharp.CommonEx.Resources.Data.ChampionData.json")
-                            .GetAllBytes()));
+            var damageFile = JObject.Parse(Encoding.UTF8.GetString(Resources.ChampionData));
 
             championToken = damageFile["data"][championName];
 

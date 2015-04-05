@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
+using LeagueSharp.CommonEx.Core.UI.Skins;
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
 
@@ -91,7 +92,10 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <summary>
         ///     Menu Drawing callback.
         /// </summary>
-        public override void OnDraw() {}
+        public override void OnDraw(Vector2 position)
+        {
+            SkinIndex.Skin[Configuration.MenuSkin < SkinIndex.Skin.Length ? Configuration.MenuSkin : 0].OnDraw(position);
+        }
 
         /// <summary>
         ///     Menu Windows Process Messages callback.

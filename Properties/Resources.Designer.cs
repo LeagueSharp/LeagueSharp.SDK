@@ -61,6 +61,16 @@ namespace LeagueSharp.CommonEx.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] ChampionData {
+            get {
+                object obj = ResourceManager.GetObject("ChampionData", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap skin0_img000 {

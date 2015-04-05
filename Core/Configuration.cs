@@ -6,8 +6,8 @@
     public class Configuration
     {
         /// <summary>
-        ///     The type of the menu.
+        ///     The skin of the menu.
         /// </summary>
-        public static int MenuType = 0;
+        public static int MenuSkin = 0;
     }
 }
