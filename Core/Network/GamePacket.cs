@@ -35,7 +35,7 @@ namespace LeagueSharp.CommonEx.Core.Network
     /// <summary>
     ///     This class makes easier to handle packets.
     /// </summary>
-    public class GamePacket
+    public sealed class GamePacket : IDisposable
     {
         /// <summary>
         ///     Game Packet Data
@@ -149,6 +149,25 @@ namespace LeagueSharp.CommonEx.Core.Network
         public byte[] PacketData
         {
             get { return packetData.PacketData; }
+        }
+
+        /// <summary>
+        ///     Dispose of the GamePacket.
+        /// </summary>
+        public void Dispose()
+        {
+            if (packetData != null)
+            {
+                packetData.Dispose();
+            }
+            if (Reader != null)
+            {
+                Reader.Dispose();
+            }
+            if (Writer != null)
+            {
+                Writer.Dispose();
+            }
         }
 
         /// <summary>
@@ -338,38 +357,95 @@ namespace LeagueSharp.CommonEx.Core.Network
         }
     }
 
-    internal class GamePacketData
+    /// <summary>
+    ///     GamePacket Data.
+    /// </summary>
+    internal sealed class GamePacketData : IDisposable
     {
+        /// <summary>
+        ///     Memory Stream.
+        /// </summary>
         private MemoryStream ms;
 
+        /// <summary>
+        ///     Constructor.
+        /// </summary>
         public GamePacketData()
         {
             CreatePacket(null);
         }
 
+        /// <summary>
+        ///     Constructor.
+        /// </summary>
+        /// <param name="data">Packet Data</param>
         public GamePacketData(byte[] data)
         {
             CreatePacket(data);
         }
 
+        /// <summary>
+        ///     Constructor.
+        /// </summary>
+        /// <param name="args">GamePacket Event Arguments Container</param>
         public GamePacketData(GamePacketEventArgs args)
         {
             CreatePacket(args.PacketData);
         }
 
+        /// <summary>
+        ///     Constructor.
+        /// </summary>
+        /// <param name="id">Short Value</param>
         public GamePacketData(short id)
         {
             CreatePacket(BitConverter.GetBytes(id));
         }
 
+        /// <summary>
+        ///     Binary Reader.
+        /// </summary>
         public BinaryReader Reader { get; private set; }
+
+        /// <summary>
+        ///     Binary Writer.
+        /// </summary>
         public BinaryWriter Writer { get; private set; }
 
+        /// <summary>
+        ///     Packet Data.
+        /// </summary>
         public byte[] PacketData
         {
             get { return ms.ToArray(); }
         }
 
+        /// <summary>
+        ///     GamePacket Data Dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            if (ms != null)
+            {
+                ms.Dispose();
+                ms = null;
+            }
+            if (Reader != null)
+            {
+                Reader.Dispose();
+                Reader = null;
+            }
+            if (Writer != null)
+            {
+                Writer.Dispose();
+                Writer = null;
+            }
+        }
+
+        /// <summary>
+        ///     Create a Packet.
+        /// </summary>
+        /// <param name="data">Packet Data</param>
         private void CreatePacket(byte[] data)
         {
             ms = data == null ? new MemoryStream() : new MemoryStream(data);
@@ -380,6 +456,10 @@ namespace LeagueSharp.CommonEx.Core.Network
             Writer.BaseStream.Position = 0;
         }
 
+        /// <summary>
+        ///     Returns the packet identity.
+        /// </summary>
+        /// <returns>Short value of the packet ID</returns>
         public short GetPacketId()
         {
             return PacketData.GetPacketId();

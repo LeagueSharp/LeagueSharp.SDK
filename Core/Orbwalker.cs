@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.Extensions;
@@ -16,6 +17,20 @@ namespace LeagueSharp.CommonEx.Core
     /// </summary>
     public class Orbwalker
     {
+        /// <summary>
+        ///     Orbwalker Attack Event Delegate.
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Orbwalker Attack Event Arguments Container</param>
+        public delegate void OnAttackEventDelegate(object sender, AttackArgs e);
+
+        /// <summary>
+        ///     Orbwalker Event Delegate.
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Orbwalker Event Arguments Container</param>
+        public delegate void OnOrbwalkDelegate(object sender, OrbwalkerArgs e);
+
         /// <summary>
         ///     Next Tick on which the Orbwalker should begin to to check once again.
         /// </summary>
@@ -134,12 +149,12 @@ namespace LeagueSharp.CommonEx.Core
         /// <summary>
         ///     Orbwalker event, used for subscribing to incoming orbwalker events.
         /// </summary>
-        public static event Action<OrbwalkerArgs> OnOrbwalk;
+        public static event OnOrbwalkDelegate OnOrbwalk;
 
         /// <summary>
         ///     Orbwalker event of attack, used for notifying on pre, during or after an attack event.
         /// </summary>
-        public static event Action<AttackArgs> OnAttackEvent;
+        public static event OnAttackEventDelegate OnAttackEvent;
 
         /// <summary>
         ///     On Game Update subscribed event function.
@@ -185,7 +200,7 @@ namespace LeagueSharp.CommonEx.Core
 
             if (OnOrbwalk != null)
             {
-                OnOrbwalk(args);
+                OnOrbwalk(MethodBase.GetCurrentMethod().DeclaringType, args);
             }
 
             Orbwalk(args);
@@ -253,7 +268,8 @@ namespace LeagueSharp.CommonEx.Core
 
             if (mode == OrbwalkerMode.Combo)
             {
-                var target = ObjectHandler.GetFast<Obj_AI_Hero>().OrderBy(t => t.Distance(_player.Position)).FirstOrDefault();
+                var target =
+                    ObjectHandler.GetFast<Obj_AI_Hero>().OrderBy(t => t.Distance(_player.Position)).FirstOrDefault();
                 if (target.IsValidTarget(_player.GetRealAutoAttackRange()))
                 {
                     return target; // TODO: Replace with target selector
@@ -337,7 +353,7 @@ namespace LeagueSharp.CommonEx.Core
     /// <summary>
     ///     Orbwalker data class for <see cref="Orbwalker.OnOrbwalk" />
     /// </summary>
-    public sealed class OrbwalkerArgs
+    public class OrbwalkerArgs : EventArgs
     {
         /// <summary>
         ///     Local value to define if should continue with the orbwalker command.
@@ -384,10 +400,6 @@ namespace LeagueSharp.CommonEx.Core
     }
 
     /// <summary>
-    ///     
     /// </summary>
-    public sealed class AttackArgs
-    {
-        
-    }
+    public class AttackArgs : EventArgs {}
 }

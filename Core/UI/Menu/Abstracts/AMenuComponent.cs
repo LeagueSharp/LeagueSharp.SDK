@@ -75,7 +75,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         public abstract AMenuComponent this[string name] { get; }
 
         /// <summary>
-        ///     Component Visibilty.
+        ///     Component Visibilty Flag.
         /// </summary>
         public abstract bool Visible { get; set; }
 
@@ -85,6 +85,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         public abstract bool Enabled { get; set; }
 
         /// <summary>
+        ///     Component Toggled Flag.
+        /// </summary>
+        public abstract bool Toggled { get; set; }
+
+        /// <summary>
         ///     Component Position
         /// </summary>
         public abstract Vector2 Position { get; set; }
@@ -92,7 +97,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         /// <summary>
         ///     Component Drawing callback.
         /// </summary>
-        public abstract void OnDraw(Vector2 position);
+        public abstract void OnDraw(Vector2 position, int index);
 
         /// <summary>
         ///     Component Windows Process Messages callback.

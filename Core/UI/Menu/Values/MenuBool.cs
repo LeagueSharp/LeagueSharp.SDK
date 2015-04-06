@@ -41,8 +41,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         /// </summary>
         public override void OnDraw(Vector2 position)
         {
-            SkinIndex.Skin[Configuration.MenuSkin < SkinIndex.Skin.Length ? Configuration.MenuSkin : 0].OnBoolDraw(
-                position);
+            SkinIndex.Skin[Configuration.GetValidMenuSkin()].OnBoolDraw(position);
         }
 
         /// <summary>

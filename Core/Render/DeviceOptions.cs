@@ -13,7 +13,7 @@ namespace LeagueSharp.CommonEx.Core.Render
     /// <summary>
     ///     Device Options to use in a block and then release to original device state afterwards.
     /// </summary>
-    public class DeviceOptions : IDisposable
+    public sealed class DeviceOptions : IDisposable
     {
         /// <summary>
         ///     Device Option list.

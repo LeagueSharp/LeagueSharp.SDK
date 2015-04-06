@@ -14,12 +14,7 @@ namespace LeagueSharp.CommonEx.Core.Events
         /// <summary>
         ///     DetectedDashes list.
         /// </summary>
-        private static readonly Dictionary<int, DashContainer> DetectedDashes = new Dictionary<int, DashContainer>();
-
-        /// <summary>
-        ///     OnDash Event
-        /// </summary>
-        public static event Action<DashContainer> OnDash;
+        private static readonly Dictionary<int, DashArgs> DetectedDashes = new Dictionary<int, DashArgs>();
 
         /// <summary>
         ///     Static Constructor.
@@ -28,6 +23,18 @@ namespace LeagueSharp.CommonEx.Core.Events
         {
             Obj_AI_Base.OnNewPath += ObjAiHeroOnOnNewPath;
         }
+
+        /// <summary>
+        ///     OnDashDelegate
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Dash Arguments Container</param>
+        public delegate void OnDashDelegate(object sender, DashArgs e);
+
+        /// <summary>
+        ///     OnDash Event
+        /// </summary>
+        public static event OnDashDelegate OnDash;
 
         /// <summary>
         ///     New Path subscribed event function.
@@ -40,12 +47,12 @@ namespace LeagueSharp.CommonEx.Core.Events
             {
                 if (!DetectedDashes.ContainsKey(sender.NetworkId))
                 {
-                    DetectedDashes.Add(sender.NetworkId, new DashContainer());
+                    DetectedDashes.Add(sender.NetworkId, new DashArgs());
                 }
                 var path = new List<Vector2> { sender.ServerPosition.ToVector2() };
                 path.AddRange(args.Path.ToList().ToVector2());
 
-                DetectedDashes[sender.NetworkId] = new DashContainer
+                DetectedDashes[sender.NetworkId] = new DashArgs
                 {
                     StartTick = Variables.TickCount - Game.Ping / 2,
                     Speed = args.Speed,
@@ -64,7 +71,8 @@ namespace LeagueSharp.CommonEx.Core.Events
 
                 if (OnDash != null)
                 {
-                    OnDash(DetectedDashes[sender.NetworkId]);
+                    OnDash(
+                        System.Reflection.MethodBase.GetCurrentMethod().DeclaringType, DetectedDashes[sender.NetworkId]);
                 }
             }
         }
@@ -84,15 +92,15 @@ namespace LeagueSharp.CommonEx.Core.Events
         /// <summary>
         ///     Gets the speed of the dashing unit if it is dashing.
         /// </summary>
-        public static DashContainer GetDashInfo(this Obj_AI_Base unit)
+        public static DashArgs GetDashInfo(this Obj_AI_Base unit)
         {
-            return DetectedDashes.ContainsKey(unit.NetworkId) ? DetectedDashes[unit.NetworkId] : new DashContainer();
+            return DetectedDashes.ContainsKey(unit.NetworkId) ? DetectedDashes[unit.NetworkId] : new DashArgs();
         }
 
         /// <summary>
         ///     Dash Container
         /// </summary>
-        public class DashContainer
+        public class DashArgs : EventArgs
         {
             /// <summary>
             ///     Dash Duration

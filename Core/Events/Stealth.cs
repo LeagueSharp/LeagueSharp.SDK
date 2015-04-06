@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace LeagueSharp.CommonEx.Core.Events
 {
@@ -7,6 +8,13 @@ namespace LeagueSharp.CommonEx.Core.Events
     /// </summary>
     public class Stealth
     {
+        /// <summary>
+        ///     OnStealth Delegate.
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">OnStealth Event Arguments Container</param>
+        public delegate void OnStealthDelegate(object sender, OnStealthEventArgs e);
+
         /// <summary>
         ///     Static constructor.
         /// </summary>
@@ -47,7 +55,7 @@ namespace LeagueSharp.CommonEx.Core.Events
         /// <summary>
         ///     Gets fired when any hero is invisible.
         /// </summary>
-        public static event Action<OnStealthEventArgs> OnStealth;
+        public static event OnStealthDelegate OnStealth;
 
         /// <summary>
         /// </summary>
@@ -56,7 +64,7 @@ namespace LeagueSharp.CommonEx.Core.Events
         {
             if (OnStealth != null)
             {
-                OnStealth(args);
+                OnStealth(MethodBase.GetCurrentMethod().DeclaringType, args);
             }
         }
 
@@ -64,7 +72,7 @@ namespace LeagueSharp.CommonEx.Core.Events
         ///     On Stealth Event Data, contains useful information that is passed with OnStealth
         ///     <seealso cref="OnStealth" />
         /// </summary>
-        public struct OnStealthEventArgs
+        public class OnStealthEventArgs : EventArgs
         {
             /// <summary>
             ///     Returns if the unit is stealthed or not.

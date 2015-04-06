@@ -1,4 +1,7 @@
-﻿using LeagueSharp.CommonEx.Core.Utils;
+﻿using System.Collections.Generic;
+using LeagueSharp.CommonEx.Core.UI.Abstracts;
+using LeagueSharp.CommonEx.Core.UI.Skins;
+using LeagueSharp.CommonEx.Core.Utils;
 
 namespace LeagueSharp.CommonEx.Core.UI
 {
@@ -8,15 +11,29 @@ namespace LeagueSharp.CommonEx.Core.UI
     public static class MenuInterface
     {
         /// <summary>
+        ///     Root Menu(Components), contains the list of the menu that are attached to the root.
+        /// </summary>
+        public static readonly List<AMenuComponent> RootMenuComponents = new List<AMenuComponent>();
+
+        /// <summary>
         ///     Sends a drawing request towards the menu, happens on an OnDraw present.
         /// </summary>
-        public static void OnDraw() {}
+        public static void OnDraw()
+        {
+            SkinIndex.Skin[Configuration.GetValidMenuSkin()].OnDraw(MenuSettings.Position);
+        }
 
         /// <summary>
         ///     Sends a windows process message towards the menu.
         /// </summary>
         /// <param name="keys"></param>
-        public static void OnWndProc(WindowsKeys keys) {}
+        public static void OnWndProc(WindowsKeys keys)
+        {
+            foreach (var component in RootMenuComponents)
+            {
+                component.OnWndProc(keys);
+            }
+        }
 
         /// <summary>
         ///     Event is fired when the menu container gets opened.

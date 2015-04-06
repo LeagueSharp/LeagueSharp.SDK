@@ -21,7 +21,7 @@ namespace LeagueSharp.CommonEx.Core
         /// </summary>
         static Spells()
         {
-            Load.OnLoad += args =>
+            Load.OnLoad += (sender, e) =>
             {
                 foreach (var obj in ObjectHandler.GetFast<Obj_AI_Hero>())
                 {

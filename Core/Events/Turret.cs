@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace LeagueSharp.CommonEx.Core.Events
 {
@@ -7,6 +8,16 @@ namespace LeagueSharp.CommonEx.Core.Events
     /// </summary>
     public class Turret
     {
+        /// <summary>
+        ///     OnTurretShot Delegate.
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">OnTurretShot Arguments Container</param>
+        public delegate void OnTurretShotDelegate(object sender, TurretShotArgs e);
+
+        /// <summary>
+        ///     Static Constructor
+        /// </summary>
         static Turret()
         {
             Obj_AI_Base.OnProcessSpellCast += ObjAiBaseOnOnProcessSpellCast;
@@ -15,13 +26,12 @@ namespace LeagueSharp.CommonEx.Core.Events
         /// <summary>
         ///     This event gets called when any unit gets shot by a tower.
         /// </summary>
-        public static event Action<TurretShotArgs> OnTurretShot;
+        public static event OnTurretShotDelegate OnTurretShot;
 
         #region OnTurretShot
 
         private static void ObjAiBaseOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            
             var turret = sender as Obj_AI_Turret;
 
             if (turret != null)
@@ -34,7 +44,7 @@ namespace LeagueSharp.CommonEx.Core.Events
         {
             if (OnTurretShot != null)
             {
-                OnTurretShot(new TurretShotArgs(unit, turret));
+                OnTurretShot(MethodBase.GetCurrentMethod().DeclaringType, new TurretShotArgs(unit, turret));
             }
         }
 
@@ -44,7 +54,7 @@ namespace LeagueSharp.CommonEx.Core.Events
     /// <summary>
     ///     Contains the event arguements for the OnTurretShot event.
     /// </summary>
-    public struct TurretShotArgs
+    public class TurretShotArgs : EventArgs
     {
         /// <summary>
         ///     The turret that has attacked the unit.

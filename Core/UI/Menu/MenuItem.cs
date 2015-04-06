@@ -84,6 +84,11 @@ namespace LeagueSharp.CommonEx.Core.UI
         public override sealed bool Enabled { get; set; }
 
         /// <summary>
+        ///     Returns if the item is toggled.
+        /// </summary>
+        public override bool Toggled { get; set; }
+
+        /// <summary>
         ///     Item Position
         /// </summary>
         public override Vector2 Position { get; set; }
@@ -99,7 +104,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <summary>
         ///     Item Draw callback.
         /// </summary>
-        public override void OnDraw(Vector2 position)
+        public override void OnDraw(Vector2 position, int index)
         {
             if (Visible)
             {

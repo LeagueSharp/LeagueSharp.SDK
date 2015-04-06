@@ -17,7 +17,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <summary>
         ///     Returns if the menu shoudl be drawn.
         /// </summary>
-        private static bool _showMenu;
+        public static bool MenuVisible = true;
 
         /// <summary>
         ///     Windows Process Messages callback.
@@ -32,7 +32,7 @@ namespace LeagueSharp.CommonEx.Core.UI
             {
                 var value = keys.Msg == WindowsMessages.KEYDOWN;
 
-                _showMenu = value;
+                MenuVisible = value;
 
                 if (value)
                 {
@@ -55,7 +55,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// </param>
         private static void Drawing_OnDraw(EventArgs args)
         {
-            if (_showMenu)
+            if (MenuVisible)
             {
                 MenuInterface.OnDraw();
             }

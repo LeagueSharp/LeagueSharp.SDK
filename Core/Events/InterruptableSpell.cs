@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using LeagueSharp.CommonEx.Core.Wrappers;
 
 namespace LeagueSharp.CommonEx.Core.Events
@@ -11,6 +12,13 @@ namespace LeagueSharp.CommonEx.Core.Events
     /// </summary>
     public class InterruptableSpell
     {
+        /// <summary>
+        ///     Interruptable Target Delegate.
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Interruptable Target Event Arguments Container</param>
+        public delegate void OnInterruptableTargetDelegate(object sender, InterruptableTargetEventArgs e);
+
         /// <summary>
         ///     The danger level of the spell.
         /// </summary>
@@ -62,7 +70,7 @@ namespace LeagueSharp.CommonEx.Core.Events
         /// <summary>
         ///     Gets fired when an enemy is casting a spellData that should be interrupted.
         /// </summary>
-        public static event Action<InterruptableTargetEventArgs> OnInterruptableTarget;
+        public static event OnInterruptableTargetDelegate OnInterruptableTarget;
 
         /// <summary>
         ///     Initializer for the spells
@@ -137,7 +145,7 @@ namespace LeagueSharp.CommonEx.Core.Events
             foreach (var newArgs in
                 ObjectHandler.EnemyHeroes.Select(GetInterruptableTargetData).Where(newArgs => newArgs != null))
             {
-                OnInterruptableTarget(newArgs);
+                OnInterruptableTarget(MethodBase.GetCurrentMethod().DeclaringType, newArgs);
             }
         }
 
@@ -232,7 +240,7 @@ namespace LeagueSharp.CommonEx.Core.Events
         /// <summary>
         ///     Class that represents the event arguements for <see cref="OnInterruptableTarget" />
         /// </summary>
-        public class InterruptableTargetEventArgs
+        public class InterruptableTargetEventArgs : EventArgs
         {
             /// <summary>
             ///     Interruptable Target Data internal constructor

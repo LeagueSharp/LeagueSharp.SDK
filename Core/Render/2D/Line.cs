@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using SharpDX;
 using Color = System.Drawing.Color;
 
@@ -11,7 +12,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
     ///     Line class, holds information for drawing a line onto the screen using SharpDX (Direct3D9 cover) and/or
     ///     draws a line.
     /// </summary>
-    public class Line
+    public sealed class Line : IDisposable
     {
         #region Private Fields
 
@@ -385,5 +386,14 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         #endregion
 
         #endregion
+
+        /// <summary>
+        ///     Line Dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            _line.Dispose();
+            DrawingLine.Dispose();
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Reflection;
 using LeagueSharp.CommonEx.Core.Utils;
 
 #endregion
@@ -12,6 +13,13 @@ namespace LeagueSharp.CommonEx.Core.Events
     /// </summary>
     public class Load
     {
+        /// <summary>
+        ///     OnLoad Delegate.
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">EventArgs</param>
+        public delegate void OnLoadDelegate(object sender, EventArgs e);
+
         /// <summary>
         ///     Static constructor.
         /// </summary>
@@ -31,7 +39,7 @@ namespace LeagueSharp.CommonEx.Core.Events
         ///     OnLoad is getting called when you get ingame (doesn't matter if started or restarted while game is already
         ///     running) and when reloading an assembly.
         /// </summary>
-        public static event Action<EventArgs> OnLoad;
+        public static event OnLoadDelegate OnLoad;
 
         /// <summary>
         ///     Internal event that is called when the game starts or is already running (when you get ingame).
@@ -41,7 +49,7 @@ namespace LeagueSharp.CommonEx.Core.Events
         {
             if (OnLoad != null)
             {
-                OnLoad(new EventArgs());
+                OnLoad(MethodBase.GetCurrentMethod().DeclaringType, new EventArgs());
             }
         }
     }

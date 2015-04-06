@@ -5,7 +5,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
     /// <summary>
     ///     Executes an operation each set amount of ticks.
     /// </summary>
-    public class TickOperation : IDisposable
+    public sealed class TickOperation : IDisposable
     {
         /// <summary>
         ///     Contains the next tick value that Action should be executed.

@@ -17,23 +17,25 @@ namespace LeagueSharp.CommonEx.Core.Utils
     public class Cache : ObjectCache
     {
         /// <summary>
-        ///     Main Cache
-        /// </summary>
-        internal readonly Dictionary<string, Dictionary<string, object>> InternalCache;
-
-        /// <summary>
-        ///     Holds callbacks that are called before cached item is removed
+        ///     Holds callbacks that are called before cached item is removed.
         /// </summary>
         private readonly SortedDictionary<string, CacheEntryUpdateCallback> cacheEntryUpdateCallbacks;
 
         /// <summary>
-        ///     Holds callbacks that are called after cached item is removed
+        ///     Holds callbacks that are called after cached item is removed.
         /// </summary>
         private readonly SortedDictionary<string, CacheEntryRemovedCallback> cacheRemovedCallbacks;
 
+        /// <summary>
+        ///     Main Cache.
+        /// </summary>
+        internal readonly Dictionary<string, Dictionary<string, object>> InternalCache;
+
+        /// <summary>
+        ///     Private Constructor.
+        /// </summary>
         private Cache()
         {
-            // We have to create the default region, else we get exceptions :^(
             InternalCache = new Dictionary<string, Dictionary<string, object>>();
             CreateRegion("Default");
 
@@ -42,7 +44,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
-        ///     The capabilities of this implementation of ObjectCache
+        ///     The capabilities of this implementation of ObjectCache.
         /// </summary>
         public override DefaultCacheCapabilities DefaultCacheCapabilities
         {
@@ -55,7 +57,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
-        ///     Returns the name of the Cache
+        ///     Returns the name of the Cache.
         /// </summary>
         public override string Name
         {
@@ -63,7 +65,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
-        ///     Gets/Sets the value of a key in the Cache, using the default region name
+        ///     Gets/Sets the value of a key in the Cache, using the default region name.
         /// </summary>
         /// <param name="key">Key</param>
         /// <returns>Value matching the key</returns>
@@ -211,14 +213,15 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
             if (OnEntryAdded != null)
             {
-                OnEntryAdded(key, result, regionName);
+                OnEntryAdded(this, new EntryAddedArgs { Key = key, Value = result, RegionName = regionName });
             }
 
             return result;
         }
 
         /// <summary>
-        ///     Adds a key and a value, in the InternalCache region. However, if the item exists, it will return the cached item. This
+        ///     Adds a key and a value, in the InternalCache region. However, if the item exists, it will return the cached item.
+        ///     This
         ///     KeyValuePair does not expire.
         /// </summary>
         /// <param name="key">Key</param>
@@ -231,7 +234,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
-        ///     Adds a key, a value, and an expiration to the InternalCache, returns the value if the key exists
+        ///     Adds a key, a value, and an expiration to the InternalCache, returns the value if the key exists.
         /// </summary>
         /// <param name="key">Key</param>
         /// <param name="value">Value</param>
@@ -255,7 +258,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
             if (OnEntryAdded != null)
             {
-                OnEntryAdded(key, value, regionName);
+                OnEntryAdded(this, new EntryAddedArgs { Key = key, Value = value, RegionName = regionName });
             }
 
             InternalCache[regionName].Add(key, value);
@@ -298,7 +301,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
             if (OnEntryAdded != null)
             {
-                OnEntryAdded(value.Key, value.Value, value.RegionName);
+                OnEntryAdded(this, new EntryAddedArgs { Key = value.Key, Value = value.Value, RegionName = regionName });
             }
 
             InternalCache[regionName].Add(value.Key, value.Value);
@@ -349,7 +352,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
             if (OnEntryAdded != null)
             {
-                OnEntryAdded(key, value, regionName);
+                OnEntryAdded(this, new EntryAddedArgs { Key = key, Value = value, RegionName = regionName });
             }
 
             InternalCache[regionName].Add(key, value);
@@ -376,7 +379,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
-        ///     Gets a value in the InternalCache by the key
+        ///     Gets a value in the InternalCache by the key.
         /// </summary>
         /// <param name="key">Key</param>
         /// <param name="regionName">The name of the region in the InternalCache</param>
@@ -403,7 +406,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         }
 
         /// <summary>
-        ///     Gets the CacheItem from the Key
+        ///     Gets the CacheItem from the Key.
         /// </summary>
         /// <param name="key"></param>
         /// <param name="regionName"></param>
@@ -427,7 +430,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
             if (OnValueChanged != null && InternalCache[regionName].ContainsKey(key))
             {
-                OnValueChanged(new ValueChangedArgs(key, InternalCache[regionName][key], value, regionName));
+                OnValueChanged(this, new ValueChangedArgs(key, InternalCache[regionName][key], value, regionName));
             }
 
             InternalCache[regionName][key] = value;
@@ -459,7 +462,8 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
             if (OnValueChanged != null && InternalCache[regionName].ContainsKey(item.Key))
             {
-                OnValueChanged(new ValueChangedArgs(item.Key, InternalCache[regionName][item.Key], item.Value, regionName));
+                OnValueChanged(
+                    this, new ValueChangedArgs(item.Key, InternalCache[regionName][item.Key], item.Value, regionName));
             }
 
             InternalCache[regionName][item.Key] = item.Value;
@@ -493,7 +497,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
             if (OnValueChanged != null && InternalCache[regionName].ContainsKey(key))
             {
-                OnValueChanged(new ValueChangedArgs(key, InternalCache[regionName][key], value, regionName));
+                OnValueChanged(this, new ValueChangedArgs(key, InternalCache[regionName][key], value, regionName));
             }
 
             InternalCache[regionName][key] = value;
@@ -523,11 +527,12 @@ namespace LeagueSharp.CommonEx.Core.Utils
         public override IDictionary<string, object> GetValues(IEnumerable<string> keys, string regionName = null)
         {
             regionName = regionName ?? "Default";
-            return keys.Where(x => InternalCache[regionName].ContainsKey(x)).ToDictionary(x => x, x => InternalCache[regionName][x]);
+            return keys.Where(x => InternalCache[regionName].ContainsKey(x))
+                .ToDictionary(x => x, x => InternalCache[regionName][x]);
         }
 
         /// <summary>
-        ///     Removes KeyPair by the key in the InternalCache
+        ///     Removes KeyPair by the key in the InternalCache.
         /// </summary>
         /// <param name="key">Key</param>
         /// <param name="regionName">The name of the region in the InternalCache</param>
@@ -576,12 +581,11 @@ namespace LeagueSharp.CommonEx.Core.Utils
         #region OnEntryAdded
 
         /// <summary>
-        ///     Delegate when a value is added
+        ///     Delegate when a value is added.
         /// </summary>
-        /// <param name="key">Key</param>
-        /// <param name="value">Value</param>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
-        public delegate void OnEntryAddedDelegate(string key, object value, string regionName);
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Passed Arguments Container</param>
+        public delegate void OnEntryAddedDelegate(object sender, EntryAddedArgs e);
 
         /// <summary>
         ///     Gets called when a new value is added to the InternalCache.
@@ -593,13 +597,14 @@ namespace LeagueSharp.CommonEx.Core.Utils
         #region OnValueChanged
 
         /// <summary>
-        ///     Delegate for <see cref="OnValueChanged" />
+        ///     Delegate for <see cref="OnValueChanged" />.
         /// </summary>
-        /// <param name="args">Arguements</param>
-        public delegate void OnValueChangedDelegate(ValueChangedArgs args);
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Arguements</param>
+        public delegate void OnValueChangedDelegate(object sender, ValueChangedArgs e);
 
         /// <summary>
-        ///     Called when an entry in the InternalCache is modified
+        ///     Called when an entry in the InternalCache is modified.
         /// </summary>
         public static event OnValueChangedDelegate OnValueChanged;
 
@@ -632,27 +637,27 @@ namespace LeagueSharp.CommonEx.Core.Utils
     }
 
     /// <summary>
-    ///     Arguements for the <see cref="Cache.OnValueChanged" /> event
+    ///     Arguements for the <see cref="Cache.OnValueChanged" /> event.
     /// </summary>
-    public struct ValueChangedArgs
+    public class ValueChangedArgs : EventArgs
     {
         /// <summary>
-        ///     Key
+        ///     Key.
         /// </summary>
         public string Key;
 
         /// <summary>
-        ///     The new value after it was changed
+        ///     The new value after it was changed.
         /// </summary>
         public object NewValue;
 
         /// <summary>
-        ///     The old value prior to changing
+        ///     The old value prior to changing.
         /// </summary>
         public object OldValue;
 
         /// <summary>
-        ///     The name of the region in the InternalCache
+        ///     The name of the region in the InternalCache.
         /// </summary>
         public string RegionName;
 
@@ -663,5 +668,26 @@ namespace LeagueSharp.CommonEx.Core.Utils
             NewValue = newValue;
             RegionName = regionName;
         }
+    }
+
+    /// <summary>
+    ///     Arguments for the <see cref="Cache.OnEntryAddedDelegate" /> event.
+    /// </summary>
+    public class EntryAddedArgs : EventArgs
+    {
+        /// <summary>
+        ///     Key.
+        /// </summary>
+        public string Key;
+
+        /// <summary>
+        ///     The name of the region in the InternalCache.
+        /// </summary>
+        public string RegionName;
+
+        /// <summary>
+        ///     Value.
+        /// </summary>
+        public object Value;
     }
 }

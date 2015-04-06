@@ -10,13 +10,13 @@ namespace LeagueSharp.CommonEx.Core.Math
     public static class Geometry
     {
         /// <summary>
-        ///     Gets the center of the center of the rectangle where the text should be drawn to be centered by the flags.
+        ///     Returns the center position of the rendering object on the rectangle.
         /// </summary>
         /// <param name="rectangle">Rectangle boundaries</param>
         /// <param name="sprite">Sprite which is being drawn on</param>
         /// <param name="dimensions">Object Dimensions</param>
         /// <param name="flags">Centered Flags</param>
-        /// <returns>Vector2 with coordinations where to draw the text on the rectangle.</returns>
+        /// <returns>Vector2 center position of the rendering object on the rectangle.</returns>
         public static Vector2 GetCenter(this Rectangle rectangle,
             Sprite sprite,
             Rectangle dimensions,
@@ -52,6 +52,35 @@ namespace LeagueSharp.CommonEx.Core.Math
             }
 
             return new Vector2(x, y);
+        }
+
+        /// <summary>
+        ///     Returns the center position of the text on the rectangle.
+        /// </summary>
+        /// <param name="rectangle">Rectangle boundaries</param>
+        /// <param name="sprite">Sprite which is being drawn on</param>
+        /// <param name="text">Text</param>
+        /// <param name="flags">Centered Flags</param>
+        /// <returns>Returns the center position of the text on the rectangle.</returns>
+        public static Vector2 GetCenteredText(this Rectangle rectangle, Sprite sprite, string text, CenteredFlags flags)
+        {
+            return rectangle.GetCenter(sprite, Constants.LeagueSharpFont.MeasureText(sprite, text, 0), flags);
+        }
+
+        /// <summary>
+        ///     Returns the center position of the text on the rectangle.
+        /// </summary>
+        /// <param name="rectangle">Rectangle boundaries</param>
+        /// <param name="sprite">Sprite which is being drawn on</param>
+        /// <param name="font">Text Font</param>
+        /// <param name="text">Text</param>
+        /// <param name="flags">Centered Flags</param>
+        /// <returns>Returns the center position of the text on the rectangle.</returns>
+        public static Vector2 GetCenteredText(this Rectangle rectangle, Sprite sprite, Font font, string text, CenteredFlags flags)
+        {
+            return font == null
+                ? rectangle.GetCenteredText(sprite, text, flags)
+                : rectangle.GetCenter(sprite, font.MeasureText(sprite, text, 0), flags);
         }
     }
 }

@@ -101,7 +101,9 @@
     <Compile Include="Core\UI\Menu\Skins\Biolight\BiolightSkin.cs" />
     <Compile Include="Core\UI\Menu\Skins\Biolight\BoolRender.cs" />
     <Compile Include="Core\UI\Menu\Skins\Default\BoolRender.cs" />
+    <Compile Include="Core\UI\Menu\Skins\Default\DefaultSettings.cs" />
     <Compile Include="Core\UI\Menu\Skins\Default\DefaultSkin.cs" />
+    <Compile Include="Core\UI\Menu\Skins\Default\MenuRender.cs" />
     <Compile Include="Core\UI\Menu\Skins\SkinIndex.cs" />
     <Compile Include="Core\UI\Menu\Values\MenuInputText.cs" />
     <Compile Include="Core\UI\Menu\Values\MenuKeyBind.cs" />
@@ -149,8 +151,6 @@
     <Compile Include="Core\Network\Packet.cs" />
     <Compile Include="Core\Utils\Network.cs" />
     <Compile Include="Core\ObjectHandler.cs" />
-    <Compile Include="Core\Render\2D\Circle.cs" />
-    <Compile Include="Core\Render\2D\CircleFilled.cs" />
     <Compile Include="Core\Render\2D\Line.cs" />
     <Compile Include="Core\Enumerations\CircleType.cs" />
     <Compile Include="Core\Render\DeviceOptions.cs" />

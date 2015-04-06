@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.Extensions;
 using SharpDX;
@@ -17,9 +18,11 @@ namespace LeagueSharp.CommonEx.Core.Events
     public class Gapcloser
     {
         /// <summary>
-        ///     OnGapCloser Event.
+        ///     OnGapCloser Delegate.
         /// </summary>
-        public static event Action<GapCloserEventArgs> OnGapCloser;
+        /// <param name="sender">Sender</param>
+        /// <param name="e">GapCloserEvent Arguments Container</param>
+        public delegate void OnGapCloserDelegate(object sender, GapCloserEventArgs e);
 
         /// <summary>
         ///     List of Spells to trigger OnGapCloser for.
@@ -624,9 +627,14 @@ namespace LeagueSharp.CommonEx.Core.Events
         }
 
         /// <summary>
+        ///     OnGapCloser Event.
+        /// </summary>
+        public static event OnGapCloserDelegate OnGapCloser;
+
+        /// <summary>
         ///     On Process Spell Cast subscribed event function
         /// </summary>
-        /// <param name="sender"><see cref="Obj_AI_Base"/> sender</param>
+        /// <param name="sender"><see cref="Obj_AI_Base" /> sender</param>
         /// <param name="args">Process Spell Cast Data</param>
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
@@ -655,7 +663,9 @@ namespace LeagueSharp.CommonEx.Core.Events
         /// <summary>
         ///     On game tick update subscribed event function
         /// </summary>
-        /// <param name="args"><see cref="System.EventArgs"/></param>
+        /// <param name="args">
+        ///     <see cref="System.EventArgs" />
+        /// </param>
         private static void Game_OnUpdate(EventArgs args)
         {
             ActiveSpells.RemoveAll(entry => Variables.TickCount > entry.TickCount + 900);
@@ -672,19 +682,24 @@ namespace LeagueSharp.CommonEx.Core.Events
                             (gapcloser.SkillType == GapcloserType.Skillshot &&
                              ObjectManager.Player.DistanceSquared(gapcloser.Sender) < 250000))) // 500 * 500
             {
-                OnGapCloser(gapcloser);
+                OnGapCloser(MethodBase.GetCurrentMethod().DeclaringType, gapcloser);
             }
         }
 
         /// <summary>
         ///     GapCloser Data Container
         /// </summary>
-        public struct GapCloserEventArgs
+        public class GapCloserEventArgs : EventArgs
         {
             /// <summary>
             ///     Vector3 end of the Gapcloser
             /// </summary>
             public Vector3 End;
+
+            /// <summary>
+            ///     Returns if the direction of the gapcloser is towards the player
+            /// </summary>
+            public bool IsDirectedToPlayer;
 
             /// <summary>
             ///     GapCloser Sender
@@ -710,11 +725,6 @@ namespace LeagueSharp.CommonEx.Core.Events
             ///     Tick of Gapcloser start
             /// </summary>
             public int TickCount;
-
-            /// <summary>
-            ///     Returns if the direction of the gapcloser is towards the player
-            /// </summary>
-            public bool IsDirectedToPlayer;
 
             /// <summary>
             ///     Spell Name
