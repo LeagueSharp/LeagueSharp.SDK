@@ -155,6 +155,18 @@ namespace LeagueSharp.CommonEx.Core
             get { return ObjectManager.Player; }
         }
 
+        
+        /// <summary>
+        ///     Queries the native <see cref="ObjectManager"/> to retrieve objects of the specific type.
+        /// </summary>
+        /// <typeparam name="T">Type of GameObject</typeparam>
+        /// <returns>An enumerable list of the objects</returns>
+        [Obsolete("Use ObjectManager.GetFast<T>() instead for improved performance.")]
+        public static IEnumerable<T> Get<T>() where T : GameObject, new()
+        {
+            return ObjectManager.Get<T>();
+        }
+
         /// <summary>
         ///     Queries the <see cref="Cache" /> to retrieve objects of the specific type.
         /// </summary>
