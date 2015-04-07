@@ -1,5 +1,7 @@
 ﻿#region
 
+using LeagueSharp.CommonEx.Core.Enumerations;
+using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.UI.Skins;
 using LeagueSharp.CommonEx.Core.Utils;
@@ -37,17 +39,40 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         public bool Value { get; set; }
 
         /// <summary>
+        ///     Boolean Item Position.
+        /// </summary>
+        public override Vector2 Position { get; set; }
+
+        /// <summary>
         ///     Boolean Item Draw callback.
         /// </summary>
-        public override void OnDraw(Vector2 position)
+        /// <param name="component">Parent Component</param>
+        /// <param name="position">Position</param>
+        /// <param name="index">Item Index</param>
+        public override void OnDraw(AMenuComponent component, Vector2 position, int index)
         {
-            SkinIndex.Skin[Configuration.GetValidMenuSkin()].OnBoolDraw(position);
+            if (!Position.Equals(position))
+            {
+                Position = position;
+            }
+
+            SkinIndex.Skin[Configuration.GetValidMenuSkin()].OnBoolDraw(component, position, index);
         }
 
         /// <summary>
         ///     Boolean Item Windows Process Messages callback.
         /// </summary>
-        /// <param name="args"></param>
-        public override void OnWndProc(WindowsKeys args) {}
+        /// <param name="args">WindowsKeys</param>
+        public override void OnWndProc(WindowsKeys args)
+        {
+            if (args.Msg == WindowsMessages.LBUTTONDOWN && Position.IsValid())
+            {
+                var rect = SkinIndex.Skin[Configuration.GetValidMenuSkin()].GetBooleanContainerRectangle(Position);
+                if (args.Cursor.IsUnderRectangle(rect.X, rect.Y, rect.Width, rect.Height))
+                {
+                    Value = !Value;
+                }
+            }
+        }
     }
 }

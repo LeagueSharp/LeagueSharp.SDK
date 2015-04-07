@@ -50,9 +50,14 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         }
 
         /// <summary>
+        ///     Slider Item Position.
+        /// </summary>
+        public override Vector2 Position { get; set; }
+
+        /// <summary>
         ///     Slider Item Draw callback.
         /// </summary>
-        public override void OnDraw(Vector2 position) {}
+        public override void OnDraw(AMenuComponent component, Vector2 position, int index) {}
 
         /// <summary>
         ///     Slider Windows Process Messages callback.

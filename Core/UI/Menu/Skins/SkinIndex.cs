@@ -1,8 +1,8 @@
 ﻿using System;
+using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.UI.Skins.Battlecry;
 using LeagueSharp.CommonEx.Core.UI.Skins.Biolight;
 using LeagueSharp.CommonEx.Core.UI.Skins.Default;
-using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
 using BoolRender = LeagueSharp.CommonEx.Core.UI.Skins.Default.BoolRender;
 
@@ -30,7 +30,8 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins
                     OnDraw = DefaultSkin.OnDraw,
                     OnMenuDraw = MenuRender.OnDraw,
                     OnBoolDraw = BoolRender.OnDraw,
-                    GetContainerRectangle = DefaultSkin.GetContainerRectangle
+                    GetContainerRectangle = DefaultSkin.GetContainerRectangle,
+                    GetBooleanContainerRectangle = BoolRender.GetBooleanContainerRectangle
                 },
                 new SkinContainer { OnDraw = BiolightSkin.OnDraw, OnBoolDraw = Biolight.BoolRender.OnDraw },
                 new SkinContainer { OnDraw = BattlecrySkin.OnDraw, OnBoolDraw = Battlecry.BoolRender.OnDraw }
@@ -43,14 +44,19 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins
         public struct SkinContainer
         {
             /// <summary>
-            ///     Action link towards the boolean render function.
+            ///     Function link towards the boolean container rectangle get value.
             /// </summary>
-            public Action<Vector2> OnBoolDraw;
+            public Func<Vector2, Rectangle> GetBooleanContainerRectangle;
 
             /// <summary>
-            ///     Action link towards the menu render function.
+            ///     Function link towards the container rectangle get value.
             /// </summary>
-            public Action<MenuContainer, Vector2, int> OnMenuDraw;
+            public Func<Vector2, Rectangle> GetContainerRectangle;
+
+            /// <summary>
+            ///     Action link towards the boolean render function.
+            /// </summary>
+            public Action<AMenuComponent, Vector2, int> OnBoolDraw;
 
             /// <summary>
             ///     Action link towards the main render function.
@@ -58,9 +64,9 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins
             public Action<Vector2> OnDraw;
 
             /// <summary>
-            ///     Function link towards the container rectangle get value.
+            ///     Action link towards the menu render function.
             /// </summary>
-            public Func<Vector2, Rectangle> GetContainerRectangle;
+            public Action<AMenuComponent, Vector2, int> OnMenuDraw;
         }
     }
 }

@@ -41,9 +41,17 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         }
 
         /// <summary>
-        ///     InputText Item Draw callback.
+        ///     InputText Item Position.
         /// </summary>
-        public override void OnDraw(Vector2 position) {}
+        public override Vector2 Position { get; set; }
+
+        /// <summary>
+        ///     InputText Draw callback.
+        /// </summary>
+        /// <param name="component">Parent Component</param>
+        /// <param name="position">Position</param>
+        /// <param name="index">Item Index</param>
+        public override void OnDraw(AMenuComponent component, Vector2 position, int index) {}
 
         /// <summary>
         ///     InputText Item Windows Process Messages callback.

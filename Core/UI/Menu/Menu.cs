@@ -1,6 +1,6 @@
 ﻿#region
 
-using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
@@ -19,11 +19,6 @@ namespace LeagueSharp.CommonEx.Core.UI
     public class Menu : AMenuComponent
     {
         /// <summary>
-        ///     Menu Children.
-        /// </summary>
-        private readonly IDictionary<string, AMenuComponent> components = new Dictionary<string, AMenuComponent>();
-
-        /// <summary>
         ///     Menu Constructor.
         /// </summary>
         /// <param name="name">Menu Name</param>
@@ -33,7 +28,6 @@ namespace LeagueSharp.CommonEx.Core.UI
         {
             Root = (root) ? this : null;
             Visible = Enabled = true;
-            MenuContainer = new MenuContainer { Components = components, DisplayName = displayName, Toggled = Toggled };
         }
 
         /// <summary>
@@ -43,7 +37,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <returns>Child Menu Component of this component.</returns>
         public override AMenuComponent this[string name]
         {
-            get { return components.ContainsKey(name) ? components[name] : null; }
+            get { return Components.ContainsKey(name) ? Components[name] : null; }
         }
 
         /// <summary>
@@ -60,8 +54,6 @@ namespace LeagueSharp.CommonEx.Core.UI
         ///     Returns if the menu has been toggled.
         /// </summary>
         public override sealed bool Toggled { get; set; }
-
-        private MenuContainer MenuContainer { get; set; }
 
         /// <summary>
         ///     Menu Position
@@ -89,7 +81,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         public void Add(AMenuComponent component)
         {
             component.Parent = this;
-            components.Add(component.Name, component);
+            Components.Add(component.Name, component);
         }
 
         /// <summary>
@@ -98,10 +90,10 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <param name="component"><see cref="AMenuComponent" /> component instance</param>
         public void Remove(AMenuComponent component)
         {
-            if (components.ContainsKey(component.Name))
+            if (Components.ContainsKey(component.Name))
             {
                 component.Parent = null;
-                components.Remove(component.Name);
+                Components.Remove(component.Name);
             }
         }
 
@@ -115,7 +107,7 @@ namespace LeagueSharp.CommonEx.Core.UI
                 Position = position;
             }
 
-            SkinIndex.Skin[Configuration.GetValidMenuSkin()].OnMenuDraw(MenuContainer, position, index);
+            SkinIndex.Skin[Configuration.GetValidMenuSkin()].OnMenuDraw(this, position, index);
         }
 
         /// <summary>
@@ -126,11 +118,22 @@ namespace LeagueSharp.CommonEx.Core.UI
         {
             if (UI.Root.MenuVisible && Visible)
             {
-                if (args.Cursor.IsUnderRectangle(Position.X, Position.Y, DefaultSettings.ContainerWidth, DefaultSettings.ContainerHeight))
+                if (args.Cursor.IsUnderRectangle(
+                    Position.X, Position.Y, DefaultSettings.ContainerWidth, DefaultSettings.ContainerHeight))
                 {
                     if (args.Msg == WindowsMessages.LBUTTONDOWN)
                     {
-                        MenuContainer.Toggled = Toggled = !Toggled;
+                        Toggled = !Toggled;
+                        MenuInterface.OnMenuOpen(this);
+                        return;
+                    }
+                }
+
+                if (Toggled)
+                {
+                    foreach (var item in Components.Where(c => c.Value.Enabled && c.Value.Visible))
+                    {
+                        item.Value.OnWndProc(args);
                     }
                 }
             }
@@ -140,26 +143,5 @@ namespace LeagueSharp.CommonEx.Core.UI
         ///     Menu Update callback.
         /// </summary>
         public override void OnUpdate() {}
-    }
-
-    /// <summary>
-    ///     Menu Information Container.
-    /// </summary>
-    public class MenuContainer
-    {
-        /// <summary>
-        ///     Menu Display Name
-        /// </summary>
-        public string DisplayName { get; set; }
-
-        /// <summary>
-        ///     Returns if the menu was toggled.
-        /// </summary>
-        public bool Toggled { get; set; }
-
-        /// <summary>
-        ///     Menu Components
-        /// </summary>
-        public IDictionary<string, AMenuComponent> Components { get; set; }
     }
 }

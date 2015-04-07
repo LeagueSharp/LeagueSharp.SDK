@@ -23,9 +23,17 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         public abstract int Width { get; }
 
         /// <summary>
+        ///     Menu Value Position.
+        /// </summary>
+        public abstract Vector2 Position { get; set; }
+
+        /// <summary>
         ///     Drawing callback.
         /// </summary>
-        public abstract void OnDraw(Vector2 position);
+        /// <param name="component">Parent Component</param>
+        /// <param name="position">Position</param>
+        /// <param name="index">Item Index</param>
+        public abstract void OnDraw(AMenuComponent component, Vector2 position, int index);
 
         /// <summary>
         ///     Windows Process Messages callback.

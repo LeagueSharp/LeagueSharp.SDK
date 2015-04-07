@@ -36,11 +36,11 @@ namespace LeagueSharp.CommonEx.Core.UI
 
                 if (value)
                 {
-                    MenuInterface.OnMenuOpen();
+                    MenuInterface.OnMenuOpen(null);
                 }
                 else
                 {
-                    MenuInterface.OnMenuClose();
+                    MenuInterface.OnMenuClose(null);
                 }
             }
 

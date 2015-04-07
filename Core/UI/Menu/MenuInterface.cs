@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.UI.Skins;
 using LeagueSharp.CommonEx.Core.Utils;
@@ -38,11 +39,20 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <summary>
         ///     Event is fired when the menu container gets opened.
         /// </summary>
-        public static void OnMenuOpen() {}
+        public static void OnMenuOpen(AMenuComponent component)
+        {
+            if (component != null)
+            {
+                foreach (var rootComponent in RootMenuComponents.Where(c => !c.Equals(component)))
+                {
+                    rootComponent.Toggled = false;
+                }
+            }
+        }
 
         /// <summary>
         ///     Event is fired when the menu container gets closed.
         /// </summary>
-        public static void OnMenuClose() {}
+        public static void OnMenuClose(AMenuComponent component) {}
     }
 }

@@ -64,9 +64,17 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         public Keys Key { get; set; }
 
         /// <summary>
+        ///     KeyBind Item Position.
+        /// </summary>
+        public override Vector2 Position { get; set; }
+
+        /// <summary>
         ///     KeyBind Item Draw callback.
         /// </summary>
-        public override void OnDraw(Vector2 position) {}
+        /// <param name="component">Parent Component</param>
+        /// <param name="position">Position</param>
+        /// <param name="index">Item Index</param>
+        public override void OnDraw(AMenuComponent component, Vector2 position, int index) {}
 
         /// <summary>
         ///     KeyBind Item Windows Process Messages callback.

@@ -1,5 +1,6 @@
 ﻿#region
 
+using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
@@ -46,7 +47,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <param name="displayName">Item Display Name</param>
         public MenuItem(string name, string displayName) : base(name, displayName)
         {
-            MenuFactory.Create<T>();
+            _value = MenuFactory.Create<T>();
             Enabled = Visible = true;
         }
 
@@ -106,9 +107,15 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// </summary>
         public override void OnDraw(Vector2 position, int index)
         {
+            if (_value == null)
+            {
+                Logging.Write()(LogLevel.Error, "Attempting to draw a null value item. [Item Name: {0}]", Name);
+                return;
+            }
+
             if (Visible)
             {
-                _value.OnDraw(position);
+                _value.OnDraw(this, position, index);
             }
         }
 
@@ -118,11 +125,34 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <param name="args">
         ///     <see cref="WindowsKeys" />
         /// </param>
-        public override void OnWndProc(WindowsKeys args) {}
+        public override void OnWndProc(WindowsKeys args)
+        {
+            if (_value == null)
+            {
+                Logging.Write()(
+                    LogLevel.Error,
+                    "Attempting to pass a windows process message to a null value item. [Item Name: {0}]", Name);
+                return;
+            }
+
+            if (Visible && Enabled)
+            {
+                _value.OnWndProc(args);
+            }
+        }
 
         /// <summary>
         ///     Item Update callback.
         /// </summary>
         public override void OnUpdate() {}
+
+        /// <summary>
+        ///     Item Valid Check.
+        /// </summary>
+        /// <returns>Returns if the Item is valid based on the Value instance.</returns>
+        public bool IsValid()
+        {
+            return Value != null;
+        }
     }
 }

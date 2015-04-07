@@ -1,5 +1,4 @@
 ﻿using SharpDX;
-using SharpDX.Direct3D9;
 
 namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
 {
@@ -17,19 +16,14 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
             var height = DefaultSettings.ContainerHeight * MenuInterface.RootMenuComponents.Count;
             var width = DefaultSettings.ContainerWidth;
 
-            var line = new Line(Drawing.Direct3DDevice) { Antialias = true, GLLines = true, Width = width };
-
-            line.Begin();
-            line.Draw(
+            DefaultSettings.ContainerLine.Begin();
+            DefaultSettings.ContainerLine.Draw(
                 new[]
                 {
                     new Vector2(position.X + width / 2, position.Y),
                     new Vector2(position.X + width / 2, position.Y + height)
-                },
-                new ColorBGRA(0, 0, 0, (byte) (255 / 1.5f)));
-            line.End();
-
-            line.Dispose();
+                }, DefaultSettings.RootContainerColor);
+            DefaultSettings.ContainerLine.End();
 
             for (var i = 0; i < MenuInterface.RootMenuComponents.Count; ++i)
             {

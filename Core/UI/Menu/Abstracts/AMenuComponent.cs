@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 using System.Dynamic;
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
@@ -14,6 +15,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
     /// </summary>
     public abstract class AMenuComponent : DynamicObject
     {
+        /// <summary>
+        ///     Menu Component Sub-Components.
+        /// </summary>
+        public readonly IDictionary<string, AMenuComponent> Components = new Dictionary<string, AMenuComponent>();
+
         /// <summary>
         ///     Local menu root component.
         /// </summary>
