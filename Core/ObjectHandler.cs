@@ -161,7 +161,7 @@ namespace LeagueSharp.CommonEx.Core
         /// </summary>
         /// <typeparam name="T">Type of GameObject</typeparam>
         /// <returns>An enumerable list of the objects</returns>
-        [Obsolete("Use ObjectManager.GetFast<T>() instead for improved performance.")]
+        [Obsolete("Use ObjectHandler.GetFast<T>() instead for improved performance.")]
         public static IEnumerable<T> Get<T>() where T : GameObject, new()
         {
             return ObjectManager.Get<T>();
