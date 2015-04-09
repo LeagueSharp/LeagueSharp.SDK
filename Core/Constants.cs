@@ -15,6 +15,14 @@ namespace LeagueSharp.CommonEx.Core
     public static class Constants
     {
         /// <summary>
+        ///     LeagueSharp Font.
+        /// </summary>
+        public static Font LeagueSharpFont = new Font(
+            Drawing.Direct3DDevice, 14, 0, FontWeight.DoNotCare, 0, false, FontCharacterSet.Default,
+            FontPrecision.Default, FontQuality.Default, FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative,
+            "Tahoma");
+
+        /// <summary>
         ///     The directory where logs will be created.
         /// </summary>
         public static string LogDirectory
@@ -22,8 +30,8 @@ namespace LeagueSharp.CommonEx.Core
             get
             {
                 return
-                    Cache.Instance.AddOrGetExisting("LogDirectory", () => Path.Combine(LeagueSharpDirectory, "Logs"))
-                        .ToString();
+                    Cache.Instance.AddOrGetExisting(
+                        "LogDirectory", () => Path.Combine(LeagueSharpAppData, "Logs", "CommonEx")).ToString();
             }
         }
 
@@ -41,24 +49,20 @@ namespace LeagueSharp.CommonEx.Core
         }
 
         /// <summary>
-        ///     Gets the directory where L# resides.
+        ///     Gets the LeagueSharp AppData directory.
         /// </summary>
-        public static string LeagueSharpDirectory
+        public static string LeagueSharpAppData
         {
             get
             {
                 return
-                    Cache.Instance.AddOrGetExisting("LeagueSharpDir", () => AppDomain.CurrentDomain.BaseDirectory)
-                        .ToString();
+                    Cache.Instance.AddOrGetExisting(
+                        "LeagueSharpDir",
+                        () =>
+                            Path.Combine(
+                                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                                "LS" + Environment.UserName.GetHashCode().ToString("X"))).ToString();
             }
         }
-
-        /// <summary>
-        ///     LeagueSharp Font.
-        /// </summary>
-        public static Font LeagueSharpFont = new Font(
-            Drawing.Direct3DDevice, 14, 0, FontWeight.DoNotCare, 0, false, FontCharacterSet.Default,
-            FontPrecision.Default, FontQuality.Default, FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative,
-            "Tahoma");
     }
 }
