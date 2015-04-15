@@ -168,6 +168,17 @@ namespace LeagueSharp.CommonEx.Core
         }
 
         /// <summary>
+        ///     Gets the unit with the specific network ID. Returns a default instance of the type if there is no object with that network id. (Check with IsValid)
+        /// </summary>
+        /// <typeparam name="T">Type of <see cref="GameObject"/></typeparam>
+        /// <param name="networkId">Unit's Network ID</param>
+        /// <returns>The unit with the specific network ID</returns>
+        public static T GetUnitByNetworkId<T>(int networkId) where T: GameObject, new()
+        {
+            return SavedTypes.SelectMany(x => GetList(x).OfType<T>().Cast<GameObject>().Where(y => y.NetworkId == networkId)).Cast<T>().FirstOrDefault();
+        }
+
+        /// <summary>
         ///     Queries the <see cref="Cache" /> to retrieve objects of the specific type.
         /// </summary>
         /// <returns>IEnumerable of those objects.</returns>
