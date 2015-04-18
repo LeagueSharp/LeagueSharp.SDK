@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Reflection;
+using LeagueSharp.CommonEx.Core.Extensions;
+using LeagueSharp.CommonEx.Core.Utils;
 
 namespace LeagueSharp.CommonEx.Core.Events
 {
@@ -34,17 +36,22 @@ namespace LeagueSharp.CommonEx.Core.Events
         {
             var turret = sender as Obj_AI_Turret;
 
-            if (turret != null)
+            if (turret == null)
             {
-                FireOnTurretShot(args.Target, turret);
+                return;
             }
+
+            FireOnTurretShot(args.Target, turret, TurretShotArgs.TurretShotType.TurretShot);
+
+            DelayAction.Add((int) (1000*turret.Distance(args.Target)/args.SData.MissileSpeed),
+                () => FireOnTurretShot(args.Target, turret, TurretShotArgs.TurretShotType.TurretShotHit));
         }
 
-        private static void FireOnTurretShot(GameObject unit, Obj_AI_Turret turret)
+        private static void FireOnTurretShot(GameObject unit, Obj_AI_Turret turret, TurretShotArgs.TurretShotType type)
         {
             if (OnTurretShot != null)
             {
-                OnTurretShot(MethodBase.GetCurrentMethod().DeclaringType, new TurretShotArgs(unit, turret));
+                OnTurretShot(MethodBase.GetCurrentMethod().DeclaringType, new TurretShotArgs(unit, turret, type));
             }
         }
 
@@ -57,6 +64,21 @@ namespace LeagueSharp.CommonEx.Core.Events
     public class TurretShotArgs : EventArgs
     {
         /// <summary>
+        ///     Enum containing the type of turret shot.
+        /// </summary>
+        public enum TurretShotType
+        {
+            /// <summary>
+            ///     The turret fired a shot.
+            /// </summary>
+            TurretShot,
+
+            /// <summary>
+            ///     The turret shot hit the unit.
+            /// </summary>
+            TurretShotHit
+        }
+        /// <summary>
         ///     The turret that has attacked the unit.
         /// </summary>
         public Obj_AI_Turret Turret;
@@ -66,10 +88,16 @@ namespace LeagueSharp.CommonEx.Core.Events
         /// </summary>
         public GameObject Unit;
 
-        internal TurretShotArgs(GameObject unit, Obj_AI_Turret turret)
+        /// <summary>
+        ///     The type of turret shot.
+        /// </summary>
+        public TurretShotType Type;
+
+        internal TurretShotArgs(GameObject unit, Obj_AI_Turret turret, TurretShotType type)
         {
             Unit = unit;
             Turret = turret;
+            Type = type;
         }
     }
 }

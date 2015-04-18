@@ -19,12 +19,12 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <summary>
         ///     Holds callbacks that are called before cached item is removed.
         /// </summary>
-        private readonly SortedDictionary<string, CacheEntryUpdateCallback> cacheEntryUpdateCallbacks;
+        private readonly SortedDictionary<string, CacheEntryUpdateCallback> _cacheEntryUpdateCallbacks;
 
         /// <summary>
         ///     Holds callbacks that are called after cached item is removed.
         /// </summary>
-        private readonly SortedDictionary<string, CacheEntryRemovedCallback> cacheRemovedCallbacks;
+        private readonly SortedDictionary<string, CacheEntryRemovedCallback> _cacheRemovedCallbacks;
 
         /// <summary>
         ///     Main Cache.
@@ -39,8 +39,8 @@ namespace LeagueSharp.CommonEx.Core.Utils
             InternalCache = new Dictionary<string, Dictionary<string, object>>();
             CreateRegion("Default");
 
-            cacheEntryUpdateCallbacks = new SortedDictionary<string, CacheEntryUpdateCallback>();
-            cacheRemovedCallbacks = new SortedDictionary<string, CacheEntryRemovedCallback>();
+            _cacheEntryUpdateCallbacks = new SortedDictionary<string, CacheEntryUpdateCallback>();
+            _cacheRemovedCallbacks = new SortedDictionary<string, CacheEntryRemovedCallback>();
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
             string regionName = null)
         {
             CacheEntryUpdateCallback callback;
-            var contains = cacheEntryUpdateCallbacks.TryGetValue(key + regionName, out callback);
+            var contains = _cacheEntryUpdateCallbacks.TryGetValue(key + regionName, out callback);
 
             if (!contains)
             {
@@ -116,7 +116,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
             string regionName = null)
         {
             CacheEntryRemovedCallback callback;
-            var contains = cacheRemovedCallbacks.TryGetValue(key + regionName, out callback);
+            var contains = _cacheRemovedCallbacks.TryGetValue(key + regionName, out callback);
 
             if (!contains)
             {
@@ -306,8 +306,8 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
             InternalCache[regionName].Add(value.Key, value.Value);
 
-            cacheEntryUpdateCallbacks[value.Key + value.RegionName] = policy.UpdateCallback;
-            cacheRemovedCallbacks[value.Key + value.RegionName] = policy.RemovedCallback;
+            _cacheEntryUpdateCallbacks[value.Key + value.RegionName] = policy.UpdateCallback;
+            _cacheRemovedCallbacks[value.Key + value.RegionName] = policy.RemovedCallback;
 
             DelayAction.Add(
                 (int) (policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds, delegate
@@ -357,8 +357,8 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
             InternalCache[regionName].Add(key, value);
 
-            cacheEntryUpdateCallbacks[key + regionName] = policy.UpdateCallback;
-            cacheRemovedCallbacks[key + regionName] = policy.RemovedCallback;
+            _cacheEntryUpdateCallbacks[key + regionName] = policy.UpdateCallback;
+            _cacheRemovedCallbacks[key + regionName] = policy.RemovedCallback;
 
             DelayAction.Add(
                 (int) (policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds, delegate
@@ -546,18 +546,18 @@ namespace LeagueSharp.CommonEx.Core.Utils
                 return null;
             }
 
-            if (cacheEntryUpdateCallbacks.ContainsKey(key + regionName))
+            if (_cacheEntryUpdateCallbacks.ContainsKey(key + regionName))
             {
-                cacheEntryUpdateCallbacks[key + regionName].Invoke(
+                _cacheEntryUpdateCallbacks[key + regionName].Invoke(
                     new CacheEntryUpdateArguments(this, CacheEntryRemovedReason.Removed, key, regionName));
             }
 
             var value = InternalCache[regionName][key];
             InternalCache[regionName].Remove(key);
 
-            if (cacheRemovedCallbacks.ContainsKey(key + regionName))
+            if (_cacheRemovedCallbacks.ContainsKey(key + regionName))
             {
-                cacheRemovedCallbacks[key + regionName].Invoke(
+                _cacheRemovedCallbacks[key + regionName].Invoke(
                     new CacheEntryRemovedArguments(
                         this, CacheEntryRemovedReason.Removed, new CacheItem(key, value, regionName)));
             }

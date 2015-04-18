@@ -33,22 +33,24 @@ namespace LeagueSharp.CommonEx.Core.Utils
         {
             for (var i = ActionList.Count - 1; i >= 0; i--)
             {
-                if (ActionList[i].Value <= Variables.TickCount)
+                if (ActionList[i].Value > Variables.TickCount)
                 {
-                    try
-                    {
-                        if (ActionList[i].Key != null)
-                        {
-                            ActionList[i].Key();
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        // Ignored exception.
-                    }
-
-                    ActionList.RemoveAt(i);
+                    continue;
                 }
+
+                try
+                {
+                    if (ActionList[i].Key != null)
+                    {
+                        ActionList[i].Key();
+                    }
+                }
+                catch (Exception)
+                {
+                    // Ignored exception.
+                }
+
+                ActionList.RemoveAt(i);
             }
         }
 
