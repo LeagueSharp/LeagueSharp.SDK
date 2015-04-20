@@ -43,10 +43,11 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>LeagueSharp.CommonEx.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="clipper_library">
@@ -195,7 +196,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Data\ChampionData.json" />
-    <None Include="LeagueSharp.CommonEx.pfx" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
