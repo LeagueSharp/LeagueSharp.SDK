@@ -124,7 +124,6 @@
     <Compile Include="Core\Extensions\Streams.cs" />
     <Compile Include="Core\Math\Geometry.cs" />
     <Compile Include="Core\Math\Prediction\Health.cs" />
-    <Compile Include="Core\MultiLanguage.cs" />
     <Compile Include="Core\Orbwalker.cs" />
     <Compile Include="Core\Render\Render.cs" />
     <Compile Include="Core\Render\RenderObjects\Circle.cs" />
@@ -159,7 +158,6 @@
     <Compile Include="Core\Extensions\Unit.cs" />
     <Compile Include="Core\Math\Collision.cs" />
     <Compile Include="Core\Utils\Cursor.cs" />
-    <Compile Include="Core\Utils\Mouse.cs" />
     <Compile Include="Core\Utils\Serialization.cs" />
     <Compile Include="Core\Utils\VirtualKeys.cs" />
     <Compile Include="Core\Utils\WindowsKeys.cs" />

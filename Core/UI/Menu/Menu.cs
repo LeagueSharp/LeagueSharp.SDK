@@ -167,7 +167,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         {
             get
             {
-                return MenuDrawHelper.Font.MeasureText(null, MultiLanguage._(DisplayName), FontDrawFlags.Left).Width + 25;
+                return MenuDrawHelper.Font.MeasureText(null, DisplayName, FontDrawFlags.Left).Width + 25;
             }
         }
 
@@ -212,7 +212,7 @@ namespace LeagueSharp.CommonEx.Core.UI
 
         internal void Game_OnWndProc(WndEventArgs args)
         {
-            OnReceiveMessage((WindowsMessages)args.Msg, Mouse.CursorPosT.GetCursorPos(), args.WParam);
+            OnReceiveMessage((WindowsMessages)args.Msg, Cursor.Position, args.WParam);
         }
 
         internal void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key)
@@ -309,7 +309,7 @@ namespace LeagueSharp.CommonEx.Core.UI
                     : MenuSettings.BackgroundColor, 1, Color.Black);
 
             MenuDrawHelper.Font.DrawText(
-                null, MultiLanguage._(DisplayName),
+                null, DisplayName,
                 new SharpDX.Rectangle((int)Position.X + 5, (int)Position.Y, Width, Height),
                 FontDrawFlags.VerticalCenter, new ColorBGRA(255, 255, 255, 255));
             MenuDrawHelper.Font.DrawText(
@@ -606,7 +606,7 @@ namespace LeagueSharp.CommonEx.Core.UI
                             .Width;
                 }
 
-                return MenuDrawHelper.Font.MeasureText(null, MultiLanguage._(DisplayName), FontDrawFlags.Left).Width +
+                return MenuDrawHelper.Font.MeasureText(null, DisplayName, FontDrawFlags.Left).Width +
                        Height * 2 + 10 + extra;
             }
         }
@@ -1014,7 +1014,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         internal void Drawing_OnDraw()
         {
             MenuDrawHelper.DrawBox(Position, Width, Height, MenuSettings.BackgroundColor, 1, Color.Black);
-            var s = MultiLanguage._(DisplayName);
+            var s = DisplayName;
 
             switch (ValueType)
             {
@@ -1033,7 +1033,7 @@ namespace LeagueSharp.CommonEx.Core.UI
 
                     if (Interacting)
                     {
-                        s = MultiLanguage._("Press new key");
+                        s = "Press new Key";
                     }
 
                     MenuDrawHelper.DrawOnOff(val.Active, new Vector2(Position.X + Width - Height, Position.Y), this);
@@ -1071,7 +1071,7 @@ namespace LeagueSharp.CommonEx.Core.UI
                     MenuDrawHelper.DrawArrow(">", Position + new Vector2(Width - Height, 0), this, Color.Black);
 
                     MenuDrawHelper.Font.DrawText(
-                        null, MultiLanguage._(t),
+                        null, t,
                         new SharpDX.Rectangle((int)Position.X - 5 - 2 * Height, (int)Position.Y, Width, Height),
                         FontDrawFlags.VerticalCenter | FontDrawFlags.Right, new ColorBGRA(255, 255, 255, 255));
                     break;
@@ -1243,7 +1243,7 @@ namespace LeagueSharp.CommonEx.Core.UI
 
             if (args.Msg == (uint)WindowsMessages.LBUTTONDOWN)
             {
-                var pos = Mouse.CursorPosT.GetCursorPos();
+                var pos = Cursor.Position;
 
                 if (Vector2Extensions.IsUnderRectangle(pos, X, Y, BackgroundSprite.Width, 25))
                 {
@@ -1280,7 +1280,7 @@ namespace LeagueSharp.CommonEx.Core.UI
             {
                 if (_selecting)
                 {
-                    var pos = Mouse.CursorPosT.GetCursorPos();
+                    var pos = Cursor.Position;
                     if (Vector2Extensions.IsUnderRectangle(pos, ColorPickerX, ColorPickerY, ColorPickerW, ColorPickerH))
                     {
                         UpdateColor();
@@ -1289,11 +1289,11 @@ namespace LeagueSharp.CommonEx.Core.UI
 
                 if (_moving)
                 {
-                    var pos = Mouse.CursorPosT.GetCursorPos();
+                    var pos = Cursor.Position;
                     X += (int)(pos.X - _prevPos.X);
                     Y += (int)(pos.Y - _prevPos.Y);
                 }
-                _prevPos = Mouse.CursorPosT.GetCursorPos();
+                _prevPos = Cursor.Position;
             }
         }
 
@@ -1351,7 +1351,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         {
             if (_selecting)
             {
-                var pos = Mouse.CursorPosT.GetCursorPos();
+                var pos = Cursor.Position;
                 var color = BackgroundSprite.Bitmap.GetPixel((int)pos.X - X, (int)pos.Y - Y);
                 _sHue = ((HslColor)color).Hue;
                 _sSaturation = ((HslColor)color).Saturation;
@@ -1467,7 +1467,7 @@ namespace LeagueSharp.CommonEx.Core.UI
 
             private void UpdatePercent()
             {
-                var pos = Mouse.CursorPosT.GetCursorPos();
+                var pos = Cursor.Position;
                 Percent = (pos.Y - Resources.SliderActive_png.Height / 2 - Sy) / Height;
                 UpdateColor();
                 ActiveSprite.Y = Sy + (int)(Percent * Height);
@@ -1479,7 +1479,7 @@ namespace LeagueSharp.CommonEx.Core.UI
                 switch (args.Msg)
                 {
                     case (uint)WindowsMessages.LBUTTONDOWN:
-                        var pos = Mouse.CursorPosT.GetCursorPos();
+                        var pos = Cursor.Position;
                         if (pos.IsUnderRectangle(Sx, Sy, Width, Height + Resources.SliderActive_png.Height))
                         {
                             Moving = true;
