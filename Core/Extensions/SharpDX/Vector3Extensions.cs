@@ -146,6 +146,17 @@ namespace LeagueSharp.CommonEx.Core.Extensions.SharpDX
         }
 
         /// <summary>
+        ///     Switches the Y and Z value of a given Vector.
+        /// </summary>
+        /// <param name="v">Extended SharpDX Vector3</param>
+        /// <returns></returns>
+        public static Vector3 SwitchYz(this Vector3 v)
+        {
+            return new Vector3(v.X, v.Z, v.Y);
+        }
+
+
+        /// <summary>
         ///     Returns the total distance of a path.
         /// </summary>
         public static float PathLength(this List<Vector3> path)

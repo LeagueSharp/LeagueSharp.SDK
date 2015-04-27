@@ -1,70 +1,45 @@
-﻿#region
-
-using LeagueSharp.CommonEx.Core.UI.Abstracts;
-using LeagueSharp.CommonEx.Core.Utils;
-using SharpDX;
-
-#endregion
+﻿using System;
 
 namespace LeagueSharp.CommonEx.Core.UI.Values
 {
     /// <summary>
-    ///     Menu Slider.
+    ///     Menu Slider
     /// </summary>
-    public class MenuSlider : AMenuValue
+    [Serializable]
+    public struct MenuSlider
     {
+        private int _value;
+
         /// <summary>
-        ///     Menu Slider Constructor.
+        ///     Max Value of the Slider
         /// </summary>
-        /// <param name="value">Value</param>
-        /// <param name="minValue">Minimum Value Boundary</param>
-        /// <param name="maxValue">Maximum Value Boundary</param>
+        public int MaxValue;
+
+        /// <summary>
+        ///     Min Value of the Slider
+        /// </summary>
+        public int MinValue;
+
+        /// <summary>
+        ///     Creates the Slider
+        /// </summary>
+        /// <param name="value">Value of the Slider</param>
+        /// <param name="minValue">Min Value of the Slider</param>
+        /// <param name="maxValue">Max Value of the Slider</param>
         public MenuSlider(int value = 0, int minValue = 0, int maxValue = 100)
         {
-            Value = value;
-            MinValue = minValue;
-            MaxValue = maxValue;
+            MaxValue = System.Math.Max(maxValue, minValue);
+            MinValue = System.Math.Min(maxValue, minValue);
+            _value = value;
         }
 
         /// <summary>
-        ///     Slider Current Value.
+        ///     Selected value of the Slider
         /// </summary>
-        public int Value { get; set; }
-
-        /// <summary>
-        ///     Slider Minimum Value.
-        /// </summary>
-        public int MinValue { get; set; }
-
-        /// <summary>
-        ///     Slider Maximum Value.
-        /// </summary>
-        public int MaxValue { get; set; }
-
-        /// <summary>
-        ///     Slider Item Width.
-        /// </summary>
-        public override int Width
+        public int Value
         {
-            get { return 0; }
+            get { return _value; }
+            set { _value = System.Math.Min(System.Math.Max(value, MinValue), MaxValue); }
         }
-
-        /// <summary>
-        ///     Slider Item Position.
-        /// </summary>
-        public override Vector2 Position { get; set; }
-
-        /// <summary>
-        ///     Slider Item Draw callback.
-        /// </summary>
-        public override void OnDraw(AMenuComponent component, Vector2 position, int index) {}
-
-        /// <summary>
-        ///     Slider Windows Process Messages callback.
-        /// </summary>
-        /// <param name="args">
-        ///     <see cref="WindowsKeys" />
-        /// </param>
-        public override void OnWndProc(WindowsKeys args) {}
     }
 }

@@ -64,5 +64,33 @@ namespace LeagueSharp.CommonEx.Core
                                 "LS" + Environment.UserName.GetHashCode().ToString("X"))).ToString();
             }
         }
+
+        /// <summary>
+        /// Returns the ShowMenu Key from the Sandbox.
+        /// </summary>
+        public static byte ShowMenuPressKey
+        {
+            get
+            {
+                byte key = (byte)Sandbox.SandboxConfig.MenuKey;
+                key = key == 0 ? (byte)16 : key;
+                key = VirtualKeys.FixVirtualKey(key);
+                return key;
+            }
+        }
+
+        /// <summary>
+        /// Returns the ShowMenu Toggle Key from the Sandbox.
+        /// </summary>
+        public static byte ShowMenuToggleKey
+        {
+            get
+            {
+                byte key = (byte)Sandbox.SandboxConfig.MenuToggleKey;
+                key = key == 0 ? (byte)120 : key;
+                key = VirtualKeys.FixVirtualKey(key);
+                return key;
+            }
+        }
     }
 }

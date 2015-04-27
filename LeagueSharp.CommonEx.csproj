@@ -49,21 +49,44 @@
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\LeagueSharp.CommonEx.XML</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\Release\LeagueSharp.CommonEx.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="clipper_library">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\clipper_library.dll</HintPath>
+      <HintPath>..\LeagueSharp\System\clipper_library.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>..\LeagueSharp\System\LeagueSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="LeagueSharp.Sandbox">
+      <HintPath>..\LeagueSharp\System\LeagueSharp.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>..\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>..\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -72,10 +95,11 @@
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Bootstrap.cs" />
-    <Compile Include="Core\Configuration.cs" />
     <Compile Include="Core\Enumerations\CastStates.cs" />
     <Compile Include="Core\Enumerations\CenteredFlags.cs" />
     <Compile Include="Core\Enumerations\CollisionableObjects.cs" />
@@ -94,36 +118,30 @@
     <Compile Include="Core\Enumerations\PerformanceType.cs" />
     <Compile Include="Core\Enumerations\TargetSelectorMode.cs" />
     <Compile Include="Core\Enumerations\WindowsMessages.cs" />
+    <Compile Include="Core\Events\End.cs" />
     <Compile Include="Core\Events\Gapcloser.cs" />
     <Compile Include="Core\Events\Turret.cs" />
     <Compile Include="Core\Extensions\Streams.cs" />
     <Compile Include="Core\Math\Geometry.cs" />
     <Compile Include="Core\Math\Prediction\Health.cs" />
+    <Compile Include="Core\MultiLanguage.cs" />
     <Compile Include="Core\Orbwalker.cs" />
-    <Compile Include="Core\UI\Menu\MenuInterface.cs" />
-    <Compile Include="Core\UI\Menu\MenuSettings.cs" />
-    <Compile Include="Core\UI\Menu\MenuSprite.cs" />
-    <Compile Include="Core\UI\Menu\Skins\Battlecry\BattlecrySkin.cs" />
-    <Compile Include="Core\UI\Menu\Skins\Battlecry\BoolRender.cs" />
-    <Compile Include="Core\UI\Menu\Skins\Biolight\BiolightSkin.cs" />
-    <Compile Include="Core\UI\Menu\Skins\Biolight\BoolRender.cs" />
-    <Compile Include="Core\UI\Menu\Skins\Default\BoolRender.cs" />
-    <Compile Include="Core\UI\Menu\Skins\Default\DefaultSettings.cs" />
-    <Compile Include="Core\UI\Menu\Skins\Default\DefaultSkin.cs" />
-    <Compile Include="Core\UI\Menu\Skins\Default\MenuRender.cs" />
-    <Compile Include="Core\UI\Menu\Skins\SkinIndex.cs" />
-    <Compile Include="Core\UI\Menu\Values\MenuInputText.cs" />
-    <Compile Include="Core\UI\Menu\Values\MenuKeyBind.cs" />
-    <Compile Include="Core\UI\Menu\Values\MenuSlider.cs" />
-    <Compile Include="Core\UI\Root.cs" />
+    <Compile Include="Core\Render\Render.cs" />
+    <Compile Include="Core\Render\RenderObjects\Circle.cs" />
+    <Compile Include="Core\Render\RenderObjects\Line.cs" />
+    <Compile Include="Core\Render\RenderObjects\Rectangle.cs" />
+    <Compile Include="Core\Render\RenderObjects\Sprite.cs" />
+    <Compile Include="Core\Render\RenderObjects\Text.cs" />
+    <Compile Include="Core\UI\Menu\Drawings\MenuDrawHelper.cs" />
+    <Compile Include="Core\UI\Menu\KeyBind.cs" />
+    <Compile Include="Core\UI\Menu\MenuGlobal.cs" />
     <Compile Include="Core\Spells.cs" />
-    <Compile Include="Core\UI\Developer\Developer.cs" />
-    <Compile Include="Core\UI\Menu\Abstracts\AMenuComponent.cs" />
-    <Compile Include="Core\UI\Menu\Abstracts\AMenuValue.cs" />
     <Compile Include="Core\UI\Menu\Menu.cs" />
-    <Compile Include="Core\UI\Menu\MenuFactory.cs" />
-    <Compile Include="Core\UI\Menu\MenuItem.cs" />
-    <Compile Include="Core\UI\Menu\Values\MenuBool.cs" />
+    <Compile Include="Core\UI\Menu\Settings\MenuSettings.cs" />
+    <Compile Include="Core\UI\Menu\Settings\SavedSettings.cs" />
+    <Compile Include="Core\UI\Menu\Values\MenuCircle.cs" />
+    <Compile Include="Core\UI\Menu\Values\MenuSlider.cs" />
+    <Compile Include="Core\UI\Menu\Values\MenuStringList.cs" />
     <Compile Include="Core\UI\Notifications\Notifications.cs" />
     <Compile Include="Core\Utils\AutoAttack.cs" />
     <Compile Include="Core\Utils\CallbackPerformance.cs" />
@@ -141,6 +159,9 @@
     <Compile Include="Core\Extensions\Unit.cs" />
     <Compile Include="Core\Math\Collision.cs" />
     <Compile Include="Core\Utils\Cursor.cs" />
+    <Compile Include="Core\Utils\Mouse.cs" />
+    <Compile Include="Core\Utils\Serialization.cs" />
+    <Compile Include="Core\Utils\VirtualKeys.cs" />
     <Compile Include="Core\Utils\WindowsKeys.cs" />
     <Compile Include="Core\Utils\Math.cs" />
     <Compile Include="Core\Math\MEC.cs" />
@@ -158,12 +179,7 @@
     <Compile Include="Core\Network\Packet.cs" />
     <Compile Include="Core\Utils\Network.cs" />
     <Compile Include="Core\ObjectHandler.cs" />
-    <Compile Include="Core\Render\2D\Line.cs" />
     <Compile Include="Core\Enumerations\CircleType.cs" />
-    <Compile Include="Core\Render\DeviceOptions.cs" />
-    <Compile Include="Core\Render\2D\Rectangle.cs" />
-    <Compile Include="Core\Render\Text.cs" />
-    <Compile Include="Core\Render\Vertex.cs" />
     <Compile Include="Core\Utils\Cache.cs" />
     <Compile Include="Core\Utils\DelayAction.cs" />
     <Compile Include="Core\Utils\Logging.cs" />
@@ -202,15 +218,9 @@
     <Folder Include="Third_Party\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Menu\Skin0\img_000.png" />
-    <Content Include="Resources\Menu\Skin0\img_001.png" />
-    <Content Include="Resources\Menu\Skin0\img_001_sub.png" />
-    <Content Include="Resources\Menu\Skin0\img_002.png" />
-    <Content Include="Resources\Menu\Skin0\img_002_sub.png" />
-    <Content Include="Resources\Menu\Skin0\img_003.png" />
-    <Content Include="Resources\Menu\Skin0\img_003_sub.png" />
-    <Content Include="Resources\Menu\Skin0\img_004.png" />
-    <Content Include="Resources\Menu\Special\F3VD2VG.png" />
+    <Content Include="Resources\Menu\CPForm.png" />
+    <Content Include="Resources\Menu\SliderActive.png" />
+    <Content Include="Resources\Menu\SliderDisabled.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
