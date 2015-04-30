@@ -224,19 +224,19 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                 case DamageItems.BlackFireTorch:
                     return source.CalculateDamage(target, DamageType.Magical, target.MaxHealth * 0.2);
                 case DamageItems.BladeOfTheRuinedKing:
-                    return source.CalculateDamage(target, DamageType.Physcial, target.MaxHealth * 0.1);
+                    return source.CalculateDamage(target, DamageType.Physical, target.MaxHealth * 0.1);
                 case DamageItems.FrostQueenClaim:
                     return source.CalculateDamage(target, DamageType.Magical, 50 + 5 * source.Level);
                 case DamageItems.HextechGunblade:
                     return source.CalculateDamage(target, DamageType.Magical, 150 + 0.4 * source.FlatMagicDamageMod);
                 case DamageItems.RavenousHydra:
                     return source.CalculateDamage(
-                        target, DamageType.Physcial, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
+                        target, DamageType.Physical, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
                 case DamageItems.OdynsVeil:
                     return source.CalculateDamage(target, DamageType.Magical, 200);
                 case DamageItems.Tiamat:
                     return source.CalculateDamage(
-                        target, DamageType.Physcial, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
+                        target, DamageType.Physical, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
                 case DamageItems.LiandrysTorment:
                     var d = target.Health * .2f * 3f;
                     return (target.CanMove || target.HasBuffOfType(BuffType.Slow)) ? d : d * 2;
@@ -300,7 +300,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         {
             switch (damageType)
             {
-                case DamageType.Physcial:
+                case DamageType.Physical:
                     return CalculatePhysicalDamage(source, target, damage);
                 case DamageType.Magical:
                     return CalculateMagicDamage(source, target, damage);
@@ -592,7 +592,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 70, 115, 160, 205, 250 }[level] + 0.6 * source.FlatPhysicalDamageMod
@@ -601,7 +601,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.W,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 60, 95, 130, 165, 200 }[level] + 1 * source.FlatPhysicalDamageMod
@@ -714,7 +714,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 30, 55, 80, 105, 130 }[level] + 0.3 * source.FlatMagicDamageMod +
@@ -738,7 +738,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 60, 105, 150, 195, 240 }[level] + 0.5 * source.FlatMagicDamageMod
@@ -878,7 +878,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.W,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 40, 50, 60, 70, 80 }[level] +
@@ -965,7 +965,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage = (source, target, level) => 1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                     },
                     //R
@@ -1064,7 +1064,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 60, 100, 140, 180 }[level] +
@@ -1092,7 +1092,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 250, 475, 700 }[level] + 2 * source.FlatPhysicalDamageMod
@@ -1207,7 +1207,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 32, 44, 56, 68 }[level] + 0.4 * source.FlatPhysicalDamageMod
@@ -1244,7 +1244,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 70, 105, 140, 175, 210 }[level] + 0.7 * source.FlatPhysicalDamageMod
@@ -1254,7 +1254,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.Q,
                         Stage = 1,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new[] { 105, 157.5, 210, 262.5, 315 }[level] + 1.05 * source.FlatPhysicalDamageMod
@@ -1263,7 +1263,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.W,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 40, 60, 80, 100 }[level] / 100 *
@@ -1351,7 +1351,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 45, 55, 65, 75, 85 }[level] / 100 *
@@ -1361,7 +1361,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 70, 105, 140, 175, 210 }[level] + 0.5 * source.FlatPhysicalDamageMod
@@ -1370,7 +1370,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 175, 275, 375 }[level] + 1.1 * source.FlatPhysicalDamageMod
@@ -1430,7 +1430,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 70, 110, 150, 190, 230 }[level] + 1 * source.FlatMagicDamageMod +
@@ -1455,7 +1455,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 35, 55, 75, 95, 115 }[level] + 0.4 * source.FlatMagicDamageMod +
@@ -1530,7 +1530,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 40, 65, 90, 115, 140 }[level] + 0.6 * source.FlatPhysicalDamageMod
@@ -1548,7 +1548,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 325, 663, 1001 }[level] + 2.34 * source.FlatPhysicalDamageMod
@@ -1636,7 +1636,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 45, 70, 95, 120 }[level] +
@@ -1660,7 +1660,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 30, 55, 80, 105, 130 }[level] +
@@ -1670,7 +1670,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 45, 70, 95, 120 }[level] +
@@ -1696,7 +1696,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 5, 35, 65, 95, 125 }[level] +
@@ -1707,7 +1707,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.Q,
                         Stage = 1,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 5, 45, 85, 125, 165 }[level] +
@@ -1728,7 +1728,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.W,
                         Stage = 1,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 25, 45, 65, 85, 105 }[level] +
@@ -1738,7 +1738,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 60, 100, 140, 180 }[level] + source.MaxHealth * 0.06
@@ -1748,7 +1748,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.E,
                         Stage = 1,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 60, 100, 140, 180 }[level] + source.MaxHealth * 0.06
@@ -1757,7 +1757,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 200, 300, 400 }[level] + 0.5 * source.FlatMagicDamageMod +
@@ -1815,7 +1815,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 60, 95, 130, 165, 200 }[level] + 0.8 * source.FlatPhysicalDamageMod
@@ -1833,7 +1833,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 250, 400, 550 }[level] + 1.5 * source.FlatPhysicalDamageMod
@@ -1847,7 +1847,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 60, 95, 130, 165, 200 }[level] + 0.6 * source.FlatPhysicalDamageMod
@@ -1865,7 +1865,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 40, 75, 110, 145, 180 }[level] + 0.5 * source.FlatPhysicalDamageMod
@@ -1933,7 +1933,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 50, 80, 110, 140 }[level] +
@@ -1959,7 +1959,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 80, 120, 160 }[level] + 0.5 * source.FlatMagicDamageMod +
@@ -1997,7 +1997,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 70, 115, 160, 205, 250 }[level] + 1.2 * source.FlatPhysicalDamageMod
@@ -2015,7 +2015,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 200, 325, 450 }[level] + 1.5 * source.FlatPhysicalDamageMod
@@ -2029,7 +2029,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 70, 110, 150, 190, 230 }[level] + 1 * source.FlatPhysicalDamageMod +
@@ -2048,7 +2048,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 50, 75, 100, 125, 150 }[level] + 0.5 * source.FlatPhysicalDamageMod
@@ -2071,7 +2071,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 60, 115, 170, 225, 280 }[level] + 1.2 * source.FlatPhysicalDamageMod
@@ -2081,7 +2081,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.Q,
                         Stage = 1,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 65, 110, 155, 200 }[level] + 1 * source.FlatPhysicalDamageMod
@@ -2114,7 +2114,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) => 0.1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                     },
@@ -2122,7 +2122,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.W,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 10, 60, 110, 160, 210 }[level] +
@@ -2141,7 +2141,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 125, 175, 225 }[level] +
@@ -2153,7 +2153,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.R,
                         Stage = 1,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 250, 350, 450 }[level] +
@@ -2462,7 +2462,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 70, 95, 120, 145, 170 }[level] + 1.2 * source.FlatPhysicalDamageMod
@@ -2472,7 +2472,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.Q,
                         Stage = 1,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new[] { 91, 123.5, 156, 188.5, 221 }[level] + 1.56 * source.FlatPhysicalDamageMod
@@ -2482,7 +2482,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.Q,
                         Stage = 2,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 70, 95, 120, 145, 170 }[level] + 2.24 * source.FlatPhysicalDamageMod +
@@ -2493,7 +2493,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.Q,
                         Stage = 3,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new[] { 91, 123.5, 156, 188.5, 221 }[level] + 2.6 * source.FlatPhysicalDamageMod +
@@ -2503,7 +2503,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.W,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 80, 110, 140, 170, 200 }[level] + 1 * source.FlatPhysicalDamageMod
@@ -2512,7 +2512,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 65, 100, 135, 170, 205 }[level] + 0.2 * source.FlatPhysicalDamageMod
@@ -2569,7 +2569,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 10, 70, 130, 190, 250 }[level] + source.BaseAttackDamage +
@@ -2588,7 +2588,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage = (source, target, level) =>
                         {
                             var buff =
@@ -2661,7 +2661,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 50, 80, 110, 140, 170 }[level] + 0.9 * source.FlatPhysicalDamageMod
@@ -2671,7 +2671,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.Q,
                         Stage = 1,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 50, 80, 110, 140, 170 }[level] + 0.9 * source.FlatPhysicalDamageMod +
@@ -2690,7 +2690,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 200, 400, 600 }[level] + 2 * source.FlatPhysicalDamageMod
@@ -2786,7 +2786,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 80, 110, 140, 170, 200 }[level] +
@@ -2805,7 +2805,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 40, 50, 60 }[level] + 0.1 * source.FlatMagicDamageMod +
@@ -2884,7 +2884,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.W,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 30, 38, 46, 54, 62 }[level] / 100 *
@@ -3012,7 +3012,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 25, 60, 95, 130, 165 }[level] +
@@ -3039,7 +3039,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 35, 50, 65, 80 }[level] + 0.35 * source.FlatMagicDamageMod +
@@ -3050,7 +3050,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.Q,
                         Stage = 1,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 40, 70, 100, 130, 160 }[level] + 0.5 * source.FlatMagicDamageMod +
@@ -3077,7 +3077,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 50, 75, 125 }[level] + 0.2 * source.FlatMagicDamageMod
@@ -3091,7 +3091,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 30, 60, 90, 120, 150 }[level] +
@@ -3110,7 +3110,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 60, 105, 150, 195, 240 }[level] + 0.8 * source.FlatPhysicalDamageMod
@@ -3119,7 +3119,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 110, 200 }[level] +
@@ -3250,7 +3250,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 (from buff in ObjectManager.Player.Buffs
@@ -3405,7 +3405,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 60, 105, 150, 195, 240 }[level] + 0.75 * source.FlatPhysicalDamageMod
@@ -3423,7 +3423,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 150, 250, 350 }[level] + 1.2 * source.FlatPhysicalDamageMod
@@ -3467,7 +3467,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 70, 115, 160, 205, 250 }[level] + 1 * source.FlatPhysicalDamageMod
@@ -3532,7 +3532,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 (new double[] { 65, 105, 145, 185, 225 }[level] + 1.4 * source.FlatPhysicalDamageMod) *
@@ -3551,7 +3551,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 (new double[] { 13, 23, 33, 43, 53 }[level] + 0.6 * source.FlatPhysicalDamageMod) *
@@ -3623,7 +3623,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 70, 110, 150, 190, 230 }[level] + 0.65 * source.FlatPhysicalDamageMod +
@@ -3633,7 +3633,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 40, 70, 100, 130, 160 }[level] + 0.2 * source.FlatPhysicalDamageMod
@@ -3642,7 +3642,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 (new double[] { 100, 150, 200 }[level] + 0.5 * source.FlatPhysicalDamageMod) *
@@ -3688,7 +3688,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 60, 90, 120, 150, 180 }[level] + 0.8 * source.FlatPhysicalDamageMod
@@ -3698,7 +3698,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.Q,
                         Stage = 1,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 (new double[] { 60, 90, 120, 150, 180 }[level] + 0.8 * source.FlatPhysicalDamageMod) *
@@ -3708,7 +3708,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.W,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 10, 30, 50, 70, 90 }[level] +
@@ -3719,7 +3719,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.W,
                         Stage = 1,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 (new double[] { 10, 30, 50, 70, 90 }[level] +
@@ -3729,7 +3729,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 30, 60, 90, 120, 150 }[level] + 0.9 * source.FlatPhysicalDamageMod
@@ -3738,7 +3738,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 (new double[] { 30, 60, 90, 120, 150 }[level] + 0.9 * source.FlatPhysicalDamageMod) *
@@ -3762,7 +3762,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 30, 60, 90, 120, 150 }[level] +
@@ -3773,7 +3773,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 30, 60, 90, 120, 150 }[level] +
@@ -3793,7 +3793,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 50, 100, 150, 200, 250 }[level] + 0.7 * source.FlatPhysicalDamageMod
@@ -3807,7 +3807,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 10, 30, 50, 70, 90 }[level] +
@@ -3818,7 +3818,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.W,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 50, 80, 110, 140, 170 }[level] + 1 * source.FlatPhysicalDamageMod
@@ -3827,7 +3827,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 (new double[] { 80, 120, 160 }[level] + 0.6 * source.FlatPhysicalDamageMod) *
@@ -3991,7 +3991,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 140, 160, 180, 200, 220 }[level] / 100 *
@@ -4057,7 +4057,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 80, 85, 90, 95, 100 }[level] / 100 *
@@ -4122,7 +4122,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 40, 60, 80, 100 }[level] +
@@ -4133,7 +4133,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.Q,
                         Stage = 1,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 60, 120, 180, 240, 300 }[level] +
@@ -4172,7 +4172,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 150, 300, 450 }[level] + 0.4 * source.FlatPhysicalDamageMod
@@ -4182,7 +4182,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.R,
                         Stage = 1,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 (new double[] { 150, 300, 450 }[level] + 0.4 * source.FlatPhysicalDamageMod) * 2
@@ -4196,7 +4196,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 25, 45, 65, 85, 105 }[level] +
@@ -4208,7 +4208,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.W,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 50, 55, 60, 65, 70 }[level] / 100 *
@@ -4223,7 +4223,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 30, 40, 50, 60 }[level] + 0.4 * source.FlatPhysicalDamageMod
@@ -4394,7 +4394,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 30, 60, 90, 120, 150 }[level] + 0.3 * source.FlatPhysicalDamageMod +
@@ -4406,7 +4406,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.W,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 30, 55, 80, 105, 130 }[level] + 0.6 * source.FlatPhysicalDamageMod
@@ -4415,7 +4415,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 120, 170, 220 }[level] + 0.75 * source.FlatPhysicalDamageMod
@@ -4544,7 +4544,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 60, 70, 80, 90, 100 }[level] +
@@ -4569,7 +4569,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 40, 60, 80, 100 }[level] +
@@ -4595,7 +4595,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 70, 100, 130, 160, 190 }[level] + 1.2 * source.FlatPhysicalDamageMod +
@@ -4668,7 +4668,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 (from buff in target.Buffs
@@ -4682,7 +4682,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.E,
                         Stage = 1,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 15, 20, 25, 30, 35 }[level] + 0.2 * source.FlatMagicDamageMod +
@@ -4697,7 +4697,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 30, 80, 130, 180, 230 }[level] +
@@ -4722,7 +4722,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 10, 40, 70, 100, 130 }[level] +
@@ -4732,7 +4732,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 75, 130, 185, 240, 295 }[level] + 0.6 * source.FlatPhysicalDamageMod
@@ -4746,7 +4746,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 10, 47, 83, 120, 157 }[level] +
@@ -4757,7 +4757,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.Q,
                         Stage = 1,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 15, 70, 125, 180, 235 }[level] +
@@ -4787,7 +4787,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 65, 100, 135, 170, 205 }[level] + 0.6 * source.FlatPhysicalDamageMod
@@ -4810,7 +4810,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 30, 35, 40, 45, 50 }[level] / 100 *
@@ -4830,7 +4830,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 45, 80, 115, 150, 185 }[level] + 0.5 * source.FlatPhysicalDamageMod
@@ -4919,7 +4919,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 50, 75, 100, 125, 150 }[level] + 0.8 * source.FlatPhysicalDamageMod
@@ -4928,7 +4928,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.W,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 (new[] { 4, 5.5, 7, 8.5, 10 }[level] / 100 + 0.01 * source.FlatPhysicalDamageMod / 35) *
@@ -4938,7 +4938,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 5, 20, 35, 50, 65 }[level] +
@@ -4949,7 +4949,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 150, 300, 450 }[level] + 1.4 * source.FlatPhysicalDamageMod
@@ -5054,14 +5054,14 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage = (source, target, level) => new double[] { 30, 60, 90, 120, 150 }[level]
                     },
                     //W
                     new DamageSpell
                     {
                         Slot = SpellSlot.W,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 (new double[] { 80, 125, 170, 215, 260 }[level]) *
@@ -5161,7 +5161,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 15, 30, 45, 60, 75 }[level] +
@@ -5180,7 +5180,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 75, 175, 275 }[level] + 1 * source.FlatPhysicalDamageMod +
@@ -5195,7 +5195,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 40, 60, 80, 100 }[level] +
@@ -5214,7 +5214,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 200, 300, 400 }[level] + 1.5 * source.FlatPhysicalDamageMod
@@ -5228,7 +5228,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 30, 60, 90, 120, 150 }[level] +
@@ -5304,7 +5304,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 75, 115, 155, 195, 235 }[level] + 1 * source.FlatPhysicalDamageMod
@@ -5313,7 +5313,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 60, 90, 120, 150, 180 }[level] + 0.8 * source.FlatPhysicalDamageMod
@@ -5322,7 +5322,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.Physcial,
+                        DamageType = DamageType.Physical,
                         Damage = (source, target, level) => 1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                     },
                 });
@@ -5462,7 +5462,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     (source, target) =>
                         ((float)
                             source.CalculateDamage(
-                                target, DamageType.Physcial,
+                                target, DamageType.Physical,
                                 1.5d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
             };
             attackPassives.Add(p);
@@ -5479,7 +5479,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     (source, target) =>
                         ((float)
                             source.CalculateDamage(
-                                target, DamageType.Physcial,
+                                target, DamageType.Physical,
                                 0.45d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
             };
             attackPassives.Add(p);
@@ -5524,7 +5524,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     (source, target) =>
                         ((float)
                             source.CalculateDamage(
-                                target, DamageType.Physcial,
+                                target, DamageType.Physical,
                                 0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
             };
             attackPassives.Add(p);
@@ -5631,7 +5631,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                         (float)source.GetSpellDamage(target, SpellSlot.W) -
                         (float)
                             source.CalculateDamage(
-                                target, DamageType.Physcial, (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
+                                target, DamageType.Physical, (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
             };
             attackPassives.Add(p);
 
