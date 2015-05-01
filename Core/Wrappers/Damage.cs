@@ -309,7 +309,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     return CalculatePhysicalDamage(source, target, damage);
                 case DamageType.Magical:
                     return CalculateMagicDamage(source, target, damage);
-                case DamageType.True:
+                case DamageType.TrueDamage:
                     return damage;
             }
             return 0d;
@@ -649,7 +649,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     {
                         Slot = SpellSlot.Q,
                         Stage = 1,
-                        DamageType = DamageType.True,
+                        DamageType = DamageType.TrueDamage,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 40, 65, 90, 115, 140 }[level] + 0.35 * source.FlatMagicDamageMod
@@ -1179,7 +1179,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.True,
+                        DamageType = DamageType.TrueDamage,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 300, 475, 650 }[level] + 0.7 * source.FlatMagicDamageMod
@@ -1278,7 +1278,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        DamageType = DamageType.True,
+                        DamageType = DamageType.TrueDamage,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 160, 250, 340 }[level] + 0.75 * source.FlatPhysicalDamageMod
@@ -1948,7 +1948,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.W,
-                        DamageType = DamageType.True,
+                        DamageType = DamageType.TrueDamage,
                         Damage = (source, target, level) => new double[] { 15, 30, 45, 60, 75 }[level]
                     },
                     //E
@@ -3028,7 +3028,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.True,
+                        DamageType = DamageType.TrueDamage,
                         Damage =
                             (source, target, level) =>
                                 new[] { 10, 12.5, 15, 17.5, 20 }[level] / 100 *
@@ -3442,7 +3442,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.Q,
-                        DamageType = DamageType.True,
+                        DamageType = DamageType.TrueDamage,
                         Damage = (source, target, level) => new double[] { 400, 550, 700, 850, 1000 }[level]
                     },
                     //E
@@ -3481,7 +3481,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,
-                        DamageType = DamageType.True,
+                        DamageType = DamageType.TrueDamage,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 70, 115, 160, 205, 250 }[level] +
@@ -4825,7 +4825,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
                     new DamageSpell
                     {
                         Slot = SpellSlot.W,
-                        DamageType = DamageType.True,
+                        DamageType = DamageType.TrueDamage,
                         Damage =
                             (source, target, level) =>
                                 new double[] { 20, 30, 40, 50, 60 }[level] +
