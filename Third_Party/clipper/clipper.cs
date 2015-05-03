@@ -56,6 +56,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+// ReSharper disable once CheckNamespace
 namespace ClipperLib
 {
 
@@ -68,23 +69,45 @@ namespace ClipperLib
     using Path = List<IntPoint>;
     using Paths = List<List<IntPoint>>;
 
+    /// <summary>
+    ///     Points that are made out of doubles.
+    /// </summary>
     public struct DoublePoint
     {
+        /// <summary>
+        ///     The x
+        /// </summary>
         public double X;
+        /// <summary>
+        ///     The y
+        /// </summary>
         public double Y;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DoublePoint"/> struct.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
         public DoublePoint(double x = 0, double y = 0)
         {
             X = x;
             Y = y;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DoublePoint"/> struct.
+        /// </summary>
+        /// <param name="dp">The doublepoint.</param>
         public DoublePoint(DoublePoint dp)
         {
             X = dp.X;
             Y = dp.Y;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DoublePoint"/> struct.
+        /// </summary>
+        /// <param name="ip">The intpoint.</param>
         public DoublePoint(IntPoint ip)
         {
             X = ip.X;
@@ -97,15 +120,24 @@ namespace ClipperLib
     // PolyTree & PolyNode classes
     //------------------------------------------------------------------------------
 
+    /// <summary>
+    ///     Tree of PolyNodes.
+    /// </summary>
     public class PolyTree : PolyNode
     {
         internal List<PolyNode> MAllPolys = new List<PolyNode>();
 
+        /// <summary>
+        /// Finalizes an instance of the <see cref="PolyTree"/> class.
+        /// </summary>
         ~PolyTree()
         {
             Clear();
         }
 
+        /// <summary>
+        /// Clears this instance.
+        /// </summary>
         public void Clear()
         {
             for (var i = 0; i < MAllPolys.Count; i++)
@@ -114,11 +146,21 @@ namespace ClipperLib
             MChilds.Clear();
         }
 
+        /// <summary>
+        /// Gets the first.
+        /// </summary>
+        /// <returns></returns>
         public PolyNode GetFirst()
         {
             return MChilds.Count > 0 ? MChilds[0] : null;
         }
 
+        /// <summary>
+        /// Gets the total.
+        /// </summary>
+        /// <value>
+        /// The total.
+        /// </value>
         public int Total
         {
             get
@@ -133,6 +175,9 @@ namespace ClipperLib
 
     }
 
+    /// <summary>
+    ///     A point at which lines or pathways intersect or branch, a central or connecting point.
+    /// </summary>
     public class PolyNode
     {
         internal PolyNode MParent;
@@ -154,11 +199,23 @@ namespace ClipperLib
             return result;
         }
 
+        /// <summary>
+        /// Gets the child count.
+        /// </summary>
+        /// <value>
+        /// The child count.
+        /// </value>
         public int ChildCount
         {
             get { return MChilds.Count; }
         }
 
+        /// <summary>
+        /// Gets the contour.
+        /// </summary>
+        /// <value>
+        /// The contour.
+        /// </value>
         public Path Contour
         {
             get { return MPolygon; }
@@ -172,6 +229,10 @@ namespace ClipperLib
             child.MIndex = cnt;
         }
 
+        /// <summary>
+        /// Gets the next.
+        /// </summary>
+        /// <returns></returns>
         public PolyNode GetNext()
         {
             return MChilds.Count > 0 ? MChilds[0] : GetNextSiblingUp();
@@ -184,21 +245,45 @@ namespace ClipperLib
             return MIndex == MParent.MChilds.Count - 1 ? MParent.GetNextSiblingUp() : MParent.MChilds[MIndex + 1];
         }
 
+        /// <summary>
+        /// Gets the childs.
+        /// </summary>
+        /// <value>
+        /// The childs.
+        /// </value>
         public List<PolyNode> Childs
         {
             get { return MChilds; }
         }
 
+        /// <summary>
+        /// Gets the parent.
+        /// </summary>
+        /// <value>
+        /// The parent.
+        /// </value>
         public PolyNode Parent
         {
             get { return MParent; }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is hole.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is hole; otherwise, <c>false</c>.
+        /// </value>
         public bool IsHole
         {
             get { return IsHoleNode(); }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is open.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is open; otherwise, <c>false</c>.
+        /// </value>
         public bool IsOpen { get; set; }
     }
 
@@ -211,21 +296,22 @@ namespace ClipperLib
     //    val3.ToString => "85070591730234615847396907784232501249" (8.5e+37)
     //------------------------------------------------------------------------------
 
+
     internal struct Int128
     {
-        private Int64 hi;
-        private UInt64 lo;
+        private long hi;
+        private ulong lo;
 
-        public Int128(Int64 lo)
+        public Int128(long lo)
         {
-            this.lo = (UInt64) lo;
+            this.lo = (ulong) lo;
             if (lo < 0)
                 hi = -1;
             else
                 hi = 0;
         }
 
-        public Int128(Int64 hi, UInt64 lo)
+        public Int128(long hi, ulong lo)
         {
             this.lo = lo;
             this.hi = hi;
@@ -252,7 +338,7 @@ namespace ClipperLib
             return !(val1 == val2);
         }
 
-        public override bool Equals(Object obj)
+        public override bool Equals(object obj)
         {
             if (!(obj is Int128))
                 return false;
@@ -309,25 +395,25 @@ namespace ClipperLib
         //is slow. So, although calling the Int128Mul method doesn't look as clean, the 
         //code runs significantly faster than if we'd used the * operator.
 
-        public static Int128 Int128Mul(Int64 lhs, Int64 rhs)
+        public static Int128 Int128Mul(long lhs, long rhs)
         {
             var negate = (lhs < 0) != (rhs < 0);
             if (lhs < 0)
                 lhs = -lhs;
             if (rhs < 0)
                 rhs = -rhs;
-            var int1Hi = (UInt64) lhs >> 32;
-            var int1Lo = (UInt64) lhs & 0xFFFFFFFF;
-            var int2Hi = (UInt64) rhs >> 32;
-            var int2Lo = (UInt64) rhs & 0xFFFFFFFF;
+            var int1Hi = (ulong) lhs >> 32;
+            var int1Lo = (ulong) lhs & 0xFFFFFFFF;
+            var int2Hi = (ulong) rhs >> 32;
+            var int2Lo = (ulong) rhs & 0xFFFFFFFF;
 
             //nb: see comments in clipper.pas
             var a = int1Hi * int2Hi;
             var b = int1Lo * int2Lo;
             var c = int1Hi * int2Lo + int1Lo * int2Hi;
 
-            UInt64 lo;
-            var hi = (Int64) (a + (c >> 32));
+            ulong lo;
+            var hi = (long) (a + (c >> 32));
 
             unchecked
             {
@@ -344,9 +430,19 @@ namespace ClipperLib
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
 
+
+    /// <summary>
+    ///     A point whose values are Integers.
+    /// </summary>
     public struct IntPoint
     {
+        /// <summary>
+        /// The X
+        /// </summary>
         public cInt X;
+        /// <summary>
+        /// The Y
+        /// </summary>
         public cInt Y;
 #if use_xyz
     public cInt Z;
@@ -371,18 +467,33 @@ namespace ClipperLib
       this.X = pt.X; this.Y = pt.Y; this.Z = pt.Z;
     }
 #else
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntPoint"/> struct.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
         public IntPoint(cInt x, cInt y)
         {
             X = x;
             Y = y;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntPoint"/> struct.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
         public IntPoint(double x, double y)
         {
             X = (cInt) x;
             Y = (cInt) y;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntPoint"/> struct.
+        /// </summary>
+        /// <param name="pt">The pt.</param>
         public IntPoint(IntPoint pt)
         {
             X = pt.X;
@@ -390,26 +501,52 @@ namespace ClipperLib
         }
 #endif
 
+        /// <summary>
+        /// Implements the operator ==.
+        /// </summary>
+        /// <param name="a">a.</param>
+        /// <param name="b">The b.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator ==(IntPoint a, IntPoint b)
         {
             return a.X == b.X && a.Y == b.Y;
         }
 
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        /// <param name="a">a.</param>
+        /// <param name="b">The b.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator !=(IntPoint a, IntPoint b)
         {
             return a.X != b.X || a.Y != b.Y;
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
         public override bool Equals(object obj)
         {
-            if (obj is IntPoint)
-            {
-                var a = (IntPoint) obj;
-                return (X == a.X) && (Y == a.Y);
-            }
-            return false;
+            if (!(obj is IntPoint)) return false;
+            var a = (IntPoint) obj;
+            return (X == a.X) && (Y == a.Y);
         }
 
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
         public override int GetHashCode()
         {
             //simply prevents a compiler warning
@@ -418,13 +555,39 @@ namespace ClipperLib
 
     } // end struct IntPoint
 
+    /// <summary>
+    ///     A rectangle whose points are integers.
+    /// </summary>
     public struct IntRect
     {
+
+        /// <summary>
+        /// The left
+        /// </summary>
         public cInt Left;
+
+        /// <summary>
+        /// The top
+        /// </summary>
         public cInt Top;
+
+        /// <summary>
+        /// The right
+        /// </summary>
         public cInt Right;
+
+        /// <summary>
+        /// The bottom
+        /// </summary>
         public cInt Bottom;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntRect"/> struct.
+        /// </summary>
+        /// <param name="l">The left.</param>
+        /// <param name="t">The top.</param>
+        /// <param name="r">The righ.</param>
+        /// <param name="b">The bottom.</param>
         public IntRect(cInt l, cInt t, cInt r, cInt b)
         {
             Left = l;
@@ -433,6 +596,10 @@ namespace ClipperLib
             Bottom = b;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntRect"/> struct.
+        /// </summary>
+        /// <param name="ir">The <see cref="IntRect"/>.</param>
         public IntRect(IntRect ir)
         {
             Left = ir.Left;
@@ -442,45 +609,127 @@ namespace ClipperLib
         }
     }
 
+    /// <summary>
+    ///     The type of clipping.
+    /// </summary>
     public enum ClipType
     {
+        /// <summary>
+        ///     Intersection
+        /// </summary>
         CtIntersection,
+
+        /// <summary>
+        ///     Union
+        /// </summary>
         CtUnion,
+
+        /// <summary>
+        ///     Difference
+        /// </summary>
         CtDifference,
+
+        /// <summary>
+        ///     Xor
+        /// </summary>
         CtXor
     };
 
+    /// <summary>
+    ///     The type of polygon.
+    /// </summary>
     public enum PolyType
     {
+        /// <summary>
+        ///     Subject
+        /// </summary>
         PtSubject,
+
+        /// <summary>
+        ///     Clip
+        /// </summary>
         PtClip
     };
 
     //By far the most widely used winding rules for polygon filling are
     //EvenOdd & NonZero (GDI, GDI+, XLib, OpenGL, Cairo, AGG, Quartz, SVG, Gr32)
     //Others rules include Positive, Negative and ABS_GTR_EQ_TWO (only in OpenGL)
-    //see http://glprogramming.com/red/chapter11.html
+    //see http://glprogramming.com/red/chapter11.html    
+    /// <summary>
+    ///     The type of winding rules for polygon filling.
+    /// </summary>
     public enum PolyFillType
     {
+        /// <summary>
+        ///     Even odd.
+        /// </summary>
         PftEvenOdd,
+
+        /// <summary>
+        ///     Non Zero
+        /// </summary>
         PftNonZero,
+
+        /// <summary>
+        ///     Positive
+        /// </summary>
         PftPositive,
+
+        /// <summary>
+        ///     Negative
+        /// </summary>
         PftNegative
     };
 
+    /// <summary>
+    ///     Type of joining.
+    /// </summary>
     public enum JoinType
     {
+        /// <summary>
+        ///     Square
+        /// </summary>
         JtSquare,
+
+        /// <summary>
+        ///     Round
+        /// </summary>
         JtRound,
+
+        /// <summary>
+        ///     Miter.
+        /// </summary>
         JtMiter
     };
 
+    /// <summary>
+    ///     Type of end.
+    /// </summary>
     public enum EndType
     {
+        /// <summary>
+        ///     Closed Polygon
+        /// </summary>
         EtClosedPolygon,
+
+        /// <summary>
+        ///     Closed Line
+        /// </summary>
         EtClosedLine,
+
+        /// <summary>
+        ///     Open Butt
+        /// </summary>
         EtOpenButt,
+
+        /// <summary>
+        ///     Open square
+        /// </summary>
         EtOpenSquare,
+
+        /// <summary>
+        ///     Open round.
+        /// </summary>
         EtOpenRound
     };
 
@@ -518,6 +767,9 @@ namespace ClipperLib
         internal Edge PrevInSel;
     };
 
+    /// <summary>
+    ///     A point at which lines intersect.
+    /// </summary>
     public class IntersectNode
     {
         internal Edge Edge1;
@@ -525,8 +777,17 @@ namespace ClipperLib
         internal IntPoint Pt;
     };
 
+    /// <summary>
+    ///     Compares <see cref="IntersectNode"/>s for the .Sort method.
+    /// </summary>
     public class MyIntersectNodeSort : IComparer<IntersectNode>
     {
+        /// <summary>
+        /// Compares the specified nodes.
+        /// </summary>
+        /// <param name="node1">The node1.</param>
+        /// <param name="node2">The node2.</param>
+        /// <returns></returns>
         public int Compare(IntersectNode node1, IntersectNode node2)
         {
             var i = node2.Pt.Y - node1.Pt.Y;
@@ -579,11 +840,29 @@ namespace ClipperLib
         internal IntPoint OffPt;
     };
 
+    /// <summary>
+    ///     Base clipper.
+    /// </summary>
     public class ClipperBase
     {
+        /// <summary>
+        /// The horizontal
+        /// </summary>
         protected const double Horizontal = -3.4E+38;
+
+        /// <summary>
+        /// The skip
+        /// </summary>
         protected const int Skip = -2;
+
+        /// <summary>
+        /// The unassigned
+        /// </summary>
         protected const int Unassigned = -1;
+
+        /// <summary>
+        /// The tolerance
+        /// </summary>
         protected const double Tolerance = 1.0E-20;
 
         internal static bool NearZero(double val)
@@ -595,7 +874,14 @@ namespace ClipperLib
     public const cInt loRange = 0x7FFF;
     public const cInt hiRange = 0x7FFF;
 #else
+        /// <summary>
+        ///     The low range
+        /// </summary>
         public const cInt LoRange = 0x3FFFFFFF;
+
+        /// <summary>
+        ///     The high range
+        /// </summary>
         public const cInt HiRange = 0x3FFFFFFFFFFFFFFFL;
 #endif
 
@@ -607,9 +893,20 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to preserve the collinear.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if preserve the collinear; otherwise, <c>false</c>.
+        /// </value>
         public bool PreserveCollinear { get; set; }
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     Swaps the specified value.
+        /// </summary>
+        /// <param name="val1">Value 1.</param>
+        /// <param name="val2">Value 2.</param>
         public void Swap(ref cInt val1, ref cInt val2)
         {
             var tmp = val1;
@@ -681,6 +978,14 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     Checks if the slope is equal.
+        /// </summary>
+        /// <param name="pt1">The PT1.</param>
+        /// <param name="pt2">The PT2.</param>
+        /// <param name="pt3">The PT3.</param>
+        /// <param name="useFullRange">if set to <c>true</c>, will use the full range.</param>
+        /// <returns></returns>
         protected static bool SlopesEqual(IntPoint pt1, IntPoint pt2, IntPoint pt3, bool useFullRange)
         {
             if (useFullRange)
@@ -691,6 +996,15 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     Checks if the slopes are equaal.
+        /// </summary>
+        /// <param name="pt1">The PT1.</param>
+        /// <param name="pt2">The PT2.</param>
+        /// <param name="pt3">The PT3.</param>
+        /// <param name="pt4">The PT4.</param>
+        /// <param name="useFullRange">if set to <c>true</c>, will use full range.</param>
+        /// <returns></returns>
         protected static bool SlopesEqual(IntPoint pt1, IntPoint pt2, IntPoint pt3, IntPoint pt4, bool useFullRange)
         {
             if (useFullRange)
@@ -711,6 +1025,9 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     Clears this instance.
+        /// </summary>
         public virtual void Clear()
         {
             DisposeLocalMinimaList();
@@ -931,6 +1248,14 @@ namespace ClipperLib
         //------------------------------------------------------------------------------
 
 
+        /// <summary>
+        /// Adds the path.
+        /// </summary>
+        /// <param name="pg">The path.</param>
+        /// <param name="polyType">Type of the polygpm.</param>
+        /// <param name="closed">Gets of the path is closed or not.</param>
+        /// <returns></returns>
+        /// <exception cref="ClipperLib.ClipperException">Open paths have been disabled.</exception>
         public bool AddPath(Path pg, PolyType polyType, bool closed)
         {
 #if use_lines
@@ -1090,6 +1415,13 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     Adds the paths.
+        /// </summary>
+        /// <param name="ppg">The paths.</param>
+        /// <param name="polyType">Type of the poly.</param>
+        /// <param name="closed">if set to <c>true</c>, closes the path.</param>
+        /// <returns></returns>
         public bool AddPaths(Paths ppg, PolyType polyType, bool closed)
         {
             return ppg.Any(t => AddPath(t, polyType, closed));
@@ -1109,6 +1441,11 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Removes an edge.
+        /// </summary>
+        /// <param name="e">The edge.</param>
+        /// <returns></returns>
         private Edge RemoveEdge(Edge e)
         {
             //removes e from double_linked_list (but without removing from memory)
@@ -1121,6 +1458,10 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Sets the delta x.
+        /// </summary>
+        /// <param name="e">The edge.</param>
         private void SetDx(Edge e)
         {
             e.Delta.X = (e.Top.X - e.Bot.X);
@@ -1156,6 +1497,9 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Pops the local minima.
+        /// </summary>
         protected void PopLocalMinima()
         {
             if (MCurrentLm == null)
@@ -1178,6 +1522,9 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     Resets this instance.
+        /// </summary>
         protected virtual void Reset()
         {
             MCurrentLm = MMinimaList;
@@ -1208,6 +1555,11 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Gets the bounds.
+        /// </summary>
+        /// <param name="paths">The paths.</param>
+        /// <returns></returns>
         public static IntRect GetBounds(Paths paths)
         {
             int i = 0, cnt = paths.Count;
@@ -1236,11 +1588,25 @@ namespace ClipperLib
 
     } //end ClipperBase
 
+    /// <summary>
+    ///     Clips polygons.
+    /// </summary>
     public class Clipper : ClipperBase
     {
         //InitOptions that can be passed to the constructor ...
+        /// <summary>
+        ///     Reverses the solution
+        /// </summary>
         public const int IoReverseSolution = 1;
+
+        /// <summary>
+        ///     Makes the clipping scrictly simple.
+        /// </summary>
         public const int IoStrictlySimple = 2;
+
+        /// <summary>
+        ///     Perserves the collinear.
+        /// </summary>
         public const int IoPreserveCollinear = 4;
 
         private readonly List<OutRec> _mPolyOuts;
@@ -1262,6 +1628,10 @@ namespace ClipperLib
       public ZFillCallback ZFillFunction { get; set; }
 #endif
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Clipper"/> class.
+        /// </summary>
+        /// <param name="initOptions">The initialize options.</param>
         public Clipper(int initOptions = 0) //constructor
         {
             _mScanbeam = null;
@@ -1296,6 +1666,9 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Resets this instance.
+        /// </summary>
         protected override void Reset()
         {
             base.Reset();
@@ -1312,9 +1685,21 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to reverse the solution.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if reversing the solution; otherwise, <c>false</c>.
+        /// </value>
         public bool ReverseSolution { get; set; }
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Gets or sets a value indicating whether clipping is strictly simple.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if clipping is strictly simple; otherwise, <c>false</c>.
+        /// </value>
         public bool StrictlySimple { get; set; }
         //------------------------------------------------------------------------------
 
@@ -1343,6 +1728,15 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     Executes the specified clipping.
+        /// </summary>
+        /// <param name="clipType">Type of the clip.</param>
+        /// <param name="solution">The solution.</param>
+        /// <param name="subjFillType">Type of the subject fill.</param>
+        /// <param name="clipFillType">Type of the clip fill.</param>
+        /// <returns></returns>
+        /// <exception cref="ClipperLib.ClipperException">Error: PolyTree struct is need for open path clipping.</exception>
         public bool Execute(ClipType clipType, Paths solution, PolyFillType subjFillType, PolyFillType clipFillType)
         {
             if (_mExecuteLocked)
@@ -1374,6 +1768,14 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Executes the specified clipping.
+        /// </summary>
+        /// <param name="clipType">Type of the clip.</param>
+        /// <param name="polytree">The polytree.</param>
+        /// <param name="subjFillType">Type of the subject fill.</param>
+        /// <param name="clipFillType">Type of the clip fill.</param>
+        /// <returns></returns>
         public bool Execute(ClipType clipType, PolyTree polytree, PolyFillType subjFillType, PolyFillType clipFillType)
         {
             if (_mExecuteLocked)
@@ -1401,6 +1803,12 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Executes the specified clip type.
+        /// </summary>
+        /// <param name="clipType">Type of the clip.</param>
+        /// <param name="solution">The solution.</param>
+        /// <returns></returns>
         public bool Execute(ClipType clipType, Paths solution)
         {
             return Execute(clipType, solution, PolyFillType.PftEvenOdd, PolyFillType.PftEvenOdd);
@@ -1408,6 +1816,12 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Executes the specified clip type.
+        /// </summary>
+        /// <param name="clipType">Type of the clip.</param>
+        /// <param name="polytree">The polytree.</param>
+        /// <returns></returns>
         public bool Execute(ClipType clipType, PolyTree polytree)
         {
             return Execute(clipType, polytree, PolyFillType.PftEvenOdd, PolyFillType.PftEvenOdd);
@@ -3329,6 +3743,10 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Reverses the paths.
+        /// </summary>
+        /// <param name="polys">The paths.</param>
         public static void ReversePaths(Paths polys)
         {
             foreach (var poly in polys)
@@ -3339,6 +3757,11 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     Orientates the specified path.
+        /// </summary>
+        /// <param name="poly">The path.</param>
+        /// <returns></returns>
         public static bool Orientation(Path poly)
         {
             return Area(poly) >= 0;
@@ -3776,6 +4199,12 @@ namespace ClipperLib
 
         //----------------------------------------------------------------------
 
+        /// <summary>
+        ///     Checks if a point is in the polygon.
+        /// </summary>
+        /// <param name="pt">The point.</param>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
         public static int PointInPolygon(IntPoint pt, Path path)
         {
             //returns 0 if false, +1 if true, -1 if pt ON polygon boundary
@@ -4121,6 +4550,11 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     Gets the area of the specified polygon.
+        /// </summary>
+        /// <param name="poly">The polygon.</param>
+        /// <returns></returns>
         public static double Area(Path poly)
         {
             var cnt = poly.Count;
@@ -4156,6 +4590,12 @@ namespace ClipperLib
         // Convert self-intersecting polygons into simple polygons
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     Simplifies the polygon.
+        /// </summary>
+        /// <param name="poly">The polygon.</param>
+        /// <param name="fillType">Type of the fill.</param>
+        /// <returns></returns>
         public static Paths SimplifyPolygon(Path poly, PolyFillType fillType = PolyFillType.PftEvenOdd)
         {
             var result = new Paths();
@@ -4167,6 +4607,12 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     Simplifies the polygons.
+        /// </summary>
+        /// <param name="polys">The polygon.</param>
+        /// <param name="fillType">Type of the fill.</param>
+        /// <returns></returns>
         public static Paths SimplifyPolygons(Paths polys, PolyFillType fillType = PolyFillType.PftEvenOdd)
         {
             var result = new Paths();
@@ -4246,6 +4692,12 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Cleans the polygon.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="distance">The distance.</param>
+        /// <returns></returns>
         public static Path CleanPolygon(Path path, double distance = 1.415)
         {
             //distance = proximity in units/pixels below which vertices will be stripped. 
@@ -4309,6 +4761,12 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Cleans the polygons.
+        /// </summary>
+        /// <param name="polys">The polygon.</param>
+        /// <param name="distance">The distance.</param>
+        /// <returns></returns>
         public static Paths CleanPolygons(Paths polys, double distance = 1.415)
         {
             var result = new Paths(polys.Count);
@@ -4359,6 +4817,13 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Gets the Minkowskis sum.
+        /// </summary>
+        /// <param name="pattern">The pattern.</param>
+        /// <param name="path">The path.</param>
+        /// <param name="pathIsClosed">Whether the path is closed or not.</param>
+        /// <returns></returns>
         public static Paths MinkowskiSum(Path pattern, Path path, bool pathIsClosed)
         {
             var paths = Minkowski(pattern, path, true, pathIsClosed);
@@ -4380,6 +4845,13 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Gets the Minkowskis sum.
+        /// </summary>
+        /// <param name="pattern">The pattern.</param>
+        /// <param name="paths">The paths.</param>
+        /// <param name="pathIsClosed">Whether the path is closed or not.</param>
+        /// <returns></returns>
         public static Paths MinkowskiSum(Path pattern, Paths paths, bool pathIsClosed)
         {
             var solution = new Paths();
@@ -4400,6 +4872,12 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Gets the Minkowskis difference.
+        /// </summary>
+        /// <param name="poly1">Polygon 1.</param>
+        /// <param name="poly2">Polygon 2.</param>
+        /// <returns></returns>
         public static Paths MinkowskiDiff(Path poly1, Path poly2)
         {
             var paths = Minkowski(poly1, poly2, false, true);
@@ -4418,6 +4896,11 @@ namespace ClipperLib
             NtClosed
         };
 
+        /// <summary>
+        ///     Converts a <see cref="PolyTree"/> to a <see cref="Paths"/>.
+        /// </summary>
+        /// <param name="polytree">The polytree.</param>
+        /// <returns></returns>
         public static Paths PolyTreeToPaths(PolyTree polytree)
         {
 
@@ -4448,6 +4931,11 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Opens the paths from poly tree.
+        /// </summary>
+        /// <param name="polytree">The polytree.</param>
+        /// <returns></returns>
         public static Paths OpenPathsFromPolyTree(PolyTree polytree)
         {
             var result = new Paths { Capacity = polytree.ChildCount };
@@ -4459,6 +4947,11 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Closeds the paths from poly tree.
+        /// </summary>
+        /// <param name="polytree">The polytree.</param>
+        /// <returns></returns>
         public static Paths ClosedPathsFromPolyTree(PolyTree polytree)
         {
             var result = new Paths { Capacity = polytree.Total };
@@ -4470,6 +4963,9 @@ namespace ClipperLib
 
     } //end Clipper
 
+    /// <summary>
+    ///     Clipping offset.
+    /// </summary>
     public class ClipperOffset
     {
         private Paths _mDestPolys;
@@ -4482,12 +4978,30 @@ namespace ClipperLib
         private IntPoint _mLowest;
         private readonly PolyNode _mPolyNodes = new PolyNode();
 
+        /// <summary>
+        /// Gets or sets the arc tolerance.
+        /// </summary>
+        /// <value>
+        /// The arc tolerance.
+        /// </value>
         public double ArcTolerance { get; set; }
+
+        /// <summary>
+        /// Gets or sets the miter limit.
+        /// </summary>
+        /// <value>
+        /// The miter limit.
+        /// </value>
         public double MiterLimit { get; set; }
 
         private const double TwoPi = Math.PI * 2;
         private const double DefArcTolerance = 0.25;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClipperOffset"/> class.
+        /// </summary>
+        /// <param name="miterLimit">The miter limit.</param>
+        /// <param name="arcTolerance">The arc tolerance.</param>
         public ClipperOffset(double miterLimit = 2.0, double arcTolerance = DefArcTolerance)
         {
             MiterLimit = miterLimit;
@@ -4497,6 +5011,9 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Clears this instance.
+        /// </summary>
         public void Clear()
         {
             _mPolyNodes.Childs.Clear();
@@ -4512,6 +5029,12 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Adds the path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="joinType">Type of the join.</param>
+        /// <param name="endType">The end type.</param>
         public void AddPath(Path path, JoinType joinType, EndType endType)
         {
             var highI = path.Count - 1;
@@ -4555,6 +5078,12 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Adds the paths.
+        /// </summary>
+        /// <param name="paths">The paths.</param>
+        /// <param name="joinType">Type of the join.</param>
+        /// <param name="endType">The end type.</param>
         public void AddPaths(Paths paths, JoinType joinType, EndType endType)
         {
             foreach (var p in paths)
@@ -4794,6 +5323,11 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     Executes the specified solution.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
+        /// <param name="delta">The delta.</param>
         public void Execute(ref Paths solution, double delta)
         {
             solution.Clear();
@@ -4828,6 +5362,11 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Executes the specified solution.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
+        /// <param name="delta">The delta.</param>
         public void Execute(ref PolyTree solution, double delta)
         {
             solution.Clear();
