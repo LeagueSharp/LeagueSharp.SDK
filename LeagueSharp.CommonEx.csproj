@@ -49,9 +49,6 @@
     <AssemblyOriginatorKeyFile>LeagueSharp.CommonEx.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="clipper_library">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\clipper_library.dll</HintPath>
-    </Reference>
     <Reference Include="LeagueSharp">
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
@@ -187,6 +184,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Third_Party\clipper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -198,9 +196,7 @@
     <None Include="LeagueSharp.CommonEx.snk" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Third_Party\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Resources\Menu\Skin0\img_000.png" />
     <Content Include="Resources\Menu\Skin0\img_001.png" />
@@ -211,6 +207,7 @@
     <Content Include="Resources\Menu\Skin0\img_003_sub.png" />
     <Content Include="Resources\Menu\Skin0\img_004.png" />
     <Content Include="Resources\Menu\Special\F3VD2VG.png" />
+    <None Include="Third_Party\clipper.License.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
