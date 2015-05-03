@@ -184,7 +184,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Third_Party\clipper.cs" />
+    <Compile Include="Third_Party\clipper\clipper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -207,7 +207,7 @@
     <Content Include="Resources\Menu\Skin0\img_003_sub.png" />
     <Content Include="Resources\Menu\Skin0\img_004.png" />
     <Content Include="Resources\Menu\Special\F3VD2VG.png" />
-    <None Include="Third_Party\clipper.License.txt" />
+    <None Include="Third_Party\clipper\License.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
