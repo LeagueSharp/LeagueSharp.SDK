@@ -96,9 +96,10 @@
     <Compile Include="Core\Math\Geometry.cs" />
     <Compile Include="Core\Math\Prediction\Health.cs" />
     <Compile Include="Core\Orbwalker.cs" />
+    <Compile Include="Core\Render\2D\Circle.cs" />
+    <Compile Include="Core\Render\2D\Sprite.cs" />
     <Compile Include="Core\UI\Menu\MenuInterface.cs" />
     <Compile Include="Core\UI\Menu\MenuSettings.cs" />
-    <Compile Include="Core\UI\Menu\MenuSprite.cs" />
     <Compile Include="Core\UI\Menu\Skins\Battlecry\BattlecrySkin.cs" />
     <Compile Include="Core\UI\Menu\Skins\Battlecry\BoolRender.cs" />
     <Compile Include="Core\UI\Menu\Skins\Biolight\BiolightSkin.cs" />
@@ -194,7 +195,9 @@
     <None Include="LeagueSharp.CommonEx.snk" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Core\UI\Console\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Menu\Skin0\img_000.png" />
     <Content Include="Resources\Menu\Skin0\img_001.png" />
