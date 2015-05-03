@@ -24,8 +24,122 @@ namespace LeagueSharp.CommonEx.Core.Render
     ///     If the selected font is too large for the rectangle, this method does not attempt to substitute a smaller font.
     ///     This method supports only fonts whose escapement and orientation are both zero.
     /// </remarks>
-    public static class Text
+    public sealed class Text : IDisposable
     {
+        #region Private Fields
+
+        private readonly Font font;
+
+        #endregion
+
+        /// <summary>
+        ///     Text dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            font.Dispose();
+        }
+
+        #region Class Internal Drawing
+
+        /// <summary>
+        ///     Draws formatted text. This method supports ANSI and Unicode strings.
+        /// </summary>
+        /// <param name="text">String to draw.</param>
+        /// <param name="vector2">
+        ///     Vector2 structure that contains the X-Axis and Y-Axis to draw the given text on the screen
+        ///     projector.
+        /// </param>
+        /// <param name="color">Color of the text.</param>
+        /// <returns>
+        ///     If the function succeeds, the return value is the height of the text in logical units. If the function fails,
+        ///     the return value is zero.
+        /// </returns>
+        public int Draw(string text, Vector2 vector2, ColorBGRA color)
+        {
+            return font.DrawText(null, text, (int) vector2.X, (int) vector2.Y, color);
+        }
+
+        #endregion
+
+        #region Constructors / Overloads
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Text" /> class.
+        /// </summary>
+        /// <param name="font">
+        ///     Font interface encapsulates the textures and resources needed to render a specific font on a
+        ///     specific device.
+        /// </param>
+        public Text(Font font)
+        {
+            this.font = font;
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Text" /> class.
+        /// </summary>
+        /// <param name="font">
+        ///     Font interface encapsulates the textures and resources needed to render a specific font on a
+        ///     specific device, from the <see cref="System.Drawing.Font" /> class.
+        /// </param>
+        public Text(System.Drawing.Font font)
+        {
+            this.font = new Font(Drawing.Direct3DDevice, font);
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Text" /> class.
+        /// </summary>
+        /// <param name="fontDescription">
+        ///     Defines font attributes for a Font interface which encapsulates the textures and resources needed to render a
+        ///     specific font on a
+        ///     specific device.
+        /// </param>
+        public Text(FontDescription fontDescription)
+        {
+            font = new Font(Drawing.Direct3DDevice, fontDescription);
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Text" /> class.
+        /// </summary>
+        public Text()
+        {
+            font = Constants.LeagueSharpFont;
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Text" /> class.
+        /// </summary>
+        /// <param name="height">The height.</param>
+        /// <param name="width">The width.</param>
+        /// <param name="weight">The weight.</param>
+        /// <param name="mipLevels">The mip levels.</param>
+        /// <param name="isItalic">if set to <c>true</c> [is italic].</param>
+        /// <param name="characterSet">The character set.</param>
+        /// <param name="precision">The precision.</param>
+        /// <param name="quality">The quality.</param>
+        /// <param name="pitchAndFamily">The pitch and family.</param>
+        /// <param name="faceName">Name of the face.</param>
+        public Text(int height,
+            int width,
+            FontWeight weight,
+            int mipLevels,
+            bool isItalic,
+            FontCharacterSet characterSet,
+            FontPrecision precision,
+            FontQuality quality,
+            FontPitchAndFamily pitchAndFamily,
+            string faceName)
+        {
+            font = new Font(
+                Drawing.Direct3DDevice, height, width, weight, mipLevels, isItalic, characterSet, precision, quality,
+                pitchAndFamily, faceName);
+        }
+
+        #endregion
+
         #region External Drawing
 
         #region DrawText :: Font, Sprite, Text, Vector2, Color
@@ -51,11 +165,7 @@ namespace LeagueSharp.CommonEx.Core.Render
         ///     If the function succeeds, the return value is the height of the text in logical units. If the function fails,
         ///     the return value is zero.
         /// </returns>
-        public static int DrawText(this Font font,
-            SharpDX.Direct3D9.Sprite sprite,
-            string text,
-            Vector2 vector2,
-            ColorBGRA color)
+        public static int DrawText(Font font, Sprite sprite, string text, Vector2 vector2, ColorBGRA color)
         {
             return font.DrawText(sprite, text, (int) vector2.X, (int) vector2.Y, color);
         }
@@ -78,11 +188,7 @@ namespace LeagueSharp.CommonEx.Core.Render
         /// </param>
         /// <param name="color">Color of the text.</param>
         /// <returns></returns>
-        public static int DrawText(this Font font,
-            SharpDX.Direct3D9.Sprite sprite,
-            string text,
-            Vector2 vector2,
-            Color color)
+        public static int DrawText(Font font, Sprite sprite, string text, Vector2 vector2, Color color)
         {
             return font.DrawText(
                 sprite, text, (int) vector2.X, (int) vector2.Y, new ColorBGRA(color.R, color.G, color.B, color.A));
@@ -108,12 +214,7 @@ namespace LeagueSharp.CommonEx.Core.Render
         /// <param name="y">Y-Axis on the screen projector to draw on.</param>
         /// <param name="color">Color of the text.</param>
         /// <returns></returns>
-        public static int DrawText(this Font font,
-            SharpDX.Direct3D9.Sprite sprite,
-            string text,
-            int x,
-            int y,
-            Color color)
+        public static int DrawText(Font font, Sprite sprite, string text, int x, int y, Color color)
         {
             return font.DrawText(sprite, text, x, y, new ColorBGRA(color.R, color.G, color.B, color.A));
         }
@@ -151,8 +252,8 @@ namespace LeagueSharp.CommonEx.Core.Render
         ///     FontDrawFlags.VerticalCenter or FontDrawFlags.Bottom is specified, the return value is the offset from pRect (top
         ///     to the bottom) of the drawn text. If the function fails, the return value is zero.
         /// </returns>
-        public static int DrawText(this Font font,
-            SharpDX.Direct3D9.Sprite spriteRef,
+        public static int DrawText(Font font,
+            Sprite spriteRef,
             string stringRef,
             int count,
             IntPtr rectRef,
@@ -191,8 +292,8 @@ namespace LeagueSharp.CommonEx.Core.Render
         ///     FontDrawFlags.VerticalCenter or FontDrawFlags.Bottom is specified, the return value is the offset from pRect (top
         ///     to the bottom) of the drawn text. If the function fails, the return value is zero.
         /// </returns>
-        public static int DrawText(this Font font,
-            SharpDX.Direct3D9.Sprite sprite,
+        public static int DrawText(Font font,
+            Sprite sprite,
             string text,
             Rectangle rect,
             FontDrawFlags drawFlags,

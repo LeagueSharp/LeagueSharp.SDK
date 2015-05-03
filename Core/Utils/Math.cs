@@ -80,9 +80,9 @@ namespace LeagueSharp.CommonEx.Core.Utils
 
             var solution = new List<List<IntPoint>>();
             var c = new Clipper();
-            c.AddPaths(subj, PolyType.ptSubject, true);
-            c.AddPaths(clip, PolyType.ptClip, true);
-            c.Execute(ClipType.ctUnion, solution, PolyFillType.pftPositive, PolyFillType.pftEvenOdd);
+            c.AddPaths(subj, PolyType.PtSubject, true);
+            c.AddPaths(clip, PolyType.PtClip, true);
+            c.Execute(ClipType.CtUnion, solution, PolyFillType.PftPositive, PolyFillType.PftEvenOdd);
 
             return solution;
         }
