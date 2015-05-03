@@ -106,7 +106,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         /// <param name="ignoredChampions">Any champions to ignore.</param>
         /// <returns></returns>
         public static Obj_AI_Hero GetTarget(float range,
-            DamageType damageType = DamageType.TrueDamage,
+            DamageType damageType = DamageType.True,
             Vector3 from = new Vector3(),
             IEnumerable<Obj_AI_Hero> ignoredChampions = null)
         {
@@ -177,7 +177,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         public static bool IsInvulnerable(Obj_AI_Base target, DamageType damageType, bool ignoreShields = true)
         {
             // Tryndamere's Undying Rage (R)
-            if (!damageType.Equals(DamageType.TrueDamage) && target.HasBuff("Undying Rage") && target.Health <= 2f)
+            if (!damageType.Equals(DamageType.True) && target.HasBuff("Undying Rage") && target.Health <= 2f)
             {
                 return true;
             }
