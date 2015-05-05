@@ -129,16 +129,16 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="token">The cancelation token.</param>
         public DelayActionItem(int time, Action func, CancellationToken token)
         {
-            Time = time;
+            Time = time + Variables.TickCount;
             Function = func;
             Token = token;
         }
 
         /// <summary>
-        ///     Gets or sets the time.
+        ///     Gets or sets the time the function will be executed at.
         /// </summary>
         /// <value>
-        ///     The time.
+        ///     The time the function will be executed at.
         /// </value>
         public int Time { get; set; }
 
