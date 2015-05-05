@@ -795,7 +795,7 @@ namespace LeagueSharp.CommonEx.Core.Wrappers
         public float GetHealthPrediction(Obj_AI_Base unit)
         {
             var time = (int) (Delay * 1000 + From.Distance(unit.ServerPosition) / Speed - 100);
-            return Health.GetHealthPrediction(unit, time);
+            return Health.GetPrediction(unit, time);
         }
 
         /// <summary>

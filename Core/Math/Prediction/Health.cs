@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.Extensions;
 
 #endregion
@@ -92,13 +93,29 @@ namespace LeagueSharp.CommonEx.Core.Math.Prediction
                 sender.AttackDelay * 1000 - (sender is Obj_AI_Turret ? 70 : 0),
                 sender.CombatType == GameObjectCombatType.Melee ? int.MaxValue : (int) args.SData.MissileSpeed,
                 sender.TotalAttackDamage);
+
             ActiveAttacks.Add(sender.NetworkId, attackData);
         }
 
         /// <summary>
-        ///     Returns the unit health after a set time milliseconds.
+        ///     Returns the health prediction, either default or simulated
         /// </summary>
-        public static float GetHealthPrediction(Obj_AI_Base unit, int time, int delay = 70)
+        /// <param name="unit"><see cref="Obj_AI_Base" /> unit</param>
+        /// <param name="time">The time in milliseconds</param>
+        /// <param name="delay">An optional delay</param>
+        /// <param name="type"><see cref="HealthPredictionType" /> type</param>
+        /// <returns></returns>
+        public static float GetPrediction(Obj_AI_Base unit,
+            int time,
+            int delay = 70,
+            HealthPredictionType type = HealthPredictionType.Default)
+        {
+            return type == HealthPredictionType.Simulated
+                ? GetPredictionSimulated(unit, time, delay)
+                : GetPredictionDefault(unit, time, delay);
+        }
+
+        private static float GetPredictionDefault(Obj_AI_Base unit, int time, int delay = 70)
         {
             var predictedDamage = 0f;
 
@@ -123,10 +140,7 @@ namespace LeagueSharp.CommonEx.Core.Math.Prediction
             return unit.Health - predictedDamage;
         }
 
-        /// <summary>
-        ///     Returns the unit health after time milliseconds assuming that the past auto-attacks are periodic.
-        /// </summary>
-        public static float LaneClearHealthPrediction(Obj_AI_Base unit, int time, int delay = 70)
+        private static float GetPredictionSimulated(Obj_AI_Base unit, int time, int delay = 70)
         {
             var predictedDamage = 0f;
 
