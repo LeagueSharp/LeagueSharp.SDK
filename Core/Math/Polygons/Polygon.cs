@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using ClipperLib;
+using LeagueSharp.CommonEx.Clipper;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using SharpDX;
 using Color = System.Drawing.Color;
@@ -117,7 +117,7 @@ namespace LeagueSharp.CommonEx.Core.Math.Polygons
         public bool IsOutside(Vector2 point)
         {
             var p = new IntPoint(point.X, point.Y);
-            return Clipper.PointInPolygon(p, ToClipperPath()) != 1;
+            return Clipper.Clipper.PointInPolygon(p, ToClipperPath()) != 1;
         }
     }
 }

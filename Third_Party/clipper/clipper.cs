@@ -56,9 +56,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-// ReSharper disable once CheckNamespace
-
-namespace ClipperLib
+namespace LeagueSharp.CommonEx.Clipper
 {
 #if use_int32
     using cInt = Int32;
@@ -1377,7 +1375,7 @@ namespace ClipperLib
         /// <param name="polyType">Type of the polygpm.</param>
         /// <param name="closed">Gets of the path is closed or not.</param>
         /// <returns></returns>
-        /// <exception cref="ClipperLib.ClipperException">Open paths have been disabled.</exception>
+        /// <exception cref="ClipperException">Open paths have been disabled.</exception>
         public bool AddPath(Path pg, PolyType polyType, bool closed)
         {
 #if use_lines
@@ -1856,18 +1854,6 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
-        private void DisposeScanbeamList()
-        {
-            while (_mScanbeam != null)
-            {
-                var sb2 = _mScanbeam.Next;
-                _mScanbeam = null;
-                _mScanbeam = sb2;
-            }
-        }
-
-        //------------------------------------------------------------------------------
-
         /// <summary>
         ///     Resets this instance.
         /// </summary>
@@ -1944,7 +1930,7 @@ namespace ClipperLib
         /// <param name="subjFillType">Type of the subject fill.</param>
         /// <param name="clipFillType">Type of the clip fill.</param>
         /// <returns></returns>
-        /// <exception cref="ClipperLib.ClipperException">Error: PolyTree struct is need for open path clipping.</exception>
+        /// <exception cref="ClipperException">Error: PolyTree struct is need for open path clipping.</exception>
         public bool Execute(ClipType clipType, Paths solution, PolyFillType subjFillType, PolyFillType clipFillType)
         {
             if (_mExecuteLocked)
@@ -3808,13 +3794,6 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
-        private static bool IsMinima(Edge e)
-        {
-            return e != null && (e.Prev.NextInLml != e) && (e.Next.NextInLml != e);
-        }
-
-        //------------------------------------------------------------------------------
-
         private static bool IsMaxima(Edge e, double y)
         {
             return (e != null && Math.Abs(e.Top.Y - y) < float.Epsilon && e.NextInLml == null);
@@ -3940,18 +3919,9 @@ namespace ClipperLib
 
         //------------------------------------------------------------------------------
 
-        private bool EdgesAdjacent(IntersectNode inode)
+        private static bool EdgesAdjacent(IntersectNode inode)
         {
             return (inode.Edge1.NextInSel == inode.Edge2) || (inode.Edge1.PrevInSel == inode.Edge2);
-        }
-
-        //------------------------------------------------------------------------------
-
-        private static int IntersectNodeSort(IntersectNode node1, IntersectNode node2)
-        {
-            //the following typecast is safe because the differences in Pt.Y will
-            //be limited to the height of the scanbeam.
-            return (int) (node2.Pt.Y - node1.Pt.Y);
         }
 
         //------------------------------------------------------------------------------
@@ -5267,15 +5237,6 @@ namespace ClipperLib
             c.AddPaths(polys, PolyType.PtSubject, true);
             c.Execute(ClipType.CtUnion, result, fillType, fillType);
             return result;
-        }
-
-        //------------------------------------------------------------------------------
-
-        private static double DistanceSqrd(IntPoint pt1, IntPoint pt2)
-        {
-            var dx = ((double) pt1.X - pt2.X);
-            var dy = ((double) pt1.Y - pt2.Y);
-            return (dx * dx + dy * dy);
         }
 
         //------------------------------------------------------------------------------
