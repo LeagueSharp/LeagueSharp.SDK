@@ -304,42 +304,42 @@ namespace ClipperLib
 
     internal struct Int128
     {
-        private long hi;
-        private ulong lo;
+        private long _hi;
+        private ulong _lo;
 
         public Int128(long lo)
         {
-            this.lo = (ulong) lo;
+            _lo = (ulong) lo;
             if (lo < 0)
             {
-                hi = -1;
+                _hi = -1;
             }
             else
             {
-                hi = 0;
+                _hi = 0;
             }
         }
 
         public Int128(long hi, ulong lo)
         {
-            this.lo = lo;
-            this.hi = hi;
+            _lo = lo;
+            _hi = hi;
         }
 
         public Int128(Int128 val)
         {
-            hi = val.hi;
-            lo = val.lo;
+            _hi = val._hi;
+            _lo = val._lo;
         }
 
         public bool IsNegative()
         {
-            return hi < 0;
+            return _hi < 0;
         }
 
         public static bool operator ==(Int128 val1, Int128 val2)
         {
-            return (object) val1 == (object) val2 || val1.hi == val2.hi && val1.lo == val2.lo;
+            return (object) val1 == (object) val2 || val1._hi == val2._hi && val1._lo == val2._lo;
         }
 
         public static bool operator !=(Int128 val1, Int128 val2)
@@ -354,35 +354,35 @@ namespace ClipperLib
                 return false;
             }
             var i128 = (Int128) obj;
-            return (i128.hi == hi && i128.lo == lo);
+            return (i128._hi == _hi && i128._lo == _lo);
         }
 
         public override int GetHashCode()
         {
-            return hi.GetHashCode() ^ lo.GetHashCode();
+            return _hi.GetHashCode() ^ _lo.GetHashCode();
         }
 
         public static bool operator >(Int128 val1, Int128 val2)
         {
-            if (val1.hi != val2.hi)
+            if (val1._hi != val2._hi)
             {
-                return val1.hi > val2.hi;
+                return val1._hi > val2._hi;
             }
-            return val1.lo > val2.lo;
+            return val1._lo > val2._lo;
         }
 
         public static bool operator <(Int128 val1, Int128 val2)
         {
-            return (val1.hi != val2.hi) ? val1.hi < val2.hi : val1.lo < val2.lo;
+            return (val1._hi != val2._hi) ? val1._hi < val2._hi : val1._lo < val2._lo;
         }
 
         public static Int128 operator +(Int128 lhs, Int128 rhs)
         {
-            lhs.hi += rhs.hi;
-            lhs.lo += rhs.lo;
-            if (lhs.lo < rhs.lo)
+            lhs._hi += rhs._hi;
+            lhs._lo += rhs._lo;
+            if (lhs._lo < rhs._lo)
             {
-                lhs.hi++;
+                lhs._hi++;
             }
             return lhs;
         }
@@ -394,15 +394,15 @@ namespace ClipperLib
 
         public static Int128 operator -(Int128 val)
         {
-            return val.lo == 0 ? new Int128(-val.hi, 0) : new Int128(~val.hi, ~val.lo + 1);
+            return val._lo == 0 ? new Int128(-val._hi, 0) : new Int128(~val._hi, ~val._lo + 1);
         }
 
         public static explicit operator double(Int128 val)
         {
             const double shift64 = 18446744073709551616.0; //2^64
-            return val.hi < 0
-                ? (val.lo == 0 ? val.hi * shift64 : -(~val.lo + ~val.hi * shift64))
-                : val.lo + val.hi * shift64;
+            return val._hi < 0
+                ? (val._lo == 0 ? val._hi * shift64 : -(~val._lo + ~val._hi * shift64))
+                : val._lo + val._hi * shift64;
         }
 
         //nb: Constructing two new Int128 objects every time we want to multiply longs  
@@ -668,22 +668,22 @@ namespace ClipperLib
     public enum ClipType
     {
         /// <summary>
-        ///     Intersection
+        ///     Create regions where both subject and clip polygons are filled.
         /// </summary>
         CtIntersection,
 
         /// <summary>
-        ///     Union
+        ///     Create regions where either subject or clip polygons (or both) are filled.
         /// </summary>
         CtUnion,
 
         /// <summary>
-        ///     Difference
+        ///     Create regions where subject polygons are filled except where clip polygons are filled
         /// </summary>
         CtDifference,
 
         /// <summary>
-        ///     Xor
+        ///     Create regions where either subject or clip polygons are filled but not where both are filled
         /// </summary>
         CtXor
     };
@@ -707,29 +707,30 @@ namespace ClipperLib
     //By far the most widely used winding rules for polygon filling are
     //EvenOdd & NonZero (GDI, GDI+, XLib, OpenGL, Cairo, AGG, Quartz, SVG, Gr32)
     //Others rules include Positive, Negative and ABS_GTR_EQ_TWO (only in OpenGL)
-    //see http://glprogramming.com/red/chapter11.html    
+    //see http://glprogramming.com/red/chapter11.html
+
     /// <summary>
     ///     The type of winding rules for polygon filling.
     /// </summary>
     public enum PolyFillType
     {
         /// <summary>
-        ///     Even odd.
+        ///     Also known as Alternate Filling. Odd numbered sub-regions are filled, while even numbered sub-regions are not.
         /// </summary>
         PftEvenOdd,
 
         /// <summary>
-        ///     Non Zero
+        ///     All non-zero sub-regions are filled.
         /// </summary>
         PftNonZero,
 
         /// <summary>
-        ///     Positive
+        ///     All sub-regions with winding counts > 0 are filled.
         /// </summary>
         PftPositive,
 
         /// <summary>
-        ///     Negative
+        ///     All sub-regions with winding counts &lt; 0 are filled
         /// </summary>
         PftNegative
     };
@@ -740,17 +741,20 @@ namespace ClipperLib
     public enum JoinType
     {
         /// <summary>
-        ///     Square
+        ///     Squaring is applied uniformally at all convex edge joins at 1 x delta.
         /// </summary>
         JtSquare,
 
         /// <summary>
-        ///     Round
+        ///     While flattened paths can never perfectly trace an arc, they are approximated by a series of arc chords. <see cref="ClipperOffset.ArcTolerance"/>
         /// </summary>
         JtRound,
 
         /// <summary>
-        ///     Miter.
+        ///     There's a necessary limit to mitered joins since offsetting edges that join at very acute angles will produce
+        ///     excessively long and narrow 'spikes'. To contain these potential spikes, the <see cref="ClipperOffset.MiterLimit"/>
+        ///     property specifies a maximum distance that vertices will be offset (in multiples of delta). For any given edge
+        ///     join, when miter offsetting would exceed that maximum distance, 'square' joining is applied.
         /// </summary>
         JtMiter
     };
@@ -761,27 +765,27 @@ namespace ClipperLib
     public enum EndType
     {
         /// <summary>
-        ///     Closed Polygon
+        ///     Ends are joined using the JoinType value and the path filled as a polygon.
         /// </summary>
         EtClosedPolygon,
 
         /// <summary>
-        ///     Closed Line
+        ///     Ends are joined using the JoinType value and the path filled as a polyline.
         /// </summary>
         EtClosedLine,
 
         /// <summary>
-        ///     Open Butt
+        ///     Ends are squared off with no extension.
         /// </summary>
         EtOpenButt,
 
         /// <summary>
-        ///     Open square
+        ///    Ends are squared off and extended delta units.
         /// </summary>
         EtOpenSquare,
 
         /// <summary>
-        ///     Open round.
+        ///     Ends are rounded off and extended delta units.
         /// </summary>
         EtOpenRound
     };
