@@ -1,5 +1,8 @@
 ﻿using System;
+using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.Extensions;
+using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
+using LeagueSharp.CommonEx.Core.Math;
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
 
@@ -22,7 +25,10 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
             Text = text;
             Duration = duration;
             AutoDispose = autoDispose;
-            Flags = Flags.SetFlags(NotificationFlags.Draw | NotificationFlags.Update | NotificationFlags.WPM);
+            Flags =
+                Flags.SetFlags(
+                    NotificationFlags.Draw | NotificationFlags.Update | NotificationFlags.WPM |
+                    NotificationFlags.Initalized);
         }
 
         /// <summary>
@@ -41,16 +47,6 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         public int Duration { get; set; }
 
         /// <summary>
-        ///     Notification Position in the global list.
-        /// </summary>
-        public int NotifcationPosition { get; set; }
-
-        /// <summary>
-        ///     Notification Position.
-        /// </summary>
-        public Vector2 Position { get; set; }
-
-        /// <summary>
         ///     Notification Drawing Position.
         /// </summary>
         public Vector2 DrawPosition { get; set; }
@@ -59,6 +55,46 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         ///     Notification auto-disposal after duration has ended.
         /// </summary>
         public bool AutoDispose { get; set; }
+
+        /// <summary>
+        ///     Notification color decay interval.
+        /// </summary>
+        public int ColorInterval { get; set; }
+
+        /// <summary>
+        ///     Notification update interval.
+        /// </summary>
+        public int UpdateInterval { get; set; }
+
+        /// <summary>
+        ///     Notification Position Tick.
+        /// </summary>
+        private int _lastPositionTick = Variables.TickCount;
+
+        /// <summary>
+        ///     Notification Color Tick.
+        /// </summary>
+        private int _lastColorTick = Variables.TickCount;
+
+        /// <summary>
+        ///     Notification Update Tick.
+        /// </summary>
+        private int _lastUpdateTick = Variables.TickCount;
+
+        /// <summary>
+        ///     Notification Click Tick.
+        /// </summary>
+        private int _lastClickTick = Variables.TickCount;
+
+        /// <summary>
+        ///     Notification Animation ID.
+        /// </summary>
+        private int AnimationId { get; set; }
+
+        /// <summary>
+        ///     Notification Speed.
+        /// </summary>
+        public float Speed { get; set; }
 
         /// <summary>
         ///     On drawing event callback.
@@ -77,9 +113,45 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         /// </summary>
         public override void OnUpdate()
         {
-            if (!Flags.HasFlag(NotificationFlags.Update))
+            if (!Flags.HasFlag(NotificationFlags.Update) || Variables.TickCount - _lastUpdateTick < UpdateInterval)
             {
                 return;
+            }
+            _lastUpdateTick = Variables.TickCount;
+
+            if (Flags.HasFlag(NotificationFlags.Initalized))
+            {
+                if (!DrawPosition.IsValid())
+                {
+                    DrawPosition = Position;
+                }
+
+                Flags = Flags.ClearFlags(NotificationFlags.Initalized).SetFlags(NotificationFlags.Animation);
+            }
+            else if (Flags.HasFlag(NotificationFlags.Animation))
+            {
+                switch (AnimationId)
+                {
+                    
+                }
+
+                Flags = Flags.ClearFlags(NotificationFlags.Animation).SetFlags(NotificationFlags.Idle);
+            }
+            else if (Flags.HasFlag(NotificationFlags.Idle))
+            {
+                if (DrawPosition != Position && Variables.TickCount - _lastPositionTick >= Speed * 0.5f)
+                {
+                    DrawPosition = DrawPosition.Extend(Position, 1f * Speed);
+                    if (DrawPosition.X > Position.X)
+                    {
+                        DrawPosition = new Vector2(Position.X, DrawPosition.Y);
+                    }
+                    if (DrawPosition.Y > Position.Y)
+                    {
+                        DrawPosition = new Vector2(DrawPosition.X, Position.Y);
+                    }
+                    _lastPositionTick = Variables.TickCount;
+                }
             }
         }
 
@@ -93,24 +165,15 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
             {
                 return;
             }
-        }
 
-        /// <summary>
-        ///     Sets the notification list position.
-        /// </summary>
-        /// <param name="position">New position</param>
-        public override void SetPosition(int position)
-        {
-            NotifcationPosition = position;
-        }
-
-        /// <summary>
-        ///     Retrieves the notification list position.
-        /// </summary>
-        /// <returns>Notification list position</returns>
-        public override int GetPosition()
-        {
-            return NotifcationPosition;
+            if (Geometry.IsUnderRectangle(keys.Cursor, DrawPosition.X, DrawPosition.Y, Width, Height) && keys.Msg == WindowsMessages.LBUTTONUP)
+            {
+                if (Variables.TickCount - _lastClickTick <= 500)
+                {
+                    Dispose();
+                }
+                _lastClickTick = Variables.TickCount;
+            }
         }
 
         /// <summary>
@@ -161,9 +224,9 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
                     this.RemoveNotification();
                 }
                 Guid = Text = "";
-                Duration = NotifcationPosition = 0;
                 Position = DrawPosition = Vector2.Zero;
                 AutoDispose = false;
+                Flags = 0;
                 GC.SuppressFinalize(this);
             }
         }

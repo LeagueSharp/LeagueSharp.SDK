@@ -14,6 +14,21 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         public NotificationFlags Flags { get; set; }
 
         /// <summary>
+        ///     Notification Height.
+        /// </summary>
+        public float Height = 25f;
+
+        /// <summary>
+        ///     Notification Width.
+        /// </summary>
+        public float Width = 190f;
+
+        /// <summary>
+        ///     Notification Position.
+        /// </summary>
+        public Vector2 Position { get; set; }
+
+        /// <summary>
         ///     Clone function which clones the notification information and creates a new one, however position and guid are
         ///     re-generated.
         /// </summary>
@@ -36,18 +51,6 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         /// </summary>
         /// <param name="keys">Converted windowskeys</param>
         public abstract void OnWndProc(WindowsKeys keys);
-
-        /// <summary>
-        ///     Sets the notification list position.
-        /// </summary>
-        /// <param name="position">New position</param>
-        public abstract void SetPosition(int position);
-
-        /// <summary>
-        ///     Retrieves the notification list position.
-        /// </summary>
-        /// <returns>Notification list position</returns>
-        public abstract int GetPosition();
 
         /// <summary>
         ///     Retrieves the global unique identification.

@@ -130,6 +130,7 @@
     <Compile Include="Core\UI\Menu\Values\MenuBool.cs" />
     <Compile Include="Core\UI\Notifications\Notifications.cs" />
     <Compile Include="Core\Utils\AutoAttack.cs" />
+    <Compile Include="Core\Utils\AutoPinner.cs" />
     <Compile Include="Core\Utils\CallbackPerformance.cs" />
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\Enumerations\HitChance.cs" />

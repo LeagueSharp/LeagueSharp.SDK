@@ -6,7 +6,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
     ///     Notification runtime flags.
     /// </summary>
     [Flags]
-    public enum NotificationFlags : byte
+    public enum NotificationFlags
     {
         /// <summary>
         ///     Drawing runtime flag.
@@ -21,6 +21,21 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         /// <summary>
         ///     Update flag.
         /// </summary>
-        Update = WPM << 2
+        Update = WPM << 2,
+
+        /// <summary>
+        ///     Initalization flag.
+        /// </summary>
+        Initalized = Update << 3,
+
+        /// <summary>
+        ///     Idle flag.
+        /// </summary>
+        Idle = Initalized << 4,
+
+        /// <summary>
+        ///     Animation flag.
+        /// </summary>
+        Animation = Idle << 5
     }
 }
