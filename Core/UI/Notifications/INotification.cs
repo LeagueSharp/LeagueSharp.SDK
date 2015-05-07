@@ -1,5 +1,6 @@
 ﻿using System;
 using LeagueSharp.CommonEx.Core.Utils;
+using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.UI.Notifications
 {
@@ -11,7 +12,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         /// <summary>
         ///     Send an drawing request to the callback.
         /// </summary>
-        void OnDraw();
+        void OnDraw(Vector2 parentPosition);
 
         /// <summary>
         ///     Send an update request to the callback.
@@ -39,7 +40,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         /// <summary>
         ///     Sends a global unique identification request to the notification type.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Global Unique Identification</returns>
         string GetGuid();
     }
 }

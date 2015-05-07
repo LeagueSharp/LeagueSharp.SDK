@@ -6253,8 +6253,16 @@ namespace LeagueSharp.CommonEx.Clipper
         }
     }
 
-    internal class ClipperException : Exception
+    /// <summary>
+    ///     Clipper Exception.
+    /// </summary>
+    [Serializable]
+    public class ClipperException : Exception
     {
+        /// <summary>
+        ///     Clipper Exception constructor.
+        /// </summary>
+        /// <param name="description">Exception description</param>
         public ClipperException(string description) : base(description) {}
     }
 

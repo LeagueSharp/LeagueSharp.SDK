@@ -1,4 +1,5 @@
 ﻿using System;
+using LeagueSharp.CommonEx.Core.Extensions;
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
 
@@ -7,7 +8,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
     /// <summary>
     ///     A basic notification for general purposes.
     /// </summary>
-    public class Notification : INotification
+    public class Notification : NotificationBase
     {
         /// <summary>
         ///     Constructor
@@ -21,6 +22,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
             Text = text;
             Duration = duration;
             AutoDispose = autoDispose;
+            Flags = Flags.SetFlags(NotificationFlags.Draw | NotificationFlags.Update | NotificationFlags.WPM);
         }
 
         /// <summary>
@@ -61,33 +63,43 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         /// <summary>
         ///     On drawing event callback.
         /// </summary>
-        public void OnDraw()
+        /// <param name="parentPosition">Base Position</param>
+        public override void OnDraw(Vector2 parentPosition)
         {
-            throw new NotImplementedException();
+            if (!Flags.HasFlag(NotificationFlags.Draw))
+            {
+                return;
+            }
         }
 
         /// <summary>
         ///     On update event callback.
         /// </summary>
-        public void OnUpdate()
+        public override void OnUpdate()
         {
-            throw new NotImplementedException();
+            if (!Flags.HasFlag(NotificationFlags.Update))
+            {
+                return;
+            }
         }
 
         /// <summary>
         ///     On windows process messages callback.
         /// </summary>
         /// <param name="keys">Converted windowskeys</param>
-        public void OnWndProc(WindowsKeys keys)
+        public override void OnWndProc(WindowsKeys keys)
         {
-            throw new NotImplementedException();
+            if (!Flags.HasFlag(NotificationFlags.WPM))
+            {
+                return;
+            }
         }
 
         /// <summary>
         ///     Sets the notification list position.
         /// </summary>
         /// <param name="position">New position</param>
-        public void SetPosition(int position)
+        public override void SetPosition(int position)
         {
             NotifcationPosition = position;
         }
@@ -96,16 +108,16 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         ///     Retrieves the notification list position.
         /// </summary>
         /// <returns>Notification list position</returns>
-        public int GetPosition()
+        public override int GetPosition()
         {
             return NotifcationPosition;
         }
 
         /// <summary>
-        ///     Retrieves the notification global unique identification.
+        ///     Retrieves the global unique identification.
         /// </summary>
-        /// <returns>Notification GUID</returns>
-        public string GetGuid()
+        /// <returns>Global Unique Identification</returns>
+        public override string GetGuid()
         {
             return Guid;
         }
@@ -113,7 +125,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         /// <summary>
         ///     Disposal usercall.
         /// </summary>
-        public void Dispose()
+        public override sealed void Dispose()
         {
             Dispose(true);
         }
@@ -123,7 +135,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         ///     re-generated.
         /// </summary>
         /// <returns>Object in the type of <see cref="Notification" /> class</returns>
-        public object Clone()
+        public override object Clone()
         {
             return new Notification(Text, Duration, AutoDispose);
         }
@@ -152,6 +164,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
                 Duration = NotifcationPosition = 0;
                 Position = DrawPosition = Vector2.Zero;
                 AutoDispose = false;
+                GC.SuppressFinalize(this);
             }
         }
     }

@@ -1,23 +1,31 @@
 ﻿using System.Collections.Concurrent;
 using LeagueSharp.CommonEx.Core.Utils;
+using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.UI.Notifications
 {
     /// <summary>
+    ///     Notifications class.
     /// </summary>
     public static class Notifications
     {
         /// <summary>
         ///     Safe-thread notifications list.
         /// </summary>
-        private static readonly ConcurrentDictionary<string, INotification> NotificationsDictionary =
-            new ConcurrentDictionary<string, INotification>();
+        public static readonly ConcurrentDictionary<string, NotificationBase> NotificationsDictionary =
+            new ConcurrentDictionary<string, NotificationBase>();
+
+        /// <summary>
+        ///     Notifications starting position.
+        /// </summary>
+        public static Vector2 Position { get; set; }
 
         /// <summary>
         ///     Static constructor.
         /// </summary>
         static Notifications()
         {
+            Position = new Vector2(Drawing.Width - 250, 10);
             Game.OnUpdate += args =>
             {
                 foreach (var notificaiton in NotificationsDictionary.Values)
@@ -29,7 +37,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
             {
                 foreach (var notificaiton in NotificationsDictionary.Values)
                 {
-                    notificaiton.OnDraw();
+                    notificaiton.OnDraw(Position);
                 }
             };
             Game.OnWndProc += args =>
@@ -46,7 +54,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         /// </summary>
         /// <param name="notification">Notification instance</param>
         /// <returns>Process success/failure</returns>
-        public static bool AddNotification(INotification notification)
+        public static bool AddNotification(NotificationBase notification)
         {
             return (notification != null) && !NotificationsDictionary.ContainsKey(notification.GetGuid()) &&
                    NotificationsDictionary.TryAdd(notification.GetGuid(), notification);
@@ -71,9 +79,9 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         /// </summary>
         /// <param name="notification">Notifications instance</param>
         /// <returns>Process success/failure</returns>
-        public static bool RemoveNotification(this INotification notification)
+        public static bool RemoveNotification(this NotificationBase notification)
         {
-            INotification dumpNotification;
+            NotificationBase dumpNotification;
             return NotificationsDictionary.TryRemove(notification.GetGuid(), out dumpNotification);
         }
 
@@ -84,7 +92,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         /// <returns>Process success/failure</returns>
         public static bool RemoveNotification(this string notificationGuid)
         {
-            INotification dumpNotification;
+            NotificationBase dumpNotification;
             return NotificationsDictionary.TryRemove(notificationGuid, out dumpNotification);
         }
 
@@ -93,7 +101,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         /// </summary>
         /// <param name="notification">Notification instance</param>
         /// <returns>Validates the notification and returns success or failure</returns>
-        public static bool IsValid(this INotification notification)
+        public static bool IsValid(this NotificationBase notification)
         {
             return notification != null && NotificationsDictionary.ContainsKey(notification.GetGuid());
         }

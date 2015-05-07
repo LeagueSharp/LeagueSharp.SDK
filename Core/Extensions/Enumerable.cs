@@ -2,10 +2,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
-using LeagueSharp.CommonEx.Core.Enumerations;
 
 #endregion
 
@@ -16,7 +17,157 @@ namespace LeagueSharp.CommonEx.Core.Extensions
     /// </summary>
     public static class Enumerable
     {
-        #region MinOrDefault
+        /// <summary>
+        ///     Converts an item to another Type
+        /// </summary>
+        /// <typeparam name="T">Type to convert to</typeparam>
+        /// <param name="object">The object to conver to</param>
+        /// <returns>The converted object</returns>
+        public static T To<T>(this IConvertible @object)
+        {
+            return (T) Convert.ChangeType(@object, typeof(T));
+        }
+
+        /// <summary>
+        ///     Logs an exception to the console and a file.
+        /// </summary>
+        /// <param name="exception">Exception to log.</param>
+        public static void Log(this Exception exception)
+        {
+            Logging.Write(true)(LogLevel.Error, exception.Message);
+        }
+
+        #region FlagsAttribute
+
+        /// <summary>
+        ///     Sets the given flags to the struct source, given struct must be an enumeration with flag attributes.
+        /// </summary>
+        /// <typeparam name="T">Enumeration with Flag Attributes (struct)</typeparam>
+        /// <param name="value">The enumeration</param>
+        /// <param name="flags">The flags to be set</param>
+        /// <param name="status">Turn flags on or off</param>
+        /// <returns>Enumeration with Flag Attributes (struct)</returns>
+        public static T SetFlags<T>(this T value, T flags, bool status = true) where T : struct
+        {
+            if (!typeof(T).IsEnum)
+            {
+                throw new ArgumentException(string.Format("Type '{0}' is not an enum.", typeof(T).FullName));
+            }
+            if (!Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
+            {
+                throw new ArgumentException(
+                    string.Format("Type '{0}' doesn't have the 'Flags' attribute.", typeof(T).FullName));
+            }
+            return
+                (T)
+                    Enum.ToObject(
+                        typeof(T),
+                        status
+                            ? Convert.ToInt64(flags) | Convert.ToInt64(value)
+                            : ~Convert.ToInt64(flags) & Convert.ToInt64(value));
+        }
+
+        /// <summary>
+        ///     Retrieves all of the flags from a specific struct source.
+        /// </summary>
+        /// <typeparam name="T">Enumeration with Flag Attributes (struct)</typeparam>
+        /// <param name="value">The enumeration</param>
+        /// <returns>Enumeration with Flag Attributes (struct)</returns>
+        public static IEnumerable<T> GetFlags<T>(this T value) where T : struct
+        {
+            if (!typeof(T).IsEnum)
+            {
+                throw new ArgumentException(string.Format("Type '{0}' is not an enum.", typeof(T).FullName));
+            }
+            if (!Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
+            {
+                throw new ArgumentException(
+                    string.Format("Type '{0}' doesn't have the 'Flags' attribute.", typeof(T).FullName));
+            }
+
+            return
+                Enum.GetValues(typeof(T)).Cast<T>().Where(flag => (Convert.ToInt64(value) & Convert.ToInt64(flag)) != 0);
+        }
+
+        /// <summary>
+        ///     Clears all given flags from a specific struct soruce.
+        /// </summary>
+        /// <typeparam name="T">Enumeration with Flag Attributes (struct)</typeparam>
+        /// <param name="value">The enumeration</param>
+        /// <param name="flags">Flags to be cleared</param>
+        /// <returns>Enumeration with Flag Attributes (struct)</returns>
+        public static T ClearFlags<T>(this T value, T flags) where T : struct
+        {
+            if (!typeof(T).IsEnum)
+            {
+                throw new ArgumentException(string.Format("Type '{0}' is not an enum.", typeof(T).FullName));
+            }
+            if (!Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
+            {
+                throw new ArgumentException(
+                    string.Format("Type '{0}' doesn't have the 'Flags' attribute.", typeof(T).FullName));
+            }
+
+            return value.SetFlags(flags, false);
+        }
+
+        /// <summary>
+        ///     Combines flags from an enumerable list to a new given struct source.
+        /// </summary>
+        /// <typeparam name="T">Enumeration with Flag Attributes (struct)</typeparam>
+        /// <param name="flags">Flags</param>
+        /// <returns>Enumeration with Flag Attributes (struct)</returns>
+        public static T CombineFlags<T>(this IEnumerable<T> flags) where T : struct
+        {
+            if (!typeof(T).IsEnum)
+            {
+                throw new ArgumentException(string.Format("Type '{0}' is not an enum.", typeof(T).FullName));
+            }
+            if (!Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
+            {
+                throw new ArgumentException(
+                    string.Format("Type '{0}' doesn't have the 'Flags' attribute.", typeof(T).FullName));
+            }
+
+            return (T) Enum.ToObject(typeof(T), flags.Aggregate(0L, (current, flag) => current | Convert.ToInt64(flag)));
+        }
+
+        /// <summary>
+        ///     Gets a flag attribute description.
+        /// </summary>
+        /// <typeparam name="T">Enumeration with Flag Attributes (struct)</typeparam>
+        /// <param name="value">The enumeration</param>
+        /// <returns>Enumeration with Flag Attributes (struct)</returns>
+        public static string GetFlagDescription<T>(this T value) where T : struct
+        {
+            if (!typeof(T).IsEnum)
+            {
+                throw new ArgumentException(string.Format("Type '{0}' is not an enum.", typeof(T).FullName));
+            }
+            if (!Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
+            {
+                throw new ArgumentException(
+                    string.Format("Type '{0}' doesn't have the 'Flags' attribute.", typeof(T).FullName));
+            }
+
+            var name = Enum.GetName(typeof(T), value);
+            if (string.IsNullOrEmpty(name))
+            {
+                var field = typeof(T).GetField(name);
+                if (field != null)
+                {
+                    var attributeDesc =
+                        Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) as DescriptionAttribute;
+                    return attributeDesc != null ? attributeDesc.Description : null;
+                }
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region IEnumerable
 
         /// <summary>
         ///     Gets the minimun value of an IEnumerable by the comparer, or returns the default.
@@ -53,9 +204,6 @@ namespace LeagueSharp.CommonEx.Core.Extensions
             return minElem;
         }
 
-        #endregion
-
-        #region MaxOrDefault
 
         /// <summary>
         ///     Gets the maximum value of an IEnumerable by the comparer, or returns the default.
@@ -92,9 +240,6 @@ namespace LeagueSharp.CommonEx.Core.Extensions
             return maxElem;
         }
 
-        #endregion
-
-        #region Find
 
         /// <summary>
         ///     Finds match in a container of values.
@@ -107,9 +252,6 @@ namespace LeagueSharp.CommonEx.Core.Extensions
             return (source as List<TSource> ?? source.ToList()).Find(match);
         }
 
-        #endregion
-
-        #region In
 
         /// <summary>
         ///     Determines if a list contains any of the values.
@@ -123,9 +265,6 @@ namespace LeagueSharp.CommonEx.Core.Extensions
             return list.Contains(source);
         }
 
-        #endregion
-
-        #region ForEach
 
         /// <summary>
         ///     Does an action over a list of types.
@@ -141,37 +280,6 @@ namespace LeagueSharp.CommonEx.Core.Extensions
             }
         }
 
-        #endregion
-
-        #region To
-
-        /// <summary>
-        ///     Converts an item to another Type
-        /// </summary>
-        /// <typeparam name="T">Type to convert to</typeparam>
-        /// <param name="object">The object to conver to</param>
-        /// <returns>The converted object</returns>
-        public static T To<T>(this IConvertible @object)
-        {
-            return (T) Convert.ChangeType(@object, typeof(T));
-        }
-
-        #endregion
-
-        #region Logging
-
-        /// <summary>
-        ///     Logs an exception to the console and a file.
-        /// </summary>
-        /// <param name="exception">Exception to log.</param>
-        public static void Log(this Exception exception)
-        {
-            Logging.Write(true)(LogLevel.Error, exception.Message);
-        }
-
-        #endregion
-
-        #region GetCombinations
 
         /*
          from: https://stackoverflow.com/questions/10515449/generate-all-combinations-for-a-list-of-strings :^)
@@ -196,9 +304,6 @@ namespace LeagueSharp.CommonEx.Core.Extensions
             return collection;
         }
 
-        #endregion GetCombinations
-
-        #region Standard Deviation
 
         /// <summary>
         ///     Standard Devitation of the values list.
