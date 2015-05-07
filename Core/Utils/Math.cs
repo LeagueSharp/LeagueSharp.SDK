@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ClipperLib;
+using LeagueSharp.CommonEx.Clipper;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.Math.Polygons;
 using SharpDX;
@@ -79,7 +79,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
             }
 
             var solution = new List<List<IntPoint>>();
-            var c = new Clipper();
+            var c = new Clipper.Clipper();
             c.AddPaths(subj, PolyType.PtSubject, true);
             c.AddPaths(clip, PolyType.PtClip, true);
             c.Execute(ClipType.CtUnion, solution, PolyFillType.PftPositive, PolyFillType.PftEvenOdd);

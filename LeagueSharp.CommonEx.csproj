@@ -78,6 +78,7 @@
     <Compile Include="Core\Enumerations\DamageType.cs" />
     <Compile Include="Core\Enumerations\DeviceOptionIdentity.cs" />
     <Compile Include="Core\Enumerations\GapcloserType.cs" />
+    <Compile Include="Core\Enumerations\HealthPredictionType.cs" />
     <Compile Include="Core\Enumerations\KeyBindType.cs" />
     <Compile Include="Core\Enumerations\LogLevel.cs" />
     <Compile Include="Core\Enumerations\MapType.cs" />
@@ -114,6 +115,8 @@
     <Compile Include="Core\UI\Menu\Values\MenuInputText.cs" />
     <Compile Include="Core\UI\Menu\Values\MenuKeyBind.cs" />
     <Compile Include="Core\UI\Menu\Values\MenuSlider.cs" />
+    <Compile Include="Core\UI\Notifications\INotification.cs" />
+    <Compile Include="Core\UI\Notifications\Notification.cs" />
     <Compile Include="Core\UI\Root.cs" />
     <Compile Include="Core\Spells.cs" />
     <Compile Include="Core\UI\Developer\Developer.cs" />
@@ -185,7 +188,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Third_Party\clipper\clipper.cs" />
+    <Compile Include="Third_Party\Clipper\Clipper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -210,7 +213,7 @@
     <Content Include="Resources\Menu\Skin0\img_003_sub.png" />
     <Content Include="Resources\Menu\Skin0\img_004.png" />
     <Content Include="Resources\Menu\Special\F3VD2VG.png" />
-    <None Include="Third_Party\clipper\License.txt" />
+    <None Include="Third_Party\Clipper\License.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
