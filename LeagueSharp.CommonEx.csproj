@@ -98,6 +98,8 @@
     <Compile Include="Core\Orbwalker.cs" />
     <Compile Include="Core\Render\2D\Circle.cs" />
     <Compile Include="Core\Render\2D\Sprite.cs" />
+    <Compile Include="Core\Signals\Signal.cs" />
+    <Compile Include="Core\Signals\SignalManager.cs" />
     <Compile Include="Core\UI\Menu\MenuInterface.cs" />
     <Compile Include="Core\UI\Menu\MenuSettings.cs" />
     <Compile Include="Core\UI\Menu\Skins\Battlecry\BattlecrySkin.cs" />
