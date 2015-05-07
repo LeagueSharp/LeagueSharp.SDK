@@ -2,8 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
+using LeagueSharp.CommonEx.Core.Signals;
 
 #endregion
 
@@ -15,60 +15,13 @@ namespace LeagueSharp.CommonEx.Core.Utils
     public class DelayAction
     {
         /// <summary>
-        ///     Action List.
-        /// </summary>
-        public static List<DelayActionItem> ActionList = new List<DelayActionItem>();
-
-        /// <summary>
-        ///     Static constructor.
-        /// </summary>
-        static DelayAction()
-        {
-            Game.OnUpdate += Game_OnUpdate;
-        }
-
-        /// <summary>
-        ///     OnGameUpdate called event (per game-tick).
-        /// </summary>
-        /// <param name="args">System.EventArgs</param>
-        private static void Game_OnUpdate(EventArgs args)
-        {
-            //  Remove all actions that are cancelled.
-            ActionList.Where(x => x.Token.IsCancellationRequested).ToList().ForEach(x => ActionList.Remove(x));
-
-            for (var i = ActionList.Count - 1; i >= 0; i--)
-            {
-                var action = ActionList[i];
-
-                if (action.Time > Variables.TickCount)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    if (action.Function != null)
-                    {
-                        action.Function();
-                    }
-                }
-                catch (Exception)
-                {
-                    // Ignored exception.
-                }
-
-                ActionList.RemoveAt(i);
-            }
-        }
-
-        /// <summary>
         ///     Adds a new delayed action.
         /// </summary>
         /// <param name="time">Delayed Time</param>
         /// <param name="func">Callback Function</param>
         public static void Add(int time, Action func)
         {
-            ActionList.Add(new DelayActionItem(time, func, new CancellationToken(false)));
+            Add(new DelayActionItem(time, func, new CancellationToken(false)));
         }
 
         /// <summary>
@@ -78,7 +31,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="func">The function to call once the <paramref name="time" /> has expired.</param>
         public static void Add(float time, Action func)
         {
-            ActionList.Add(new DelayActionItem((int) time, func, new CancellationToken(false)));
+            Add(new DelayActionItem((int) time, func, new CancellationToken(false)));
         }
 
         /// <summary>
@@ -90,7 +43,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="token">The cancelation token.</param>
         public static void Add(int time, Action func, CancellationToken token)
         {
-            ActionList.Add(new DelayActionItem(time, func, token));
+            Add(new DelayActionItem(time, func, token));
         }
 
         /// <summary>
@@ -102,7 +55,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="token">The cancelation token.</param>
         public static void Add(float time, Action func, CancellationToken token)
         {
-            ActionList.Add(new DelayActionItem((int) time, func, token));
+            Add(new DelayActionItem((int) time, func, token));
         }
 
         /// <summary>
@@ -111,7 +64,21 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="item">The <see cref="DelayActionItem" /> to add.</param>
         public static void Add(DelayActionItem item)
         {
-            ActionList.Add(item);
+            Signal.Create(delegate(object sender, Signal.RaisedArgs args)
+            {
+                var delayActionItem = (DelayActionItem) args.Signal.Properties["DelayActionItem"];
+
+                if (delayActionItem.Token.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                delayActionItem.Function();
+            }, delegate(Signal signal)
+            {
+                var delayActionItem = (DelayActionItem) signal.Properties["DelayActionItem"];
+                return Variables.TickCount >= delayActionItem.Time;
+            }, default(DateTimeOffset), new Dictionary<string, object> {{"DelayActionItem", item}});
         }
     }
 

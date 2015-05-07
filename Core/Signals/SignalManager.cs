@@ -29,13 +29,26 @@ namespace LeagueSharp.CommonEx.Core.Signals
             }
         }
 
+        /// <summary>
+        /// Removes a signal.
+        /// </summary>
+        /// <param name="signal">The signal.</param>
+        public static void RemoveSignal(Signal signal)
+        {
+            if (Signals.Contains(signal))
+            {
+                Signals.Remove(signal);
+            }
+        }
+
         private static void Game_OnUpdate(EventArgs args)
         {
             foreach (var signal in Signals.Where(x => x.Enabled))
             {
-                if (signal.SignalWaver())
+                if (signal.SignalWaver(signal))
                 {
                     signal.TriggerSignal(MethodBase.GetCurrentMethod().Name, "Signal was waved.");
+                    Signals.Remove(signal);
                 }
 
                 if (signal.Expired && signal.CalledExpired == false)

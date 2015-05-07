@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.Caching;
 
 namespace LeagueSharp.CommonEx.Core.Signals
 {
@@ -10,6 +9,34 @@ namespace LeagueSharp.CommonEx.Core.Signals
     /// </summary>
     public class Signal : EventArgs
     {
+        /// <summary>
+        ///     Raised delegate.
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">RaisedArgs</param>
+        public delegate void OnEnabledStatusChangedDelegate(object sender, EnabledStatusChangedArgs e);
+
+        /// <summary>
+        ///     Raised delegate.
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">RaisedArgs</param>
+        public delegate void OnRaisedDelegate(object sender, RaisedArgs e);
+
+        /// <summary>
+        ///     Signal raised delegate.
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Signal</param>
+        public delegate void OnSignalRaisedDelegate(object sender, Signal e);
+
+        /// <summary>
+        ///     The delegate for <see cref="SignalWaver"/>
+        /// </summary>
+        /// <param name="signal">The signal.</param>
+        /// <returns>True if the signal should be waved.</returns>
+        public delegate bool SignalWaverDelegate(Signal signal);
+
         /// <summary>
         ///     Whether or not to check expirations.
         /// </summary>
@@ -23,43 +50,22 @@ namespace LeagueSharp.CommonEx.Core.Signals
         /// <summary>
         ///     If this returns true, the signal will be raised.
         /// </summary>
-        public Func<bool> SignalWaver;
+        public SignalWaverDelegate SignalWaver;
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="Signal" /> class.
-        /// </summary>
-        /// <param name="onRaised">The action to execute when this signal is raised</param>
-        /// <param name="signalWaver">Waves(activates) this signal on when this returns true.</param>
-        public Signal(OnRaisedDelegate onRaised, Func<bool> signalWaver)
-            : this(onRaised, signalWaver, ObjectCache.InfiniteAbsoluteExpiration)
+        private Signal(OnRaisedDelegate signalRaised, SignalWaverDelegate signalWaver, DateTimeOffset expiration, IDictionary<string, object> properties)
         {
-        }
+            if (signalRaised != null)
+            {
+                OnRaised += signalRaised;
+            }
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="Signal" /> class.
-        /// </summary>
-        /// <param name="onRaised">The on raised.</param>
-        /// <param name="signalWaver">The signal waver.</param>
-        /// <param name="expiration">The time this signal expires.</param>
-        public Signal(OnRaisedDelegate onRaised, Func<bool> signalWaver, DateTimeOffset expiration)
-        {
-            OnRaised += onRaised;
-            SignalWaver = signalWaver;
+            if (signalWaver != null)
+            {
+                SignalWaver = signalWaver;
+            }
 
             Expiration = expiration;
-
-            SignalManager.AddSignal(this);
-            Properties = new Dictionary<string, string>();
-        }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="Signal" /> class with an infinite expiration.
-        /// </summary>
-        public Signal()
-        {
-            Expiration = ObjectCache.InfiniteAbsoluteExpiration;
-            SignalManager.AddSignal(this);
-            Properties = new Dictionary<string, string>();
+            Properties = new Dictionary<string, object>(properties);
         }
 
         /// <summary>
@@ -87,7 +93,7 @@ namespace LeagueSharp.CommonEx.Core.Signals
         /// <value>
         ///     The properties.
         /// </value>
-        public IDictionary<string, string> Properties { get; private set; }
+        public IDictionary<string, object> Properties { get; private set; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether this <see cref="Signal" /> is enabled.
@@ -114,48 +120,36 @@ namespace LeagueSharp.CommonEx.Core.Signals
         public DateTimeOffset LastSignaled { get; set; }
 
         /// <summary>
+        ///     Creates an instance of the <see cref="Signal" /> class.
+        /// </summary>
+        /// <param name="onRaised">The delegate to call when this signal is raised.</param>
+        /// <param name="signalWaver">The function that returns <c>true</c> when this signal should be waved.</param>
+        /// <param name="expiration">The expiration of this signal.</param>
+        /// <param name="defaultProperties">A dictionary that contents will be dumped into <see cref="Properties"/></param>
+        /// <returns></returns>
+        public static Signal Create(OnRaisedDelegate onRaised = null, SignalWaverDelegate signalWaver = null,
+            DateTimeOffset expiration = default(DateTimeOffset), IDictionary<string, object> defaultProperties = null)
+        {
+            if (expiration == default(DateTimeOffset))
+            {
+                expiration = DateTimeOffset.MaxValue;
+            }
+
+            var signal = new Signal(onRaised, signalWaver, expiration, defaultProperties ?? new Dictionary<string, object>());
+            SignalManager.AddSignal(signal);
+
+            return signal;
+        }
+
+        /// <summary>
         ///     Occurs when any signal is raised.
         /// </summary>
         public static event OnSignalRaisedDelegate OnSignalRaised;
 
         /// <summary>
-        ///     Signal raised delegate.
-        /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="e">Signal</param>
-        public delegate void OnSignalRaisedDelegate(object sender, Signal e);
-
-        /// <summary>
         ///     Occurs when this signal is raied.
         /// </summary>
         public event OnRaisedDelegate OnRaised;
-
-        /// <summary>
-        ///     Raised delegate.
-        /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="e">RaisedArgs</param>
-        public delegate void OnRaisedDelegate(object sender, RaisedArgs e);
-
-        /// <summary>
-        ///     Raised Arguments.
-        /// </summary>
-        public class RaisedArgs : EventArgs
-        {
-            /// <summary>
-            ///     Constructor
-            /// </summary>
-            /// <param name="reason">Reason</param>
-            public RaisedArgs(string reason)
-            {
-                Reason = reason;
-            }
-
-            /// <summary>
-            ///     Raised Reason.
-            /// </summary>
-            public string Reason;
-        }
 
         /// <summary>
         ///     Occurs when this signal expires.
@@ -166,33 +160,6 @@ namespace LeagueSharp.CommonEx.Core.Signals
         ///     Occurs when <see cref="Enabled" /> is changed.
         /// </summary>
         public event OnEnabledStatusChangedDelegate OnEnabledStatusChanged;
-
-        /// <summary>
-        ///     Raised delegate.
-        /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="e">RaisedArgs</param>
-        public delegate void OnEnabledStatusChangedDelegate(object sender, EnabledStatusChangedArgs e);
-
-        /// <summary>
-        ///     Raised Arguments.
-        /// </summary>
-        public class EnabledStatusChangedArgs : EventArgs
-        {
-            /// <summary>
-            ///     Constructor
-            /// </summary>
-            /// <param name="status">Changed Status</param>
-            public EnabledStatusChangedArgs(bool status)
-            {
-                Status = status;
-            }
-
-            /// <summary>
-            ///     Raised Reason.
-            /// </summary>
-            public bool Status;
-        }
 
         /// <summary>
         ///     Suspends the expiration checking.
@@ -251,6 +218,9 @@ namespace LeagueSharp.CommonEx.Core.Signals
             Enabled = true;
             Raised = false;
             CalledExpired = false;
+
+            // Add signal back to manager
+            SignalManager.AddSignal(this);
         }
 
         /// <summary>
@@ -271,6 +241,8 @@ namespace LeagueSharp.CommonEx.Core.Signals
 
             var caller = declaringType.FullName + "." + callFrame.GetMethod().Name;
             TriggerEnabledStatusChanged(caller, false);
+
+            SignalManager.RemoveSignal(this);
         }
 
         /// <summary>
@@ -291,6 +263,8 @@ namespace LeagueSharp.CommonEx.Core.Signals
 
             var caller = declaringType.FullName + "." + callFrame.GetMethod().Name;
             TriggerEnabledStatusChanged(caller, true);
+
+            SignalManager.AddSignal(this);
         }
 
         /// <summary>
@@ -307,7 +281,7 @@ namespace LeagueSharp.CommonEx.Core.Signals
 
             Raised = true;
             LastSignaled = DateTimeOffset.Now;
-            OnRaised(sender, new RaisedArgs(reason));
+            OnRaised(sender, new RaisedArgs(reason, this));
 
             if (OnSignalRaised != null)
             {
@@ -337,6 +311,53 @@ namespace LeagueSharp.CommonEx.Core.Signals
             if (OnExpired != null)
             {
                 OnExpired(sender, new EventArgs());
+            }
+        }
+
+        /// <summary>
+        ///     Raised Arguments.
+        /// </summary>
+        public class RaisedArgs : EventArgs
+        {
+            /// <summary>
+            ///     Raised Reason.
+            /// </summary>
+            public string Reason;
+
+            /// <summary>
+            ///     The signal.
+            /// </summary>
+            public Signal Signal;
+
+            /// <summary>
+            ///     Constructor
+            /// </summary>
+            /// <param name="reason">Reason</param>
+            /// <param name="signal">Signal</param>
+            public RaisedArgs(string reason, Signal signal)
+            {
+                Reason = reason;
+                Signal = signal;
+            }
+        }
+
+        /// <summary>
+        ///     Raised Arguments.
+        /// </summary>
+        public class EnabledStatusChangedArgs : EventArgs
+        {
+            /// <summary>
+            ///     Raised Reason.
+            /// </summary>
+            public bool Status;
+
+            /// <summary>
+            ///     Initializes a new instance of the <see cref="EnabledStatusChangedArgs" /> class.
+            /// </summary>
+            /// <param name="status">Signal is enabled or not.</param>
+            public EnabledStatusChangedArgs(bool status)
+            {
+                Status = status;
             }
         }
 
