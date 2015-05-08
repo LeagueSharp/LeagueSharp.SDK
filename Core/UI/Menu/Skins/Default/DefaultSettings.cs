@@ -38,6 +38,9 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
         /// </summary>
         public static ColorBGRA ContainerSeparatorColor = new ColorBGRA(255, 255, 255, 100);
 
+        /// <summary>
+        /// The color of an item when the user is hovering over it.
+        /// </summary>
         public static ColorBGRA HoverColor = new ColorBGRA(255, 255, 255, 50);
 
         /// <summary>
@@ -60,6 +63,9 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
             Width = 200f
         };
 
+        /// <summary>
+        /// The hover line
+        /// </summary>
         public static Line HoverLine = new Line(Drawing.Direct3DDevice)
         {
             Antialias = false,

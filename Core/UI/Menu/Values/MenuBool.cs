@@ -29,6 +29,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
             Value = value;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MenuBool"/> class.
+        /// </summary>
+        /// <param name="info">The information.</param>
+        /// <param name="context">The context.</param>
         public MenuBool(SerializationInfo info, StreamingContext context)
         {
             Value = (bool) info.GetValue("value", typeof(bool));
@@ -52,6 +57,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         /// </summary>
         public override Vector2 Position { get; set; }
 
+        /// <summary>
+        /// Gets the object data.
+        /// </summary>
+        /// <param name="info">The information.</param>
+        /// <param name="context">The context.</param>
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("value", Value, typeof(bool));
@@ -96,6 +106,10 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
             }
         }
 
+        /// <summary>
+        /// Extracts the specified component.
+        /// </summary>
+        /// <param name="component">The component.</param>
         public override void Extract(AMenuValue component)
         {
             Value = ((MenuBool) component).Value;

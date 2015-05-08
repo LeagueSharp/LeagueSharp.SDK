@@ -109,11 +109,23 @@ namespace LeagueSharp.CommonEx.Core.UI
             get { return Value; }
         }
 
+        /// <summary>
+        /// Gets the width.
+        /// </summary>
+        /// <value>
+        /// The width.
+        /// </value>
         public override int Width
         {
             get { return ThemeManager.Current.CalcWidthItem(this) + Value.Width; }
         }
 
+        /// <summary>
+        /// Gets the path.
+        /// </summary>
+        /// <value>
+        /// The path.
+        /// </value>
         public override string Path
         {
             get
@@ -171,6 +183,12 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// </summary>
         public override void OnUpdate() {}
 
+        /// <summary>
+        /// Gets the value.
+        /// </summary>
+        /// <typeparam name="T1">The type of the 1.</typeparam>
+        /// <returns></returns>
+        /// <exception cref="Exception">Cannot cast value  + Value.GetType() +  to  + typeof(T1)</exception>
         public override T1 GetValue<T1>()
         {
             var val = Value as T1;
@@ -181,12 +199,22 @@ namespace LeagueSharp.CommonEx.Core.UI
             throw new Exception("Cannot cast value " + Value.GetType() + " to " + typeof(T1));
         }
 
+        /// <summary>
+        /// Gets the value.
+        /// </summary>
+        /// <typeparam name="T2">The type of the 2.</typeparam>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception">Cannot get child of a MenuItem</exception>
         public override T2 GetValue<T2>(string name)
         {
             throw new Exception("Cannot get child of a MenuItem");
         }
 
 
+        /// <summary>
+        /// Saves this instance.
+        /// </summary>
         public override void Save()
         {
             if (Value != null && Value.GetType().IsSerializable)
@@ -217,6 +245,9 @@ namespace LeagueSharp.CommonEx.Core.UI
             return (T3) binForm.Deserialize(memStream);
         }
 
+        /// <summary>
+        /// Loads this instance.
+        /// </summary>
         public override void Load()
         {
             if (File.Exists(Path) && typeof(T).IsSerializable)

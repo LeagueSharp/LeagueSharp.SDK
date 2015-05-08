@@ -34,6 +34,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
             Type = type;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MenuKeyBind"/> class.
+        /// </summary>
+        /// <param name="info">The information.</param>
+        /// <param name="context">The context.</param>
         public MenuKeyBind(SerializationInfo info, StreamingContext context)
         {
             Key = (Keys) info.GetValue("key", typeof(Keys));
@@ -58,6 +63,12 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="MenuKeyBind"/> is interacting.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if interacting; otherwise, <c>false</c>.
+        /// </value>
         public bool Interacting
         {
             get { return _interacting; }
@@ -88,6 +99,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         /// </summary>
         public override Vector2 Position { get; set; }
 
+        /// <summary>
+        /// Gets the object data.
+        /// </summary>
+        /// <param name="info">The information.</param>
+        /// <param name="context">The context.</param>
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("key", Key, typeof(Keys));
@@ -179,6 +195,10 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
             }
         }
 
+        /// <summary>
+        /// Extracts the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
         public override void Extract(AMenuValue value)
         {
             var keybind = ((MenuKeyBind) value);

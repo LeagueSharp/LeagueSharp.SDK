@@ -14,7 +14,12 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
     [Serializable]
     public abstract class AMenuValue
     {
-        public delegate void OnValueChanged(OnValueChangedEventArgs args);
+        /// <summary>
+        /// Delegate for <see cref="ValueChanged" />
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="OnValueChangedEventArgs" /> instance containing the event data.</param>
+        public delegate void OnValueChanged(object sender, OnValueChangedEventArgs args);
 
         /// <summary>
         ///     Value Container.
@@ -31,6 +36,9 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         /// </summary>
         public abstract Vector2 Position { get; set; }
 
+        /// <summary>
+        /// Occurs when a value is changed.
+        /// </summary>
         public event OnValueChanged ValueChanged;
 
         /// <summary>
@@ -41,7 +49,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         {
             if (ValueChanged != null)
             {
-                ValueChanged(new OnValueChangedEventArgs(value));
+                ValueChanged(this, new OnValueChangedEventArgs(value));
             }
         }
 
@@ -59,6 +67,10 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         /// <param name="args"></param>
         public abstract void OnWndProc(WindowsKeys args);
 
+        /// <summary>
+        /// Extracts the specified component.
+        /// </summary>
+        /// <param name="component">The component.</param>
         public abstract void Extract(AMenuValue component);
     }
 }

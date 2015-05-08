@@ -32,11 +32,22 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
             MaxValue = maxValue;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MenuSlider"/> class.
+        /// </summary>
+        /// <param name="info">The information.</param>
+        /// <param name="context">The context.</param>
         public MenuSlider(SerializationInfo info, StreamingContext context)
         {
             Value = (int) info.GetValue("value", typeof(int));
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="MenuSlider"/> is interacting.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if interacting; otherwise, <c>false</c>.
+        /// </value>
         public bool Interacting { get; private set; }
 
         /// <summary>
@@ -67,6 +78,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         /// </summary>
         public override Vector2 Position { get; set; }
 
+        /// <summary>
+        /// Gets the object data.
+        /// </summary>
+        /// <param name="info">The information.</param>
+        /// <param name="context">The context.</param>
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("value", Value, typeof(int));
@@ -142,6 +158,10 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
            
         }
 
+        /// <summary>
+        /// Extracts the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
         public override void Extract(AMenuValue value)
         {
             Value = ((MenuSlider) value).Value;

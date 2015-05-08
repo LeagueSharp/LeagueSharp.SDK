@@ -52,8 +52,20 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// </summary>
         public override sealed bool Visible { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="Menu"/> is hovering.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if hovering; otherwise, <c>false</c>.
+        /// </value>
         public bool Hovering { get; private set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating that the settings are shared.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the settings are shared; otherwise, <c>false</c>.
+        /// </value>
         public bool SharedSettings { get; set; }
 
         /// <summary>
@@ -82,11 +94,23 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// </summary>
         public override Vector2 Position { get; set; }
 
+        /// <summary>
+        /// Gets the width.
+        /// </summary>
+        /// <value>
+        /// The width.
+        /// </value>
         public override int Width
         {
             get { return ThemeManager.Current.CalcWidthMenu(this); }
         }
 
+        /// <summary>
+        /// Gets the path.
+        /// </summary>
+        /// <value>
+        /// The path.
+        /// </value>
         public override string Path
         {
             get
@@ -136,6 +160,15 @@ namespace LeagueSharp.CommonEx.Core.UI
             }
         }
 
+        /// <summary>
+        /// Get the value of a child with a certain name.
+        /// </summary>
+        /// <typeparam name="T">The type of MenuValue of this child.</typeparam>
+        /// <param name="name">The name of the child.</param>
+        /// <returns>
+        /// The value that is attached to this Child.
+        /// </returns>
+        /// <exception cref="Exception">Could not find child with name  + name</exception>
         public override T GetValue<T>(string name)
         {
             if (Components.ContainsKey(name))
@@ -145,6 +178,14 @@ namespace LeagueSharp.CommonEx.Core.UI
             throw new Exception("Could not find child with name " + name);
         }
 
+        /// <summary>
+        /// Get the value of this component.
+        /// </summary>
+        /// <typeparam name="T">The type of MenuValue of this component.</typeparam>
+        /// <returns>
+        /// The value that is attached to this component.
+        /// </returns>
+        /// <exception cref="Exception">Cannot get the Value of a Menu</exception>
         public override T GetValue<T>()
         {
             throw new Exception("Cannot get the Value of a Menu");
@@ -178,7 +219,7 @@ namespace LeagueSharp.CommonEx.Core.UI
                         //Toggling siblings logic
                         if (Parent == null)
                         {
-                            foreach (Menu rootComponent in MenuManager.Instance.Menus.Where(c => !c.Equals(this)))
+                            foreach (var rootComponent in MenuManager.Instance.Menus.Where(c => !c.Equals(this)))
                             {
                                 rootComponent.Toggled = false;
                             }
@@ -216,6 +257,9 @@ namespace LeagueSharp.CommonEx.Core.UI
         public override void OnUpdate() {}
 
 
+        /// <summary>
+        /// Saves this instance.
+        /// </summary>
         public override void Save()
         {
             foreach (var comp in Components)
@@ -224,6 +268,9 @@ namespace LeagueSharp.CommonEx.Core.UI
             }
         }
 
+        /// <summary>
+        /// Loads this instance.
+        /// </summary>
         public override void Load()
         {
             foreach (var comp in Components)

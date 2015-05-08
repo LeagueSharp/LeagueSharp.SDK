@@ -1,15 +1,18 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.Math;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.UI.Values;
+using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
 using SharpDX.Direct3D9;
 
 namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
 {
+    /// <summary>
+    ///     The default theme for the menu.
+    /// </summary>
     public class DefaultTheme : Theme
     {
         private static readonly Font Font = DefaultSettings.Font;
@@ -18,36 +21,70 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
         private Drawable? _slider;
         private DrawableList? _list;
 
+        /// <summary>
+        /// Gets the boolean.
+        /// </summary>
+        /// <value>
+        /// The boolean.
+        /// </value>
         public override Drawable Boolean
         {
             get { return (Drawable) (_boolean ?? (_boolean = GetBoolean())); }
         }
 
+        /// <summary>
+        /// Gets the slider.
+        /// </summary>
+        /// <value>
+        /// The slider.
+        /// </value>
         public override Drawable Slider
         {
             get { return (Drawable) (_slider ?? (_slider = GetSlider())); }
         }
 
+        /// <summary>
+        /// Gets the key bind.
+        /// </summary>
+        /// <value>
+        /// The key bind.
+        /// </value>
         public override Drawable KeyBind
         {
             get { return (Drawable) (_keyBind ?? (_keyBind = GetKeyBind())); }
         }
 
+        /// <summary>
+        /// Gets the separator.
+        /// </summary>
+        /// <value>
+        /// The separator.
+        /// </value>
         public override Drawable Separator
         {
             get { return (Drawable) (_separator ?? (_separator = GetSeparator())); }
         }
 
+        /// <summary>
+        /// Gets the list.
+        /// </summary>
+        /// <value>
+        /// The list.
+        /// </value>
         public override DrawableList List
         {
             get { return (DrawableList)(_list ?? (_list = GetList())); }
         }
 
+        /// <summary>
+        /// Called when the Menu is drawn.
+        /// </summary>
+        /// <param name="position">The position.</param>
         public override void OnDraw(Vector2 position)
         {
-            MenuManager menuManager = MenuManager.Instance;
-            float height = DefaultSettings.ContainerHeight * menuManager.Menus.Count;
-            float width = DefaultSettings.ContainerWidth;
+            var menuManager = MenuManager.Instance;
+            var height = DefaultSettings.ContainerHeight * menuManager.Menus.Count;
+            var width = DefaultSettings.ContainerWidth;
             if (menuManager.Menus.Count > 0)
             {
                 width = menuManager.Menus.First().MenuWidth;
@@ -63,13 +100,19 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
                 }, DefaultSettings.RootContainerColor);
             DefaultSettings.ContainerLine.End();
 
-            for (int i = 0; i < menuManager.Menus.Count; ++i)
+            for (var i = 0; i < menuManager.Menus.Count; ++i)
             {
                 menuManager.Menus[i].OnDraw(
                     new Vector2(position.X, position.Y + i * DefaultSettings.ContainerHeight), i);
             }
         }
 
+        /// <summary>
+        /// Called when the menu is drawn.
+        /// </summary>
+        /// <param name="menuComponent">The menu component.</param>
+        /// <param name="position">The position.</param>
+        /// <param name="index">The index.</param>
         public override void OnMenu(Menu menuComponent, Vector2 position, int index)
         {
             #region Hovering
@@ -80,9 +123,9 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
                 DefaultSettings.HoverLine.Draw(
                     new[]
                     {
-                        new Vector2(position.X, position.Y + DefaultSettings.ContainerHeight / 2),
+                        new Vector2(position.X, position.Y + DefaultSettings.ContainerHeight / 2f),
                         new Vector2(
-                            position.X + menuComponent.MenuWidth, position.Y + DefaultSettings.ContainerHeight / 2)
+                            position.X + menuComponent.MenuWidth, position.Y + DefaultSettings.ContainerHeight / 2f)
                     },
                     DefaultSettings.HoverColor);
                 DefaultSettings.HoverLine.End();
@@ -181,6 +224,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
             }
         }
 
+        /// <summary>
+        /// Calculates the width of the menu.
+        /// </summary>
+        /// <param name="menu">The menu.</param>
+        /// <returns></returns>
         public override int CalcWidthMenu(Menu menu)
         {
             return
@@ -189,11 +237,21 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
                      DefaultSettings.ContainerTextMarkWidth);
         }
 
+        /// <summary>
+        /// Calculates the width item.
+        /// </summary>
+        /// <param name="menuItem">The menu item.</param>
+        /// <returns></returns>
         public override int CalcWidthItem(MenuItem menuItem)
         {
             return (int) (CalcWidthText(menuItem.DisplayName) + (DefaultSettings.ContainerTextOffset * 2));
         }
 
+        /// <summary>
+        /// Calculates the width of text.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns></returns>
         public override int CalcWidthText(string text)
         {
             return DefaultSettings.Font.MeasureText(null, text, 0).Width;
@@ -204,12 +262,9 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
             return new Drawable
             {
                 AdditionalBoundries =
-                    (Vector2 position, AMenuComponent component) =>
-                    {
-                        return new Rectangle(
-                            (int) (position.X + component.MenuWidth - DefaultSettings.ContainerHeight), (int) position.Y,
-                            (int) DefaultSettings.ContainerHeight, (int) DefaultSettings.ContainerHeight);
-                    },
+                    (position, component) => new Rectangle(
+                        (int) (position.X + component.MenuWidth - DefaultSettings.ContainerHeight), (int) position.Y,
+                        DefaultSettings.ContainerHeight, DefaultSettings.ContainerHeight),
                 OnDraw = (component, position, index) =>
                 {
                     #region Text Draw
@@ -240,10 +295,10 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
                         {
                             new Vector2(
                                 (position.X + component.MenuWidth - DefaultSettings.ContainerHeight) +
-                                DefaultSettings.ContainerHeight / 2, position.Y + 1),
+                                DefaultSettings.ContainerHeight / 2f, position.Y + 1),
                             new Vector2(
                                 (position.X + component.MenuWidth - DefaultSettings.ContainerHeight) +
-                                DefaultSettings.ContainerHeight / 2, position.Y + DefaultSettings.ContainerHeight)
+                                DefaultSettings.ContainerHeight / 2f, position.Y + DefaultSettings.ContainerHeight)
                         },
                         ((MenuItem<MenuBool>) component).Value.Value
                             ? new ColorBGRA(0, 100, 0, 255)
@@ -257,8 +312,8 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
                         (int)
                             (new Rectangle(
                                 (int) (position.X + component.MenuWidth - DefaultSettings.ContainerHeight),
-                                (int) (position.Y), (int) DefaultSettings.ContainerHeight,
-                                (int) DefaultSettings.ContainerHeight).GetCenteredText(
+                                (int) (position.Y), DefaultSettings.ContainerHeight,
+                                DefaultSettings.ContainerHeight).GetCenteredText(
                                     null, ((MenuItem<MenuBool>) component).Value.Value ? "ON" : "OFF",
                                     CenteredFlags.HorizontalCenter).X);
                     DefaultSettings.Font.DrawText(
@@ -269,7 +324,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
 
                     #endregion
                 },
-                Bounding = GetContainerRectangle,
+                Bounding = GetContainerRectangle
             };
         }
 
@@ -278,15 +333,12 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
             return new Drawable
             {
                 AdditionalBoundries =
-                    (Vector2 position, AMenuComponent component) =>
-                    {
-                        return new Rectangle(
-                            (int) (position.X + component.MenuWidth - DefaultSettings.ContainerHeight), (int) position.Y,
-                            (int) DefaultSettings.ContainerHeight, (int) DefaultSettings.ContainerHeight);
-                    },
+                    (position, component) => new Rectangle(
+                        (int) (position.X + component.MenuWidth - DefaultSettings.ContainerHeight), (int) position.Y,
+                        DefaultSettings.ContainerHeight, DefaultSettings.ContainerHeight),
                 OnDraw = (component, position, index) =>
                 {
-                    MenuKeyBind value = ((MenuItem<MenuKeyBind>) component).Value;
+                    var value = ((MenuItem<MenuKeyBind>) component).Value;
 
                     #region Text
 
@@ -301,7 +353,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
 
                     if (!value.Interacting)
                     {
-                        string keyString = "[" + value.Key + "]";
+                        var keyString = "[" + value.Key + "]";
                         DefaultSettings.Font.DrawText(
                             null, keyString,
                             (int)
@@ -326,10 +378,10 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
                         {
                             new Vector2(
                                 (position.X + component.MenuWidth - DefaultSettings.ContainerHeight) +
-                                DefaultSettings.ContainerHeight / 2, position.Y + 1),
+                                DefaultSettings.ContainerHeight / 2f, position.Y + 1),
                             new Vector2(
                                 (position.X + component.MenuWidth - DefaultSettings.ContainerHeight) +
-                                DefaultSettings.ContainerHeight / 2, position.Y + DefaultSettings.ContainerHeight)
+                                DefaultSettings.ContainerHeight / 2f, position.Y + DefaultSettings.ContainerHeight)
                         },
                         value.Active ? new ColorBGRA(0, 100, 0, 255) : new ColorBGRA(255, 0, 0, 255));
                     line.End();
@@ -341,8 +393,8 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
                         (int)
                             (new Rectangle(
                                 (int) (position.X + component.MenuWidth - DefaultSettings.ContainerHeight),
-                                (int) (position.Y), (int) DefaultSettings.ContainerHeight,
-                                (int) DefaultSettings.ContainerHeight).GetCenteredText(
+                                (int) (position.Y), DefaultSettings.ContainerHeight,
+                                DefaultSettings.ContainerHeight).GetCenteredText(
                                     null, value.Active ? "ON" : "OFF", CenteredFlags.HorizontalCenter).X);
                     DefaultSettings.Font.DrawText(
                         null, value.Active ? "ON" : "OFF", centerX, centerY, DefaultSettings.TextColor);
@@ -400,8 +452,8 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
                     line.Draw(
                         new[]
                         {
-                            new Vector2(position.X, position.Y + DefaultSettings.ContainerHeight / 2),
-                            new Vector2(x, position.Y + DefaultSettings.ContainerHeight / 2)
+                            new Vector2(position.X, position.Y + DefaultSettings.ContainerHeight / 2f),
+                            new Vector2(x, position.Y + DefaultSettings.ContainerHeight / 2f)
                         }, DefaultSettings.HoverColor);
                     line.End();
                     line.Dispose();
@@ -532,11 +584,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
         {
             if (component == null)
             {
-                Console.WriteLine("component is null");
+                Logging.Write(true)(LogLevel.Error, "Component is null");
             }
 
             return new Rectangle(
-                (int) position.X, (int) position.Y, component.MenuWidth, (int) DefaultSettings.ContainerHeight);
+                (int) position.X, (int) position.Y, component.MenuWidth, DefaultSettings.ContainerHeight);
         }
 
         

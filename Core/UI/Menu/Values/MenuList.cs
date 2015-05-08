@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -13,42 +12,106 @@ using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.UI.Values
 {
+    /// <summary>
+    ///     A list of values.
+    /// </summary>
     [Serializable]
     public abstract class MenuList : AMenuValue
     {
+        /// <summary>
+        /// Gets or sets a value if the user is hovering over the right arrow.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the user is hovering over the right arrow; otherwise, <c>false</c>.
+        /// </value>
         public bool RightArrowHover { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the user is hovering over the left arrow..
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> ithe user is hovering over the left arrow; otherwise, <c>false</c>.
+        /// </value>
         public bool LeftArrowHover { get; protected set; }
-        
+
+        /// <summary>
+        /// Gets the selected value as an object.
+        /// </summary>
+        /// <value>
+        /// The selected value as an object.
+        /// </value>
         public abstract object SelectedValueAsObject { get; }
 
+        /// <summary>
+        /// Gets the maximum width of the string.
+        /// </summary>
+        /// <value>
+        /// The maximum width of the string.
+        /// </value>
         public abstract int MaxStringWidth { get; }
     }
 
 
+    /// <summary>
+    ///     A list of values with a specific type.
+    /// </summary>
+    /// <typeparam name="T">Type of object in the list</typeparam>
     [Serializable]
     public class MenuList<T> : MenuList, ISerializable
     {
 
+        /// <summary>
+        /// Gets or sets the index.
+        /// </summary>
+        /// <value>
+        /// The index.
+        /// </value>
         public int Index { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MenuList{T}"/> class.
+        /// </summary>
+        /// <param name="objects">The objects.</param>
         public MenuList(IEnumerable<T> objects)
         {
             Values = objects.ToList();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MenuList{T}"/> class.
+        /// </summary>
+        /// <param name="info">The information.</param>
+        /// <param name="context">The context.</param>
         public MenuList(SerializationInfo info, StreamingContext context)
         {
             Index = (int)info.GetValue("index", typeof(int));
         }
 
+        /// <summary>
+        /// Gets or sets the values.
+        /// </summary>
+        /// <value>
+        /// The values.
+        /// </value>
         public List<T> Values { get; set; }
 
+        /// <summary>
+        /// Gets the selected value.
+        /// </summary>
+        /// <value>
+        /// The selected value.
+        /// </value>
         public T SelectedValue
         {
             get { return Values[Index]; }
         }
 
+        /// <summary>
+        /// Gets the selected value as an object.
+        /// </summary>
+        /// <value>
+        /// The selected value as an object.
+        /// </value>
         public override object SelectedValueAsObject
         {
             get { return SelectedValue; }
@@ -56,6 +119,12 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
 
         private int _width;
 
+        /// <summary>
+        /// Gets the maximum width of the string.
+        /// </summary>
+        /// <value>
+        /// The maximum width of the string.
+        /// </value>
         public override int MaxStringWidth
         {
             get
@@ -75,13 +144,25 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
             }
         }
 
+        /// <summary>
+        /// Value Width.
+        /// </summary>
         public override int Width
         {
             get { return ThemeManager.Current.List.Width(this); }
         }
 
+        /// <summary>
+        /// Menu Value Position.
+        /// </summary>
         public override Vector2 Position { get; set; }
 
+        /// <summary>
+        /// Drawing callback.
+        /// </summary>
+        /// <param name="component">Parent Component</param>
+        /// <param name="position">Position</param>
+        /// <param name="index">Item Index</param>
         public override void OnDraw(AMenuComponent component, Vector2 position, int index)
         {
             Position = position;
@@ -89,6 +170,10 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
             ThemeManager.Current.List.OnDraw(component, position, index);
         }
 
+        /// <summary>
+        /// Windows Process Messages callback.
+        /// </summary>
+        /// <param name="args"></param>
         public override void OnWndProc(WindowsKeys args)
         {
             Rectangle rightArrowRect = ThemeManager.Current.List.RightArrow(Position, Container, this);
@@ -128,6 +213,10 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         }
 
 
+        /// <summary>
+        /// Extracts the specified component.
+        /// </summary>
+        /// <param name="component">The component.</param>
         public override void Extract(AMenuValue component)
         {
             Index =((MenuList<T>) component).Index;
@@ -135,6 +224,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
 
 
 
+        /// <summary>
+        /// Gets the object data.
+        /// </summary>
+        /// <param name="info">The information.</param>
+        /// <param name="context">The context.</param>
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("index", Index, typeof(int));

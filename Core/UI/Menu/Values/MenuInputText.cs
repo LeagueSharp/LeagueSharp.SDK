@@ -33,6 +33,12 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         /// </summary>
         public bool IsFocused { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="MenuInputText"/> has interaction.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this <see cref="MenuInputText"/> has interaction; otherwise, <c>false</c>.
+        /// </value>
         public bool Interaction { get; set; }
 
         /// <summary>
@@ -67,6 +73,10 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
             if (!MenuGUI.IsChatOpen && args.Msg == WindowsMessages.LBUTTONDOWN) {}
         }
 
+        /// <summary>
+        /// Extracts the specified component.
+        /// </summary>
+        /// <param name="component">The component.</param>
         public override void Extract(AMenuValue component) {}
     }
 }

@@ -15,6 +15,9 @@ namespace LeagueSharp.CommonEx.Core.UI
     /// </summary>
     public class MenuManager
     {
+        /// <summary>
+        /// The configuration folder
+        /// </summary>
         public static DirectoryInfo ConfigFolder =
             Directory.CreateDirectory(
                 Path.Combine(
@@ -38,27 +41,59 @@ namespace LeagueSharp.CommonEx.Core.UI
             AppDomain.CurrentDomain.ProcessExit += (sender, args) => SaveSettings();
         }
 
+        /// <summary>
+        /// Gets the <see cref="Menu"/> with the specified name.
+        /// </summary>
+        /// <value>
+        /// The <see cref="Menu"/>.
+        /// </value>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         public Menu this[string name]
         {
             get { return _menus.First(menu => menu.Name.Equals(name)); }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the menu is visible.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the menu is visible; otherwise, <c>false</c>.
+        /// </value>
         public bool MenuVisible
         {
             get { return _menuVisible || ForcedOpen; }
             set { _menuVisible = value; }
         }
 
+        /// <summary>
+        /// Gets the menus.
+        /// </summary>
+        /// <value>
+        /// The menus.
+        /// </value>
         public List<Menu> Menus
         {
             get { return _menus; }
         }
 
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        /// <value>
+        /// The instance.
+        /// </value>
         public static MenuManager Instance
         {
             get { return instance; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the menu was forced to open.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the menu was forced to open; otherwise, <c>false</c>.
+        /// </value>
         public bool ForcedOpen { get; set; }
 
         private void SaveSettings()
@@ -76,8 +111,14 @@ namespace LeagueSharp.CommonEx.Core.UI
             }
         }
 
+        /// <summary>
+        /// Occurs when the menu is opened.
+        /// </summary>
         public event EventHandler OnOpen;
 
+        /// <summary>
+        /// Fires the on open.
+        /// </summary>
         protected virtual void FireOnOpen()
         {
             EventHandler handler = OnOpen;
@@ -87,8 +128,14 @@ namespace LeagueSharp.CommonEx.Core.UI
             }
         }
 
+        /// <summary>
+        /// Occurs when the menu is closed.
+        /// </summary>
         public event EventHandler OnClose;
 
+        /// <summary>
+        /// Fires the on close.
+        /// </summary>
         protected virtual void FireOnClose()
         {
             EventHandler handler = OnClose;
@@ -140,6 +187,10 @@ namespace LeagueSharp.CommonEx.Core.UI
             }
         }
 
+        /// <summary>
+        /// Adds the specified menu.
+        /// </summary>
+        /// <param name="menu">The menu.</param>
         public void Add(Menu menu)
         {
             if (!_menus.Contains(menu))

@@ -23,6 +23,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         /// </summary>
         /// <param name="name">Menu Name</param>
         /// <param name="displayName">Menu Display Name</param>
+        /// <param name="uniqueString">Unique string (ID)</param>
         protected AMenuComponent(string name, string displayName, string uniqueString)
         {
             UniqueString = uniqueString;
@@ -30,8 +31,20 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
             DisplayName = displayName;
         }
 
+        /// <summary>
+        /// Gets or sets the name of the assembly.
+        /// </summary>
+        /// <value>
+        /// The name of the assembly.
+        /// </value>
         public string AssemblyName { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the unique string.
+        /// </summary>
+        /// <value>
+        /// The unique string.
+        /// </value>
         public string UniqueString { get; set; }
 
         /// <summary>
@@ -71,10 +84,28 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         /// </summary>
         public abstract Vector2 Position { get; set; }
 
+        /// <summary>
+        /// Gets the path.
+        /// </summary>
+        /// <value>
+        /// The path.
+        /// </value>
         public abstract string Path { get; }
 
+        /// <summary>
+        /// Gets the width.
+        /// </summary>
+        /// <value>
+        /// The width.
+        /// </value>
         public abstract int Width { get; }
 
+        /// <summary>
+        /// Gets or sets the width of the menu.
+        /// </summary>
+        /// <value>
+        /// The width of the menu.
+        /// </value>
         public int MenuWidth
         {
             get
@@ -95,6 +126,9 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
             set { _menuWidthCached = value; }
         }
 
+        /// <summary>
+        /// Resets the width.
+        /// </summary>
         public void ResetWidth()
         {
             if (Parent != null)
@@ -106,7 +140,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
             }
             else
             {
-                foreach (Menu menu in MenuManager.Instance.Menus)
+                foreach (var menu in MenuManager.Instance.Menus)
                 {
                     menu.MenuWidth = 0;
                 }
@@ -129,8 +163,14 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         /// </summary>
         public abstract void OnUpdate();
 
+        /// <summary>
+        /// Saves this instance.
+        /// </summary>
         public abstract void Save();
 
+        /// <summary>
+        /// Loads this instance.
+        /// </summary>
         public abstract void Load();
 
 
@@ -159,7 +199,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         {
             try
             {
-                AMenuComponent comp = this[binder.Name];
+                var comp = this[binder.Name];
                 var item = comp as MenuItem;
                 result = item != null ? item.ValueAsObject : comp;
                 return true;
