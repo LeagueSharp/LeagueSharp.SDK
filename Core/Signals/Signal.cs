@@ -14,7 +14,7 @@ namespace LeagueSharp.CommonEx.Core.Signals
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="e">RaisedArgs</param>
-        public delegate void OnEnabledStatusChangedDelegate(object sender, Signal.EnabledStatusChangedArgs e);
+        public delegate void OnEnabledStatusChangedDelegate(object sender, EnabledStatusChangedArgs e);
 
         /// <summary>
         ///     Raised delegate.
@@ -31,7 +31,7 @@ namespace LeagueSharp.CommonEx.Core.Signals
         public delegate void OnSignalRaisedDelegate(object sender, Signal e);
 
         /// <summary>
-        ///     The delegate for <see cref="SignalWaver"/>
+        ///     The delegate for <see cref="SignalWaver" />
         /// </summary>
         /// <param name="signal">The signal.</param>
         /// <returns>True if the signal should be waved.</returns>
@@ -47,7 +47,8 @@ namespace LeagueSharp.CommonEx.Core.Signals
         /// </summary>
         public SignalWaverDelegate SignalWaver;
 
-        private Signal(OnRaisedDelegate signalRaised, SignalWaverDelegate signalWaver, DateTimeOffset expiration, IDictionary<string, object> properties)
+        private Signal(OnRaisedDelegate signalRaised, SignalWaverDelegate signalWaver, DateTimeOffset expiration,
+            IDictionary<string, object> properties)
         {
             if (signalRaised != null)
             {
@@ -79,7 +80,7 @@ namespace LeagueSharp.CommonEx.Core.Signals
         /// </value>
         public bool Expired
         {
-            get { return DateTime.Now >= Expiration; }
+            get { return DateTimeOffset.Now >= Expiration; }
         }
 
         /// <summary>
@@ -120,7 +121,7 @@ namespace LeagueSharp.CommonEx.Core.Signals
         /// <param name="onRaised">The delegate to call when this signal is raised.</param>
         /// <param name="signalWaver">The function that returns <c>true</c> when this signal should be waved.</param>
         /// <param name="expiration">The expiration of this signal.</param>
-        /// <param name="defaultProperties">A dictionary that contents will be dumped into <see cref="Properties"/></param>
+        /// <param name="defaultProperties">A dictionary that contents will be dumped into <see cref="Properties" /></param>
         /// <returns></returns>
         public static Signal Create(OnRaisedDelegate onRaised = null, SignalWaverDelegate signalWaver = null,
             DateTimeOffset expiration = default(DateTimeOffset), IDictionary<string, object> defaultProperties = null)
@@ -130,7 +131,9 @@ namespace LeagueSharp.CommonEx.Core.Signals
                 expiration = DateTimeOffset.MaxValue;
             }
 
-            var signal = new Signal(onRaised, signalWaver, expiration, defaultProperties ?? new Dictionary<string, object>());
+            var signal = new Signal(onRaised, signalWaver, expiration,
+                defaultProperties ?? new Dictionary<string, object>());
+
             SignalManager.AddSignal(signal);
             signal.Enabled = true;
 

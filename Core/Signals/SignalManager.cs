@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using LeagueSharp.CommonEx.Core.Enumerations;
-using LeagueSharp.CommonEx.Core.Utils;
 
 namespace LeagueSharp.CommonEx.Core.Signals
 {
@@ -32,7 +30,7 @@ namespace LeagueSharp.CommonEx.Core.Signals
         }
 
         /// <summary>
-        /// Removes a signal.
+        ///     Removes a signal.
         /// </summary>
         /// <param name="signal">The signal.</param>
         public static void RemoveSignal(Signal signal)
@@ -45,7 +43,7 @@ namespace LeagueSharp.CommonEx.Core.Signals
 
         private static void Game_OnUpdate(EventArgs args)
         {
-            foreach (var signal in Signals.Where(x => x.Enabled))
+            foreach (var signal in Signals.Where(x => x.Enabled).ToList())
             {
                 if (signal.SignalWaver(signal))
                 {
