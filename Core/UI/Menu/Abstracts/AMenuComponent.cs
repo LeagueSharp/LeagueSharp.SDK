@@ -26,12 +26,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         protected AMenuComponent(string name, string displayName, string uniqueString)
         {
             UniqueString = uniqueString;
-            AssemblyName = Assembly.GetCallingAssembly().GetName().Name;
             Name = name;
             DisplayName = displayName;
         }
 
-        public string AssemblyName { get; private set; }
+        public string AssemblyName { get; protected set; }
 
         public string UniqueString { get; set; }
 

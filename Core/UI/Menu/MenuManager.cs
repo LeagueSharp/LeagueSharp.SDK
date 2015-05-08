@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.UI.Skins;
@@ -22,7 +23,7 @@ namespace LeagueSharp.CommonEx.Core.UI
 
         private static readonly MenuManager instance = new MenuManager();
 
-        private readonly List<MenuRoot> _menus = new List<MenuRoot>();
+        private readonly List<Menu> _menus = new List<Menu>();
 
         private readonly Vector2 _position = new Vector2(30, 30);
         private bool _menuVisible;
@@ -37,13 +38,18 @@ namespace LeagueSharp.CommonEx.Core.UI
             AppDomain.CurrentDomain.ProcessExit += (sender, args) => SaveSettings();
         }
 
+        public Menu this[string name]
+        {
+            get { return _menus.First(menu => menu.Name.Equals(name)); }
+        }
+
         public bool MenuVisible
         {
             get { return _menuVisible || ForcedOpen; }
             set { _menuVisible = value; }
         }
 
-        public List<MenuRoot> Menus
+        public List<Menu> Menus
         {
             get { return _menus; }
         }
@@ -115,7 +121,7 @@ namespace LeagueSharp.CommonEx.Core.UI
                 MenuVisible = !MenuVisible;
             }
 
-            foreach (MenuRoot component in _menus)
+            foreach (Menu component in _menus)
             {
                 component.OnWndProc(keys);
             }
@@ -134,7 +140,7 @@ namespace LeagueSharp.CommonEx.Core.UI
             }
         }
 
-        public void Add(MenuRoot menu)
+        public void Add(Menu menu)
         {
             if (!_menus.Contains(menu))
             {

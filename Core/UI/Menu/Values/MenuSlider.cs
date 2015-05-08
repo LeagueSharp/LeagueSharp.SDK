@@ -134,7 +134,12 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
             {
                 newValue = MaxValue;
             }
-            Value = newValue;
+            if (newValue != Value)
+            {
+                Value = newValue;
+                FireEvent(this);
+            }
+           
         }
 
         public override void Extract(AMenuValue value)

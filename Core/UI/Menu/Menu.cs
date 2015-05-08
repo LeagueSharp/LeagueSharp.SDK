@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
@@ -154,10 +155,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// </summary>
         public override void OnDraw(Vector2 position, int index)
         {
-            if (!Position.Equals(position))
-            {
-                Position = position;
-            }
+            Position = position;
 
             ThemeManager.Current.OnMenu(this, position, index);
         }
@@ -180,7 +178,7 @@ namespace LeagueSharp.CommonEx.Core.UI
                         //Toggling siblings logic
                         if (Parent == null)
                         {
-                            foreach (MenuRoot rootComponent in MenuManager.Instance.Menus.Where(c => !c.Equals(this)))
+                            foreach (Menu rootComponent in MenuManager.Instance.Menus.Where(c => !c.Equals(this)))
                             {
                                 rootComponent.Toggled = false;
                             }
@@ -232,6 +230,24 @@ namespace LeagueSharp.CommonEx.Core.UI
             {
                 comp.Value.Load();
             }
+        }
+
+        /// <summary>
+        ///     Attaches the menu towards the main menu.
+        /// </summary>
+        /// <returns>Menu Instance</returns>
+        public Menu Attach()
+        {
+            if (Parent == null)
+            {
+                AssemblyName = Assembly.GetCallingAssembly().GetName().Name;
+                MenuManager.Instance.Add(this);
+            }
+            else
+            {
+                throw new Exception("You should not add a Menu that already has a parent.");
+            }
+            return this;
         }
     }
 }

@@ -16,6 +16,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
         private Drawable? _boolean;
         private Drawable? _keyBind, _separator;
         private Drawable? _slider;
+        private DrawableList? _list;
 
         public override Drawable Boolean
         {
@@ -35,6 +36,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
         public override Drawable Separator
         {
             get { return (Drawable) (_separator ?? (_separator = GetSeparator())); }
+        }
+
+        public override DrawableList List
+        {
+            get { return (DrawableList)(_list ?? (_list = GetList())); }
         }
 
         public override void OnDraw(Vector2 position)
@@ -190,7 +196,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
 
         public override int CalcWidthText(string text)
         {
-            return DefaultSettings.Font.MeasureText(null, text, FontDrawFlags.Center).Width;
+            return DefaultSettings.Font.MeasureText(null, text, 0).Width;
         }
 
         private Drawable GetBoolean()
@@ -368,7 +374,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
 
                     int currentValue = ((MenuItem<MenuSlider>) component).Value.Value;
                     Rectangle measureText = DefaultSettings.Font.MeasureText(
-                        null, currentValue.ToString(CultureInfo.InvariantCulture), FontDrawFlags.Center);
+                        null, currentValue.ToString(CultureInfo.InvariantCulture), 0);
                     DefaultSettings.Font.DrawText(
                         null, currentValue.ToString(CultureInfo.InvariantCulture),
                         (int) (position.X + component.MenuWidth - DefaultSettings.ContainerTextOffset - measureText.Width),
@@ -430,6 +436,98 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
             };
         }
 
+        private DrawableList GetList()
+        {
+            const int arrowSpacing = 2;
+            const int textSpacing = 8;
+            Rectangle arrowRectangle = DefaultSettings.Font.MeasureText(null, ">", 0);
+            return new DrawableList
+            {
+                OnDraw = (component, position, index) =>
+                {
+                    var list = (MenuList)((MenuItem)component).ValueAsObject;
+                    #region Text Draw
+                    var rectangleName =
+                            (GetContainerRectangle(position, component)
+                                .GetCenteredText(null, component.DisplayName, CenteredFlags.VerticalCenter)
+                                );
+
+                    DefaultSettings.Font.DrawText(
+                        null, component.DisplayName, (int)(position.X + DefaultSettings.ContainerTextOffset), (int) rectangleName.Y,
+                        DefaultSettings.TextColor);
+
+                    #endregion
+
+                    #region rightarrow
+
+                    Line line = new Line(Drawing.Direct3DDevice)
+                    {
+                        Antialias = false,
+                        GLLines = true,
+                        Width = arrowRectangle.Width + (2 * arrowSpacing)
+                    };
+
+                    line.Begin();
+                    line.Draw(new[]
+                    {
+                        new Vector2(position.X + component.MenuWidth - (arrowRectangle.Width /2f) - arrowSpacing, position.Y),
+                        new Vector2(position.X + component.MenuWidth - (arrowRectangle.Width /2f) - arrowSpacing, position.Y + DefaultSettings.ContainerHeight)
+                    }, list.RightArrowHover ? DefaultSettings.ContainerSelectedColor : DefaultSettings.HoverColor);
+                    line.End();
+
+                    DefaultSettings.Font.DrawText(
+                        null, ">", (int)(position.X + component.MenuWidth - arrowRectangle.Width - arrowSpacing), (int)rectangleName.Y,
+                        DefaultSettings.TextColor);
+                    #endregion
+                    
+                    #region Value
+
+                    Vector2 textPos = new Rectangle(
+                        (int)
+                            (position.X + component.MenuWidth - (2 * arrowSpacing) - arrowRectangle.Width -
+                             list.MaxStringWidth - textSpacing), (int) position.Y, list.MaxStringWidth, DefaultSettings.ContainerHeight)
+                        .GetCenteredText(
+                            null, list.SelectedValueAsObject.ToString(),
+                            CenteredFlags.HorizontalCenter | CenteredFlags.VerticalCenter);
+                    DefaultSettings.Font.DrawText(
+                        null, list.SelectedValueAsObject.ToString(), (int) textPos.X, (int) textPos.Y,
+                        DefaultSettings.TextColor);
+                    #endregion
+
+                    #region leftarrow
+                    line.Begin();
+                    line.Draw(new[]
+                    {
+                        new Vector2(position.X + component.MenuWidth - arrowRectangle.Width -  (3 *arrowSpacing) - list.MaxStringWidth - (2* textSpacing) - (arrowRectangle.Width/2f), position.Y),
+                        new Vector2(position.X + component.MenuWidth - arrowRectangle.Width -  (3 *arrowSpacing) - list.MaxStringWidth - (2* textSpacing) - (arrowRectangle.Width/2f), position.Y + DefaultSettings.ContainerHeight)
+                    }, list.LeftArrowHover ? DefaultSettings.ContainerSelectedColor : DefaultSettings.HoverColor);
+                    line.End();
+
+                     DefaultSettings.Font.DrawText(
+                        null, "<", (int)(position.X + component.MenuWidth - (2 * arrowRectangle.Width) - (2 * arrowSpacing) - list.MaxStringWidth - (2 * textSpacing)) - 2, (int)rectangleName.Y,
+                        DefaultSettings.TextColor);
+                    line.Dispose();
+                    #endregion
+
+
+                },
+                Bounding = GetContainerRectangle,
+                AdditionalBoundries = GetContainerRectangle,
+                RightArrow =
+                    (position, component, menuList) =>
+                        new Rectangle(
+                            (int) (position.X + component.MenuWidth - (2 * arrowSpacing) - arrowRectangle.Width),
+                            (int) position.Y, (2 * arrowSpacing) + arrowRectangle.Width, DefaultSettings.ContainerHeight),
+                Width =
+                    list => list.MaxStringWidth + (2 * textSpacing) + (4 * arrowSpacing) + (2 * arrowRectangle.Width),
+                LeftArrow =
+                (position, component, menuList) =>
+                    new Rectangle(
+                        (int)(position.X + component.MenuWidth - (4 * arrowSpacing) - (2 *arrowRectangle.Width) - (2 * textSpacing) - menuList.MaxStringWidth),
+                        (int)position.Y, (2 * arrowSpacing) + arrowRectangle.Width, DefaultSettings.ContainerHeight)
+            };
+        }
+
         private Rectangle GetContainerRectangle(Vector2 position, AMenuComponent component)
         {
             if (component == null)
@@ -440,5 +538,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
             return new Rectangle(
                 (int) position.X, (int) position.Y, component.MenuWidth, (int) DefaultSettings.ContainerHeight);
         }
+
+        
     }
 }

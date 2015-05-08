@@ -1,5 +1,6 @@
 ﻿using System;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
+using LeagueSharp.CommonEx.Core.UI.Values;
 using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.UI.Skins
@@ -9,6 +10,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins
         public abstract Drawable Boolean { get; }
         public abstract Drawable Slider { get; }
         public abstract Drawable KeyBind { get; }
+        public abstract DrawableList List { get; }
 
         public abstract Drawable Separator { get; }
 
@@ -31,6 +33,17 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins
             public Animation Animation;
             public Func<Vector2, AMenuComponent, Rectangle> Bounding;
             public Action<AMenuComponent, Vector2, int> OnDraw;
+        }
+
+        public struct DrawableList
+        {
+            public Func<Vector2, AMenuComponent, Rectangle> AdditionalBoundries;
+            public Animation Animation;
+            public Func<Vector2, AMenuComponent, Rectangle> Bounding;
+            public Action<AMenuComponent, Vector2, int> OnDraw;
+            public Func<Vector2, AMenuComponent, MenuList, Rectangle> RightArrow;
+            public Func<Vector2, AMenuComponent, MenuList, Rectangle> LeftArrow;
+            public Func<MenuList, int> Width;
         }
     }
 }

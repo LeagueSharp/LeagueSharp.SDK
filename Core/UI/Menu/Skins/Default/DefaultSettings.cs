@@ -21,7 +21,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
         /// <summary>
         ///     Global Container Height.
         /// </summary>
-        public static float ContainerHeight = 30f;
+        public static int ContainerHeight = 30;
 
         /// <summary>
         ///     Global Text Color.

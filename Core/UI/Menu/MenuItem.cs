@@ -69,7 +69,10 @@ namespace LeagueSharp.CommonEx.Core.UI
             set
             {
                 _value = value;
-                _value.Container = this;
+                if (_value != null)
+                {
+                    _value.Container = this;
+                }
             }
         }
 
@@ -216,7 +219,7 @@ namespace LeagueSharp.CommonEx.Core.UI
 
         public override void Load()
         {
-            if (File.Exists(Path))
+            if (File.Exists(Path) && typeof(T).IsSerializable)
             {
                 var newValue = Deserialize<T>(File.ReadAllBytes(Path));
                 if (Value != null)
