@@ -64,7 +64,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
             set
             {
                 _interacting = value;
-                MenuInterface.Instance.ForcedOpen = value;
+                MenuManager.Instance.ForcedOpen = value;
             }
         }
 
@@ -134,25 +134,27 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
                         if (args.Key == Key && Type == KeyBindType.Press)
                         {
                             Active = true;
-                            FireEvent(Active, false);
+                            FireEvent(this);
                         }
                         break;
                     case WindowsMessages.KEYUP:
                         if (Interacting && args.SingleKey != Keys.ShiftKey)
                         {
                             Key = args.SingleKey == Keys.Escape ? Keys.None : args.Key;
+                            args.Process = false;
                             Interacting = false;
                             Container.ResetWidth();
+                            FireEvent(this);
                         }
                         else if (args.Key == Key && Type == KeyBindType.Press)
                         {
                             Active = false;
-                            FireEvent(Active, true);
+                            FireEvent(this);
                         }
                         else if (args.Key == Key && Type == KeyBindType.Toggle)
                         {
                             Active = !Active;
-                            FireEvent(Active, !Active);
+                            FireEvent(this);
                         }
                         break;
                     case WindowsMessages.LBUTTONDOWN:

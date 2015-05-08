@@ -69,7 +69,6 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            Console.WriteLine("SAVING: " + Value);
             info.AddValue("value", Value, typeof(int));
         }
 
@@ -141,7 +140,6 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         public override void Extract(AMenuValue value)
         {
             Value = ((MenuSlider) value).Value;
-            Console.WriteLine("Extracting: " + Value);
         }
     }
 }

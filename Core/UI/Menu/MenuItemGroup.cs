@@ -12,12 +12,12 @@ namespace LeagueSharp.CommonEx.Core.UI
 
         public void Add(MenuItem item)
         {
-            if (item.ValueAsObject is MenuBool || item.ValueAsObject is MenuKeyBind)
+            if (item.ValueAsObject is MenuBool)
             {
                 Items.Add(item);
                 ((AMenuValue) item.ValueAsObject).ValueChanged += args =>
                 {
-                    if (args.GetNewValue() is bool && ((bool) (args.GetNewValue())))
+                    if (args.GetValue<MenuBool>().Value)
                     {
                         DisableAll(((AMenuValue) item.ValueAsObject));
                     }
@@ -27,18 +27,6 @@ namespace LeagueSharp.CommonEx.Core.UI
             {
                 Console.WriteLine("{0} not implemented into MenuGroup", item);
             }
-        }
-
-        public void Remove(MenuItem item)
-        {
-            ((AMenuValue) item.ValueAsObject).ValueChanged -= args =>
-            {
-                if (args.GetNewValue() is bool && ((bool) (args.GetNewValue())))
-                {
-                    DisableAll(((AMenuValue) item.ValueAsObject));
-                }
-            };
-            Items.Remove(item);
         }
 
         public void DisableAll(AMenuValue except)

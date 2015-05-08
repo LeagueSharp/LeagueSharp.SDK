@@ -53,6 +53,8 @@ namespace LeagueSharp.CommonEx.Core.UI
 
         public bool Hovering { get; private set; }
 
+        public bool SharedSettings { get; set; }
+
         /// <summary>
         ///     Returns if the menu has been toggled.
         /// </summary>
@@ -88,25 +90,19 @@ namespace LeagueSharp.CommonEx.Core.UI
         {
             get
             {
+                if (SharedSettings)
+                {
+                    return MenuManager.ConfigFolder.CreateSubdirectory("SharedConfig").FullName;
+                }
                 if (Parent == null)
                 {
                     return
-                        MenuInterface.ConfigFolder.CreateSubdirectory(AssemblyName)
+                        MenuManager.ConfigFolder.CreateSubdirectory(AssemblyName)
                             .CreateSubdirectory(Name + UniqueString)
                             .FullName;
                 }
                 return Directory.CreateDirectory(System.IO.Path.Combine(Parent.Path, Name + UniqueString)).FullName;
             }
-        }
-
-        /// <summary>
-        ///     Attaches the menu towards the main menu.
-        /// </summary>
-        /// <returns>Menu Instance</returns>
-        public Menu Attach()
-        {
-            MenuInterface.Instance.Add(this);
-            return this;
         }
 
         /// <summary>
@@ -163,7 +159,6 @@ namespace LeagueSharp.CommonEx.Core.UI
                 Position = position;
             }
 
-            //SkinIndex.Skin[Configuration.GetValidMenuSkin()].OnMenuDraw(this, position, index);
             ThemeManager.Current.OnMenu(this, position, index);
         }
 
@@ -173,19 +168,19 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <param name="args"></param>
         public override void OnWndProc(WindowsKeys args)
         {
-            if ((MenuInterface.Instance.MenuVisible && Parent == null) || Visible)
+            if ((MenuManager.Instance.MenuVisible && Parent == null) || Visible)
             {
                 if (args.Cursor.IsUnderRectangle(Position.X, Position.Y, MenuWidth, DefaultSettings.ContainerHeight))
                 {
                     Hovering = true;
-                    if (args.Msg == WindowsMessages.LBUTTONDOWN)
+                    if (args.Msg == WindowsMessages.LBUTTONDOWN && Components.Count > 0)
                     {
                         Toggled = !Toggled;
 
                         //Toggling siblings logic
                         if (Parent == null)
                         {
-                            foreach (Menu rootComponent in MenuInterface.Instance.Menus.Where(c => !c.Equals(this)))
+                            foreach (MenuRoot rootComponent in MenuManager.Instance.Menus.Where(c => !c.Equals(this)))
                             {
                                 rootComponent.Toggled = false;
                             }

@@ -14,7 +14,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
     {
         private static readonly Font Font = DefaultSettings.Font;
         private Drawable? _boolean;
-        private Drawable? _keyBind, _seperator;
+        private Drawable? _keyBind, _separator;
         private Drawable? _slider;
 
         public override Drawable Boolean
@@ -32,19 +32,19 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
             get { return (Drawable) (_keyBind ?? (_keyBind = GetKeyBind())); }
         }
 
-        public override Drawable Seperator
+        public override Drawable Separator
         {
-            get { return (Drawable) (_seperator ?? (_seperator = GetSeperator())); }
+            get { return (Drawable) (_separator ?? (_separator = GetSeparator())); }
         }
 
         public override void OnDraw(Vector2 position)
         {
-            MenuInterface menuInterface = MenuInterface.Instance;
-            float height = DefaultSettings.ContainerHeight * menuInterface.Menus.Count;
+            MenuManager menuManager = MenuManager.Instance;
+            float height = DefaultSettings.ContainerHeight * menuManager.Menus.Count;
             float width = DefaultSettings.ContainerWidth;
-            if (menuInterface.Menus.Count > 0)
+            if (menuManager.Menus.Count > 0)
             {
-                width = menuInterface.Menus.First().MenuWidth;
+                width = menuManager.Menus.First().MenuWidth;
             }
 
             DefaultSettings.ContainerLine.Width = width;
@@ -57,9 +57,9 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
                 }, DefaultSettings.RootContainerColor);
             DefaultSettings.ContainerLine.End();
 
-            for (int i = 0; i < menuInterface.Menus.Count; ++i)
+            for (int i = 0; i < menuManager.Menus.Count; ++i)
             {
-                menuInterface.Menus[i].OnDraw(
+                menuManager.Menus[i].OnDraw(
                     new Vector2(position.X, position.Y + i * DefaultSettings.ContainerHeight), i);
             }
         }
@@ -68,7 +68,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
         {
             #region Hovering
 
-            if (menuComponent.Hovering && !menuComponent.Toggled)
+            if (menuComponent.Hovering && !menuComponent.Toggled && menuComponent.Components.Count > 0)
             {
                 DefaultSettings.HoverLine.Begin();
                 DefaultSettings.HoverLine.Draw(
@@ -100,23 +100,8 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
                 null, "»",
                 (int)
                     (position.X + menuComponent.MenuWidth - DefaultSettings.ContainerTextMarkWidth +
-                     DefaultSettings.ContainerTextMarkOffset), centerY, DefaultSettings.TextColor);
-
-            #endregion
-
-            #region Components Draw
-
-            if ((index + 1) < MenuInterface.Instance.Menus.Count)
-            {
-                DefaultSettings.ContainerSeperatorLine.Begin();
-                DefaultSettings.ContainerSeperatorLine.Draw(
-                    new[]
-                    {
-                        new Vector2(position.X, position.Y + DefaultSettings.ContainerHeight),
-                        new Vector2(position.X + menuComponent.MenuWidth, position.Y + DefaultSettings.ContainerHeight)
-                    }, DefaultSettings.ContainerSeperatorColor);
-                DefaultSettings.ContainerSeperatorLine.End();
-            }
+                     DefaultSettings.ContainerTextMarkOffset), centerY,
+                menuComponent.Components.Count > 0 ? DefaultSettings.TextColor : DefaultSettings.ContainerSeparatorColor);
 
             #endregion
 
@@ -156,14 +141,35 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
                     DefaultSettings.RootContainerColor);
                 DefaultSettings.ContainerLine.End();
 
+
                 for (int i = 0; i < menuComponent.Components.Count; ++i)
                 {
-                    if (menuComponent.Components.Values.ToList()[i] != null)
+                    AMenuComponent childComponent = menuComponent.Components.Values.ToList()[i];
+                    if (childComponent != null)
                     {
-                        menuComponent.Components.Values.ToList()[i].OnDraw(
-                            new Vector2(
-                                position.X + menuComponent.MenuWidth, position.Y + i * DefaultSettings.ContainerHeight),
-                            i);
+                        var childPos = new Vector2(
+                            position.X + menuComponent.MenuWidth, position.Y + i * DefaultSettings.ContainerHeight);
+
+                        #region Separator
+
+                        if (i < menuComponent.Components.Count - 1)
+                        {
+                            DefaultSettings.ContainerSeparatorLine.Begin();
+                            DefaultSettings.ContainerSeparatorLine.Draw(
+                                new[]
+                                {
+                                    new Vector2(childPos.X, childPos.Y + DefaultSettings.ContainerHeight),
+                                    new Vector2(
+                                        childPos.X + childComponent.MenuWidth,
+                                        childPos.Y + DefaultSettings.ContainerHeight)
+                                },
+                                DefaultSettings.ContainerSeparatorColor);
+                            DefaultSettings.ContainerSeparatorLine.End();
+                        }
+
+                        #endregion
+
+                        childComponent.OnDraw(childPos, i);
                     }
                 }
             }
@@ -211,24 +217,6 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
                     DefaultSettings.Font.DrawText(
                         null, component.DisplayName, (int) (position.X + DefaultSettings.ContainerTextOffset), centerY,
                         DefaultSettings.TextColor);
-
-                    #endregion
-
-                    #region Components Draw
-
-                    if ((index + 1) < component.Parent.Components.Count)
-                    {
-                        DefaultSettings.ContainerSeperatorLine.Begin();
-                        DefaultSettings.ContainerSeperatorLine.Draw(
-                            new[]
-                            {
-                                new Vector2(position.X, position.Y + DefaultSettings.ContainerHeight),
-                                new Vector2(
-                                    position.X + component.MenuWidth, position.Y + DefaultSettings.ContainerHeight)
-                            },
-                            DefaultSettings.ContainerSeperatorColor);
-                        DefaultSettings.ContainerSeperatorLine.End();
-                    }
 
                     #endregion
 
@@ -318,24 +306,6 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
 
                     #endregion
 
-                    #region Component
-
-                    if ((index + 1) < component.Parent.Components.Count)
-                    {
-                        DefaultSettings.ContainerSeperatorLine.Begin();
-                        DefaultSettings.ContainerSeperatorLine.Draw(
-                            new[]
-                            {
-                                new Vector2(position.X, position.Y + DefaultSettings.ContainerHeight),
-                                new Vector2(
-                                    position.X + component.MenuWidth, position.Y + DefaultSettings.ContainerHeight)
-                            },
-                            DefaultSettings.ContainerSeperatorColor);
-                        DefaultSettings.ContainerSeperatorLine.End();
-                    }
-
-                    #endregion
-
                     #region KeyBind
 
                     var line = new Line(Drawing.Direct3DDevice)
@@ -406,22 +376,6 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
 
                     #endregion
 
-                    #region Component
-
-                    if ((index + 1) < component.Parent.Components.Count)
-                    {
-                        DefaultSettings.ContainerSeperatorLine.Begin();
-                        DefaultSettings.ContainerSeperatorLine.Draw(
-                            new[]
-                            {
-                                new Vector2(position.X, position.Y + DefaultSettings.ContainerHeight),
-                                new Vector2(position.X + component.MenuWidth, position.Y + DefaultSettings.ContainerHeight)
-                            }, DefaultSettings.ContainerSeperatorColor);
-                        DefaultSettings.ContainerSeperatorLine.End();
-                    }
-
-                    #endregion
-
                     #region Slider Box Draw
 
                     MenuSlider value = ((MenuItem<MenuSlider>) component).Value;
@@ -453,7 +407,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
             };
         }
 
-        private Drawable GetSeperator()
+        private Drawable GetSeparator()
         {
             return new Drawable
             {
@@ -468,22 +422,6 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
 
                     DefaultSettings.Font.DrawText(
                         null, component.DisplayName, (int) centerY.X, (int) centerY.Y, DefaultSettings.TextColor);
-
-                    #endregion
-
-                    #region Components Draw
-
-                    if ((index + 1) < component.Parent.Components.Count)
-                    {
-                        DefaultSettings.ContainerSeperatorLine.Begin();
-                        DefaultSettings.ContainerSeperatorLine.Draw(
-                            new[]
-                            {
-                                new Vector2(position.X, position.Y + DefaultSettings.ContainerHeight),
-                                new Vector2(position.X + component.MenuWidth, position.Y + DefaultSettings.ContainerHeight)
-                            }, DefaultSettings.ContainerSeperatorColor);
-                        DefaultSettings.ContainerSeperatorLine.End();
-                    }
 
                     #endregion
                 },

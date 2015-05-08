@@ -33,6 +33,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         public abstract object ValueAsObject { get; }
     }
 
+
     /// <summary>
     ///     Menu Item
     /// </summary>
@@ -58,6 +59,7 @@ namespace LeagueSharp.CommonEx.Core.UI
             Value = MenuFactory.Create<T>();
         }
 
+
         /// <summary>
         ///     Value Container.
         /// </summary>
@@ -68,7 +70,6 @@ namespace LeagueSharp.CommonEx.Core.UI
             {
                 _value = value;
                 _value.Container = this;
-                _value.ValueChanged += _value_ValueChanged;
             }
         }
 
@@ -117,20 +118,9 @@ namespace LeagueSharp.CommonEx.Core.UI
                 if (Parent == null)
                 {
                     return System.IO.Path.Combine(
-                        MenuInterface.ConfigFolder.CreateSubdirectory(AssemblyName).FullName,
-                        Name + UniqueString + ".bin");
+                        MenuManager.ConfigFolder.CreateSubdirectory(AssemblyName).FullName, Name + UniqueString + ".bin");
                 }
                 return System.IO.Path.Combine(Parent.Path, Name + UniqueString + ".bin");
-            }
-        }
-
-        public event AMenuValue.OnValueChange ValueChange;
-
-        private void _value_ValueChanged(AMenuValue.ValueChangeArgs args)
-        {
-            if (ValueChange != null)
-            {
-                ValueChange(args);
             }
         }
 

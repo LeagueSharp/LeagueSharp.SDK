@@ -10,7 +10,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins
         public abstract Drawable Slider { get; }
         public abstract Drawable KeyBind { get; }
 
-        public abstract Drawable Seperator { get; }
+        public abstract Drawable Separator { get; }
 
         public abstract void OnDraw(Vector2 position);
         public abstract void OnMenu(Menu menuComponent, Vector2 position, int index);

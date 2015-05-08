@@ -24,7 +24,7 @@ namespace LeagueSharp.CommonEx.Core.UI
                 { typeof(MenuKeyBind), () => new MenuKeyBind() },
                 { typeof(MenuSlider), () => new MenuSlider() },
                 { typeof(MenuInputText), () => new MenuInputText() },
-                { typeof(MenuSeperator), () => new MenuSeperator() }
+                { typeof(MenuSeparator), () => new MenuSeparator() }
             };
 
         /// <summary>

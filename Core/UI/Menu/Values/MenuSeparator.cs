@@ -5,7 +5,7 @@ using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.UI.Values
 {
-    public class MenuSeperator : AMenuValue
+    public class MenuSeparator : AMenuValue
     {
         public override int Width
         {
@@ -29,7 +29,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
 
                 return;
             }
-            ThemeManager.Current.Seperator.OnDraw(component, position, index);
+            ThemeManager.Current.Separator.OnDraw(component, position, index);
         }
 
         public override void OnWndProc(WindowsKeys args)

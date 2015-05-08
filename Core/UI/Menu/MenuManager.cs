@@ -5,13 +5,14 @@ using System.Windows.Forms;
 using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.UI.Skins;
 using LeagueSharp.CommonEx.Core.Utils;
+using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.UI
 {
     /// <summary>
     ///     Menu Interface class, used to control the menu.
     /// </summary>
-    public class MenuInterface
+    public class MenuManager
     {
         public static DirectoryInfo ConfigFolder =
             Directory.CreateDirectory(
@@ -19,19 +20,21 @@ namespace LeagueSharp.CommonEx.Core.UI
                     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                     "LS" + Environment.UserName.GetHashCode().ToString("X"), "MenuConfigEx"));
 
-        private static readonly MenuInterface instance = new MenuInterface();
+        private static readonly MenuManager instance = new MenuManager();
 
-        private readonly List<Menu> _menus = new List<Menu>();
+        private readonly List<MenuRoot> _menus = new List<MenuRoot>();
 
+        private readonly Vector2 _position = new Vector2(30, 30);
         private bool _menuVisible;
 
-        private MenuInterface()
+        private MenuManager()
         {
             MenuVisible = true;
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnEndScene += Drawing_OnDraw;
             Game.OnWndProc += Game_OnWndProc;
-            AppDomain.CurrentDomain.DomainUnload += CurrentDomainDomainUnload;
+            AppDomain.CurrentDomain.DomainUnload += (sender, args) => SaveSettings();
+            AppDomain.CurrentDomain.ProcessExit += (sender, args) => SaveSettings();
         }
 
         public bool MenuVisible
@@ -40,21 +43,20 @@ namespace LeagueSharp.CommonEx.Core.UI
             set { _menuVisible = value; }
         }
 
-        public List<Menu> Menus
+        public List<MenuRoot> Menus
         {
             get { return _menus; }
         }
 
-        public static MenuInterface Instance
+        public static MenuManager Instance
         {
             get { return instance; }
         }
 
         public bool ForcedOpen { get; set; }
 
-        private void CurrentDomainDomainUnload(object sender, EventArgs args)
+        private void SaveSettings()
         {
-            Console.WriteLine("UNLOADING");
             foreach (Menu menu in _menus)
             {
                 try
@@ -113,7 +115,7 @@ namespace LeagueSharp.CommonEx.Core.UI
                 MenuVisible = !MenuVisible;
             }
 
-            foreach (Menu component in _menus)
+            foreach (MenuRoot component in _menus)
             {
                 component.OnWndProc(keys);
             }
@@ -128,11 +130,11 @@ namespace LeagueSharp.CommonEx.Core.UI
         {
             if (MenuVisible)
             {
-                ThemeManager.Current.OnDraw(MenuSettings.Position);
+                ThemeManager.Current.OnDraw(_position);
             }
         }
 
-        public void Add(Menu menu)
+        public void Add(MenuRoot menu)
         {
             if (!_menus.Contains(menu))
             {

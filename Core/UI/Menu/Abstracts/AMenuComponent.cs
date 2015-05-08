@@ -88,7 +88,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
                     }
                     else
                     {
-                        _menuWidthCached = MenuInterface.Instance.Menus.Max(menu => menu.Width);
+                        _menuWidthCached = MenuManager.Instance.Menus.Max(menu => menu.Width);
                     }
                 }
                 return _menuWidthCached;
@@ -107,7 +107,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
             }
             else
             {
-                foreach (Menu menu in MenuInterface.Instance.Menus)
+                foreach (Menu menu in MenuManager.Instance.Menus)
                 {
                     menu.MenuWidth = 0;
                 }

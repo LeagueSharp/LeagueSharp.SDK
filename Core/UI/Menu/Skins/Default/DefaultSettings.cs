@@ -34,9 +34,9 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
         public static ColorBGRA RootContainerColor = new ColorBGRA(0, 0, 0, (byte) (255 / 1.5f));
 
         /// <summary>
-        ///     Container Line Seperator Color.
+        ///     Container Line Separator Color.
         /// </summary>
-        public static ColorBGRA ContainerSeperatorColor = Color.White;
+        public static ColorBGRA ContainerSeparatorColor = new ColorBGRA(255, 255, 255, 100);
 
         public static ColorBGRA HoverColor = new ColorBGRA(255, 255, 255, 50);
 
@@ -73,9 +73,9 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
         public static ColorBGRA ContainerSelectedColor = new ColorBGRA(255, 255, 255, 255 / 2);
 
         /// <summary>
-        ///     Global Container Seperator Line.
+        ///     Global Container Separator Line.
         /// </summary>
-        public static Line ContainerSeperatorLine = new Line(Drawing.Direct3DDevice)
+        public static Line ContainerSeparatorLine = new Line(Drawing.Direct3DDevice)
         {
             Antialias = true,
             GLLines = true,

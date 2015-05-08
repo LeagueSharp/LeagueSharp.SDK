@@ -104,10 +104,11 @@
     <Compile Include="Core\UI\Menu\Abstracts\AMenuValue.cs" />
     <Compile Include="Core\UI\Menu\Menu.cs" />
     <Compile Include="Core\UI\Menu\MenuFactory.cs" />
-    <Compile Include="Core\UI\Menu\MenuInterface.cs" />
+    <Compile Include="Core\UI\Menu\MenuManager.cs" />
     <Compile Include="Core\UI\Menu\MenuItem.cs" />
     <Compile Include="Core\UI\Menu\MenuItemGroup.cs" />
-    <Compile Include="Core\UI\Menu\MenuSettings.cs" />
+    <Compile Include="Core\UI\Menu\MenuRoot.cs" />
+    <Compile Include="Core\UI\Menu\OnValueChangedEventArgs.cs" />
     <Compile Include="Core\UI\Menu\Skins\Default\DefaultSettings.cs" />
     <Compile Include="Core\UI\Menu\Skins\Default\DefaultTheme.cs" />
     <Compile Include="Core\UI\Menu\Skins\Theme.cs" />
@@ -117,7 +118,7 @@
     <Compile Include="Core\UI\Menu\Values\MenuInputText.cs" />
     <Compile Include="Core\UI\Menu\Values\MenuKeyBind.cs" />
     <Compile Include="Core\UI\Menu\Values\MenuList.cs" />
-    <Compile Include="Core\UI\Menu\Values\MenuSeperator.cs" />
+    <Compile Include="Core\UI\Menu\Values\MenuSeparator.cs" />
     <Compile Include="Core\UI\Menu\Values\MenuSlider.cs" />
     <Compile Include="Core\UI\Notifications\INotification.cs" />
     <Compile Include="Core\UI\Notifications\Notification.cs" />
