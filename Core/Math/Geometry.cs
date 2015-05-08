@@ -76,11 +76,29 @@ namespace LeagueSharp.CommonEx.Core.Math
         /// <param name="text">Text</param>
         /// <param name="flags">Centered Flags</param>
         /// <returns>Returns the center position of the text on the rectangle.</returns>
-        public static Vector2 GetCenteredText(this Rectangle rectangle, Sprite sprite, Font font, string text, CenteredFlags flags)
+        public static Vector2 GetCenteredText(this Rectangle rectangle,
+            Sprite sprite,
+            Font font,
+            string text,
+            CenteredFlags flags)
         {
             return font == null
                 ? rectangle.GetCenteredText(sprite, text, flags)
                 : rectangle.GetCenter(sprite, font.MeasureText(sprite, text, 0), flags);
+        }
+
+        /// <summary>
+        ///     Returns true if the point is under the rectangle.
+        /// </summary>
+        /// <param name="point">Point</param>
+        /// <param name="x">Rectangle X</param>
+        /// <param name="y">Rectangle Y</param>
+        /// <param name="width">Rectangle Width</param>
+        /// <param name="height">Rectangle Height</param>
+        /// <returns>Returns true if the point is under the rectangle, otherwise false</returns>
+        public static bool IsUnderRectangle(Vector2 point, float x, float y, float width, float height)
+        {
+            return (point.X > x && point.X < x + width && point.Y > y && point.Y < y + height);
         }
     }
 }

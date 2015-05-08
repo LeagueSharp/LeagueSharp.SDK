@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
 
@@ -10,15 +11,14 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
     public static class Notifications
     {
         /// <summary>
-        ///     Safe-thread notifications list.
+        ///     Notifications list.
         /// </summary>
-        public static readonly ConcurrentDictionary<string, NotificationBase> NotificationsDictionary =
-            new ConcurrentDictionary<string, NotificationBase>();
+        public static readonly List<NotificationBase> NotificationsList = new List<NotificationBase>();
 
         /// <summary>
-        ///     Notifications starting position.
+        ///     Notifications array.
         /// </summary>
-        public static Vector2 Position { get; set; }
+        private static NotificationBase[] _notifications;
 
         /// <summary>
         ///     Static constructor.
@@ -28,26 +28,31 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
             Position = new Vector2(Drawing.Width - 250, 10);
             Game.OnUpdate += args =>
             {
-                foreach (var notificaiton in NotificationsDictionary.Values)
+                foreach (var notificaiton in _notifications)
                 {
                     notificaiton.OnUpdate();
                 }
             };
             Drawing.OnDraw += args =>
             {
-                foreach (var notificaiton in NotificationsDictionary.Values)
+                foreach (var notificaiton in _notifications)
                 {
                     notificaiton.OnDraw(Position);
                 }
             };
             Game.OnWndProc += args =>
             {
-                foreach (var notification in NotificationsDictionary.Values)
+                foreach (var notification in _notifications)
                 {
                     notification.OnWndProc(new WindowsKeys(args));
                 }
             };
         }
+
+        /// <summary>
+        ///     Notifications starting position.
+        /// </summary>
+        public static Vector2 Position { get; set; }
 
         /// <summary>
         ///     Attempts to add a notification to the list.
@@ -56,8 +61,33 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         /// <returns>Process success/failure</returns>
         public static bool AddNotification(NotificationBase notification)
         {
-            return (notification != null) && !NotificationsDictionary.ContainsKey(notification.GetGuid()) &&
-                   NotificationsDictionary.TryAdd(notification.GetGuid(), notification);
+            if (notification != null && !NotificationsList.Contains(notification))
+            {
+                NotificationsList.Add(notification);
+                UpdateNotifications();
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        ///     Updates all of the notifications runtime values.
+        /// </summary>
+        public static void UpdateNotifications()
+        {
+            if (!NotificationsList.Any())
+            {
+                return;
+            }
+
+            _notifications = NotificationsList.ToArray();
+            _notifications[0].Position = Position;
+            for (var i = 1; i < _notifications.Length; ++i)
+            {
+                _notifications[i].Position = new Vector2(
+                    _notifications[i - 1].Position.X,
+                    _notifications[i - 1].Position.Y + _notifications[i - 1].Height + 10f);
+            }
         }
 
         /// <summary>
@@ -70,8 +100,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         public static Notification AddNotification(string @string, int duration = -1, bool dispose = true)
         {
             var notification = new Notification(@string, duration, dispose);
-            NotificationsDictionary.TryAdd(notification.GetGuid(), notification);
-            return notification;
+            return AddNotification(notification) ? notification : null;
         }
 
         /// <summary>
@@ -81,19 +110,13 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         /// <returns>Process success/failure</returns>
         public static bool RemoveNotification(this NotificationBase notification)
         {
-            NotificationBase dumpNotification;
-            return NotificationsDictionary.TryRemove(notification.GetGuid(), out dumpNotification);
-        }
-
-        /// <summary>
-        ///     Attempts to remove the notification from the list using the global unique identification.
-        /// </summary>
-        /// <param name="notificationGuid">global unique identification</param>
-        /// <returns>Process success/failure</returns>
-        public static bool RemoveNotification(this string notificationGuid)
-        {
-            NotificationBase dumpNotification;
-            return NotificationsDictionary.TryRemove(notificationGuid, out dumpNotification);
+            if (NotificationsList.Contains(notification))
+            {
+                NotificationsList.Remove(notification);
+                UpdateNotifications();
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -103,18 +126,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         /// <returns>Validates the notification and returns success or failure</returns>
         public static bool IsValid(this NotificationBase notification)
         {
-            return notification != null && NotificationsDictionary.ContainsKey(notification.GetGuid());
-        }
-
-        /// <summary>
-        ///     Verifies the notification validation and checks if the notification is on the notifications list through the global
-        ///     unique identification.
-        /// </summary>
-        /// <param name="notificationGuid">global unique identification</param>
-        /// <returns>Validates the notification and returns success or failure</returns>
-        public static bool IsValidNotification(this string notificationGuid)
-        {
-            return NotificationsDictionary.ContainsKey(notificationGuid);
+            return notification != null && NotificationsList.Contains(notification);
         }
     }
 }

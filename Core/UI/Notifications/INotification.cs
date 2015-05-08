@@ -26,18 +26,6 @@ namespace LeagueSharp.CommonEx.Core.UI.Notifications
         void OnWndProc(WindowsKeys keys);
 
         /// <summary>
-        ///     Send a new position to be placed to the notification.
-        /// </summary>
-        /// <param name="position">New position</param>
-        void SetPosition(int position);
-
-        /// <summary>
-        ///     Send a notification position request to the notification type.
-        /// </summary>
-        /// <returns>Notification postion in list</returns>
-        int GetPosition();
-
-        /// <summary>
         ///     Sends a global unique identification request to the notification type.
         /// </summary>
         /// <returns>Global Unique Identification</returns>
