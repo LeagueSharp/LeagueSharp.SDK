@@ -1,5 +1,6 @@
 ﻿#region
 
+using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
@@ -32,6 +33,8 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         /// </summary>
         public bool IsFocused { get; set; }
 
+        public bool Interaction { get; set; }
+
         /// <summary>
         ///     InputText Item Width.
         /// </summary>
@@ -59,6 +62,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         /// <param name="args">
         ///     <see cref="WindowsKeys" />
         /// </param>
-        public override void OnWndProc(WindowsKeys args) {}
+        public override void OnWndProc(WindowsKeys args)
+        {
+            if (!MenuGUI.IsChatOpen && args.Msg == WindowsMessages.LBUTTONDOWN) {}
+        }
+
+        public override void Extract(AMenuValue component) {}
     }
 }

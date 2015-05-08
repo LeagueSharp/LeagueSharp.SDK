@@ -1,9 +1,12 @@
 ﻿#region
 
+using System;
+using System.Runtime.Serialization;
 using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.UI.Skins;
+using LeagueSharp.CommonEx.Core.UI.Skins.Default;
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
 
@@ -14,7 +17,8 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
     /// <summary>
     ///     Menu Bool.
     /// </summary>
-    public class MenuBool : AMenuValue
+    [Serializable]
+    public class MenuBool : AMenuValue, ISerializable
     {
         /// <summary>
         ///     Constructor for MenuBool
@@ -25,12 +29,17 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
             Value = value;
         }
 
+        public MenuBool(SerializationInfo info, StreamingContext context)
+        {
+            Value = (bool) info.GetValue("value", typeof(bool));
+        }
+
         /// <summary>
         ///     Boolean Item Width requirement.
         /// </summary>
         public override int Width
         {
-            get { return 0; }
+            get { return (int) DefaultSettings.ContainerHeight; }
         }
 
         /// <summary>
@@ -42,6 +51,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         ///     Boolean Item Position.
         /// </summary>
         public override Vector2 Position { get; set; }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("value", Value, typeof(bool));
+        }
 
         /// <summary>
         ///     Boolean Item Draw callback.
@@ -56,7 +70,15 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
                 Position = position;
             }
 
-            SkinIndex.Skin[Configuration.GetValidMenuSkin()].OnBoolDraw(component, position, index);
+            Theme.Animation animation = ThemeManager.Current.Boolean.Animation;
+
+            if (animation != null && animation.IsAnimating())
+            {
+                animation.OnDraw(component, position, index);
+
+                return;
+            }
+            ThemeManager.Current.Boolean.OnDraw(component, position, index);
         }
 
         /// <summary>
@@ -67,12 +89,19 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         {
             if (args.Msg == WindowsMessages.LBUTTONDOWN && Position.IsValid())
             {
-                var rect = SkinIndex.Skin[Configuration.GetValidMenuSkin()].GetBooleanContainerRectangle(Position);
+                Rectangle rect = ThemeManager.Current.Boolean.AdditionalBoundries(Position, Container);
+
                 if (args.Cursor.IsUnderRectangle(rect.X, rect.Y, rect.Width, rect.Height))
                 {
                     Value = !Value;
+                    FireEvent(Value, !Value);
                 }
             }
+        }
+
+        public override void Extract(AMenuValue component)
+        {
+            Value = ((MenuBool) component).Value;
         }
     }
 }

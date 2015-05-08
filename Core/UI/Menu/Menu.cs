@@ -1,5 +1,8 @@
 ﻿#region
 
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
@@ -19,16 +22,19 @@ namespace LeagueSharp.CommonEx.Core.UI
     public class Menu : AMenuComponent
     {
         /// <summary>
+        ///     Menu Component Sub-Components.
+        /// </summary>
+        public readonly IDictionary<string, AMenuComponent> Components = new Dictionary<string, AMenuComponent>();
+
+        private bool _toggled;
+
+        /// <summary>
         ///     Menu Constructor.
         /// </summary>
         /// <param name="name">Menu Name</param>
         /// <param name="displayName">Menu Display Name</param>
-        /// <param name="root">Is Menu Root</param>
-        public Menu(string name, string displayName, bool root = false) : base(name, displayName)
-        {
-            Root = (root) ? this : null;
-            Visible = Enabled = true;
-        }
+        /// <param name="uniqueString">Unique string</param>
+        public Menu(string name, string displayName, string uniqueString = "") : base(name, displayName, uniqueString) {}
 
         /// <summary>
         ///     Component Sub Object accessability.
@@ -45,33 +51,62 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// </summary>
         public override sealed bool Visible { get; set; }
 
-        /// <summary>
-        ///     Returns if the menu is enabled.
-        /// </summary>
-        public override sealed bool Enabled { get; set; }
+        public bool Hovering { get; private set; }
 
         /// <summary>
         ///     Returns if the menu has been toggled.
         /// </summary>
-        public override sealed bool Toggled { get; set; }
+        public override sealed bool Toggled
+        {
+            get { return _toggled; }
+            set
+            {
+                _toggled = value;
+                //Hide children when untoggled
+                foreach (var comp in Components)
+                {
+                    comp.Value.Visible = value;
+                    if (!_toggled)
+                    {
+                        comp.Value.Toggled = false;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         ///     Menu Position
         /// </summary>
         public override Vector2 Position { get; set; }
 
+        public override int Width
+        {
+            get { return ThemeManager.Current.CalcWidthMenu(this); }
+        }
+
+        public override string Path
+        {
+            get
+            {
+                if (Parent == null)
+                {
+                    return
+                        MenuInterface.ConfigFolder.CreateSubdirectory(AssemblyName)
+                            .CreateSubdirectory(Name + UniqueString)
+                            .FullName;
+                }
+                return Directory.CreateDirectory(System.IO.Path.Combine(Parent.Path, Name + UniqueString)).FullName;
+            }
+        }
+
         /// <summary>
         ///     Attaches the menu towards the main menu.
         /// </summary>
         /// <returns>Menu Instance</returns>
-        public Menu AttachMenu()
+        public Menu Attach()
         {
-            if (Root == this)
-            {
-                MenuInterface.RootMenuComponents.Add(this);
-                return this;
-            }
-            return null;
+            MenuInterface.Instance.Add(this);
+            return this;
         }
 
         /// <summary>
@@ -80,8 +115,15 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <param name="component"><see cref="AMenuComponent" /> component</param>
         public void Add(AMenuComponent component)
         {
-            component.Parent = this;
-            Components.Add(component.Name, component);
+            if (!Components.ContainsKey(component.Name))
+            {
+                component.Parent = this;
+                Components[component.Name] = component;
+            }
+            else
+            {
+                throw new Exception("This menu already contains a component with the name " + component.Name);
+            }
         }
 
         /// <summary>
@@ -97,6 +139,20 @@ namespace LeagueSharp.CommonEx.Core.UI
             }
         }
 
+        public override T GetValue<T>(string name)
+        {
+            if (Components.ContainsKey(name))
+            {
+                return ((MenuItem<T>) Components[name]).Value;
+            }
+            throw new Exception("Could not find child with name " + name);
+        }
+
+        public override T GetValue<T>()
+        {
+            throw new Exception("Cannot get the Value of a Menu");
+        }
+
         /// <summary>
         ///     Menu Drawing callback.
         /// </summary>
@@ -107,7 +163,8 @@ namespace LeagueSharp.CommonEx.Core.UI
                 Position = position;
             }
 
-            SkinIndex.Skin[Configuration.GetValidMenuSkin()].OnMenuDraw(this, position, index);
+            //SkinIndex.Skin[Configuration.GetValidMenuSkin()].OnMenuDraw(this, position, index);
+            ThemeManager.Current.OnMenu(this, position, index);
         }
 
         /// <summary>
@@ -116,22 +173,43 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <param name="args"></param>
         public override void OnWndProc(WindowsKeys args)
         {
-            if (UI.Root.MenuVisible && Visible)
+            if ((MenuInterface.Instance.MenuVisible && Parent == null) || Visible)
             {
-                if (args.Cursor.IsUnderRectangle(
-                    Position.X, Position.Y, DefaultSettings.ContainerWidth, DefaultSettings.ContainerHeight))
+                if (args.Cursor.IsUnderRectangle(Position.X, Position.Y, MenuWidth, DefaultSettings.ContainerHeight))
                 {
+                    Hovering = true;
                     if (args.Msg == WindowsMessages.LBUTTONDOWN)
                     {
                         Toggled = !Toggled;
-                        MenuInterface.OnMenuOpen(this);
+
+                        //Toggling siblings logic
+                        if (Parent == null)
+                        {
+                            foreach (Menu rootComponent in MenuInterface.Instance.Menus.Where(c => !c.Equals(this)))
+                            {
+                                rootComponent.Toggled = false;
+                            }
+                        }
+                        else
+                        {
+                            foreach (var comp in Parent.Components.Where(comp => comp.Value.Name != Name))
+                            {
+                                comp.Value.Toggled = false;
+                            }
+                        }
+
                         return;
                     }
                 }
+                else
+                {
+                    Hovering = false;
+                }
 
+                //Pass OnWndProc on to children
                 if (Toggled)
                 {
-                    foreach (var item in Components.Where(c => c.Value.Enabled && c.Value.Visible))
+                    foreach (var item in Components.Where(c => c.Value.Visible))
                     {
                         item.Value.OnWndProc(args);
                     }
@@ -143,5 +221,22 @@ namespace LeagueSharp.CommonEx.Core.UI
         ///     Menu Update callback.
         /// </summary>
         public override void OnUpdate() {}
+
+
+        public override void Save()
+        {
+            foreach (var comp in Components)
+            {
+                comp.Value.Save();
+            }
+        }
+
+        public override void Load()
+        {
+            foreach (var comp in Components)
+            {
+                comp.Value.Load();
+            }
+        }
     }
 }

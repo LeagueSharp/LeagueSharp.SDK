@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.UI.Values;
 
@@ -24,13 +23,16 @@ namespace LeagueSharp.CommonEx.Core.UI
                 { typeof(MenuBool), () => new MenuBool() },
                 { typeof(MenuKeyBind), () => new MenuKeyBind() },
                 { typeof(MenuSlider), () => new MenuSlider() },
-                { typeof(MenuInputText), () => new MenuInputText() }
+                { typeof(MenuInputText), () => new MenuInputText() },
+                { typeof(MenuSeperator), () => new MenuSeperator() }
             };
 
         /// <summary>
         ///     Creates a new value out of the given type.
         /// </summary>
-        /// <typeparam name="T"><see cref="AMenuValue"/></typeparam>
+        /// <typeparam name="T">
+        ///     <see cref="AMenuValue" />
+        /// </typeparam>
         /// <returns>Created given type</returns>
         public static T Create<T>() where T : AMenuValue
         {
@@ -44,7 +46,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <summary>
         ///     Stores the new factory values into the menu factory container.
         /// </summary>
-        /// <typeparam name="T"><see cref="AMenuValue"/> to contain into the factory value container</typeparam>
+        /// <typeparam name="T"><see cref="AMenuValue" /> to contain into the factory value container</typeparam>
         /// <param name="value">Standard build for the constructor</param>
         /// <returns></returns>
         public static bool CreateFactory<T>(AMenuValue value) where T : AMenuValue

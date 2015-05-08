@@ -1,6 +1,11 @@
 ﻿#region
 
+using System;
+using System.Runtime.Serialization;
+using LeagueSharp.CommonEx.Core.Enumerations;
+using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
+using LeagueSharp.CommonEx.Core.UI.Skins;
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
 
@@ -11,7 +16,8 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
     /// <summary>
     ///     Menu Slider.
     /// </summary>
-    public class MenuSlider : AMenuValue
+    [Serializable]
+    public class MenuSlider : AMenuValue, ISerializable
     {
         /// <summary>
         ///     Menu Slider Constructor.
@@ -25,6 +31,13 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
             MinValue = minValue;
             MaxValue = maxValue;
         }
+
+        public MenuSlider(SerializationInfo info, StreamingContext context)
+        {
+            Value = (int) info.GetValue("value", typeof(int));
+        }
+
+        public bool Interacting { get; private set; }
 
         /// <summary>
         ///     Slider Current Value.
@@ -46,7 +59,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         /// </summary>
         public override int Width
         {
-            get { return 0; }
+            get { return 100; }
         }
 
         /// <summary>
@@ -54,10 +67,31 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         /// </summary>
         public override Vector2 Position { get; set; }
 
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            Console.WriteLine("SAVING: " + Value);
+            info.AddValue("value", Value, typeof(int));
+        }
+
         /// <summary>
         ///     Slider Item Draw callback.
         /// </summary>
-        public override void OnDraw(AMenuComponent component, Vector2 position, int index) {}
+        public override void OnDraw(AMenuComponent component, Vector2 position, int index)
+        {
+            if (!Position.Equals(position))
+            {
+                Position = position;
+            }
+
+            Theme.Animation animation = ThemeManager.Current.Boolean.Animation;
+            if (animation != null && animation.IsAnimating())
+            {
+                animation.OnDraw(component, position, index);
+
+                return;
+            }
+            ThemeManager.Current.Slider.OnDraw(component, position, index);
+        }
 
         /// <summary>
         ///     Slider Windows Process Messages callback.
@@ -65,6 +99,49 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         /// <param name="args">
         ///     <see cref="WindowsKeys" />
         /// </param>
-        public override void OnWndProc(WindowsKeys args) {}
+        public override void OnWndProc(WindowsKeys args)
+        {
+            if (args.Msg == WindowsMessages.MOUSEMOVE && Interacting)
+            {
+                CalculateNewValue(args);
+            }
+            else if (args.Msg == WindowsMessages.LBUTTONDOWN && !Interacting)
+            {
+                Rectangle container = ThemeManager.Current.Slider.Bounding(Position, Container);
+
+                if (args.Cursor.IsUnderRectangle(container.X, container.Y, container.Width, container.Height))
+                {
+                    Interacting = true;
+                    CalculateNewValue(args);
+                }
+            }
+            else if (args.Msg == WindowsMessages.LBUTTONUP)
+            {
+                Interacting = false;
+            }
+        }
+
+        private void CalculateNewValue(WindowsKeys args)
+        {
+            var newValue =
+                (int)
+                    System.Math.Round(
+                        (MinValue + ((args.Cursor.X - Position.X) * (MaxValue - MinValue)) / Container.MenuWidth));
+            if (newValue < MinValue)
+            {
+                newValue = MinValue;
+            }
+            else if (newValue > MaxValue)
+            {
+                newValue = MaxValue;
+            }
+            Value = newValue;
+        }
+
+        public override void Extract(AMenuValue value)
+        {
+            Value = ((MenuSlider) value).Value;
+            Console.WriteLine("Extracting: " + Value);
+        }
     }
 }

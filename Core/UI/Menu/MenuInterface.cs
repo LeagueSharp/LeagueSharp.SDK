@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using LeagueSharp.CommonEx.Core.UI.Abstracts;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
+using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.UI.Skins;
 using LeagueSharp.CommonEx.Core.Utils;
 
@@ -9,50 +11,141 @@ namespace LeagueSharp.CommonEx.Core.UI
     /// <summary>
     ///     Menu Interface class, used to control the menu.
     /// </summary>
-    public static class MenuInterface
+    public class MenuInterface
     {
-        /// <summary>
-        ///     Root Menu(Components), contains the list of the menu that are attached to the root.
-        /// </summary>
-        public static readonly List<AMenuComponent> RootMenuComponents = new List<AMenuComponent>();
+        public static DirectoryInfo ConfigFolder =
+            Directory.CreateDirectory(
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "LS" + Environment.UserName.GetHashCode().ToString("X"), "MenuConfigEx"));
 
-        /// <summary>
-        ///     Sends a drawing request towards the menu, happens on an OnDraw present.
-        /// </summary>
-        public static void OnDraw()
+        private static readonly MenuInterface instance = new MenuInterface();
+
+        private readonly List<Menu> _menus = new List<Menu>();
+
+        private bool _menuVisible;
+
+        private MenuInterface()
         {
-            SkinIndex.Skin[Configuration.GetValidMenuSkin()].OnDraw(MenuSettings.Position);
+            MenuVisible = true;
+            Game.OnUpdate += Game_OnUpdate;
+            Drawing.OnEndScene += Drawing_OnDraw;
+            Game.OnWndProc += Game_OnWndProc;
+            AppDomain.CurrentDomain.DomainUnload += CurrentDomainDomainUnload;
         }
 
-        /// <summary>
-        ///     Sends a windows process message towards the menu.
-        /// </summary>
-        /// <param name="keys"></param>
-        public static void OnWndProc(WindowsKeys keys)
+        public bool MenuVisible
         {
-            foreach (var component in RootMenuComponents)
+            get { return _menuVisible || ForcedOpen; }
+            set { _menuVisible = value; }
+        }
+
+        public List<Menu> Menus
+        {
+            get { return _menus; }
+        }
+
+        public static MenuInterface Instance
+        {
+            get { return instance; }
+        }
+
+        public bool ForcedOpen { get; set; }
+
+        private void CurrentDomainDomainUnload(object sender, EventArgs args)
+        {
+            Console.WriteLine("UNLOADING");
+            foreach (Menu menu in _menus)
+            {
+                try
+                {
+                    menu.Save();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+        }
+
+        public event EventHandler OnOpen;
+
+        protected virtual void FireOnOpen()
+        {
+            EventHandler handler = OnOpen;
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+
+        public event EventHandler OnClose;
+
+        protected virtual void FireOnClose()
+        {
+            EventHandler handler = OnClose;
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+
+        private void Game_OnWndProc(WndEventArgs args)
+        {
+            var keys = new WindowsKeys(args);
+            if (keys.SingleKey == Keys.ShiftKey)
+            {
+                bool value = keys.Msg == WindowsMessages.KEYDOWN;
+
+                MenuVisible = value;
+
+                if (value)
+                {
+                    FireOnOpen();
+                }
+                else
+                {
+                    FireOnClose();
+                }
+            }
+            else if (keys.SingleKey == Keys.CapsLock && keys.Msg == WindowsMessages.KEYDOWN)
+            {
+                MenuVisible = !MenuVisible;
+            }
+
+            foreach (Menu component in _menus)
             {
                 component.OnWndProc(keys);
             }
         }
 
-        /// <summary>
-        ///     Event is fired when the menu container gets opened.
-        /// </summary>
-        public static void OnMenuOpen(AMenuComponent component)
+        private void Game_OnUpdate(EventArgs args)
         {
-            if (component != null)
+            //nothing
+        }
+
+        private void Drawing_OnDraw(EventArgs args)
+        {
+            if (MenuVisible)
             {
-                foreach (var rootComponent in RootMenuComponents.Where(c => !c.Equals(component)))
-                {
-                    rootComponent.Toggled = false;
-                }
+                ThemeManager.Current.OnDraw(MenuSettings.Position);
             }
         }
 
-        /// <summary>
-        ///     Event is fired when the menu container gets closed.
-        /// </summary>
-        public static void OnMenuClose(AMenuComponent component) {}
+        public void Add(Menu menu)
+        {
+            if (!_menus.Contains(menu))
+            {
+                _menus.Add(menu);
+                try
+                {
+                    menu.Load();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+        }
     }
 }

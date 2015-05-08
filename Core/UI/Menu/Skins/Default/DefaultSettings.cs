@@ -38,6 +38,8 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
         /// </summary>
         public static ColorBGRA ContainerSeperatorColor = Color.White;
 
+        public static ColorBGRA HoverColor = new ColorBGRA(255, 255, 255, 50);
+
         /// <summary>
         ///     Container Text Addition Offset.
         /// </summary>
@@ -46,7 +48,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
         /// <summary>
         ///     Container Text Marking Offset.
         /// </summary>
-        public static float ContainerTextMarkOffset = -5f;
+        public static float ContainerTextMarkOffset = -8f;
 
         /// <summary>
         ///     Single Container Line.
@@ -56,6 +58,13 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
             Antialias = false,
             GLLines = true,
             Width = 200f
+        };
+
+        public static Line HoverLine = new Line(Drawing.Direct3DDevice)
+        {
+            Antialias = false,
+            GLLines = true,
+            Width = ContainerHeight
         };
 
         /// <summary>
@@ -112,7 +121,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
             set
             {
                 _font = value;
-                ContainerTextMarkWidth = value.MeasureText(null, ">>", 0).Width;
+                ContainerTextMarkWidth = value.MeasureText(null, "»", 0).Width;
             }
         }
     }

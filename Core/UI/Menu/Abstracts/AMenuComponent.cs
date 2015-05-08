@@ -1,8 +1,9 @@
 ﻿#region
 
 using System;
-using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
+using System.Reflection;
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
 
@@ -15,32 +16,24 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
     /// </summary>
     public abstract class AMenuComponent : DynamicObject
     {
-        /// <summary>
-        ///     Menu Component Sub-Components.
-        /// </summary>
-        public readonly IDictionary<string, AMenuComponent> Components = new Dictionary<string, AMenuComponent>();
-
-        /// <summary>
-        ///     Local menu root component.
-        /// </summary>
-        private AMenuComponent _root;
+        private int _menuWidthCached;
 
         /// <summary>
         ///     Abstract Constructor
         /// </summary>
         /// <param name="name">Menu Name</param>
         /// <param name="displayName">Menu Display Name</param>
-        protected AMenuComponent(string name, string displayName)
+        protected AMenuComponent(string name, string displayName, string uniqueString)
         {
-            Id = Guid.NewGuid().ToString("N");
+            UniqueString = uniqueString;
+            AssemblyName = Assembly.GetCallingAssembly().GetName().Name;
             Name = name;
             DisplayName = displayName;
         }
 
-        /// <summary>
-        ///     Menu Component Id
-        /// </summary>
-        public string Id { get; private set; }
+        public string AssemblyName { get; private set; }
+
+        public string UniqueString { get; set; }
 
         /// <summary>
         ///     Menu Component Name
@@ -55,23 +48,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         /// <summary>
         ///     Parent Menu Component.
         /// </summary>
-        public AMenuComponent Parent { get; set; }
-
-        /// <summary>
-        ///     Root Menu Component Resolver.
-        /// </summary>
-        public AMenuComponent Root
-        {
-            get
-            {
-                if (_root == null && Parent != null)
-                {
-                    return Parent.Root;
-                }
-                return _root;
-            }
-            set { _root = value; }
-        }
+        public Menu Parent { get; set; }
 
         /// <summary>
         ///     Component Sub Object accessability.
@@ -86,11 +63,6 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         public abstract bool Visible { get; set; }
 
         /// <summary>
-        ///     Component Enable Flag.
-        /// </summary>
-        public abstract bool Enabled { get; set; }
-
-        /// <summary>
         ///     Component Toggled Flag.
         /// </summary>
         public abstract bool Toggled { get; set; }
@@ -99,6 +71,48 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         ///     Component Position
         /// </summary>
         public abstract Vector2 Position { get; set; }
+
+        public abstract string Path { get; }
+
+        public abstract int Width { get; }
+
+        public int MenuWidth
+        {
+            get
+            {
+                if (_menuWidthCached == 0)
+                {
+                    if (Parent != null)
+                    {
+                        _menuWidthCached = Parent.Components.Max(comp => comp.Value.Width);
+                    }
+                    else
+                    {
+                        _menuWidthCached = MenuInterface.Instance.Menus.Max(menu => menu.Width);
+                    }
+                }
+                return _menuWidthCached;
+            }
+            set { _menuWidthCached = value; }
+        }
+
+        public void ResetWidth()
+        {
+            if (Parent != null)
+            {
+                foreach (var comp in Parent.Components)
+                {
+                    comp.Value.MenuWidth = 0;
+                }
+            }
+            else
+            {
+                foreach (Menu menu in MenuInterface.Instance.Menus)
+                {
+                    menu.MenuWidth = 0;
+                }
+            }
+        }
 
         /// <summary>
         ///     Component Drawing callback.
@@ -116,6 +130,26 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         /// </summary>
         public abstract void OnUpdate();
 
+        public abstract void Save();
+
+        public abstract void Load();
+
+
+        /// <summary>
+        ///     Get the value of a child with a certain name.
+        /// </summary>
+        /// <typeparam name="T">The type of MenuValue of this child.</typeparam>
+        /// <param name="name">The name of the child.</param>
+        /// <returns>The value that is attached to this Child.</returns>
+        public abstract T GetValue<T>(string name) where T : AMenuValue;
+
+        /// <summary>
+        ///     Get the value of this component.
+        /// </summary>
+        /// <typeparam name="T">The type of MenuValue of this component.</typeparam>
+        /// <returns>The value that is attached to this component.</returns>
+        public abstract T GetValue<T>() where T : AMenuValue;
+
         /// <summary>
         ///     Dynamic Object Member Resolver.
         /// </summary>
@@ -126,7 +160,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         {
             try
             {
-                var comp = this[binder.Name];
+                AMenuComponent comp = this[binder.Name];
                 var item = comp as MenuItem;
                 result = item != null ? item.ValueAsObject : comp;
                 return true;
