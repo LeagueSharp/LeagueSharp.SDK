@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using LeagueSharp.CommonEx.Core.Enumerations;
+using LeagueSharp.CommonEx.Core.Utils;
 
 namespace LeagueSharp.CommonEx.Core.Signals
 {

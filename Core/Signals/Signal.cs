@@ -14,7 +14,7 @@ namespace LeagueSharp.CommonEx.Core.Signals
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="e">RaisedArgs</param>
-        public delegate void OnEnabledStatusChangedDelegate(object sender, EnabledStatusChangedArgs e);
+        public delegate void OnEnabledStatusChangedDelegate(object sender, Signal.EnabledStatusChangedArgs e);
 
         /// <summary>
         ///     Raised delegate.
@@ -36,11 +36,6 @@ namespace LeagueSharp.CommonEx.Core.Signals
         /// <param name="signal">The signal.</param>
         /// <returns>True if the signal should be waved.</returns>
         public delegate bool SignalWaverDelegate(Signal signal);
-
-        /// <summary>
-        ///     Whether or not to check expirations.
-        /// </summary>
-        private bool _checkExpiration;
 
         /// <summary>
         ///     Whether we already called the expire event.
@@ -137,6 +132,7 @@ namespace LeagueSharp.CommonEx.Core.Signals
 
             var signal = new Signal(onRaised, signalWaver, expiration, defaultProperties ?? new Dictionary<string, object>());
             SignalManager.AddSignal(signal);
+            signal.Enabled = true;
 
             return signal;
         }
@@ -160,14 +156,6 @@ namespace LeagueSharp.CommonEx.Core.Signals
         ///     Occurs when <see cref="Enabled" /> is changed.
         /// </summary>
         public event OnEnabledStatusChangedDelegate OnEnabledStatusChanged;
-
-        /// <summary>
-        ///     Suspends the expiration checking.
-        /// </summary>
-        public void SuspendExpirationChecking()
-        {
-            _checkExpiration = false;
-        }
 
         /// <summary>
         ///     Raises the signal.
@@ -274,7 +262,7 @@ namespace LeagueSharp.CommonEx.Core.Signals
         /// <param name="reason">The reason.</param>
         internal void TriggerSignal(object sender, string reason)
         {
-            if (OnRaised == null || (!Expired && !_checkExpiration) || Raised)
+            if (OnRaised == null || Expired || Raised)
             {
                 return;
             }

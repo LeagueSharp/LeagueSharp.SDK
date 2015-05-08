@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.Signals;
 
 #endregion
@@ -78,7 +79,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
             {
                 var delayActionItem = (DelayActionItem) signal.Properties["DelayActionItem"];
                 return Variables.TickCount >= delayActionItem.Time;
-            }, default(DateTimeOffset), new Dictionary<string, object> {{"DelayActionItem", item}});
+            }, default(DateTimeOffset), new Dictionary<string, object> {{ "DelayActionItem", item}});
         }
     }
 
