@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
@@ -56,6 +57,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         public MenuItem(string name, string displayName, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
+            AssemblyName = Assembly.GetCallingAssembly().GetName().Name;
             Value = MenuFactory.Create<T>();
         }
 
