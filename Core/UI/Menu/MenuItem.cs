@@ -57,7 +57,6 @@ namespace LeagueSharp.CommonEx.Core.UI
         public MenuItem(string name, string displayName, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
-            AssemblyName = Assembly.GetCallingAssembly().GetName().Name;
             Value = MenuFactory.Create<T>();
         }
 

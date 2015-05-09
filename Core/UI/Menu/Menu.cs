@@ -39,7 +39,6 @@ namespace LeagueSharp.CommonEx.Core.UI
         public Menu(string name, string displayName, bool root = false, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
-            AssemblyName = Assembly.GetCallingAssembly().GetName().Name;
             Root = root;
         }
 

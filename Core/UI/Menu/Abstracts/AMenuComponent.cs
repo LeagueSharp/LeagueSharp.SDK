@@ -26,6 +26,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         /// <param name="uniqueString">Unique string (ID)</param>
         protected AMenuComponent(string name, string displayName, string uniqueString)
         {
+            AssemblyName = Assembly.GetEntryAssembly().GetName().Name;
             UniqueString = uniqueString;
             Name = name;
             DisplayName = displayName;

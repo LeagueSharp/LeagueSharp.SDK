@@ -102,9 +102,58 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
 
             for (var i = 0; i < menuManager.Menus.Count; ++i)
             {
-                menuManager.Menus[i].OnDraw(
-                    new Vector2(position.X, position.Y + i * DefaultSettings.ContainerHeight), i);
+                var childPos = new Vector2(position.X, position.Y + i * DefaultSettings.ContainerHeight);
+
+                if (i < menuManager.Menus.Count - 1)
+                {
+                    DefaultSettings.ContainerSeparatorLine.Begin();
+                    DefaultSettings.ContainerSeparatorLine.Draw(
+                        new[]
+                                {
+                                    new Vector2(childPos.X, childPos.Y + DefaultSettings.ContainerHeight),
+                                    new Vector2(
+                                        childPos.X + menuManager.Menus[i].MenuWidth,
+                                        childPos.Y + DefaultSettings.ContainerHeight)
+                                },
+                        DefaultSettings.ContainerSeparatorColor);
+                    DefaultSettings.ContainerSeparatorLine.End();
+                }
+
+                menuManager.Menus[i].OnDraw(childPos, i);
             }
+
+            Line contour = new Line(Drawing.Direct3DDevice) { GLLines = true, Width = 1 };
+            contour.Begin();
+            contour.Draw(
+                new[]
+                    {
+                        new Vector2(position.X, position.Y),
+                        new Vector2(position.X + width, position.Y)
+                    },
+                Color.Black);
+            contour.Draw(
+                new[]
+                    {
+                        new Vector2(position.X, position.Y + height),
+                        new Vector2(position.X + width, position.Y + height)
+                    },
+                Color.Black);
+            contour.Draw(
+                new[]
+                    {
+                        new Vector2(position.X, position.Y),
+                        new Vector2(position.X, position.Y + height)
+                    },
+                Color.Black);
+            contour.Draw(
+                new[]
+                    {
+                        new Vector2(position.X + width, position.Y),
+                        new Vector2(position.X + width, position.Y + height)
+                    },
+                Color.Black);
+            contour.End();
+            contour.Dispose();
         }
 
         /// <summary>
@@ -221,6 +270,39 @@ namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
                         childComponent.OnDraw(childPos, i);
                     }
                 }
+
+                Line contour = new Line(Drawing.Direct3DDevice) { GLLines = true, Width = 1 };
+                contour.Begin();
+                contour.Draw(
+                    new[]
+                    {
+                        new Vector2(position.X + menuComponent.MenuWidth, position.Y),
+                        new Vector2(position.X + menuComponent.MenuWidth + width, position.Y)
+                    },
+                    Color.Black);
+                contour.Draw(
+                    new[]
+                    {
+                        new Vector2(position.X + menuComponent.MenuWidth, position.Y + height),
+                        new Vector2(position.X + menuComponent.MenuWidth + width, position.Y + height)
+                    },
+                    Color.Black);
+                contour.Draw(
+                    new[]
+                    {
+                        new Vector2(position.X + menuComponent.MenuWidth, position.Y),
+                        new Vector2(position.X + menuComponent.MenuWidth, position.Y + height)
+                    },
+                    Color.Black);
+                contour.Draw(
+                    new[]
+                    {
+                        new Vector2(position.X + menuComponent.MenuWidth + width, position.Y),
+                        new Vector2(position.X + menuComponent.MenuWidth + width, position.Y + height)
+                    },
+                    Color.Black);
+                contour.End();
+                contour.Dispose();
             }
         }
 
