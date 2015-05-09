@@ -77,6 +77,11 @@ namespace LeagueSharp.CommonEx.Core.UI
         }
 
         /// <summary>
+        ///     Check if settings are loaded.
+        /// </summary>
+        public bool SettingsLoaded { get; set; }
+
+        /// <summary>
         ///     Component Dynamic Object accessability.
         /// </summary>
         /// <param name="name">Child Menu Component name</param>
@@ -250,7 +255,7 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// </summary>
         public override void Load()
         {
-            if (File.Exists(Path) && typeof(T).IsSerializable)
+            if (!SettingsLoaded && File.Exists(Path) && typeof(T).IsSerializable)
             {
                 var newValue = Deserialize<T>(File.ReadAllBytes(Path));
                 if (Value != null)
@@ -261,6 +266,7 @@ namespace LeagueSharp.CommonEx.Core.UI
                 {
                     Value = newValue;
                 }
+                SettingsLoaded = true;
             }
         }
     }

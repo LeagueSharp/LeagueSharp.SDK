@@ -63,6 +63,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         public Menu Parent { get; set; }
 
         /// <summary>
+        ///     True if the component is on the uppermost level.
+        /// </summary>
+        public bool Root { get; protected set; }
+
+        /// <summary>
         ///     Component Sub Object accessability.
         /// </summary>
         /// <param name="name">Child Menu Component name</param>

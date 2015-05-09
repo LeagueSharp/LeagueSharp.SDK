@@ -24,7 +24,7 @@ namespace LeagueSharp.CommonEx.Core
             Logging.LogAllExceptions();
 
             // Create L# menu
-            Variables.LeagueSharpMenu = new Menu("LeagueSharp", "LeagueSharp").Attach();
+            Variables.LeagueSharpMenu = new Menu("LeagueSharp", "LeagueSharp", true).Attach();
 
             // Load the orbwalker
             Orbwalker.BootstrapMenu();

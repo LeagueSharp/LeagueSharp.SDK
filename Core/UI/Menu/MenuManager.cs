@@ -198,7 +198,7 @@ namespace LeagueSharp.CommonEx.Core.UI
                 _menus.Add(menu);
                 try
                 {
-                    menu.Load();
+                    //menu.Load();
                 }
                 catch (Exception e)
                 {

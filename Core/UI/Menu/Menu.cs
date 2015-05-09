@@ -34,8 +34,13 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// </summary>
         /// <param name="name">Menu Name</param>
         /// <param name="displayName">Menu Display Name</param>
+        /// <param name="root">Root component</param>
         /// <param name="uniqueString">Unique string</param>
-        public Menu(string name, string displayName, string uniqueString = "") : base(name, displayName, uniqueString) {}
+        public Menu(string name, string displayName, bool root = false, string uniqueString = "")
+            : base(name, displayName, uniqueString)
+        {
+            Root = root;
+        }
 
         /// <summary>
         ///     Component Sub Object accessability.
@@ -140,6 +145,17 @@ namespace LeagueSharp.CommonEx.Core.UI
             {
                 component.Parent = this;
                 Components[component.Name] = component;
+
+                AMenuComponent comp = this;
+                while (comp.Parent != null)
+                {
+                    comp = comp.Parent;
+                }
+
+                if (comp.Root)
+                {
+                    comp.Load();
+                }
             }
             else
             {
@@ -285,14 +301,14 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <returns>Menu Instance</returns>
         public Menu Attach()
         {
-            if (Parent == null)
+            if (Parent == null && Root)
             {
                 AssemblyName = Assembly.GetCallingAssembly().GetName().Name;
                 MenuManager.Instance.Add(this);
             }
             else
             {
-                throw new Exception("You should not add a Menu that already has a parent.");
+                throw new Exception("You should not add a Menu that already has a parent or is not a Root component.");
             }
             return this;
         }
