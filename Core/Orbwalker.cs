@@ -225,7 +225,7 @@ namespace LeagueSharp.CommonEx.Core
         /// </summary>
         /// <param name="target">Type of <see cref="AttackableUnit" /></param>
         /// <returns></returns>
-        public static bool CanGetOrbwalked(this AttackableUnit target)
+        public static bool CanGetOrbwalked(AttackableUnit target)
         {
             return target != null && target.IsValidTarget() && target.InAutoAttackRange();
         }
@@ -304,7 +304,7 @@ namespace LeagueSharp.CommonEx.Core
         /// <param name="target"></param>
         private void PerformModeCombo(AttackableUnit target = null)
         {
-            if (CanAttack() && target.CanGetOrbwalked())
+            if (CanAttack() && CanGetOrbwalked(target))
             {
                 Attack(target);
             }
@@ -316,7 +316,7 @@ namespace LeagueSharp.CommonEx.Core
         /// <param name="target"><see cref="AttackableUnit" /> Optional target (usually <see cref="Obj_AI_Hero" />)</param>
         private void PerformModeLaneClear(AttackableUnit target = null)
         {
-            if (target.CanGetOrbwalked() && !ShouldWait())
+            if (CanGetOrbwalked(target) && !ShouldWait())
             {
                 Attack(target);
                 return;
@@ -336,7 +336,7 @@ namespace LeagueSharp.CommonEx.Core
         /// <param name="target"><see cref="AttackableUnit" /> Optional target (usually <see cref="Obj_AI_Hero" />)</param>
         private void PerformModeLaneFreeze(AttackableUnit target = null)
         {
-            if (target.CanGetOrbwalked() && !ShouldWait())
+            if (CanGetOrbwalked(target) && !ShouldWait())
             {
                 Attack(target);
                 return;
@@ -369,7 +369,7 @@ namespace LeagueSharp.CommonEx.Core
         /// <param name="target"><see cref="AttackableUnit" /> Optional target (usually <see cref="Obj_AI_Hero" />)</param>
         private void PerformModeMixed(AttackableUnit target = null)
         {
-            if (target.CanGetOrbwalked() && !ShouldWait())
+            if (CanGetOrbwalked(target) && !ShouldWait())
             {
                 Attack(target);
                 return;

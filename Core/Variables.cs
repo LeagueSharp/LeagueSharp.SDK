@@ -1,4 +1,6 @@
-﻿namespace LeagueSharp.CommonEx.Core
+﻿using LeagueSharp.CommonEx.Core.UI;
+
+namespace LeagueSharp.CommonEx.Core
 {
     /// <summary>
     ///     Class that contains helpful variables.
@@ -12,5 +14,13 @@
         {
             get { return (int) (Game.ClockTime * 1000); }
         }
+
+        /// <summary>
+        ///     Gets or sets the LeagueSharp menu.
+        /// </summary>
+        /// <value>
+        ///     The LeagueSharp menu.
+        /// </value>
+        internal static Menu LeagueSharpMenu { get; set; }
     }
 }

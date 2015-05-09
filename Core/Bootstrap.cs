@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.UI;
-using LeagueSharp.CommonEx.Core.UI.Values;
 using LeagueSharp.CommonEx.Core.Utils;
 using LeagueSharp.CommonEx.Core.Wrappers;
 
@@ -23,6 +22,9 @@ namespace LeagueSharp.CommonEx.Core
 
             // Log all of the exceptions
             Logging.LogAllExceptions();
+
+            // Create L# menu
+            Variables.LeagueSharpMenu = new Menu("LeagueSharp", "LeagueSharp").Attach();
         }
     }
 }
