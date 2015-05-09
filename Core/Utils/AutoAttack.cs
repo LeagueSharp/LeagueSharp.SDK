@@ -121,7 +121,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <returns>Returns if the hero can't cancel his AA</returns>
         public static bool CanCancelAutoAttack(this Obj_AI_Hero hero)
         {
-            return NoCancelChamps.Contains(hero.ChampionName);
+            return !NoCancelChamps.Contains(hero.ChampionName);
         }
     }
 }
