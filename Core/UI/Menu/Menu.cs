@@ -18,6 +18,13 @@ using SharpDX;
 namespace LeagueSharp.CommonEx.Core.UI
 {
     /// <summary>
+    ///  Menu Value Changed delegate
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="args"></param>
+    public delegate void OnMenuValueChanged(object sender, OnMenuValueChangedEventArgs args);
+
+    /// <summary>
     ///     Menu User Interface.
     /// </summary>
     public class Menu : AMenuComponent
@@ -93,6 +100,11 @@ namespace LeagueSharp.CommonEx.Core.UI
                 }
             }
         }
+
+        /// <summary>
+        /// Occurs when a value is changed.
+        /// </summary>
+        public event OnMenuValueChanged MenuValueChanged;
 
         /// <summary>
         ///     Menu Position
@@ -173,6 +185,14 @@ namespace LeagueSharp.CommonEx.Core.UI
             {
                 component.Parent = null;
                 Components.Remove(component.Name);
+            }
+        }
+
+        internal void FireEvent(object sender)
+        {
+            if (MenuValueChanged != null)
+            {
+                MenuValueChanged(sender, new OnMenuValueChangedEventArgs(this));
             }
         }
 

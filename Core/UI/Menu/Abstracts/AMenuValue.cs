@@ -14,17 +14,11 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
     [Serializable]
     public abstract class AMenuValue
     {
-        /// <summary>
-        /// Delegate for <see cref="ValueChanged" />
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="args">The <see cref="OnValueChangedEventArgs" /> instance containing the event data.</param>
-        public delegate void OnValueChanged(object sender, OnValueChangedEventArgs args);
 
         /// <summary>
         ///     Value Container.
         /// </summary>
-        public AMenuComponent Container { get; set; }
+        public MenuItem Container { get; set; }
 
         /// <summary>
         ///     Value Width.
@@ -35,23 +29,6 @@ namespace LeagueSharp.CommonEx.Core.UI.Abstracts
         ///     Menu Value Position.
         /// </summary>
         public abstract Vector2 Position { get; set; }
-
-        /// <summary>
-        /// Occurs when a value is changed.
-        /// </summary>
-        public event OnValueChanged ValueChanged;
-
-        /// <summary>
-        ///     Event Handler
-        /// </summary>
-        /// <param name="value"></param>
-        public void FireEvent(AMenuValue value)
-        {
-            if (ValueChanged != null)
-            {
-                ValueChanged(this, new OnValueChangedEventArgs(value));
-            }
-        }
 
         /// <summary>
         ///     Drawing callback.

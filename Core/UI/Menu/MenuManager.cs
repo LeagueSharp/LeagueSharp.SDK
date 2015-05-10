@@ -7,6 +7,7 @@ using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.UI.Skins;
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
+using SharpDX.Direct3D9;
 
 namespace LeagueSharp.CommonEx.Core.UI
 {
@@ -33,6 +34,7 @@ namespace LeagueSharp.CommonEx.Core.UI
 
         private MenuManager()
         {
+            Sprite = new Sprite(Drawing.Direct3DDevice);
             MenuVisible = true;
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnEndScene += Drawing_OnDraw;
@@ -53,6 +55,11 @@ namespace LeagueSharp.CommonEx.Core.UI
         {
             get { return _menus.First(menu => menu.Name.Equals(name)); }
         }
+
+        /// <summary>
+        /// The Sprite used to draw the components of the menu on.
+        /// </summary>
+        public Sprite Sprite { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the menu is visible.

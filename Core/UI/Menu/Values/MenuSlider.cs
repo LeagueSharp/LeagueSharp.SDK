@@ -153,7 +153,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
             if (newValue != Value)
             {
                 Value = newValue;
-                FireEvent(this);
+                Container.FireEvent();
             }
            
         }

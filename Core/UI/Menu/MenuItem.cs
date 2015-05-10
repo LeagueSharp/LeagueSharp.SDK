@@ -14,6 +14,7 @@ using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.UI
 {
+    
     /// <summary>
     ///     Abstract build of a Menu Item.
     /// </summary>
@@ -32,6 +33,12 @@ namespace LeagueSharp.CommonEx.Core.UI
         ///     Returns the item value as a generic object.
         /// </summary>
         public abstract object ValueAsObject { get; }
+
+        /// <summary>
+        /// Event handler
+        /// </summary>
+        public abstract void FireEvent();
+
     }
 
 
@@ -43,6 +50,14 @@ namespace LeagueSharp.CommonEx.Core.UI
     /// </typeparam>
     public class MenuItem<T> : MenuItem where T : AMenuValue
     {
+        /// <summary>
+        /// Delegate for <see cref="ValueChanged" />
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The OnValueChangedEventArgs instance containing the event data.</param>
+        public delegate void OnValueChanged(object sender, OnValueChangedEventArgs<T> args);
+        
+        
         /// <summary>
         ///     Local Value of the MenuItem Type.
         /// </summary>
@@ -93,6 +108,11 @@ namespace LeagueSharp.CommonEx.Core.UI
         }
 
         /// <summary>
+        /// Occurs when a value is changed.
+        /// </summary>
+        public event OnValueChanged ValueChanged;
+
+        /// <summary>
         ///     Returns the item visibility.
         /// </summary>
         public override sealed bool Visible { get; set; }
@@ -113,6 +133,21 @@ namespace LeagueSharp.CommonEx.Core.UI
         public override object ValueAsObject
         {
             get { return Value; }
+        }
+
+        /// <summary>
+        /// Event Handler
+        /// </summary>
+        public override void FireEvent()
+        {
+            if (Parent != null)
+            {
+                Parent.FireEvent(this);
+            }
+            if (ValueChanged != null)
+            {
+                ValueChanged(this, new OnValueChangedEventArgs<T>(Value));
+            }
         }
 
         /// <summary>

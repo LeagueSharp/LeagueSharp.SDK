@@ -150,7 +150,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
                         if (args.Key == Key && Type == KeyBindType.Press)
                         {
                             Active = true;
-                            FireEvent(this);
+                            Container.FireEvent();
                         }
                         break;
                     case WindowsMessages.KEYUP:
@@ -160,17 +160,16 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
                             args.Process = false;
                             Interacting = false;
                             Container.ResetWidth();
-                            FireEvent(this);
                         }
                         else if (args.Key == Key && Type == KeyBindType.Press)
                         {
                             Active = false;
-                            FireEvent(this);
+                            Container.FireEvent();
                         }
                         else if (args.Key == Key && Type == KeyBindType.Toggle)
                         {
                             Active = !Active;
-                            FireEvent(this);
+                            Container.FireEvent();
                         }
                         break;
                     case WindowsMessages.LBUTTONDOWN:

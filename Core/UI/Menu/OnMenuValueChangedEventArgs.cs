@@ -6,20 +6,20 @@ namespace LeagueSharp.CommonEx.Core.UI
     /// <summary>
     ///     Arguements for the OnValueChanged event.
     /// </summary>
-    public class OnValueChangedEventArgs<T> : EventArgs where T:AMenuValue
+    public class OnMenuValueChangedEventArgs
     {
         /// <summary>
         ///  The new Value.
         /// </summary>
-        public T Value { get; private set; }
+        public Menu Menu { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the OnValueChangedEventArgs class.
+        /// Initializes a new instance of the <see cref="OnMenuValueChangedEventArgs"/> class.
         /// </summary>
-        /// <param name="value">The value.</param>
-        public OnValueChangedEventArgs(T value)
+        /// <param name="menu">The menu.</param>
+        public OnMenuValueChangedEventArgs(Menu menu)
         {
-            Value = value;
+            Menu = menu;
         }
     }
 }

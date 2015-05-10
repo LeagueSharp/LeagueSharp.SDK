@@ -104,41 +104,28 @@ namespace LeagueSharp.CommonEx.Core
 
             #region Menu Events
 
-            _menu["Combo"].GetValue<MenuKeyBind>().ValueChanged +=
-                (sender, args) =>
+            _menu.MenuValueChanged += delegate(object sender, OnMenuValueChangedEventArgs args)
+            {
+                if (args.Menu["Combo"].GetValue<MenuKeyBind>().Active)
                 {
-                    if (args.GetValue<MenuKeyBind>().Active)
-                    {
-                        _activeMode = OrbwalkerMode.Combo;
-                    }
-                };
+                    _activeMode = OrbwalkerMode.Combo;
+                }
 
-            _menu["Harass"].GetValue<MenuKeyBind>().ValueChanged +=
-                (sender, args) =>
+                if (args.Menu["Harass"].GetValue<MenuKeyBind>().Active)
                 {
-                    if (args.GetValue<MenuKeyBind>().Active)
-                    {
-                        _activeMode = OrbwalkerMode.Mixed;
-                    }
-                };
+                    _activeMode = OrbwalkerMode.Mixed;
+                }
 
-            _menu["LastHit"].GetValue<MenuKeyBind>().ValueChanged +=
-                (sender, args) =>
-                 {
-                    if (args.GetValue<MenuKeyBind>().Active)
-                    {
-                        _activeMode = OrbwalkerMode.LastHit;
-                    }
-                };
-
-            _menu["WaveClear"].GetValue<MenuKeyBind>().ValueChanged +=
-                (sender, args) =>
+                if (args.Menu["LastHit"].GetValue<MenuKeyBind>().Active)
                 {
-                    if (args.GetValue<MenuKeyBind>().Active)
-                    {
-                        _activeMode = OrbwalkerMode.LaneClear;
-                    }
-                };
+                    _activeMode = OrbwalkerMode.LastHit;
+                }
+
+                if (args.Menu["WaveClear"].GetValue<MenuKeyBind>().Active)
+                {
+                    _activeMode = OrbwalkerMode.LaneClear;
+                }
+            };
 
             #endregion
 

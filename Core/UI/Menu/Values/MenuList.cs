@@ -184,6 +184,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
                 if (args.Msg == WindowsMessages.LBUTTONDOWN)
                 {
                     Index = (Index + 1) % Values.Count;
+                    Container.FireEvent();
                 }
             }
             else
@@ -203,6 +204,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
                     else
                     {
                         Index = (Index - 1) % Values.Count;
+                        Container.FireEvent();
                     }
                 }
             }
