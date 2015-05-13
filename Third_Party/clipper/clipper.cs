@@ -1,76 +1,88 @@
-﻿/*******************************************************************************
-*                                                                              *
-* Author    :  Angus Johnson                                                   *
-* Version   :  6.2.1                                                           *
-* Date      :  31 October 2014                                                 *
-* Website   :  http://www.angusj.com                                           *
-* Copyright :  Angus Johnson 2010-2014                                         *
-*                                                                              *
-* License:                                                                     *
-* Use, modification & distribution is subject to Boost Software License Ver 1. *
-* http://www.boost.org/LICENSE_1_0.txt                                         *
-*                                                                              *
-* Attributions:                                                                *
-* The code in this library is an extension of Bala Vatti's clipping algorithm: *
-* "A generic solution to polygon clipping"                                     *
-* Communications of the ACM, Vol 35, Issue 7 (July 1992) pp 56-63.             *
-* http://portal.acm.org/citation.cfm?id=129906                                 *
-*                                                                              *
-* Computer graphics and geometric modeling: implementation and algorithms      *
-* By Max K. Agoston                                                            *
-* Springer; 1 edition (January 4, 2005)                                        *
-* http://books.google.com/books?q=vatti+clipping+agoston                       *
-*                                                                              *
-* See also:                                                                    *
-* "Polygon Offsetting by Computing Winding Numbers"                            *
-* Paper no. DETC2005-85513 pp. 565-575                                         *
-* ASME 2005 International Design Engineering Technical Conferences             *
-* and Computers and Information in Engineering Conference (IDETC/CIE2005)      *
-* September 24-28, 2005 , Long Beach, California, USA                          *
-* http://www.me.berkeley.edu/~mcmains/pubs/DAC05OffsetPolygon.pdf              *
-*                                                                              *
-*******************************************************************************/
-
-/*******************************************************************************
-*                                                                              *
-* This is a translation of the Delphi Clipper library and the naming style     *
-* used has retained a Delphi flavour.                                          *
-*                                                                              *
-*******************************************************************************/
-
-//use_int32: When enabled 32bit ints are used instead of 64bit ints. This
-//improve performance but coordinate values are limited to the range +/- 46340
-//#define use_int32
-
-//use_xyz: adds a Z member to IntPoint. Adds a minor cost to performance.
-//#define use_xyz
-
-//use_lines: Enables open path clipping. Adds a very minor cost to performance.
-//#define use_lines
-
-//use_deprecated: Enables temporary support for the obsolete functions
-//#define use_deprecated
-
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Clipper.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Author    :  Angus Johnson
+//   Version   :  6.2.1
+//   Date      :  31 October 2014
+//   Website   :  http://www.angusj.com
+//   Copyright :  Angus Johnson 2010-2014
+//   
+//   License:
+//   Use, modification & distribution is subject to Boost Software License Ver 1.
+//   http://www.boost.org/LICENSE_1_0.txt
+//   
+//   Attributions:                                                                
+//   The code in this library is an extension of Bala Vatti's clipping algorithm:
+//   "A generic solution to polygon clipping"
+//   Communications of the ACM, Vol 35, Issue 7 (July 1992) pp 56-63.
+//   http://portal.acm.org/citation.cfm?id=12990
+//   
+//   Computer graphics and geometric modeling: implementation and algorithms
+//   By Max K. Agoston
+//   Springer; 1 edition (January 4, 2005)
+//   http://books.google.com/books?q=vatti+clipping+agoston
+//   
+//   See also:
+//   "Polygon Offsetting by Computing Winding Numbers"
+//   Paper no. DETC2005-85513 pp. 565-575
+//   ASME 2005 International Design Engineering Technical Conferences
+//   
+//   and Computers and Information in Engineering Conference (IDETC/CIE2005)
+//   September 24-28, 2005 , Long Beach, California, USA
+//   http://www.me.berkeley.edu/~mcmains/pubs/DAC05OffsetPolygon.pdf
+//
+//   Additional code usage:
+//   use_int32: When enabled 32bit ints are used instead of 64bit ints. This
+//   improve performance but coordinate values are limited to the range +/- 46340
+//   #define use_int32
+//   
+//   use_xyz: adds a Z member to IntPoint. Adds a minor cost to performance.
+//   #define use_xyz
+//   
+//   use_lines: Enables open path clipping. Adds a very minor cost to performance.
+//   #define use_lines
+//   
+//   use_deprecated: Enables temporary support for the obsolete functions
+//   #define use_deprecated
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.CommonEx.Clipper
 {
 #if use_int32
     using cInt = Int32;
 #else
-    using cInt = Int64;
 #endif
-    using Path = List<IntPoint>;
-    using Paths = List<List<IntPoint>>;
+
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using cInt = System.Int64;
+    using Path = System.Collections.Generic.List<IntPoint>;
+    using Paths = System.Collections.Generic.List<System.Collections.Generic.List<IntPoint>>;
 
     /// <summary>
     ///     Points that are made out of doubles.
     /// </summary>
     public struct DoublePoint
     {
+        #region Fields
+
         /// <summary>
         ///     The x
         /// </summary>
@@ -81,6 +93,10 @@ namespace LeagueSharp.CommonEx.Clipper
         /// </summary>
         public double Y;
 
+        #endregion
+
+        #region Constructors and Destructors
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="DoublePoint" /> struct.
         /// </summary>
@@ -88,8 +104,8 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <param name="y">The y.</param>
         public DoublePoint(double x = 0, double y = 0)
         {
-            X = x;
-            Y = y;
+            this.X = x;
+            this.Y = y;
         }
 
         /// <summary>
@@ -98,8 +114,8 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <param name="dp">The doublepoint.</param>
         public DoublePoint(DoublePoint dp)
         {
-            X = dp.X;
-            Y = dp.Y;
+            this.X = dp.X;
+            this.Y = dp.Y;
         }
 
         /// <summary>
@@ -108,22 +124,44 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <param name="ip">The intpoint.</param>
         public DoublePoint(IntPoint ip)
         {
-            X = ip.X;
-            Y = ip.Y;
+            this.X = ip.X;
+            this.Y = ip.Y;
         }
+
+        #endregion
     };
 
-
-    //------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------
     // PolyTree & PolyNode classes
-    //------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------
 
     /// <summary>
     ///     Tree of PolyNodes.
     /// </summary>
     public class PolyTree : PolyNode
     {
+        #region Fields
+
+        /// <summary>
+        ///     List contains all of the merged polygons.
+        /// </summary>
         internal List<PolyNode> MAllPolys = new List<PolyNode>();
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Finalizes an instance of the <see cref="PolyTree" /> class.
+        /// </summary>
+        ~PolyTree()
+        {
+            this.Clear();
+        }
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         ///     Gets the total.
@@ -135,35 +173,34 @@ namespace LeagueSharp.CommonEx.Clipper
         {
             get
             {
-                var result = MAllPolys.Count;
-                //with negative offsets, ignore the hidden outer polygon ...
-                if (result > 0 && MChilds[0] != MAllPolys[0])
+                var result = this.MAllPolys.Count;
+
+                // with negative offsets, ignore the hidden outer polygon ...
+                if (result > 0 && this.MChilds[0] != this.MAllPolys[0])
                 {
                     result--;
                 }
+
                 return result;
             }
         }
 
-        /// <summary>
-        ///     Finalizes an instance of the <see cref="PolyTree" /> class.
-        /// </summary>
-        ~PolyTree()
-        {
-            Clear();
-        }
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         ///     Clears this instance.
         /// </summary>
         public void Clear()
         {
-            for (var i = 0; i < MAllPolys.Count; i++)
+            for (var i = 0; i < this.MAllPolys.Count; i++)
             {
-                MAllPolys[i] = null;
+                this.MAllPolys[i] = null;
             }
-            MAllPolys.Clear();
-            MChilds.Clear();
+
+            this.MAllPolys.Clear();
+            this.MChilds.Clear();
         }
 
         /// <summary>
@@ -172,8 +209,10 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <returns></returns>
         public PolyNode GetFirst()
         {
-            return MChilds.Count > 0 ? MChilds[0] : null;
+            return this.MChilds.Count > 0 ? this.MChilds[0] : null;
         }
+
+        #endregion
     }
 
     /// <summary>
@@ -181,12 +220,41 @@ namespace LeagueSharp.CommonEx.Clipper
     /// </summary>
     public class PolyNode
     {
+        #region Fields
+
+        /// <summary>
+        ///     List contains all of the merged childs of the polygon node.
+        /// </summary>
         internal List<PolyNode> MChilds = new List<PolyNode>();
+
+        /// <summary>
+        ///     TODO The m endtype.
+        /// </summary>
         internal EndType MEndtype;
+
+        /// <summary>
+        ///     TODO The m index.
+        /// </summary>
         internal int MIndex;
+
+        /// <summary>
+        ///     TODO The m jointype.
+        /// </summary>
         internal JoinType MJointype;
+
+        /// <summary>
+        ///     TODO The m parent.
+        /// </summary>
         internal PolyNode MParent;
+
+        /// <summary>
+        ///     TODO The m polygon.
+        /// </summary>
         internal Path MPolygon = new Path();
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         ///     Gets the child count.
@@ -196,18 +264,10 @@ namespace LeagueSharp.CommonEx.Clipper
         /// </value>
         public int ChildCount
         {
-            get { return MChilds.Count; }
-        }
-
-        /// <summary>
-        ///     Gets the contour.
-        /// </summary>
-        /// <value>
-        ///     The contour.
-        /// </value>
-        public Path Contour
-        {
-            get { return MPolygon; }
+            get
+            {
+                return this.MChilds.Count;
+            }
         }
 
         /// <summary>
@@ -218,18 +278,24 @@ namespace LeagueSharp.CommonEx.Clipper
         /// </value>
         public List<PolyNode> Childs
         {
-            get { return MChilds; }
+            get
+            {
+                return this.MChilds;
+            }
         }
 
         /// <summary>
-        ///     Gets the parent.
+        ///     Gets the contour.
         /// </summary>
         /// <value>
-        ///     The parent.
+        ///     The contour.
         /// </value>
-        public PolyNode Parent
+        public Path Contour
         {
-            get { return MParent; }
+            get
+            {
+                return this.MPolygon;
+            }
         }
 
         /// <summary>
@@ -240,7 +306,10 @@ namespace LeagueSharp.CommonEx.Clipper
         /// </value>
         public bool IsHole
         {
-            get { return IsHoleNode(); }
+            get
+            {
+                return this.IsHoleNode();
+            }
         }
 
         /// <summary>
@@ -251,25 +320,23 @@ namespace LeagueSharp.CommonEx.Clipper
         /// </value>
         public bool IsOpen { get; set; }
 
-        private bool IsHoleNode()
+        /// <summary>
+        ///     Gets the parent.
+        /// </summary>
+        /// <value>
+        ///     The parent.
+        /// </value>
+        public PolyNode Parent
         {
-            var result = true;
-            var node = MParent;
-            while (node != null)
+            get
             {
-                result = !result;
-                node = node.MParent;
+                return this.MParent;
             }
-            return result;
         }
 
-        internal void AddChild(PolyNode child)
-        {
-            var cnt = MChilds.Count;
-            MChilds.Add(child);
-            child.MParent = this;
-            child.MIndex = cnt;
-        }
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         ///     Gets the next.
@@ -277,136 +344,159 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <returns></returns>
         public PolyNode GetNext()
         {
-            return MChilds.Count > 0 ? MChilds[0] : GetNextSiblingUp();
+            return this.MChilds.Count > 0 ? this.MChilds[0] : this.GetNextSiblingUp();
         }
 
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     TODO The add child.
+        /// </summary>
+        /// <param name="child">
+        ///     TODO The child.
+        /// </param>
+        internal void AddChild(PolyNode child)
+        {
+            var cnt = this.MChilds.Count;
+            this.MChilds.Add(child);
+            child.MParent = this;
+            child.MIndex = cnt;
+        }
+
+        /// <summary>
+        ///     TODO The get next sibling up.
+        /// </summary>
+        /// <returns>
+        /// </returns>
         internal PolyNode GetNextSiblingUp()
         {
-            if (MParent == null)
+            if (this.MParent == null)
             {
                 return null;
             }
-            return MIndex == MParent.MChilds.Count - 1 ? MParent.GetNextSiblingUp() : MParent.MChilds[MIndex + 1];
+
+            return this.MIndex == this.MParent.MChilds.Count - 1
+                       ? this.MParent.GetNextSiblingUp()
+                       : this.MParent.MChilds[this.MIndex + 1];
         }
+
+        /// <summary>
+        ///     TODO The is hole node.
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private bool IsHoleNode()
+        {
+            var result = true;
+            var node = this.MParent;
+            while (node != null)
+            {
+                result = !result;
+                node = node.MParent;
+            }
+
+            return result;
+        }
+
+        #endregion
     }
 
-
-    //------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------
     // Int128 struct (enables safe math on signed 64bit integers)
     // eg Int128 val1((Int64)9223372036854775807); //ie 2^63 -1
-    //    Int128 val2((Int64)9223372036854775807);
-    //    Int128 val3 = val1 * val2;
-    //    val3.ToString => "85070591730234615847396907784232501249" (8.5e+37)
-    //------------------------------------------------------------------------------
+    // Int128 val2((Int64)9223372036854775807);
+    // Int128 val3 = val1 * val2;
+    // val3.ToString => "85070591730234615847396907784232501249" (8.5e+37)
+    // ------------------------------------------------------------------------------
 
-
+    /// <summary>
+    ///     TODO The int 128.
+    /// </summary>
     internal struct Int128
     {
-        private long _hi;
-        private ulong _lo;
+        #region Fields
 
+        /// <summary>
+        ///     TODO The _hi.
+        /// </summary>
+        private long hi;
+
+        /// <summary>
+        ///     TODO The _lo.
+        /// </summary>
+        private ulong lo;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Int128" /> struct.
+        /// </summary>
+        /// <param name="lo">
+        ///     TODO The lo.
+        /// </param>
         public Int128(long lo)
         {
-            _lo = (ulong) lo;
+            this.lo = (ulong)lo;
             if (lo < 0)
             {
-                _hi = -1;
+                this.hi = -1;
             }
             else
             {
-                _hi = 0;
+                this.hi = 0;
             }
         }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Int128" /> struct.
+        /// </summary>
+        /// <param name="hi">
+        ///     TODO The hi.
+        /// </param>
+        /// <param name="lo">
+        ///     TODO The lo.
+        /// </param>
         public Int128(long hi, ulong lo)
         {
-            _lo = lo;
-            _hi = hi;
+            this.lo = lo;
+            this.hi = hi;
         }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Int128" /> struct.
+        /// </summary>
+        /// <param name="val">
+        ///     TODO The val.
+        /// </param>
         public Int128(Int128 val)
         {
-            _hi = val._hi;
-            _lo = val._lo;
+            this.hi = val.hi;
+            this.lo = val.lo;
         }
 
-        public bool IsNegative()
-        {
-            return _hi < 0;
-        }
+        #endregion
 
-        public static bool operator ==(Int128 val1, Int128 val2)
-        {
-            return (object) val1 == (object) val2 || val1._hi == val2._hi && val1._lo == val2._lo;
-        }
+        #region Public Methods and Operators
 
-        public static bool operator !=(Int128 val1, Int128 val2)
-        {
-            return !(val1 == val2);
-        }
+        // nb: Constructing two new Int128 objects every time we want to multiply longs  
+        // is slow. So, although calling the Int128Mul method doesn't look as clean, the 
+        // code runs significantly faster than if we'd used the * operator.
 
-        public override bool Equals(object obj)
-        {
-            if (!(obj is Int128))
-            {
-                return false;
-            }
-            var i128 = (Int128) obj;
-            return (i128._hi == _hi && i128._lo == _lo);
-        }
-
-        public override int GetHashCode()
-        {
-            return _hi.GetHashCode() ^ _lo.GetHashCode();
-        }
-
-        public static bool operator >(Int128 val1, Int128 val2)
-        {
-            if (val1._hi != val2._hi)
-            {
-                return val1._hi > val2._hi;
-            }
-            return val1._lo > val2._lo;
-        }
-
-        public static bool operator <(Int128 val1, Int128 val2)
-        {
-            return (val1._hi != val2._hi) ? val1._hi < val2._hi : val1._lo < val2._lo;
-        }
-
-        public static Int128 operator +(Int128 lhs, Int128 rhs)
-        {
-            lhs._hi += rhs._hi;
-            lhs._lo += rhs._lo;
-            if (lhs._lo < rhs._lo)
-            {
-                lhs._hi++;
-            }
-            return lhs;
-        }
-
-        public static Int128 operator -(Int128 lhs, Int128 rhs)
-        {
-            return lhs + -rhs;
-        }
-
-        public static Int128 operator -(Int128 val)
-        {
-            return val._lo == 0 ? new Int128(-val._hi, 0) : new Int128(~val._hi, ~val._lo + 1);
-        }
-
-        public static explicit operator double(Int128 val)
-        {
-            const double shift64 = 18446744073709551616.0; //2^64
-            return val._hi < 0
-                ? (val._lo == 0 ? val._hi * shift64 : -(~val._lo + ~val._hi * shift64))
-                : val._lo + val._hi * shift64;
-        }
-
-        //nb: Constructing two new Int128 objects every time we want to multiply longs  
-        //is slow. So, although calling the Int128Mul method doesn't look as clean, the 
-        //code runs significantly faster than if we'd used the * operator.
-
+        /// <summary>
+        ///     TODO The int 128 mul.
+        /// </summary>
+        /// <param name="lhs">
+        ///     TODO The lhs.
+        /// </param>
+        /// <param name="rhs">
+        ///     TODO The rhs.
+        /// </param>
+        /// <returns>
+        /// </returns>
         public static Int128 Int128Mul(long lhs, long rhs)
         {
             var negate = (lhs < 0) != (rhs < 0);
@@ -414,39 +504,220 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 lhs = -lhs;
             }
+
             if (rhs < 0)
             {
                 rhs = -rhs;
             }
-            var int1Hi = (ulong) lhs >> 32;
-            var int1Lo = (ulong) lhs & 0xFFFFFFFF;
-            var int2Hi = (ulong) rhs >> 32;
-            var int2Lo = (ulong) rhs & 0xFFFFFFFF;
 
-            //nb: see comments in clipper.pas
+            var int1Hi = (ulong)lhs >> 32;
+            var int1Lo = (ulong)lhs & 0xFFFFFFFF;
+            var int2Hi = (ulong)rhs >> 32;
+            var int2Lo = (ulong)rhs & 0xFFFFFFFF;
+
+            // nb: see comments in clipper.pas
             var a = int1Hi * int2Hi;
             var b = int1Lo * int2Lo;
             var c = int1Hi * int2Lo + int1Lo * int2Hi;
 
             ulong lo;
-            var hi = (long) (a + (c >> 32));
+            var hi = (long)(a + (c >> 32));
 
             unchecked
             {
                 lo = (c << 32) + b;
             }
+
             if (lo < b)
             {
                 hi++;
             }
+
             var result = new Int128(hi, lo);
             return negate ? -result : result;
         }
+
+        /// <summary>
+        ///     TODO The +.
+        /// </summary>
+        /// <param name="lhs">
+        ///     TODO The lhs.
+        /// </param>
+        /// <param name="rhs">
+        ///     TODO The rhs.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static Int128 operator +(Int128 lhs, Int128 rhs)
+        {
+            lhs.hi += rhs.hi;
+            lhs.lo += rhs.lo;
+            if (lhs.lo < rhs.lo)
+            {
+                lhs.hi++;
+            }
+
+            return lhs;
+        }
+
+        /// <summary>
+        ///     TODO The ==.
+        /// </summary>
+        /// <param name="val1">
+        ///     TODO The val 1.
+        /// </param>
+        /// <param name="val2">
+        ///     TODO The val 2.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static bool operator ==(Int128 val1, Int128 val2)
+        {
+            return (object)val1 == (object)val2 || val1.hi == val2.hi && val1.lo == val2.lo;
+        }
+
+        /// <summary>
+        ///     TODO The op_ explicit.
+        /// </summary>
+        /// <param name="val">
+        ///     TODO The val.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static explicit operator double(Int128 val)
+        {
+            const double Shift64 = 18446744073709551616.0; // 2^64
+            return val.hi < 0
+                       ? (val.lo == 0 ? val.hi * Shift64 : -(~val.lo + ~val.hi * Shift64))
+                       : val.lo + val.hi * Shift64;
+        }
+
+        /// <summary>
+        ///     TODO The &gt;.
+        /// </summary>
+        /// <param name="val1">
+        ///     TODO The val 1.
+        /// </param>
+        /// <param name="val2">
+        ///     TODO The val 2.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static bool operator >(Int128 val1, Int128 val2)
+        {
+            if (val1.hi != val2.hi)
+            {
+                return val1.hi > val2.hi;
+            }
+
+            return val1.lo > val2.lo;
+        }
+
+        /// <summary>
+        ///     TODO The !=.
+        /// </summary>
+        /// <param name="val1">
+        ///     TODO The val 1.
+        /// </param>
+        /// <param name="val2">
+        ///     TODO The val 2.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static bool operator !=(Int128 val1, Int128 val2)
+        {
+            return !(val1 == val2);
+        }
+
+        /// <summary>
+        ///     TODO The &lt;.
+        /// </summary>
+        /// <param name="val1">
+        ///     TODO The val 1.
+        /// </param>
+        /// <param name="val2">
+        ///     TODO The val 2.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static bool operator <(Int128 val1, Int128 val2)
+        {
+            return (val1.hi != val2.hi) ? val1.hi < val2.hi : val1.lo < val2.lo;
+        }
+
+        /// <summary>
+        ///     TODO The -.
+        /// </summary>
+        /// <param name="lhs">
+        ///     TODO The lhs.
+        /// </param>
+        /// <param name="rhs">
+        ///     TODO The rhs.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static Int128 operator -(Int128 lhs, Int128 rhs)
+        {
+            return lhs + -rhs;
+        }
+
+        /// <summary>
+        ///     TODO The -.
+        /// </summary>
+        /// <param name="val">
+        ///     TODO The val.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static Int128 operator -(Int128 val)
+        {
+            return val.lo == 0 ? new Int128(-val.hi, 0) : new Int128(~val.hi, ~val.lo + 1);
+        }
+
+        /// <summary>
+        ///     TODO The equals.
+        /// </summary>
+        /// <param name="obj">
+        ///     TODO The obj.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Int128))
+            {
+                return false;
+            }
+
+            var i128 = (Int128)obj;
+            return i128.hi == this.hi && i128.lo == this.lo;
+        }
+
+        /// <summary>
+        ///     TODO The get hash code.
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public override int GetHashCode()
+        {
+            return this.hi.GetHashCode() ^ this.lo.GetHashCode();
+        }
+
+        /// <summary>
+        ///     TODO The is negative.
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool IsNegative()
+        {
+            return this.hi < 0;
+        }
+
+        #endregion
     };
 
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
-
+    // ------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------
 
     /// <summary>
     ///     A point whose values are Integers.
@@ -456,16 +727,17 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <summary>
         ///     The X
         /// </summary>
-        public cInt X;
+        public long X;
 
         /// <summary>
         ///     The Y
         /// </summary>
-        public cInt Y;
+        public long Y;
 
 #if use_xyz
-    /// <summary>
-    ///     The Z
+
+    // <summary>
+    // The Z
     /// </summary>
         public cInt Z;
 
@@ -523,10 +795,10 @@ namespace LeagueSharp.CommonEx.Clipper
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
-        public IntPoint(cInt x, cInt y)
+        public IntPoint(long x, long y)
         {
-            X = x;
-            Y = y;
+            this.X = x;
+            this.Y = y;
         }
 
         /// <summary>
@@ -536,8 +808,8 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <param name="y">The y.</param>
         public IntPoint(double x, double y)
         {
-            X = (cInt) x;
-            Y = (cInt) y;
+            this.X = (cInt)x;
+            this.Y = (cInt)y;
         }
 
         /// <summary>
@@ -546,9 +818,10 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <param name="pt">The pt.</param>
         public IntPoint(IntPoint pt)
         {
-            X = pt.X;
-            Y = pt.Y;
+            this.X = pt.X;
+            this.Y = pt.Y;
         }
+
 #endif
 
         /// <summary>
@@ -590,8 +863,9 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 return false;
             }
-            var a = (IntPoint) obj;
-            return (X == a.X) && (Y == a.Y);
+
+            var a = (IntPoint)obj;
+            return (this.X == a.X) && (this.Y == a.Y);
         }
 
         /// <summary>
@@ -602,7 +876,7 @@ namespace LeagueSharp.CommonEx.Clipper
         /// </returns>
         public override int GetHashCode()
         {
-            //simply prevents a compiler warning
+            // simply prevents a compiler warning
             return base.GetHashCode();
         }
     } // end struct IntPoint
@@ -612,25 +886,31 @@ namespace LeagueSharp.CommonEx.Clipper
     /// </summary>
     public struct IntRect
     {
+        #region Fields
+
         /// <summary>
         ///     The bottom
         /// </summary>
-        public cInt Bottom;
+        public long Bottom;
 
         /// <summary>
         ///     The left
         /// </summary>
-        public cInt Left;
+        public long Left;
 
         /// <summary>
         ///     The right
         /// </summary>
-        public cInt Right;
+        public long Right;
 
         /// <summary>
         ///     The top
         /// </summary>
-        public cInt Top;
+        public long Top;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="IntRect" /> struct.
@@ -639,12 +919,12 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <param name="t">The top.</param>
         /// <param name="r">The righ.</param>
         /// <param name="b">The bottom.</param>
-        public IntRect(cInt l, cInt t, cInt r, cInt b)
+        public IntRect(long l, long t, long r, long b)
         {
-            Left = l;
-            Top = t;
-            Right = r;
-            Bottom = b;
+            this.Left = l;
+            this.Top = t;
+            this.Right = r;
+            this.Bottom = b;
         }
 
         /// <summary>
@@ -653,11 +933,13 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <param name="ir">The <see cref="IntRect" />.</param>
         public IntRect(IntRect ir)
         {
-            Left = ir.Left;
-            Top = ir.Top;
-            Right = ir.Right;
-            Bottom = ir.Bottom;
+            this.Left = ir.Left;
+            this.Top = ir.Top;
+            this.Right = ir.Right;
+            this.Bottom = ir.Bottom;
         }
+
+        #endregion
     }
 
     /// <summary>
@@ -668,17 +950,17 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <summary>
         ///     Create regions where both subject and clip polygons are filled.
         /// </summary>
-        CtIntersection,
+        CtIntersection, 
 
         /// <summary>
         ///     Create regions where either subject or clip polygons (or both) are filled.
         /// </summary>
-        CtUnion,
+        CtUnion, 
 
         /// <summary>
         ///     Create regions where subject polygons are filled except where clip polygons are filled
         /// </summary>
-        CtDifference,
+        CtDifference, 
 
         /// <summary>
         ///     Create regions where either subject or clip polygons are filled but not where both are filled
@@ -694,7 +976,7 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <summary>
         ///     Subject
         /// </summary>
-        PtSubject,
+        PtSubject, 
 
         /// <summary>
         ///     Clip
@@ -702,10 +984,10 @@ namespace LeagueSharp.CommonEx.Clipper
         PtClip
     };
 
-    //By far the most widely used winding rules for polygon filling are
-    //EvenOdd & NonZero (GDI, GDI+, XLib, OpenGL, Cairo, AGG, Quartz, SVG, Gr32)
-    //Others rules include Positive, Negative and ABS_GTR_EQ_TWO (only in OpenGL)
-    //see http://glprogramming.com/red/chapter11.html
+    // By far the most widely used winding rules for polygon filling are
+    // EvenOdd & NonZero (GDI, GDI+, XLib, OpenGL, Cairo, AGG, Quartz, SVG, Gr32)
+    // Others rules include Positive, Negative and ABS_GTR_EQ_TWO (only in OpenGL)
+    // see http://glprogramming.com/red/chapter11.html
 
     /// <summary>
     ///     The type of winding rules for polygon filling.
@@ -715,17 +997,17 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <summary>
         ///     Also known as Alternate Filling. Odd numbered sub-regions are filled, while even numbered sub-regions are not.
         /// </summary>
-        PftEvenOdd,
+        PftEvenOdd, 
 
         /// <summary>
         ///     All non-zero sub-regions are filled.
         /// </summary>
-        PftNonZero,
+        PftNonZero, 
 
         /// <summary>
         ///     All sub-regions with winding counts > 0 are filled.
         /// </summary>
-        PftPositive,
+        PftPositive, 
 
         /// <summary>
         ///     All sub-regions with winding counts &lt; 0 are filled
@@ -741,16 +1023,18 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <summary>
         ///     Squaring is applied uniformally at all convex edge joins at 1 x delta.
         /// </summary>
-        JtSquare,
+        JtSquare, 
 
         /// <summary>
-        ///     While flattened paths can never perfectly trace an arc, they are approximated by a series of arc chords. <see cref="ClipperOffset.ArcTolerance"/>
+        ///     While flattened paths can never perfectly trace an arc, they are approximated by a series of arc chords.
+        ///     <see cref="ClipperOffset.ArcTolerance" />
         /// </summary>
-        JtRound,
+        JtRound, 
 
         /// <summary>
         ///     There's a necessary limit to mitered joins since offsetting edges that join at very acute angles will produce
-        ///     excessively long and narrow 'spikes'. To contain these potential spikes, the <see cref="ClipperOffset.MiterLimit"/>
+        ///     excessively long and narrow 'spikes'. To contain these potential spikes, the
+        ///     <see cref="ClipperOffset.MiterLimit" />
         ///     property specifies a maximum distance that vertices will be offset (in multiples of delta). For any given edge
         ///     join, when miter offsetting would exceed that maximum distance, 'square' joining is applied.
         /// </summary>
@@ -765,22 +1049,22 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <summary>
         ///     Ends are joined using the JoinType value and the path filled as a polygon.
         /// </summary>
-        EtClosedPolygon,
+        EtClosedPolygon, 
 
         /// <summary>
         ///     Ends are joined using the JoinType value and the path filled as a polyline.
         /// </summary>
-        EtClosedLine,
+        EtClosedLine, 
 
         /// <summary>
         ///     Ends are squared off with no extension.
         /// </summary>
-        EtOpenButt,
+        EtOpenButt, 
 
         /// <summary>
-        ///    Ends are squared off and extended delta units.
+        ///     Ends are squared off and extended delta units.
         /// </summary>
-        EtOpenSquare,
+        EtOpenSquare, 
 
         /// <summary>
         ///     Ends are rounded off and extended delta units.
@@ -788,38 +1072,136 @@ namespace LeagueSharp.CommonEx.Clipper
         EtOpenRound
     };
 
+    /// <summary>
+    ///     TODO The edge side.
+    /// </summary>
     internal enum EdgeSide
     {
-        EsLeft,
+        /// <summary>
+        ///     TODO The es left.
+        /// </summary>
+        EsLeft, 
+
+        /// <summary>
+        ///     TODO The es right.
+        /// </summary>
         EsRight
     };
 
+    /// <summary>
+    ///     TODO The direction.
+    /// </summary>
     internal enum Direction
     {
-        DRightToLeft,
+        /// <summary>
+        ///     TODO The d right to left.
+        /// </summary>
+        DRightToLeft, 
+
+        /// <summary>
+        ///     TODO The d left to right.
+        /// </summary>
         DLeftToRight
     };
 
+    /// <summary>
+    ///     TODO The edge.
+    /// </summary>
     internal class Edge
     {
+        #region Fields
+
+        /// <summary>
+        ///     TODO The bot.
+        /// </summary>
         internal IntPoint Bot;
+
+        /// <summary>
+        ///     TODO The curr.
+        /// </summary>
         internal IntPoint Curr;
+
+        /// <summary>
+        ///     TODO The delta.
+        /// </summary>
         internal IntPoint Delta;
+
+        /// <summary>
+        ///     TODO The dx.
+        /// </summary>
         internal double Dx;
+
+        /// <summary>
+        ///     TODO The next.
+        /// </summary>
         internal Edge Next;
+
+        /// <summary>
+        ///     TODO The next in ael.
+        /// </summary>
         internal Edge NextInAel;
+
+        /// <summary>
+        ///     TODO The next in lml.
+        /// </summary>
         internal Edge NextInLml;
+
+        /// <summary>
+        ///     TODO The next in sel.
+        /// </summary>
         internal Edge NextInSel;
+
+        /// <summary>
+        ///     TODO The out idx.
+        /// </summary>
         internal int OutIdx;
+
+        /// <summary>
+        ///     TODO The poly typ.
+        /// </summary>
         internal PolyType PolyTyp;
+
+        /// <summary>
+        ///     TODO The prev.
+        /// </summary>
         internal Edge Prev;
+
+        /// <summary>
+        ///     TODO The prev in ael.
+        /// </summary>
         internal Edge PrevInAel;
+
+        /// <summary>
+        ///     TODO The prev in sel.
+        /// </summary>
         internal Edge PrevInSel;
+
+        /// <summary>
+        ///     TODO The side.
+        /// </summary>
         internal EdgeSide Side;
+
+        /// <summary>
+        ///     TODO The top.
+        /// </summary>
         internal IntPoint Top;
+
+        /// <summary>
+        ///     TODO The wind cnt.
+        /// </summary>
         internal int WindCnt;
-        internal int WindCnt2; //winding count of the opposite polytype
-        internal int WindDelta; //1 or -1 depending on winding direction
+
+        /// <summary>
+        ///     TODO The wind cnt 2.
+        /// </summary>
+        internal int WindCnt2; // winding count of the opposite polytype
+
+        /// <summary>
+        ///     TODO The wind delta.
+        /// </summary>
+        internal int WindDelta; // 1 or -1 depending on winding direction
+
+        #endregion
     };
 
     /// <summary>
@@ -827,9 +1209,24 @@ namespace LeagueSharp.CommonEx.Clipper
     /// </summary>
     public class IntersectNode
     {
+        #region Fields
+
+        /// <summary>
+        ///     TODO The edge 1.
+        /// </summary>
         internal Edge Edge1;
+
+        /// <summary>
+        ///     TODO The edge 2.
+        /// </summary>
         internal Edge Edge2;
+
+        /// <summary>
+        ///     TODO The pt.
+        /// </summary>
         internal IntPoint Pt;
+
+        #endregion
     };
 
     /// <summary>
@@ -837,6 +1234,8 @@ namespace LeagueSharp.CommonEx.Clipper
     /// </summary>
     public class MyIntersectNodeSort : IComparer<IntersectNode>
     {
+        #region Public Methods and Operators
+
         /// <summary>
         ///     Compares the specified nodes.
         /// </summary>
@@ -850,52 +1249,166 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 return 1;
             }
+
             if (i < 0)
             {
                 return -1;
             }
+
             return 0;
         }
+
+        #endregion
     }
 
+    /// <summary>
+    ///     TODO The local minima.
+    /// </summary>
     internal class LocalMinima
     {
+        #region Fields
+
+        /// <summary>
+        ///     TODO The left bound.
+        /// </summary>
         internal Edge LeftBound;
+
+        /// <summary>
+        ///     TODO The next.
+        /// </summary>
         internal LocalMinima Next;
+
+        /// <summary>
+        ///     TODO The right bound.
+        /// </summary>
         internal Edge RightBound;
-        internal cInt Y;
+
+        /// <summary>
+        ///     TODO The y.
+        /// </summary>
+        internal long Y;
+
+        #endregion
     };
 
+    /// <summary>
+    ///     TODO The scanbeam.
+    /// </summary>
     internal class Scanbeam
     {
+        #region Fields
+
+        /// <summary>
+        ///     TODO The next.
+        /// </summary>
         internal Scanbeam Next;
-        internal cInt Y;
+
+        /// <summary>
+        ///     TODO The y.
+        /// </summary>
+        internal long Y;
+
+        #endregion
     };
 
+    /// <summary>
+    ///     TODO The out rec.
+    /// </summary>
     internal class OutRec
     {
+        #region Fields
+
+        /// <summary>
+        ///     TODO The bottom pt.
+        /// </summary>
         internal OutPt BottomPt;
-        internal OutRec FirstLeft; //see comments in clipper.pas
+
+        /// <summary>
+        ///     TODO The first left.
+        /// </summary>
+        internal OutRec FirstLeft; // see comments in clipper.pas
+
+        /// <summary>
+        ///     TODO The idx.
+        /// </summary>
         internal int Idx;
+
+        /// <summary>
+        ///     TODO The is hole.
+        /// </summary>
         internal bool IsHole;
+
+        /// <summary>
+        ///     TODO The is open.
+        /// </summary>
         internal bool IsOpen;
+
+        /// <summary>
+        ///     TODO The poly node.
+        /// </summary>
         internal PolyNode PolyNode;
+
+        /// <summary>
+        ///     TODO The pts.
+        /// </summary>
         internal OutPt Pts;
+
+        #endregion
     };
 
+    /// <summary>
+    ///     TODO The out pt.
+    /// </summary>
     internal class OutPt
     {
+        #region Fields
+
+        /// <summary>
+        ///     TODO The idx.
+        /// </summary>
         internal int Idx;
+
+        /// <summary>
+        ///     TODO The next.
+        /// </summary>
         internal OutPt Next;
+
+        /// <summary>
+        ///     TODO The prev.
+        /// </summary>
         internal OutPt Prev;
+
+        /// <summary>
+        ///     TODO The pt.
+        /// </summary>
         internal IntPoint Pt;
+
+        #endregion
     };
 
+    /// <summary>
+    ///     TODO The join.
+    /// </summary>
     internal class Join
     {
+        #region Fields
+
+        /// <summary>
+        ///     TODO The off pt.
+        /// </summary>
         internal IntPoint OffPt;
+
+        /// <summary>
+        ///     TODO The out pt 1.
+        /// </summary>
         internal OutPt OutPt1;
+
+        /// <summary>
+        ///     TODO The out pt 2.
+        /// </summary>
         internal OutPt OutPt2;
+
+        #endregion
     };
 
     /// <summary>
@@ -923,14 +1436,23 @@ namespace LeagueSharp.CommonEx.Clipper
         /// </summary>
         protected const double Tolerance = 1.0E-20;
 
+        /// <summary>
+        ///     TODO The near zero.
+        /// </summary>
+        /// <param name="val">
+        ///     TODO The val.
+        /// </param>
+        /// <returns>
+        /// </returns>
         internal static bool NearZero(double val)
         {
             return (val > -Tolerance) && (val < Tolerance);
         }
 
 #if use_int32
-    /// <summary>
-    ///     The low range
+
+    // <summary>
+    // The low range
     /// </summary>
         public const cInt LoRange = 0x7FFF;
 
@@ -939,24 +1461,44 @@ namespace LeagueSharp.CommonEx.Clipper
         /// </summary>
         public const cInt HiRange = 0x7FFF;
 #else
+
         /// <summary>
         ///     The low range
         /// </summary>
-        public const cInt LoRange = 0x3FFFFFFF;
+        public const long LoRange = 0x3FFFFFFF;
 
         /// <summary>
         ///     The high range
         /// </summary>
-        public const cInt HiRange = 0x3FFFFFFFFFFFFFFFL;
+        public const long HiRange = 0x3FFFFFFFFFFFFFFFL;
 #endif
 
+        /// <summary>
+        ///     TODO The m minima list.
+        /// </summary>
         internal LocalMinima MMinimaList;
+
+        /// <summary>
+        ///     TODO The m current lm.
+        /// </summary>
         internal LocalMinima MCurrentLm;
+
+        /// <summary>
+        ///     TODO The m edges.
+        /// </summary>
         internal List<List<Edge>> MEdges = new List<List<Edge>>();
+
+        /// <summary>
+        ///     TODO The m use full range.
+        /// </summary>
         internal bool MUseFullRange;
+
+        /// <summary>
+        ///     TODO The m has open paths.
+        /// </summary>
         internal bool MHasOpenPaths;
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Gets or sets a value indicating whether to preserve the collinear.
@@ -966,29 +1508,48 @@ namespace LeagueSharp.CommonEx.Clipper
         /// </value>
         public bool PreserveCollinear { get; set; }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Swaps the specified value.
         /// </summary>
         /// <param name="val1">Value 1.</param>
         /// <param name="val2">Value 2.</param>
-        public void Swap(ref cInt val1, ref cInt val2)
+        public void Swap(ref long val1, ref long val2)
         {
             var tmp = val1;
             val1 = val2;
             val2 = tmp;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The is horizontal.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
+        /// <returns>
+        /// </returns>
         internal static bool IsHorizontal(Edge e)
         {
             return e.Delta.Y == 0;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The point is vertex.
+        /// </summary>
+        /// <param name="pt">
+        ///     TODO The pt.
+        /// </param>
+        /// <param name="pp">
+        ///     TODO The pp.
+        /// </param>
+        /// <returns>
+        /// </returns>
         internal bool PointIsVertex(IntPoint pt, OutPt pp)
         {
             var pp2 = pp;
@@ -998,59 +1559,110 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     return true;
                 }
+
                 pp2 = pp2.Next;
-            } while (pp2 != pp);
+            }
+            while (pp2 != pp);
             return false;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The point on line segment.
+        /// </summary>
+        /// <param name="pt">
+        ///     TODO The pt.
+        /// </param>
+        /// <param name="linePt1">
+        ///     TODO The line pt 1.
+        /// </param>
+        /// <param name="linePt2">
+        ///     TODO The line pt 2.
+        /// </param>
+        /// <param name="useFullRange">
+        ///     TODO The use full range.
+        /// </param>
+        /// <returns>
+        /// </returns>
         internal bool PointOnLineSegment(IntPoint pt, IntPoint linePt1, IntPoint linePt2, bool useFullRange)
         {
             if (useFullRange)
             {
-                return ((pt.X == linePt1.X) && (pt.Y == linePt1.Y)) || ((pt.X == linePt2.X) && (pt.Y == linePt2.Y)) ||
-                       (((pt.X > linePt1.X) == (pt.X < linePt2.X)) && ((pt.Y > linePt1.Y) == (pt.Y < linePt2.Y)) &&
-                        ((Int128.Int128Mul((pt.X - linePt1.X), (linePt2.Y - linePt1.Y)) ==
-                          Int128.Int128Mul((linePt2.X - linePt1.X), (pt.Y - linePt1.Y)))));
+                return ((pt.X == linePt1.X) && (pt.Y == linePt1.Y)) || ((pt.X == linePt2.X) && (pt.Y == linePt2.Y))
+                       || (((pt.X > linePt1.X) == (pt.X < linePt2.X)) && ((pt.Y > linePt1.Y) == (pt.Y < linePt2.Y))
+                           && (Int128.Int128Mul(pt.X - linePt1.X, linePt2.Y - linePt1.Y)
+                               == Int128.Int128Mul(linePt2.X - linePt1.X, pt.Y - linePt1.Y)));
             }
-            return ((pt.X == linePt1.X) && (pt.Y == linePt1.Y)) || ((pt.X == linePt2.X) && (pt.Y == linePt2.Y)) ||
-                   (((pt.X > linePt1.X) == (pt.X < linePt2.X)) && ((pt.Y > linePt1.Y) == (pt.Y < linePt2.Y)) &&
-                    ((pt.X - linePt1.X) * (linePt2.Y - linePt1.Y) == (linePt2.X - linePt1.X) * (pt.Y - linePt1.Y)));
+
+            return ((pt.X == linePt1.X) && (pt.Y == linePt1.Y)) || ((pt.X == linePt2.X) && (pt.Y == linePt2.Y))
+                   || (((pt.X > linePt1.X) == (pt.X < linePt2.X)) && ((pt.Y > linePt1.Y) == (pt.Y < linePt2.Y))
+                       && ((pt.X - linePt1.X) * (linePt2.Y - linePt1.Y) == (linePt2.X - linePt1.X) * (pt.Y - linePt1.Y)));
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The point on polygon.
+        /// </summary>
+        /// <param name="pt">
+        ///     TODO The pt.
+        /// </param>
+        /// <param name="pp">
+        ///     TODO The pp.
+        /// </param>
+        /// <param name="useFullRange">
+        ///     TODO The use full range.
+        /// </param>
+        /// <returns>
+        /// </returns>
         internal bool PointOnPolygon(IntPoint pt, OutPt pp, bool useFullRange)
         {
             var pp2 = pp;
             while (true)
             {
-                if (PointOnLineSegment(pt, pp2.Pt, pp2.Next.Pt, useFullRange))
+                if (this.PointOnLineSegment(pt, pp2.Pt, pp2.Next.Pt, useFullRange))
                 {
                     return true;
                 }
+
                 pp2 = pp2.Next;
                 if (pp2 == pp)
                 {
                     break;
                 }
             }
+
             return false;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The slopes equal.
+        /// </summary>
+        /// <param name="e1">
+        ///     TODO The e 1.
+        /// </param>
+        /// <param name="e2">
+        ///     TODO The e 2.
+        /// </param>
+        /// <param name="useFullRange">
+        ///     TODO The use full range.
+        /// </param>
+        /// <returns>
+        /// </returns>
         internal static bool SlopesEqual(Edge e1, Edge e2, bool useFullRange)
         {
             if (useFullRange)
             {
                 return Int128.Int128Mul(e1.Delta.Y, e2.Delta.X) == Int128.Int128Mul(e1.Delta.X, e2.Delta.Y);
             }
-            return e1.Delta.Y * (e2.Delta.X) == e1.Delta.X * (e2.Delta.Y);
+
+            return e1.Delta.Y * e2.Delta.X == e1.Delta.X * e2.Delta.Y;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Checks if the slope is equal.
@@ -1066,10 +1678,11 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 return Int128.Int128Mul(pt1.Y - pt2.Y, pt2.X - pt3.X) == Int128.Int128Mul(pt1.X - pt2.X, pt2.Y - pt3.Y);
             }
+
             return (pt1.Y - pt2.Y) * (pt2.X - pt3.X) - (pt1.X - pt2.X) * (pt2.Y - pt3.Y) == 0;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Checks if the slopes are equaal.
@@ -1086,55 +1699,77 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 return Int128.Int128Mul(pt1.Y - pt2.Y, pt3.X - pt4.X) == Int128.Int128Mul(pt1.X - pt2.X, pt3.Y - pt4.Y);
             }
+
             return (pt1.Y - pt2.Y) * (pt3.X - pt4.X) - (pt1.X - pt2.X) * (pt3.Y - pt4.Y) == 0;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
-        internal ClipperBase() //constructor (nb: no external instantiation)
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ClipperBase" /> class.
+        /// </summary>
+        internal ClipperBase()
         {
-            MMinimaList = null;
-            MCurrentLm = null;
-            MUseFullRange = false;
-            MHasOpenPaths = false;
+            // constructor (nb: no external instantiation)
+            this.MMinimaList = null;
+            this.MCurrentLm = null;
+            this.MUseFullRange = false;
+            this.MHasOpenPaths = false;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Clears this instance.
         /// </summary>
         public virtual void Clear()
         {
-            DisposeLocalMinimaList();
-            foreach (var t in MEdges)
+            this.DisposeLocalMinimaList();
+            foreach (var t in this.MEdges)
             {
                 for (var j = 0; j < t.Count; ++j)
                 {
                     t[j] = null;
                 }
+
                 t.Clear();
             }
-            MEdges.Clear();
-            MUseFullRange = false;
-            MHasOpenPaths = false;
+
+            this.MEdges.Clear();
+            this.MUseFullRange = false;
+            this.MHasOpenPaths = false;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The dispose local minima list.
+        /// </summary>
         private void DisposeLocalMinimaList()
         {
-            while (MMinimaList != null)
+            while (this.MMinimaList != null)
             {
-                var tmpLm = MMinimaList.Next;
-                MMinimaList = null;
-                MMinimaList = tmpLm;
+                var tmpLm = this.MMinimaList.Next;
+                this.MMinimaList = null;
+                this.MMinimaList = tmpLm;
             }
-            MCurrentLm = null;
+
+            this.MCurrentLm = null;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The range test.
+        /// </summary>
+        /// <param name="pt">
+        ///     TODO The pt.
+        /// </param>
+        /// <param name="useFullRange">
+        ///     TODO The use full range.
+        /// </param>
+        /// <exception cref="ClipperException">
+        /// </exception>
         private void RangeTest(IntPoint pt, ref bool useFullRange)
         {
             if (useFullRange)
@@ -1147,12 +1782,27 @@ namespace LeagueSharp.CommonEx.Clipper
             else if (pt.X > LoRange || pt.Y > LoRange || -pt.X > LoRange || -pt.Y > LoRange)
             {
                 useFullRange = true;
-                RangeTest(pt, ref useFullRange);
+                this.RangeTest(pt, ref useFullRange);
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The init edge.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
+        /// <param name="eNext">
+        ///     TODO The e next.
+        /// </param>
+        /// <param name="ePrev">
+        ///     TODO The e prev.
+        /// </param>
+        /// <param name="pt">
+        ///     TODO The pt.
+        /// </param>
         private void InitEdge(Edge e, Edge eNext, Edge ePrev, IntPoint pt)
         {
             e.Next = eNext;
@@ -1161,8 +1811,17 @@ namespace LeagueSharp.CommonEx.Clipper
             e.OutIdx = Unassigned;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The init edge 2.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
+        /// <param name="polyType">
+        ///     TODO The poly type.
+        /// </param>
         private void InitEdge2(Edge e, PolyType polyType)
         {
             if (e.Curr.Y >= e.Next.Curr.Y)
@@ -1175,12 +1834,21 @@ namespace LeagueSharp.CommonEx.Clipper
                 e.Top = e.Curr;
                 e.Bot = e.Next.Curr;
             }
-            SetDx(e);
+
+            this.SetDx(e);
             e.PolyTyp = polyType;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The find next loc min.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static Edge FindNextLocMin(Edge e)
         {
             for (;;)
@@ -1189,34 +1857,52 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     e = e.Next;
                 }
+
                 if (Math.Abs(e.Dx - Horizontal) > float.Epsilon && Math.Abs(e.Prev.Dx - Horizontal) > float.Epsilon)
                 {
                     break;
                 }
+
                 while (Math.Abs(e.Prev.Dx - Horizontal) < float.Epsilon)
                 {
                     e = e.Prev;
                 }
+
                 var e2 = e;
                 while (Math.Abs(e.Dx - Horizontal) < float.Epsilon)
                 {
                     e = e.Next;
                 }
+
                 if (e.Top.Y == e.Prev.Bot.Y)
                 {
-                    continue; //ie just an intermediate horz.
+                    continue; // ie just an intermediate horz.
                 }
+
                 if (e2.Prev.Bot.X < e.Bot.X)
                 {
                     e = e2;
                 }
+
                 break;
             }
+
             return e;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The process bound.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
+        /// <param name="leftBoundIsForward">
+        ///     TODO The left bound is forward.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private Edge ProcessBound(Edge e, bool leftBoundIsForward)
         {
             Edge eStart, result = e;
@@ -1224,8 +1910,8 @@ namespace LeagueSharp.CommonEx.Clipper
 
             if (result.OutIdx == Skip)
             {
-                //check if there are edges beyond the skip edge in the bound and if so
-                //create another LocMin and calling ProcessBound once more ...
+                // check if there are edges beyond the skip edge in the bound and if so
+                // create another LocMin and calling ProcessBound once more ...
                 e = result;
                 if (leftBoundIsForward)
                 {
@@ -1233,6 +1919,7 @@ namespace LeagueSharp.CommonEx.Clipper
                     {
                         e = e.Next;
                     }
+
                     while (e != result && Math.Abs(e.Dx - Horizontal) < float.Epsilon)
                     {
                         e = e.Prev;
@@ -1244,45 +1931,49 @@ namespace LeagueSharp.CommonEx.Clipper
                     {
                         e = e.Prev;
                     }
+
                     while (e != result && Math.Abs(e.Dx - Horizontal) < float.Epsilon)
                     {
                         e = e.Next;
                     }
                 }
+
                 if (e == result)
                 {
                     result = leftBoundIsForward ? e.Next : e.Prev;
                 }
                 else
                 {
-                    //there are more edges in the bound beyond result starting with E
+                    // there are more edges in the bound beyond result starting with E
                     e = leftBoundIsForward ? result.Next : result.Prev;
                     var locMin = new LocalMinima { Next = null, Y = e.Bot.Y, LeftBound = null, RightBound = e };
                     e.WindDelta = 0;
-                    result = ProcessBound(e, leftBoundIsForward);
-                    InsertLocalMinima(locMin);
+                    result = this.ProcessBound(e, leftBoundIsForward);
+                    this.InsertLocalMinima(locMin);
                 }
+
                 return result;
             }
 
             if (Math.Abs(e.Dx - Horizontal) < float.Epsilon)
             {
-                //We need to be careful with open paths because this may not be a
-                //true local minima (ie E may be following a skip edge).
-                //Also, consecutive horz. edges may start heading left before going right.
+                // We need to be careful with open paths because this may not be a
+                // true local minima (ie E may be following a skip edge).
+                // Also, consecutive horz. edges may start heading left before going right.
                 eStart = leftBoundIsForward ? e.Prev : e.Next;
                 if (eStart.OutIdx != Skip)
                 {
-                    if (Math.Abs(eStart.Dx - Horizontal) < float.Epsilon) //ie an adjoining horizontal skip edge
+                    if (Math.Abs(eStart.Dx - Horizontal) < float.Epsilon)
                     {
+                        // ie an adjoining horizontal skip edge
                         if (eStart.Bot.X != e.Bot.X && eStart.Top.X != e.Bot.X)
                         {
-                            ReverseHorizontal(e);
+                            this.ReverseHorizontal(e);
                         }
                     }
                     else if (eStart.Bot.X != e.Bot.X)
                     {
-                        ReverseHorizontal(e);
+                        this.ReverseHorizontal(e);
                     }
                 }
             }
@@ -1294,35 +1985,41 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     result = result.Next;
                 }
+
                 if (Math.Abs(result.Dx - Horizontal) < float.Epsilon && result.Next.OutIdx != Skip)
                 {
-                    //nb: at the top of a bound, horizontals are added to the bound
-                    //only when the preceding edge attaches to the horizontal's left vertex
-                    //unless a Skip edge is encountered when that becomes the top divide
+                    // nb: at the top of a bound, horizontals are added to the bound
+                    // only when the preceding edge attaches to the horizontal's left vertex
+                    // unless a Skip edge is encountered when that becomes the top divide
                     horz = result;
                     while (Math.Abs(horz.Prev.Dx - Horizontal) < float.Epsilon)
                     {
                         horz = horz.Prev;
                     }
+
                     if (horz.Prev.Top.X > result.Next.Top.X)
                     {
                         result = horz.Prev;
                     }
                 }
+
                 while (e != result)
                 {
                     e.NextInLml = e.Next;
                     if (Math.Abs(e.Dx - Horizontal) < float.Epsilon && e != eStart && e.Bot.X != e.Prev.Top.X)
                     {
-                        ReverseHorizontal(e);
+                        this.ReverseHorizontal(e);
                     }
+
                     e = e.Next;
                 }
+
                 if (Math.Abs(e.Dx - Horizontal) < float.Epsilon && e != eStart && e.Bot.X != e.Prev.Top.X)
                 {
-                    ReverseHorizontal(e);
+                    this.ReverseHorizontal(e);
                 }
-                result = result.Next; //move to the edge just beyond current bound
+
+                result = result.Next; // move to the edge just beyond current bound
             }
             else
             {
@@ -1330,6 +2027,7 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     result = result.Prev;
                 }
+
                 if (Math.Abs(result.Dx - Horizontal) < float.Epsilon && result.Prev.OutIdx != Skip)
                 {
                     horz = result;
@@ -1337,6 +2035,7 @@ namespace LeagueSharp.CommonEx.Clipper
                     {
                         horz = horz.Next;
                     }
+
                     if (horz.Next.Top.X == result.Prev.Top.X)
                     {
                         result = horz.Next;
@@ -1352,21 +2051,24 @@ namespace LeagueSharp.CommonEx.Clipper
                     e.NextInLml = e.Prev;
                     if (Math.Abs(e.Dx - Horizontal) < float.Epsilon && e != eStart && e.Bot.X != e.Next.Top.X)
                     {
-                        ReverseHorizontal(e);
+                        this.ReverseHorizontal(e);
                     }
+
                     e = e.Prev;
                 }
+
                 if (Math.Abs(e.Dx - Horizontal) < float.Epsilon && e != eStart && e.Bot.X != e.Next.Top.X)
                 {
-                    ReverseHorizontal(e);
+                    this.ReverseHorizontal(e);
                 }
-                result = result.Prev; //move to the edge just beyond current bound
+
+                result = result.Prev; // move to the edge just beyond current bound
             }
+
             return result;
         }
 
-        //------------------------------------------------------------------------------
-
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Adds the path.
@@ -1386,6 +2088,7 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 throw new ClipperException("AddPath: Open paths have been disabled.");
             }
+
 #endif
 
             var highI = pg.Count - 1;
@@ -1393,16 +2096,18 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 --highI;
             }
+
             while (highI > 0 && (pg[highI] == pg[highI - 1]))
             {
                 --highI;
             }
-            if ((highI < 2))
+
+            if (highI < 2)
             {
                 return false;
             }
 
-            //create a new edge array ...
+            // create a new edge array ...
             var edges = new List<Edge>(highI + 1);
             for (var i = 0; i <= highI; i++)
             {
@@ -1411,96 +2116,104 @@ namespace LeagueSharp.CommonEx.Clipper
 
             var isFlat = true;
 
-            //1. Basic (first) edge initialization ...
+            // 1. Basic (first) edge initialization ...
             edges[1].Curr = pg[1];
-            RangeTest(pg[0], ref MUseFullRange);
-            RangeTest(pg[highI], ref MUseFullRange);
-            InitEdge(edges[0], edges[1], edges[highI], pg[0]);
-            InitEdge(edges[highI], edges[0], edges[highI - 1], pg[highI]);
+            this.RangeTest(pg[0], ref this.MUseFullRange);
+            this.RangeTest(pg[highI], ref this.MUseFullRange);
+            this.InitEdge(edges[0], edges[1], edges[highI], pg[0]);
+            this.InitEdge(edges[highI], edges[0], edges[highI - 1], pg[highI]);
             for (var i = highI - 1; i >= 1; --i)
             {
-                RangeTest(pg[i], ref MUseFullRange);
-                InitEdge(edges[i], edges[i + 1], edges[i - 1], pg[i]);
+                this.RangeTest(pg[i], ref this.MUseFullRange);
+                this.InitEdge(edges[i], edges[i + 1], edges[i - 1], pg[i]);
             }
+
             var eStart = edges[0];
 
-            //2. Remove duplicate vertices, and (when closed) collinear edges ...
+            // 2. Remove duplicate vertices, and (when closed) collinear edges ...
             Edge e = eStart, eLoopStop = eStart;
             for (;;)
             {
-                //nb: allows matching start and end points when not Closed ...
+                // nb: allows matching start and end points when not Closed ...
                 if (e.Curr == e.Next.Curr)
                 {
                     if (e == e.Next)
                     {
                         break;
                     }
+
                     if (e == eStart)
                     {
                         eStart = e.Next;
                     }
-                    e = RemoveEdge(e);
+
+                    e = this.RemoveEdge(e);
                     eLoopStop = e;
                     continue;
                 }
+
                 if (e.Prev == e.Next)
                 {
-                    break; //only two vertices
+                    break; // only two vertices
                 }
-                if (SlopesEqual(e.Prev.Curr, e.Curr, e.Next.Curr, MUseFullRange) &&
-                    (!PreserveCollinear || !Pt2IsBetweenPt1AndPt3(e.Prev.Curr, e.Curr, e.Next.Curr)))
+
+                if (SlopesEqual(e.Prev.Curr, e.Curr, e.Next.Curr, this.MUseFullRange)
+                    && (!this.PreserveCollinear || !this.Pt2IsBetweenPt1AndPt3(e.Prev.Curr, e.Curr, e.Next.Curr)))
                 {
-                    //Collinear edges are allowed for open paths but in closed paths
-                    //the default is to merge adjacent collinear edges into a single edge.
-                    //However, if the PreserveCollinear property is enabled, only overlapping
-                    //collinear edges (ie spikes) will be removed from closed paths.
+                    // Collinear edges are allowed for open paths but in closed paths
+                    // the default is to merge adjacent collinear edges into a single edge.
+                    // However, if the PreserveCollinear property is enabled, only overlapping
+                    // collinear edges (ie spikes) will be removed from closed paths.
                     if (e == eStart)
                     {
                         eStart = e.Next;
                     }
-                    e = RemoveEdge(e);
+
+                    e = this.RemoveEdge(e);
                     e = e.Prev;
                     eLoopStop = e;
                     continue;
                 }
+
                 e = e.Next;
-                if ((e == eLoopStop))
+                if (e == eLoopStop)
                 {
                     break;
                 }
             }
 
-            if (((e.Prev == e.Next)))
+            if (e.Prev == e.Next)
             {
                 return false;
             }
 
-            //3. Do second stage of edge initialization ...
+            // 3. Do second stage of edge initialization ...
             e = eStart;
             do
             {
-                InitEdge2(e, polyType);
+                this.InitEdge2(e, polyType);
                 e = e.Next;
                 if (isFlat && e.Curr.Y != eStart.Curr.Y)
                 {
                     isFlat = false;
                 }
-            } while (e != eStart);
+            }
+            while (e != eStart);
 
-            //4. Finally, add edge bounds to LocalMinima list ...
+            // 4. Finally, add edge bounds to LocalMinima list ...
 
-            //Totally flat paths must be handled differently when adding them
-            //to LocalMinima list to avoid endless loops etc ...
+            // Totally flat paths must be handled differently when adding them
+            // to LocalMinima list to avoid endless loops etc ...
             if (isFlat)
             {
                 return false;
             }
 
-            MEdges.Add(edges);
+            this.MEdges.Add(edges);
             Edge eMin = null;
 
-            //workaround to avoid an endless loop in the while loop below when
-            //open paths have matching start and end points ...
+            // workaround to avoid an endless loop in the while loop below when
+            // open paths have matching start and end points ...
             if (e.Prev.Bot == e.Prev.Top)
             {
                 e = e.Next;
@@ -1513,27 +2226,29 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     break;
                 }
+
                 if (eMin == null)
                 {
                     eMin = e;
                 }
 
-                //E and E.Prev now share a local minima (left aligned if horizontal).
-                //Compare their slopes to find which starts which bound ...
+                // E and E.Prev now share a local minima (left aligned if horizontal).
+                // Compare their slopes to find which starts which bound ...
                 var locMin = new LocalMinima { Next = null, Y = e.Bot.Y };
                 bool leftBoundIsForward;
                 if (e.Dx < e.Prev.Dx)
                 {
                     locMin.LeftBound = e.Prev;
                     locMin.RightBound = e;
-                    leftBoundIsForward = false; //Q.nextInLML = Q.prev
+                    leftBoundIsForward = false; // Q.nextInLML = Q.prev
                 }
                 else
                 {
                     locMin.LeftBound = e;
                     locMin.RightBound = e.Prev;
-                    leftBoundIsForward = true; //Q.nextInLML = Q.next
+                    leftBoundIsForward = true; // Q.nextInLML = Q.next
                 }
+
                 locMin.LeftBound.Side = EdgeSide.EsLeft;
                 locMin.RightBound.Side = EdgeSide.EsRight;
 
@@ -1545,18 +2260,19 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     locMin.LeftBound.WindDelta = 1;
                 }
+
                 locMin.RightBound.WindDelta = -locMin.LeftBound.WindDelta;
 
-                e = ProcessBound(locMin.LeftBound, leftBoundIsForward);
+                e = this.ProcessBound(locMin.LeftBound, leftBoundIsForward);
                 if (e.OutIdx == Skip)
                 {
-                    e = ProcessBound(e, leftBoundIsForward);
+                    e = this.ProcessBound(e, leftBoundIsForward);
                 }
 
-                var e2 = ProcessBound(locMin.RightBound, !leftBoundIsForward);
+                var e2 = this.ProcessBound(locMin.RightBound, !leftBoundIsForward);
                 if (e2.OutIdx == Skip)
                 {
-                    e2 = ProcessBound(e2, !leftBoundIsForward);
+                    e2 = this.ProcessBound(e2, !leftBoundIsForward);
                 }
 
                 if (locMin.LeftBound.OutIdx == Skip)
@@ -1567,16 +2283,18 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     locMin.RightBound = null;
                 }
-                InsertLocalMinima(locMin);
+
+                this.InsertLocalMinima(locMin);
                 if (!leftBoundIsForward)
                 {
                     e = e2;
                 }
             }
+
             return true;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Adds the paths.
@@ -1587,25 +2305,41 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <returns></returns>
         public bool AddPaths(Paths ppg, PolyType polyType, bool closed)
         {
-            return ppg.Any(t => AddPath(t, polyType, closed));
+            return ppg.Any(t => this.AddPath(t, polyType, closed));
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The pt 2 is between pt 1 and pt 3.
+        /// </summary>
+        /// <param name="pt1">
+        ///     TODO The pt 1.
+        /// </param>
+        /// <param name="pt2">
+        ///     TODO The pt 2.
+        /// </param>
+        /// <param name="pt3">
+        ///     TODO The pt 3.
+        /// </param>
+        /// <returns>
+        /// </returns>
         internal bool Pt2IsBetweenPt1AndPt3(IntPoint pt1, IntPoint pt2, IntPoint pt3)
         {
             if ((pt1 == pt3) || (pt1 == pt2) || (pt3 == pt2))
             {
                 return false;
             }
+
             if (pt1.X != pt3.X)
             {
                 return (pt2.X > pt1.X) == (pt2.X < pt3.X);
             }
+
             return (pt2.Y > pt1.Y) == (pt2.Y < pt3.Y);
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Removes an edge.
@@ -1614,15 +2348,15 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <returns></returns>
         private Edge RemoveEdge(Edge e)
         {
-            //removes e from double_linked_list (but without removing from memory)
+            // removes e from double_linked_list (but without removing from memory)
             e.Prev.Next = e.Next;
             e.Next.Prev = e.Prev;
             var result = e.Next;
-            e.Prev = null; //flag as removed (see ClipperBase.Clear)
+            e.Prev = null; // flag as removed (see ClipperBase.Clear)
             return result;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Sets the delta x.
@@ -1630,85 +2364,99 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <param name="e">The edge.</param>
         private void SetDx(Edge e)
         {
-            e.Delta.X = (e.Top.X - e.Bot.X);
-            e.Delta.Y = (e.Top.Y - e.Bot.Y);
+            e.Delta.X = e.Top.X - e.Bot.X;
+            e.Delta.Y = e.Top.Y - e.Bot.Y;
             if (e.Delta.Y == 0)
             {
                 e.Dx = Horizontal;
             }
             else
             {
-                e.Dx = (double) (e.Delta.X) / (e.Delta.Y);
+                e.Dx = (double)e.Delta.X / e.Delta.Y;
             }
         }
 
-        //---------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The insert local minima.
+        /// </summary>
+        /// <param name="newLm">
+        ///     TODO The new lm.
+        /// </param>
         private void InsertLocalMinima(LocalMinima newLm)
         {
-            if (MMinimaList == null)
+            if (this.MMinimaList == null)
             {
-                MMinimaList = newLm;
+                this.MMinimaList = newLm;
             }
-            else if (newLm.Y >= MMinimaList.Y)
+            else if (newLm.Y >= this.MMinimaList.Y)
             {
-                newLm.Next = MMinimaList;
-                MMinimaList = newLm;
+                newLm.Next = this.MMinimaList;
+                this.MMinimaList = newLm;
             }
             else
             {
-                var tmpLm = MMinimaList;
+                var tmpLm = this.MMinimaList;
                 while (tmpLm.Next != null && (newLm.Y < tmpLm.Next.Y))
                 {
                     tmpLm = tmpLm.Next;
                 }
+
                 newLm.Next = tmpLm.Next;
                 tmpLm.Next = newLm;
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Pops the local minima.
         /// </summary>
         protected void PopLocalMinima()
         {
-            if (MCurrentLm == null)
+            if (this.MCurrentLm == null)
             {
                 return;
             }
-            MCurrentLm = MCurrentLm.Next;
+
+            this.MCurrentLm = this.MCurrentLm.Next;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The reverse horizontal.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
         private void ReverseHorizontal(Edge e)
         {
-            //swap horizontal edges' top and bottom x's so they follow the natural
-            //progression of the bounds - ie so their xbots will align with the
-            //adjoining lower edge. [Helpful in the ProcessHorizontal() method.]
-            Swap(ref e.Top.X, ref e.Bot.X);
+            // swap horizontal edges' top and bottom x's so they follow the natural
+            // progression of the bounds - ie so their xbots will align with the
+            // adjoining lower edge. [Helpful in the ProcessHorizontal() method.]
+            this.Swap(ref e.Top.X, ref e.Bot.X);
 #if use_xyz
       Swap(ref e.Top.Z, ref e.Bot.Z);
 #endif
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Resets this instance.
         /// </summary>
         protected virtual void Reset()
         {
-            MCurrentLm = MMinimaList;
-            if (MCurrentLm == null)
+            this.MCurrentLm = this.MMinimaList;
+            if (this.MCurrentLm == null)
             {
-                return; //ie nothing to process
+                return; // ie nothing to process
             }
 
-            //reset all edges ...
-            var lm = MMinimaList;
+            // reset all edges ...
+            var lm = this.MMinimaList;
             while (lm != null)
             {
                 var e = lm.LeftBound;
@@ -1718,6 +2466,7 @@ namespace LeagueSharp.CommonEx.Clipper
                     e.Side = EdgeSide.EsLeft;
                     e.OutIdx = Unassigned;
                 }
+
                 e = lm.RightBound;
                 if (e != null)
                 {
@@ -1725,11 +2474,12 @@ namespace LeagueSharp.CommonEx.Clipper
                     e.Side = EdgeSide.EsRight;
                     e.OutIdx = Unassigned;
                 }
+
                 lm = lm.Next;
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Gets the bounds.
@@ -1743,10 +2493,12 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 i++;
             }
+
             if (i == cnt)
             {
                 return new IntRect(0, 0, 0, 0);
             }
+
             var result = new IntRect { Left = paths[i][0].X };
             result.Right = result.Left;
             result.Top = paths[i][0].Y;
@@ -1763,6 +2515,7 @@ namespace LeagueSharp.CommonEx.Clipper
                     {
                         result.Right = paths[i][j].X;
                     }
+
                     if (paths[i][j].Y < result.Top)
                     {
                         result.Top = paths[i][j].Y;
@@ -1773,16 +2526,17 @@ namespace LeagueSharp.CommonEx.Clipper
                     }
                 }
             }
+
             return result;
         }
-    } //end ClipperBase
+    } // end ClipperBase
 
     /// <summary>
     ///     Clips polygons.
     /// </summary>
     public class Clipper : ClipperBase
     {
-        //InitOptions that can be passed to the constructor ...
+        // InitOptions that can be passed to the constructor ...
         /// <summary>
         ///     Reverses the solution
         /// </summary>
@@ -1798,22 +2552,75 @@ namespace LeagueSharp.CommonEx.Clipper
         /// </summary>
         public const int IoPreserveCollinear = 4;
 
-        private readonly List<OutRec> _mPolyOuts;
-        private ClipType _mClipType;
-        private Scanbeam _mScanbeam;
-        private Edge _mActiveEdges;
-        private Edge _mSortedEdges;
-        private readonly List<IntersectNode> _mIntersectList;
-        private readonly IComparer<IntersectNode> _mIntersectNodeComparer;
-        private bool _mExecuteLocked;
-        private PolyFillType _mClipFillType;
-        private PolyFillType _mSubjFillType;
-        private readonly List<Join> _mJoins;
-        private readonly List<Join> _mGhostJoins;
-        private bool _mUsingPolyTree;
+        /// <summary>
+        ///     TODO The _m poly outs.
+        /// </summary>
+        private readonly List<OutRec> mPolyOuts;
+
+        /// <summary>
+        ///     TODO The _m clip type.
+        /// </summary>
+        private ClipType mClipType;
+
+        /// <summary>
+        ///     TODO The _m scanbeam.
+        /// </summary>
+        private Scanbeam mScanbeam;
+
+        /// <summary>
+        ///     TODO The _m active edges.
+        /// </summary>
+        private Edge mActiveEdges;
+
+        /// <summary>
+        ///     TODO The _m sorted edges.
+        /// </summary>
+        private Edge mSortedEdges;
+
+        /// <summary>
+        ///     TODO The _m intersect list.
+        /// </summary>
+        private readonly List<IntersectNode> mIntersectList;
+
+        /// <summary>
+        ///     TODO The _m intersect node comparer.
+        /// </summary>
+        private readonly IComparer<IntersectNode> mIntersectNodeComparer;
+
+        /// <summary>
+        ///     TODO The _m execute locked.
+        /// </summary>
+        private bool mExecuteLocked;
+
+        /// <summary>
+        ///     TODO The _m clip fill type.
+        /// </summary>
+        private PolyFillType mClipFillType;
+
+        /// <summary>
+        ///     TODO The _m subj fill type.
+        /// </summary>
+        private PolyFillType mSubjFillType;
+
+        /// <summary>
+        ///     TODO The _m joins.
+        /// </summary>
+        private readonly List<Join> mJoins;
+
+        /// <summary>
+        ///     TODO The _m ghost joins.
+        /// </summary>
+        private readonly List<Join> mGhostJoins;
+
+        /// <summary>
+        ///     TODO The _m using poly tree.
+        /// </summary>
+        private bool mUsingPolyTree;
+
 #if use_xyz
-    /// <summary>
-    ///     Z-Fill callback delegate.
+
+    // <summary>
+    // Z-Fill callback delegate.
     /// </summary>
     /// <param name="bot1">Bottom point 1</param>
     /// <param name="top1">Top point 1</param>
@@ -1832,27 +2639,28 @@ namespace LeagueSharp.CommonEx.Clipper
         ///     Initializes a new instance of the <see cref="Clipper" /> class.
         /// </summary>
         /// <param name="initOptions">The initialize options.</param>
-        public Clipper(int initOptions = 0) //constructor
+        public Clipper(int initOptions = 0)
         {
-            _mScanbeam = null;
-            _mActiveEdges = null;
-            _mSortedEdges = null;
-            _mIntersectList = new List<IntersectNode>();
-            _mIntersectNodeComparer = new MyIntersectNodeSort();
-            _mExecuteLocked = false;
-            _mUsingPolyTree = false;
-            _mPolyOuts = new List<OutRec>();
-            _mJoins = new List<Join>();
-            _mGhostJoins = new List<Join>();
-            ReverseSolution = (IoReverseSolution & initOptions) != 0;
-            StrictlySimple = (IoStrictlySimple & initOptions) != 0;
-            PreserveCollinear = (IoPreserveCollinear & initOptions) != 0;
+            // constructor
+            this.mScanbeam = null;
+            this.mActiveEdges = null;
+            this.mSortedEdges = null;
+            this.mIntersectList = new List<IntersectNode>();
+            this.mIntersectNodeComparer = new MyIntersectNodeSort();
+            this.mExecuteLocked = false;
+            this.mUsingPolyTree = false;
+            this.mPolyOuts = new List<OutRec>();
+            this.mJoins = new List<Join>();
+            this.mGhostJoins = new List<Join>();
+            this.ReverseSolution = (IoReverseSolution & initOptions) != 0;
+            this.StrictlySimple = (IoStrictlySimple & initOptions) != 0;
+            this.PreserveCollinear = (IoPreserveCollinear & initOptions) != 0;
 #if use_xyz
           ZFillFunction = null;
 #endif
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Resets this instance.
@@ -1860,18 +2668,18 @@ namespace LeagueSharp.CommonEx.Clipper
         protected override void Reset()
         {
             base.Reset();
-            _mScanbeam = null;
-            _mActiveEdges = null;
-            _mSortedEdges = null;
-            var lm = MMinimaList;
+            this.mScanbeam = null;
+            this.mActiveEdges = null;
+            this.mSortedEdges = null;
+            var lm = this.MMinimaList;
             while (lm != null)
             {
-                InsertScanbeam(lm.Y);
+                this.InsertScanbeam(lm.Y);
                 lm = lm.Next;
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Gets or sets a value indicating whether to reverse the solution.
@@ -1881,7 +2689,7 @@ namespace LeagueSharp.CommonEx.Clipper
         /// </value>
         public bool ReverseSolution { get; set; }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Gets or sets a value indicating whether clipping is strictly simple.
@@ -1891,36 +2699,44 @@ namespace LeagueSharp.CommonEx.Clipper
         /// </value>
         public bool StrictlySimple { get; set; }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
-        private void InsertScanbeam(cInt y)
+        /// <summary>
+        ///     TODO The insert scanbeam.
+        /// </summary>
+        /// <param name="y">
+        ///     TODO The y.
+        /// </param>
+        private void InsertScanbeam(long y)
         {
-            if (_mScanbeam == null)
+            if (this.mScanbeam == null)
             {
-                _mScanbeam = new Scanbeam { Next = null, Y = y };
+                this.mScanbeam = new Scanbeam { Next = null, Y = y };
             }
-            else if (y > _mScanbeam.Y)
+            else if (y > this.mScanbeam.Y)
             {
-                var newSb = new Scanbeam { Y = y, Next = _mScanbeam };
-                _mScanbeam = newSb;
+                var newSb = new Scanbeam { Y = y, Next = this.mScanbeam };
+                this.mScanbeam = newSb;
             }
             else
             {
-                var sb2 = _mScanbeam;
+                var sb2 = this.mScanbeam;
                 while (sb2.Next != null && (y <= sb2.Next.Y))
                 {
                     sb2 = sb2.Next;
                 }
+
                 if (y == sb2.Y)
                 {
-                    return; //ie ignores duplicates
+                    return; // ie ignores duplicates
                 }
+
                 var newSb = new Scanbeam { Y = y, Next = sb2.Next };
                 sb2.Next = newSb;
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Executes the specified clipping.
@@ -1933,40 +2749,43 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <exception cref="ClipperException">Error: PolyTree struct is need for open path clipping.</exception>
         public bool Execute(ClipType clipType, Paths solution, PolyFillType subjFillType, PolyFillType clipFillType)
         {
-            if (_mExecuteLocked)
+            if (this.mExecuteLocked)
             {
                 return false;
             }
-            if (MHasOpenPaths)
+
+            if (this.MHasOpenPaths)
             {
                 throw new ClipperException("Error: PolyTree struct is need for open path clipping.");
             }
 
-            _mExecuteLocked = true;
+            this.mExecuteLocked = true;
             solution.Clear();
-            _mSubjFillType = subjFillType;
-            _mClipFillType = clipFillType;
-            _mClipType = clipType;
-            _mUsingPolyTree = false;
+            this.mSubjFillType = subjFillType;
+            this.mClipFillType = clipFillType;
+            this.mClipType = clipType;
+            this.mUsingPolyTree = false;
             bool succeeded;
             try
             {
-                succeeded = ExecuteInternal();
-                //build the return polygons ...
+                succeeded = this.ExecuteInternal();
+
+                // build the return polygons ...
                 if (succeeded)
                 {
-                    BuildResult(solution);
+                    this.BuildResult(solution);
                 }
             }
             finally
             {
-                DisposeAllPolyPts();
-                _mExecuteLocked = false;
+                this.DisposeAllPolyPts();
+                this.mExecuteLocked = false;
             }
+
             return succeeded;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Executes the specified clipping.
@@ -1978,34 +2797,37 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <returns></returns>
         public bool Execute(ClipType clipType, PolyTree polytree, PolyFillType subjFillType, PolyFillType clipFillType)
         {
-            if (_mExecuteLocked)
+            if (this.mExecuteLocked)
             {
                 return false;
             }
-            _mExecuteLocked = true;
-            _mSubjFillType = subjFillType;
-            _mClipFillType = clipFillType;
-            _mClipType = clipType;
-            _mUsingPolyTree = true;
+
+            this.mExecuteLocked = true;
+            this.mSubjFillType = subjFillType;
+            this.mClipFillType = clipFillType;
+            this.mClipType = clipType;
+            this.mUsingPolyTree = true;
             bool succeeded;
             try
             {
-                succeeded = ExecuteInternal();
-                //build the return polygons ...
+                succeeded = this.ExecuteInternal();
+
+                // build the return polygons ...
                 if (succeeded)
                 {
-                    BuildResult2(polytree);
+                    this.BuildResult2(polytree);
                 }
             }
             finally
             {
-                DisposeAllPolyPts();
-                _mExecuteLocked = false;
+                this.DisposeAllPolyPts();
+                this.mExecuteLocked = false;
             }
+
             return succeeded;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Executes the specified clip type.
@@ -2015,10 +2837,10 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <returns></returns>
         public bool Execute(ClipType clipType, Paths solution)
         {
-            return Execute(clipType, solution, PolyFillType.PftEvenOdd, PolyFillType.PftEvenOdd);
+            return this.Execute(clipType, solution, PolyFillType.PftEvenOdd, PolyFillType.PftEvenOdd);
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Executes the specified clip type.
@@ -2028,15 +2850,21 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <returns></returns>
         public bool Execute(ClipType clipType, PolyTree polytree)
         {
-            return Execute(clipType, polytree, PolyFillType.PftEvenOdd, PolyFillType.PftEvenOdd);
+            return this.Execute(clipType, polytree, PolyFillType.PftEvenOdd, PolyFillType.PftEvenOdd);
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The fix hole linkage.
+        /// </summary>
+        /// <param name="outRec">
+        ///     TODO The out rec.
+        /// </param>
         internal void FixHoleLinkage(OutRec outRec)
         {
-            //skip if an outermost polygon or
-            //already already points to the correct FirstLeft ...
+            // skip if an outermost polygon or
+            // already already points to the correct FirstLeft ...
             if (outRec.FirstLeft == null || (outRec.IsHole != outRec.FirstLeft.IsHole && outRec.FirstLeft.Pts != null))
             {
                 return;
@@ -2047,116 +2875,162 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 orfl = orfl.FirstLeft;
             }
+
             outRec.FirstLeft = orfl;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The execute internal.
+        /// </summary>
+        /// <returns>
+        /// </returns>
         private bool ExecuteInternal()
         {
             try
             {
-                Reset();
-                if (MCurrentLm == null)
+                this.Reset();
+                if (this.MCurrentLm == null)
                 {
                     return false;
                 }
 
-                var botY = PopScanbeam();
+                var botY = this.PopScanbeam();
                 do
                 {
-                    InsertLocalMinimaIntoAel(botY);
-                    _mGhostJoins.Clear();
-                    ProcessHorizontals(false);
-                    if (_mScanbeam == null)
+                    this.InsertLocalMinimaIntoAel(botY);
+                    this.mGhostJoins.Clear();
+                    this.ProcessHorizontals(false);
+                    if (this.mScanbeam == null)
                     {
                         break;
                     }
-                    var topY = PopScanbeam();
-                    if (!ProcessIntersections(topY))
+
+                    var topY = this.PopScanbeam();
+                    if (!this.ProcessIntersections(topY))
                     {
                         return false;
                     }
-                    ProcessEdgesAtTopOfScanbeam(topY);
+
+                    this.ProcessEdgesAtTopOfScanbeam(topY);
                     botY = topY;
-                } while (_mScanbeam != null || MCurrentLm != null);
+                }
+                while (this.mScanbeam != null || this.MCurrentLm != null);
 
-                //fix orientations ...
+                // fix orientations ...
                 foreach (var outRec in
-                    _mPolyOuts.Where(outRec => outRec.Pts != null && !outRec.IsOpen)
-                        .Where(outRec => (outRec.IsHole ^ ReverseSolution) == (Area(outRec) > 0)))
+                    this.mPolyOuts.Where(outRec => outRec.Pts != null && !outRec.IsOpen)
+                        .Where(outRec => (outRec.IsHole ^ this.ReverseSolution) == (Area(outRec) > 0)))
                 {
-                    ReversePolyPtLinks(outRec.Pts);
+                    this.ReversePolyPtLinks(outRec.Pts);
                 }
 
-                JoinCommonEdges();
+                this.JoinCommonEdges();
 
-                foreach (var outRec in _mPolyOuts.Where(outRec => outRec.Pts != null && !outRec.IsOpen))
+                foreach (var outRec in this.mPolyOuts.Where(outRec => outRec.Pts != null && !outRec.IsOpen))
                 {
-                    FixupOutPolygon(outRec);
+                    this.FixupOutPolygon(outRec);
                 }
 
-                if (StrictlySimple)
+                if (this.StrictlySimple)
                 {
-                    DoSimplePolygons();
+                    this.DoSimplePolygons();
                 }
+
                 return true;
             }
-                //catch { return false; }
+
+                // catch { return false; }
             finally
             {
-                _mJoins.Clear();
-                _mGhostJoins.Clear();
+                this.mJoins.Clear();
+                this.mGhostJoins.Clear();
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
-        private cInt PopScanbeam()
+        /// <summary>
+        ///     TODO The pop scanbeam.
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private long PopScanbeam()
         {
-            var y = _mScanbeam.Y;
-            _mScanbeam = _mScanbeam.Next;
+            var y = this.mScanbeam.Y;
+            this.mScanbeam = this.mScanbeam.Next;
             return y;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The dispose all poly pts.
+        /// </summary>
         private void DisposeAllPolyPts()
         {
-            for (var i = 0; i < _mPolyOuts.Count; ++i)
+            for (var i = 0; i < this.mPolyOuts.Count; ++i)
             {
-                DisposeOutRec(i);
+                this.DisposeOutRec(i);
             }
-            _mPolyOuts.Clear();
+
+            this.mPolyOuts.Clear();
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The dispose out rec.
+        /// </summary>
+        /// <param name="index">
+        ///     TODO The index.
+        /// </param>
         private void DisposeOutRec(int index)
         {
-            var outRec = _mPolyOuts[index];
+            var outRec = this.mPolyOuts[index];
             outRec.Pts = null;
-            _mPolyOuts[index] = null;
+            this.mPolyOuts[index] = null;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The add join.
+        /// </summary>
+        /// <param name="op1">
+        ///     TODO The op 1.
+        /// </param>
+        /// <param name="op2">
+        ///     TODO The op 2.
+        /// </param>
+        /// <param name="offPt">
+        ///     TODO The off pt.
+        /// </param>
         private void AddJoin(OutPt op1, OutPt op2, IntPoint offPt)
         {
             var j = new Join { OutPt1 = op1, OutPt2 = op2, OffPt = offPt };
-            _mJoins.Add(j);
+            this.mJoins.Add(j);
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The add ghost join.
+        /// </summary>
+        /// <param name="op">
+        ///     TODO The op.
+        /// </param>
+        /// <param name="offPt">
+        ///     TODO The off pt.
+        /// </param>
         private void AddGhostJoin(OutPt op, IntPoint offPt)
         {
             var j = new Join { OutPt1 = op, OffPt = offPt };
-            _mGhostJoins.Add(j);
+            this.mGhostJoins.Add(j);
         }
 
-        //------------------------------------------------------------------------------
-
+        // ------------------------------------------------------------------------------
 #if use_xyz
       internal void SetZ(ref IntPoint pt, Edge e1, Edge e2)
       {
@@ -2168,60 +3042,68 @@ namespace LeagueSharp.CommonEx.Clipper
           else ZFillFunction(e1.Bot, e1.Top, e2.Bot, e2.Top, ref pt);
       }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 #endif
 
-        private void InsertLocalMinimaIntoAel(cInt botY)
+        /// <summary>
+        ///     TODO The insert local minima into ael.
+        /// </summary>
+        /// <param name="botY">
+        ///     TODO The bot y.
+        /// </param>
+        private void InsertLocalMinimaIntoAel(long botY)
         {
-            while (MCurrentLm != null && (MCurrentLm.Y == botY))
+            while (this.MCurrentLm != null && (this.MCurrentLm.Y == botY))
             {
-                var lb = MCurrentLm.LeftBound;
-                var rb = MCurrentLm.RightBound;
-                PopLocalMinima();
+                var lb = this.MCurrentLm.LeftBound;
+                var rb = this.MCurrentLm.RightBound;
+                this.PopLocalMinima();
 
                 OutPt op1 = null;
                 if (lb == null)
                 {
-                    InsertEdgeIntoAel(rb, null);
-                    SetWindingCount(rb);
-                    if (IsContributing(rb))
+                    this.InsertEdgeIntoAel(rb, null);
+                    this.SetWindingCount(rb);
+                    if (this.IsContributing(rb))
                     {
-                        op1 = AddOutPt(rb, rb.Bot);
+                        op1 = this.AddOutPt(rb, rb.Bot);
                     }
                 }
                 else if (rb == null)
                 {
-                    InsertEdgeIntoAel(lb, null);
-                    SetWindingCount(lb);
-                    if (IsContributing(lb))
+                    this.InsertEdgeIntoAel(lb, null);
+                    this.SetWindingCount(lb);
+                    if (this.IsContributing(lb))
                     {
-                        op1 = AddOutPt(lb, lb.Bot);
+                        op1 = this.AddOutPt(lb, lb.Bot);
                     }
-                    InsertScanbeam(lb.Top.Y);
+
+                    this.InsertScanbeam(lb.Top.Y);
                 }
                 else
                 {
-                    InsertEdgeIntoAel(lb, null);
-                    InsertEdgeIntoAel(rb, lb);
-                    SetWindingCount(lb);
+                    this.InsertEdgeIntoAel(lb, null);
+                    this.InsertEdgeIntoAel(rb, lb);
+                    this.SetWindingCount(lb);
                     rb.WindCnt = lb.WindCnt;
                     rb.WindCnt2 = lb.WindCnt2;
-                    if (IsContributing(lb))
+                    if (this.IsContributing(lb))
                     {
-                        op1 = AddLocalMinPoly(lb, rb, lb.Bot);
+                        op1 = this.AddLocalMinPoly(lb, rb, lb.Bot);
                     }
-                    InsertScanbeam(lb.Top.Y);
+
+                    this.InsertScanbeam(lb.Top.Y);
                 }
 
                 if (rb != null)
                 {
                     if (IsHorizontal(rb))
                     {
-                        AddEdgeToSel(rb);
+                        this.AddEdgeToSel(rb);
                     }
                     else
                     {
-                        InsertScanbeam(rb.Top.Y);
+                        this.InsertScanbeam(rb.Top.Y);
                     }
                 }
 
@@ -2230,31 +3112,32 @@ namespace LeagueSharp.CommonEx.Clipper
                     continue;
                 }
 
-                //if output polygons share an Edge with a horizontal rb, they'll need joining later ...
-                if (op1 != null && IsHorizontal(rb) && _mGhostJoins.Count > 0 && rb.WindDelta != 0)
+                // if output polygons share an Edge with a horizontal rb, they'll need joining later ...
+                if (op1 != null && IsHorizontal(rb) && this.mGhostJoins.Count > 0 && rb.WindDelta != 0)
                 {
                     foreach (var j in
-                        _mGhostJoins.Where(j => HorzSegmentsOverlap(j.OutPt1.Pt.X, j.OffPt.X, rb.Bot.X, rb.Top.X)))
+                        this.mGhostJoins.Where(
+                            j => this.HorzSegmentsOverlap(j.OutPt1.Pt.X, j.OffPt.X, rb.Bot.X, rb.Top.X)))
                     {
-                        AddJoin(j.OutPt1, op1, j.OffPt);
+                        this.AddJoin(j.OutPt1, op1, j.OffPt);
                     }
                 }
 
-                if (lb.OutIdx >= 0 && lb.PrevInAel != null && lb.PrevInAel.Curr.X == lb.Bot.X &&
-                    lb.PrevInAel.OutIdx >= 0 && SlopesEqual(lb.PrevInAel, lb, MUseFullRange) && lb.WindDelta != 0 &&
-                    lb.PrevInAel.WindDelta != 0)
+                if (lb.OutIdx >= 0 && lb.PrevInAel != null && lb.PrevInAel.Curr.X == lb.Bot.X
+                    && lb.PrevInAel.OutIdx >= 0 && SlopesEqual(lb.PrevInAel, lb, this.MUseFullRange)
+                    && lb.WindDelta != 0 && lb.PrevInAel.WindDelta != 0)
                 {
-                    var op2 = AddOutPt(lb.PrevInAel, lb.Bot);
-                    AddJoin(op1, op2, lb.Top);
+                    var op2 = this.AddOutPt(lb.PrevInAel, lb.Bot);
+                    this.AddJoin(op1, op2, lb.Top);
                 }
 
                 if (lb.NextInAel != rb)
                 {
-                    if (rb.OutIdx >= 0 && rb.PrevInAel.OutIdx >= 0 && SlopesEqual(rb.PrevInAel, rb, MUseFullRange) &&
-                        rb.WindDelta != 0 && rb.PrevInAel.WindDelta != 0)
+                    if (rb.OutIdx >= 0 && rb.PrevInAel.OutIdx >= 0 && SlopesEqual(rb.PrevInAel, rb, this.MUseFullRange)
+                        && rb.WindDelta != 0 && rb.PrevInAel.WindDelta != 0)
                     {
-                        var op2 = AddOutPt(rb.PrevInAel, rb.Bot);
-                        AddJoin(op1, op2, rb.Top);
+                        var op2 = this.AddOutPt(rb.PrevInAel, rb.Bot);
+                        this.AddJoin(op1, op2, rb.Top);
                     }
 
                     var e = lb.NextInAel;
@@ -2262,9 +3145,9 @@ namespace LeagueSharp.CommonEx.Clipper
                     {
                         while (e != rb)
                         {
-                            //nb: For calculating winding counts etc, IntersectEdges() assumes
-                            //that param1 will be to the right of param2 ABOVE the intersection ...
-                            IntersectEdges(rb, e, lb.Curr); //order important here
+                            // nb: For calculating winding counts etc, IntersectEdges() assumes
+                            // that param1 will be to the right of param2 ABOVE the intersection ...
+                            this.IntersectEdges(rb, e, lb.Curr); // order important here
                             e = e.NextInAel;
                         }
                     }
@@ -2272,45 +3155,68 @@ namespace LeagueSharp.CommonEx.Clipper
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The insert edge into ael.
+        /// </summary>
+        /// <param name="edge">
+        ///     TODO The edge.
+        /// </param>
+        /// <param name="startEdge">
+        ///     TODO The start edge.
+        /// </param>
         private void InsertEdgeIntoAel(Edge edge, Edge startEdge)
         {
-            if (_mActiveEdges == null)
+            if (this.mActiveEdges == null)
             {
                 edge.PrevInAel = null;
                 edge.NextInAel = null;
-                _mActiveEdges = edge;
+                this.mActiveEdges = edge;
             }
-            else if (startEdge == null && E2InsertsBeforeE1(_mActiveEdges, edge))
+            else if (startEdge == null && this.E2InsertsBeforeE1(this.mActiveEdges, edge))
             {
                 edge.PrevInAel = null;
-                edge.NextInAel = _mActiveEdges;
-                _mActiveEdges.PrevInAel = edge;
-                _mActiveEdges = edge;
+                edge.NextInAel = this.mActiveEdges;
+                this.mActiveEdges.PrevInAel = edge;
+                this.mActiveEdges = edge;
             }
             else
             {
                 if (startEdge == null)
                 {
-                    startEdge = _mActiveEdges;
+                    startEdge = this.mActiveEdges;
                 }
-                while (startEdge.NextInAel != null && !E2InsertsBeforeE1(startEdge.NextInAel, edge))
+
+                while (startEdge.NextInAel != null && !this.E2InsertsBeforeE1(startEdge.NextInAel, edge))
                 {
                     startEdge = startEdge.NextInAel;
                 }
+
                 edge.NextInAel = startEdge.NextInAel;
                 if (startEdge.NextInAel != null)
                 {
                     startEdge.NextInAel.PrevInAel = edge;
                 }
+
                 edge.PrevInAel = startEdge;
                 startEdge.NextInAel = edge;
             }
         }
 
-        //----------------------------------------------------------------------
+        // ----------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The e 2 inserts before e 1.
+        /// </summary>
+        /// <param name="e1">
+        ///     TODO The e 1.
+        /// </param>
+        /// <param name="e2">
+        ///     TODO The e 2.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private bool E2InsertsBeforeE1(Edge e1, Edge e2)
         {
             if (e2.Curr.X == e1.Curr.X)
@@ -2319,102 +3225,137 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     return e2.Top.X < TopX(e1, e2.Top.Y);
                 }
+
                 return e1.Top.X > TopX(e2, e1.Top.Y);
             }
+
             return e2.Curr.X < e1.Curr.X;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The is even odd fill type.
+        /// </summary>
+        /// <param name="edge">
+        ///     TODO The edge.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private bool IsEvenOddFillType(Edge edge)
         {
             if (edge.PolyTyp == PolyType.PtSubject)
             {
-                return _mSubjFillType == PolyFillType.PftEvenOdd;
+                return this.mSubjFillType == PolyFillType.PftEvenOdd;
             }
-            return _mClipFillType == PolyFillType.PftEvenOdd;
+
+            return this.mClipFillType == PolyFillType.PftEvenOdd;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The is even odd alt fill type.
+        /// </summary>
+        /// <param name="edge">
+        ///     TODO The edge.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private bool IsEvenOddAltFillType(Edge edge)
         {
             if (edge.PolyTyp == PolyType.PtSubject)
             {
-                return _mClipFillType == PolyFillType.PftEvenOdd;
+                return this.mClipFillType == PolyFillType.PftEvenOdd;
             }
-            return _mSubjFillType == PolyFillType.PftEvenOdd;
+
+            return this.mSubjFillType == PolyFillType.PftEvenOdd;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The is contributing.
+        /// </summary>
+        /// <param name="edge">
+        ///     TODO The edge.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private bool IsContributing(Edge edge)
         {
             PolyFillType pft, pft2;
             if (edge.PolyTyp == PolyType.PtSubject)
             {
-                pft = _mSubjFillType;
-                pft2 = _mClipFillType;
+                pft = this.mSubjFillType;
+                pft2 = this.mClipFillType;
             }
             else
             {
-                pft = _mClipFillType;
-                pft2 = _mSubjFillType;
+                pft = this.mClipFillType;
+                pft2 = this.mSubjFillType;
             }
 
             switch (pft)
             {
                 case PolyFillType.PftEvenOdd:
-                    //return false if a subj line has been flagged as inside a subj polygon
+
+                    // return false if a subj line has been flagged as inside a subj polygon
                     if (edge.WindDelta == 0 && edge.WindCnt != 1)
                     {
                         return false;
                     }
+
                     break;
                 case PolyFillType.PftNonZero:
                     if (Math.Abs(edge.WindCnt) != 1)
                     {
                         return false;
                     }
+
                     break;
                 case PolyFillType.PftPositive:
                     if (edge.WindCnt != 1)
                     {
                         return false;
                     }
+
                     break;
-                default: //PolyFillType.pftNegative
+                default: // PolyFillType.pftNegative
                     if (edge.WindCnt != -1)
                     {
                         return false;
                     }
+
                     break;
             }
 
-            switch (_mClipType)
+            switch (this.mClipType)
             {
                 case ClipType.CtIntersection:
                     switch (pft2)
                     {
                         case PolyFillType.PftEvenOdd:
                         case PolyFillType.PftNonZero:
-                            return (edge.WindCnt2 != 0);
+                            return edge.WindCnt2 != 0;
                         case PolyFillType.PftPositive:
-                            return (edge.WindCnt2 > 0);
+                            return edge.WindCnt2 > 0;
                         default:
-                            return (edge.WindCnt2 < 0);
+                            return edge.WindCnt2 < 0;
                     }
+
                 case ClipType.CtUnion:
                     switch (pft2)
                     {
                         case PolyFillType.PftEvenOdd:
                         case PolyFillType.PftNonZero:
-                            return (edge.WindCnt2 == 0);
+                            return edge.WindCnt2 == 0;
                         case PolyFillType.PftPositive:
-                            return (edge.WindCnt2 <= 0);
+                            return edge.WindCnt2 <= 0;
                         default:
-                            return (edge.WindCnt2 >= 0);
+                            return edge.WindCnt2 >= 0;
                     }
+
                 case ClipType.CtDifference:
                     if (edge.PolyTyp == PolyType.PtSubject)
                     {
@@ -2422,70 +3363,83 @@ namespace LeagueSharp.CommonEx.Clipper
                         {
                             case PolyFillType.PftEvenOdd:
                             case PolyFillType.PftNonZero:
-                                return (edge.WindCnt2 == 0);
+                                return edge.WindCnt2 == 0;
                             case PolyFillType.PftPositive:
-                                return (edge.WindCnt2 <= 0);
+                                return edge.WindCnt2 <= 0;
                             default:
-                                return (edge.WindCnt2 >= 0);
+                                return edge.WindCnt2 >= 0;
                         }
                     }
+
                     switch (pft2)
                     {
                         case PolyFillType.PftEvenOdd:
                         case PolyFillType.PftNonZero:
-                            return (edge.WindCnt2 != 0);
+                            return edge.WindCnt2 != 0;
                         case PolyFillType.PftPositive:
-                            return (edge.WindCnt2 > 0);
+                            return edge.WindCnt2 > 0;
                         default:
-                            return (edge.WindCnt2 < 0);
+                            return edge.WindCnt2 < 0;
                     }
+
                 case ClipType.CtXor:
-                    if (edge.WindDelta == 0) //XOr always contributing unless open
+                    if (edge.WindDelta == 0)
                     {
+                        // XOr always contributing unless open
                         switch (pft2)
                         {
                             case PolyFillType.PftEvenOdd:
                             case PolyFillType.PftNonZero:
-                                return (edge.WindCnt2 == 0);
+                                return edge.WindCnt2 == 0;
                             case PolyFillType.PftPositive:
-                                return (edge.WindCnt2 <= 0);
+                                return edge.WindCnt2 <= 0;
                             default:
-                                return (edge.WindCnt2 >= 0);
+                                return edge.WindCnt2 >= 0;
                         }
                     }
+
                     return true;
             }
+
             return true;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The set winding count.
+        /// </summary>
+        /// <param name="edge">
+        ///     TODO The edge.
+        /// </param>
         private void SetWindingCount(Edge edge)
         {
             var e = edge.PrevInAel;
-            //find the edge of the same polytype that immediately preceeds 'edge' in AEL
+
+            // find the edge of the same polytype that immediately preceeds 'edge' in AEL
             while (e != null && ((e.PolyTyp != edge.PolyTyp) || (e.WindDelta == 0)))
             {
                 e = e.PrevInAel;
             }
+
             if (e == null)
             {
-                edge.WindCnt = (edge.WindDelta == 0 ? 1 : edge.WindDelta);
+                edge.WindCnt = edge.WindDelta == 0 ? 1 : edge.WindDelta;
                 edge.WindCnt2 = 0;
-                e = _mActiveEdges; //ie get ready to calc WindCnt2
+                e = this.mActiveEdges; // ie get ready to calc WindCnt2
             }
-            else if (edge.WindDelta == 0 && _mClipType != ClipType.CtUnion)
+            else if (edge.WindDelta == 0 && this.mClipType != ClipType.CtUnion)
             {
                 edge.WindCnt = 1;
                 edge.WindCnt2 = e.WindCnt2;
-                e = e.NextInAel; //ie get ready to calc WindCnt2
+                e = e.NextInAel; // ie get ready to calc WindCnt2
             }
-            else if (IsEvenOddFillType(edge))
+            else if (this.IsEvenOddFillType(edge))
             {
-                //EvenOdd filling ...
+                // EvenOdd filling ...
                 if (edge.WindDelta == 0)
                 {
-                    //are we inside a subj polygon ...
+                    // are we inside a subj polygon ...
                     var inside = true;
                     var e2 = e.PrevInAel;
                     while (e2 != null)
@@ -2494,33 +3448,37 @@ namespace LeagueSharp.CommonEx.Clipper
                         {
                             inside = !inside;
                         }
+
                         e2 = e2.PrevInAel;
                     }
-                    edge.WindCnt = (inside ? 0 : 1);
+
+                    edge.WindCnt = inside ? 0 : 1;
                 }
                 else
                 {
                     edge.WindCnt = edge.WindDelta;
                 }
+
                 edge.WindCnt2 = e.WindCnt2;
-                e = e.NextInAel; //ie get ready to calc WindCnt2
+                e = e.NextInAel; // ie get ready to calc WindCnt2
             }
             else
             {
-                //nonZero, Positive or Negative filling ...
+                // nonZero, Positive or Negative filling ...
                 if (e.WindCnt * e.WindDelta < 0)
                 {
-                    //prev edge is 'decreasing' WindCount (WC) toward zero
-                    //so we're outside the previous polygon ...
+                    // prev edge is 'decreasing' WindCount (WC) toward zero
+                    // so we're outside the previous polygon ...
                     if (Math.Abs(e.WindCnt) > 1)
                     {
-                        //outside prev poly but still inside another.
-                        //when reversing direction of prev poly use the same WC 
+                        // outside prev poly but still inside another.
+                        // when reversing direction of prev poly use the same WC 
                         if (e.WindDelta * edge.WindDelta < 0)
                         {
                             edge.WindCnt = e.WindCnt;
                         }
-                        //otherwise continue to 'decrease' WC ...
+
+                        // otherwise continue to 'decrease' WC ...
                         else
                         {
                             edge.WindCnt = e.WindCnt + edge.WindDelta;
@@ -2528,49 +3486,53 @@ namespace LeagueSharp.CommonEx.Clipper
                     }
                     else
                     {
-                        //now outside all polys of same polytype so set own WC ...
-                        edge.WindCnt = (edge.WindDelta == 0 ? 1 : edge.WindDelta);
+                        // now outside all polys of same polytype so set own WC ...
+                        edge.WindCnt = edge.WindDelta == 0 ? 1 : edge.WindDelta;
                     }
                 }
                 else
                 {
-                    //prev edge is 'increasing' WindCount (WC) away from zero
-                    //so we're inside the previous polygon ...
+                    // prev edge is 'increasing' WindCount (WC) away from zero
+                    // so we're inside the previous polygon ...
                     if (edge.WindDelta == 0)
                     {
-                        edge.WindCnt = (e.WindCnt < 0 ? e.WindCnt - 1 : e.WindCnt + 1);
+                        edge.WindCnt = e.WindCnt < 0 ? e.WindCnt - 1 : e.WindCnt + 1;
                     }
-                    //if wind direction is reversing prev then use same WC
+
+                    // if wind direction is reversing prev then use same WC
                     else if (e.WindDelta * edge.WindDelta < 0)
                     {
                         edge.WindCnt = e.WindCnt;
                     }
-                    //otherwise add to WC ...
+
+                    // otherwise add to WC ...
                     else
                     {
                         edge.WindCnt = e.WindCnt + edge.WindDelta;
                     }
                 }
+
                 edge.WindCnt2 = e.WindCnt2;
-                e = e.NextInAel; //ie get ready to calc WindCnt2
+                e = e.NextInAel; // ie get ready to calc WindCnt2
             }
 
-            //update WindCnt2 ...
-            if (IsEvenOddAltFillType(edge))
+            // update WindCnt2 ...
+            if (this.IsEvenOddAltFillType(edge))
             {
-                //EvenOdd filling ...
+                // EvenOdd filling ...
                 while (e != edge)
                 {
                     if (e.WindDelta != 0)
                     {
-                        edge.WindCnt2 = (edge.WindCnt2 == 0 ? 1 : 0);
+                        edge.WindCnt2 = edge.WindCnt2 == 0 ? 1 : 0;
                     }
+
                     e = e.NextInAel;
                 }
             }
             else
             {
-                //nonZero, Positive or Negative filling ...
+                // nonZero, Positive or Negative filling ...
                 while (e != edge)
                 {
                     edge.WindCnt2 += e.WindDelta;
@@ -2579,33 +3541,42 @@ namespace LeagueSharp.CommonEx.Clipper
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The add edge to sel.
+        /// </summary>
+        /// <param name="edge">
+        ///     TODO The edge.
+        /// </param>
         private void AddEdgeToSel(Edge edge)
         {
-            //SEL pointers in PEdge are reused to build a list of horizontal edges.
-            //However, we don't need to worry about order with horizontal edge processing.
-            if (_mSortedEdges == null)
+            // SEL pointers in PEdge are reused to build a list of horizontal edges.
+            // However, we don't need to worry about order with horizontal edge processing.
+            if (this.mSortedEdges == null)
             {
-                _mSortedEdges = edge;
+                this.mSortedEdges = edge;
                 edge.PrevInSel = null;
                 edge.NextInSel = null;
             }
             else
             {
-                edge.NextInSel = _mSortedEdges;
+                edge.NextInSel = this.mSortedEdges;
                 edge.PrevInSel = null;
-                _mSortedEdges.PrevInSel = edge;
-                _mSortedEdges = edge;
+                this.mSortedEdges.PrevInSel = edge;
+                this.mSortedEdges = edge;
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The copy aelto sel.
+        /// </summary>
         private void CopyAeltoSel()
         {
-            var e = _mActiveEdges;
-            _mSortedEdges = e;
+            var e = this.mActiveEdges;
+            this.mSortedEdges = e;
             while (e != null)
             {
                 e.PrevInSel = e.PrevInAel;
@@ -2614,11 +3585,20 @@ namespace LeagueSharp.CommonEx.Clipper
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The swap positions in ael.
+        /// </summary>
+        /// <param name="edge1">
+        ///     TODO The edge 1.
+        /// </param>
+        /// <param name="edge2">
+        ///     TODO The edge 2.
+        /// </param>
         private void SwapPositionsInAel(Edge edge1, Edge edge2)
         {
-            //check that one or other edge hasn't already been removed from AEL ...
+            // check that one or other edge hasn't already been removed from AEL ...
             if (edge1.NextInAel == edge1.PrevInAel || edge2.NextInAel == edge2.PrevInAel)
             {
                 return;
@@ -2631,11 +3611,13 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     next.PrevInAel = edge1;
                 }
+
                 var prev = edge1.PrevInAel;
                 if (prev != null)
                 {
                     prev.NextInAel = edge2;
                 }
+
                 edge2.PrevInAel = prev;
                 edge2.NextInAel = edge1;
                 edge1.PrevInAel = edge2;
@@ -2648,11 +3630,13 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     next.PrevInAel = edge2;
                 }
+
                 var prev = edge2.PrevInAel;
                 if (prev != null)
                 {
                     prev.NextInAel = edge1;
                 }
+
                 edge1.PrevInAel = prev;
                 edge1.NextInAel = edge2;
                 edge2.PrevInAel = edge1;
@@ -2667,16 +3651,19 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     edge1.NextInAel.PrevInAel = edge1;
                 }
+
                 edge1.PrevInAel = edge2.PrevInAel;
                 if (edge1.PrevInAel != null)
                 {
                     edge1.PrevInAel.NextInAel = edge1;
                 }
+
                 edge2.NextInAel = next;
                 if (edge2.NextInAel != null)
                 {
                     edge2.NextInAel.PrevInAel = edge2;
                 }
+
                 edge2.PrevInAel = prev;
                 if (edge2.PrevInAel != null)
                 {
@@ -2686,22 +3673,32 @@ namespace LeagueSharp.CommonEx.Clipper
 
             if (edge1.PrevInAel == null)
             {
-                _mActiveEdges = edge1;
+                this.mActiveEdges = edge1;
             }
             else if (edge2.PrevInAel == null)
             {
-                _mActiveEdges = edge2;
+                this.mActiveEdges = edge2;
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The swap positions in sel.
+        /// </summary>
+        /// <param name="edge1">
+        ///     TODO The edge 1.
+        /// </param>
+        /// <param name="edge2">
+        ///     TODO The edge 2.
+        /// </param>
         private void SwapPositionsInSel(Edge edge1, Edge edge2)
         {
             if (edge1.NextInSel == null && edge1.PrevInSel == null)
             {
                 return;
             }
+
             if (edge2.NextInSel == null && edge2.PrevInSel == null)
             {
                 return;
@@ -2714,11 +3711,13 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     next.PrevInSel = edge1;
                 }
+
                 var prev = edge1.PrevInSel;
                 if (prev != null)
                 {
                     prev.NextInSel = edge2;
                 }
+
                 edge2.PrevInSel = prev;
                 edge2.NextInSel = edge1;
                 edge1.PrevInSel = edge2;
@@ -2731,11 +3730,13 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     next.PrevInSel = edge2;
                 }
+
                 var prev = edge2.PrevInSel;
                 if (prev != null)
                 {
                     prev.NextInSel = edge1;
                 }
+
                 edge1.PrevInSel = prev;
                 edge1.NextInSel = edge2;
                 edge2.PrevInSel = edge1;
@@ -2750,16 +3751,19 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     edge1.NextInSel.PrevInSel = edge1;
                 }
+
                 edge1.PrevInSel = edge2.PrevInSel;
                 if (edge1.PrevInSel != null)
                 {
                     edge1.PrevInSel.NextInSel = edge1;
                 }
+
                 edge2.NextInSel = next;
                 if (edge2.NextInSel != null)
                 {
                     edge2.NextInSel.PrevInSel = edge2;
                 }
+
                 edge2.PrevInSel = prev;
                 if (edge2.PrevInSel != null)
                 {
@@ -2769,24 +3773,36 @@ namespace LeagueSharp.CommonEx.Clipper
 
             if (edge1.PrevInSel == null)
             {
-                _mSortedEdges = edge1;
+                this.mSortedEdges = edge1;
             }
             else if (edge2.PrevInSel == null)
             {
-                _mSortedEdges = edge2;
+                this.mSortedEdges = edge2;
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
-
+        /// <summary>
+        ///     TODO The add local max poly.
+        /// </summary>
+        /// <param name="e1">
+        ///     TODO The e 1.
+        /// </param>
+        /// <param name="e2">
+        ///     TODO The e 2.
+        /// </param>
+        /// <param name="pt">
+        ///     TODO The pt.
+        /// </param>
         private void AddLocalMaxPoly(Edge e1, Edge e2, IntPoint pt)
         {
-            AddOutPt(e1, pt);
+            this.AddOutPt(e1, pt);
             if (e2.WindDelta == 0)
             {
-                AddOutPt(e2, pt);
+                this.AddOutPt(e2, pt);
             }
+
             if (e1.OutIdx == e2.OutIdx)
             {
                 e1.OutIdx = Unassigned;
@@ -2794,23 +3810,37 @@ namespace LeagueSharp.CommonEx.Clipper
             }
             else if (e1.OutIdx < e2.OutIdx)
             {
-                AppendPolygon(e1, e2);
+                this.AppendPolygon(e1, e2);
             }
             else
             {
-                AppendPolygon(e2, e1);
+                this.AppendPolygon(e2, e1);
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The add local min poly.
+        /// </summary>
+        /// <param name="e1">
+        ///     TODO The e 1.
+        /// </param>
+        /// <param name="e2">
+        ///     TODO The e 2.
+        /// </param>
+        /// <param name="pt">
+        ///     TODO The pt.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private OutPt AddLocalMinPoly(Edge e1, Edge e2, IntPoint pt)
         {
             OutPt result;
             Edge e, prevE;
             if (IsHorizontal(e2) || (e1.Dx > e2.Dx))
             {
-                result = AddOutPt(e1, pt);
+                result = this.AddOutPt(e1, pt);
                 e2.OutIdx = e1.OutIdx;
                 e1.Side = EdgeSide.EsLeft;
                 e2.Side = EdgeSide.EsRight;
@@ -2819,7 +3849,7 @@ namespace LeagueSharp.CommonEx.Clipper
             }
             else
             {
-                result = AddOutPt(e2, pt);
+                result = this.AddOutPt(e2, pt);
                 e1.OutIdx = e2.OutIdx;
                 e1.Side = EdgeSide.EsRight;
                 e2.Side = EdgeSide.EsLeft;
@@ -2827,43 +3857,55 @@ namespace LeagueSharp.CommonEx.Clipper
                 prevE = e.PrevInAel == e1 ? e1.PrevInAel : e.PrevInAel;
             }
 
-            if (prevE != null && prevE.OutIdx >= 0 && (TopX(prevE, pt.Y) == TopX(e, pt.Y)) &&
-                SlopesEqual(e, prevE, MUseFullRange) && (e.WindDelta != 0) && (prevE.WindDelta != 0))
+            if (prevE != null && prevE.OutIdx >= 0 && (TopX(prevE, pt.Y) == TopX(e, pt.Y))
+                && SlopesEqual(e, prevE, this.MUseFullRange) && (e.WindDelta != 0) && (prevE.WindDelta != 0))
             {
-                var outPt = AddOutPt(prevE, pt);
-                AddJoin(result, outPt, e.Top);
+                var outPt = this.AddOutPt(prevE, pt);
+                this.AddJoin(result, outPt, e.Top);
             }
+
             return result;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The create out rec.
+        /// </summary>
+        /// <returns>
+        /// </returns>
         private OutRec CreateOutRec()
         {
             var result = new OutRec
-            {
-                Idx = Unassigned,
-                IsHole = false,
-                IsOpen = false,
-                FirstLeft = null,
-                Pts = null,
-                BottomPt = null,
-                PolyNode = null
-            };
-            _mPolyOuts.Add(result);
-            result.Idx = _mPolyOuts.Count - 1;
+                             {
+                                 Idx = Unassigned, IsHole = false, IsOpen = false, FirstLeft = null, Pts = null, 
+                                 BottomPt = null, PolyNode = null
+                             };
+            this.mPolyOuts.Add(result);
+            result.Idx = this.mPolyOuts.Count - 1;
             return result;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The add out pt.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
+        /// <param name="pt">
+        ///     TODO The pt.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private OutPt AddOutPt(Edge e, IntPoint pt)
         {
-            var toFront = (e.Side == EdgeSide.EsLeft);
+            var toFront = e.Side == EdgeSide.EsLeft;
             if (e.OutIdx < 0)
             {
-                var outRec = CreateOutRec();
-                outRec.IsOpen = (e.WindDelta == 0);
+                var outRec = this.CreateOutRec();
+                outRec.IsOpen = e.WindDelta == 0;
                 var newOp = new OutPt();
                 outRec.Pts = newOp;
                 newOp.Idx = outRec.Idx;
@@ -2872,20 +3914,23 @@ namespace LeagueSharp.CommonEx.Clipper
                 newOp.Prev = newOp;
                 if (!outRec.IsOpen)
                 {
-                    SetHoleState(e, outRec);
+                    this.SetHoleState(e, outRec);
                 }
-                e.OutIdx = outRec.Idx; //nb: do this after SetZ !
+
+                e.OutIdx = outRec.Idx; // nb: do this after SetZ !
                 return newOp;
             }
             else
             {
-                var outRec = _mPolyOuts[e.OutIdx];
-                //OutRec.Pts is the 'Left-most' point & OutRec.Pts.Prev is the 'Right-most'
+                var outRec = this.mPolyOuts[e.OutIdx];
+
+                // OutRec.Pts is the 'Left-most' point & OutRec.Pts.Prev is the 'Right-most'
                 var op = outRec.Pts;
                 if (toFront && pt == op.Pt)
                 {
                     return op;
                 }
+
                 if (!toFront && pt == op.Prev.Pt)
                 {
                     return op.Prev;
@@ -2898,12 +3943,22 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     outRec.Pts = newOp;
                 }
+
                 return newOp;
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The swap points.
+        /// </summary>
+        /// <param name="pt1">
+        ///     TODO The pt 1.
+        /// </param>
+        /// <param name="pt2">
+        ///     TODO The pt 2.
+        /// </param>
         internal void SwapPoints(ref IntPoint pt1, ref IntPoint pt2)
         {
             var tmp = new IntPoint(pt1);
@@ -2911,23 +3966,51 @@ namespace LeagueSharp.CommonEx.Clipper
             pt2 = tmp;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
-        private bool HorzSegmentsOverlap(cInt seg1A, cInt seg1B, cInt seg2A, cInt seg2B)
+        /// <summary>
+        ///     TODO The horz segments overlap.
+        /// </summary>
+        /// <param name="seg1A">
+        ///     TODO The seg 1 a.
+        /// </param>
+        /// <param name="seg1B">
+        ///     TODO The seg 1 b.
+        /// </param>
+        /// <param name="seg2A">
+        ///     TODO The seg 2 a.
+        /// </param>
+        /// <param name="seg2B">
+        ///     TODO The seg 2 b.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private bool HorzSegmentsOverlap(long seg1A, long seg1B, long seg2A, long seg2B)
         {
             if (seg1A > seg1B)
             {
-                Swap(ref seg1A, ref seg1B);
+                this.Swap(ref seg1A, ref seg1B);
             }
+
             if (seg2A > seg2B)
             {
-                Swap(ref seg2A, ref seg2B);
+                this.Swap(ref seg2A, ref seg2B);
             }
+
             return (seg1A < seg2B) && (seg2A < seg1B);
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The set hole state.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
+        /// <param name="outRec">
+        ///     TODO The out rec.
+        /// </param>
         private void SetHoleState(Edge e, OutRec outRec)
         {
             var isHole = false;
@@ -2939,30 +4022,55 @@ namespace LeagueSharp.CommonEx.Clipper
                     isHole = !isHole;
                     if (outRec.FirstLeft == null)
                     {
-                        outRec.FirstLeft = _mPolyOuts[e2.OutIdx];
+                        outRec.FirstLeft = this.mPolyOuts[e2.OutIdx];
                     }
                 }
+
                 e2 = e2.PrevInAel;
             }
+
             if (isHole)
             {
                 outRec.IsHole = true;
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The get dx.
+        /// </summary>
+        /// <param name="pt1">
+        ///     TODO The pt 1.
+        /// </param>
+        /// <param name="pt2">
+        ///     TODO The pt 2.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private double GetDx(IntPoint pt1, IntPoint pt2)
         {
             if (pt1.Y == pt2.Y)
             {
                 return Horizontal;
             }
-            return (double) (pt2.X - pt1.X) / (pt2.Y - pt1.Y);
+
+            return (double)(pt2.X - pt1.X) / (pt2.Y - pt1.Y);
         }
 
-        //---------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The first is bottom pt.
+        /// </summary>
+        /// <param name="btmPt1">
+        ///     TODO The btm pt 1.
+        /// </param>
+        /// <param name="btmPt2">
+        ///     TODO The btm pt 2.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private bool FirstIsBottomPt(OutPt btmPt1, OutPt btmPt2)
         {
             var p = btmPt1.Prev;
@@ -2970,31 +4078,43 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 p = p.Prev;
             }
-            var dx1P = Math.Abs(GetDx(btmPt1.Pt, p.Pt));
+
+            var dx1P = Math.Abs(this.GetDx(btmPt1.Pt, p.Pt));
             p = btmPt1.Next;
             while ((p.Pt == btmPt1.Pt) && (p != btmPt1))
             {
                 p = p.Next;
             }
-            var dx1N = Math.Abs(GetDx(btmPt1.Pt, p.Pt));
+
+            var dx1N = Math.Abs(this.GetDx(btmPt1.Pt, p.Pt));
 
             p = btmPt2.Prev;
             while ((p.Pt == btmPt2.Pt) && (p != btmPt2))
             {
                 p = p.Prev;
             }
-            var dx2P = Math.Abs(GetDx(btmPt2.Pt, p.Pt));
+
+            var dx2P = Math.Abs(this.GetDx(btmPt2.Pt, p.Pt));
             p = btmPt2.Next;
             while ((p.Pt == btmPt2.Pt) && (p != btmPt2))
             {
                 p = p.Next;
             }
-            var dx2N = Math.Abs(GetDx(btmPt2.Pt, p.Pt));
+
+            var dx2N = Math.Abs(this.GetDx(btmPt2.Pt, p.Pt));
             return (dx1P >= dx2P && dx1P >= dx2N) || (dx1N >= dx2P && dx1N >= dx2N);
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The get bottom pt.
+        /// </summary>
+        /// <param name="pp">
+        ///     TODO The pp.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private OutPt GetBottomPt(OutPt pp)
         {
             OutPt dups = null;
@@ -3021,17 +4141,20 @@ namespace LeagueSharp.CommonEx.Clipper
                         }
                     }
                 }
+
                 p = p.Next;
             }
+
             if (dups != null)
             {
-                //there appears to be at least 2 vertices at bottomPt so ...
+                // there appears to be at least 2 vertices at bottomPt so ...
                 while (dups != p)
                 {
-                    if (!FirstIsBottomPt(p, dups))
+                    if (!this.FirstIsBottomPt(p, dups))
                     {
                         pp = dups;
                     }
+
                     dups = dups.Next;
                     while (dups.Pt != pp.Pt)
                     {
@@ -3039,57 +4162,89 @@ namespace LeagueSharp.CommonEx.Clipper
                     }
                 }
             }
+
             return pp;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The get lowermost rec.
+        /// </summary>
+        /// <param name="outRec1">
+        ///     TODO The out rec 1.
+        /// </param>
+        /// <param name="outRec2">
+        ///     TODO The out rec 2.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private OutRec GetLowermostRec(OutRec outRec1, OutRec outRec2)
         {
-            //work out which polygon fragment has the correct hole state ...
+            // work out which polygon fragment has the correct hole state ...
             if (outRec1.BottomPt == null)
             {
-                outRec1.BottomPt = GetBottomPt(outRec1.Pts);
+                outRec1.BottomPt = this.GetBottomPt(outRec1.Pts);
             }
+
             if (outRec2.BottomPt == null)
             {
-                outRec2.BottomPt = GetBottomPt(outRec2.Pts);
+                outRec2.BottomPt = this.GetBottomPt(outRec2.Pts);
             }
+
             var bPt1 = outRec1.BottomPt;
             var bPt2 = outRec2.BottomPt;
             if (bPt1.Pt.Y > bPt2.Pt.Y)
             {
                 return outRec1;
             }
+
             if (bPt1.Pt.Y < bPt2.Pt.Y)
             {
                 return outRec2;
             }
+
             if (bPt1.Pt.X < bPt2.Pt.X)
             {
                 return outRec1;
             }
+
             if (bPt1.Pt.X > bPt2.Pt.X)
             {
                 return outRec2;
             }
+
             if (bPt1.Next == bPt1)
             {
                 return outRec2;
             }
+
             if (bPt2.Next == bPt2)
             {
                 return outRec1;
             }
-            if (FirstIsBottomPt(bPt1, bPt2))
+
+            if (this.FirstIsBottomPt(bPt1, bPt2))
             {
                 return outRec1;
             }
+
             return outRec2;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The param 1 right of param 2.
+        /// </summary>
+        /// <param name="outRec1">
+        ///     TODO The out rec 1.
+        /// </param>
+        /// <param name="outRec2">
+        ///     TODO The out rec 2.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private bool Param1RightOfParam2(OutRec outRec1, OutRec outRec2)
         {
             do
@@ -3099,42 +4254,61 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     return true;
                 }
-            } while (outRec1 != null);
+            }
+            while (outRec1 != null);
             return false;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The get out rec.
+        /// </summary>
+        /// <param name="idx">
+        ///     TODO The idx.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private OutRec GetOutRec(int idx)
         {
-            var outrec = _mPolyOuts[idx];
-            while (outrec != _mPolyOuts[outrec.Idx])
+            var outrec = this.mPolyOuts[idx];
+            while (outrec != this.mPolyOuts[outrec.Idx])
             {
-                outrec = _mPolyOuts[outrec.Idx];
+                outrec = this.mPolyOuts[outrec.Idx];
             }
+
             return outrec;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The append polygon.
+        /// </summary>
+        /// <param name="e1">
+        ///     TODO The e 1.
+        /// </param>
+        /// <param name="e2">
+        ///     TODO The e 2.
+        /// </param>
         private void AppendPolygon(Edge e1, Edge e2)
         {
-            //get the start and ends of both output polygons ...
-            var outRec1 = _mPolyOuts[e1.OutIdx];
-            var outRec2 = _mPolyOuts[e2.OutIdx];
+            // get the start and ends of both output polygons ...
+            var outRec1 = this.mPolyOuts[e1.OutIdx];
+            var outRec2 = this.mPolyOuts[e2.OutIdx];
 
             OutRec holeStateRec;
-            if (Param1RightOfParam2(outRec1, outRec2))
+            if (this.Param1RightOfParam2(outRec1, outRec2))
             {
                 holeStateRec = outRec2;
             }
-            else if (Param1RightOfParam2(outRec2, outRec1))
+            else if (this.Param1RightOfParam2(outRec2, outRec1))
             {
                 holeStateRec = outRec1;
             }
             else
             {
-                holeStateRec = GetLowermostRec(outRec1, outRec2);
+                holeStateRec = this.GetLowermostRec(outRec1, outRec2);
             }
 
             var p1Lft = outRec1.Pts;
@@ -3143,13 +4317,14 @@ namespace LeagueSharp.CommonEx.Clipper
             var p2Rt = p2Lft.Prev;
 
             EdgeSide side;
-            //join e2 poly onto e1 poly and delete pointers to e2 ...
+
+            // join e2 poly onto e1 poly and delete pointers to e2 ...
             if (e1.Side == EdgeSide.EsLeft)
             {
                 if (e2.Side == EdgeSide.EsLeft)
                 {
-                    //z y x a b c
-                    ReversePolyPtLinks(p2Lft);
+                    // z y x a b c
+                    this.ReversePolyPtLinks(p2Lft);
                     p2Lft.Next = p1Lft;
                     p1Lft.Prev = p2Lft;
                     p1Rt.Next = p2Rt;
@@ -3158,21 +4333,22 @@ namespace LeagueSharp.CommonEx.Clipper
                 }
                 else
                 {
-                    //x y z a b c
+                    // x y z a b c
                     p2Rt.Next = p1Lft;
                     p1Lft.Prev = p2Rt;
                     p2Lft.Prev = p1Rt;
                     p1Rt.Next = p2Lft;
                     outRec1.Pts = p2Lft;
                 }
+
                 side = EdgeSide.EsLeft;
             }
             else
             {
                 if (e2.Side == EdgeSide.EsRight)
                 {
-                    //a b c z y x
-                    ReversePolyPtLinks(p2Lft);
+                    // a b c z y x
+                    this.ReversePolyPtLinks(p2Lft);
                     p1Rt.Next = p2Rt;
                     p2Rt.Prev = p1Rt;
                     p2Lft.Next = p1Lft;
@@ -3180,12 +4356,13 @@ namespace LeagueSharp.CommonEx.Clipper
                 }
                 else
                 {
-                    //a b c x y z
+                    // a b c x y z
                     p1Rt.Next = p2Lft;
                     p2Lft.Prev = p1Rt;
                     p1Lft.Prev = p2Rt;
                     p2Rt.Next = p1Lft;
                 }
+
                 side = EdgeSide.EsRight;
             }
 
@@ -3196,8 +4373,10 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     outRec1.FirstLeft = outRec2.FirstLeft;
                 }
+
                 outRec1.IsHole = outRec2.IsHole;
             }
+
             outRec2.Pts = null;
             outRec2.BottomPt = null;
 
@@ -3206,10 +4385,10 @@ namespace LeagueSharp.CommonEx.Clipper
             var okIdx = e1.OutIdx;
             var obsoleteIdx = e2.OutIdx;
 
-            e1.OutIdx = Unassigned; //nb: safe because we only get here via AddLocalMaxPoly
+            e1.OutIdx = Unassigned; // nb: safe because we only get here via AddLocalMaxPoly
             e2.OutIdx = Unassigned;
 
-            var e = _mActiveEdges;
+            var e = this.mActiveEdges;
             while (e != null)
             {
                 if (e.OutIdx == obsoleteIdx)
@@ -3218,19 +4397,28 @@ namespace LeagueSharp.CommonEx.Clipper
                     e.Side = side;
                     break;
                 }
+
                 e = e.NextInAel;
             }
+
             outRec2.Idx = outRec1.Idx;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The reverse poly pt links.
+        /// </summary>
+        /// <param name="pp">
+        ///     TODO The pp.
+        /// </param>
         private void ReversePolyPtLinks(OutPt pp)
         {
             if (pp == null)
             {
                 return;
             }
+
             var pp1 = pp;
             do
             {
@@ -3238,11 +4426,21 @@ namespace LeagueSharp.CommonEx.Clipper
                 pp1.Next = pp1.Prev;
                 pp1.Prev = pp2;
                 pp1 = pp2;
-            } while (pp1 != pp);
+            }
+            while (pp1 != pp);
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The swap sides.
+        /// </summary>
+        /// <param name="edge1">
+        ///     TODO The edge 1.
+        /// </param>
+        /// <param name="edge2">
+        ///     TODO The edge 2.
+        /// </param>
         private static void SwapSides(Edge edge1, Edge edge2)
         {
             var side = edge1.Side;
@@ -3250,8 +4448,17 @@ namespace LeagueSharp.CommonEx.Clipper
             edge2.Side = side;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The swap poly indexes.
+        /// </summary>
+        /// <param name="edge1">
+        ///     TODO The edge 1.
+        /// </param>
+        /// <param name="edge2">
+        ///     TODO The edge 2.
+        /// </param>
         private static void SwapPolyIndexes(Edge edge1, Edge edge2)
         {
             var outIdx = edge1.OutIdx;
@@ -3259,28 +4466,42 @@ namespace LeagueSharp.CommonEx.Clipper
             edge2.OutIdx = outIdx;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The intersect edges.
+        /// </summary>
+        /// <param name="e1">
+        ///     TODO The e 1.
+        /// </param>
+        /// <param name="e2">
+        ///     TODO The e 2.
+        /// </param>
+        /// <param name="pt">
+        ///     TODO The pt.
+        /// </param>
         private void IntersectEdges(Edge e1, Edge e2, IntPoint pt)
         {
-            //e1 will be to the left of e2 BELOW the intersection. Therefore e1 is before
-            //e2 in AEL except when e1 is being inserted at the intersection point ...
-
-            var e1Contributing = (e1.OutIdx >= 0);
-            var e2Contributing = (e2.OutIdx >= 0);
+            // e1 will be to the left of e2 BELOW the intersection. Therefore e1 is before
+            // e2 in AEL except when e1 is being inserted at the intersection point ...
+            var e1Contributing = e1.OutIdx >= 0;
+            var e2Contributing = e2.OutIdx >= 0;
 
 #if use_xyz
           SetZ(ref pt, e1, e2);
 #endif
 
 #if use_lines
-    //if either edge is on an OPEN path ...
+
+    // if either edge is on an OPEN path ...
           if (e1.WindDelta == 0 || e2.WindDelta == 0)
           {
-            //ignore subject-subject open path intersections UNLESS they
-            //are both open paths, AND they are both 'contributing maximas' ...
+            // ignore subject-subject open path intersections UNLESS they
+            // are both open paths, AND they are both 'contributing maximas' ...
             if (e1.WindDelta == 0 && e2.WindDelta == 0) return;
-            //if intersecting a subj line with a subj poly ...
+            
+
+// if intersecting a subj line with a subj poly ...
             else if (e1.PolyTyp == e2.PolyTyp && 
               e1.WindDelta != e2.WindDelta && _mClipType == ClipType.CtUnion)
             {
@@ -3320,11 +4541,11 @@ namespace LeagueSharp.CommonEx.Clipper
           }
 #endif
 
-            //update winding counts...
-            //assumes that e1 will be to the Right of e2 ABOVE the intersection
+            // update winding counts...
+            // assumes that e1 will be to the Right of e2 ABOVE the intersection
             if (e1.PolyTyp == e2.PolyTyp)
             {
-                if (IsEvenOddFillType(e1))
+                if (this.IsEvenOddFillType(e1))
                 {
                     var oldE1WindCnt = e1.WindCnt;
                     e1.WindCnt = e2.WindCnt;
@@ -3340,6 +4561,7 @@ namespace LeagueSharp.CommonEx.Clipper
                     {
                         e1.WindCnt += e2.WindDelta;
                     }
+
                     if (e2.WindCnt - e1.WindDelta == 0)
                     {
                         e2.WindCnt = -e2.WindCnt;
@@ -3352,7 +4574,7 @@ namespace LeagueSharp.CommonEx.Clipper
             }
             else
             {
-                if (!IsEvenOddFillType(e2))
+                if (!this.IsEvenOddFillType(e2))
                 {
                     e1.WindCnt2 += e2.WindDelta;
                 }
@@ -3360,7 +4582,8 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     e1.WindCnt2 = (e1.WindCnt2 == 0) ? 1 : 0;
                 }
-                if (!IsEvenOddFillType(e1))
+
+                if (!this.IsEvenOddFillType(e1))
                 {
                     e2.WindCnt2 -= e1.WindDelta;
                 }
@@ -3373,23 +4596,24 @@ namespace LeagueSharp.CommonEx.Clipper
             PolyFillType e1FillType, e2FillType, e1FillType2, e2FillType2;
             if (e1.PolyTyp == PolyType.PtSubject)
             {
-                e1FillType = _mSubjFillType;
-                e1FillType2 = _mClipFillType;
+                e1FillType = this.mSubjFillType;
+                e1FillType2 = this.mClipFillType;
             }
             else
             {
-                e1FillType = _mClipFillType;
-                e1FillType2 = _mSubjFillType;
+                e1FillType = this.mClipFillType;
+                e1FillType2 = this.mSubjFillType;
             }
+
             if (e2.PolyTyp == PolyType.PtSubject)
             {
-                e2FillType = _mSubjFillType;
-                e2FillType2 = _mClipFillType;
+                e2FillType = this.mSubjFillType;
+                e2FillType2 = this.mClipFillType;
             }
             else
             {
-                e2FillType = _mClipFillType;
-                e2FillType2 = _mSubjFillType;
+                e2FillType = this.mClipFillType;
+                e2FillType2 = this.mSubjFillType;
             }
 
             int e1Wc, e2Wc;
@@ -3405,6 +4629,7 @@ namespace LeagueSharp.CommonEx.Clipper
                     e1Wc = Math.Abs(e1.WindCnt);
                     break;
             }
+
             switch (e2FillType)
             {
                 case PolyFillType.PftPositive:
@@ -3420,15 +4645,15 @@ namespace LeagueSharp.CommonEx.Clipper
 
             if (e1Contributing && e2Contributing)
             {
-                if ((e1Wc != 0 && e1Wc != 1) || (e2Wc != 0 && e2Wc != 1) ||
-                    (e1.PolyTyp != e2.PolyTyp && _mClipType != ClipType.CtXor))
+                if ((e1Wc != 0 && e1Wc != 1) || (e2Wc != 0 && e2Wc != 1)
+                    || (e1.PolyTyp != e2.PolyTyp && this.mClipType != ClipType.CtXor))
                 {
-                    AddLocalMaxPoly(e1, e2, pt);
+                    this.AddLocalMaxPoly(e1, e2, pt);
                 }
                 else
                 {
-                    AddOutPt(e1, pt);
-                    AddOutPt(e2, pt);
+                    this.AddOutPt(e1, pt);
+                    this.AddOutPt(e2, pt);
                     SwapSides(e1, e2);
                     SwapPolyIndexes(e1, e2);
                 }
@@ -3437,7 +4662,7 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 if (e2Wc == 0 || e2Wc == 1)
                 {
-                    AddOutPt(e1, pt);
+                    this.AddOutPt(e1, pt);
                     SwapSides(e1, e2);
                     SwapPolyIndexes(e1, e2);
                 }
@@ -3446,15 +4671,15 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 if (e1Wc == 0 || e1Wc == 1)
                 {
-                    AddOutPt(e2, pt);
+                    this.AddOutPt(e2, pt);
                     SwapSides(e1, e2);
                     SwapPolyIndexes(e1, e2);
                 }
             }
             else if ((e1Wc == 0 || e1Wc == 1) && (e2Wc == 0 || e2Wc == 1))
             {
-                //neither edge is currently contributing ...
-                cInt e1Wc2, e2Wc2;
+                // neither edge is currently contributing ...
+                long e1Wc2, e2Wc2;
                 switch (e1FillType2)
                 {
                     case PolyFillType.PftPositive:
@@ -3467,6 +4692,7 @@ namespace LeagueSharp.CommonEx.Clipper
                         e1Wc2 = Math.Abs(e1.WindCnt2);
                         break;
                 }
+
                 switch (e2FillType2)
                 {
                     case PolyFillType.PftPositive:
@@ -3482,33 +4708,36 @@ namespace LeagueSharp.CommonEx.Clipper
 
                 if (e1.PolyTyp != e2.PolyTyp)
                 {
-                    AddLocalMinPoly(e1, e2, pt);
+                    this.AddLocalMinPoly(e1, e2, pt);
                 }
                 else if (e1Wc == 1 && e2Wc == 1)
                 {
-                    switch (_mClipType)
+                    switch (this.mClipType)
                     {
                         case ClipType.CtIntersection:
                             if (e1Wc2 > 0 && e2Wc2 > 0)
                             {
-                                AddLocalMinPoly(e1, e2, pt);
+                                this.AddLocalMinPoly(e1, e2, pt);
                             }
+
                             break;
                         case ClipType.CtUnion:
                             if (e1Wc2 <= 0 && e2Wc2 <= 0)
                             {
-                                AddLocalMinPoly(e1, e2, pt);
+                                this.AddLocalMinPoly(e1, e2, pt);
                             }
+
                             break;
                         case ClipType.CtDifference:
-                            if (((e1.PolyTyp == PolyType.PtClip) && (e1Wc2 > 0) && (e2Wc2 > 0)) ||
-                                ((e1.PolyTyp == PolyType.PtSubject) && (e1Wc2 <= 0) && (e2Wc2 <= 0)))
+                            if (((e1.PolyTyp == PolyType.PtClip) && (e1Wc2 > 0) && (e2Wc2 > 0))
+                                || ((e1.PolyTyp == PolyType.PtSubject) && (e1Wc2 <= 0) && (e2Wc2 <= 0)))
                             {
-                                AddLocalMinPoly(e1, e2, pt);
+                                this.AddLocalMinPoly(e1, e2, pt);
                             }
+
                             break;
                         case ClipType.CtXor:
-                            AddLocalMinPoly(e1, e2, pt);
+                            this.AddLocalMinPoly(e1, e2, pt);
                             break;
                     }
                 }
@@ -3519,66 +4748,93 @@ namespace LeagueSharp.CommonEx.Clipper
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The delete from ael.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
         private void DeleteFromAel(Edge e)
         {
             var aelPrev = e.PrevInAel;
             var aelNext = e.NextInAel;
-            if (aelPrev == null && aelNext == null && (e != _mActiveEdges))
+            if (aelPrev == null && aelNext == null && (e != this.mActiveEdges))
             {
-                return; //already deleted
+                return; // already deleted
             }
+
             if (aelPrev != null)
             {
                 aelPrev.NextInAel = aelNext;
             }
             else
             {
-                _mActiveEdges = aelNext;
+                this.mActiveEdges = aelNext;
             }
+
             if (aelNext != null)
             {
                 aelNext.PrevInAel = aelPrev;
             }
+
             e.NextInAel = null;
             e.PrevInAel = null;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The delete from sel.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
         private void DeleteFromSel(Edge e)
         {
             var selPrev = e.PrevInSel;
             var selNext = e.NextInSel;
-            if (selPrev == null && selNext == null && (e != _mSortedEdges))
+            if (selPrev == null && selNext == null && (e != this.mSortedEdges))
             {
-                return; //already deleted
+                return; // already deleted
             }
+
             if (selPrev != null)
             {
                 selPrev.NextInSel = selNext;
             }
             else
             {
-                _mSortedEdges = selNext;
+                this.mSortedEdges = selNext;
             }
+
             if (selNext != null)
             {
                 selNext.PrevInSel = selPrev;
             }
+
             e.NextInSel = null;
             e.PrevInSel = null;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The update edge into ael.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
+        /// <exception cref="ClipperException">
+        /// </exception>
         private void UpdateEdgeIntoAel(ref Edge e)
         {
             if (e.NextInLml == null)
             {
                 throw new ClipperException("UpdateEdgeIntoAEL: invalid call");
             }
+
             var aelPrev = e.PrevInAel;
             var aelNext = e.NextInAel;
             e.NextInLml.OutIdx = e.OutIdx;
@@ -3588,12 +4844,14 @@ namespace LeagueSharp.CommonEx.Clipper
             }
             else
             {
-                _mActiveEdges = e.NextInLml;
+                this.mActiveEdges = e.NextInLml;
             }
+
             if (aelNext != null)
             {
                 aelNext.PrevInAel = e.NextInLml;
             }
+
             e.NextInLml.Side = e.Side;
             e.NextInLml.WindDelta = e.WindDelta;
             e.NextInLml.WindCnt = e.WindCnt;
@@ -3604,26 +4862,47 @@ namespace LeagueSharp.CommonEx.Clipper
             e.NextInAel = aelNext;
             if (!IsHorizontal(e))
             {
-                InsertScanbeam(e.Top.Y);
+                this.InsertScanbeam(e.Top.Y);
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The process horizontals.
+        /// </summary>
+        /// <param name="isTopOfScanbeam">
+        ///     TODO The is top of scanbeam.
+        /// </param>
         private void ProcessHorizontals(bool isTopOfScanbeam)
         {
-            var horzEdge = _mSortedEdges;
+            var horzEdge = this.mSortedEdges;
             while (horzEdge != null)
             {
-                DeleteFromSel(horzEdge);
-                ProcessHorizontal(horzEdge, isTopOfScanbeam);
-                horzEdge = _mSortedEdges;
+                this.DeleteFromSel(horzEdge);
+                this.ProcessHorizontal(horzEdge, isTopOfScanbeam);
+                horzEdge = this.mSortedEdges;
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
-        private void GetHorzDirection(Edge horzEdge, out Direction dir, out cInt left, out cInt right)
+        /// <summary>
+        ///     TODO The get horz direction.
+        /// </summary>
+        /// <param name="horzEdge">
+        ///     TODO The horz edge.
+        /// </param>
+        /// <param name="dir">
+        ///     TODO The dir.
+        /// </param>
+        /// <param name="left">
+        ///     TODO The left.
+        /// </param>
+        /// <param name="right">
+        ///     TODO The right.
+        /// </param>
+        private void GetHorzDirection(Edge horzEdge, out Direction dir, out long left, out long right)
         {
             if (horzEdge.Bot.X < horzEdge.Top.X)
             {
@@ -3639,20 +4918,30 @@ namespace LeagueSharp.CommonEx.Clipper
             }
         }
 
-        //------------------------------------------------------------------------
+        // ------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The process horizontal.
+        /// </summary>
+        /// <param name="horzEdge">
+        ///     TODO The horz edge.
+        /// </param>
+        /// <param name="isTopOfScanbeam">
+        ///     TODO The is top of scanbeam.
+        /// </param>
         private void ProcessHorizontal(Edge horzEdge, bool isTopOfScanbeam)
         {
             Direction dir;
-            cInt horzLeft, horzRight;
+            long horzLeft, horzRight;
 
-            GetHorzDirection(horzEdge, out dir, out horzLeft, out horzRight);
+            this.GetHorzDirection(horzEdge, out dir, out horzLeft, out horzRight);
 
             Edge eLastHorz = horzEdge, eMaxPair = null;
             while (eLastHorz.NextInLml != null && IsHorizontal(eLastHorz.NextInLml))
             {
                 eLastHorz = eLastHorz.NextInLml;
             }
+
             if (eLastHorz.NextInLml == null)
             {
                 eMaxPair = GetMaximaPair(eLastHorz);
@@ -3660,154 +4949,210 @@ namespace LeagueSharp.CommonEx.Clipper
 
             for (;;)
             {
-                var isLastHorz = (horzEdge == eLastHorz);
+                var isLastHorz = horzEdge == eLastHorz;
                 var e = GetNextInAel(horzEdge, dir);
                 while (e != null)
                 {
-                    //Break if we've got to the end of an intermediate horizontal edge ...
-                    //nb: Smaller Dx's are to the right of larger Dx's ABOVE the horizontal.
+                    // Break if we've got to the end of an intermediate horizontal edge ...
+                    // nb: Smaller Dx's are to the right of larger Dx's ABOVE the horizontal.
                     if (e.Curr.X == horzEdge.Top.X && horzEdge.NextInLml != null && e.Dx < horzEdge.NextInLml.Dx)
                     {
                         break;
                     }
 
-                    var eNext = GetNextInAel(e, dir); //saves eNext for later
+                    var eNext = GetNextInAel(e, dir); // saves eNext for later
 
-                    if ((dir == Direction.DLeftToRight && e.Curr.X <= horzRight) ||
-                        (dir == Direction.DRightToLeft && e.Curr.X >= horzLeft))
+                    if ((dir == Direction.DLeftToRight && e.Curr.X <= horzRight)
+                        || (dir == Direction.DRightToLeft && e.Curr.X >= horzLeft))
                     {
-                        //so far we're still in range of the horizontal Edge  but make sure
-                        //we're at the last of consec. horizontals when matching with eMaxPair
+                        // so far we're still in range of the horizontal Edge  but make sure
+                        // we're at the last of consec. horizontals when matching with eMaxPair
                         if (e == eMaxPair && isLastHorz)
                         {
                             if (horzEdge.OutIdx >= 0)
                             {
-                                var op1 = AddOutPt(horzEdge, horzEdge.Top);
-                                var eNextHorz = _mSortedEdges;
+                                var op1 = this.AddOutPt(horzEdge, horzEdge.Top);
+                                var eNextHorz = this.mSortedEdges;
                                 while (eNextHorz != null)
                                 {
-                                    if (eNextHorz.OutIdx >= 0 &&
-                                        HorzSegmentsOverlap(
-                                            horzEdge.Bot.X, horzEdge.Top.X, eNextHorz.Bot.X, eNextHorz.Top.X))
+                                    if (eNextHorz.OutIdx >= 0
+                                        && this.HorzSegmentsOverlap(
+                                            horzEdge.Bot.X, 
+                                            horzEdge.Top.X, 
+                                            eNextHorz.Bot.X, 
+                                            eNextHorz.Top.X))
                                     {
-                                        var op2 = AddOutPt(eNextHorz, eNextHorz.Bot);
-                                        AddJoin(op2, op1, eNextHorz.Top);
+                                        var op2 = this.AddOutPt(eNextHorz, eNextHorz.Bot);
+                                        this.AddJoin(op2, op1, eNextHorz.Top);
                                     }
+
                                     eNextHorz = eNextHorz.NextInSel;
                                 }
-                                AddGhostJoin(op1, horzEdge.Bot);
-                                AddLocalMaxPoly(horzEdge, eMaxPair, horzEdge.Top);
+
+                                this.AddGhostJoin(op1, horzEdge.Bot);
+                                this.AddLocalMaxPoly(horzEdge, eMaxPair, horzEdge.Top);
                             }
-                            DeleteFromAel(horzEdge);
-                            DeleteFromAel(eMaxPair);
+
+                            this.DeleteFromAel(horzEdge);
+                            this.DeleteFromAel(eMaxPair);
                             return;
                         }
+
                         if (dir == Direction.DLeftToRight)
                         {
                             var pt = new IntPoint(e.Curr.X, horzEdge.Curr.Y);
-                            IntersectEdges(horzEdge, e, pt);
+                            this.IntersectEdges(horzEdge, e, pt);
                         }
                         else
                         {
                             var pt = new IntPoint(e.Curr.X, horzEdge.Curr.Y);
-                            IntersectEdges(e, horzEdge, pt);
+                            this.IntersectEdges(e, horzEdge, pt);
                         }
-                        SwapPositionsInAel(horzEdge, e);
+
+                        this.SwapPositionsInAel(horzEdge, e);
                     }
-                    else if ((dir == Direction.DLeftToRight && e.Curr.X >= horzRight) ||
-                             (dir == Direction.DRightToLeft && e.Curr.X <= horzLeft))
+                    else if ((dir == Direction.DLeftToRight && e.Curr.X >= horzRight)
+                             || (dir == Direction.DRightToLeft && e.Curr.X <= horzLeft))
                     {
                         break;
                     }
-                    e = eNext;
-                } //end while
 
+                    e = eNext;
+                }
+
+                // end while
                 if (horzEdge.NextInLml != null && IsHorizontal(horzEdge.NextInLml))
                 {
-                    UpdateEdgeIntoAel(ref horzEdge);
+                    this.UpdateEdgeIntoAel(ref horzEdge);
                     if (horzEdge.OutIdx >= 0)
                     {
-                        AddOutPt(horzEdge, horzEdge.Bot);
+                        this.AddOutPt(horzEdge, horzEdge.Bot);
                     }
-                    GetHorzDirection(horzEdge, out dir, out horzLeft, out horzRight);
+
+                    this.GetHorzDirection(horzEdge, out dir, out horzLeft, out horzRight);
                 }
                 else
                 {
                     break;
                 }
-            } //end for (;;)
+            }
 
+            // end for (;;)
             if (horzEdge.NextInLml != null)
             {
                 if (horzEdge.OutIdx >= 0)
                 {
-                    var op1 = AddOutPt(horzEdge, horzEdge.Top);
+                    var op1 = this.AddOutPt(horzEdge, horzEdge.Top);
                     if (isTopOfScanbeam)
                     {
-                        AddGhostJoin(op1, horzEdge.Bot);
+                        this.AddGhostJoin(op1, horzEdge.Bot);
                     }
 
-                    UpdateEdgeIntoAel(ref horzEdge);
+                    this.UpdateEdgeIntoAel(ref horzEdge);
                     if (horzEdge.WindDelta == 0)
                     {
                         return;
                     }
-                    //nb: HorzEdge is no longer horizontal here
+
+                    // nb: HorzEdge is no longer horizontal here
                     var ePrev = horzEdge.PrevInAel;
                     var eNext = horzEdge.NextInAel;
-                    if (ePrev != null && ePrev.Curr.X == horzEdge.Bot.X && ePrev.Curr.Y == horzEdge.Bot.Y &&
-                        ePrev.WindDelta != 0 &&
-                        (ePrev.OutIdx >= 0 && ePrev.Curr.Y > ePrev.Top.Y && SlopesEqual(horzEdge, ePrev, MUseFullRange)))
+                    if (ePrev != null && ePrev.Curr.X == horzEdge.Bot.X && ePrev.Curr.Y == horzEdge.Bot.Y
+                        && ePrev.WindDelta != 0
+                        && (ePrev.OutIdx >= 0 && ePrev.Curr.Y > ePrev.Top.Y
+                            && SlopesEqual(horzEdge, ePrev, this.MUseFullRange)))
                     {
-                        var op2 = AddOutPt(ePrev, horzEdge.Bot);
-                        AddJoin(op1, op2, horzEdge.Top);
+                        var op2 = this.AddOutPt(ePrev, horzEdge.Bot);
+                        this.AddJoin(op1, op2, horzEdge.Top);
                     }
-                    else if (eNext != null && eNext.Curr.X == horzEdge.Bot.X && eNext.Curr.Y == horzEdge.Bot.Y &&
-                             eNext.WindDelta != 0 && eNext.OutIdx >= 0 && eNext.Curr.Y > eNext.Top.Y &&
-                             SlopesEqual(horzEdge, eNext, MUseFullRange))
+                    else if (eNext != null && eNext.Curr.X == horzEdge.Bot.X && eNext.Curr.Y == horzEdge.Bot.Y
+                             && eNext.WindDelta != 0 && eNext.OutIdx >= 0 && eNext.Curr.Y > eNext.Top.Y
+                             && SlopesEqual(horzEdge, eNext, this.MUseFullRange))
                     {
-                        var op2 = AddOutPt(eNext, horzEdge.Bot);
-                        AddJoin(op1, op2, horzEdge.Top);
+                        var op2 = this.AddOutPt(eNext, horzEdge.Bot);
+                        this.AddJoin(op1, op2, horzEdge.Top);
                     }
                 }
                 else
                 {
-                    UpdateEdgeIntoAel(ref horzEdge);
+                    this.UpdateEdgeIntoAel(ref horzEdge);
                 }
             }
             else
             {
                 if (horzEdge.OutIdx >= 0)
                 {
-                    AddOutPt(horzEdge, horzEdge.Top);
+                    this.AddOutPt(horzEdge, horzEdge.Top);
                 }
-                DeleteFromAel(horzEdge);
+
+                this.DeleteFromAel(horzEdge);
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The get next in ael.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
+        /// <param name="direction">
+        ///     TODO The direction.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static Edge GetNextInAel(Edge e, Direction direction)
         {
             return direction == Direction.DLeftToRight ? e.NextInAel : e.PrevInAel;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The is maxima.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
+        /// <param name="y">
+        ///     TODO The y.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static bool IsMaxima(Edge e, double y)
         {
-            return (e != null && Math.Abs(e.Top.Y - y) < float.Epsilon && e.NextInLml == null);
+            return e != null && Math.Abs(e.Top.Y - y) < float.Epsilon && e.NextInLml == null;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The is intermediate.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
+        /// <param name="y">
+        ///     TODO The y.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static bool IsIntermediate(Edge e, double y)
         {
-            return (Math.Abs(e.Top.Y - y) < float.Epsilon && e.NextInLml != null);
+            return Math.Abs(e.Top.Y - y) < float.Epsilon && e.NextInLml != null;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The get maxima pair.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static Edge GetMaximaPair(Edge e)
         {
             Edge result = null;
@@ -3819,32 +5164,46 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 result = e.Prev;
             }
-            if (result != null &&
-                (result.OutIdx == Skip || (result.NextInAel == result.PrevInAel && !IsHorizontal(result))))
+
+            if (result != null
+                && (result.OutIdx == Skip || (result.NextInAel == result.PrevInAel && !IsHorizontal(result))))
             {
                 return null;
             }
+
             return result;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
-        private bool ProcessIntersections(cInt topY)
+        /// <summary>
+        ///     TODO The process intersections.
+        /// </summary>
+        /// <param name="topY">
+        ///     TODO The top y.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="ClipperException">
+        /// </exception>
+        private bool ProcessIntersections(long topY)
         {
-            if (_mActiveEdges == null)
+            if (this.mActiveEdges == null)
             {
                 return true;
             }
+
             try
             {
-                BuildIntersectList(topY);
-                if (_mIntersectList.Count == 0)
+                this.BuildIntersectList(topY);
+                if (this.mIntersectList.Count == 0)
                 {
                     return true;
                 }
-                if (_mIntersectList.Count == 1 || FixupIntersectionOrder())
+
+                if (this.mIntersectList.Count == 1 || this.FixupIntersectionOrder())
                 {
-                    ProcessIntersectList();
+                    this.ProcessIntersectList();
                 }
                 else
                 {
@@ -3853,26 +5212,33 @@ namespace LeagueSharp.CommonEx.Clipper
             }
             catch
             {
-                _mSortedEdges = null;
-                _mIntersectList.Clear();
+                this.mSortedEdges = null;
+                this.mIntersectList.Clear();
                 throw new ClipperException("ProcessIntersections error");
             }
-            _mSortedEdges = null;
+
+            this.mSortedEdges = null;
             return true;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
-        private void BuildIntersectList(cInt topY)
+        /// <summary>
+        ///     TODO The build intersect list.
+        /// </summary>
+        /// <param name="topY">
+        ///     TODO The top y.
+        /// </param>
+        private void BuildIntersectList(long topY)
         {
-            if (_mActiveEdges == null)
+            if (this.mActiveEdges == null)
             {
                 return;
             }
 
-            //prepare for sorting ...
-            var e = _mActiveEdges;
-            _mSortedEdges = e;
+            // prepare for sorting ...
+            var e = this.mActiveEdges;
+            this.mSortedEdges = e;
             while (e != null)
             {
                 e.PrevInSel = e.PrevInAel;
@@ -3881,23 +5247,23 @@ namespace LeagueSharp.CommonEx.Clipper
                 e = e.NextInAel;
             }
 
-            //bubblesort ...
+            // bubblesort ...
             var isModified = true;
-            while (isModified && _mSortedEdges != null)
+            while (isModified && this.mSortedEdges != null)
             {
                 isModified = false;
-                e = _mSortedEdges;
+                e = this.mSortedEdges;
                 while (e.NextInSel != null)
                 {
                     var eNext = e.NextInSel;
                     if (e.Curr.X > eNext.Curr.X)
                     {
                         IntPoint pt;
-                        IntersectPoint(e, eNext, out pt);
+                        this.IntersectPoint(e, eNext, out pt);
                         var newNode = new IntersectNode { Edge1 = e, Edge2 = eNext, Pt = pt };
-                        _mIntersectList.Add(newNode);
+                        this.mIntersectList.Add(newNode);
 
-                        SwapPositionsInSel(e, eNext);
+                        this.SwapPositionsInSel(e, eNext);
                         isModified = true;
                     }
                     else
@@ -3905,6 +5271,7 @@ namespace LeagueSharp.CommonEx.Clipper
                         e = eNext;
                     }
                 }
+
                 if (e.PrevInSel != null)
                 {
                     e.PrevInSel.NextInSel = null;
@@ -3914,90 +5281,144 @@ namespace LeagueSharp.CommonEx.Clipper
                     break;
                 }
             }
-            _mSortedEdges = null;
+
+            this.mSortedEdges = null;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The edges adjacent.
+        /// </summary>
+        /// <param name="inode">
+        ///     TODO The inode.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static bool EdgesAdjacent(IntersectNode inode)
         {
             return (inode.Edge1.NextInSel == inode.Edge2) || (inode.Edge1.PrevInSel == inode.Edge2);
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The fixup intersection order.
+        /// </summary>
+        /// <returns>
+        /// </returns>
         private bool FixupIntersectionOrder()
         {
-            //pre-condition: intersections are sorted bottom-most first.
-            //Now it's crucial that intersections are made only between adjacent edges,
-            //so to ensure this the order of intersections may need adjusting ...
-            _mIntersectList.Sort(_mIntersectNodeComparer);
+            // pre-condition: intersections are sorted bottom-most first.
+            // Now it's crucial that intersections are made only between adjacent edges,
+            // so to ensure this the order of intersections may need adjusting ...
+            this.mIntersectList.Sort(this.mIntersectNodeComparer);
 
-            CopyAeltoSel();
-            var cnt = _mIntersectList.Count;
+            this.CopyAeltoSel();
+            var cnt = this.mIntersectList.Count;
             for (var i = 0; i < cnt; i++)
             {
-                if (!EdgesAdjacent(_mIntersectList[i]))
+                if (!EdgesAdjacent(this.mIntersectList[i]))
                 {
                     var j = i + 1;
-                    while (j < cnt && !EdgesAdjacent(_mIntersectList[j]))
+                    while (j < cnt && !EdgesAdjacent(this.mIntersectList[j]))
                     {
                         j++;
                     }
+
                     if (j == cnt)
                     {
                         return false;
                     }
 
-                    var tmp = _mIntersectList[i];
-                    _mIntersectList[i] = _mIntersectList[j];
-                    _mIntersectList[j] = tmp;
+                    var tmp = this.mIntersectList[i];
+                    this.mIntersectList[i] = this.mIntersectList[j];
+                    this.mIntersectList[j] = tmp;
                 }
-                SwapPositionsInSel(_mIntersectList[i].Edge1, _mIntersectList[i].Edge2);
+
+                this.SwapPositionsInSel(this.mIntersectList[i].Edge1, this.mIntersectList[i].Edge2);
             }
+
             return true;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The process intersect list.
+        /// </summary>
         private void ProcessIntersectList()
         {
-            foreach (var iNode in _mIntersectList)
+            foreach (var iNode in this.mIntersectList)
             {
                 {
-                    IntersectEdges(iNode.Edge1, iNode.Edge2, iNode.Pt);
-                    SwapPositionsInAel(iNode.Edge1, iNode.Edge2);
+                    this.IntersectEdges(iNode.Edge1, iNode.Edge2, iNode.Pt);
+                    this.SwapPositionsInAel(iNode.Edge1, iNode.Edge2);
                 }
             }
-            _mIntersectList.Clear();
+
+            this.mIntersectList.Clear();
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
-        internal static cInt Round(double value)
+        /// <summary>
+        ///     TODO The round.
+        /// </summary>
+        /// <param name="value">
+        ///     TODO The value.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        internal static long Round(double value)
         {
-            return value < 0 ? (cInt) (value - 0.5) : (cInt) (value + 0.5);
+            return value < 0 ? (cInt)(value - 0.5) : (cInt)(value + 0.5);
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
-        private static cInt TopX(Edge edge, cInt currentY)
+        /// <summary>
+        ///     TODO The top x.
+        /// </summary>
+        /// <param name="edge">
+        ///     TODO The edge.
+        /// </param>
+        /// <param name="currentY">
+        ///     TODO The current y.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private static long TopX(Edge edge, long currentY)
         {
             if (currentY == edge.Top.Y)
             {
                 return edge.Top.X;
             }
+
             return edge.Bot.X + Round(edge.Dx * (currentY - edge.Bot.Y));
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The intersect point.
+        /// </summary>
+        /// <param name="edge1">
+        ///     TODO The edge 1.
+        /// </param>
+        /// <param name="edge2">
+        ///     TODO The edge 2.
+        /// </param>
+        /// <param name="ip">
+        ///     TODO The ip.
+        /// </param>
         private void IntersectPoint(Edge edge1, Edge edge2, out IntPoint ip)
         {
             ip = new IntPoint();
             double b1, b2;
-            //nb: with very large coordinate values, it's possible for SlopesEqual() to 
-            //return false but for the edge.Dx value be equal due to double precision rounding.
+
+            // nb: with very large coordinate values, it's possible for SlopesEqual() to 
+            // return false but for the edge.Dx value be equal due to double precision rounding.
             if (Math.Abs(edge1.Dx - edge2.Dx) < float.Epsilon)
             {
                 ip.Y = edge1.Curr.Y;
@@ -4045,49 +5466,58 @@ namespace LeagueSharp.CommonEx.Clipper
                 ip.Y = edge1.Top.Y > edge2.Top.Y ? edge1.Top.Y : edge2.Top.Y;
                 ip.X = TopX(Math.Abs(edge1.Dx) < Math.Abs(edge2.Dx) ? edge1 : edge2, ip.Y);
             }
-            //finally, don't allow 'ip' to be BELOW curr.Y (ie bottom of scanbeam) ...
+
+            // finally, don't allow 'ip' to be BELOW curr.Y (ie bottom of scanbeam) ...
             if (ip.Y > edge1.Curr.Y)
             {
                 ip.Y = edge1.Curr.Y;
-                //better to use the more vertical edge to derive X ...
+
+                // better to use the more vertical edge to derive X ...
                 ip.X = TopX(Math.Abs(edge1.Dx) > Math.Abs(edge2.Dx) ? edge2 : edge1, ip.Y);
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
-        private void ProcessEdgesAtTopOfScanbeam(cInt topY)
+        /// <summary>
+        ///     TODO The process edges at top of scanbeam.
+        /// </summary>
+        /// <param name="topY">
+        ///     TODO The top y.
+        /// </param>
+        private void ProcessEdgesAtTopOfScanbeam(long topY)
         {
-            var e = _mActiveEdges;
+            var e = this.mActiveEdges;
             while (e != null)
             {
-                //1. process maxima, treating them as if they're 'bent' horizontal edges,
-                //   but exclude maxima with horizontal edges. nb: e can't be a horizontal.
+                // 1. process maxima, treating them as if they're 'bent' horizontal edges,
+                // but exclude maxima with horizontal edges. nb: e can't be a horizontal.
                 var isMaximaEdge = IsMaxima(e, topY);
 
                 if (isMaximaEdge)
                 {
                     var eMaxPair = GetMaximaPair(e);
-                    isMaximaEdge = (eMaxPair == null || !IsHorizontal(eMaxPair));
+                    isMaximaEdge = eMaxPair == null || !IsHorizontal(eMaxPair);
                 }
 
                 if (isMaximaEdge)
                 {
                     var ePrev = e.PrevInAel;
-                    DoMaxima(e);
-                    e = ePrev == null ? _mActiveEdges : ePrev.NextInAel;
+                    this.DoMaxima(e);
+                    e = ePrev == null ? this.mActiveEdges : ePrev.NextInAel;
                 }
                 else
                 {
-                    //2. promote horizontal edges, otherwise update Curr.X and Curr.Y ...
+                    // 2. promote horizontal edges, otherwise update Curr.X and Curr.Y ...
                     if (IsIntermediate(e, topY) && IsHorizontal(e.NextInLml))
                     {
-                        UpdateEdgeIntoAel(ref e);
+                        this.UpdateEdgeIntoAel(ref e);
                         if (e.OutIdx >= 0)
                         {
-                            AddOutPt(e, e.Bot);
+                            this.AddOutPt(e, e.Bot);
                         }
-                        AddEdgeToSel(e);
+
+                        this.AddEdgeToSel(e);
                     }
                     else
                     {
@@ -4095,19 +5525,19 @@ namespace LeagueSharp.CommonEx.Clipper
                         e.Curr.Y = topY;
                     }
 
-                    if (StrictlySimple)
+                    if (this.StrictlySimple)
                     {
                         var ePrev = e.PrevInAel;
-                        if ((e.OutIdx >= 0) && (e.WindDelta != 0) && ePrev != null && (ePrev.OutIdx >= 0) &&
-                            (ePrev.Curr.X == e.Curr.X) && (ePrev.WindDelta != 0))
+                        if ((e.OutIdx >= 0) && (e.WindDelta != 0) && ePrev != null && (ePrev.OutIdx >= 0)
+                            && (ePrev.Curr.X == e.Curr.X) && (ePrev.WindDelta != 0))
                         {
                             var ip = new IntPoint(e.Curr);
 #if use_xyz
                 SetZ(ref ip, ePrev, e);
 #endif
-                            var op = AddOutPt(ePrev, ip);
-                            var op2 = AddOutPt(e, ip);
-                            AddJoin(op, op2, ip); //StrictlySimple (type-3) join
+                            var op = this.AddOutPt(ePrev, ip);
+                            var op2 = this.AddOutPt(e, ip);
+                            this.AddJoin(op, op2, ip); // StrictlySimple (type-3) join
                         }
                     }
 
@@ -4115,11 +5545,11 @@ namespace LeagueSharp.CommonEx.Clipper
                 }
             }
 
-            //3. Process horizontals at the Top of the scanbeam ...
-            ProcessHorizontals(true);
+            // 3. Process horizontals at the Top of the scanbeam ...
+            this.ProcessHorizontals(true);
 
-            //4. Promote intermediate vertices ...
-            e = _mActiveEdges;
+            // 4. Promote intermediate vertices ...
+            e = this.mActiveEdges;
             while (e != null)
             {
                 if (IsIntermediate(e, topY))
@@ -4127,34 +5557,44 @@ namespace LeagueSharp.CommonEx.Clipper
                     OutPt op = null;
                     if (e.OutIdx >= 0)
                     {
-                        op = AddOutPt(e, e.Top);
+                        op = this.AddOutPt(e, e.Top);
                     }
-                    UpdateEdgeIntoAel(ref e);
 
-                    //if output polygons share an edge, they'll need joining later ...
+                    this.UpdateEdgeIntoAel(ref e);
+
+                    // if output polygons share an edge, they'll need joining later ...
                     var ePrev = e.PrevInAel;
                     var eNext = e.NextInAel;
-                    if (ePrev != null && ePrev.Curr.X == e.Bot.X && ePrev.Curr.Y == e.Bot.Y && op != null &&
-                        ePrev.OutIdx >= 0 && ePrev.Curr.Y > ePrev.Top.Y && SlopesEqual(e, ePrev, MUseFullRange) &&
-                        (e.WindDelta != 0) && (ePrev.WindDelta != 0))
+                    if (ePrev != null && ePrev.Curr.X == e.Bot.X && ePrev.Curr.Y == e.Bot.Y && op != null
+                        && ePrev.OutIdx >= 0 && ePrev.Curr.Y > ePrev.Top.Y && SlopesEqual(e, ePrev, this.MUseFullRange)
+                        && (e.WindDelta != 0) && (ePrev.WindDelta != 0))
                     {
-                        var op2 = AddOutPt(ePrev, e.Bot);
-                        AddJoin(op, op2, e.Top);
+                        var op2 = this.AddOutPt(ePrev, e.Bot);
+                        this.AddJoin(op, op2, e.Top);
                     }
-                    else if (eNext != null && eNext.Curr.X == e.Bot.X && eNext.Curr.Y == e.Bot.Y && op != null &&
-                             eNext.OutIdx >= 0 && eNext.Curr.Y > eNext.Top.Y && SlopesEqual(e, eNext, MUseFullRange) &&
-                             (e.WindDelta != 0) && (eNext.WindDelta != 0))
+                    else if (eNext != null && eNext.Curr.X == e.Bot.X && eNext.Curr.Y == e.Bot.Y && op != null
+                             && eNext.OutIdx >= 0 && eNext.Curr.Y > eNext.Top.Y
+                             && SlopesEqual(e, eNext, this.MUseFullRange) && (e.WindDelta != 0) && (eNext.WindDelta != 0))
                     {
-                        var op2 = AddOutPt(eNext, e.Bot);
-                        AddJoin(op, op2, e.Top);
+                        var op2 = this.AddOutPt(eNext, e.Bot);
+                        this.AddJoin(op, op2, e.Top);
                     }
                 }
+
                 e = e.NextInAel;
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The do maxima.
+        /// </summary>
+        /// <param name="e">
+        ///     TODO The e.
+        /// </param>
+        /// <exception cref="ClipperException">
+        /// </exception>
         private void DoMaxima(Edge e)
         {
             var eMaxPair = GetMaximaPair(e);
@@ -4162,34 +5602,37 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 if (e.OutIdx >= 0)
                 {
-                    AddOutPt(e, e.Top);
+                    this.AddOutPt(e, e.Top);
                 }
-                DeleteFromAel(e);
+
+                this.DeleteFromAel(e);
                 return;
             }
 
             var eNext = e.NextInAel;
             while (eNext != null && eNext != eMaxPair)
             {
-                IntersectEdges(e, eNext, e.Top);
-                SwapPositionsInAel(e, eNext);
+                this.IntersectEdges(e, eNext, e.Top);
+                this.SwapPositionsInAel(e, eNext);
                 eNext = e.NextInAel;
             }
 
             if (e.OutIdx == Unassigned && eMaxPair.OutIdx == Unassigned)
             {
-                DeleteFromAel(e);
-                DeleteFromAel(eMaxPair);
+                this.DeleteFromAel(e);
+                this.DeleteFromAel(eMaxPair);
             }
             else if (e.OutIdx >= 0 && eMaxPair.OutIdx >= 0)
             {
                 if (e.OutIdx >= 0)
                 {
-                    AddLocalMaxPoly(e, eMaxPair, e.Top);
+                    this.AddLocalMaxPoly(e, eMaxPair, e.Top);
                 }
-                DeleteFromAel(e);
-                DeleteFromAel(eMaxPair);
+
+                this.DeleteFromAel(e);
+                this.DeleteFromAel(eMaxPair);
             }
+
 #if use_lines
         else if (e.WindDelta == 0)
         {
@@ -4214,7 +5657,7 @@ namespace LeagueSharp.CommonEx.Clipper
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Reverses the paths.
@@ -4228,7 +5671,7 @@ namespace LeagueSharp.CommonEx.Clipper
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Orientates the specified path.
@@ -4240,68 +5683,94 @@ namespace LeagueSharp.CommonEx.Clipper
             return Area(poly) >= 0;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The point count.
+        /// </summary>
+        /// <param name="pts">
+        ///     TODO The pts.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private int PointCount(OutPt pts)
         {
             if (pts == null)
             {
                 return 0;
             }
+
             var result = 0;
             var p = pts;
             do
             {
                 result++;
                 p = p.Next;
-            } while (p != pts);
+            }
+            while (p != pts);
             return result;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The build result.
+        /// </summary>
+        /// <param name="polyg">
+        ///     TODO The polyg.
+        /// </param>
         private void BuildResult(Paths polyg)
         {
             polyg.Clear();
-            polyg.Capacity = _mPolyOuts.Count;
-            foreach (var outRec in _mPolyOuts)
+            polyg.Capacity = this.mPolyOuts.Count;
+            foreach (var outRec in this.mPolyOuts)
             {
                 if (outRec.Pts == null)
                 {
                     continue;
                 }
+
                 var p = outRec.Pts.Prev;
-                var cnt = PointCount(p);
+                var cnt = this.PointCount(p);
                 if (cnt < 2)
                 {
                     continue;
                 }
+
                 var pg = new Path(cnt);
                 for (var j = 0; j < cnt; j++)
                 {
                     pg.Add(p.Pt);
                     p = p.Prev;
                 }
+
                 polyg.Add(pg);
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The build result 2.
+        /// </summary>
+        /// <param name="polytree">
+        ///     TODO The polytree.
+        /// </param>
         private void BuildResult2(PolyTree polytree)
         {
             polytree.Clear();
 
-            //add each output polygon/contour to polytree ...
-            polytree.MAllPolys.Capacity = _mPolyOuts.Count;
-            foreach (var outRec in _mPolyOuts)
+            // add each output polygon/contour to polytree ...
+            polytree.MAllPolys.Capacity = this.mPolyOuts.Count;
+            foreach (var outRec in this.mPolyOuts)
             {
-                var cnt = PointCount(outRec.Pts);
+                var cnt = this.PointCount(outRec.Pts);
                 if ((outRec.IsOpen && cnt < 2) || (!outRec.IsOpen && cnt < 3))
                 {
                     continue;
                 }
-                FixHoleLinkage(outRec);
+
+                this.FixHoleLinkage(outRec);
                 var pn = new PolyNode();
                 polytree.MAllPolys.Add(pn);
                 outRec.PolyNode = pn;
@@ -4314,9 +5783,9 @@ namespace LeagueSharp.CommonEx.Clipper
                 }
             }
 
-            //fixup PolyNode links etc ...
-            polytree.MChilds.Capacity = _mPolyOuts.Count;
-            foreach (var outRec in _mPolyOuts.Where(outRec => outRec.PolyNode != null))
+            // fixup PolyNode links etc ...
+            polytree.MChilds.Capacity = this.mPolyOuts.Count;
+            foreach (var outRec in this.mPolyOuts.Where(outRec => outRec.PolyNode != null))
             {
                 if (outRec.IsOpen)
                 {
@@ -4334,12 +5803,18 @@ namespace LeagueSharp.CommonEx.Clipper
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The fixup out polygon.
+        /// </summary>
+        /// <param name="outRec">
+        ///     TODO The out rec.
+        /// </param>
         private void FixupOutPolygon(OutRec outRec)
         {
-            //FixupOutPolygon() - removes duplicate points and simplifies consecutive
-            //parallel edges by removing the middle vertex.
+            // FixupOutPolygon() - removes duplicate points and simplifies consecutive
+            // parallel edges by removing the middle vertex.
             OutPt lastOk = null;
             outRec.BottomPt = null;
             var pp = outRec.Pts;
@@ -4350,10 +5825,11 @@ namespace LeagueSharp.CommonEx.Clipper
                     outRec.Pts = null;
                     return;
                 }
-                //test for duplicate points and collinear edges ...
-                if ((pp.Pt == pp.Next.Pt) || (pp.Pt == pp.Prev.Pt) ||
-                    (SlopesEqual(pp.Prev.Pt, pp.Pt, pp.Next.Pt, MUseFullRange) &&
-                     (!PreserveCollinear || !Pt2IsBetweenPt1AndPt3(pp.Prev.Pt, pp.Pt, pp.Next.Pt))))
+
+                // test for duplicate points and collinear edges ...
+                if ((pp.Pt == pp.Next.Pt) || (pp.Pt == pp.Prev.Pt)
+                    || (SlopesEqual(pp.Prev.Pt, pp.Pt, pp.Next.Pt, this.MUseFullRange)
+                        && (!this.PreserveCollinear || !this.Pt2IsBetweenPt1AndPt3(pp.Prev.Pt, pp.Pt, pp.Next.Pt))))
                 {
                     lastOk = null;
                     pp.Prev.Next = pp.Next;
@@ -4370,14 +5846,27 @@ namespace LeagueSharp.CommonEx.Clipper
                     {
                         lastOk = pp;
                     }
+
                     pp = pp.Next;
                 }
             }
+
             outRec.Pts = pp;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The dup out pt.
+        /// </summary>
+        /// <param name="outPt">
+        ///     TODO The out pt.
+        /// </param>
+        /// <param name="insertAfter">
+        ///     TODO The insert after.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static OutPt DupOutPt(OutPt outPt, bool insertAfter)
         {
             var result = new OutPt { Pt = outPt.Pt, Idx = outPt.Idx };
@@ -4395,12 +5884,36 @@ namespace LeagueSharp.CommonEx.Clipper
                 outPt.Prev.Next = result;
                 outPt.Prev = result;
             }
+
             return result;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
-        private bool GetOverlap(cInt a1, cInt a2, cInt b1, cInt b2, out cInt left, out cInt right)
+        /// <summary>
+        ///     TODO The get overlap.
+        /// </summary>
+        /// <param name="a1">
+        ///     TODO The a 1.
+        /// </param>
+        /// <param name="a2">
+        ///     TODO The a 2.
+        /// </param>
+        /// <param name="b1">
+        ///     TODO The b 1.
+        /// </param>
+        /// <param name="b2">
+        ///     TODO The b 2.
+        /// </param>
+        /// <param name="left">
+        ///     TODO The left.
+        /// </param>
+        /// <param name="right">
+        ///     TODO The right.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private bool GetOverlap(long a1, long a2, long b1, long b2, out long left, out long right)
         {
             if (a1 < a2)
             {
@@ -4428,35 +5941,61 @@ namespace LeagueSharp.CommonEx.Clipper
                     right = Math.Min(a1, b1);
                 }
             }
+
             return left < right;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The join horz.
+        /// </summary>
+        /// <param name="op1">
+        ///     TODO The op 1.
+        /// </param>
+        /// <param name="op1B">
+        ///     TODO The op 1 b.
+        /// </param>
+        /// <param name="op2">
+        ///     TODO The op 2.
+        /// </param>
+        /// <param name="op2B">
+        ///     TODO The op 2 b.
+        /// </param>
+        /// <param name="pt">
+        ///     TODO The pt.
+        /// </param>
+        /// <param name="discardLeft">
+        ///     TODO The discard left.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private bool JoinHorz(OutPt op1, OutPt op1B, OutPt op2, OutPt op2B, IntPoint pt, bool discardLeft)
         {
-            var dir1 = (op1.Pt.X > op1B.Pt.X ? Direction.DRightToLeft : Direction.DLeftToRight);
-            var dir2 = (op2.Pt.X > op2B.Pt.X ? Direction.DRightToLeft : Direction.DLeftToRight);
+            var dir1 = op1.Pt.X > op1B.Pt.X ? Direction.DRightToLeft : Direction.DLeftToRight;
+            var dir2 = op2.Pt.X > op2B.Pt.X ? Direction.DRightToLeft : Direction.DLeftToRight;
             if (dir1 == dir2)
             {
                 return false;
             }
 
-            //When DiscardLeft, we want Op1b to be on the Left of Op1, otherwise we
-            //want Op1b to be on the Right. (And likewise with Op2 and Op2b.)
-            //So, to facilitate this while inserting Op1b and Op2b ...
-            //when DiscardLeft, make sure we're AT or RIGHT of Pt before adding Op1b,
-            //otherwise make sure we're AT or LEFT of Pt. (Likewise with Op2b.)
+            // When DiscardLeft, we want Op1b to be on the Left of Op1, otherwise we
+            // want Op1b to be on the Right. (And likewise with Op2 and Op2b.)
+            // So, to facilitate this while inserting Op1b and Op2b ...
+            // when DiscardLeft, make sure we're AT or RIGHT of Pt before adding Op1b,
+            // otherwise make sure we're AT or LEFT of Pt. (Likewise with Op2b.)
             if (dir1 == Direction.DLeftToRight)
             {
                 while (op1.Next.Pt.X <= pt.X && op1.Next.Pt.X >= op1.Pt.X && op1.Next.Pt.Y == pt.Y)
                 {
                     op1 = op1.Next;
                 }
+
                 if (discardLeft && (op1.Pt.X != pt.X))
                 {
                     op1 = op1.Next;
                 }
+
                 op1B = DupOutPt(op1, !discardLeft);
                 if (op1B.Pt != pt)
                 {
@@ -4471,10 +6010,12 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     op1 = op1.Next;
                 }
+
                 if (!discardLeft && (op1.Pt.X != pt.X))
                 {
                     op1 = op1.Next;
                 }
+
                 op1B = DupOutPt(op1, discardLeft);
                 if (op1B.Pt != pt)
                 {
@@ -4490,10 +6031,12 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     op2 = op2.Next;
                 }
+
                 if (discardLeft && (op2.Pt.X != pt.X))
                 {
                     op2 = op2.Next;
                 }
+
                 op2B = DupOutPt(op2, !discardLeft);
                 if (op2B.Pt != pt)
                 {
@@ -4508,10 +6051,12 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     op2 = op2.Next;
                 }
+
                 if (!discardLeft && (op2.Pt.X != pt.X))
                 {
                     op2 = op2.Next;
                 }
+
                 op2B = DupOutPt(op2, discardLeft);
                 if (op2B.Pt != pt)
                 {
@@ -4535,50 +6080,69 @@ namespace LeagueSharp.CommonEx.Clipper
                 op1B.Prev = op2B;
                 op2B.Next = op1B;
             }
+
             return true;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The join points.
+        /// </summary>
+        /// <param name="j">
+        ///     TODO The j.
+        /// </param>
+        /// <param name="outRec1">
+        ///     TODO The out rec 1.
+        /// </param>
+        /// <param name="outRec2">
+        ///     TODO The out rec 2.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private bool JoinPoints(Join j, OutRec outRec1, OutRec outRec2)
         {
             OutPt op1 = j.OutPt1, op1B;
             OutPt op2 = j.OutPt2, op2B;
 
-            //There are 3 kinds of joins for output polygons ...
-            //1. Horizontal joins where Join.OutPt1 & Join.OutPt2 are a vertices anywhere
-            //along (horizontal) collinear edges (& Join.OffPt is on the same horizontal).
-            //2. Non-horizontal joins where Join.OutPt1 & Join.OutPt2 are at the same
-            //location at the Bottom of the overlapping segment (& Join.OffPt is above).
-            //3. StrictlySimple joins where edges touch but are not collinear and where
-            //Join.OutPt1, Join.OutPt2 & Join.OffPt all share the same point.
-            var isHorizontal = (j.OutPt1.Pt.Y == j.OffPt.Y);
+            // There are 3 kinds of joins for output polygons ...
+            // 1. Horizontal joins where Join.OutPt1 & Join.OutPt2 are a vertices anywhere
+            // along (horizontal) collinear edges (& Join.OffPt is on the same horizontal).
+            // 2. Non-horizontal joins where Join.OutPt1 & Join.OutPt2 are at the same
+            // location at the Bottom of the overlapping segment (& Join.OffPt is above).
+            // 3. StrictlySimple joins where edges touch but are not collinear and where
+            // Join.OutPt1, Join.OutPt2 & Join.OffPt all share the same point.
+            var isHorizontal = j.OutPt1.Pt.Y == j.OffPt.Y;
 
             bool reverse1;
             bool reverse2;
             if (isHorizontal && (j.OffPt == j.OutPt1.Pt) && (j.OffPt == j.OutPt2.Pt))
             {
-                //Strictly Simple join ...
+                // Strictly Simple join ...
                 if (outRec1 != outRec2)
                 {
                     return false;
                 }
+
                 op1B = j.OutPt1.Next;
                 while (op1B != op1 && (op1B.Pt == j.OffPt))
                 {
                     op1B = op1B.Next;
                 }
-                reverse1 = (op1B.Pt.Y > j.OffPt.Y);
+
+                reverse1 = op1B.Pt.Y > j.OffPt.Y;
                 op2B = j.OutPt2.Next;
                 while (op2B != op2 && (op2B.Pt == j.OffPt))
                 {
                     op2B = op2B.Next;
                 }
-                reverse2 = (op2B.Pt.Y > j.OffPt.Y);
+
+                reverse2 = op2B.Pt.Y > j.OffPt.Y;
                 if (reverse1 == reverse2)
                 {
                     return false;
                 }
+
                 if (reverse1)
                 {
                     op1B = DupOutPt(op1, false);
@@ -4591,6 +6155,7 @@ namespace LeagueSharp.CommonEx.Clipper
                     j.OutPt2 = op1B;
                     return true;
                 }
+
                 op1B = DupOutPt(op1, true);
                 op2B = DupOutPt(op2, false);
                 op1.Next = op2;
@@ -4601,23 +6166,26 @@ namespace LeagueSharp.CommonEx.Clipper
                 j.OutPt2 = op1B;
                 return true;
             }
+
             if (isHorizontal)
             {
-                //treat horizontal joins differently to non-horizontal joins since with
-                //them we're not yet sure where the overlapping is. OutPt1.Pt & OutPt2.Pt
-                //may be anywhere along the horizontal edge.
+                // treat horizontal joins differently to non-horizontal joins since with
+                // them we're not yet sure where the overlapping is. OutPt1.Pt & OutPt2.Pt
+                // may be anywhere along the horizontal edge.
                 op1B = op1;
                 while (op1.Prev.Pt.Y == op1.Pt.Y && op1.Prev != op1B && op1.Prev != op2)
                 {
                     op1 = op1.Prev;
                 }
+
                 while (op1B.Next.Pt.Y == op1B.Pt.Y && op1B.Next != op1 && op1B.Next != op2)
                 {
                     op1B = op1B.Next;
                 }
+
                 if (op1B.Next == op1 || op1B.Next == op2)
                 {
-                    return false; //a flat 'polygon'
+                    return false; // a flat 'polygon'
                 }
 
                 op2B = op2;
@@ -4625,36 +6193,39 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     op2 = op2.Prev;
                 }
+
                 while (op2B.Next.Pt.Y == op2B.Pt.Y && op2B.Next != op2 && op2B.Next != op1)
                 {
                     op2B = op2B.Next;
                 }
+
                 if (op2B.Next == op2 || op2B.Next == op1)
                 {
-                    return false; //a flat 'polygon'
+                    return false; // a flat 'polygon'
                 }
 
-                cInt left, right;
-                //Op1 -. Op1b & Op2 -. Op2b are the extremites of the horizontal edges
-                if (!GetOverlap(op1.Pt.X, op1B.Pt.X, op2.Pt.X, op2B.Pt.X, out left, out right))
+                long left, right;
+
+                // Op1 -. Op1b & Op2 -. Op2b are the extremites of the horizontal edges
+                if (!this.GetOverlap(op1.Pt.X, op1B.Pt.X, op2.Pt.X, op2B.Pt.X, out left, out right))
                 {
                     return false;
                 }
 
-                //DiscardLeftSide: when overlapping edges are joined, a spike will created
-                //which needs to be cleaned up. However, we don't want Op1 or Op2 caught up
-                //on the discard Side as either may still be needed for other joins ...
+                // DiscardLeftSide: when overlapping edges are joined, a spike will created
+                // which needs to be cleaned up. However, we don't want Op1 or Op2 caught up
+                // on the discard Side as either may still be needed for other joins ...
                 IntPoint pt;
                 bool discardLeftSide;
                 if (op1.Pt.X >= left && op1.Pt.X <= right)
                 {
                     pt = op1.Pt;
-                    discardLeftSide = (op1.Pt.X > op1B.Pt.X);
+                    discardLeftSide = op1.Pt.X > op1B.Pt.X;
                 }
                 else if (op2.Pt.X >= left && op2.Pt.X <= right)
                 {
                     pt = op2.Pt;
-                    discardLeftSide = (op2.Pt.X > op2B.Pt.X);
+                    discardLeftSide = op2.Pt.X > op2B.Pt.X;
                 }
                 else if (op1B.Pt.X >= left && op1B.Pt.X <= right)
                 {
@@ -4664,23 +6235,26 @@ namespace LeagueSharp.CommonEx.Clipper
                 else
                 {
                     pt = op2B.Pt;
-                    discardLeftSide = (op2B.Pt.X > op2.Pt.X);
+                    discardLeftSide = op2B.Pt.X > op2.Pt.X;
                 }
+
                 j.OutPt1 = op1;
                 j.OutPt2 = op2;
-                return JoinHorz(op1, op1B, op2, op2B, pt, discardLeftSide);
+                return this.JoinHorz(op1, op1B, op2, op2B, pt, discardLeftSide);
             }
-            //nb: For non-horizontal joins ...
-            //    1. Jr.OutPt1.Pt.Y == Jr.OutPt2.Pt.Y
-            //    2. Jr.OutPt1.Pt > Jr.OffPt.Y
 
-            //make sure the polygons are correctly oriented ...
+            // nb: For non-horizontal joins ...
+            // 1. Jr.OutPt1.Pt.Y == Jr.OutPt2.Pt.Y
+            // 2. Jr.OutPt1.Pt > Jr.OffPt.Y
+
+            // make sure the polygons are correctly oriented ...
             op1B = op1.Next;
             while ((op1B.Pt == op1.Pt) && (op1B != op1))
             {
                 op1B = op1B.Next;
             }
-            reverse1 = ((op1B.Pt.Y > op1.Pt.Y) || !SlopesEqual(op1.Pt, op1B.Pt, j.OffPt, MUseFullRange));
+
+            reverse1 = (op1B.Pt.Y > op1.Pt.Y) || !SlopesEqual(op1.Pt, op1B.Pt, j.OffPt, this.MUseFullRange);
             if (reverse1)
             {
                 op1B = op1.Prev;
@@ -4688,17 +6262,20 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     op1B = op1B.Prev;
                 }
-                if ((op1B.Pt.Y > op1.Pt.Y) || !SlopesEqual(op1.Pt, op1B.Pt, j.OffPt, MUseFullRange))
+
+                if ((op1B.Pt.Y > op1.Pt.Y) || !SlopesEqual(op1.Pt, op1B.Pt, j.OffPt, this.MUseFullRange))
                 {
                     return false;
                 }
             }
+
             op2B = op2.Next;
             while ((op2B.Pt == op2.Pt) && (op2B != op2))
             {
                 op2B = op2B.Next;
             }
-            reverse2 = ((op2B.Pt.Y > op2.Pt.Y) || !SlopesEqual(op2.Pt, op2B.Pt, j.OffPt, MUseFullRange));
+
+            reverse2 = (op2B.Pt.Y > op2.Pt.Y) || !SlopesEqual(op2.Pt, op2B.Pt, j.OffPt, this.MUseFullRange);
             if (reverse2)
             {
                 op2B = op2.Prev;
@@ -4706,7 +6283,8 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     op2B = op2B.Prev;
                 }
-                if ((op2B.Pt.Y > op2.Pt.Y) || !SlopesEqual(op2.Pt, op2B.Pt, j.OffPt, MUseFullRange))
+
+                if ((op2B.Pt.Y > op2.Pt.Y) || !SlopesEqual(op2.Pt, op2B.Pt, j.OffPt, this.MUseFullRange))
                 {
                     return false;
                 }
@@ -4729,6 +6307,7 @@ namespace LeagueSharp.CommonEx.Clipper
                 j.OutPt2 = op1B;
                 return true;
             }
+
             op1B = DupOutPt(op1, true);
             op2B = DupOutPt(op2, false);
             op1.Next = op2;
@@ -4740,7 +6319,7 @@ namespace LeagueSharp.CommonEx.Clipper
             return true;
         }
 
-        //----------------------------------------------------------------------
+        // ----------------------------------------------------------------------
 
         /// <summary>
         ///     Checks if a point is in the polygon.
@@ -4750,18 +6329,19 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <returns></returns>
         public static int PointInPolygon(IntPoint pt, Path path)
         {
-            //returns 0 if false, +1 if true, -1 if pt ON polygon boundary
-            //See "The Point in Polygon Problem for Arbitrary Polygons" by Hormann & Agathos
-            //http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.88.5498&rep=rep1&type=pdf
+            // returns 0 if false, +1 if true, -1 if pt ON polygon boundary
+            // See "The Point in Polygon Problem for Arbitrary Polygons" by Hormann & Agathos
+            // http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.88.5498&rep=rep1&type=pdf
             int result = 0, cnt = path.Count;
             if (cnt < 3)
             {
                 return 0;
             }
+
             var ip = path[0];
             for (var i = 1; i <= cnt; ++i)
             {
-                var ipNext = (i == cnt ? path[0] : path[i]);
+                var ipNext = i == cnt ? path[0] : path[i];
                 if (ipNext.Y == pt.Y)
                 {
                     if ((ipNext.X == pt.X) || (ip.Y == pt.Y && ((ipNext.X > pt.X) == (ip.X < pt.X))))
@@ -4769,6 +6349,7 @@ namespace LeagueSharp.CommonEx.Clipper
                         return -1;
                     }
                 }
+
                 if ((ip.Y < pt.Y) != (ipNext.Y < pt.Y))
                 {
                     if (ip.X >= pt.X)
@@ -4779,12 +6360,13 @@ namespace LeagueSharp.CommonEx.Clipper
                         }
                         else
                         {
-                            var d = (double) (ip.X - pt.X) * (ipNext.Y - pt.Y) -
-                                    (double) (ipNext.X - pt.X) * (ip.Y - pt.Y);
+                            var d = (double)(ip.X - pt.X) * (ipNext.Y - pt.Y)
+                                    - (double)(ipNext.X - pt.X) * (ip.Y - pt.Y);
                             if (Math.Abs(d) < float.Epsilon)
                             {
                                 return -1;
                             }
+
                             if ((d > 0) == (ipNext.Y > ip.Y))
                             {
                                 result = 1 - result;
@@ -4795,12 +6377,13 @@ namespace LeagueSharp.CommonEx.Clipper
                     {
                         if (ipNext.X > pt.X)
                         {
-                            var d = (double) (ip.X - pt.X) * (ipNext.Y - pt.Y) -
-                                    (double) (ipNext.X - pt.X) * (ip.Y - pt.Y);
+                            var d = (double)(ip.X - pt.X) * (ipNext.Y - pt.Y)
+                                    - (double)(ipNext.X - pt.X) * (ip.Y - pt.Y);
                             if (Math.Abs(d) < float.Epsilon)
                             {
                                 return -1;
                             }
+
                             if ((d > 0) == (ipNext.Y > ip.Y))
                             {
                                 result = 1 - result;
@@ -4808,26 +6391,39 @@ namespace LeagueSharp.CommonEx.Clipper
                         }
                     }
                 }
+
                 ip = ipNext;
             }
+
             return result;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The point in polygon.
+        /// </summary>
+        /// <param name="pt">
+        ///     TODO The pt.
+        /// </param>
+        /// <param name="op">
+        ///     TODO The op.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static int PointInPolygon(IntPoint pt, OutPt op)
         {
-            //returns 0 if false, +1 if true, -1 if pt ON polygon boundary
-            //See "The Point in Polygon Problem for Arbitrary Polygons" by Hormann & Agathos
-            //http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.88.5498&rep=rep1&type=pdf
+            // returns 0 if false, +1 if true, -1 if pt ON polygon boundary
+            // See "The Point in Polygon Problem for Arbitrary Polygons" by Hormann & Agathos
+            // http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.88.5498&rep=rep1&type=pdf
             var result = 0;
             var startOp = op;
-            cInt ptx = pt.X, pty = pt.Y;
-            cInt poly0X = op.Pt.X, poly0Y = op.Pt.Y;
+            long ptx = pt.X, pty = pt.Y;
+            long poly0X = op.Pt.X, poly0Y = op.Pt.Y;
             do
             {
                 op = op.Next;
-                cInt poly1X = op.Pt.X, poly1Y = op.Pt.Y;
+                long poly1X = op.Pt.X, poly1Y = op.Pt.Y;
 
                 if (poly1Y == pty)
                 {
@@ -4836,6 +6432,7 @@ namespace LeagueSharp.CommonEx.Clipper
                         return -1;
                     }
                 }
+
                 if ((poly0Y < pty) != (poly1Y < pty))
                 {
                     if (poly0X >= ptx)
@@ -4846,11 +6443,12 @@ namespace LeagueSharp.CommonEx.Clipper
                         }
                         else
                         {
-                            var d = (double) (poly0X - ptx) * (poly1Y - pty) - (double) (poly1X - ptx) * (poly0Y - pty);
+                            var d = (double)(poly0X - ptx) * (poly1Y - pty) - (double)(poly1X - ptx) * (poly0Y - pty);
                             if (Math.Abs(d) < float.Epsilon)
                             {
                                 return -1;
                             }
+
                             if ((d > 0) == (poly1Y > poly0Y))
                             {
                                 result = 1 - result;
@@ -4861,11 +6459,12 @@ namespace LeagueSharp.CommonEx.Clipper
                     {
                         if (poly1X > ptx)
                         {
-                            var d = (double) (poly0X - ptx) * (poly1Y - pty) - (double) (poly1X - ptx) * (poly0Y - pty);
+                            var d = (double)(poly0X - ptx) * (poly1Y - pty) - (double)(poly1X - ptx) * (poly0Y - pty);
                             if (Math.Abs(d) < float.Epsilon)
                             {
                                 return -1;
                             }
+
                             if ((d > 0) == (poly1Y > poly0Y))
                             {
                                 result = 1 - result;
@@ -4873,129 +6472,175 @@ namespace LeagueSharp.CommonEx.Clipper
                         }
                     }
                 }
+
                 poly0X = poly1X;
                 poly0Y = poly1Y;
-            } while (startOp != op);
+            }
+            while (startOp != op);
             return result;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The poly 2 contains poly 1.
+        /// </summary>
+        /// <param name="outPt1">
+        ///     TODO The out pt 1.
+        /// </param>
+        /// <param name="outPt2">
+        ///     TODO The out pt 2.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static bool Poly2ContainsPoly1(OutPt outPt1, OutPt outPt2)
         {
             var op = outPt1;
             do
             {
-                //nb: PointInPolygon returns 0 if false, +1 if true, -1 if pt on polygon
+                // nb: PointInPolygon returns 0 if false, +1 if true, -1 if pt on polygon
                 var res = PointInPolygon(op.Pt, outPt2);
                 if (res >= 0)
                 {
                     return res > 0;
                 }
+
                 op = op.Next;
-            } while (op != outPt1);
+            }
+            while (op != outPt1);
             return true;
         }
 
-        //----------------------------------------------------------------------
+        // ----------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The fixup first lefts 1.
+        /// </summary>
+        /// <param name="oldOutRec">
+        ///     TODO The old out rec.
+        /// </param>
+        /// <param name="newOutRec">
+        ///     TODO The new out rec.
+        /// </param>
         private void FixupFirstLefts1(OutRec oldOutRec, OutRec newOutRec)
         {
-            foreach (var outRec in from outRec in _mPolyOuts
-                where outRec.Pts != null && outRec.FirstLeft != null
-                let firstLeft = ParseFirstLeft(outRec.FirstLeft)
-                where firstLeft == oldOutRec
-                where Poly2ContainsPoly1(outRec.Pts, newOutRec.Pts)
-                select outRec)
+            foreach (var outRec in from outRec in this.mPolyOuts
+                                   where outRec.Pts != null && outRec.FirstLeft != null
+                                   let firstLeft = ParseFirstLeft(outRec.FirstLeft)
+                                   where firstLeft == oldOutRec
+                                   where Poly2ContainsPoly1(outRec.Pts, newOutRec.Pts)
+                                   select outRec)
             {
                 outRec.FirstLeft = newOutRec;
             }
         }
 
-        //----------------------------------------------------------------------
+        // ----------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The fixup first lefts 2.
+        /// </summary>
+        /// <param name="oldOutRec">
+        ///     TODO The old out rec.
+        /// </param>
+        /// <param name="newOutRec">
+        ///     TODO The new out rec.
+        /// </param>
         private void FixupFirstLefts2(OutRec oldOutRec, OutRec newOutRec)
         {
-            foreach (var outRec in _mPolyOuts.Where(outRec => outRec.FirstLeft == oldOutRec))
+            foreach (var outRec in this.mPolyOuts.Where(outRec => outRec.FirstLeft == oldOutRec))
             {
                 outRec.FirstLeft = newOutRec;
             }
         }
 
-        //----------------------------------------------------------------------
+        // ----------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The parse first left.
+        /// </summary>
+        /// <param name="firstLeft">
+        ///     TODO The first left.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static OutRec ParseFirstLeft(OutRec firstLeft)
         {
             while (firstLeft != null && firstLeft.Pts == null)
             {
                 firstLeft = firstLeft.FirstLeft;
             }
+
             return firstLeft;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The join common edges.
+        /// </summary>
         private void JoinCommonEdges()
         {
-            foreach (var @join in _mJoins)
+            foreach (var @join in this.mJoins)
             {
-                var outRec1 = GetOutRec(@join.OutPt1.Idx);
-                var outRec2 = GetOutRec(@join.OutPt2.Idx);
+                var outRec1 = this.GetOutRec(@join.OutPt1.Idx);
+                var outRec2 = this.GetOutRec(@join.OutPt2.Idx);
 
                 if (outRec1.Pts == null || outRec2.Pts == null)
                 {
                     continue;
                 }
 
-                //get the polygon fragment with the correct hole state (FirstLeft)
-                //before calling JoinPoints() ...
+                // get the polygon fragment with the correct hole state (FirstLeft)
+                // before calling JoinPoints() ...
                 OutRec holeStateRec;
                 if (outRec1 == outRec2)
                 {
                     holeStateRec = outRec1;
                 }
-                else if (Param1RightOfParam2(outRec1, outRec2))
+                else if (this.Param1RightOfParam2(outRec1, outRec2))
                 {
                     holeStateRec = outRec2;
                 }
-                else if (Param1RightOfParam2(outRec2, outRec1))
+                else if (this.Param1RightOfParam2(outRec2, outRec1))
                 {
                     holeStateRec = outRec1;
                 }
                 else
                 {
-                    holeStateRec = GetLowermostRec(outRec1, outRec2);
+                    holeStateRec = this.GetLowermostRec(outRec1, outRec2);
                 }
 
-                if (!JoinPoints(@join, outRec1, outRec2))
+                if (!this.JoinPoints(@join, outRec1, outRec2))
                 {
                     continue;
                 }
 
                 if (outRec1 == outRec2)
                 {
-                    //instead of joining two polygons, we've just created a new one by
-                    //splitting one polygon into two.
+                    // instead of joining two polygons, we've just created a new one by
+                    // splitting one polygon into two.
                     outRec1.Pts = @join.OutPt1;
                     outRec1.BottomPt = null;
-                    outRec2 = CreateOutRec();
+                    outRec2 = this.CreateOutRec();
                     outRec2.Pts = @join.OutPt2;
 
-                    //update all OutRec2.Pts Idx's ...
+                    // update all OutRec2.Pts Idx's ...
                     UpdateOutPtIdxs(outRec2);
 
-                    //We now need to check every OutRec.FirstLeft pointer. If it points
-                    //to OutRec1 it may need to point to OutRec2 instead ...
-                    if (_mUsingPolyTree)
+                    // We now need to check every OutRec.FirstLeft pointer. If it points
+                    // to OutRec1 it may need to point to OutRec2 instead ...
+                    if (this.mUsingPolyTree)
                     {
-                        for (var j = 0; j < _mPolyOuts.Count - 1; j++)
+                        for (var j = 0; j < this.mPolyOuts.Count - 1; j++)
                         {
-                            var oRec = _mPolyOuts[j];
-                            if (oRec.Pts == null || ParseFirstLeft(oRec.FirstLeft) != outRec1 ||
-                                oRec.IsHole == outRec1.IsHole)
+                            var oRec = this.mPolyOuts[j];
+                            if (oRec.Pts == null || ParseFirstLeft(oRec.FirstLeft) != outRec1
+                                || oRec.IsHole == outRec1.IsHole)
                             {
                                 continue;
                             }
+
                             if (Poly2ContainsPoly1(oRec.Pts, @join.OutPt2))
                             {
                                 oRec.FirstLeft = outRec2;
@@ -5005,57 +6650,56 @@ namespace LeagueSharp.CommonEx.Clipper
 
                     if (Poly2ContainsPoly1(outRec2.Pts, outRec1.Pts))
                     {
-                        //outRec2 is contained by outRec1 ...
+                        // outRec2 is contained by outRec1 ...
                         outRec2.IsHole = !outRec1.IsHole;
                         outRec2.FirstLeft = outRec1;
 
-                        //fixup FirstLeft pointers that may need reassigning to OutRec1
-                        if (_mUsingPolyTree)
+                        // fixup FirstLeft pointers that may need reassigning to OutRec1
+                        if (this.mUsingPolyTree)
                         {
-                            FixupFirstLefts2(outRec2, outRec1);
+                            this.FixupFirstLefts2(outRec2, outRec1);
                         }
 
-                        if ((outRec2.IsHole ^ ReverseSolution) == (Area(outRec2) > 0))
+                        if ((outRec2.IsHole ^ this.ReverseSolution) == (Area(outRec2) > 0))
                         {
-                            ReversePolyPtLinks(outRec2.Pts);
+                            this.ReversePolyPtLinks(outRec2.Pts);
                         }
                     }
                     else if (Poly2ContainsPoly1(outRec1.Pts, outRec2.Pts))
                     {
-                        //outRec1 is contained by outRec2 ...
+                        // outRec1 is contained by outRec2 ...
                         outRec2.IsHole = outRec1.IsHole;
                         outRec1.IsHole = !outRec2.IsHole;
                         outRec2.FirstLeft = outRec1.FirstLeft;
                         outRec1.FirstLeft = outRec2;
 
-                        //fixup FirstLeft pointers that may need reassigning to OutRec1
-                        if (_mUsingPolyTree)
+                        // fixup FirstLeft pointers that may need reassigning to OutRec1
+                        if (this.mUsingPolyTree)
                         {
-                            FixupFirstLefts2(outRec1, outRec2);
+                            this.FixupFirstLefts2(outRec1, outRec2);
                         }
 
-                        if ((outRec1.IsHole ^ ReverseSolution) == (Area(outRec1) > 0))
+                        if ((outRec1.IsHole ^ this.ReverseSolution) == (Area(outRec1) > 0))
                         {
-                            ReversePolyPtLinks(outRec1.Pts);
+                            this.ReversePolyPtLinks(outRec1.Pts);
                         }
                     }
                     else
                     {
-                        //the 2 polygons are completely separate ...
+                        // the 2 polygons are completely separate ...
                         outRec2.IsHole = outRec1.IsHole;
                         outRec2.FirstLeft = outRec1.FirstLeft;
 
-                        //fixup FirstLeft pointers that may need reassigning to OutRec2
-                        if (_mUsingPolyTree)
+                        // fixup FirstLeft pointers that may need reassigning to OutRec2
+                        if (this.mUsingPolyTree)
                         {
-                            FixupFirstLefts1(outRec1, outRec2);
+                            this.FixupFirstLefts1(outRec1, outRec2);
                         }
                     }
                 }
                 else
                 {
-                    //joined 2 polygons together ...
-
+                    // joined 2 polygons together ...
                     outRec2.Pts = null;
                     outRec2.BottomPt = null;
                     outRec2.Idx = outRec1.Idx;
@@ -5065,19 +6709,26 @@ namespace LeagueSharp.CommonEx.Clipper
                     {
                         outRec1.FirstLeft = outRec2.FirstLeft;
                     }
+
                     outRec2.FirstLeft = outRec1;
 
-                    //fixup FirstLeft pointers that may need reassigning to OutRec1
-                    if (_mUsingPolyTree)
+                    // fixup FirstLeft pointers that may need reassigning to OutRec1
+                    if (this.mUsingPolyTree)
                     {
-                        FixupFirstLefts2(outRec2, outRec1);
+                        this.FixupFirstLefts2(outRec2, outRec1);
                     }
                 }
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The update out pt idxs.
+        /// </summary>
+        /// <param name="outrec">
+        ///     TODO The outrec.
+        /// </param>
         private static void UpdateOutPtIdxs(OutRec outrec)
         {
             var op = outrec.Pts;
@@ -5085,30 +6736,35 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 op.Idx = outrec.Idx;
                 op = op.Prev;
-            } while (op != outrec.Pts);
+            }
+            while (op != outrec.Pts);
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The do simple polygons.
+        /// </summary>
         private void DoSimplePolygons()
         {
             var i = 0;
-            while (i < _mPolyOuts.Count)
+            while (i < this.mPolyOuts.Count)
             {
-                var outrec = _mPolyOuts[i++];
+                var outrec = this.mPolyOuts[i++];
                 var op = outrec.Pts;
                 if (op == null || outrec.IsOpen)
                 {
                     continue;
                 }
-                do //for each Pt in Polygon until duplicate found do ...
+                do
                 {
+                    // for each Pt in Polygon until duplicate found do ...
                     var op2 = op.Next;
                     while (op2 != outrec.Pts)
                     {
                         if ((op.Pt == op2.Pt) && op2.Next != op && op2.Prev != op)
                         {
-                            //split the polygon into two ...
+                            // split the polygon into two ...
                             var op3 = op.Prev;
                             var op4 = op2.Prev;
                             op.Prev = op4;
@@ -5117,51 +6773,55 @@ namespace LeagueSharp.CommonEx.Clipper
                             op3.Next = op2;
 
                             outrec.Pts = op;
-                            var outrec2 = CreateOutRec();
+                            var outrec2 = this.CreateOutRec();
                             outrec2.Pts = op2;
                             UpdateOutPtIdxs(outrec2);
                             if (Poly2ContainsPoly1(outrec2.Pts, outrec.Pts))
                             {
-                                //OutRec2 is contained by OutRec1 ...
+                                // OutRec2 is contained by OutRec1 ...
                                 outrec2.IsHole = !outrec.IsHole;
                                 outrec2.FirstLeft = outrec;
-                                if (_mUsingPolyTree)
+                                if (this.mUsingPolyTree)
                                 {
-                                    FixupFirstLefts2(outrec2, outrec);
+                                    this.FixupFirstLefts2(outrec2, outrec);
                                 }
                             }
                             else if (Poly2ContainsPoly1(outrec.Pts, outrec2.Pts))
                             {
-                                //OutRec1 is contained by OutRec2 ...
+                                // OutRec1 is contained by OutRec2 ...
                                 outrec2.IsHole = outrec.IsHole;
                                 outrec.IsHole = !outrec2.IsHole;
                                 outrec2.FirstLeft = outrec.FirstLeft;
                                 outrec.FirstLeft = outrec2;
-                                if (_mUsingPolyTree)
+                                if (this.mUsingPolyTree)
                                 {
-                                    FixupFirstLefts2(outrec, outrec2);
+                                    this.FixupFirstLefts2(outrec, outrec2);
                                 }
                             }
                             else
                             {
-                                //the 2 polygons are separate ...
+                                // the 2 polygons are separate ...
                                 outrec2.IsHole = outrec.IsHole;
                                 outrec2.FirstLeft = outrec.FirstLeft;
-                                if (_mUsingPolyTree)
+                                if (this.mUsingPolyTree)
                                 {
-                                    FixupFirstLefts1(outrec, outrec2);
+                                    this.FixupFirstLefts1(outrec, outrec2);
                                 }
                             }
-                            op2 = op; //ie get ready for the next iteration
+
+                            op2 = op; // ie get ready for the next iteration
                         }
+
                         op2 = op2.Next;
                     }
+
                     op = op.Next;
-                } while (op != outrec.Pts);
+                }
+                while (op != outrec.Pts);
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Gets the area of the specified polygon.
@@ -5175,17 +6835,27 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 return 0;
             }
+
             double a = 0;
             for (int i = 0, j = cnt - 1; i < cnt; ++i)
             {
-                a += ((double) poly[j].X + poly[i].X) * ((double) poly[j].Y - poly[i].Y);
+                a += ((double)poly[j].X + poly[i].X) * ((double)poly[j].Y - poly[i].Y);
                 j = i;
             }
+
             return -a * 0.5;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The area.
+        /// </summary>
+        /// <param name="outRec">
+        ///     TODO The out rec.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static double Area(OutRec outRec)
         {
             var op = outRec.Pts;
@@ -5193,19 +6863,21 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 return 0;
             }
+
             double a = 0;
             do
             {
-                a = a + (op.Prev.Pt.X + op.Pt.X) * (double) (op.Prev.Pt.Y - op.Pt.Y);
+                a = a + (op.Prev.Pt.X + op.Pt.X) * (double)(op.Prev.Pt.Y - op.Pt.Y);
                 op = op.Next;
-            } while (op != outRec.Pts);
+            }
+            while (op != outRec.Pts);
             return a * 0.5;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
         // SimplifyPolygon functions ...
         // Convert self-intersecting polygons into simple polygons
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Simplifies the polygon.
@@ -5222,7 +6894,7 @@ namespace LeagueSharp.CommonEx.Clipper
             return result;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Simplifies the polygons.
@@ -5239,16 +6911,30 @@ namespace LeagueSharp.CommonEx.Clipper
             return result;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The distance from line sqrd.
+        /// </summary>
+        /// <param name="pt">
+        ///     TODO The pt.
+        /// </param>
+        /// <param name="ln1">
+        ///     TODO The ln 1.
+        /// </param>
+        /// <param name="ln2">
+        ///     TODO The ln 2.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static double DistanceFromLineSqrd(IntPoint pt, IntPoint ln1, IntPoint ln2)
         {
-            //The equation of a line in general form (Ax + By + C = 0)
-            //given 2 points (x¹,y¹) & (x²,y²) is ...
-            //(y¹ - y²)x + (x² - x¹)y + (y² - y¹)x¹ - (x² - x¹)y¹ = 0
-            //A = (y¹ - y²); B = (x² - x¹); C = (y² - y¹)x¹ - (x² - x¹)y¹
-            //perpendicular distance of point (x³,y³) = (Ax³ + By³ + C)/Sqrt(A² + B²)
-            //see http://en.wikipedia.org/wiki/Perpendicular_distance
+            // The equation of a line in general form (Ax + By + C = 0)
+            // given 2 points (x¹,y¹) & (x²,y²) is ...
+            // (y¹ - y²)x + (x² - x¹)y + (y² - y¹)x¹ - (x² - x¹)y¹ = 0
+            // A = (y¹ - y²); B = (x² - x¹); C = (y² - y¹)x¹ - (x² - x¹)y¹
+            // perpendicular distance of point (x³,y³) = (Ax³ + By³ + C)/Sqrt(A² + B²)
+            // see http://en.wikipedia.org/wiki/Perpendicular_distance
             double a = ln1.Y - ln2.Y;
             double b = ln2.X - ln1.X;
             var c = a * ln1.X + b * ln1.Y;
@@ -5256,47 +6942,91 @@ namespace LeagueSharp.CommonEx.Clipper
             return (c * c) / (a * a + b * b);
         }
 
-        //---------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The slopes near collinear.
+        /// </summary>
+        /// <param name="pt1">
+        ///     TODO The pt 1.
+        /// </param>
+        /// <param name="pt2">
+        ///     TODO The pt 2.
+        /// </param>
+        /// <param name="pt3">
+        ///     TODO The pt 3.
+        /// </param>
+        /// <param name="distSqrd">
+        ///     TODO The dist sqrd.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static bool SlopesNearCollinear(IntPoint pt1, IntPoint pt2, IntPoint pt3, double distSqrd)
         {
-            //this function is more accurate when the point that's GEOMETRICALLY 
-            //between the other 2 points is the one that's tested for distance.  
-            //nb: with 'spikes', either pt1 or pt3 is geometrically between the other pts                    
+            // this function is more accurate when the point that's GEOMETRICALLY 
+            // between the other 2 points is the one that's tested for distance.  
+            // nb: with 'spikes', either pt1 or pt3 is geometrically between the other pts                    
             if (Math.Abs(pt1.X - pt2.X) > Math.Abs(pt1.Y - pt2.Y))
             {
                 if ((pt1.X > pt2.X) == (pt1.X < pt3.X))
                 {
                     return DistanceFromLineSqrd(pt1, pt2, pt3) < distSqrd;
                 }
+
                 if ((pt2.X > pt1.X) == (pt2.X < pt3.X))
                 {
                     return DistanceFromLineSqrd(pt2, pt1, pt3) < distSqrd;
                 }
+
                 return DistanceFromLineSqrd(pt3, pt1, pt2) < distSqrd;
             }
+
             if ((pt1.Y > pt2.Y) == (pt1.Y < pt3.Y))
             {
                 return DistanceFromLineSqrd(pt1, pt2, pt3) < distSqrd;
             }
+
             if ((pt2.Y > pt1.Y) == (pt2.Y < pt3.Y))
             {
                 return DistanceFromLineSqrd(pt2, pt1, pt3) < distSqrd;
             }
+
             return DistanceFromLineSqrd(pt3, pt1, pt2) < distSqrd;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The points are close.
+        /// </summary>
+        /// <param name="pt1">
+        ///     TODO The pt 1.
+        /// </param>
+        /// <param name="pt2">
+        ///     TODO The pt 2.
+        /// </param>
+        /// <param name="distSqrd">
+        ///     TODO The dist sqrd.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static bool PointsAreClose(IntPoint pt1, IntPoint pt2, double distSqrd)
         {
-            var dx = (double) pt1.X - pt2.X;
-            var dy = (double) pt1.Y - pt2.Y;
-            return ((dx * dx) + (dy * dy) <= distSqrd);
+            var dx = (double)pt1.X - pt2.X;
+            var dy = (double)pt1.Y - pt2.Y;
+            return (dx * dx) + (dy * dy) <= distSqrd;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The exclude op.
+        /// </summary>
+        /// <param name="op">
+        ///     TODO The op.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static OutPt ExcludeOp(OutPt op)
         {
             var result = op.Prev;
@@ -5306,7 +7036,7 @@ namespace LeagueSharp.CommonEx.Clipper
             return result;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Cleans the polygon.
@@ -5316,10 +7046,9 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <returns></returns>
         public static Path CleanPolygon(Path path, double distance = 1.415)
         {
-            //distance = proximity in units/pixels below which vertices will be stripped. 
-            //Default ~= sqrt(2) so when adjacent vertices or semi-adjacent vertices have 
-            //both x & y coords within 1 unit, then the second vertex will be stripped.
-
+            // distance = proximity in units/pixels below which vertices will be stripped. 
+            // Default ~= sqrt(2) so when adjacent vertices or semi-adjacent vertices have 
+            // both x & y coords within 1 unit, then the second vertex will be stripped.
             var cnt = path.Count;
 
             if (cnt == 0)
@@ -5372,16 +7101,18 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 cnt = 0;
             }
+
             var result = new Path(cnt);
             for (var i = 0; i < cnt; ++i)
             {
                 result.Add(op.Pt);
                 op = op.Next;
             }
+
             return result;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Cleans the polygons.
@@ -5396,11 +7127,28 @@ namespace LeagueSharp.CommonEx.Clipper
             return result;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The minkowski.
+        /// </summary>
+        /// <param name="pattern">
+        ///     TODO The pattern.
+        /// </param>
+        /// <param name="path">
+        ///     TODO The path.
+        /// </param>
+        /// <param name="isSum">
+        ///     TODO The is sum.
+        /// </param>
+        /// <param name="isClosed">
+        ///     TODO The is closed.
+        /// </param>
+        /// <returns>
+        /// </returns>
         internal static Paths Minkowski(Path pattern, Path path, bool isSum, bool isClosed)
         {
-            var delta = (isClosed ? 1 : 0);
+            var delta = isClosed ? 1 : 0;
             var polyCnt = pattern.Count;
             var pathCnt = path.Count;
             var result = new Paths(pathCnt);
@@ -5429,23 +7177,24 @@ namespace LeagueSharp.CommonEx.Clipper
                 for (var j = 0; j < polyCnt; j++)
                 {
                     var quad = new Path(4)
-                    {
-                        result[i % pathCnt][j % polyCnt],
-                        result[(i + 1) % pathCnt][j % polyCnt],
-                        result[(i + 1) % pathCnt][(j + 1) % polyCnt],
-                        result[i % pathCnt][(j + 1) % polyCnt]
-                    };
+                                   {
+                                       result[i % pathCnt][j % polyCnt], result[(i + 1) % pathCnt][j % polyCnt], 
+                                       result[(i + 1) % pathCnt][(j + 1) % polyCnt], 
+                                       result[i % pathCnt][(j + 1) % polyCnt]
+                                   };
                     if (!Orientation(quad))
                     {
                         quad.Reverse();
                     }
+
                     quads.Add(quad);
                 }
             }
+
             return quads;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Gets the Minkowskis sum.
@@ -5463,8 +7212,19 @@ namespace LeagueSharp.CommonEx.Clipper
             return paths;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The translate path.
+        /// </summary>
+        /// <param name="path">
+        ///     TODO The path.
+        /// </param>
+        /// <param name="delta">
+        ///     TODO The delta.
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static Path TranslatePath(IReadOnlyList<IntPoint> path, IntPoint delta)
         {
             var outPath = new Path(path.Count);
@@ -5472,10 +7232,11 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 outPath.Add(new IntPoint(path[i].X + delta.X, path[i].Y + delta.Y));
             }
+
             return outPath;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Gets the Minkowskis sum.
@@ -5498,11 +7259,12 @@ namespace LeagueSharp.CommonEx.Clipper
                     c.AddPath(path, PolyType.PtClip, true);
                 }
             }
+
             c.Execute(ClipType.CtUnion, solution, PolyFillType.PftNonZero, PolyFillType.PftNonZero);
             return solution;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Gets the Minkowskis difference.
@@ -5519,12 +7281,26 @@ namespace LeagueSharp.CommonEx.Clipper
             return paths;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The node type.
+        /// </summary>
         internal enum NodeType
         {
-            NtAny,
-            NtOpen,
+            /// <summary>
+            ///     TODO The nt any.
+            /// </summary>
+            NtAny, 
+
+            /// <summary>
+            ///     TODO The nt open.
+            /// </summary>
+            NtOpen, 
+
+            /// <summary>
+            ///     TODO The nt closed.
+            /// </summary>
             NtClosed
         };
 
@@ -5540,8 +7316,20 @@ namespace LeagueSharp.CommonEx.Clipper
             return result;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
+        /// <summary>
+        ///     TODO The add poly node to paths.
+        /// </summary>
+        /// <param name="polynode">
+        ///     TODO The polynode.
+        /// </param>
+        /// <param name="nt">
+        ///     TODO The nt.
+        /// </param>
+        /// <param name="paths">
+        ///     TODO The paths.
+        /// </param>
         internal static void AddPolyNodeToPaths(PolyNode polynode, NodeType nt, Paths paths)
         {
             var match = true;
@@ -5558,13 +7346,14 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 paths.Add(polynode.MPolygon);
             }
+
             foreach (var pn in polynode.Childs)
             {
                 AddPolyNodeToPaths(pn, nt, paths);
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Opens the paths from poly tree.
@@ -5581,10 +7370,11 @@ namespace LeagueSharp.CommonEx.Clipper
                     result.Add(polytree.Childs[i].MPolygon);
                 }
             }
+
             return result;
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Closeds the paths from poly tree.
@@ -5598,24 +7388,93 @@ namespace LeagueSharp.CommonEx.Clipper
             return result;
         }
 
-        //------------------------------------------------------------------------------
-    } //end Clipper
+        // ------------------------------------------------------------------------------
+    } // end Clipper
 
     /// <summary>
     ///     Clipping offset.
     /// </summary>
     public class ClipperOffset
     {
-        private const double TwoPi = Math.PI * 2;
+        #region Constants
+
+        /// <summary>
+        ///     TODO The def arc tolerance.
+        /// </summary>
         private const double DefArcTolerance = 0.25;
-        private readonly List<DoublePoint> _mNormals = new List<DoublePoint>();
-        private readonly PolyNode _mPolyNodes = new PolyNode();
-        private double _mDelta, _mSinA, _mSin, _mCos;
-        private Path _mDestPoly;
-        private Paths _mDestPolys;
-        private IntPoint _mLowest;
-        private double _mMiterLim, _mStepsPerRad;
-        private Path _mSrcPoly;
+
+        /// <summary>
+        ///     TODO The two pi.
+        /// </summary>
+        private const double TwoPi = Math.PI * 2;
+
+        #endregion
+
+        #region Fields
+
+        /// <summary>
+        ///     TODO The _m normals.
+        /// </summary>
+        private readonly List<DoublePoint> mNormals = new List<DoublePoint>();
+
+        /// <summary>
+        ///     TODO The _m poly nodes.
+        /// </summary>
+        private readonly PolyNode mPolyNodes = new PolyNode();
+
+        /// <summary>
+        ///     TODO The _m cos.
+        /// </summary>
+        private double mCos;
+
+        /// <summary>
+        ///     TODO The _m delta.
+        /// </summary>
+        private double mDelta;
+
+        /// <summary>
+        ///     TODO The _m dest poly.
+        /// </summary>
+        private Path mDestPoly;
+
+        /// <summary>
+        ///     TODO The _m dest polys.
+        /// </summary>
+        private Paths mDestPolys;
+
+        /// <summary>
+        ///     TODO The _m lowest.
+        /// </summary>
+        private IntPoint mLowest;
+
+        /// <summary>
+        ///     TODO The _m miter lim.
+        /// </summary>
+        private double mMiterLim;
+
+        /// <summary>
+        ///     TODO The _m sin.
+        /// </summary>
+        private double mSin;
+
+        /// <summary>
+        ///     TODO The _m sin a.
+        /// </summary>
+        private double mSinA;
+
+        /// <summary>
+        ///     TODO The _m src poly.
+        /// </summary>
+        private Path mSrcPoly;
+
+        /// <summary>
+        ///     TODO The _m steps per rad.
+        /// </summary>
+        private double mStepsPerRad;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ClipperOffset" /> class.
@@ -5624,10 +7483,14 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <param name="arcTolerance">The arc tolerance.</param>
         public ClipperOffset(double miterLimit = 2.0, double arcTolerance = DefArcTolerance)
         {
-            MiterLimit = miterLimit;
-            ArcTolerance = arcTolerance;
-            _mLowest.X = -1;
+            this.MiterLimit = miterLimit;
+            this.ArcTolerance = arcTolerance;
+            this.mLowest.X = -1;
         }
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         ///     Gets or sets the arc tolerance.
@@ -5645,25 +7508,11 @@ namespace LeagueSharp.CommonEx.Clipper
         /// </value>
         public double MiterLimit { get; set; }
 
-        //------------------------------------------------------------------------------
+        #endregion
 
-        /// <summary>
-        ///     Clears this instance.
-        /// </summary>
-        public void Clear()
-        {
-            _mPolyNodes.Childs.Clear();
-            _mLowest.X = -1;
-        }
+        #region Public Methods and Operators
 
-        //------------------------------------------------------------------------------
-
-        internal static cInt Round(double value)
-        {
-            return value < 0 ? (cInt) (value - 0.5) : (cInt) (value + 0.5);
-        }
-
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Adds the path.
@@ -5678,9 +7527,10 @@ namespace LeagueSharp.CommonEx.Clipper
             {
                 return;
             }
+
             var newNode = new PolyNode { MJointype = joinType, MEndtype = endType };
 
-            //strip duplicate points from path and also get index to the lowest point ...
+            // strip duplicate points from path and also get index to the lowest point ...
             if (endType == EndType.EtClosedLine || endType == EndType.EtClosedPolygon)
             {
                 while (highI > 0 && path[0] == path[highI])
@@ -5688,6 +7538,7 @@ namespace LeagueSharp.CommonEx.Clipper
                     highI--;
                 }
             }
+
             newNode.MPolygon.Capacity = highI + 1;
             newNode.MPolygon.Add(path[0]);
             int j = 0, k = 0;
@@ -5697,44 +7548,46 @@ namespace LeagueSharp.CommonEx.Clipper
                 {
                     j++;
                     newNode.MPolygon.Add(path[i]);
-                    if (path[i].Y > newNode.MPolygon[k].Y ||
-                        (path[i].Y == newNode.MPolygon[k].Y && path[i].X < newNode.MPolygon[k].X))
+                    if (path[i].Y > newNode.MPolygon[k].Y
+                        || (path[i].Y == newNode.MPolygon[k].Y && path[i].X < newNode.MPolygon[k].X))
                     {
                         k = j;
                     }
                 }
             }
+
             if (endType == EndType.EtClosedPolygon && j < 2)
             {
                 return;
             }
 
-            _mPolyNodes.AddChild(newNode);
+            this.mPolyNodes.AddChild(newNode);
 
-            //if this path's lowest pt is lower than all the others then update m_lowest
+            // if this path's lowest pt is lower than all the others then update m_lowest
             if (endType != EndType.EtClosedPolygon)
             {
                 return;
             }
-            if (_mLowest.X < 0)
+
+            if (this.mLowest.X < 0)
             {
-                _mLowest = new IntPoint(_mPolyNodes.ChildCount - 1, k);
+                this.mLowest = new IntPoint(this.mPolyNodes.ChildCount - 1, k);
             }
             else
             {
 #if use_int32
                 var ip = _mPolyNodes.Childs[_mLowest.X].MPolygon[_mLowest.Y];
 #else
-                var ip = _mPolyNodes.Childs[(int) _mLowest.X].MPolygon[(int) _mLowest.Y];
+                var ip = this.mPolyNodes.Childs[(int)this.mLowest.X].MPolygon[(int)this.mLowest.Y];
 #endif
                 if (newNode.MPolygon[k].Y > ip.Y || (newNode.MPolygon[k].Y == ip.Y && newNode.MPolygon[k].X < ip.X))
                 {
-                    _mLowest = new IntPoint(_mPolyNodes.ChildCount - 1, k);
+                    this.mLowest = new IntPoint(this.mPolyNodes.ChildCount - 1, k);
                 }
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Adds the paths.
@@ -5746,302 +7599,22 @@ namespace LeagueSharp.CommonEx.Clipper
         {
             foreach (var p in paths)
             {
-                AddPath(p, joinType, endType);
+                this.AddPath(p, joinType, endType);
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
-        private void FixOrientations()
+        /// <summary>
+        ///     Clears this instance.
+        /// </summary>
+        public void Clear()
         {
-            //fixup orientations of all closed paths if the orientation of the
-            //closed path with the lowermost vertex is wrong ...
-#if use_int32
-            if (_mLowest.X >= 0 && !Clipper.Orientation(_mPolyNodes.Childs[_mLowest.X].MPolygon))
-#else
-            if (_mLowest.X >= 0 && !Clipper.Orientation(_mPolyNodes.Childs[(int) _mLowest.X].MPolygon))
-#endif
-            {
-                for (var i = 0; i < _mPolyNodes.ChildCount; i++)
-                {
-                    var node = _mPolyNodes.Childs[i];
-                    if (node.MEndtype == EndType.EtClosedPolygon ||
-                        (node.MEndtype == EndType.EtClosedLine && Clipper.Orientation(node.MPolygon)))
-                    {
-                        node.MPolygon.Reverse();
-                    }
-                }
-            }
-            else
-            {
-                for (var i = 0; i < _mPolyNodes.ChildCount; i++)
-                {
-                    var node = _mPolyNodes.Childs[i];
-                    if (node.MEndtype == EndType.EtClosedLine && !Clipper.Orientation(node.MPolygon))
-                    {
-                        node.MPolygon.Reverse();
-                    }
-                }
-            }
+            this.mPolyNodes.Childs.Clear();
+            this.mLowest.X = -1;
         }
 
-        //------------------------------------------------------------------------------
-
-        internal static DoublePoint GetUnitNormal(IntPoint pt1, IntPoint pt2)
-        {
-            double dx = (pt2.X - pt1.X);
-            double dy = (pt2.Y - pt1.Y);
-            if ((Math.Abs(dx) < float.Epsilon) && (Math.Abs(dy) < float.Epsilon))
-            {
-                return new DoublePoint();
-            }
-
-            var f = 1 * 1.0 / Math.Sqrt(dx * dx + dy * dy);
-            dx *= f;
-            dy *= f;
-
-            return new DoublePoint(dy, -dx);
-        }
-
-        //------------------------------------------------------------------------------
-
-        private void DoOffset(double delta)
-        {
-            _mDestPolys = new Paths();
-            _mDelta = delta;
-
-            //if Zero offset, just copy any CLOSED polygons to m_p and return ...
-            if (ClipperBase.NearZero(delta))
-            {
-                _mDestPolys.Capacity = _mPolyNodes.ChildCount;
-                for (var i = 0; i < _mPolyNodes.ChildCount; i++)
-                {
-                    var node = _mPolyNodes.Childs[i];
-                    if (node.MEndtype == EndType.EtClosedPolygon)
-                    {
-                        _mDestPolys.Add(node.MPolygon);
-                    }
-                }
-                return;
-            }
-
-            //see offset_triginometry3.svg in the documentation folder ...
-            if (MiterLimit > 2)
-            {
-                _mMiterLim = 2 / (MiterLimit * MiterLimit);
-            }
-            else
-            {
-                _mMiterLim = 0.5;
-            }
-
-            double y;
-            if (ArcTolerance <= 0.0)
-            {
-                y = DefArcTolerance;
-            }
-            else if (ArcTolerance > Math.Abs(delta) * DefArcTolerance)
-            {
-                y = Math.Abs(delta) * DefArcTolerance;
-            }
-            else
-            {
-                y = ArcTolerance;
-            }
-            //see offset_triginometry2.svg in the documentation folder ...
-            var steps = Math.PI / Math.Acos(1 - y / Math.Abs(delta));
-            _mSin = Math.Sin(TwoPi / steps);
-            _mCos = Math.Cos(TwoPi / steps);
-            _mStepsPerRad = steps / TwoPi;
-            if (delta < 0.0)
-            {
-                _mSin = -_mSin;
-            }
-
-            _mDestPolys.Capacity = _mPolyNodes.ChildCount * 2;
-            for (var i = 0; i < _mPolyNodes.ChildCount; i++)
-            {
-                var node = _mPolyNodes.Childs[i];
-                _mSrcPoly = node.MPolygon;
-
-                var len = _mSrcPoly.Count;
-
-                if (len == 0 || (delta <= 0 && (len < 3 || node.MEndtype != EndType.EtClosedPolygon)))
-                {
-                    continue;
-                }
-
-                _mDestPoly = new Path();
-
-                if (len == 1)
-                {
-                    if (node.MJointype == JoinType.JtRound)
-                    {
-                        var x = 1.0;
-                        y = 0.0;
-                        for (var j = 1; j <= steps; j++)
-                        {
-                            _mDestPoly.Add(
-                                new IntPoint(Round(_mSrcPoly[0].X + x * delta), Round(_mSrcPoly[0].Y + y * delta)));
-                            var x2 = x;
-                            x = x * _mCos - _mSin * y;
-                            y = x2 * _mSin + y * _mCos;
-                        }
-                    }
-                    else
-                    {
-                        var x = -1.0;
-                        y = -1.0;
-                        for (var j = 0; j < 4; ++j)
-                        {
-                            _mDestPoly.Add(
-                                new IntPoint(Round(_mSrcPoly[0].X + x * delta), Round(_mSrcPoly[0].Y + y * delta)));
-                            if (x < 0)
-                            {
-                                x = 1;
-                            }
-                            else if (y < 0)
-                            {
-                                y = 1;
-                            }
-                            else
-                            {
-                                x = -1;
-                            }
-                        }
-                    }
-                    _mDestPolys.Add(_mDestPoly);
-                    continue;
-                }
-
-                //build m_normals ...
-                _mNormals.Clear();
-                _mNormals.Capacity = len;
-                for (var j = 0; j < len - 1; j++)
-                {
-                    _mNormals.Add(GetUnitNormal(_mSrcPoly[j], _mSrcPoly[j + 1]));
-                }
-                if (node.MEndtype == EndType.EtClosedLine || node.MEndtype == EndType.EtClosedPolygon)
-                {
-                    _mNormals.Add(GetUnitNormal(_mSrcPoly[len - 1], _mSrcPoly[0]));
-                }
-                else
-                {
-                    _mNormals.Add(new DoublePoint(_mNormals[len - 2]));
-                }
-
-                if (node.MEndtype == EndType.EtClosedPolygon)
-                {
-                    var k = len - 1;
-                    for (var j = 0; j < len; j++)
-                    {
-                        OffsetPoint(j, ref k, node.MJointype);
-                    }
-                    _mDestPolys.Add(_mDestPoly);
-                }
-                else if (node.MEndtype == EndType.EtClosedLine)
-                {
-                    var k = len - 1;
-                    for (var j = 0; j < len; j++)
-                    {
-                        OffsetPoint(j, ref k, node.MJointype);
-                    }
-                    _mDestPolys.Add(_mDestPoly);
-                    _mDestPoly = new Path();
-                    //re-build m_normals ...
-                    var n = _mNormals[len - 1];
-                    for (var j = len - 1; j > 0; j--)
-                    {
-                        _mNormals[j] = new DoublePoint(-_mNormals[j - 1].X, -_mNormals[j - 1].Y);
-                    }
-                    _mNormals[0] = new DoublePoint(-n.X, -n.Y);
-                    k = 0;
-                    for (var j = len - 1; j >= 0; j--)
-                    {
-                        OffsetPoint(j, ref k, node.MJointype);
-                    }
-                    _mDestPolys.Add(_mDestPoly);
-                }
-                else
-                {
-                    var k = 0;
-                    for (var j = 1; j < len - 1; ++j)
-                    {
-                        OffsetPoint(j, ref k, node.MJointype);
-                    }
-
-                    IntPoint pt1;
-                    if (node.MEndtype == EndType.EtOpenButt)
-                    {
-                        var j = len - 1;
-                        pt1 = new IntPoint(
-                            Round(_mSrcPoly[j].X + _mNormals[j].X * delta),
-                            Round(_mSrcPoly[j].Y + _mNormals[j].Y * delta));
-                        _mDestPoly.Add(pt1);
-                        pt1 = new IntPoint(
-                            Round(_mSrcPoly[j].X - _mNormals[j].X * delta),
-                            Round(_mSrcPoly[j].Y - _mNormals[j].Y * delta));
-                        _mDestPoly.Add(pt1);
-                    }
-                    else
-                    {
-                        var j = len - 1;
-                        k = len - 2;
-                        _mSinA = 0;
-                        _mNormals[j] = new DoublePoint(-_mNormals[j].X, -_mNormals[j].Y);
-                        if (node.MEndtype == EndType.EtOpenSquare)
-                        {
-                            DoSquare(j, k);
-                        }
-                        else
-                        {
-                            DoRound(j, k);
-                        }
-                    }
-
-                    //re-build m_normals ...
-                    for (var j = len - 1; j > 0; j--)
-                    {
-                        _mNormals[j] = new DoublePoint(-_mNormals[j - 1].X, -_mNormals[j - 1].Y);
-                    }
-
-                    _mNormals[0] = new DoublePoint(-_mNormals[1].X, -_mNormals[1].Y);
-
-                    k = len - 1;
-                    for (var j = k - 1; j > 0; --j)
-                    {
-                        OffsetPoint(j, ref k, node.MJointype);
-                    }
-
-                    if (node.MEndtype == EndType.EtOpenButt)
-                    {
-                        pt1 = new IntPoint(
-                            Round(_mSrcPoly[0].X - _mNormals[0].X * delta),
-                            Round(_mSrcPoly[0].Y - _mNormals[0].Y * delta));
-                        _mDestPoly.Add(pt1);
-                        pt1 = new IntPoint(
-                            Round(_mSrcPoly[0].X + _mNormals[0].X * delta),
-                            Round(_mSrcPoly[0].Y + _mNormals[0].Y * delta));
-                        _mDestPoly.Add(pt1);
-                    }
-                    else
-                    {
-                        _mSinA = 0;
-                        if (node.MEndtype == EndType.EtOpenSquare)
-                        {
-                            DoSquare(0, 1);
-                        }
-                        else
-                        {
-                            DoRound(0, 1);
-                        }
-                    }
-                    _mDestPolys.Add(_mDestPoly);
-                }
-            }
-        }
-
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Executes the specified solution.
@@ -6051,26 +7624,24 @@ namespace LeagueSharp.CommonEx.Clipper
         public void Execute(ref Paths solution, double delta)
         {
             solution.Clear();
-            FixOrientations();
-            DoOffset(delta);
-            //now clean up 'corners' ...
+            this.FixOrientations();
+            this.DoOffset(delta);
+
+            // now clean up 'corners' ...
             var clpr = new Clipper();
-            clpr.AddPaths(_mDestPolys, PolyType.PtSubject, true);
+            clpr.AddPaths(this.mDestPolys, PolyType.PtSubject, true);
             if (delta > 0)
             {
                 clpr.Execute(ClipType.CtUnion, solution, PolyFillType.PftPositive, PolyFillType.PftPositive);
             }
             else
             {
-                var r = ClipperBase.GetBounds(_mDestPolys);
+                var r = ClipperBase.GetBounds(this.mDestPolys);
                 var outer = new Path(4)
-                {
-                    new IntPoint(r.Left - 10, r.Bottom + 10),
-                    new IntPoint(r.Right + 10, r.Bottom + 10),
-                    new IntPoint(r.Right + 10, r.Top - 10),
-                    new IntPoint(r.Left - 10, r.Top - 10)
-                };
-
+                                {
+                                    new IntPoint(r.Left - 10, r.Bottom + 10), new IntPoint(r.Right + 10, r.Bottom + 10), 
+                                    new IntPoint(r.Right + 10, r.Top - 10), new IntPoint(r.Left - 10, r.Top - 10)
+                                };
 
                 clpr.AddPath(outer, PolyType.PtSubject, true);
                 clpr.ReverseSolution = true;
@@ -6082,7 +7653,7 @@ namespace LeagueSharp.CommonEx.Clipper
             }
         }
 
-        //------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------
 
         /// <summary>
         ///     Executes the specified solution.
@@ -6092,32 +7663,30 @@ namespace LeagueSharp.CommonEx.Clipper
         public void Execute(ref PolyTree solution, double delta)
         {
             solution.Clear();
-            FixOrientations();
-            DoOffset(delta);
+            this.FixOrientations();
+            this.DoOffset(delta);
 
-            //now clean up 'corners' ...
+            // now clean up 'corners' ...
             var clpr = new Clipper();
-            clpr.AddPaths(_mDestPolys, PolyType.PtSubject, true);
+            clpr.AddPaths(this.mDestPolys, PolyType.PtSubject, true);
             if (delta > 0)
             {
                 clpr.Execute(ClipType.CtUnion, solution, PolyFillType.PftPositive, PolyFillType.PftPositive);
             }
             else
             {
-                var r = ClipperBase.GetBounds(_mDestPolys);
+                var r = ClipperBase.GetBounds(this.mDestPolys);
                 var outer = new Path(4)
-                {
-                    new IntPoint(r.Left - 10, r.Bottom + 10),
-                    new IntPoint(r.Right + 10, r.Bottom + 10),
-                    new IntPoint(r.Right + 10, r.Top - 10),
-                    new IntPoint(r.Left - 10, r.Top - 10)
-                };
-
+                                {
+                                    new IntPoint(r.Left - 10, r.Bottom + 10), new IntPoint(r.Right + 10, r.Bottom + 10), 
+                                    new IntPoint(r.Right + 10, r.Top - 10), new IntPoint(r.Left - 10, r.Top - 10)
+                                };
 
                 clpr.AddPath(outer, PolyType.PtSubject, true);
                 clpr.ReverseSolution = true;
                 clpr.Execute(ClipType.CtUnion, solution, PolyFillType.PftNegative, PolyFillType.PftNegative);
-                //remove the outer PolyNode rectangle ...
+
+                // remove the outer PolyNode rectangle ...
                 if (solution.ChildCount == 1 && solution.Childs[0].ChildCount > 0)
                 {
                     var outerNode = solution.Childs[0];
@@ -6136,121 +7705,527 @@ namespace LeagueSharp.CommonEx.Clipper
             }
         }
 
-        //------------------------------------------------------------------------------
+        #endregion
 
+        #region Methods
+
+        // ------------------------------------------------------------------------------
+
+        /// <summary>
+        ///     TODO The get unit normal.
+        /// </summary>
+        /// <param name="pt1">
+        ///     TODO The pt 1.
+        /// </param>
+        /// <param name="pt2">
+        ///     TODO The pt 2.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        internal static DoublePoint GetUnitNormal(IntPoint pt1, IntPoint pt2)
+        {
+            double dx = pt2.X - pt1.X;
+            double dy = pt2.Y - pt1.Y;
+            if ((Math.Abs(dx) < float.Epsilon) && (Math.Abs(dy) < float.Epsilon))
+            {
+                return new DoublePoint();
+            }
+
+            var f = 1 * 1.0 / Math.Sqrt(dx * dx + dy * dy);
+            dx *= f;
+            dy *= f;
+
+            return new DoublePoint(dy, -dx);
+        }
+
+        // ------------------------------------------------------------------------------
+
+        /// <summary>
+        ///     TODO The round.
+        /// </summary>
+        /// <param name="value">
+        ///     TODO The value.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        internal static long Round(double value)
+        {
+            return value < 0 ? (cInt)(value - 0.5) : (cInt)(value + 0.5);
+        }
+
+        // ------------------------------------------------------------------------------
+
+        /// <summary>
+        ///     TODO The do miter.
+        /// </summary>
+        /// <param name="j">
+        ///     TODO The j.
+        /// </param>
+        /// <param name="k">
+        ///     TODO The k.
+        /// </param>
+        /// <param name="r">
+        ///     TODO The r.
+        /// </param>
+        internal void DoMiter(int j, int k, double r)
+        {
+            var q = this.mDelta / r;
+            this.mDestPoly.Add(
+                new IntPoint(
+                    Round(this.mSrcPoly[j].X + (this.mNormals[k].X + this.mNormals[j].X) * q), 
+                    Round(this.mSrcPoly[j].Y + (this.mNormals[k].Y + this.mNormals[j].Y) * q)));
+        }
+
+        // ------------------------------------------------------------------------------
+
+        /// <summary>
+        ///     TODO The do round.
+        /// </summary>
+        /// <param name="j">
+        ///     TODO The j.
+        /// </param>
+        /// <param name="k">
+        ///     TODO The k.
+        /// </param>
+        internal void DoRound(int j, int k)
+        {
+            var a = Math.Atan2(
+                this.mSinA, 
+                this.mNormals[k].X * this.mNormals[j].X + this.mNormals[k].Y * this.mNormals[j].Y);
+            var steps = Math.Max(Round(this.mStepsPerRad * Math.Abs(a)), 1);
+
+            double x = this.mNormals[k].X, y = this.mNormals[k].Y;
+            for (var i = 0; i < steps; ++i)
+            {
+                this.mDestPoly.Add(
+                    new IntPoint(
+                        Round(this.mSrcPoly[j].X + x * this.mDelta), 
+                        Round(this.mSrcPoly[j].Y + y * this.mDelta)));
+                var x2 = x;
+                x = x * this.mCos - this.mSin * y;
+                y = x2 * this.mSin + y * this.mCos;
+            }
+
+            this.mDestPoly.Add(
+                new IntPoint(
+                    Round(this.mSrcPoly[j].X + this.mNormals[j].X * this.mDelta), 
+                    Round(this.mSrcPoly[j].Y + this.mNormals[j].Y * this.mDelta)));
+        }
+
+        // ------------------------------------------------------------------------------
+
+        /// <summary>
+        ///     TODO The do square.
+        /// </summary>
+        /// <param name="j">
+        ///     TODO The j.
+        /// </param>
+        /// <param name="k">
+        ///     TODO The k.
+        /// </param>
+        internal void DoSquare(int j, int k)
+        {
+            var dx =
+                Math.Tan(
+                    Math.Atan2(
+                        this.mSinA, 
+                        this.mNormals[k].X * this.mNormals[j].X + this.mNormals[k].Y * this.mNormals[j].Y) / 4);
+            this.mDestPoly.Add(
+                new IntPoint(
+                    Round(this.mSrcPoly[j].X + this.mDelta * (this.mNormals[k].X - this.mNormals[k].Y * dx)), 
+                    Round(this.mSrcPoly[j].Y + this.mDelta * (this.mNormals[k].Y + this.mNormals[k].X * dx))));
+            this.mDestPoly.Add(
+                new IntPoint(
+                    Round(this.mSrcPoly[j].X + this.mDelta * (this.mNormals[j].X + this.mNormals[j].Y * dx)), 
+                    Round(this.mSrcPoly[j].Y + this.mDelta * (this.mNormals[j].Y - this.mNormals[j].X * dx))));
+        }
+
+        // ------------------------------------------------------------------------------
+
+        /// <summary>
+        ///     TODO The do offset.
+        /// </summary>
+        /// <param name="delta">
+        ///     TODO The delta.
+        /// </param>
+        private void DoOffset(double delta)
+        {
+            this.mDestPolys = new Paths();
+            this.mDelta = delta;
+
+            // if Zero offset, just copy any CLOSED polygons to m_p and return ...
+            if (ClipperBase.NearZero(delta))
+            {
+                this.mDestPolys.Capacity = this.mPolyNodes.ChildCount;
+                for (var i = 0; i < this.mPolyNodes.ChildCount; i++)
+                {
+                    var node = this.mPolyNodes.Childs[i];
+                    if (node.MEndtype == EndType.EtClosedPolygon)
+                    {
+                        this.mDestPolys.Add(node.MPolygon);
+                    }
+                }
+
+                return;
+            }
+
+            // see offset_triginometry3.svg in the documentation folder ...
+            if (this.MiterLimit > 2)
+            {
+                this.mMiterLim = 2 / (this.MiterLimit * this.MiterLimit);
+            }
+            else
+            {
+                this.mMiterLim = 0.5;
+            }
+
+            double y;
+            if (this.ArcTolerance <= 0.0)
+            {
+                y = DefArcTolerance;
+            }
+            else if (this.ArcTolerance > Math.Abs(delta) * DefArcTolerance)
+            {
+                y = Math.Abs(delta) * DefArcTolerance;
+            }
+            else
+            {
+                y = this.ArcTolerance;
+            }
+
+            // see offset_triginometry2.svg in the documentation folder ...
+            var steps = Math.PI / Math.Acos(1 - y / Math.Abs(delta));
+            this.mSin = Math.Sin(TwoPi / steps);
+            this.mCos = Math.Cos(TwoPi / steps);
+            this.mStepsPerRad = steps / TwoPi;
+            if (delta < 0.0)
+            {
+                this.mSin = -this.mSin;
+            }
+
+            this.mDestPolys.Capacity = this.mPolyNodes.ChildCount * 2;
+            for (var i = 0; i < this.mPolyNodes.ChildCount; i++)
+            {
+                var node = this.mPolyNodes.Childs[i];
+                this.mSrcPoly = node.MPolygon;
+
+                var len = this.mSrcPoly.Count;
+
+                if (len == 0 || (delta <= 0 && (len < 3 || node.MEndtype != EndType.EtClosedPolygon)))
+                {
+                    continue;
+                }
+
+                this.mDestPoly = new Path();
+
+                if (len == 1)
+                {
+                    if (node.MJointype == JoinType.JtRound)
+                    {
+                        var x = 1.0;
+                        y = 0.0;
+                        for (var j = 1; j <= steps; j++)
+                        {
+                            this.mDestPoly.Add(
+                                new IntPoint(
+                                    Round(this.mSrcPoly[0].X + x * delta), 
+                                    Round(this.mSrcPoly[0].Y + y * delta)));
+                            var x2 = x;
+                            x = x * this.mCos - this.mSin * y;
+                            y = x2 * this.mSin + y * this.mCos;
+                        }
+                    }
+                    else
+                    {
+                        var x = -1.0;
+                        y = -1.0;
+                        for (var j = 0; j < 4; ++j)
+                        {
+                            this.mDestPoly.Add(
+                                new IntPoint(
+                                    Round(this.mSrcPoly[0].X + x * delta), 
+                                    Round(this.mSrcPoly[0].Y + y * delta)));
+                            if (x < 0)
+                            {
+                                x = 1;
+                            }
+                            else if (y < 0)
+                            {
+                                y = 1;
+                            }
+                            else
+                            {
+                                x = -1;
+                            }
+                        }
+                    }
+
+                    this.mDestPolys.Add(this.mDestPoly);
+                    continue;
+                }
+
+                // build m_normals ...
+                this.mNormals.Clear();
+                this.mNormals.Capacity = len;
+                for (var j = 0; j < len - 1; j++)
+                {
+                    this.mNormals.Add(GetUnitNormal(this.mSrcPoly[j], this.mSrcPoly[j + 1]));
+                }
+
+                if (node.MEndtype == EndType.EtClosedLine || node.MEndtype == EndType.EtClosedPolygon)
+                {
+                    this.mNormals.Add(GetUnitNormal(this.mSrcPoly[len - 1], this.mSrcPoly[0]));
+                }
+                else
+                {
+                    this.mNormals.Add(new DoublePoint(this.mNormals[len - 2]));
+                }
+
+                if (node.MEndtype == EndType.EtClosedPolygon)
+                {
+                    var k = len - 1;
+                    for (var j = 0; j < len; j++)
+                    {
+                        this.OffsetPoint(j, ref k, node.MJointype);
+                    }
+
+                    this.mDestPolys.Add(this.mDestPoly);
+                }
+                else if (node.MEndtype == EndType.EtClosedLine)
+                {
+                    var k = len - 1;
+                    for (var j = 0; j < len; j++)
+                    {
+                        this.OffsetPoint(j, ref k, node.MJointype);
+                    }
+
+                    this.mDestPolys.Add(this.mDestPoly);
+                    this.mDestPoly = new Path();
+
+                    // re-build m_normals ...
+                    var n = this.mNormals[len - 1];
+                    for (var j = len - 1; j > 0; j--)
+                    {
+                        this.mNormals[j] = new DoublePoint(-this.mNormals[j - 1].X, -this.mNormals[j - 1].Y);
+                    }
+
+                    this.mNormals[0] = new DoublePoint(-n.X, -n.Y);
+                    k = 0;
+                    for (var j = len - 1; j >= 0; j--)
+                    {
+                        this.OffsetPoint(j, ref k, node.MJointype);
+                    }
+
+                    this.mDestPolys.Add(this.mDestPoly);
+                }
+                else
+                {
+                    var k = 0;
+                    for (var j = 1; j < len - 1; ++j)
+                    {
+                        this.OffsetPoint(j, ref k, node.MJointype);
+                    }
+
+                    IntPoint pt1;
+                    if (node.MEndtype == EndType.EtOpenButt)
+                    {
+                        var j = len - 1;
+                        pt1 = new IntPoint(
+                            Round(this.mSrcPoly[j].X + this.mNormals[j].X * delta), 
+                            Round(this.mSrcPoly[j].Y + this.mNormals[j].Y * delta));
+                        this.mDestPoly.Add(pt1);
+                        pt1 = new IntPoint(
+                            Round(this.mSrcPoly[j].X - this.mNormals[j].X * delta), 
+                            Round(this.mSrcPoly[j].Y - this.mNormals[j].Y * delta));
+                        this.mDestPoly.Add(pt1);
+                    }
+                    else
+                    {
+                        var j = len - 1;
+                        k = len - 2;
+                        this.mSinA = 0;
+                        this.mNormals[j] = new DoublePoint(-this.mNormals[j].X, -this.mNormals[j].Y);
+                        if (node.MEndtype == EndType.EtOpenSquare)
+                        {
+                            this.DoSquare(j, k);
+                        }
+                        else
+                        {
+                            this.DoRound(j, k);
+                        }
+                    }
+
+                    // re-build m_normals ...
+                    for (var j = len - 1; j > 0; j--)
+                    {
+                        this.mNormals[j] = new DoublePoint(-this.mNormals[j - 1].X, -this.mNormals[j - 1].Y);
+                    }
+
+                    this.mNormals[0] = new DoublePoint(-this.mNormals[1].X, -this.mNormals[1].Y);
+
+                    k = len - 1;
+                    for (var j = k - 1; j > 0; --j)
+                    {
+                        this.OffsetPoint(j, ref k, node.MJointype);
+                    }
+
+                    if (node.MEndtype == EndType.EtOpenButt)
+                    {
+                        pt1 = new IntPoint(
+                            Round(this.mSrcPoly[0].X - this.mNormals[0].X * delta), 
+                            Round(this.mSrcPoly[0].Y - this.mNormals[0].Y * delta));
+                        this.mDestPoly.Add(pt1);
+                        pt1 = new IntPoint(
+                            Round(this.mSrcPoly[0].X + this.mNormals[0].X * delta), 
+                            Round(this.mSrcPoly[0].Y + this.mNormals[0].Y * delta));
+                        this.mDestPoly.Add(pt1);
+                    }
+                    else
+                    {
+                        this.mSinA = 0;
+                        if (node.MEndtype == EndType.EtOpenSquare)
+                        {
+                            this.DoSquare(0, 1);
+                        }
+                        else
+                        {
+                            this.DoRound(0, 1);
+                        }
+                    }
+
+                    this.mDestPolys.Add(this.mDestPoly);
+                }
+            }
+        }
+
+        // ------------------------------------------------------------------------------
+
+        /// <summary>
+        ///     TODO The fix orientations.
+        /// </summary>
+        private void FixOrientations()
+        {
+            // fixup orientations of all closed paths if the orientation of the
+            // closed path with the lowermost vertex is wrong ...
+#if use_int32
+            if (_mLowest.X >= 0 && !Clipper.Orientation(_mPolyNodes.Childs[_mLowest.X].MPolygon))
+#else
+            if (this.mLowest.X >= 0 && !Clipper.Orientation(this.mPolyNodes.Childs[(int)this.mLowest.X].MPolygon))
+#endif
+            {
+                for (var i = 0; i < this.mPolyNodes.ChildCount; i++)
+                {
+                    var node = this.mPolyNodes.Childs[i];
+                    if (node.MEndtype == EndType.EtClosedPolygon
+                        || (node.MEndtype == EndType.EtClosedLine && Clipper.Orientation(node.MPolygon)))
+                    {
+                        node.MPolygon.Reverse();
+                    }
+                }
+            }
+            else
+            {
+                for (var i = 0; i < this.mPolyNodes.ChildCount; i++)
+                {
+                    var node = this.mPolyNodes.Childs[i];
+                    if (node.MEndtype == EndType.EtClosedLine && !Clipper.Orientation(node.MPolygon))
+                    {
+                        node.MPolygon.Reverse();
+                    }
+                }
+            }
+        }
+
+        // ------------------------------------------------------------------------------
+
+        /// <summary>
+        ///     TODO The offset point.
+        /// </summary>
+        /// <param name="j">
+        ///     TODO The j.
+        /// </param>
+        /// <param name="k">
+        ///     TODO The k.
+        /// </param>
+        /// <param name="jointype">
+        ///     TODO The jointype.
+        /// </param>
         private void OffsetPoint(int j, ref int k, JoinType jointype)
         {
-            //cross product ...
-            _mSinA = (_mNormals[k].X * _mNormals[j].Y - _mNormals[j].X * _mNormals[k].Y);
+            // cross product ...
+            this.mSinA = this.mNormals[k].X * this.mNormals[j].Y - this.mNormals[j].X * this.mNormals[k].Y;
 
-            if (Math.Abs(_mSinA * _mDelta) < 1.0)
+            if (Math.Abs(this.mSinA * this.mDelta) < 1.0)
             {
-                //dot product ...
-                var cosA = (_mNormals[k].X * _mNormals[j].X + _mNormals[j].Y * _mNormals[k].Y);
-                if (cosA > 0) // angle ==> 0 degrees
+                // dot product ...
+                var cosA = this.mNormals[k].X * this.mNormals[j].X + this.mNormals[j].Y * this.mNormals[k].Y;
+                if (cosA > 0)
                 {
-                    _mDestPoly.Add(
+                    // angle ==> 0 degrees
+                    this.mDestPoly.Add(
                         new IntPoint(
-                            Round(_mSrcPoly[j].X + _mNormals[k].X * _mDelta),
-                            Round(_mSrcPoly[j].Y + _mNormals[k].Y * _mDelta)));
+                            Round(this.mSrcPoly[j].X + this.mNormals[k].X * this.mDelta), 
+                            Round(this.mSrcPoly[j].Y + this.mNormals[k].Y * this.mDelta)));
                     return;
                 }
-                //else angle ==> 180 degrees   
+
+                // else angle ==> 180 degrees   
             }
-            else if (_mSinA > 1.0)
+            else if (this.mSinA > 1.0)
             {
-                _mSinA = 1.0;
+                this.mSinA = 1.0;
             }
-            else if (_mSinA < -1.0)
+            else if (this.mSinA < -1.0)
             {
-                _mSinA = -1.0;
+                this.mSinA = -1.0;
             }
 
-            if (_mSinA * _mDelta < 0)
+            if (this.mSinA * this.mDelta < 0)
             {
-                _mDestPoly.Add(
+                this.mDestPoly.Add(
                     new IntPoint(
-                        Round(_mSrcPoly[j].X + _mNormals[k].X * _mDelta),
-                        Round(_mSrcPoly[j].Y + _mNormals[k].Y * _mDelta)));
-                _mDestPoly.Add(_mSrcPoly[j]);
-                _mDestPoly.Add(
+                        Round(this.mSrcPoly[j].X + this.mNormals[k].X * this.mDelta), 
+                        Round(this.mSrcPoly[j].Y + this.mNormals[k].Y * this.mDelta)));
+                this.mDestPoly.Add(this.mSrcPoly[j]);
+                this.mDestPoly.Add(
                     new IntPoint(
-                        Round(_mSrcPoly[j].X + _mNormals[j].X * _mDelta),
-                        Round(_mSrcPoly[j].Y + _mNormals[j].Y * _mDelta)));
+                        Round(this.mSrcPoly[j].X + this.mNormals[j].X * this.mDelta), 
+                        Round(this.mSrcPoly[j].Y + this.mNormals[j].Y * this.mDelta)));
             }
             else
             {
                 switch (jointype)
                 {
                     case JoinType.JtMiter:
-                    {
-                        var r = 1 + (_mNormals[j].X * _mNormals[k].X + _mNormals[j].Y * _mNormals[k].Y);
-                        if (r >= _mMiterLim)
                         {
-                            DoMiter(j, k, r);
+                            var r = 1
+                                    + (this.mNormals[j].X * this.mNormals[k].X
+                                       + this.mNormals[j].Y * this.mNormals[k].Y);
+                            if (r >= this.mMiterLim)
+                            {
+                                this.DoMiter(j, k, r);
+                            }
+                            else
+                            {
+                                this.DoSquare(j, k);
+                            }
+
+                            break;
                         }
-                        else
-                        {
-                            DoSquare(j, k);
-                        }
-                        break;
-                    }
+
                     case JoinType.JtSquare:
-                        DoSquare(j, k);
+                        this.DoSquare(j, k);
                         break;
                     case JoinType.JtRound:
-                        DoRound(j, k);
+                        this.DoRound(j, k);
                         break;
                 }
             }
+
             k = j;
         }
 
-        //------------------------------------------------------------------------------
-
-        internal void DoSquare(int j, int k)
-        {
-            var dx = Math.Tan(Math.Atan2(_mSinA, _mNormals[k].X * _mNormals[j].X + _mNormals[k].Y * _mNormals[j].Y) / 4);
-            _mDestPoly.Add(
-                new IntPoint(
-                    Round(_mSrcPoly[j].X + _mDelta * (_mNormals[k].X - _mNormals[k].Y * dx)),
-                    Round(_mSrcPoly[j].Y + _mDelta * (_mNormals[k].Y + _mNormals[k].X * dx))));
-            _mDestPoly.Add(
-                new IntPoint(
-                    Round(_mSrcPoly[j].X + _mDelta * (_mNormals[j].X + _mNormals[j].Y * dx)),
-                    Round(_mSrcPoly[j].Y + _mDelta * (_mNormals[j].Y - _mNormals[j].X * dx))));
-        }
-
-        //------------------------------------------------------------------------------
-
-        internal void DoMiter(int j, int k, double r)
-        {
-            var q = _mDelta / r;
-            _mDestPoly.Add(
-                new IntPoint(
-                    Round(_mSrcPoly[j].X + (_mNormals[k].X + _mNormals[j].X) * q),
-                    Round(_mSrcPoly[j].Y + (_mNormals[k].Y + _mNormals[j].Y) * q)));
-        }
-
-        //------------------------------------------------------------------------------
-
-        internal void DoRound(int j, int k)
-        {
-            var a = Math.Atan2(_mSinA, _mNormals[k].X * _mNormals[j].X + _mNormals[k].Y * _mNormals[j].Y);
-            var steps = Math.Max(Round(_mStepsPerRad * Math.Abs(a)), 1);
-
-            double x = _mNormals[k].X, y = _mNormals[k].Y;
-            for (var i = 0; i < steps; ++i)
-            {
-                _mDestPoly.Add(new IntPoint(Round(_mSrcPoly[j].X + x * _mDelta), Round(_mSrcPoly[j].Y + y * _mDelta)));
-                var x2 = x;
-                x = x * _mCos - _mSin * y;
-                y = x2 * _mSin + y * _mCos;
-            }
-            _mDestPoly.Add(
-                new IntPoint(
-                    Round(_mSrcPoly[j].X + _mNormals[j].X * _mDelta), Round(_mSrcPoly[j].Y + _mNormals[j].Y * _mDelta)));
-        }
+        #endregion
     }
 
     /// <summary>
@@ -6259,12 +8234,22 @@ namespace LeagueSharp.CommonEx.Clipper
     [Serializable]
     public class ClipperException : Exception
     {
+        #region Constructors and Destructors
+
         /// <summary>
+        ///     Initializes a new instance of the <see cref="ClipperException" /> class.
         ///     Clipper Exception constructor.
         /// </summary>
-        /// <param name="description">Exception description</param>
-        public ClipperException(string description) : base(description) {}
+        /// <param name="description">
+        ///     Exception description
+        /// </param>
+        public ClipperException(string description)
+            : base(description)
+        {
+        }
+
+        #endregion
     }
 
-    //------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------
 } //end ClipperLib namespace
