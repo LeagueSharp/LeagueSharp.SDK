@@ -91,6 +91,7 @@
     <Compile Include="Core\Events\Gapcloser.cs" />
     <Compile Include="Core\Events\Turret.cs" />
     <Compile Include="Core\Extensions\Streams.cs" />
+    <Compile Include="Core\Items.cs" />
     <Compile Include="Core\Math\Geometry.cs" />
     <Compile Include="Core\Math\Prediction\Health.cs" />
     <Compile Include="Core\Orbwalker.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="Core\Wrappers\ChampionData.cs" />
     <Compile Include="Core\Wrappers\Damage.cs" />
     <Compile Include="Core\Wrappers\HpBarDamageIndicator.cs" />
+    <Compile Include="Core\Wrappers\ItemData.cs" />
     <Compile Include="Core\Wrappers\LastCastedSpell.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
     <Compile Include="Core\Managers\MinionManager.cs" />
@@ -196,7 +198,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Data\ChampionData.json" />
     <None Include="LeagueSharp.SDK.snk" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\UI\Console\" />
@@ -211,6 +212,8 @@
     <Content Include="Resources\Menu\Skin0\img_003_sub.png" />
     <Content Include="Resources\Menu\Skin0\img_004.png" />
     <Content Include="Resources\Menu\Special\F3VD2VG.png" />
+    <EmbeddedResource Include="Resources\Data\ItemData.json" />
+    <None Include="packages.config" />
     <None Include="Third_Party\Clipper\License.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
