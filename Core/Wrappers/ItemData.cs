@@ -36,22 +36,22 @@ namespace LeagueSharp.SDK.Core.Wrappers
         #region Fields
 
         /// <summary>
-        /// Effect token used to parse the effect wrapper
+        ///     Effect token used to parse the effect wrapper
         /// </summary>
         private readonly JToken effectToken;
 
         /// <summary>
-        /// Gold token used to parse the gold wrapper
+        ///     Gold token used to parse the gold wrapper
         /// </summary>
         private readonly JToken goldToken;
 
         /// <summary>
-        /// Item token used to parse the item wrapper
+        ///     Item token used to parse the item wrapper
         /// </summary>
         private readonly JToken itemToken;
 
         /// <summary>
-        /// Stats token used to parse the stats wrapper
+        ///     Stats token used to parse the stats wrapper
         /// </summary>
         private readonly JToken statsToken;
 
@@ -86,7 +86,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         #region Public Properties
 
         /// <summary>
-        /// Gets the base price.
+        ///     Gets the base price.
         /// </summary>
         public int BasePrice
         {
@@ -97,7 +97,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
-        /// Gets the from.
+        ///     Gets the from.
         /// </summary>
         public int[] From
         {
@@ -119,7 +119,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
-        /// Gets the into.
+        ///     Gets the into.
         /// </summary>
         public int[] Into
         {
@@ -152,7 +152,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
-        /// Gets a value indicating whether purchaseable.
+        ///     Gets a value indicating whether purchaseable.
         /// </summary>
         public bool Purchaseable
         {
@@ -163,7 +163,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
-        /// Gets the sell price.
+        ///     Gets the sell price.
         /// </summary>
         public int SellPrice
         {
@@ -174,7 +174,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
-        /// Gets the stacks.
+        ///     Gets the stacks.
         /// </summary>
         public int Stacks
         {
@@ -185,7 +185,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
-        /// Gets the tags.
+        ///     Gets the tags.
         /// </summary>
         public string[] Tags
         {
@@ -196,7 +196,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
-        /// Gets the total price.
+        ///     Gets the total price.
         /// </summary>
         public int TotalPrice
         {

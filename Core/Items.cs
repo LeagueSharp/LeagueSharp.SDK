@@ -15,9 +15,11 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
+// <summary>
+//   Item class used to easily manage items.
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace LeagueSharp.CommonEx.Core
+namespace LeagueSharp.SDK.Core
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -28,19 +30,20 @@ namespace LeagueSharp.CommonEx.Core
     using SharpDX;
 
     /// <summary>
+    ///     Item class used to easily manage items.
     /// </summary>
     public static class Items
     {
         #region Public Methods and Operators
 
         /// <summary>
-        /// Retruns true if the player has the item and its not on cooldown.
+        ///     Retruns true if the player has the item and its not on cooldown.
         /// </summary>
         /// <param name="name">
-        /// The name.
+        ///     Name of the Item.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool CanUseItem(string name)
         {
@@ -55,13 +58,13 @@ namespace LeagueSharp.CommonEx.Core
         }
 
         /// <summary>
-        /// Retruns true if the player has the item and its not on cooldown.
+        ///     Retruns true if the player has the item and its not on cooldown.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        ///     Id of the Item.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool CanUseItem(int id)
         {
@@ -91,16 +94,16 @@ namespace LeagueSharp.CommonEx.Core
         }
 
         /// <summary>
-        /// Returns true if the hero has the item.
+        ///     Returns true if the hero has the item.
         /// </summary>
         /// <param name="name">
-        /// The name.
+        ///     Name of the Item.
         /// </param>
         /// <param name="hero">
-        /// The hero.
+        ///     Hero to be checked.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool HasItem(string name, Obj_AI_Hero hero = null)
         {
@@ -108,16 +111,16 @@ namespace LeagueSharp.CommonEx.Core
         }
 
         /// <summary>
-        /// Returns true if the hero has the item.
+        ///     Returns true if the hero has the item.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        ///     Id of the Item.
         /// </param>
         /// <param name="hero">
-        /// The hero.
+        ///     Hero to be checked.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool HasItem(int id, Obj_AI_Hero hero = null)
         {
@@ -125,16 +128,16 @@ namespace LeagueSharp.CommonEx.Core
         }
 
         /// <summary>
-        /// Casts the item on the target.
+        ///     Casts the item on the target.
         /// </summary>
         /// <param name="name">
-        /// The name.
+        ///     Name of the Item.
         /// </param>
         /// <param name="target">
-        /// The target.
+        ///     Target to be hit.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool UseItem(string name, Obj_AI_Base target = null)
         {
@@ -149,16 +152,16 @@ namespace LeagueSharp.CommonEx.Core
         }
 
         /// <summary>
-        /// Casts the item on the target.
+        ///     Casts the item on the target.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        ///     Id of the Item.
         /// </param>
         /// <param name="target">
-        /// The target.
+        ///     Target to be hit.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool UseItem(int id, Obj_AI_Base target = null)
         {
@@ -173,16 +176,16 @@ namespace LeagueSharp.CommonEx.Core
         }
 
         /// <summary>
-        /// Casts the item on a Vector2 position.
+        ///     Casts the item on a Vector2 position.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        ///     Id of the Item.
         /// </param>
         /// <param name="position">
-        /// The position.
+        ///     Position of the Item cast.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool UseItem(int id, Vector2 position)
         {
@@ -190,16 +193,16 @@ namespace LeagueSharp.CommonEx.Core
         }
 
         /// <summary>
-        /// Casts the item on a Vector3 position.
+        ///     Casts the item on a Vector3 position.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        ///     Id of the Item.
         /// </param>
         /// <param name="position">
-        /// The position.
+        ///     Position of the Item cast.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool UseItem(int id, Vector3 position)
         {
@@ -215,10 +218,19 @@ namespace LeagueSharp.CommonEx.Core
         /// </summary>
         public class Item
         {
+            #region Fields
+
+            /// <summary>
+            ///     Range of the Item
+            /// </summary>
+            private float range;
+
+            #endregion
+
             #region Constructors and Destructors
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="Item"/> class.
+            ///     Initializes a new instance of the <see cref="Item" /> class.
             /// </summary>
             /// <param name="id">
             /// </param>
@@ -248,27 +260,27 @@ namespace LeagueSharp.CommonEx.Core
             #region Public Properties
 
             /// <summary>
-            /// Gets the base price.
+            ///     Gets the base price.
             /// </summary>
             public int BasePrice { get; private set; }
 
             /// <summary>
-            ///     Description of the Item
+            ///     Gets the description of the Item.
             /// </summary>
             public string Description { get; private set; }
 
             /// <summary>
-            /// Gets the from.
+            ///     Gets the Id's of the included Items.
             /// </summary>
             public int[] From { get; private set; }
 
             /// <summary>
-            ///     Id of the Item
+            ///     Gets the Id of the Item.
             /// </summary>
             public int Id { get; private set; }
 
             /// <summary>
-            /// Gets the into.
+            ///     Gets the Id of the possible upgraded Item.
             /// </summary>
             public int[] Into { get; private set; }
 
@@ -284,22 +296,39 @@ namespace LeagueSharp.CommonEx.Core
             }
 
             /// <summary>
-            ///     Name of the Item
+            ///     Gets the Name of the Item
             /// </summary>
             public string Name { get; private set; }
 
             /// <summary>
-            /// Gets a value indicating whether purchaseable.
+            ///     Gets a value indicating whether purchaseable.
             /// </summary>
             public bool Purchaseable { get; private set; }
 
             /// <summary>
-            ///     Range of the Item
+            ///     Gets or sets the range.
             /// </summary>
-            public float Range { get; private set; }
+            public float Range
+            {
+                get
+                {
+                    return this.range;
+                }
+
+                set
+                {
+                    this.range = value;
+                    this.RangeSqr = value * value;
+                }
+            }
 
             /// <summary>
-            /// Gets the sell price.
+            ///     Gets the range sqr.
+            /// </summary>
+            public float RangeSqr { get; private set; }
+
+            /// <summary>
+            ///     Gets the sell price.
             /// </summary>
             public int SellPrice { get; private set; }
 
@@ -318,17 +347,17 @@ namespace LeagueSharp.CommonEx.Core
             }
 
             /// <summary>
-            /// Gets the stacks.
+            ///     Gets the maximum stacks.
             /// </summary>
             public int Stacks { get; private set; }
 
             /// <summary>
-            /// Gets the tags.
+            ///     Gets the tags.
             /// </summary>
             public string[] Tags { get; private set; }
 
             /// <summary>
-            /// Gets the total price.
+            ///     Gets the total price.
             /// </summary>
             public int TotalPrice { get; private set; }
 
@@ -337,7 +366,7 @@ namespace LeagueSharp.CommonEx.Core
             #region Public Methods and Operators
 
             /// <summary>
-            ///     Buys the Items
+            ///     Buys the Items.
             /// </summary>
             public void Buy()
             {
@@ -345,7 +374,7 @@ namespace LeagueSharp.CommonEx.Core
             }
 
             /// <summary>
-            ///     Casts the Item
+            ///     Casts the Item.
             /// </summary>
             /// <returns>
             ///     The <see cref="bool" />.
@@ -356,13 +385,13 @@ namespace LeagueSharp.CommonEx.Core
             }
 
             /// <summary>
-            /// Casts the Item on a Target
+            ///     Casts the Item on a Target.
             /// </summary>
             /// <param name="target">
-            /// Target as Obj_AI_Base
+            ///     Target as Obj_AI_Base.
             /// </param>
             /// <returns>
-            /// The <see cref="bool"/>.
+            ///     The <see cref="bool" />.
             /// </returns>
             public bool Cast(Obj_AI_Base target)
             {
@@ -370,13 +399,13 @@ namespace LeagueSharp.CommonEx.Core
             }
 
             /// <summary>
-            /// Casts the Item on a Position
+            ///     Casts the Item on a Position.
             /// </summary>
             /// <param name="position">
-            /// Position as Vector2
+            ///     Position as Vector2.
             /// </param>
             /// <returns>
-            /// The <see cref="bool"/>.
+            ///     The <see cref="bool" />.
             /// </returns>
             public bool Cast(Vector2 position)
             {
@@ -384,13 +413,13 @@ namespace LeagueSharp.CommonEx.Core
             }
 
             /// <summary>
-            /// Casts the Item on a Position
+            ///     Casts the Item on a Position.
             /// </summary>
             /// <param name="position">
-            /// Position as Vector3
+            ///     Position as Vector3.
             /// </param>
             /// <returns>
-            /// The <see cref="bool"/>.
+            ///     The <see cref="bool" />.
             /// </returns>
             public bool Cast(Vector3 position)
             {
@@ -398,13 +427,52 @@ namespace LeagueSharp.CommonEx.Core
             }
 
             /// <summary>
-            /// Returns if the Item is owned
+            ///     Returns if the target is in the range of the Item.
             /// </summary>
             /// <param name="target">
-            /// Target as Obj_AI_Hero
+            ///     Target to be checked.
             /// </param>
             /// <returns>
-            /// The <see cref="bool"/>.
+            /// </returns>
+            public bool IsInRange(Obj_AI_Base target)
+            {
+                return this.IsInRange(target.ServerPosition);
+            }
+
+            /// <summary>
+            ///     Returns if the position is in the range of the Item.
+            /// </summary>
+            /// <param name="position">
+            ///     Position to be checked.
+            /// </param>
+            /// <returns>
+            /// </returns>
+            public bool IsInRange(Vector2 position)
+            {
+                return this.IsInRange(position.ToVector3());
+            }
+
+            /// <summary>
+            ///     Returns if the position is in the range of the Item.
+            /// </summary>
+            /// <param name="position">
+            ///     Position to be checked.
+            /// </param>
+            /// <returns>
+            /// </returns>
+            public bool IsInRange(Vector3 position)
+            {
+                return ObjectManager.Player.ServerPosition.DistanceSquared(position) < this.RangeSqr;
+            }
+
+            /// <summary>
+            ///     Returns if the Item is owned.
+            /// </summary>
+            /// <param name="target">
+            ///     Target as Obj_AI_Hero.
+            /// </param>
+            /// <returns>
+            ///     The <see cref="bool" />.
             /// </returns>
             public bool IsOwned(Obj_AI_Hero target = null)
             {
