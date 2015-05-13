@@ -1,11 +1,13 @@
 ﻿using System.Threading.Tasks;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using LeagueSharp.CommonEx.Core.UI;
 using LeagueSharp.CommonEx.Core.Utils;
 using LeagueSharp.CommonEx.Core.Wrappers;
 
 namespace LeagueSharp.CommonEx.Core
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     Bootstrap is an init pointer for the AppDomainManager to initialize the library correctly once loaded in game.
     /// </summary>

@@ -3,7 +3,7 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using LeagueSharp.CommonEx.Core.Extensions;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.Managers;
@@ -21,6 +21,8 @@ namespace LeagueSharp.CommonEx.Core
 {
     using System.Media;
     using System.Threading;
+
+    using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
     ///     Orbwalker class, provides a utility tool for assemblies to implement an orbwalker. An orbwalker is a tool for

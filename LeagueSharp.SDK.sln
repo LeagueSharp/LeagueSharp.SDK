@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeagueSharp.CommonEx", "LeagueSharp.CommonEx.csproj", "{8CD6364A-5FEC-4111-AE46-492A11DC8251}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeagueSharp.SDK", "LeagueSharp.SDK.csproj", "{8CD6364A-5FEC-4111-AE46-492A11DC8251}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

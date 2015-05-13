@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using LeagueSharp.CommonEx.Core.Extensions;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.Math.Prediction;
@@ -14,6 +14,8 @@ using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.Math
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     Collision class, calculates collision for moving objects.
     /// </summary>

@@ -1,6 +1,5 @@
 ﻿#region
 
-using LeagueSharp.CommonEx.Core.Enumerations;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
@@ -9,6 +8,8 @@ using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.UI.Values
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     InputText Menu Item.
     /// </summary>

@@ -1,9 +1,11 @@
 ﻿using System.Windows.Forms;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.Utils
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     Utility class to translate Windows Messages into keys or into <see cref="WindowsMessages" />
     /// </summary>

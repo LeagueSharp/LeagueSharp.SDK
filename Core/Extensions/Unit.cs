@@ -2,7 +2,7 @@
 
 using System;
 using System.Linq;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.Wrappers;
 using SharpDX;
@@ -11,6 +11,8 @@ using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.Extensions
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     Provides helpful extensions to Units.
     /// </summary>

@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.UI.Skins;
 using LeagueSharp.CommonEx.Core.Utils;
@@ -14,7 +14,8 @@ using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.UI
 {
-    
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     Abstract build of a Menu Item.
     /// </summary>

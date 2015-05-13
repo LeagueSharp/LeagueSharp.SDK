@@ -1,9 +1,10 @@
-﻿using LeagueSharp.CommonEx.Core.Enumerations;
-using SharpDX;
+﻿using SharpDX;
 using SharpDX.Direct3D9;
 
 namespace LeagueSharp.CommonEx.Core.Math
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     Geometry math class, contains geometry calculations.
     /// </summary>

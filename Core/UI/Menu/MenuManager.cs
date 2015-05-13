@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using LeagueSharp.CommonEx.Core.UI.Skins;
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
@@ -11,6 +11,8 @@ using SharpDX.Direct3D9;
 
 namespace LeagueSharp.CommonEx.Core.UI
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     Menu Interface class, used to control the menu.
     /// </summary>

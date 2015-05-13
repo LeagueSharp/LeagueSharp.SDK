@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.UI.Skins;
@@ -12,6 +12,8 @@ using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.UI.Values
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     A list of values.
     /// </summary>

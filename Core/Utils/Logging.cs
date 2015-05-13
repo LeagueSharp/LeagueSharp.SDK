@@ -3,12 +3,13 @@
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
-using LeagueSharp.CommonEx.Core.Enumerations;
 
 #endregion
 
 namespace LeagueSharp.CommonEx.Core.Utils
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     Logging class for LeagueSharp.CommonEx, used to log output data into a file and the console.
     /// </summary>

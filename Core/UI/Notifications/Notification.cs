@@ -1,5 +1,5 @@
 ﻿using System;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using LeagueSharp.CommonEx.Core.Extensions;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.Math;
@@ -8,6 +8,8 @@ using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.UI.Notifications
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     A basic notification for general purposes.
     /// </summary>

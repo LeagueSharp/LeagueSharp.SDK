@@ -1,13 +1,15 @@
 ﻿#region
 
 using System.Collections.Generic;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using SharpDX;
 
 #endregion
 
 namespace LeagueSharp.CommonEx.Core.Wrappers
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     Utility for the Maps in League of Legends.
     /// </summary>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using LeagueSharp.CommonEx.Core.Extensions;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.Math;
@@ -9,6 +9,8 @@ using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.Managers
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     Provides utilities to minions, includin getting minions, and getting the best farm location.
     /// </summary>

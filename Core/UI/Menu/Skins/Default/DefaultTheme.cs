@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using System.Linq;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using LeagueSharp.CommonEx.Core.Math;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.UI.Values;
@@ -10,6 +10,8 @@ using SharpDX.Direct3D9;
 
 namespace LeagueSharp.CommonEx.Core.UI.Skins.Default
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     The default theme for the menu.
     /// </summary>

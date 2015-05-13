@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using LeagueSharp.CommonEx.Core.Events;
 using LeagueSharp.CommonEx.Core.Extensions;
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
@@ -13,6 +13,8 @@ using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.Math.Prediction
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     Calculates a prediction based off data values given by the source input and converts it into a output prediction
     ///     for movement, containing spell casting position and unit position in 3D-Space.

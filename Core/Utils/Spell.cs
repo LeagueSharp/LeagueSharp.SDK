@@ -2,10 +2,10 @@
 
 #endregion
 
-using LeagueSharp.CommonEx.Core.Enumerations;
-
 namespace LeagueSharp.CommonEx.Core.Utils
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     General Utils.
     /// </summary>

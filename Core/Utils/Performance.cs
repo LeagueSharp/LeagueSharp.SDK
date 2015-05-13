@@ -3,12 +3,13 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using LeagueSharp.CommonEx.Core.Enumerations;
 
 #endregion
 
 namespace LeagueSharp.CommonEx.Core.Utils
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     Performance block class, for block method performance logging.
     /// </summary>

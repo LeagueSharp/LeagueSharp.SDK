@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
 using LeagueSharp.CommonEx.Core.UI.Abstracts;
 using LeagueSharp.CommonEx.Core.UI.Skins;
@@ -17,6 +17,8 @@ using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.UI
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///  Menu Value Changed delegate
     /// </summary>

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using LeagueSharp.CommonEx.Core.Extensions;
 using SharpDX;
 
@@ -12,6 +12,8 @@ using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.Events
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     Detection of Gapclosers and fires the OnGapCloser event.
     /// </summary>

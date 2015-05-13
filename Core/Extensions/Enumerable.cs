@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using LeagueSharp.CommonEx.Core.Utils;
 using SharpDX;
 
@@ -12,6 +12,8 @@ using SharpDX;
 
 namespace LeagueSharp.CommonEx.Core.Extensions
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     Enumerable Extensions.
     /// </summary>

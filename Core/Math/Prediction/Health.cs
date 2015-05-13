@@ -3,13 +3,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LeagueSharp.CommonEx.Core.Enumerations;
+
 using LeagueSharp.CommonEx.Core.Extensions;
 
 #endregion
 
 namespace LeagueSharp.CommonEx.Core.Math.Prediction
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     Health Prediction class for prediction of health of units.
     /// </summary>
