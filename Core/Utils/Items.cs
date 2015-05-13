@@ -256,6 +256,13 @@ namespace LeagueSharp.SDK.Core.Utils
                 this.Into = item.Into;
                 this.Stacks = item.Stacks;
                 this.Tags = item.Tags;
+                this.Consumable = item.Consumable;
+                this.ConsumableOnFull = item.ConsumableOnFull;
+                this.Depth = item.Depth;
+                this.RequiredChampion = item.RequiredChampion;
+                this.InStore = item.InStore;
+                this.SpecialRecipe = item.SpecialRecipe;
+                this.HideFromAll = item.HideFromAll;
             }
 
             #endregion
@@ -268,6 +275,21 @@ namespace LeagueSharp.SDK.Core.Utils
             public int BasePrice { get; private set; }
 
             /// <summary>
+            ///     Gets a value indicating whether consumable.
+            /// </summary>
+            public bool Consumable { get; private set; }
+
+            /// <summary>
+            ///     Gets a value indicating whether consumable on full.
+            /// </summary>
+            public bool ConsumableOnFull { get; private set; }
+
+            /// <summary>
+            ///     Gets the depth.
+            /// </summary>
+            public int Depth { get; private set; }
+
+            /// <summary>
             ///     Gets the description of the Item.
             /// </summary>
             public string Description { get; private set; }
@@ -278,9 +300,19 @@ namespace LeagueSharp.SDK.Core.Utils
             public int[] From { get; private set; }
 
             /// <summary>
+            ///     Gets a value indicating whether hide from all.
+            /// </summary>
+            public bool HideFromAll { get; private set; }
+
+            /// <summary>
             ///     Gets the Id of the Item.
             /// </summary>
             public int Id { get; private set; }
+
+            /// <summary>
+            ///     Gets a value indicating whether in store.
+            /// </summary>
+            public bool InStore { get; private set; }
 
             /// <summary>
             ///     Gets the Id of the possible upgraded Item.
@@ -331,6 +363,11 @@ namespace LeagueSharp.SDK.Core.Utils
             public float RangeSqr { get; private set; }
 
             /// <summary>
+            ///     Gets the required champion.
+            /// </summary>
+            public string RequiredChampion { get; private set; }
+
+            /// <summary>
             ///     Gets the sell price.
             /// </summary>
             public int SellPrice { get; private set; }
@@ -348,6 +385,11 @@ namespace LeagueSharp.SDK.Core.Utils
                             .ToList();
                 }
             }
+
+            /// <summary>
+            ///     Gets the special recipe.
+            /// </summary>
+            public double SpecialRecipe { get; private set; }
 
             /// <summary>
             ///     Gets the maximum stacks.

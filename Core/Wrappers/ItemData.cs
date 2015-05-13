@@ -97,6 +97,39 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
+        ///     Gets a value indicating whether consumable.
+        /// </summary>
+        public bool Consumable
+        {
+            get
+            {
+                return this.itemToken["consumed"].ToObject<bool>();
+            }
+        }
+
+        /// <summary>
+        ///     Gets a value indicating whether consumable on full HP.
+        /// </summary>
+        public bool ConsumableOnFull
+        {
+            get
+            {
+                return this.itemToken["consumeOnFull"].ToObject<bool>();
+            }
+        }
+
+        /// <summary>
+        ///     Gets the depth.
+        /// </summary>
+        public int Depth
+        {
+            get
+            {
+                return this.itemToken["depth"].ToObject<int>();
+            }
+        }
+
+        /// <summary>
         ///     Gets the from.
         /// </summary>
         public int[] From
@@ -108,6 +141,17 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
+        ///     Gets a value indicating whether hide from all.
+        /// </summary>
+        public bool HideFromAll
+        {
+            get
+            {
+                return this.itemToken["hideFromAll"].ToObject<bool>();
+            }
+        }
+
+        /// <summary>
         ///     Gets the Id of the Item
         /// </summary>
         public int Id
@@ -115,6 +159,17 @@ namespace LeagueSharp.SDK.Core.Wrappers
             get
             {
                 return (int)this.itemToken;
+            }
+        }
+
+        /// <summary>
+        ///     Gets a value indicating whether in store.
+        /// </summary>
+        public bool InStore
+        {
+            get
+            {
+                return this.itemToken["inStore"].ToObject<bool>();
             }
         }
 
@@ -163,6 +218,17 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
+        ///     Gets the required champion.
+        /// </summary>
+        public string RequiredChampion
+        {
+            get
+            {
+                return this.itemToken["requiredChampion"].ToObject<string>();
+            }
+        }
+
+        /// <summary>
         ///     Gets the sell price.
         /// </summary>
         public int SellPrice
@@ -170,6 +236,17 @@ namespace LeagueSharp.SDK.Core.Wrappers
             get
             {
                 return this.goldToken["sell"].ToObject<int>();
+            }
+        }
+
+        /// <summary>
+        ///     Gets the special recipe.
+        /// </summary>
+        public double SpecialRecipe
+        {
+            get
+            {
+                return this.itemToken["specialRecipe"].ToObject<double>();
             }
         }
 
