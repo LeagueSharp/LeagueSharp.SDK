@@ -1,21 +1,38 @@
-﻿#region
-
-using System;
-using System.Runtime.Serialization;
-using System.Windows.Forms;
-
-using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
-using LeagueSharp.CommonEx.Core.UI.Abstracts;
-using LeagueSharp.CommonEx.Core.UI.Skins;
-using LeagueSharp.CommonEx.Core.UI.Skins.Default;
-using LeagueSharp.CommonEx.Core.Utils;
-using SharpDX;
-
-#endregion
-
-namespace LeagueSharp.CommonEx.Core.UI.Values
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MenuKeyBind.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Menu KeyBind.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core.UI.Values
 {
+    using System;
+    using System.Runtime.Serialization;
+    using System.Windows.Forms;
+
     using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.UI.Abstracts;
+    using LeagueSharp.SDK.Core.UI.Skins;
+    using LeagueSharp.SDK.Core.UI.Skins.Default;
+    using LeagueSharp.SDK.Core.Utils;
+
+    using SharpDX;
 
     /// <summary>
     ///     Menu KeyBind.
@@ -23,33 +40,94 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
     [Serializable]
     public class MenuKeyBind : AMenuValue, ISerializable
     {
-        private bool _interacting;
+        #region Fields
 
         /// <summary>
+        ///     Local Interacting value.
+        /// </summary>
+        private bool interacting;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MenuKeyBind" /> class.
         ///     Menu KeyBind Constructor
         /// </summary>
-        /// <param name="key">The Key to bind</param>
-        /// <param name="type">Key bind type</param>
+        /// <param name="key">
+        ///     The Key to bind
+        /// </param>
+        /// <param name="type">
+        ///     Key bind type
+        /// </param>
         public MenuKeyBind(Keys key, KeyBindType type)
         {
-            Key = key;
-            Type = type;
+            this.Key = key;
+            this.Type = type;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MenuKeyBind"/> class.
+        ///     Initializes a new instance of the <see cref="MenuKeyBind" /> class.
         /// </summary>
         /// <param name="info">The information.</param>
         /// <param name="context">The context.</param>
         public MenuKeyBind(SerializationInfo info, StreamingContext context)
         {
-            Key = (Keys) info.GetValue("key", typeof(Keys));
+            this.Key = (Keys)info.GetValue("key", typeof(Keys));
         }
 
         /// <summary>
+        ///     Initializes a new instance of the <see cref="MenuKeyBind" /> class.
         ///     Menu KeyBind Constructor
         /// </summary>
-        public MenuKeyBind() {}
+        public MenuKeyBind()
+        {
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether the key is active.
+        /// </summary>
+        public bool Active { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether this <see cref="MenuKeyBind" /> is interacting.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if interacting; otherwise, <c>false</c>.
+        /// </value>
+        public bool Interacting
+        {
+            get
+            {
+                return this.interacting;
+            }
+
+            set
+            {
+                this.interacting = value;
+                MenuManager.Instance.ForcedOpen = value;
+            }
+        }
+
+        /// <summary>
+        ///     Gets or sets the KeyBind Key Value.
+        /// </summary>
+        public Keys Key { get; set; }
+
+        /// <summary>
+        ///     KeyBind Item Position.
+        /// </summary>
+        public override Vector2 Position { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the KeyBind Type.
+        /// </summary>
+        public KeyBindType Type { get; set; }
 
         /// <summary>
         ///     KeyBind Item Width.
@@ -60,71 +138,49 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
             {
                 return
                     (int)
-                        (DefaultSettings.ContainerHeight + ThemeManager.Current.CalcWidthText("[" + Key + "]") +
-                         DefaultSettings.ContainerTextOffset);
+                    (DefaultSettings.ContainerHeight + ThemeManager.Current.CalcWidthText("[" + this.Key + "]")
+                     + DefaultSettings.ContainerTextOffset);
             }
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="MenuKeyBind"/> is interacting.
+        ///     Extracts the specified value.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if interacting; otherwise, <c>false</c>.
-        /// </value>
-        public bool Interacting
+        /// <param name="value">The value.</param>
+        public override void Extract(AMenuValue value)
         {
-            get { return _interacting; }
-            set
-            {
-                _interacting = value;
-                MenuManager.Instance.ForcedOpen = value;
-            }
+            var keybind = (MenuKeyBind)value;
+            this.Key = keybind.Key;
         }
 
         /// <summary>
-        ///     Returns if the key is active.
-        /// </summary>
-        public bool Active { get; set; }
-
-        /// <summary>
-        ///     KeyBind Type.
-        /// </summary>
-        public KeyBindType Type { get; set; }
-
-        /// <summary>
-        ///     KeyBind Key Value.
-        /// </summary>
-        public Keys Key { get; set; }
-
-        /// <summary>
-        ///     KeyBind Item Position.
-        /// </summary>
-        public override Vector2 Position { get; set; }
-
-        /// <summary>
-        /// Gets the object data.
+        ///     Gets the object data.
         /// </summary>
         /// <param name="info">The information.</param>
         /// <param name="context">The context.</param>
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("key", Key, typeof(Keys));
+            info.AddValue("key", this.Key, typeof(Keys));
         }
 
         /// <summary>
         ///     KeyBind Item Draw callback.
         /// </summary>
         /// <param name="component">Parent Component</param>
-        /// <param name="position">Position</param>
+        /// <param name="position">The Position</param>
         /// <param name="index">Item Index</param>
         public override void OnDraw(AMenuComponent component, Vector2 position, int index)
         {
-            if (!Position.Equals(position))
+            if (!this.Position.Equals(position))
             {
-                Position = position;
+                this.Position = position;
             }
 
-            Theme.Animation animation = ThemeManager.Current.Boolean.Animation;
+            var animation = ThemeManager.Current.Boolean.Animation;
 
             if (animation != null && animation.IsAnimating())
             {
@@ -140,7 +196,7 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
         ///     KeyBind Item Windows Process Messages callback.
         /// </summary>
         /// <param name="args">
-        ///     <see cref="WindowsKeys" />
+        ///     <see cref="WindowsKeys" /> data
         /// </param>
         public override void OnWndProc(WindowsKeys args)
         {
@@ -149,61 +205,61 @@ namespace LeagueSharp.CommonEx.Core.UI.Values
                 switch (args.Msg)
                 {
                     case WindowsMessages.KEYDOWN:
-                        if (args.Key == Key && Type == KeyBindType.Press)
+                        if (args.Key == this.Key && this.Type == KeyBindType.Press)
                         {
-                            Active = true;
-                            Container.FireEvent();
+                            this.Active = true;
+                            this.Container.FireEvent();
                         }
+
                         break;
                     case WindowsMessages.KEYUP:
-                        if (Interacting && args.SingleKey != Keys.ShiftKey)
+                        if (this.Interacting && args.SingleKey != Keys.ShiftKey)
                         {
-                            Key = args.SingleKey == Keys.Escape ? Keys.None : args.Key;
+                            this.Key = args.SingleKey == Keys.Escape ? Keys.None : args.Key;
                             args.Process = false;
-                            Interacting = false;
-                            Container.ResetWidth();
+                            this.Interacting = false;
+                            this.Container.ResetWidth();
                         }
-                        else if (args.Key == Key && Type == KeyBindType.Press)
+                        else if (args.Key == this.Key && this.Type == KeyBindType.Press)
                         {
-                            Active = false;
-                            Container.FireEvent();
+                            this.Active = false;
+                            this.Container.FireEvent();
                         }
-                        else if (args.Key == Key && Type == KeyBindType.Toggle)
+                        else if (args.Key == this.Key && this.Type == KeyBindType.Toggle)
                         {
-                            Active = !Active;
-                            Container.FireEvent();
+                            this.Active = !this.Active;
+                            this.Container.FireEvent();
                         }
+
                         break;
                     case WindowsMessages.LBUTTONDOWN:
 
-                        if (Position.IsValid())
+                        if (this.Position.IsValid())
                         {
-                            Rectangle container = ThemeManager.Current.KeyBind.AdditionalBoundries(Position, Container);
-                            Rectangle content = ThemeManager.Current.KeyBind.Bounding(Position, Container);
+                            var container = ThemeManager.Current.KeyBind.AdditionalBoundries(
+                                this.Position, 
+                                this.Container);
+                            var content = ThemeManager.Current.KeyBind.Bounding(this.Position, this.Container);
 
                             if (args.Cursor.IsUnderRectangle(
-                                container.X, container.Y, container.Width, container.Height))
+                                container.X, 
+                                container.Y, 
+                                container.Width, 
+                                container.Height))
                             {
-                                Active = !Active;
+                                this.Active = !this.Active;
                             }
                             else if (args.Cursor.IsUnderRectangle(content.X, content.Y, content.Width, content.Height))
                             {
-                                Interacting = !Interacting;
+                                this.Interacting = !this.Interacting;
                             }
                         }
+
                         break;
                 }
             }
         }
 
-        /// <summary>
-        /// Extracts the specified value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        public override void Extract(AMenuValue value)
-        {
-            var keybind = ((MenuKeyBind) value);
-            Key = keybind.Key;
-        }
+        #endregion
     }
 }

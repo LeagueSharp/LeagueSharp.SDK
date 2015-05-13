@@ -1,15 +1,38 @@
-﻿using SharpDX;
-using SharpDX.Direct3D9;
-
-namespace LeagueSharp.CommonEx.Core.Math
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Geometry.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Geometry math class, contains geometry calculations.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core.Math
 {
     using LeagueSharp.SDK.Core.Enumerations;
+
+    using SharpDX;
+    using SharpDX.Direct3D9;
 
     /// <summary>
     ///     Geometry math class, contains geometry calculations.
     /// </summary>
     public static class Geometry
     {
+        #region Public Methods and Operators
+
         /// <summary>
         ///     Returns the center position of the rendering object on the rectangle.
         /// </summary>
@@ -18,9 +41,10 @@ namespace LeagueSharp.CommonEx.Core.Math
         /// <param name="dimensions">Object Dimensions</param>
         /// <param name="flags">Centered Flags</param>
         /// <returns>Vector2 center position of the rendering object on the rectangle.</returns>
-        public static Vector2 GetCenter(this Rectangle rectangle,
-            Sprite sprite,
-            Rectangle dimensions,
+        public static Vector2 GetCenter(
+            this Rectangle rectangle, 
+            Sprite sprite, 
+            Rectangle dimensions, 
             CenteredFlags flags)
         {
             var x = 0;
@@ -56,11 +80,11 @@ namespace LeagueSharp.CommonEx.Core.Math
         }
 
         /// <summary>
-        ///     Returns the center position of the text on the rectangle.
+        ///     Calculates the center position for the given text on within a rectangle boundaries.
         /// </summary>
         /// <param name="rectangle">Rectangle boundaries</param>
         /// <param name="sprite">Sprite which is being drawn on</param>
-        /// <param name="text">Text</param>
+        /// <param name="text">The Text</param>
         /// <param name="flags">Centered Flags</param>
         /// <returns>Returns the center position of the text on the rectangle.</returns>
         public static Vector2 GetCenteredText(this Rectangle rectangle, Sprite sprite, string text, CenteredFlags flags)
@@ -69,29 +93,30 @@ namespace LeagueSharp.CommonEx.Core.Math
         }
 
         /// <summary>
-        ///     Returns the center position of the text on the rectangle.
+        ///     Calculates the center position for the given text on within a rectangle boundaries.
         /// </summary>
         /// <param name="rectangle">Rectangle boundaries</param>
         /// <param name="sprite">Sprite which is being drawn on</param>
         /// <param name="font">Text Font</param>
-        /// <param name="text">Text</param>
+        /// <param name="text">The Text</param>
         /// <param name="flags">Centered Flags</param>
         /// <returns>Returns the center position of the text on the rectangle.</returns>
-        public static Vector2 GetCenteredText(this Rectangle rectangle,
-            Sprite sprite,
-            Font font,
-            string text,
+        public static Vector2 GetCenteredText(
+            this Rectangle rectangle, 
+            Sprite sprite, 
+            Font font, 
+            string text, 
             CenteredFlags flags)
         {
             return font == null
-                ? rectangle.GetCenteredText(sprite, text, flags)
-                : rectangle.GetCenter(sprite, font.MeasureText(sprite, text, 0), flags);
+                       ? rectangle.GetCenteredText(sprite, text, flags)
+                       : rectangle.GetCenter(sprite, font.MeasureText(sprite, text, 0), flags);
         }
 
         /// <summary>
         ///     Returns true if the point is under the rectangle.
         /// </summary>
-        /// <param name="point">Point</param>
+        /// <param name="point">The Point</param>
         /// <param name="x">Rectangle X</param>
         /// <param name="y">Rectangle Y</param>
         /// <param name="width">Rectangle Width</param>
@@ -99,7 +124,9 @@ namespace LeagueSharp.CommonEx.Core.Math
         /// <returns>Returns true if the point is under the rectangle, otherwise false</returns>
         public static bool IsUnderRectangle(Vector2 point, float x, float y, float width, float height)
         {
-            return (point.X > x && point.X < x + width && point.Y > y && point.Y < y + height);
+            return point.X > x && point.X < x + width && point.Y > y && point.Y < y + height;
         }
+
+        #endregion
     }
 }

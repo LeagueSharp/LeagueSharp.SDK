@@ -1,29 +1,46 @@
-﻿#region
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-
-using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
-using LeagueSharp.CommonEx.Core.UI.Abstracts;
-using LeagueSharp.CommonEx.Core.UI.Skins;
-using LeagueSharp.CommonEx.Core.UI.Skins.Default;
-using LeagueSharp.CommonEx.Core.Utils;
-using SharpDX;
-
-#endregion
-
-namespace LeagueSharp.CommonEx.Core.UI
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Menu.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Menu Value Changed delegate
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core.UI
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+
     using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.UI.Abstracts;
+    using LeagueSharp.SDK.Core.UI.Skins;
+    using LeagueSharp.SDK.Core.UI.Skins.Default;
+    using LeagueSharp.SDK.Core.Utils;
+
+    using SharpDX;
 
     /// <summary>
-    ///  Menu Value Changed delegate
+    ///     Menu Value Changed delegate
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="args"></param>
+    /// <param name="sender">The sender</param>
+    /// <param name="args">The Menu Value Changed Event Data</param>
     public delegate void OnMenuValueChanged(object sender, OnMenuValueChangedEventArgs args);
 
     /// <summary>
@@ -31,54 +48,104 @@ namespace LeagueSharp.CommonEx.Core.UI
     /// </summary>
     public class Menu : AMenuComponent
     {
+        #region Fields
+
         /// <summary>
         ///     Menu Component Sub-Components.
         /// </summary>
         public readonly IDictionary<string, AMenuComponent> Components = new Dictionary<string, AMenuComponent>();
 
-        private bool _toggled;
+        /// <summary>
+        ///     Local toggled indicator.
+        /// </summary>
+        private bool toggled;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         /// <summary>
+        ///     Initializes a new instance of the <see cref="Menu" /> class.
         ///     Menu Constructor.
         /// </summary>
-        /// <param name="name">Menu Name</param>
-        /// <param name="displayName">Menu Display Name</param>
-        /// <param name="root">Root component</param>
-        /// <param name="uniqueString">Unique string</param>
+        /// <param name="name">
+        ///     Menu Name
+        /// </param>
+        /// <param name="displayName">
+        ///     Menu Display Name
+        /// </param>
+        /// <param name="root">
+        ///     Root component
+        /// </param>
+        /// <param name="uniqueString">
+        ///     Unique string
+        /// </param>
         public Menu(string name, string displayName, bool root = false, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
-            Root = root;
+            this.Root = root;
         }
 
-        /// <summary>
-        ///     Component Sub Object accessability.
-        /// </summary>
-        /// <param name="name">Child Menu Component name</param>
-        /// <returns>Child Menu Component of this component.</returns>
-        public override AMenuComponent this[string name]
-        {
-            get { return Components.ContainsKey(name) ? Components[name] : null; }
-        }
+        #endregion
+
+        #region Public Events
 
         /// <summary>
-        ///     Returns the menu visiblity.
+        ///     Occurs when a value is changed.
         /// </summary>
-        public override sealed bool Visible { get; set; }
+        public event OnMenuValueChanged MenuValueChanged;
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="Menu"/> is hovering.
+        ///     Gets a value indicating whether this <see cref="Menu" /> is hovering.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if hovering; otherwise, <c>false</c>.
+        ///     <c>true</c> if hovering; otherwise, <c>false</c>.
         /// </value>
         public bool Hovering { get; private set; }
 
         /// <summary>
-        /// Gets or sets a value indicating that the settings are shared.
+        ///     Gets the path.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if the settings are shared; otherwise, <c>false</c>.
+        ///     The path.
+        /// </value>
+        public override string Path
+        {
+            get
+            {
+                if (this.SharedSettings)
+                {
+                    return MenuManager.ConfigFolder.CreateSubdirectory("SharedConfig").FullName;
+                }
+
+                if (this.Parent == null)
+                {
+                    return
+                        MenuManager.ConfigFolder.CreateSubdirectory(this.AssemblyName)
+                            .CreateSubdirectory(this.Name + this.UniqueString)
+                            .FullName;
+                }
+
+                return
+                    Directory.CreateDirectory(System.IO.Path.Combine(this.Parent.Path, this.Name + this.UniqueString))
+                        .FullName;
+            }
+        }
+
+        /// <summary>
+        ///     Menu Position
+        /// </summary>
+        public override Vector2 Position { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether that the settings are shared.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if the settings are shared; otherwise, <c>false</c>.
         /// </value>
         public bool SharedSettings { get; set; }
 
@@ -87,15 +154,20 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// </summary>
         public override sealed bool Toggled
         {
-            get { return _toggled; }
+            get
+            {
+                return this.toggled;
+            }
+
             set
             {
-                _toggled = value;
-                //Hide children when untoggled
-                foreach (var comp in Components)
+                this.toggled = value;
+
+                // Hide children when untoggled
+                foreach (var comp in this.Components)
                 {
                     comp.Value.Visible = value;
-                    if (!_toggled)
+                    if (!this.toggled)
                     {
                         comp.Value.Toggled = false;
                     }
@@ -104,50 +176,45 @@ namespace LeagueSharp.CommonEx.Core.UI
         }
 
         /// <summary>
-        /// Occurs when a value is changed.
+        ///     Returns the menu visibility.
         /// </summary>
-        public event OnMenuValueChanged MenuValueChanged;
+        public override sealed bool Visible { get; set; }
 
         /// <summary>
-        ///     Menu Position
-        /// </summary>
-        public override Vector2 Position { get; set; }
-
-        /// <summary>
-        /// Gets the width.
+        ///     Gets the width.
         /// </summary>
         /// <value>
-        /// The width.
+        ///     The width.
         /// </value>
         public override int Width
         {
-            get { return ThemeManager.Current.CalcWidthMenu(this); }
+            get
+            {
+                return ThemeManager.Current.CalcWidthMenu(this);
+            }
         }
 
+        #endregion
+
+        #region Public Indexers
+
         /// <summary>
-        /// Gets the path.
+        ///     Component Sub Object accessibility.
         /// </summary>
-        /// <value>
-        /// The path.
-        /// </value>
-        public override string Path
+        /// <param name="name">Child Menu Component name</param>
+        /// <returns>Child Menu Component of this component.</returns>
+        public override AMenuComponent this[string name]
         {
             get
             {
-                if (SharedSettings)
-                {
-                    return MenuManager.ConfigFolder.CreateSubdirectory("SharedConfig").FullName;
-                }
-                if (Parent == null)
-                {
-                    return
-                        MenuManager.ConfigFolder.CreateSubdirectory(AssemblyName)
-                            .CreateSubdirectory(Name + UniqueString)
-                            .FullName;
-                }
-                return Directory.CreateDirectory(System.IO.Path.Combine(Parent.Path, Name + UniqueString)).FullName;
+                AMenuComponent value;
+                return this.Components.TryGetValue(name, out value) ? value : null;
             }
         }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         ///     Add a menu component to this menu.
@@ -155,10 +222,10 @@ namespace LeagueSharp.CommonEx.Core.UI
         /// <param name="component"><see cref="AMenuComponent" /> component</param>
         public void Add(AMenuComponent component)
         {
-            if (!Components.ContainsKey(component.Name))
+            if (!this.Components.ContainsKey(component.Name))
             {
                 component.Parent = this;
-                Components[component.Name] = component;
+                this.Components[component.Name] = component;
 
                 AMenuComponent comp = this;
                 while (comp.Parent != null)
@@ -178,50 +245,50 @@ namespace LeagueSharp.CommonEx.Core.UI
         }
 
         /// <summary>
-        ///     Removes a menu component from this menu.
+        ///     Attaches the menu towards the main menu.
         /// </summary>
-        /// <param name="component"><see cref="AMenuComponent" /> component instance</param>
-        public void Remove(AMenuComponent component)
+        /// <returns>Menu Instance</returns>
+        public Menu Attach()
         {
-            if (Components.ContainsKey(component.Name))
+            if (this.Parent == null && this.Root)
             {
-                component.Parent = null;
-                Components.Remove(component.Name);
+                this.AssemblyName = Assembly.GetCallingAssembly().GetName().Name;
+                MenuManager.Instance.Add(this);
             }
-        }
+            else
+            {
+                throw new Exception("You should not add a Menu that already has a parent or is not a Root component.");
+            }
 
-        internal void FireEvent(object sender)
-        {
-            if (MenuValueChanged != null)
-            {
-                MenuValueChanged(sender, new OnMenuValueChangedEventArgs(this));
-            }
+            return this;
         }
 
         /// <summary>
-        /// Get the value of a child with a certain name.
+        ///     Get the value of a child with a certain name.
         /// </summary>
         /// <typeparam name="T">The type of MenuValue of this child.</typeparam>
         /// <param name="name">The name of the child.</param>
         /// <returns>
-        /// The value that is attached to this Child.
+        ///     The value that is attached to this Child.
         /// </returns>
         /// <exception cref="Exception">Could not find child with name  + name</exception>
         public override T GetValue<T>(string name)
         {
-            if (Components.ContainsKey(name))
+            AMenuComponent value;
+            if (this.Components.TryGetValue(name, out value))
             {
-                return ((MenuItem<T>) Components[name]).Value;
+                return ((MenuItem<T>)value).Value;
             }
+
             throw new Exception("Could not find child with name " + name);
         }
 
         /// <summary>
-        /// Get the value of this component.
+        ///     Get the value of this component.
         /// </summary>
         /// <typeparam name="T">The type of MenuValue of this component.</typeparam>
         /// <returns>
-        /// The value that is attached to this component.
+        ///     The value that is attached to this component.
         /// </returns>
         /// <exception cref="Exception">Cannot get the Value of a Menu</exception>
         public override T GetValue<T>()
@@ -230,32 +297,60 @@ namespace LeagueSharp.CommonEx.Core.UI
         }
 
         /// <summary>
+        ///     Loads this instance.
+        /// </summary>
+        public override void Load()
+        {
+            foreach (var comp in this.Components)
+            {
+                comp.Value.Load();
+            }
+        }
+
+        /// <summary>
         ///     Menu Drawing callback.
         /// </summary>
+        /// <param name="position">
+        ///     The position.
+        /// </param>
+        /// <param name="index">
+        ///     The index.
+        /// </param>
         public override void OnDraw(Vector2 position, int index)
         {
-            Position = position;
+            this.Position = position;
 
             ThemeManager.Current.OnMenu(this, position, index);
         }
 
         /// <summary>
+        ///     Menu Update callback.
+        /// </summary>
+        public override void OnUpdate()
+        {
+        }
+
+        /// <summary>
         ///     Menu Windows Process Messages callback.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void OnWndProc(WindowsKeys args)
         {
-            if ((MenuManager.Instance.MenuVisible && Parent == null) || Visible)
+            if ((MenuManager.Instance.MenuVisible && this.Parent == null) || this.Visible)
             {
-                if (args.Cursor.IsUnderRectangle(Position.X, Position.Y, MenuWidth, DefaultSettings.ContainerHeight))
+                if (args.Cursor.IsUnderRectangle(
+                    this.Position.X, 
+                    this.Position.Y, 
+                    this.MenuWidth, 
+                    DefaultSettings.ContainerHeight))
                 {
-                    Hovering = true;
-                    if (args.Msg == WindowsMessages.LBUTTONDOWN && Components.Count > 0)
+                    this.Hovering = true;
+                    if (args.Msg == WindowsMessages.LBUTTONDOWN && this.Components.Count > 0)
                     {
-                        Toggled = !Toggled;
+                        this.Toggled = !this.Toggled;
 
-                        //Toggling siblings logic
-                        if (Parent == null)
+                        // Toggling siblings logic
+                        if (this.Parent == null)
                         {
                             foreach (var rootComponent in MenuManager.Instance.Menus.Where(c => !c.Equals(this)))
                             {
@@ -264,7 +359,7 @@ namespace LeagueSharp.CommonEx.Core.UI
                         }
                         else
                         {
-                            foreach (var comp in Parent.Components.Where(comp => comp.Value.Name != Name))
+                            foreach (var comp in this.Parent.Components.Where(comp => comp.Value.Name != this.Name))
                             {
                                 comp.Value.Toggled = false;
                             }
@@ -275,13 +370,13 @@ namespace LeagueSharp.CommonEx.Core.UI
                 }
                 else
                 {
-                    Hovering = false;
+                    this.Hovering = false;
                 }
 
-                //Pass OnWndProc on to children
-                if (Toggled)
+                // Pass OnWndProc on to children
+                if (this.Toggled)
                 {
-                    foreach (var item in Components.Where(c => c.Value.Visible))
+                    foreach (var item in this.Components.Where(c => c.Value.Visible))
                     {
                         item.Value.OnWndProc(args);
                     }
@@ -290,49 +385,47 @@ namespace LeagueSharp.CommonEx.Core.UI
         }
 
         /// <summary>
-        ///     Menu Update callback.
+        ///     Removes a menu component from this menu.
         /// </summary>
-        public override void OnUpdate() {}
-
+        /// <param name="component"><see cref="AMenuComponent" /> component instance</param>
+        public void Remove(AMenuComponent component)
+        {
+            if (this.Components.ContainsKey(component.Name))
+            {
+                component.Parent = null;
+                this.Components.Remove(component.Name);
+            }
+        }
 
         /// <summary>
-        /// Saves this instance.
+        ///     Saves this instance.
         /// </summary>
         public override void Save()
         {
-            foreach (var comp in Components)
+            foreach (var comp in this.Components)
             {
                 comp.Value.Save();
             }
         }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
-        /// Loads this instance.
+        ///     Fire the Value Changed event.
         /// </summary>
-        public override void Load()
+        /// <param name="sender">
+        ///     The sender object.
+        /// </param>
+        internal void FireEvent(object sender)
         {
-            foreach (var comp in Components)
+            if (this.MenuValueChanged != null)
             {
-                comp.Value.Load();
+                this.MenuValueChanged(sender, new OnMenuValueChangedEventArgs(this));
             }
         }
 
-        /// <summary>
-        ///     Attaches the menu towards the main menu.
-        /// </summary>
-        /// <returns>Menu Instance</returns>
-        public Menu Attach()
-        {
-            if (Parent == null && Root)
-            {
-                AssemblyName = Assembly.GetCallingAssembly().GetName().Name;
-                MenuManager.Instance.Add(this);
-            }
-            else
-            {
-                throw new Exception("You should not add a Menu that already has a parent or is not a Root component.");
-            }
-            return this;
-        }
+        #endregion
     }
 }

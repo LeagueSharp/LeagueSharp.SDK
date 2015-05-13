@@ -19,11 +19,11 @@
 //   Represents an Arc <see cref="Polygon" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.CommonEx.Core.Math.Polygons
+namespace LeagueSharp.SDK.Core.Math.Polygons
 {
     using System;
 
-    using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
 
     using SharpDX;
 

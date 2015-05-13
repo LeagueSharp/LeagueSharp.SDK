@@ -152,7 +152,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
-        ///     Gets a value indicating whether purchaseable.
+        ///     Gets a value indicating whether purchase-able.
         /// </summary>
         public bool Purchaseable
         {

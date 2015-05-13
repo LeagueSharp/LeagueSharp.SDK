@@ -1,13 +1,30 @@
-﻿#region
-
-using System;
-using System.IO;
-using System.Runtime.CompilerServices;
-
-#endregion
-
-namespace LeagueSharp.CommonEx.Core.Utils
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Logging.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Logging class for LeagueSharp.CommonEx, used to log output data into a file and the console.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core.Utils
 {
+    using System;
+    using System.IO;
+    using System.Runtime.CompilerServices;
+
     using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
@@ -15,6 +32,8 @@ namespace LeagueSharp.CommonEx.Core.Utils
     /// </summary>
     public class Logging
     {
+        #region Delegates
+
         /// <summary>
         ///     Write Delegate, used to state the logging data.
         /// </summary>
@@ -23,6 +42,10 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="args">Message Format Arguments</param>
         public delegate void WriteDelegate(LogLevel logLevel, string message, params object[] args);
 
+        #endregion
+
+        #region Public Methods and Operators
+
         /// <summary>
         ///     Execute a logging write through the Write Delegate.
         /// </summary>
@@ -30,25 +53,27 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="printColor">Print to Console with colors. (Optional)</param>
         /// <param name="memberName">Function name (Auto / Optional)</param>
         /// <see cref="WriteDelegate" />
-        /// <example>Write()(LogLevel.Debug, "I am a debug, arguments: {0}, {1}.", "arg1", 123);</example>
+        /// <example>Write()(LogLevel.Debug, "I am a debug, arguments: {0}, {1}.", "argument1", 123);</example>
         /// <returns>Created WriteDelegate</returns>
-        public static WriteDelegate Write(bool logToFile = false,
-            bool printColor = true,
+        public static WriteDelegate Write(
+            bool logToFile = false, 
+            bool printColor = true, 
             [CallerMemberName] string memberName = "")
         {
             return (logLevel, message, args) =>
-            {
-                string finalMessage;
-                try
                 {
-                    finalMessage = string.Format(message, args);
-                }
-                catch (Exception)
-                {
-                    finalMessage = message;
-                }
-                Write(logLevel, finalMessage, logToFile, printColor, memberName);
-            };
+                    string finalMessage;
+                    try
+                    {
+                        finalMessage = string.Format(message, args);
+                    }
+                    catch (Exception)
+                    {
+                        finalMessage = message;
+                    }
+
+                    Write(logLevel, finalMessage, logToFile, printColor, memberName);
+                };
         }
 
         /// <summary>
@@ -61,19 +86,40 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="printColor">Print to Console with colors. (Optional)</param>
         /// <param name="memberName">Function name (Auto / Optional)</param>
         /// <see cref="WriteDelegate" />
-        /// <example>Write(LogLevel.Debug, "I am a debug, arguments: {0}, {1}.", new object[] { "arg1", 123 });</example>
-        public static void Write(LogLevel logLevel,
-            string message,
-            object[] args,
-            bool logToFile = false,
-            bool printColor = true,
+        /// <example>Write(LogLevel.Debug, "I am a debug, arguments: {0}, {1}.", new object[] { "argument1", 123 });</example>
+        public static void Write(
+            LogLevel logLevel, 
+            string message, 
+            object[] args, 
+            bool logToFile = false, 
+            bool printColor = true, 
             [CallerMemberName] string memberName = "")
         {
             Write(logLevel, string.Format(message, args), logToFile, printColor, memberName);
         }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
-        ///     Logs information to Console(always), and optionaly logs it to the logging file.
+        ///     Logs all exceptions that happen in the current AppDomain.
+        /// </summary>
+        internal static void LogAllExceptions()
+        {
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+                {
+                    if (!(args.ExceptionObject is Exception))
+                    {
+                        return;
+                    }
+
+                    Write(true)(LogLevel.Error, ((Exception)args.ExceptionObject).Message);
+                };
+        }
+
+        /// <summary>
+        ///     Logs information to Console(always), and optionally logs it to the logging file.
         /// </summary>
         /// <param name="logLevel">Level of the log</param>
         /// <param name="message">Message Format</param>
@@ -83,7 +129,11 @@ namespace LeagueSharp.CommonEx.Core.Utils
         private static void Write(LogLevel logLevel, string message, bool logToFile, bool printColor, string memberName)
         {
             var format = string.Format(
-                "[{0} - {1}]: ({2}) -> {3}", DateTime.Now.TimeOfDay, logLevel, memberName, message);
+                "[{0} - {1}]: ({2}) -> {3}", 
+                DateTime.Now.TimeOfDay, 
+                logLevel, 
+                memberName, 
+                message);
 
             if (printColor)
             {
@@ -109,13 +159,14 @@ namespace LeagueSharp.CommonEx.Core.Utils
                         color = ConsoleColor.Yellow;
                         break;
                 }
+
                 Console.ForegroundColor = color;
             }
 
             Console.WriteLine(format);
             Console.ResetColor();
 
-            if (!logToFile && (int) logLevel < 3)
+            if (!logToFile && (int)logLevel < 3)
             {
                 return;
             }
@@ -138,20 +189,6 @@ namespace LeagueSharp.CommonEx.Core.Utils
             }
         }
 
-        /// <summary>
-        ///     Logs all exceptions that happen in the current AppDomain.
-        /// </summary>
-        internal static void LogAllExceptions()
-        {
-            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
-            {
-                if (!(args.ExceptionObject is Exception))
-                {
-                    return;
-                }
-
-                Write(true)(LogLevel.Error, ((Exception) args.ExceptionObject).Message);
-            };
-        }
+        #endregion
     }
 }

@@ -1,92 +1,140 @@
-﻿using System;
-using System.Drawing;
-using SharpDX;
-using SharpDX.Direct3D9;
-using Color = SharpDX.Color;
-
-namespace LeagueSharp.CommonEx.Core.Render._2D
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Sprite.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Sprite class which supports both <see cref="SharpDX.Direct3D9.Texture" /> and <see cref="Bitmap" /> for direct
+//   drawing onto a projection, also utilizes a handful of functions for easy texture manipulation, bitmaps are there
+//   to serve for any reverses as the original mapping of the picture.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core.Render._2D
 {
+    using System;
+    using System.Drawing;
+
+    using SharpDX;
+    using SharpDX.Direct3D9;
+
+    using Color = SharpDX.Color;
+
     /// <summary>
     ///     Sprite class which supports both <see cref="SharpDX.Direct3D9.Texture" /> and <see cref="Bitmap" /> for direct
-    ///     drawing onto a projection, also utilizes a handfull of functions for easy texture manipulation, bitmaps are there
+    ///     drawing onto a projection, also utilizes a handful of functions for easy texture manipulation, bitmaps are there
     ///     to serve for any reverses as the original mapping of the picture.
     /// </summary>
     public class Sprite : IDisposable, IComparable, ICloneable
     {
+        #region Fields
+
         /// <summary>
         ///     Mapping of a picture in a range of bits.
         /// </summary>
-        private Bitmap _bitmap;
+        private Bitmap bitmap;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         /// <summary>
+        ///     Initializes a new instance of the <see cref="Sprite" /> class.
         ///     Initializes a new <see cref="Sprite" /> class.
         /// </summary>
-        public Sprite() {}
+        public Sprite()
+        {
+        }
 
         /// <summary>
+        ///     Initializes a new instance of the <see cref="Sprite" /> class.
         ///     Initializes a new <see cref="Sprite" /> class.
         /// </summary>
-        /// <param name="bitmap">Bitmap</param>
+        /// <param name="bitmap">
+        ///     The Bitmap
+        /// </param>
         public Sprite(Bitmap bitmap)
         {
-            Bitmap = bitmap;
+            this.Bitmap = bitmap;
         }
 
         /// <summary>
-        ///     Initializes a new <see cref="Sprite" /> class.
+        ///     Initializes a new instance of the <see cref="Sprite" /> class.
         /// </summary>
-        /// <param name="texture">Texture</param>
-        /// <param name="scale">Scale</param>
-        /// <param name="rotation">Rotation</param>
-        /// <param name="color">Color</param>
+        /// <param name="texture">
+        ///     The Texture
+        /// </param>
+        /// <param name="scale">
+        ///     The Scale
+        /// </param>
+        /// <param name="rotation">
+        ///     The Rotation
+        /// </param>
+        /// <param name="color">
+        ///     The Color
+        /// </param>
         public Sprite(Texture texture, Vector2? scale, float rotation, Color? color)
         {
-            Texture = texture;
-            _bitmap = (Bitmap) Image.FromStream(BaseTexture.ToStream(texture, ImageFileFormat.Bmp));
-            Scale = scale ?? new Vector2(1, 1);
-            Rotation = rotation;
-            Color = color ?? Color.White;
+            this.Texture = texture;
+            this.bitmap = (Bitmap)Image.FromStream(BaseTexture.ToStream(texture, ImageFileFormat.Bmp));
+            this.Scale = scale ?? new Vector2(1, 1);
+            this.Rotation = rotation;
+            this.Color = color ?? Color.White;
         }
 
         /// <summary>
-        ///     Internally intializes a new <see cref="Sprite" /> class, used for clone-ability.
+        ///     Initializes a new instance of the <see cref="Sprite" /> class.
         /// </summary>
-        /// <param name="texture">Texture</param>
-        /// <param name="bitmap">Bitmap</param>
-        /// <param name="scale">Scale</param>
-        /// <param name="rotation">Rotation</param>
-        /// <param name="color">Color</param>
+        /// <param name="texture">
+        ///     The Texture
+        /// </param>
+        /// <param name="bitmap">
+        ///     The Bitmap
+        /// </param>
+        /// <param name="scale">
+        ///     The Scale
+        /// </param>
+        /// <param name="rotation">
+        ///     The Rotation
+        /// </param>
+        /// <param name="color">
+        ///     The Color
+        /// </param>
         internal Sprite(Texture texture, Bitmap bitmap, Vector2 scale, float rotation, Color color)
         {
-            Texture = texture;
-            _bitmap = bitmap;
-            Scale = scale;
-            Rotation = rotation;
-            Color = color;
+            this.Texture = texture;
+            this.bitmap = bitmap;
+            this.Scale = scale;
+            this.Rotation = rotation;
+            this.Color = color;
         }
 
         /// <summary>
-        ///     <see cref="Texture" /> class which is created from a memory buffer.
+        ///     Finalizes an instance of the <see cref="Sprite" /> class.
         /// </summary>
-        public Texture Texture { get; set; }
+        ~Sprite()
+        {
+            this.Dispose(false);
+        }
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
-        ///     Size value of the sprite.
-        /// </summary>
-        public Vector2 Scale { get; set; }
-
-        /// <summary>
-        ///     Rotation value in float degrees of the sprite.
-        /// </summary>
-        public float Rotation { get; set; }
-
-        /// <summary>
-        ///     Color value of the sprite.
-        /// </summary>
-        public Color Color { get; set; }
-
-        /// <summary>
-        ///     Mapping of a picture in a range of bits, creates a <see cref="Texture" /> from a memory buffer once replaced.
+        ///     Gets or sets the mapping of a picture in a range of bits, creates a <see cref="Texture" /> from a memory buffer
+        ///     once replaced.
         /// </summary>
         /// <unmanaged>
         ///     HRESULT D3DXCreateTextureFromFileInMemory([In] IDirect3DDevice9* pDevice,[In] const void* pSrcData,[In]
@@ -94,43 +142,88 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// </unmanaged>
         public Bitmap Bitmap
         {
-            get { return _bitmap; }
+            get
+            {
+                return this.bitmap;
+            }
+
             set
             {
-                _bitmap = value;
+                this.bitmap = value;
                 if (value != null)
                 {
-                    Texture = Texture.FromMemory(
-                        Drawing.Direct3DDevice, (byte[]) new ImageConverter().ConvertTo(value, typeof(byte[])),
-                        value.Width, value.Height, 0, Usage.None, Format.A1, Pool.Managed, Filter.Default,
-                        Filter.Default, 0);
+                    this.Texture = Texture.FromMemory(
+                        Drawing.Direct3DDevice, 
+                        (byte[])new ImageConverter().ConvertTo(value, typeof(byte[])), 
+                        value.Width, 
+                        value.Height, 
+                        0, 
+                        Usage.None, 
+                        Format.A1, 
+                        Pool.Managed, 
+                        Filter.Default, 
+                        Filter.Default, 
+                        0);
                 }
             }
         }
 
         /// <summary>
-        ///     Width component of the <see cref="Bitmap" /> currently stored in the <see cref="Sprite" /> instance.
+        ///     Gets or sets the color value of the sprite.
         /// </summary>
-        public int Width
-        {
-            get { return (int) (Bitmap.Width * Scale.X); }
-        }
+        public Color Color { get; set; }
 
         /// <summary>
-        ///     Height component of the <see cref="Bitmap" /> currently stored in the <see cref="Sprite" /> instance.
+        ///     Gets the height component of the <see cref="Bitmap" /> currently stored in the <see cref="Sprite" /> instance.
         /// </summary>
         public int Height
         {
-            get { return (int) (Bitmap.Height * Scale.Y); }
+            get
+            {
+                return (int)(this.Bitmap.Height * this.Scale.Y);
+            }
         }
 
         /// <summary>
-        ///     Size component of the <see cref="Bitmap" /> currently stored in the <see cref="Sprite" /> instance.
+        ///     Gets or sets the rotation value in float degrees of the sprite.
+        /// </summary>
+        public float Rotation { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the size value of the sprite.
+        /// </summary>
+        public Vector2 Scale { get; set; }
+
+        /// <summary>
+        ///     Gets the size component of the <see cref="Bitmap" /> currently stored in the <see cref="Sprite" /> instance.
         /// </summary>
         public Vector2 Size
         {
-            get { return new Vector2(Bitmap.Width, Bitmap.Height); }
+            get
+            {
+                return new Vector2(this.Bitmap.Width, this.Bitmap.Height);
+            }
         }
+
+        /// <summary>
+        ///     Gets or sets the <see cref="Texture" /> class which is created from a memory buffer.
+        /// </summary>
+        public Texture Texture { get; set; }
+
+        /// <summary>
+        ///     Gets the width component of the <see cref="Bitmap" /> currently stored in the <see cref="Sprite" /> instance.
+        /// </summary>
+        public int Width
+        {
+            get
+            {
+                return (int)(this.Bitmap.Width * this.Scale.X);
+            }
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         ///     Clones the <see cref="Sprite" /> class instance, and returns it as a general object.
@@ -138,7 +231,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// <returns>Object type of <see cref="Sprite" /></returns>
         public object Clone()
         {
-            return new Sprite(Texture, Bitmap, Scale, Rotation, Color);
+            return new Sprite(this.Texture, this.Bitmap, this.Scale, this.Rotation, this.Color);
         }
 
         /// <summary>
@@ -155,19 +248,19 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
             var sprite = obj as Sprite;
             if (sprite != null)
             {
-                return sprite.Bitmap == Bitmap && sprite.Texture == Texture ? 1 : 0;
+                return sprite.Bitmap == this.Bitmap && sprite.Texture == this.Texture ? 1 : 0;
             }
 
             var texture = obj as Texture;
             if (texture != null)
             {
-                return texture == Texture ? 1 : 0;
+                return texture == this.Texture ? 1 : 0;
             }
 
-            var bitmap = obj as Bitmap;
-            if (bitmap != null)
+            var bitmapObject = obj as Bitmap;
+            if (bitmapObject != null)
             {
-                return bitmap == Bitmap ? 1 : 0;
+                return bitmapObject == this.Bitmap ? 1 : 0;
             }
 
             return -1;
@@ -178,7 +271,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
         }
 
         /// <summary>
@@ -186,7 +279,7 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
         ///     EndScene block.
         /// </summary>
         /// <param name="sprite">Sprite sheet</param>
-        /// <param name="position">Position</param>
+        /// <param name="position">The Position</param>
         public void Draw(SharpDX.Direct3D9.Sprite sprite, Vector2 position)
         {
             if (sprite == null)
@@ -195,37 +288,36 @@ namespace LeagueSharp.CommonEx.Core.Render._2D
             }
 
             var matrix = sprite.Transform;
-            var nMatrix = (Matrix.Scaling(Scale.X, Scale.Y, 0)) * Matrix.RotationZ(Rotation) *
-                          Matrix.Translation(position.X, position.Y, 0);
+            var nMatrix = Matrix.Scaling(this.Scale.X, this.Scale.Y, 0) * Matrix.RotationZ(this.Rotation)
+                          * Matrix.Translation(position.X, position.Y, 0);
             sprite.Transform = nMatrix;
-            sprite.Draw(Texture, Color);
+            sprite.Draw(this.Texture, this.Color);
             sprite.Transform = matrix;
         }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
-        ///     Safe dispose of the sprite in both of finalization mode and dispose in fastcall.
+        ///     Safe dispose of the sprite in both of finalization mode and dispose in fast-call.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">Finalize indicator</param>
         private void Dispose(bool value)
         {
-            if (Texture != null)
+            if (this.Texture != null)
             {
-                Texture.Dispose();
-                Texture = null;
+                this.Texture.Dispose();
+                this.Texture = null;
             }
+
             if (value)
             {
-                Bitmap.Dispose();
-                Bitmap = null;
+                this.Bitmap.Dispose();
+                this.Bitmap = null;
             }
         }
 
-        /// <summary>
-        ///     Finalization of the class, thrown by GC when forgotten in memory.
-        /// </summary>
-        ~Sprite()
-        {
-            Dispose(false);
-        }
+        #endregion
     }
 }

@@ -1,8 +1,25 @@
-﻿#region
-
-#endregion
-
-namespace LeagueSharp.CommonEx.Core.Utils
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Spell.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   General Utils.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core.Utils
 {
     using LeagueSharp.SDK.Core.Enumerations;
 
@@ -11,6 +28,8 @@ namespace LeagueSharp.CommonEx.Core.Utils
     /// </summary>
     public static class Spell
     {
+        #region Public Methods and Operators
+
         /// <summary>
         ///     Returns if the spell is ready to use.
         /// </summary>
@@ -19,17 +38,17 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <returns>Is Spell Ready to use</returns>
         public static bool IsReady(this SpellDataInst spell, int t = 0)
         {
-            return (spell != null) &&
-                   (spell.Slot != SpellSlot.Unknown && t == 0
-                       ? spell.State == SpellState.Ready
-                       : (spell.State == SpellState.Ready ||
-                          (spell.State == SpellState.Cooldown && (spell.CooldownExpires - Game.Time) <= t / 1000f)));
+            return (spell != null)
+                   && (spell.Slot != SpellSlot.Unknown && t == 0
+                           ? spell.State == SpellState.Ready
+                           : (spell.State == SpellState.Ready
+                              || (spell.State == SpellState.Cooldown && (spell.CooldownExpires - Game.Time) <= t / 1000f)));
         }
 
         /// <summary>
         ///     Returns if the spell is ready to use.
         /// </summary>
-        /// <param name="spell">Spell</param>
+        /// <param name="spell">The Spell</param>
         /// <param name="t">Time Left</param>
         /// <returns>Is Spell Ready to use</returns>
         public static bool IsReady(this Wrappers.Spell spell, int t = 0)
@@ -40,7 +59,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <summary>
         ///     Returns if the spell is ready to use.
         /// </summary>
-        /// <param name="slot">SpellSlot</param>
+        /// <param name="slot">The SpellSlot</param>
         /// <param name="t">Time Left</param>
         /// <returns>Is Spell Ready to use</returns>
         public static bool IsReady(this SpellSlot slot, int t = 0)
@@ -53,10 +72,12 @@ namespace LeagueSharp.CommonEx.Core.Utils
         ///     Converts a spell cast state into a boolean.
         /// </summary>
         /// <param name="castState">Spell Cast State</param>
-        /// <returns>Boolean</returns>
+        /// <returns>The <see cref="bool" /></returns>
         public static bool ToBoolean(this CastStates castState)
         {
             return castState == CastStates.SuccessfullyCasted;
         }
+
+        #endregion
     }
 }

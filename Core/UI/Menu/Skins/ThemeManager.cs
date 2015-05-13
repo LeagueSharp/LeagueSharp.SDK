@@ -1,35 +1,82 @@
-﻿using LeagueSharp.CommonEx.Core.UI.Skins.Default;
-
-namespace LeagueSharp.CommonEx.Core.UI.Skins
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ThemeManager.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Manages themes.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core.UI.Skins
 {
+    using LeagueSharp.SDK.Core.UI.Skins.Default;
+
     /// <summary>
     ///     Manages themes.
     /// </summary>
     public class ThemeManager
     {
-        private static Theme _default, _current;
+        #region Static Fields
 
         /// <summary>
-        /// Gets the default theme.
+        ///     The current theme.
         /// </summary>
-        /// <value>
-        /// The default theme.
-        /// </value>
-        public static Theme Default
-        {
-            get { return (_default ?? (_default = new DefaultTheme())); }
-        }
+        private static Theme current;
 
         /// <summary>
-        /// Gets or sets the current theme.
+        ///     The default theme.
+        /// </summary>
+        private static Theme @default;
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets or sets the current theme.
         /// </summary>
         /// <value>
-        /// The current theme.
+        ///     The current theme.
         /// </value>
         public static Theme Current
         {
-            get { return (_current ?? (_current = Default)); }
-            set { _current = value; }
+            get
+            {
+                return current ?? (current = Default);
+            }
+
+            set
+            {
+                current = value;
+            }
         }
+
+        /// <summary>
+        ///     Gets the default theme.
+        /// </summary>
+        /// <value>
+        ///     The default theme.
+        /// </value>
+        public static Theme Default
+        {
+            get
+            {
+                return @default ?? (@default = new DefaultTheme());
+            }
+        }
+
+        #endregion
     }
 }

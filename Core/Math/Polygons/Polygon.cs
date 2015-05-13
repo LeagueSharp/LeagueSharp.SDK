@@ -1,79 +1,114 @@
-﻿#region
-
-using System.Collections.Generic;
-using System.Linq;
-using LeagueSharp.CommonEx.Clipper;
-using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
-using SharpDX;
-using Color = System.Drawing.Color;
-
-#endregion
-
-namespace LeagueSharp.CommonEx.Core.Math.Polygons
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Polygon.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Base class representing a polygon.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core.Math.Polygons
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using LeagueSharp.SDK.Clipper;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+
+    using SharpDX;
+
+    using Color = System.Drawing.Color;
+
     /// <summary>
     ///     Base class representing a polygon.
     /// </summary>
     public class Polygon
     {
+        #region Fields
+
         /// <summary>
-        ///     List of all points in the polygon.
+        ///     Local list of all points in the polygon.
         /// </summary>
-        public List<Vector2> Points = new List<Vector2>();
+        private List<Vector2> points = new List<Vector2>();
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the list of all points in the polygon.
+        /// </summary>
+        public List<Vector2> Points
+        {
+            get
+            {
+                return this.points;
+            }
+
+            set
+            {
+                this.points = value;
+            }
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         ///     Adds a Vector2 to the points
         /// </summary>
-        /// <param name="point">Point</param>
+        /// <param name="point">The Point</param>
         public void Add(Vector2 point)
         {
-            Points.Add(point);
+            this.Points.Add(point);
         }
 
         /// <summary>
         ///     Converts Vector3 to 2D, then adds it to the points.
         /// </summary>
-        /// <param name="point">Point</param>
+        /// <param name="point">The Point</param>
         public void Add(Vector3 point)
         {
-            Points.Add(point.ToVector2());
+            this.Points.Add(point.ToVector2());
         }
 
         /// <summary>
         ///     Adds all of the points in the polygon to this instance.
         /// </summary>
-        /// <param name="polygon">Polygon</param>
+        /// <param name="polygon">The Polygon</param>
         public void Add(Polygon polygon)
         {
             foreach (var point in polygon.Points)
             {
-                Points.Add(point);
+                this.Points.Add(point);
             }
-        }
-
-        /// <summary>
-        ///     Converts all the points to the Clipper Library format
-        /// </summary>
-        /// <returns>List of IntPoint's</returns>
-        public List<IntPoint> ToClipperPath()
-        {
-            var result = new List<IntPoint>(Points.Count);
-            result.AddRange(Points.Select(point => new IntPoint(point.X, point.Y)));
-            return result;
         }
 
         /// <summary>
         ///     Draws all of the points in the polygon connected.
         /// </summary>
-        /// <param name="color">Color</param>
+        /// <param name="color">The Color</param>
         /// <param name="width">Width of lines</param>
         public virtual void Draw(Color color, int width = 1)
         {
-            for (var i = 0; i <= Points.Count - 1; i++)
+            for (var i = 0; i <= this.Points.Count - 1; i++)
             {
-                var nextIndex = (Points.Count - 1 == i) ? 0 : (i + 1);
-                var from = Drawing.WorldToScreen(Points[i].ToVector3());
-                var to = Drawing.WorldToScreen(Points[nextIndex].ToVector3());
+                var nextIndex = (this.Points.Count - 1 == i) ? 0 : (i + 1);
+                var from = Drawing.WorldToScreen(this.Points[i].ToVector3());
+                var to = Drawing.WorldToScreen(this.Points[nextIndex].ToVector3());
 
                 Drawing.DrawLine(from[0], from[1], to[0], to[1], width, color);
             }
@@ -82,21 +117,21 @@ namespace LeagueSharp.CommonEx.Core.Math.Polygons
         /// <summary>
         ///     Gets if the Vector2 is inside the polygon.
         /// </summary>
-        /// <param name="point">Point</param>
+        /// <param name="point">The Point</param>
         /// <returns>Whether the Vector2 is inside the polygon</returns>
         public bool IsInside(Vector2 point)
         {
-            return !IsOutside(point);
+            return !this.IsOutside(point);
         }
 
         /// <summary>
         ///     Gets if the Vector3 is inside the polygon.
         /// </summary>
-        /// <param name="point">Point</param>
+        /// <param name="point">The Point</param>
         /// <returns>Whether the Vector3 is inside the polygon</returns>
         public bool IsInside(Vector3 point)
         {
-            return !IsOutside(point.ToVector2());
+            return !this.IsOutside(point.ToVector2());
         }
 
         /// <summary>
@@ -106,18 +141,31 @@ namespace LeagueSharp.CommonEx.Core.Math.Polygons
         /// <returns>Whether the <see cref="GameObject" />'s position is inside the polygon</returns>
         public bool IsInside(GameObject gameObject)
         {
-            return !IsOutside(gameObject.Position.ToVector2());
+            return !this.IsOutside(gameObject.Position.ToVector2());
         }
 
         /// <summary>
         ///     Gets if the position is outside of the polygon.
         /// </summary>
-        /// <param name="point">Point</param>
+        /// <param name="point">The Point</param>
         /// <returns>Whether the Vector2 is inside the polygon</returns>
         public bool IsOutside(Vector2 point)
         {
             var p = new IntPoint(point.X, point.Y);
-            return Clipper.Clipper.PointInPolygon(p, ToClipperPath()) != 1;
+            return Clipper.PointInPolygon(p, this.ToClipperPath()) != 1;
         }
+
+        /// <summary>
+        ///     Converts all the points to the Clipper Library format
+        /// </summary>
+        /// <returns>List of <c>IntPoint</c>'s</returns>
+        public List<IntPoint> ToClipperPath()
+        {
+            var result = new List<IntPoint>(this.Points.Count);
+            result.AddRange(this.Points.Select(point => new IntPoint(point.X, point.Y)));
+            return result;
+        }
+
+        #endregion
     }
 }

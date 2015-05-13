@@ -87,11 +87,13 @@
     <Compile Include="Core\Enumerations\OrbwalkerType.cs" />
     <Compile Include="Core\Enumerations\PerformanceType.cs" />
     <Compile Include="Core\Enumerations\TargetSelectorMode.cs" />
+    <Compile Include="Core\Enumerations\TurretShotType.cs" />
     <Compile Include="Core\Enumerations\WindowsMessages.cs" />
     <Compile Include="Core\Events\Gapcloser.cs" />
     <Compile Include="Core\Events\Turret.cs" />
     <Compile Include="Core\Extensions\Streams.cs" />
-    <Compile Include="Core\Items.cs" />
+    <Compile Include="Core\Utils\Items.cs" />
+    <Compile Include="Core\Math\ConvexHull.cs" />
     <Compile Include="Core\Math\Geometry.cs" />
     <Compile Include="Core\Math\Prediction\Health.cs" />
     <Compile Include="Core\Orbwalker.cs" />
@@ -122,7 +124,7 @@
     <Compile Include="Core\UI\Notifications\Notification.cs" />
     <Compile Include="Core\UI\Notifications\NotificationBase.cs" />
     <Compile Include="Core\UI\Notifications\NotificationFlags.cs" />
-    <Compile Include="Core\Spells.cs" />
+    <Compile Include="Core\Utils\Spells.cs" />
     <Compile Include="Core\UI\Developer\Developer.cs" />
     <Compile Include="Core\UI\Notifications\Notifications.cs" />
     <Compile Include="Core\Utils\AutoAttack.cs" />
@@ -144,7 +146,6 @@
     <Compile Include="Core\Utils\Cursor.cs" />
     <Compile Include="Core\Utils\WindowsKeys.cs" />
     <Compile Include="Core\Utils\Math.cs" />
-    <Compile Include="Core\Math\MEC.cs" />
     <Compile Include="Core\Math\Polygons\Arc.cs" />
     <Compile Include="Core\Math\Polygons\Circle.cs" />
     <Compile Include="Core\Math\Polygons\Line.cs" />
@@ -188,7 +189,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Third_Party\Clipper\Clipper.cs" />
+    <Compile Include="Third_Party\Clipper\Clipper.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

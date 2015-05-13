@@ -24,11 +24,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.CommonEx.Core;
-    using LeagueSharp.CommonEx.Core.Extensions;
-    using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
-    using LeagueSharp.CommonEx.Core.Wrappers;
     using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
 
     using SharpDX;
 

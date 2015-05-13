@@ -1,151 +1,219 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
-using SharpDX;
-
-namespace LeagueSharp.CommonEx.Core.Events
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Dash.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Dash class, contains the OnDash event for tracking for Dash events of a champion.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core.Events
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+
+    using SharpDX;
+
     /// <summary>
     ///     Dash class, contains the OnDash event for tracking for Dash events of a champion.
     /// </summary>
     public static class Dash
     {
+        #region Static Fields
+
         /// <summary>
         ///     DetectedDashes list.
         /// </summary>
         private static readonly Dictionary<int, DashArgs> DetectedDashes = new Dictionary<int, DashArgs>();
 
+        #endregion
+
+        #region Constructors and Destructors
+
         /// <summary>
-        ///     Static Constructor.
+        ///     Initializes static members of the <see cref="Dash" /> class.
         /// </summary>
         static Dash()
         {
             Obj_AI_Base.OnNewPath += ObjAiHeroOnOnNewPath;
         }
 
+        #endregion
+
+        #region Delegates
+
         /// <summary>
-        ///     OnDashDelegate
+        ///     OnDash Delegate.
         /// </summary>
-        /// <param name="sender">Sender</param>
+        /// <param name="sender">The Sender</param>
         /// <param name="e">Dash Arguments Container</param>
         public delegate void OnDashDelegate(object sender, DashArgs e);
 
+        #endregion
+
+        #region Public Events
+
         /// <summary>
-        ///     OnDash Event
+        ///     OnDash Event.
         /// </summary>
         public static event OnDashDelegate OnDash;
 
+        #endregion
+
+        #region Public Methods and Operators
+
         /// <summary>
-        ///     New Path subscribed event function.
+        ///     Gets the speed of the dashing unit if it is dashing.
         /// </summary>
-        /// <param name="sender"><see cref="Obj_AI_Base" /> sender</param>
-        /// <param name="args"></param>
-        private static void ObjAiHeroOnOnNewPath(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
+        /// <param name="unit">
+        ///     The unit.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="DashArgs" />.
+        /// </returns>
+        public static DashArgs GetDashInfo(this Obj_AI_Base unit)
         {
-            if (sender is Obj_AI_Hero && ((Obj_AI_Hero) (sender)).IsValid && args.IsDash)
-            {
-                if (!DetectedDashes.ContainsKey(sender.NetworkId))
-                {
-                    DetectedDashes.Add(sender.NetworkId, new DashArgs());
-                }
-                var path = new List<Vector2> { sender.ServerPosition.ToVector2() };
-                path.AddRange(args.Path.ToList().ToVector2());
-
-                DetectedDashes[sender.NetworkId] = new DashArgs
-                {
-                    StartTick = Variables.TickCount - Game.Ping / 2,
-                    Speed = args.Speed,
-                    StartPos = sender.ServerPosition.ToVector2(),
-                    Unit = sender,
-                    Path = path,
-                    EndPos = path.Last(),
-                    EndTick =
-                        Variables.TickCount - Game.Ping / 2 +
-                        ((int)
-                            ((1000 *
-                              (DetectedDashes[sender.NetworkId].EndPos.Distance(
-                                  DetectedDashes[sender.NetworkId].StartPos) / DetectedDashes[sender.NetworkId].Speed)))),
-                    Duration = DetectedDashes[sender.NetworkId].EndTick - DetectedDashes[sender.NetworkId].StartTick
-                };
-
-                if (OnDash != null)
-                {
-                    OnDash(
-                        System.Reflection.MethodBase.GetCurrentMethod().DeclaringType, DetectedDashes[sender.NetworkId]);
-                }
-            }
+            DashArgs value;
+            return DetectedDashes.TryGetValue(unit.NetworkId, out value) ? value : new DashArgs();
         }
 
         /// <summary>
         ///     Returns true if the unit is dashing.
         /// </summary>
+        /// <param name="unit">
+        ///     The unit.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
         public static bool IsDashing(this Obj_AI_Base unit)
         {
-            if (DetectedDashes.ContainsKey(unit.NetworkId))
+            DashArgs value;
+            if (DetectedDashes.TryGetValue(unit.NetworkId, out value))
             {
-                return DetectedDashes[unit.NetworkId].EndTick > Variables.TickCount;
+                return value.EndTick > Variables.TickCount;
             }
+
             return false;
         }
 
-        /// <summary>
-        ///     Gets the speed of the dashing unit if it is dashing.
-        /// </summary>
-        public static DashArgs GetDashInfo(this Obj_AI_Base unit)
-        {
-            return DetectedDashes.ContainsKey(unit.NetworkId) ? DetectedDashes[unit.NetworkId] : new DashArgs();
-        }
+        #endregion
+
+        #region Methods
 
         /// <summary>
-        ///     Dash Container
+        ///     New Path subscribed event function.
+        /// </summary>
+        /// <param name="sender"><see cref="Obj_AI_Base" /> sender</param>
+        /// <param name="args">New Path event data</param>
+        private static void ObjAiHeroOnOnNewPath(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
+        {
+            var hero = sender as Obj_AI_Hero;
+            if (hero != null && hero.IsValid && args.IsDash)
+            {
+                if (!DetectedDashes.ContainsKey(hero.NetworkId))
+                {
+                    DetectedDashes.Add(hero.NetworkId, new DashArgs());
+                }
+
+                var path = new List<Vector2> { hero.ServerPosition.ToVector2() };
+                path.AddRange(args.Path.ToList().ToVector2());
+
+                DetectedDashes[hero.NetworkId] = new DashArgs
+                                                     {
+                                                         StartTick = Variables.TickCount - Game.Ping / 2, 
+                                                         Speed = args.Speed, StartPos = hero.ServerPosition.ToVector2(), 
+                                                         Unit = sender, Path = path, EndPos = path.Last(), 
+                                                         EndTick =
+                                                             Variables.TickCount - Game.Ping / 2
+                                                             + ((int)
+                                                                (1000
+                                                                 * (DetectedDashes[hero.NetworkId].EndPos.Distance(
+                                                                     DetectedDashes[hero.NetworkId].StartPos)
+                                                                    / DetectedDashes[hero.NetworkId].Speed))), 
+                                                         Duration =
+                                                             DetectedDashes[hero.NetworkId].EndTick
+                                                             - DetectedDashes[hero.NetworkId].StartTick
+                                                     };
+
+                if (OnDash != null)
+                {
+                    OnDash(MethodBase.GetCurrentMethod().DeclaringType, DetectedDashes[hero.NetworkId]);
+                }
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        ///     Dash event data.
         /// </summary>
         public class DashArgs : EventArgs
         {
-            /// <summary>
-            ///     Dash Duration
-            /// </summary>
-            public int Duration;
+            #region Public Properties
 
             /// <summary>
-            ///     Dash Ending Position
+            ///     Gets or sets the dash duration.
             /// </summary>
-            public Vector2 EndPos;
+            public int Duration { get; set; }
 
             /// <summary>
-            ///     Dash End Tick
+            ///     Gets or sets the end position.
             /// </summary>
-            public int EndTick;
+            public Vector2 EndPos { get; set; }
 
             /// <summary>
-            ///     Is a Blinking (Game Mechanic) Dash.
+            ///     Gets or sets the end tick.
             /// </summary>
-            public bool IsBlink;
+            public int EndTick { get; set; }
 
             /// <summary>
-            ///     Dash Path
+            ///     Gets or sets a value indicating whether is blink.
             /// </summary>
-            public List<Vector2> Path;
+            public bool IsBlink { get; set; }
 
             /// <summary>
-            ///     Dash Speed
+            ///     Gets or sets the path.
             /// </summary>
-            public float Speed;
+            public List<Vector2> Path { get; set; }
 
             /// <summary>
-            ///     Dash Starting Position
+            ///     Gets or sets the speed.
             /// </summary>
-            public Vector2 StartPos;
+            public float Speed { get; set; }
 
             /// <summary>
-            ///     Dash Starting Tick
+            ///     Gets or sets the start position.
             /// </summary>
-            public int StartTick;
+            public Vector2 StartPos { get; set; }
 
             /// <summary>
-            ///     Dash Unit
+            ///     Gets or sets the start tick.
             /// </summary>
-            public Obj_AI_Base Unit;
+            public int StartTick { get; set; }
+
+            /// <summary>
+            ///     Gets or sets the unit.
+            /// </summary>
+            public Obj_AI_Base Unit { get; set; }
+
+            #endregion
         }
     }
 }

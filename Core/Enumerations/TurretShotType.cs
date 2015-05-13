@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OnValueChangedEventArgs.cs" company="LeagueSharp">
+// <copyright file="TurretShotType.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,47 +16,25 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Arguments for the OnValueChanged event.
+//   Enumeration containing the type of turret shot.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI
+
+namespace LeagueSharp.SDK.Core.Enumerations
 {
-    using System;
-
-    using LeagueSharp.SDK.Core.UI.Abstracts;
-
     /// <summary>
-    ///     Arguments for the OnValueChanged event.
+    ///     Enumeration containing the type of turret shot.
     /// </summary>
-    /// <typeparam name="T">
-    ///     <see cref="AMenuValue" /> type
-    /// </typeparam>
-    public class OnValueChangedEventArgs<T> : EventArgs
-        where T : AMenuValue
+    public enum TurretShotType
     {
-        #region Constructors and Destructors
+        /// <summary>
+        ///     The turret fired a shot.
+        /// </summary>
+        TurretShot, 
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="OnValueChangedEventArgs{T}" /> class.
-        ///     Initializes a new instance of the OnValueChangedEventArgs class.
+        ///     The turret shot hit the unit.
         /// </summary>
-        /// <param name="value">
-        ///     The value.
-        /// </param>
-        public OnValueChangedEventArgs(T value)
-        {
-            this.Value = value;
-        }
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        ///     Gets the new Value.
-        /// </summary>
-        public T Value { get; private set; }
-
-        #endregion
+        TurretShotHit
     }
 }

@@ -1,76 +1,54 @@
-﻿#region
-
-using System.Collections.Generic;
-using System.Linq;
-using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
-using SharpDX;
-
-#endregion
-
-namespace LeagueSharp.CommonEx.Core.Math.Prediction
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Path.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Path class, contains path tracker and a container
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core.Math.Prediction
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+
+    using SharpDX;
+
     /// <summary>
-    ///     Path class, contains path tracker and a containter
+    ///     Path class, contains path tracker and a container
     /// </summary>
     public class Path
     {
-        /// <summary>
-        ///     Stored Path Container, contains a stored path
-        /// </summary>
-        public class StoredPath
-        {
-            /// <summary>
-            ///     Vector2 list of the path.
-            /// </summary>
-            public List<Vector2> Path;
-
-            /// <summary>
-            ///     Tick of the stored path.
-            /// </summary>
-            public int Tick;
-
-            /// <summary>
-            ///     Currect tick of the path.
-            /// </summary>
-            public double Time
-            {
-                get { return (Variables.TickCount - Tick) / 1000d; }
-            }
-
-            /// <summary>
-            ///     Number of waypoints within the path.
-            /// </summary>
-            public int WaypointCount
-            {
-                get { return Path.Count; }
-            }
-
-            /// <summary>
-            ///     Starting point of the path.
-            /// </summary>
-            public Vector2 StartPoint
-            {
-                get { return Path.FirstOrDefault(); }
-            }
-
-            /// <summary>
-            ///     Ending point of the path.
-            /// </summary>
-            public Vector2 EndPoint
-            {
-                get { return Path.LastOrDefault(); }
-            }
-        }
-
         /// <summary>
         ///     Path Tracker class, tracks a given path.
         /// </summary>
         public static class PathTracker
         {
+            #region Constants
+
             /// <summary>
             ///     Maximum time of a path track.
             /// </summary>
             private const double MaxTime = 1.5d;
+
+            #endregion
+
+            #region Static Fields
 
             /// <summary>
             ///     Stored Path list
@@ -78,13 +56,95 @@ namespace LeagueSharp.CommonEx.Core.Math.Prediction
             private static readonly Dictionary<int, List<StoredPath>> StoredPaths =
                 new Dictionary<int, List<StoredPath>>();
 
+            #endregion
+
+            #region Constructors and Destructors
+
             /// <summary>
-            ///     Static consturctor
+            ///     Initializes static members of the <see cref="PathTracker" /> class.
             /// </summary>
             static PathTracker()
             {
                 Obj_AI_Base.OnNewPath += Obj_AI_Hero_OnNewPath;
             }
+
+            #endregion
+
+            #region Public Methods and Operators
+
+            /// <summary>
+            ///     Returns the current path of a specific unit.
+            /// </summary>
+            /// <param name="unit">The specific unit</param>
+            /// <returns>
+            ///     <see cref="StoredPath" />
+            /// </returns>
+            public static StoredPath GetCurrentPath(Obj_AI_Base unit)
+            {
+                List<StoredPath> value;
+                return StoredPaths.TryGetValue(unit.NetworkId, out value) ? value.LastOrDefault() : new StoredPath();
+            }
+
+            /// <summary>
+            ///     Returns the Root-mean-squared-speed of the specific unit.
+            /// </summary>
+            /// <param name="unit">The specific unit</param>
+            /// <param name="maxT">Max time</param>
+            /// <returns>The mean speed</returns>
+            public static double GetMeanSpeed(Obj_AI_Base unit, double maxT)
+            {
+                var paths = GetStoredPaths(unit, MaxTime);
+                var distance = 0d;
+                if (paths.Count > 0)
+                {
+                    // Assume that the unit was moving for the first path:
+                    distance += (maxT - paths[0].Time) * unit.MoveSpeed;
+
+                    for (var i = 0; i < paths.Count - 1; i++)
+                    {
+                        var currentPath = paths[i];
+                        var nextPath = paths[i + 1];
+
+                        if (currentPath.WaypointCount > 0)
+                        {
+                            distance += Math.Min(
+                                (currentPath.Time - nextPath.Time) * unit.MoveSpeed, 
+                                currentPath.Path.PathLength());
+                        }
+                    }
+
+                    // Take into account the last path:
+                    var lastPath = paths.Last();
+                    if (lastPath.WaypointCount > 0)
+                    {
+                        distance += Math.Min(lastPath.Time * unit.MoveSpeed, lastPath.Path.PathLength());
+                    }
+                }
+                else
+                {
+                    return unit.MoveSpeed;
+                }
+
+                return distance / maxT;
+            }
+
+            /// <summary>
+            ///     Returns the stored paths from the list for a specific unit.
+            /// </summary>
+            /// <param name="unit">The specific unit</param>
+            /// <param name="maxT">Max time</param>
+            /// <returns>List of <see cref="StoredPath" /></returns>
+            public static List<StoredPath> GetStoredPaths(Obj_AI_Base unit, double maxT)
+            {
+                List<StoredPath> value;
+                return StoredPaths.TryGetValue(unit.NetworkId, out value)
+                           ? value.Where(p => p.Time < maxT).ToList()
+                           : new List<StoredPath>();
+            }
+
+            #endregion
+
+            #region Methods
 
             /// <summary>
             ///     On New Path subscribed event function.
@@ -112,75 +172,71 @@ namespace LeagueSharp.CommonEx.Core.Math.Prediction
                 }
             }
 
-            /// <summary>
-            ///     Returns the stored paths from the list for a specific unit.
-            /// </summary>
-            /// <param name="unit">The specific unit</param>
-            /// <param name="maxT">Max time</param>
-            /// <returns>List of <see cref="StoredPath" /></returns>
-            public static List<StoredPath> GetStoredPaths(Obj_AI_Base unit, double maxT)
-            {
-                return StoredPaths.ContainsKey(unit.NetworkId)
-                    ? StoredPaths[unit.NetworkId].Where(p => p.Time < maxT).ToList()
-                    : new List<StoredPath>();
-            }
+            #endregion
+        }
+
+        /// <summary>
+        ///     Stored Path Container, contains a stored path
+        /// </summary>
+        public class StoredPath
+        {
+            #region Public Properties
 
             /// <summary>
-            ///     Returns the current path of a specific unit.
+            /// Gets the end point.
             /// </summary>
-            /// <param name="unit">The specific unit</param>
-            /// <returns>
-            ///     <see cref="StoredPath" />
-            /// </returns>
-            public static StoredPath GetCurrentPath(Obj_AI_Base unit)
+            public Vector2 EndPoint
             {
-                return StoredPaths.ContainsKey(unit.NetworkId)
-                    ? StoredPaths[unit.NetworkId].LastOrDefault()
-                    : new StoredPath();
-            }
-
-            /// <summary>
-            ///     Returns the Root-mean-squared-speed of the specific unit.
-            /// </summary>
-            /// <param name="unit">The specific unit</param>
-            /// <param name="maxT">Max time</param>
-            /// <returns></returns>
-            public static double GetMeanSpeed(Obj_AI_Base unit, double maxT)
-            {
-                var paths = GetStoredPaths(unit, MaxTime);
-                var distance = 0d;
-                if (paths.Count > 0)
+                get
                 {
-                    //Assume that the unit was moving for the first path:
-                    distance += (maxT - paths[0].Time) * unit.MoveSpeed;
-
-                    for (var i = 0; i < paths.Count - 1; i++)
-                    {
-                        var currentPath = paths[i];
-                        var nextPath = paths[i + 1];
-
-                        if (currentPath.WaypointCount > 0)
-                        {
-                            distance += System.Math.Min(
-                                (currentPath.Time - nextPath.Time) * unit.MoveSpeed, currentPath.Path.PathLength());
-                        }
-                    }
-
-                    //Take into account the last path:
-                    var lastPath = paths.Last();
-                    if (lastPath.WaypointCount > 0)
-                    {
-                        distance += System.Math.Min(lastPath.Time * unit.MoveSpeed, lastPath.Path.PathLength());
-                    }
+                    return this.Path.LastOrDefault();
                 }
-                else
-                {
-                    return unit.MoveSpeed;
-                }
-
-
-                return distance / maxT;
             }
+
+            /// <summary>
+            /// Gets or sets the path.
+            /// </summary>
+            public List<Vector2> Path { get; set; }
+
+            /// <summary>
+            /// Gets the start point.
+            /// </summary>
+            public Vector2 StartPoint
+            {
+                get
+                {
+                    return this.Path.FirstOrDefault();
+                }
+            }
+
+            /// <summary>
+            /// Gets or sets the tick.
+            /// </summary>
+            public int Tick { get; set; }
+
+            /// <summary>
+            ///     Gets the current tick of the path.
+            /// </summary>
+            public double Time
+            {
+                get
+                {
+                    return (Variables.TickCount - this.Tick) / 1000d;
+                }
+            }
+
+            /// <summary>
+            ///     Gets the number of waypoints within the path.
+            /// </summary>
+            public int WaypointCount
+            {
+                get
+                {
+                    return this.Path.Count;
+                }
+            }
+
+            #endregion
         }
     }
 }

@@ -41,7 +41,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         #region Fields
 
         /// <summary>
-        ///     TODO The champion token.
+        ///     The Champion Token
         /// </summary>
         private readonly JToken championToken;
 
@@ -94,7 +94,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     Gets the title of the champion.
         /// </summary>
-        /// <example>"Ezreal" - "the Prodigal Explorer"</example>
+        /// <example>"<c>Ezreal</c>" - "the Prodigal Explorer"</example>
         /// <value>Title of champion</value>
         public string Title
         {
@@ -131,7 +131,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         #region Fields
 
         /// <summary>
-        ///     TODO The spell token.
+        ///     The Spell Token.
         /// </summary>
         private readonly JToken spellToken;
 
@@ -143,7 +143,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         ///     Initializes a new instance of the <see cref="JsonSpellWrapper" /> class.
         /// </summary>
         /// <param name="spellToken">
-        ///     TODO The spell token.
+        ///     The spell token.
         /// </param>
         internal JsonSpellWrapper(JToken spellToken)
         {
@@ -155,9 +155,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
         #region Public Properties
 
         /// <summary>
-        ///     Gets the cooldown of the spell as an array. The array matches the level of the spell.
+        ///     Gets the cool-down of the spell as an array. The array matches the level of the spell.
         /// </summary>
-        /// <value>Cooldown of the spell.</value>
+        /// <value>Cool-down of the spell.</value>
         public float[] Cooldown
         {
             get
@@ -167,10 +167,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
-        ///     Gets the cooldown of the spell, with a '/' between each cooldown.
+        ///     Gets the cool-down of the spell, with a '/' between each cool-down.
         /// </summary>
-        /// <example>1/2/3/4/5</example>
-        /// <value>Cooldown of the spell as a string.</value>
+        /// <example>
+        ///     <c>1/2/3/4/5</c>
+        /// </example>
+        /// <value>Cool-down of the spell as a string.</value>
         public string CooldownString
         {
             get
@@ -182,7 +184,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     Gets an array, containing the cost of the spell. The array matches the level of the spell.
         /// </summary>
-        /// <value>Int[] of spell clost.</value>
+        /// <value><c>int</c> array of spell cost.</value>
         public int[] Cost
         {
             get
@@ -194,7 +196,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     Gets the cost of the spell, with a '/' between each cost.
         /// </summary>
-        /// <example>1/2/3/4/5</example>
+        /// <example>
+        ///     <c>1/2/3/4/5</c>
+        /// </example>
         /// <value>Cost of the spell as a string.</value>
         public string CostString
         {
@@ -207,7 +211,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     Gets the type of cost needed to cast the spell.
         /// </summary>
-        /// <example>Mana</example>
+        /// <example>
+        ///     <c>Mana</c>
+        /// </example>
         /// <value>Type of cost</value>
         public string CostType
         {
@@ -232,7 +238,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     Gets the damage of the spell, with a '/' between each damage.
         /// </summary>
-        /// <example>1/2/3/4/5</example>
+        /// <example>
+        ///     <c>1/2/3/4/5</c>
+        /// </example>
         /// <value>Damage of the spell as a string.</value>
         public string DamageString
         {
@@ -245,7 +253,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     Gets the description of the spell.
         /// </summary>
-        /// <value>Description</value>
+        /// <value>The Description</value>
         public string Description
         {
             get
@@ -257,7 +265,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     Gets the name of the spell.
         /// </summary>
-        /// <value>Name of the spel.</value>
+        /// <value>Name of the spell.</value>
         public string Key
         {
             get
@@ -293,7 +301,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     Gets the range of the spell.
         /// </summary>
-        /// <value>Range</value>
+        /// <value>The Range</value>
         public int Range
         {
             get

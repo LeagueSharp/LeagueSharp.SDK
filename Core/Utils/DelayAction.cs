@@ -1,20 +1,39 @@
-﻿#region
-
-using System;
-using System.Collections.Generic;
-using System.Threading;
-
-using LeagueSharp.CommonEx.Core.Signals;
-
-#endregion
-
-namespace LeagueSharp.CommonEx.Core.Utils
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DelayAction.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Delays actions by a set time.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core.Utils
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+
+    using LeagueSharp.SDK.Core.Signals;
+
     /// <summary>
     ///     Delays actions by a set time.
     /// </summary>
     public class DelayAction
     {
+        #region Public Methods and Operators
+
         /// <summary>
         ///     Adds a new delayed action.
         /// </summary>
@@ -28,18 +47,18 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <summary>
         ///     Adds a new delayed action, casting the time to an integer.
         /// </summary>
-        /// <param name="time">The time(in miliseconds) to call the function.</param>
+        /// <param name="time">The time(in milliseconds) to call the function.</param>
         /// <param name="func">The function to call once the <paramref name="time" /> has expired.</param>
         public static void Add(float time, Action func)
         {
-            Add(new DelayActionItem((int) time, func, new CancellationToken(false)));
+            Add(new DelayActionItem((int)time, func, new CancellationToken(false)));
         }
 
         /// <summary>
         ///     Adds a new delayed action with a cancelation token. Use the <see cref="CancellationTokenSource" /> class for
         ///     tokens.
         /// </summary>
-        /// <param name="time">The time(in miliseconds) to call the function.</param>
+        /// <param name="time">The time(in milliseconds) to call the function.</param>
         /// <param name="func">The function to call once the <paramref name="time" /> has expired.</param>
         /// <param name="token">The cancelation token.</param>
         public static void Add(int time, Action func, CancellationToken token)
@@ -51,12 +70,12 @@ namespace LeagueSharp.CommonEx.Core.Utils
         ///     Adds a new delayed action with a cancelation token. Use the <see cref="CancellationTokenSource" /> class for
         ///     tokens.
         /// </summary>
-        /// <param name="time">The time(in miliseconds) to call the function. (Gets casted into an integer)</param>
+        /// <param name="time">The time(in milliseconds) to call the function. (Gets casted into an integer)</param>
         /// <param name="func">The function to call once the <paramref name="time" /> has expired.</param>
         /// <param name="token">The cancelation token.</param>
         public static void Add(float time, Action func, CancellationToken token)
         {
-            Add(new DelayActionItem((int) time, func, token));
+            Add(new DelayActionItem((int)time, func, token));
         }
 
         /// <summary>
@@ -65,50 +84,53 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <param name="item">The <see cref="DelayActionItem" /> to add.</param>
         public static void Add(DelayActionItem item)
         {
-            Signal.Create(delegate(object sender, Signal.RaisedArgs args)
-            {
-                var delayActionItem = (DelayActionItem) args.Signal.Properties["DelayActionItem"];
+            Signal.Create(
+                delegate(object sender, Signal.RaisedArgs args)
+                    {
+                        var delayActionItem = (DelayActionItem)args.Signal.Properties["DelayActionItem"];
 
-                if (delayActionItem.Token.IsCancellationRequested)
-                {
-                    return;
-                }
+                        if (delayActionItem.Token.IsCancellationRequested)
+                        {
+                            return;
+                        }
 
-                delayActionItem.Function();
-            }, delegate(Signal signal)
-            {
-                var delayActionItem = (DelayActionItem) signal.Properties["DelayActionItem"];
-                return Variables.TickCount >= delayActionItem.Time;
-            }, default(DateTimeOffset), new Dictionary<string, object> {{ "DelayActionItem", item}});
+                        delayActionItem.Function();
+                    }, 
+                delegate(Signal signal)
+                    {
+                        var delayActionItem = (DelayActionItem)signal.Properties["DelayActionItem"];
+                        return Variables.TickCount >= delayActionItem.Time;
+                    }, 
+                default(DateTimeOffset), 
+                new Dictionary<string, object> { { "DelayActionItem", item } });
         }
-    }
 
+        #endregion
+    }
 
     /// <summary>
     ///     Class that contains all of the needed information for delaying an action.
     /// </summary>
     public class DelayActionItem
     {
+        #region Constructors and Destructors
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="DelayActionItem" /> class.
         /// </summary>
-        /// <param name="time">The time(in miliseconds) to call the function..</param>
+        /// <param name="time">The time(in milliseconds) to call the function..</param>
         /// <param name="func">The function to call once the <paramref name="time" /> has expired.</param>
         /// <param name="token">The cancelation token.</param>
         public DelayActionItem(int time, Action func, CancellationToken token)
         {
-            Time = time + Variables.TickCount;
-            Function = func;
-            Token = token;
+            this.Time = time + Variables.TickCount;
+            this.Function = func;
+            this.Token = token;
         }
 
-        /// <summary>
-        ///     Gets or sets the time the function will be executed at.
-        /// </summary>
-        /// <value>
-        ///     The time the function will be executed at.
-        /// </value>
-        public int Time { get; set; }
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         ///     Gets or sets the function.
@@ -117,6 +139,14 @@ namespace LeagueSharp.CommonEx.Core.Utils
         ///     The function.
         /// </value>
         public Action Function { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the time the function will be executed at.
+        /// </summary>
+        /// <value>
+        ///     The time the function will be executed at.
+        /// </value>
+        public int Time { get; set; }
 
         /// <summary>
         ///     Gets or sets the cancelation token.
@@ -128,5 +158,7 @@ namespace LeagueSharp.CommonEx.Core.Utils
         ///     <see cref="CancellationTokenSource" />
         /// </example>
         public CancellationToken Token { get; set; }
+
+        #endregion
     }
 }

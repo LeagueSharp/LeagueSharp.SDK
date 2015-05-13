@@ -1,21 +1,38 @@
-﻿using System;
-using System.Reflection;
-
-namespace LeagueSharp.CommonEx.Core.Events
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Stealth.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Provides events for OnStealth
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core.Events
 {
+    using System;
+    using System.Reflection;
+
     /// <summary>
     ///     Provides events for OnStealth
     /// </summary>
     public class Stealth
     {
-        /// <summary>
-        ///     OnStealth Delegate.
-        /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="e">OnStealth Event Arguments Container</param>
-        public delegate void OnStealthDelegate(object sender, OnStealthEventArgs e);
+        #region Constructors and Destructors
 
         /// <summary>
+        ///     Initializes static members of the <see cref="Stealth" /> class.
         ///     Static constructor.
         /// </summary>
         static Stealth()
@@ -23,41 +40,32 @@ namespace LeagueSharp.CommonEx.Core.Events
             GameObject.OnIntegerPropertyChange += GameObject_OnIntegerPropertyChange;
         }
 
+        #endregion
+
+        #region Delegates
+
         /// <summary>
-        ///     Function is called when a <see cref="GameObject" /> gets an integer property change and is called by an event.
+        ///     OnStealth Delegate.
         /// </summary>
-        /// <param name="sender">GameObject</param>
-        /// <param name="args">Integer Property Change Data</param>
-        private static void GameObject_OnIntegerPropertyChange(GameObject sender,
-            GameObjectIntegerPropertyChangeEventArgs args)
-        {
-            if (!args.Property.Equals("ActionState"))
-            {
-                return;
-            }
+        /// <param name="sender">The sender</param>
+        /// <param name="e">OnStealth Event Arguments Container</param>
+        public delegate void OnStealthDelegate(object sender, OnStealthEventArgs e);
 
-            var oldState = (GameObjectCharacterState) args.OldValue;
-            var newState = (GameObjectCharacterState) args.NewValue;
+        #endregion
 
-            if (!oldState.HasFlag(GameObjectCharacterState.IsStealth) &&
-                newState.HasFlag(GameObjectCharacterState.IsStealth))
-            {
-                FireOnStealth(
-                    new OnStealthEventArgs { Sender = (Obj_AI_Hero) sender, Time = Game.Time, IsStealthed = true });
-            }
-            else if (oldState.HasFlag(GameObjectCharacterState.IsStealth) &&
-                     !newState.HasFlag(GameObjectCharacterState.IsStealth))
-            {
-                FireOnStealth(new OnStealthEventArgs { Sender = (Obj_AI_Hero) sender, IsStealthed = false });
-            }
-        }
+        #region Public Events
 
         /// <summary>
         ///     Gets fired when any hero is invisible.
         /// </summary>
         public static event OnStealthDelegate OnStealth;
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
+        ///     Attempts to fire the <see cref="OnStealth" /> event.
         /// </summary>
         /// <param name="args">OnStealthEventArgs <see cref="OnStealthEventArgs" /></param>
         private static void FireOnStealth(OnStealthEventArgs args)
@@ -69,25 +77,61 @@ namespace LeagueSharp.CommonEx.Core.Events
         }
 
         /// <summary>
+        ///     Function is called when a <see cref="GameObject" /> gets an integer property change and is called by an event.
+        /// </summary>
+        /// <param name="sender">GameObject sender</param>
+        /// <param name="args">Integer Property Change Data</param>
+        private static void GameObject_OnIntegerPropertyChange(
+            GameObject sender, 
+            GameObjectIntegerPropertyChangeEventArgs args)
+        {
+            if (!args.Property.Equals("ActionState"))
+            {
+                return;
+            }
+
+            var oldState = (GameObjectCharacterState)args.OldValue;
+            var newState = (GameObjectCharacterState)args.NewValue;
+
+            if (!oldState.HasFlag(GameObjectCharacterState.IsStealth)
+                && newState.HasFlag(GameObjectCharacterState.IsStealth))
+            {
+                FireOnStealth(
+                    new OnStealthEventArgs { Sender = (Obj_AI_Hero)sender, Time = Game.Time, IsStealthed = true });
+            }
+            else if (oldState.HasFlag(GameObjectCharacterState.IsStealth)
+                     && !newState.HasFlag(GameObjectCharacterState.IsStealth))
+            {
+                FireOnStealth(new OnStealthEventArgs { Sender = (Obj_AI_Hero)sender, IsStealthed = false });
+            }
+        }
+
+        #endregion
+
+        /// <summary>
         ///     On Stealth Event Data, contains useful information that is passed with OnStealth
         ///     <seealso cref="OnStealth" />
         /// </summary>
         public class OnStealthEventArgs : EventArgs
         {
-            /// <summary>
-            ///     Returns if the unit is stealthed or not.
-            /// </summary>
-            public bool IsStealthed;
+            #region Public Properties
 
             /// <summary>
-            ///     Stealth Sender
+            ///     Gets or sets a value indicating whether is in stealth.
             /// </summary>
-            public Obj_AI_Hero Sender;
+            public bool IsStealthed { get; set; }
 
             /// <summary>
-            ///     Spell Start Time
+            ///     Gets or sets the sender.
             /// </summary>
-            public float Time;
+            public Obj_AI_Hero Sender { get; set; }
+
+            /// <summary>
+            ///     Gets or sets the time.
+            /// </summary>
+            public float Time { get; set; }
+
+            #endregion
         }
     }
 }

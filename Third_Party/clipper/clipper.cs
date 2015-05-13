@@ -61,7 +61,7 @@
 //   #define use_deprecated
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.CommonEx.Clipper
+namespace LeagueSharp.SDK.Clipper
 {
 #if use_int32
     using cInt = Int32;
@@ -111,7 +111,7 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <summary>
         ///     Initializes a new instance of the <see cref="DoublePoint" /> struct.
         /// </summary>
-        /// <param name="dp">The doublepoint.</param>
+        /// <param name="dp">The <c>doublepoint</c>.</param>
         public DoublePoint(DoublePoint dp)
         {
             this.X = dp.X;
@@ -121,7 +121,7 @@ namespace LeagueSharp.CommonEx.Clipper
         /// <summary>
         ///     Initializes a new instance of the <see cref="DoublePoint" /> struct.
         /// </summary>
-        /// <param name="ip">The intpoint.</param>
+        /// <param name="ip">The <c>intpoint</c>.</param>
         public DoublePoint(IntPoint ip)
         {
             this.X = ip.X;
@@ -129,7 +129,7 @@ namespace LeagueSharp.CommonEx.Clipper
         }
 
         #endregion
-    };
+    }
 
     // ------------------------------------------------------------------------------
     // PolyTree & PolyNode classes
@@ -966,7 +966,7 @@ namespace LeagueSharp.CommonEx.Clipper
         ///     Create regions where either subject or clip polygons are filled but not where both are filled
         /// </summary>
         CtXor
-    };
+    }
 
     /// <summary>
     ///     The type of polygon.
@@ -982,7 +982,7 @@ namespace LeagueSharp.CommonEx.Clipper
         ///     Clip
         /// </summary>
         PtClip
-    };
+    }
 
     // By far the most widely used winding rules for polygon filling are
     // EvenOdd & NonZero (GDI, GDI+, XLib, OpenGL, Cairo, AGG, Quartz, SVG, Gr32)
@@ -1013,7 +1013,7 @@ namespace LeagueSharp.CommonEx.Clipper
         ///     All sub-regions with winding counts &lt; 0 are filled
         /// </summary>
         PftNegative
-    };
+    }
 
     /// <summary>
     ///     Type of joining.
@@ -1039,7 +1039,7 @@ namespace LeagueSharp.CommonEx.Clipper
         ///     join, when miter offsetting would exceed that maximum distance, 'square' joining is applied.
         /// </summary>
         JtMiter
-    };
+    }
 
     /// <summary>
     ///     Type of end.
@@ -1070,7 +1070,7 @@ namespace LeagueSharp.CommonEx.Clipper
         ///     Ends are rounded off and extended delta units.
         /// </summary>
         EtOpenRound
-    };
+    }
 
     /// <summary>
     ///     TODO The edge side.
@@ -1086,7 +1086,7 @@ namespace LeagueSharp.CommonEx.Clipper
         ///     TODO The es right.
         /// </summary>
         EsRight
-    };
+    }
 
     /// <summary>
     ///     TODO The direction.
@@ -1102,7 +1102,7 @@ namespace LeagueSharp.CommonEx.Clipper
         ///     TODO The d left to right.
         /// </summary>
         DLeftToRight
-    };
+    }
 
     /// <summary>
     ///     TODO The edge.
@@ -1202,7 +1202,7 @@ namespace LeagueSharp.CommonEx.Clipper
         internal int WindDelta; // 1 or -1 depending on winding direction
 
         #endregion
-    };
+    }
 
     /// <summary>
     ///     A point at which lines intersect.
@@ -1227,7 +1227,7 @@ namespace LeagueSharp.CommonEx.Clipper
         internal IntPoint Pt;
 
         #endregion
-    };
+    }
 
     /// <summary>
     ///     Compares <see cref="IntersectNode" />s for the .Sort method.
@@ -1289,7 +1289,7 @@ namespace LeagueSharp.CommonEx.Clipper
         internal long Y;
 
         #endregion
-    };
+    }
 
     /// <summary>
     ///     TODO The scanbeam.
@@ -1309,7 +1309,7 @@ namespace LeagueSharp.CommonEx.Clipper
         internal long Y;
 
         #endregion
-    };
+    }
 
     /// <summary>
     ///     TODO The out rec.
@@ -1354,7 +1354,7 @@ namespace LeagueSharp.CommonEx.Clipper
         internal OutPt Pts;
 
         #endregion
-    };
+    }
 
     /// <summary>
     ///     TODO The out pt.
@@ -1384,7 +1384,7 @@ namespace LeagueSharp.CommonEx.Clipper
         internal IntPoint Pt;
 
         #endregion
-    };
+    }
 
     /// <summary>
     ///     TODO The join.
@@ -1409,7 +1409,7 @@ namespace LeagueSharp.CommonEx.Clipper
         internal OutPt OutPt2;
 
         #endregion
-    };
+    }
 
     /// <summary>
     ///     Base clipper.
@@ -2426,10 +2426,10 @@ namespace LeagueSharp.CommonEx.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The reverse horizontal.
+        ///     Reverse Horizontal on an edge.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge
         /// </param>
         private void ReverseHorizontal(Edge e)
         {
@@ -7377,10 +7377,10 @@ namespace LeagueSharp.CommonEx.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     Closeds the paths from poly tree.
+        ///     Gets the closed the paths from poly tree.
         /// </summary>
-        /// <param name="polytree">The polytree.</param>
-        /// <returns></returns>
+        /// <param name="polytree">The <c>polytree</c>.</param>
+        /// <returns><see cref="Paths"/> instance</returns>
         public static Paths ClosedPathsFromPolyTree(PolyTree polytree)
         {
             var result = new Paths { Capacity = polytree.Total };
@@ -7389,7 +7389,7 @@ namespace LeagueSharp.CommonEx.Clipper
         }
 
         // ------------------------------------------------------------------------------
-    } // end Clipper
+    }
 
     /// <summary>
     ///     Clipping offset.
@@ -8252,4 +8252,4 @@ namespace LeagueSharp.CommonEx.Clipper
     }
 
     // ------------------------------------------------------------------------------
-} //end ClipperLib namespace
+}

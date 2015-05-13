@@ -1,42 +1,38 @@
-﻿using System;
-
-namespace LeagueSharp.CommonEx.Core.Utils
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Version.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Provides version checking for League of Legends.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core.Utils
 {
+    using System;
+
     /// <summary>
     ///     Provides version checking for League of Legends.
     /// </summary>
     public static class Version
     {
-        /// <summary>
-        ///     Major version.
-        /// </summary>
-        /// <example>1.X.X.X</example>
-        public static int MajorVersion;
+        #region Constructors and Destructors
 
         /// <summary>
-        ///     Minor Version.
+        ///     Initializes static members of the <see cref="Version" /> class.
         /// </summary>
-        /// <example>X.1.X.X</example>
-        public static int MinorVersion;
-
-        /// <summary>
-        ///     Build version.
-        /// </summary>
-        /// <example>X.X.1.X</example>
-        public static int Build;
-
-        /// <summary>
-        ///     Revision version.
-        /// </summary>
-        /// <example>X.X.X.1</example>
-        public static int Revision;
-
-        /// <summary>
-        ///     Current version.
-        /// </summary>
-        /// <example>X.X.X.X</example>
-        public static System.Version CurrentVersion;
-
         static Version()
         {
             var d = Game.Version.Split('.');
@@ -47,52 +43,58 @@ namespace LeagueSharp.CommonEx.Core.Utils
             CurrentVersion = new System.Version(MajorVersion, MinorVersion, Build, Revision);
         }
 
-        /// <summary>
-        ///     Checks if the string is older then the current one.
-        /// </summary>
-        /// <param name="version">Version</param>
-        /// <returns>String is older then the current one.</returns>
-        public static bool IsOlder(string version)
-        {
-            var d = new System.Version(version);
-            return CurrentVersion < d;
-        }
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
-        ///     Checks if the Version is older then the current one.
+        ///     Gets or sets the Build version.
         /// </summary>
-        /// <param name="version">Version</param>
-        /// <returns>Version is older then the current one.</returns>
-        public static bool IsOlder(System.Version version)
-        {
-            return CurrentVersion < version;
-        }
+        /// <example>
+        ///     <c>X.X.1.X</c>
+        /// </example>
+        public static int Build { get; set; }
 
         /// <summary>
-        ///     Checks if the string is newer then the current one.
+        ///     Gets or sets the Current version.
         /// </summary>
-        /// <param name="version">Version</param>
-        /// <returns>String is newer then the current one.</returns>
-        public static bool IsNewer(string version)
-        {
-            var d = new System.Version(version);
-            return CurrentVersion > d;
-        }
+        /// <example>
+        ///     <c>X.X.X.X</c>
+        /// </example>
+        public static System.Version CurrentVersion { get; set; }
 
         /// <summary>
-        ///     Checks if the Version is newer then the current one.
+        ///     Gets or sets the Major version.
         /// </summary>
-        /// <param name="version">Version</param>
-        /// <returns>Version is newer then the current one.</returns>
-        public static bool IsNewer(System.Version version)
-        {
-            return CurrentVersion > version;
-        }
+        /// <example>
+        ///     <c>1.X.X.X</c>
+        /// </example>
+        public static int MajorVersion { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the Minor Version.
+        /// </summary>
+        /// <example>
+        ///     <c>X.1.X.X</c>
+        /// </example>
+        public static int MinorVersion { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the Revision version.
+        /// </summary>
+        /// <example>
+        ///     <c>X.X.X.1</c>
+        /// </example>
+        public static int Revision { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         ///     Checks if the string is equal to the current one.
         /// </summary>
-        /// <param name="version">Version</param>
+        /// <param name="version">The Version</param>
         /// <returns>String is equal to the current one.</returns>
         public static bool IsEqual(string version)
         {
@@ -103,11 +105,55 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <summary>
         ///     Checks if the version is equal to the current one.
         /// </summary>
-        /// <param name="version">Version</param>
+        /// <param name="version">The Version</param>
         /// <returns>Version is equal to the current one.</returns>
         public static bool IsEqual(System.Version version)
         {
             return CurrentVersion.Equals(version);
         }
+
+        /// <summary>
+        ///     Checks if the string is newer then the current one.
+        /// </summary>
+        /// <param name="version">The Version</param>
+        /// <returns>String is newer then the current one.</returns>
+        public static bool IsNewer(string version)
+        {
+            var d = new System.Version(version);
+            return CurrentVersion > d;
+        }
+
+        /// <summary>
+        ///     Checks if the Version is newer then the current one.
+        /// </summary>
+        /// <param name="version">The Version</param>
+        /// <returns>Version is newer then the current one.</returns>
+        public static bool IsNewer(System.Version version)
+        {
+            return CurrentVersion > version;
+        }
+
+        /// <summary>
+        ///     Checks if the string is older then the current one.
+        /// </summary>
+        /// <param name="version">The Version</param>
+        /// <returns>String is older then the current one.</returns>
+        public static bool IsOlder(string version)
+        {
+            var d = new System.Version(version);
+            return CurrentVersion < d;
+        }
+
+        /// <summary>
+        ///     Checks if the Version is older then the current one.
+        /// </summary>
+        /// <param name="version">The Version</param>
+        /// <returns>Version is older then the current one.</returns>
+        public static bool IsOlder(System.Version version)
+        {
+            return CurrentVersion < version;
+        }
+
+        #endregion
     }
 }

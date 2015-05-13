@@ -19,12 +19,12 @@
 //   Item class used to easily manage items.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core
+namespace LeagueSharp.SDK.Core.Utils
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.CommonEx.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Wrappers;
 
     using SharpDX;
@@ -37,7 +37,7 @@ namespace LeagueSharp.SDK.Core
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Retruns true if the player has the item and its not on cooldown.
+        ///     Returns true if the player has the item and its not on cool-down.
         /// </summary>
         /// <param name="name">
         ///     Name of the Item.
@@ -58,7 +58,7 @@ namespace LeagueSharp.SDK.Core
         }
 
         /// <summary>
-        ///     Retruns true if the player has the item and its not on cooldown.
+        ///     Returns true if the player has the item and its not on cool-down.
         /// </summary>
         /// <param name="id">
         ///     Id of the Item.
@@ -215,6 +215,7 @@ namespace LeagueSharp.SDK.Core
         #endregion
 
         /// <summary>
+        ///     Item class.
         /// </summary>
         public class Item
         {
@@ -233,8 +234,10 @@ namespace LeagueSharp.SDK.Core
             ///     Initializes a new instance of the <see cref="Item" /> class.
             /// </summary>
             /// <param name="id">
+            ///     The Id
             /// </param>
             /// <param name="range">
+            ///     The Range
             /// </param>
             public Item(int id, float range)
             {
@@ -301,7 +304,7 @@ namespace LeagueSharp.SDK.Core
             public string Name { get; private set; }
 
             /// <summary>
-            ///     Gets a value indicating whether purchaseable.
+            ///     Gets a value indicating whether purchase-able.
             /// </summary>
             public bool Purchaseable { get; private set; }
 
@@ -323,7 +326,7 @@ namespace LeagueSharp.SDK.Core
             }
 
             /// <summary>
-            ///     Gets the range sqr.
+            ///     Gets the range squared.
             /// </summary>
             public float RangeSqr { get; private set; }
 
@@ -333,7 +336,7 @@ namespace LeagueSharp.SDK.Core
             public int SellPrice { get; private set; }
 
             /// <summary>
-            ///     Slot of the Item
+            ///     Gets the Slot of the Item
             /// </summary>
             public List<SpellSlot> Slot
             {
@@ -388,7 +391,7 @@ namespace LeagueSharp.SDK.Core
             ///     Casts the Item on a Target.
             /// </summary>
             /// <param name="target">
-            ///     Target as Obj_AI_Base.
+            ///     Target as <c>Obj_AI_Base</c>.
             /// </param>
             /// <returns>
             ///     The <see cref="bool" />.
@@ -433,6 +436,7 @@ namespace LeagueSharp.SDK.Core
             ///     Target to be checked.
             /// </param>
             /// <returns>
+            ///     The <see cref="bool" />
             /// </returns>
             public bool IsInRange(Obj_AI_Base target)
             {
@@ -446,6 +450,7 @@ namespace LeagueSharp.SDK.Core
             ///     Position to be checked.
             /// </param>
             /// <returns>
+            ///     The <see cref="bool" />
             /// </returns>
             public bool IsInRange(Vector2 position)
             {
@@ -459,6 +464,7 @@ namespace LeagueSharp.SDK.Core
             ///     Position to be checked.
             /// </param>
             /// <returns>
+            ///     The <see cref="bool" />
             /// </returns>
             public bool IsInRange(Vector3 position)
             {
@@ -469,7 +475,7 @@ namespace LeagueSharp.SDK.Core
             ///     Returns if the Item is owned.
             /// </summary>
             /// <param name="target">
-            ///     Target as Obj_AI_Hero.
+            ///     Target as <c>Obj_AI_Hero</c>.
             /// </param>
             /// <returns>
             ///     The <see cref="bool" />.

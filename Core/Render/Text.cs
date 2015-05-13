@@ -1,14 +1,33 @@
-﻿#region
-
-using System;
-using SharpDX;
-using SharpDX.Direct3D9;
-using Color = System.Drawing.Color;
-
-#endregion
-
-namespace LeagueSharp.CommonEx.Core.Render
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Text.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Draws formatted text. These methods support ANSI and Unicode strings.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core.Render
 {
+    using System;
+
+    using SharpDX;
+    using SharpDX.Direct3D9;
+
+    using Color = System.Drawing.Color;
+
     /// <summary>
     ///     Draws formatted text. These methods support ANSI and Unicode strings.
     /// </summary>
@@ -26,43 +45,16 @@ namespace LeagueSharp.CommonEx.Core.Render
     /// </remarks>
     public sealed class Text : IDisposable
     {
-        #region Private Fields
+        #region Fields
 
+        /// <summary>
+        ///     The text font.
+        /// </summary>
         private readonly Font font;
 
         #endregion
 
-        /// <summary>
-        ///     Text dispose.
-        /// </summary>
-        public void Dispose()
-        {
-            font.Dispose();
-        }
-
-        #region Class Internal Drawing
-
-        /// <summary>
-        ///     Draws formatted text. This method supports ANSI and Unicode strings.
-        /// </summary>
-        /// <param name="text">String to draw.</param>
-        /// <param name="vector2">
-        ///     Vector2 structure that contains the X-Axis and Y-Axis to draw the given text on the screen
-        ///     projector.
-        /// </param>
-        /// <param name="color">Color of the text.</param>
-        /// <returns>
-        ///     If the function succeeds, the return value is the height of the text in logical units. If the function fails,
-        ///     the return value is zero.
-        /// </returns>
-        public int Draw(string text, Vector2 vector2, ColorBGRA color)
-        {
-            return font.DrawText(null, text, (int) vector2.X, (int) vector2.Y, color);
-        }
-
-        #endregion
-
-        #region Constructors / Overloads
+        #region Constructors and Destructors
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Text" /> class.
@@ -98,7 +90,7 @@ namespace LeagueSharp.CommonEx.Core.Render
         /// </param>
         public Text(FontDescription fontDescription)
         {
-            font = new Font(Drawing.Direct3DDevice, fontDescription);
+            this.font = new Font(Drawing.Direct3DDevice, fontDescription);
         }
 
         /// <summary>
@@ -106,7 +98,7 @@ namespace LeagueSharp.CommonEx.Core.Render
         /// </summary>
         public Text()
         {
-            font = Constants.LeagueSharpFont;
+            this.font = Constants.LeagueSharpFont;
         }
 
         /// <summary>
@@ -115,34 +107,42 @@ namespace LeagueSharp.CommonEx.Core.Render
         /// <param name="height">The height.</param>
         /// <param name="width">The width.</param>
         /// <param name="weight">The weight.</param>
-        /// <param name="mipLevels">The mip levels.</param>
+        /// <param name="mipLevels">The MIP maps levels.</param>
         /// <param name="isItalic">if set to <c>true</c> [is italic].</param>
         /// <param name="characterSet">The character set.</param>
         /// <param name="precision">The precision.</param>
         /// <param name="quality">The quality.</param>
         /// <param name="pitchAndFamily">The pitch and family.</param>
         /// <param name="faceName">Name of the face.</param>
-        public Text(int height,
-            int width,
-            FontWeight weight,
-            int mipLevels,
-            bool isItalic,
-            FontCharacterSet characterSet,
-            FontPrecision precision,
-            FontQuality quality,
-            FontPitchAndFamily pitchAndFamily,
+        public Text(
+            int height, 
+            int width, 
+            FontWeight weight, 
+            int mipLevels, 
+            bool isItalic, 
+            FontCharacterSet characterSet, 
+            FontPrecision precision, 
+            FontQuality quality, 
+            FontPitchAndFamily pitchAndFamily, 
             string faceName)
         {
-            font = new Font(
-                Drawing.Direct3DDevice, height, width, weight, mipLevels, isItalic, characterSet, precision, quality,
-                pitchAndFamily, faceName);
+            this.font = new Font(
+                Drawing.Direct3DDevice, 
+                height, 
+                width, 
+                weight, 
+                mipLevels, 
+                isItalic, 
+                characterSet, 
+                precision, 
+                quality, 
+                pitchAndFamily, 
+                faceName);
         }
 
         #endregion
 
-        #region External Drawing
-
-        #region DrawText :: Font, Sprite, Text, Vector2, Color
+        #region Public Methods and Operators
 
         /// <summary>
         ///     Draws formatted text. This method supports ANSI and Unicode strings.
@@ -167,7 +167,7 @@ namespace LeagueSharp.CommonEx.Core.Render
         /// </returns>
         public static int DrawText(Font font, Sprite sprite, string text, Vector2 vector2, ColorBGRA color)
         {
-            return font.DrawText(sprite, text, (int) vector2.X, (int) vector2.Y, color);
+            return font.DrawText(sprite, text, (int)vector2.X, (int)vector2.Y, color);
         }
 
         /// <summary>
@@ -187,16 +187,19 @@ namespace LeagueSharp.CommonEx.Core.Render
         ///     projector.
         /// </param>
         /// <param name="color">Color of the text.</param>
-        /// <returns></returns>
+        /// <returns>
+        ///     If the function succeeds, the return value is the height of the text in logical units. If the function fails,
+        ///     the return value is zero.
+        /// </returns>
         public static int DrawText(Font font, Sprite sprite, string text, Vector2 vector2, Color color)
         {
             return font.DrawText(
-                sprite, text, (int) vector2.X, (int) vector2.Y, new ColorBGRA(color.R, color.G, color.B, color.A));
+                sprite, 
+                text, 
+                (int)vector2.X, 
+                (int)vector2.Y, 
+                new ColorBGRA(color.R, color.G, color.B, color.A));
         }
-
-        #endregion
-
-        #region DrawText :: Font, Sprite, Text, Int, Int, Color
 
         /// <summary>
         ///     Draws formatted text. This method supports ANSI and Unicode strings.
@@ -213,15 +216,14 @@ namespace LeagueSharp.CommonEx.Core.Render
         /// <param name="x">X-Axis on the screen projector to draw on.</param>
         /// <param name="y">Y-Axis on the screen projector to draw on.</param>
         /// <param name="color">Color of the text.</param>
-        /// <returns></returns>
+        /// <returns>
+        ///     If the function succeeds, the return value is the height of the text in logical units. If the function fails,
+        ///     the return value is zero.
+        /// </returns>
         public static int DrawText(Font font, Sprite sprite, string text, int x, int y, Color color)
         {
             return font.DrawText(sprite, text, x, y, new ColorBGRA(color.R, color.G, color.B, color.A));
         }
-
-        #endregion
-
-        #region DrawText :: Font, Sprite, String, Int, Rectangle, Int, Color
 
         /// <summary>
         ///     Draws formatted text. This method supports ANSI and Unicode strings.
@@ -249,24 +251,27 @@ namespace LeagueSharp.CommonEx.Core.Render
         /// <param name="color">Color of the text.</param>
         /// <returns>
         ///     If the function succeeds, the return value is the height of the text in logical units. If
-        ///     FontDrawFlags.VerticalCenter or FontDrawFlags.Bottom is specified, the return value is the offset from pRect (top
+        ///     FontDrawFlags.VerticalCenter or FontDrawFlags.Bottom is specified, the return value is the offset from <c>pRect</c>
+        ///     (top
         ///     to the bottom) of the drawn text. If the function fails, the return value is zero.
         /// </returns>
-        public static int DrawText(Font font,
-            Sprite spriteRef,
-            string stringRef,
-            int count,
-            IntPtr rectRef,
-            int format,
+        public static int DrawText(
+            Font font, 
+            Sprite spriteRef, 
+            string stringRef, 
+            int count, 
+            IntPtr rectRef, 
+            int format, 
             Color color)
         {
             return font.DrawText(
-                spriteRef, stringRef, count, rectRef, format, new ColorBGRA(color.R, color.G, color.B, color.A));
+                spriteRef, 
+                stringRef, 
+                count, 
+                rectRef, 
+                format, 
+                new ColorBGRA(color.R, color.G, color.B, color.A));
         }
-
-        #endregion
-
-        #region DrawText :: Font, Sprite, String, Rectangle, FontDrawFlags, Color
 
         /// <summary>
         ///     Draws formatted text. This method supports ANSI and Unicode strings.
@@ -289,20 +294,46 @@ namespace LeagueSharp.CommonEx.Core.Render
         /// <param name="color">Color of the text.</param>
         /// <returns>
         ///     If the function succeeds, the return value is the height of the text in logical units. If
-        ///     FontDrawFlags.VerticalCenter or FontDrawFlags.Bottom is specified, the return value is the offset from pRect (top
+        ///     FontDrawFlags.VerticalCenter or FontDrawFlags.Bottom is specified, the return value is the offset from <c>pRect</c>
+        ///     (top
         ///     to the bottom) of the drawn text. If the function fails, the return value is zero.
         /// </returns>
-        public static int DrawText(Font font,
-            Sprite sprite,
-            string text,
-            Rectangle rect,
-            FontDrawFlags drawFlags,
+        public static int DrawText(
+            Font font, 
+            Sprite sprite, 
+            string text, 
+            Rectangle rect, 
+            FontDrawFlags drawFlags, 
             Color color)
         {
             return font.DrawText(sprite, text, rect, drawFlags, new ColorBGRA(color.R, color.G, color.B, color.A));
         }
 
-        #endregion
+        /// <summary>
+        ///     Text dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            this.font.Dispose();
+        }
+
+        /// <summary>
+        ///     Draws formatted text. This method supports ANSI and Unicode strings.
+        /// </summary>
+        /// <param name="text">String to draw.</param>
+        /// <param name="vector2">
+        ///     Vector2 structure that contains the X-Axis and Y-Axis to draw the given text on the screen
+        ///     projector.
+        /// </param>
+        /// <param name="color">Color of the text.</param>
+        /// <returns>
+        ///     If the function succeeds, the return value is the height of the text in logical units. If the function fails,
+        ///     the return value is zero.
+        /// </returns>
+        public int Draw(string text, Vector2 vector2, ColorBGRA color)
+        {
+            return this.font.DrawText(null, text, (int)vector2.X, (int)vector2.Y, color);
+        }
 
         #endregion
     }

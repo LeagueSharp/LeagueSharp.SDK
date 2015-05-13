@@ -1,52 +1,59 @@
-﻿#region
-
-using System;
-using System.IO;
-using LeagueSharp.CommonEx.Core.Utils;
-using SharpDX.Direct3D9;
-
-#endregion
-
-namespace LeagueSharp.CommonEx.Core
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Constants.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Constant values of LeagueSharp.CommonEx
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core
 {
+    using System;
+    using System.IO;
+
+    using LeagueSharp.SDK.Core.Utils;
+
+    using SharpDX.Direct3D9;
+
     /// <summary>
     ///     Constant values of LeagueSharp.CommonEx
     /// </summary>
     public static class Constants
     {
+        #region Static Fields
+
         /// <summary>
         ///     LeagueSharp Font.
         /// </summary>
-        public static Font LeagueSharpFont = new Font(
-            Drawing.Direct3DDevice, 14, 0, FontWeight.DoNotCare, 0, false, FontCharacterSet.Default,
-            FontPrecision.Default, FontQuality.Default, FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative,
+        public static readonly Font LeagueSharpFont = new Font(
+            Drawing.Direct3DDevice, 
+            14, 
+            0, 
+            FontWeight.DoNotCare, 
+            0, 
+            false, 
+            FontCharacterSet.Default, 
+            FontPrecision.Default, 
+            FontQuality.Default, 
+            FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative, 
             "Tahoma");
 
-        /// <summary>
-        ///     The directory where logs will be created.
-        /// </summary>
-        public static string LogDirectory
-        {
-            get
-            {
-                return
-                    Cache.Instance.AddOrGetExisting(
-                        "LogDirectory", () => Path.Combine(LeagueSharpAppData, "Logs", "CommonEx")).ToString();
-            }
-        }
+        #endregion
 
-        /// <summary>
-        ///     The current filename that the logger will write to.
-        /// </summary>
-        public static string LogFileName
-        {
-            get
-            {
-                return
-                    Cache.Instance.AddOrGetExisting(
-                        "LogFileName", () => DateTime.Now.ToString("d").Replace('/', '-') + ".log").ToString();
-            }
-        }
+        #region Public Properties
 
         /// <summary>
         ///     Gets the LeagueSharp AppData directory.
@@ -57,12 +64,42 @@ namespace LeagueSharp.CommonEx.Core
             {
                 return
                     Cache.Instance.AddOrGetExisting(
-                        "LeagueSharpDir",
+                        "LeagueSharpDir", 
                         () =>
-                            Path.Combine(
-                                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                                "LS" + Environment.UserName.GetHashCode().ToString("X"))).ToString();
+                        Path.Combine(
+                            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
+                            "LS" + Environment.UserName.GetHashCode().ToString("X"))).ToString();
             }
         }
+
+        /// <summary>
+        ///     Gets the directory where logs will be created.
+        /// </summary>
+        public static string LogDirectory
+        {
+            get
+            {
+                return
+                    Cache.Instance.AddOrGetExisting(
+                        "LogDirectory", 
+                        () => Path.Combine(LeagueSharpAppData, "Logs", "CommonEx")).ToString();
+            }
+        }
+
+        /// <summary>
+        ///     Gets the current filename that the logger will write to.
+        /// </summary>
+        public static string LogFileName
+        {
+            get
+            {
+                return
+                    Cache.Instance.AddOrGetExisting(
+                        "LogFileName", 
+                        () => DateTime.Now.ToString("d").Replace('/', '-') + ".log").ToString();
+            }
+        }
+
+        #endregion
     }
 }

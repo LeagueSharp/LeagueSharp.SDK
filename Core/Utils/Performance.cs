@@ -1,28 +1,47 @@
-﻿#region
-
-using System;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
-#endregion
-
-namespace LeagueSharp.CommonEx.Core.Utils
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Performance.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Performance block class, for block method performance logging.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace LeagueSharp.SDK.Core.Utils
 {
+    using System;
+    using System.Diagnostics;
+    using System.Runtime.CompilerServices;
+
     using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
     ///     Performance block class, for block method performance logging.
     /// </summary>
     /// <example>
-    ///     using(var performance = new Performance())
+    ///     using(<c>var</c> performance = new Performance())
     ///     {
-    ///         Game.PrintChat("Test");
-    ///         var elapsedTicks = performance.GetTickCount();
-    ///         Logging.Write()("Game.PrintChat took {0} ticks!", elapsedTicks);
+    ///     Game.PrintChat("Test");
+    ///     <c>var</c> elapsedTicks = performance.GetTickCount();
+    ///     Logging.Write()("Game.PrintChat took {0} ticks!", elapsedTicks);
     ///     }
     /// </example>
     public class Performance : IDisposable
     {
+        #region Fields
+
         /// <summary>
         ///     Private, string contains the calling member name.
         /// </summary>
@@ -38,31 +57,44 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// </summary>
         private Stopwatch stopwatch;
 
+        #endregion
+
+        #region Constructors and Destructors
+
         /// <summary>
-        ///     Performance Constructor, starting a new Stopwatch.
+        ///     Initializes a new instance of the <see cref="Performance" /> class.
         /// </summary>
+        /// <param name="performanceType">
+        ///     The performance Type.
+        /// </param>
+        /// <param name="memberName">
+        ///     The member Name.
+        /// </param>
         public Performance(PerformanceType performanceType, [CallerMemberName] string memberName = "")
         {
             this.memberName = memberName;
             this.performanceType = performanceType;
-            stopwatch = Stopwatch.StartNew();
+            this.stopwatch = Stopwatch.StartNew();
         }
+
+        /// <summary>
+        ///     Finalizes an instance of the <see cref="Performance" /> class.
+        /// </summary>
+        ~Performance()
+        {
+            this.Dispose(false);
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         ///     Disposable requirement, redirects to a safe disposable function.
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);
-        }
-
-        /// <summary>
-        ///     Returns the tick count from the start of the block.
-        /// </summary>
-        /// <returns>Tick count from the start of the block.</returns>
-        public long GetTickCount()
-        {
-            return stopwatch.ElapsedTicks;
+            this.Dispose(true);
         }
 
         /// <summary>
@@ -71,7 +103,16 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <returns>Milliseconds count from the start of the block.</returns>
         public long GetMilliseconds()
         {
-            return stopwatch.ElapsedMilliseconds;
+            return this.stopwatch.ElapsedMilliseconds;
+        }
+
+        /// <summary>
+        ///     Returns the tick count from the start of the block.
+        /// </summary>
+        /// <returns>Tick count from the start of the block.</returns>
+        public long GetTickCount()
+        {
+            return this.stopwatch.ElapsedTicks;
         }
 
         /// <summary>
@@ -80,16 +121,12 @@ namespace LeagueSharp.CommonEx.Core.Utils
         /// <returns>TimeSpan count data from the start of the block.</returns>
         public TimeSpan GetTimeSpan()
         {
-            return stopwatch.Elapsed;
+            return this.stopwatch.Elapsed;
         }
 
-        /// <summary>
-        ///     Finalization Dispose.
-        /// </summary>
-        ~Performance()
-        {
-            Dispose(false);
-        }
+        #endregion
+
+        #region Methods
 
         /// <summary>
         ///     Safe Dispose method.
@@ -102,25 +139,27 @@ namespace LeagueSharp.CommonEx.Core.Utils
                 return;
             }
 
-            stopwatch.Stop();
+            this.stopwatch.Stop();
 
             var format = "{0} has taken {1} elapsed ticks to execute, and was executed successfuly.";
-            var argument = GetTickCount().ToString();
+            var argument = this.GetTickCount().ToString();
 
-            switch (performanceType)
+            switch (this.performanceType)
             {
                 case PerformanceType.Milliseconds:
                     format = "{0} has taken {1} elapsed milliseconds to execute, and was executed successfuly.";
-                    argument = GetMilliseconds().ToString();
+                    argument = this.GetMilliseconds().ToString();
                     break;
                 case PerformanceType.TimeSpan:
                     format = "{0} has taken {1} elapsed time span to execute, and was executed successfuly.";
-                    argument = GetTimeSpan().ToString("g");
+                    argument = this.GetTimeSpan().ToString("g");
                     break;
             }
 
-            Logging.Write()(LogLevel.Info, format, memberName, argument);
-            stopwatch = null;
+            Logging.Write()(LogLevel.Info, format, this.memberName, argument);
+            this.stopwatch = null;
         }
+
+        #endregion
     }
 }

@@ -132,11 +132,8 @@ namespace LeagueSharp.SDK.Core.Enumerations
         ///     The WM_QUERYENDSESSION message is sent when the user chooses to end the session or when an application calls one of
         ///     the system shutdown functions. If any application returns zero, the session is not ended. The system stops sending
         ///     WM_QUERYENDSESSION messages as soon as one application returns zero.
-        ///     After processing this message, the system sends the WM_ENDSESSION message with the
-        ///     <c>
-        ///         <c>wParam</c>
-        ///     </c>
-        ///     parameter set to the
+        ///     After processing this message, the system sends the WM_ENDSESSION message with the <c>wParam</c> parameter set to
+        ///     the
         ///     results of the WM_QUERYENDSESSION message.
         /// </summary>
         QUERYENDSESSION = 0x0011, 
@@ -232,11 +229,7 @@ namespace LeagueSharp.SDK.Core.Enumerations
 
         /// <summary>
         ///     The WM_MOUSEACTIVATE message is sent when the cursor is in an inactive window and the user presses a mouse button.
-        ///     The parent window receives this message only if the child window passes it to the
-        ///     <c>
-        ///         <c>DefWindowProc</c>
-        ///     </c>
-        ///     function.
+        ///     The parent window receives this message only if the child window passes it to the <c>DefWindowProc</c> function.
         /// </summary>
         MOUSEACTIVATE = 0x0021, 
 
@@ -411,27 +404,18 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     The WM_INPUTLANGCHANGEREQUEST message is posted to the window with the focus when the user chooses a new input
         ///     language, either with the hotkey (specified in the Keyboard control panel application) or from the indicator on the
-        ///     system taskbar. An application can accept the change by passing the message to the
-        ///     <c>
-        ///         <c>DefWindowProc</c>
-        ///     </c>
-        ///     function or reject
+        ///     system taskbar. An application can accept the change by passing the message to the <c>DefWindowProc</c> function or
+        ///     reject
         ///     the change (and prevent it from taking place) by returning immediately.
         /// </summary>
         INPUTLANGCHANGEREQUEST = 0x0050, 
 
         /// <summary>
         ///     The WM_INPUTLANGCHANGE message is sent to the topmost affected window after an application's input language has
-        ///     been changed. You should make any application-specific settings and pass the message to the
-        ///     <c>
-        ///         <c>DefWindowProc</c>
-        ///     </c>
+        ///     been changed. You should make any application-specific settings and pass the message to the <c>DefWindowProc</c>
         ///     function,
         ///     which passes the message to all first-level child windows. These child windows can pass the message to
-        ///     <c>
-        ///         <c>DefWindowProc</c>
-        ///     </c>
-        ///     to have it pass the message to their child windows, and so on.
+        ///     <c>DefWindowProc</c> to have it pass the message to their child windows, and so on.
         /// </summary>
         INPUTLANGCHANGE = 0x0051, 
 
@@ -649,11 +633,7 @@ namespace LeagueSharp.SDK.Core.Enumerations
 
         /// <summary>
         ///     The WM_INPUT_DEVICE_CHANGE message is sent to the window that registered to receive raw input. A window receives
-        ///     this message through its
-        ///     <c>
-        ///         <c>WindowProc</c>
-        ///     </c>
-        ///     function.
+        ///     this message through its <c>WindowProc</c> function.
         /// </summary>
         INPUT_DEVICE_CHANGE = 0x00FE, 
 
@@ -702,8 +682,7 @@ namespace LeagueSharp.SDK.Core.Enumerations
         ///     activates the menu bar) or holds down the ALT key and then presses another key. It also occurs when no window
         ///     currently has the keyboard focus; in this case, the WM_SYSKEYDOWN message is sent to the active window. The window
         ///     that receives the message can distinguish between these two contexts by checking the context code in the
-        ///     <c>lParam</c>
-        ///     parameter.
+        ///     <c>lParam</c> parameter.
         /// </summary>
         SYSKEYDOWN = 0x0104, 
 
