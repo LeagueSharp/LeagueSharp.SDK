@@ -106,6 +106,11 @@ namespace LeagueSharp.SDK.Core.UI.Values
         }
 
         /// <summary>
+        ///  Initializes a new instance of the <see cref="MenuList{T}" /> class based upon the given Enum type.
+        /// </summary>
+        public MenuList() : this(Enum.GetValues(typeof(T)).Cast<T>()) {}
+
+        /// <summary>
         ///     Initializes a new instance of the <see cref="MenuList{T}" /> class.
         /// </summary>
         /// <param name="info">The information.</param>
