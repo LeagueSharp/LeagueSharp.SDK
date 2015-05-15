@@ -92,6 +92,7 @@
     <Compile Include="Core\Events\Gapcloser.cs" />
     <Compile Include="Core\Events\Turret.cs" />
     <Compile Include="Core\Extensions\Streams.cs" />
+    <Compile Include="Core\UI\Menu\RadioMenu.cs" />
     <Compile Include="Core\Utils\Items.cs" />
     <Compile Include="Core\Math\ConvexHull.cs" />
     <Compile Include="Core\Math\Geometry.cs" />

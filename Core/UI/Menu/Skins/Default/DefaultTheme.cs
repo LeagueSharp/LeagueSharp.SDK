@@ -619,7 +619,7 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                        null, 
                                        currentValue.ToString(CultureInfo.InvariantCulture), 
                                        (int)
-                                       (position.X + component.MenuWidth - DefaultSettings.ContainerTextOffset - measureText.Width), 
+                                       (position.X + component.MenuWidth - 5 - measureText.Width), 
                                        centeredY, 
                                        DefaultSettings.TextColor);
 

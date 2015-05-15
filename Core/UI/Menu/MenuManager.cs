@@ -19,6 +19,7 @@
 //   Menu Interface class, used to control the menu.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI
 {
     using System;
@@ -52,8 +53,8 @@ namespace LeagueSharp.SDK.Core.UI
         private static DirectoryInfo configFolder =
             Directory.CreateDirectory(
                 Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
-                    "LS" + Environment.UserName.GetHashCode().ToString("X"), 
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "LS" + Environment.UserName.GetHashCode().ToString("X"),
                     "MenuConfigEx"));
 
         #endregion
@@ -159,7 +160,7 @@ namespace LeagueSharp.SDK.Core.UI
         {
             get
             {
-                return this.menuVisible || this.ForcedOpen;
+                return this.menuVisible;
             }
 
             set
@@ -210,14 +211,6 @@ namespace LeagueSharp.SDK.Core.UI
             if (!this.menus.Contains(menu))
             {
                 this.menus.Add(menu);
-                try
-                {
-                    // menu.Load();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                }
             }
         }
 
@@ -283,24 +276,29 @@ namespace LeagueSharp.SDK.Core.UI
         private void Game_OnWndProc(WndEventArgs args)
         {
             var keys = new WindowsKeys(args);
-            if (keys.SingleKey == Keys.ShiftKey)
+            if (!ForcedOpen)
             {
-                var value = keys.Msg == WindowsMessages.KEYDOWN;
-
-                this.MenuVisible = value;
-
-                if (value)
+                if (keys.SingleKey == Keys.ShiftKey)
                 {
-                    this.FireOnOpen();
+                    //Game.Say("Shift " + keys.Msg);
+                    var keyDown = keys.Msg == WindowsMessages.KEYDOWN;
+                    var keyUp = keys.Msg == WindowsMessages.KEYUP;
+
+                    if (keyDown)
+                    {
+                        MenuVisible = true;
+                        this.FireOnOpen();
+                    }
+                    else if (keyUp)
+                    {
+                        MenuVisible = false;
+                        this.FireOnClose();
+                    }
                 }
-                else
+                else if (keys.SingleKey == Keys.CapsLock && keys.Msg == WindowsMessages.KEYDOWN)
                 {
-                    this.FireOnClose();
+                    this.MenuVisible = !this.MenuVisible;
                 }
-            }
-            else if (keys.SingleKey == Keys.CapsLock && keys.Msg == WindowsMessages.KEYDOWN)
-            {
-                this.MenuVisible = !this.MenuVisible;
             }
 
             foreach (var component in this.menus)

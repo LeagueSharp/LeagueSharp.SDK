@@ -189,9 +189,12 @@ namespace LeagueSharp.SDK.Core.UI
             set
             {
                 _visible = value;
-                foreach (var comp in Components)
+                if (Toggled)
                 {
-                    comp.Value.Visible = value;
+                    foreach (var comp in Components)
+                    {
+                        comp.Value.Visible = value;
+                    }
                 }
             } 
         }
@@ -236,7 +239,7 @@ namespace LeagueSharp.SDK.Core.UI
         ///     Add a menu component to this menu.
         /// </summary>
         /// <param name="component"><see cref="AMenuComponent" /> component</param>
-        public void Add(AMenuComponent component)
+        public virtual void Add(AMenuComponent component)
         {
             if (!this.Components.ContainsKey(component.Name))
             {
@@ -335,7 +338,6 @@ namespace LeagueSharp.SDK.Core.UI
         public override void OnDraw(Vector2 position, int index)
         {
             this.Position = position;
-
             ThemeManager.Current.OnMenu(this, position, index);
         }
 
@@ -350,7 +352,7 @@ namespace LeagueSharp.SDK.Core.UI
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void OnWndProc(WindowsKeys args)
         {
-            if ((MenuManager.Instance.MenuVisible && this.Parent == null) || this.Visible)
+            if (this.Visible)
             {
                 if (args.Cursor.IsUnderRectangle(
                     this.Position.X,
