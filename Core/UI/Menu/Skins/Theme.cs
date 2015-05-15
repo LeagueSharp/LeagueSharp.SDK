@@ -75,6 +75,14 @@ namespace LeagueSharp.SDK.Core.UI.Skins
         /// </value>
         public abstract Drawable Slider { get; }
 
+        /// <summary>
+        ///     Gets the button.
+        /// </summary>
+        /// <value>
+        ///     The button.
+        /// </value>
+        public abstract DrawableButton Button { get; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -187,6 +195,32 @@ namespace LeagueSharp.SDK.Core.UI.Skins
             ///     Gets the width
             /// </summary>
             public Func<MenuList, int> Width;
+
+            #endregion
+        }
+
+
+        /// <summary>
+        ///     A draw-able list.
+        /// </summary>
+        public struct DrawableButton
+        {
+            #region Fields
+
+            /// <summary>
+            ///     Gets the additional boundaries.
+            /// </summary>
+            public Func<Vector2, AMenuComponent, Rectangle> ButtonBoundaries;
+
+            /// <summary>
+            ///     Methods that draws this <c>DrawableList</c>.
+            /// </summary>
+            public Action<AMenuComponent, Vector2, int> OnDraw;
+
+            /// <summary>
+            ///     Gets the width
+            /// </summary>
+            public Func<MenuButton, int> Width;
 
             #endregion
         }

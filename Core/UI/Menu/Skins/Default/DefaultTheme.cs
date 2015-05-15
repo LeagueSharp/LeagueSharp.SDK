@@ -74,6 +74,11 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
         /// </summary>
         private Drawable? slider;
 
+        /// <summary>
+        ///     The button draw-able.
+        /// </summary>
+        private DrawableButton? button;
+
         #endregion
 
         #region Public Properties
@@ -145,6 +150,20 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
             get
             {
                 return (Drawable)(this.slider ?? (this.slider = GetSlider()));
+            }
+        }
+
+        /// <summary>
+        ///     Gets the button.
+        /// </summary>
+        /// <value>
+        ///     The slider.
+        /// </value>
+        public override DrawableButton Button
+        {
+            get
+            {
+                return (DrawableButton)(this.button ?? (this.button = GetButton()));
             }
         }
 
@@ -584,6 +603,81 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                }, 
                            Bounding = GetContainerRectangle, AdditionalBoundries = GetContainerRectangle
                        };
+        }
+
+        /// <summary>
+        ///     Gets the button draw-able object.
+        /// </summary>
+        /// <returns>
+        ///     <see cref="Theme.Drawable" /> instance.
+        /// </returns>
+        private static DrawableButton GetButton()
+        {
+            const int textGap = 5;
+            ColorBGRA buttonColor = new ColorBGRA(100, 100, 100, 255);
+            ColorBGRA buttonHoverColor = new ColorBGRA(170, 170, 170, 200);
+            return new DrawableButton
+            {
+                OnDraw = (component, position, index) =>
+                {
+                    var rectangleName = GetContainerRectangle(position, component)
+                                        .GetCenteredText(null, component.DisplayName, CenteredFlags.VerticalCenter);
+
+                    DefaultSettings.Font.DrawText(
+                        null,
+                        component.DisplayName,
+                        (int)(position.X + DefaultSettings.ContainerTextOffset),
+                        (int)rectangleName.Y,
+                        DefaultSettings.TextColor);
+
+                    MenuItem<MenuButton> button = ((MenuItem<MenuButton>)component);
+
+                    int buttonTextWidth = DefaultSettings.Font.MeasureText(null, button.Value.ButtonText, 0).Width;
+
+                    var line = new Line(Drawing.Direct3DDevice) { Antialias = false, GLLines = true, Width = DefaultSettings.ContainerHeight };
+                    line.Begin();
+                    line.Draw(
+                            new[]
+                                {
+                                    new Vector2(
+                                        position.X + component.MenuWidth - buttonTextWidth - (2 * textGap), 
+                                        position.Y + (DefaultSettings.ContainerHeight/2f)), 
+                                    new Vector2(
+                                        position.X + component.MenuWidth, 
+                                        position.Y + (DefaultSettings.ContainerHeight/2f)), 
+                                },DefaultSettings.HoverColor);
+                    line.End();
+                    line.Width = DefaultSettings.ContainerHeight - 5;
+                    line.Begin();
+                    line.Draw(
+                            new[]
+                                {
+                                    new Vector2(
+                                        position.X + component.MenuWidth - buttonTextWidth - (2 * textGap) + 2, 
+                                        position.Y + (DefaultSettings.ContainerHeight/2f)), 
+                                    new Vector2(
+                                        position.X + component.MenuWidth - 2, 
+                                        position.Y + (DefaultSettings.ContainerHeight/2f)), 
+                                }, button.Value.Hovering ? buttonHoverColor : buttonColor);
+                    line.End();
+                    line.Dispose();
+
+                    DefaultSettings.Font.DrawText(
+                        null,
+                        button.Value.ButtonText,
+                        (int)(position.X + component.MenuWidth - buttonTextWidth - textGap),
+                        (int)rectangleName.Y,
+                        DefaultSettings.TextColor);
+                },
+                ButtonBoundaries = delegate(Vector2 position, AMenuComponent component)
+                    {
+                        MenuItem<MenuButton> button = ((MenuItem<MenuButton>)component);
+                        int buttonTextWidth = DefaultSettings.Font.MeasureText(null, button.Value.ButtonText, 0).Width;
+                        return new Rectangle((int)(position.X + component.MenuWidth - buttonTextWidth - (2 * textGap)), (int)position.Y, (2 * textGap) + buttonTextWidth,DefaultSettings.ContainerHeight);
+                    },
+                Width = delegate(MenuButton menuButton)
+                    { return (2 * textGap) + DefaultSettings.Font.MeasureText(null,menuButton.ButtonText,0).Width; }
+            };
         }
 
         /// <summary>
