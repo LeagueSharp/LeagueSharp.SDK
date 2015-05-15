@@ -173,6 +173,11 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// </param>
         public override void OnWndProc(WindowsKeys args)
         {
+            if (!Container.Visible)
+            {
+                return;
+            }
+
             if (args.Msg == WindowsMessages.MOUSEMOVE && this.Interacting)
             {
                 this.CalculateNewValue(args);

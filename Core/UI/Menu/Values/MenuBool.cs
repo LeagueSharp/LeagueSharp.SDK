@@ -138,6 +138,10 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <param name="args">The <see cref="WindowsKeys" /> instance</param>
         public override void OnWndProc(WindowsKeys args)
         {
+            if (!Container.Visible)
+            {
+                return;
+            }
             if (args.Msg == WindowsMessages.LBUTTONDOWN && this.Position.IsValid())
             {
                 var rect = ThemeManager.Current.Boolean.AdditionalBoundries(this.Position, this.Container);

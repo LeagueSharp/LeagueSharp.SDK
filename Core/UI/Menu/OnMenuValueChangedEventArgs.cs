@@ -32,9 +32,11 @@ namespace LeagueSharp.SDK.Core.UI
         ///     Initializes a new instance of the <see cref="OnMenuValueChangedEventArgs" /> class.
         /// </summary>
         /// <param name="menu">The menu.</param>
-        public OnMenuValueChangedEventArgs(Menu menu)
+        /// <param name="menuItem">The MenuItem that changed value</param>
+        public OnMenuValueChangedEventArgs(Menu menu, MenuItem menuItem)
         {
             this.Menu = menu;
+            this.MenuItem = menuItem;
         }
 
         #endregion
@@ -42,9 +44,15 @@ namespace LeagueSharp.SDK.Core.UI
         #region Public Properties
 
         /// <summary>
-        ///     Gets the new Value.
+        ///     Gets the menu that contains the changed MenuItem.
         /// </summary>
         public Menu Menu { get; private set; }
+
+
+        /// <summary>
+        ///  The MenuItem that changed value.
+        /// </summary>
+        public MenuItem MenuItem { get; private set; }
 
         #endregion
     }

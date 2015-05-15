@@ -23,6 +23,7 @@ namespace LeagueSharp.SDK.Core.UI
 {
     using System;
     using System.IO;
+    using System.Reflection;
     using System.Runtime.Serialization.Formatters.Binary;
 
     using LeagueSharp.SDK.Core.Enumerations;
@@ -301,17 +302,23 @@ namespace LeagueSharp.SDK.Core.UI
         {
             if (!this.SettingsLoaded && File.Exists(this.Path) && typeof(T).IsSerializable)
             {
-                var newValue = Deserialize<T>(File.ReadAllBytes(this.Path));
-                if (this.Value != null)
-                {
-                    this.Value.Extract(newValue);
-                }
-                else
-                {
-                    this.Value = newValue;
-                }
-
                 this.SettingsLoaded = true;
+                try
+                {
+                    var newValue = Deserialize<T>(File.ReadAllBytes(this.Path));
+                    if (this.Value != null)
+                    {
+                        this.Value.Extract(newValue);
+                    }
+                    else
+                    {
+                        this.Value = newValue;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
             }
         }
 
@@ -355,17 +362,9 @@ namespace LeagueSharp.SDK.Core.UI
         {
             if (this.value == null)
             {
-                Logging.Write()(
-                    LogLevel.Error, 
-                    "Attempting to pass a windows process message to a null value item. [Item Name: {0}]", 
-                    this.Name);
                 return;
             }
-
-            if (this.Visible)
-            {
-                this.value.OnWndProc(args);
-            }
+            this.value.OnWndProc(args);
         }
 
         /// <summary>
@@ -398,7 +397,7 @@ namespace LeagueSharp.SDK.Core.UI
         internal static T3 Deserialize<T3>(byte[] arrBytes)
         {
             var memStream = new MemoryStream();
-            var binForm = new BinaryFormatter();
+            var binForm = new BinaryFormatter { Binder = new AllowAllAssemblyVersionsDeserializationBinder() };
             memStream.Write(arrBytes, 0, arrBytes.Length);
             memStream.Seek(0, SeekOrigin.Begin);
             return (T3)binForm.Deserialize(memStream);
@@ -427,5 +426,24 @@ namespace LeagueSharp.SDK.Core.UI
         }
 
         #endregion
+    }
+
+    sealed class AllowAllAssemblyVersionsDeserializationBinder : System.Runtime.Serialization.SerializationBinder
+    {
+        public override Type BindToType(string assemblyName, string typeName)
+        {
+            Type typeToDeserialize = null;
+
+            String currentAssembly = Assembly.GetExecutingAssembly().FullName;
+
+            // In this case we are always using the current assembly
+            assemblyName = currentAssembly;
+
+            // Get the type using the typeName and assemblyName
+            typeToDeserialize = Type.GetType(String.Format("{0}, {1}",
+                typeName, assemblyName));
+
+            return typeToDeserialize;
+        }
     }
 }

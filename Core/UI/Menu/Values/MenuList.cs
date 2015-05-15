@@ -252,6 +252,10 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void OnWndProc(WindowsKeys args)
         {
+            if (!Container.Visible)
+            {
+                return;
+            }
             var rightArrowRect = ThemeManager.Current.List.RightArrow(this.Position, this.Container, this);
             var leftArrowRect = ThemeManager.Current.List.LeftArrow(this.Position, this.Container, this);
             if (args.Cursor.IsUnderRectangle(

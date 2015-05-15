@@ -19,6 +19,7 @@
 //   Menu Value Changed delegate
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI
 {
     using System;
@@ -175,10 +176,25 @@ namespace LeagueSharp.SDK.Core.UI
             }
         }
 
+        private bool _visible;
+
         /// <summary>
         ///     Returns the menu visibility.
         /// </summary>
-        public override sealed bool Visible { get; set; }
+        public override sealed bool Visible {
+            get
+            {
+                return _visible;
+            }
+            set
+            {
+                _visible = value;
+                foreach (var comp in Components)
+                {
+                    comp.Value.Visible = value;
+                }
+            } 
+        }
 
         /// <summary>
         ///     Gets the width.
@@ -326,9 +342,7 @@ namespace LeagueSharp.SDK.Core.UI
         /// <summary>
         ///     Menu Update callback.
         /// </summary>
-        public override void OnUpdate()
-        {
-        }
+        public override void OnUpdate() {}
 
         /// <summary>
         ///     Menu Windows Process Messages callback.
@@ -339,9 +353,9 @@ namespace LeagueSharp.SDK.Core.UI
             if ((MenuManager.Instance.MenuVisible && this.Parent == null) || this.Visible)
             {
                 if (args.Cursor.IsUnderRectangle(
-                    this.Position.X, 
-                    this.Position.Y, 
-                    this.MenuWidth, 
+                    this.Position.X,
+                    this.Position.Y,
+                    this.MenuWidth,
                     DefaultSettings.ContainerHeight))
                 {
                     this.Hovering = true;
@@ -372,15 +386,12 @@ namespace LeagueSharp.SDK.Core.UI
                 {
                     this.Hovering = false;
                 }
+            }
 
-                // Pass OnWndProc on to children
-                if (this.Toggled)
-                {
-                    foreach (var item in this.Components.Where(c => c.Value.Visible))
-                    {
-                        item.Value.OnWndProc(args);
-                    }
-                }
+            // Pass OnWndProc on to children
+            foreach (var item in Components)
+            {
+                item.Value.OnWndProc(args);
             }
         }
 
@@ -418,11 +429,11 @@ namespace LeagueSharp.SDK.Core.UI
         /// <param name="sender">
         ///     The sender object.
         /// </param>
-        internal void FireEvent(object sender)
+        internal void FireEvent(MenuItem sender)
         {
             if (this.MenuValueChanged != null)
             {
-                this.MenuValueChanged(sender, new OnMenuValueChangedEventArgs(this));
+                this.MenuValueChanged(sender, new OnMenuValueChangedEventArgs(this, sender));
             }
         }
 

@@ -165,6 +165,10 @@ namespace LeagueSharp.SDK.Core.UI
             set
             {
                 this.menuVisible = value;
+                foreach (Menu menu in menus)
+                {
+                    menu.Visible = value;
+                }
             }
         }
 
