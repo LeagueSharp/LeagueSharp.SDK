@@ -21,6 +21,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.Utils
 {
+    using System;
+    using System.Linq;
     using System.Windows.Forms;
 
     using LeagueSharp.SDK.Core.Enumerations;
@@ -124,52 +126,52 @@ namespace LeagueSharp.SDK.Core.Utils
             }
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
         /// <summary>
-        ///     Returns the key from the <see cref="WndEventArgs" />.
+        /// Gets the WParam
         /// </summary>
-        /// <param name="args"><see cref="WndEventArgs" /> data</param>
-        /// <returns><see cref="System.Windows.Forms.Keys" /> data</returns>
-        public static Keys GetKey(WndEventArgs args)
+        public uint WParam
         {
-            return (Keys)((int)args.WParam);
-        }
-
-        /// <summary>
-        ///     Returns the set collection of keys from the <see cref="WndEventArgs" />.
-        /// </summary>
-        /// <param name="args"><see cref="WndEventArgs" /> data</param>
-        /// <returns><see cref="System.Windows.Forms.Keys" /> data</returns>
-        public static Keys GetKeys(WndEventArgs args)
-        {
-            Keys keyData;
-            if ((Keys)((int)args.WParam) != Control.ModifierKeys)
+            get
             {
-                keyData = (Keys)((int)args.WParam) | Control.ModifierKeys;
+                return args.WParam;
             }
-            else
-            {
-                keyData = (Keys)((int)args.WParam);
-            }
+        }
 
-            return keyData;
+        public Keys SideButton
+        {
+            get
+            {
+                byte[] bytes = BitConverter.GetBytes(args.WParam);
+                if (bytes.Count() > 2)
+                {
+                    int buttonId = bytes[2];
+                    Keys sideButton = Keys.None;
+                    if (buttonId == 1)
+                    {
+                        sideButton = Keys.XButton1;
+                    }
+                    else if (buttonId == 2)
+                    {
+                        sideButton = Keys.XButton2;
+                    }
+                    return sideButton;
+                }
+                return Keys.None;
+            }
         }
 
         /// <summary>
-        ///     Returns the translated windows message from the <see cref="WndEventArgs" />
+        /// Returns the textual representation of the input. 
         /// </summary>
-        /// <param name="args"><see cref="WndEventArgs" /> data</param>
-        /// <returns>
-        ///     <see cref="WindowsMessages" />
-        /// </returns>
-        public static WindowsMessages GetWindowsMessage(WndEventArgs args)
+        public char Char
         {
-            return (WindowsMessages)args.Msg;
+            get
+            {
+                return Convert.ToChar(args.WParam);
+            }
         }
 
         #endregion
+        
     }
 }
