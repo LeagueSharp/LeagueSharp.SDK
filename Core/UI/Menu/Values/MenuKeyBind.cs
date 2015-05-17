@@ -43,6 +43,11 @@ namespace LeagueSharp.SDK.Core.UI.Values
         #region Fields
 
         /// <summary>
+        /// The local active value.
+        /// </summary>
+        private bool active;
+
+        /// <summary>
         ///     Local Interacting value.
         /// </summary>
         private bool interacting;
@@ -89,23 +94,24 @@ namespace LeagueSharp.SDK.Core.UI.Values
 
         #region Public Properties
 
-        private bool _active;
         /// <summary>
         ///     Gets or sets a value indicating whether the key is active.
         /// </summary>
-        public bool Active {
+        public bool Active
+        {
             get
             {
-                return _active;
+                return this.active;
             }
+
             set
             {
-                if (_active != value)
+                if (this.active != value)
                 {
-                    _active = value;
-                    Container.FireEvent();
+                    this.active = value;
+                    this.Container.FireEvent();
                 }
-            } 
+            }
         }
 
         /// <summary>
@@ -221,8 +227,9 @@ namespace LeagueSharp.SDK.Core.UI.Values
                     case WindowsMessages.KEYDOWN:
                         if (args.Key == this.Key && this.Type == KeyBindType.Press)
                         {
-                            Active = true;
+                            this.Active = true;
                         }
+
                         break;
                     case WindowsMessages.KEYUP:
                         if (this.Interacting && args.SingleKey != Keys.ShiftKey)
@@ -234,18 +241,20 @@ namespace LeagueSharp.SDK.Core.UI.Values
                         }
                         else if (args.Key == this.Key && this.Type == KeyBindType.Press)
                         {
-                            Active = false;
+                            this.Active = false;
                         }
                         else if (args.Key == this.Key && this.Type == KeyBindType.Toggle)
                         {
                             this.Active = !this.Active;
                         }
+
                         break;
                     case WindowsMessages.XBUTTONDOWN:
                         if (args.SideButton == this.Key && this.Type == KeyBindType.Press)
                         {
-                            Active = true;
+                            this.Active = true;
                         }
+
                         break;
                     case WindowsMessages.XBUTTONUP:
                         if (this.Interacting)
@@ -257,18 +266,20 @@ namespace LeagueSharp.SDK.Core.UI.Values
                         }
                         else if (args.SideButton == this.Key && this.Type == KeyBindType.Press)
                         {
-                            Active = false;
+                            this.Active = false;
                         }
                         else if (args.SideButton == this.Key && this.Type == KeyBindType.Toggle)
                         {
                             this.Active = !this.Active;
                         }
+
                         break;
                     case WindowsMessages.MBUTTONDOWN:
-                        if (Key == Keys.MButton && this.Type == KeyBindType.Press)
+                        if (this.Key == Keys.MButton && this.Type == KeyBindType.Press)
                         {
-                            Active = true;
+                            this.Active = true;
                         }
+
                         break;
                     case WindowsMessages.MBUTTONUP:
                         if (this.Interacting)
@@ -280,18 +291,20 @@ namespace LeagueSharp.SDK.Core.UI.Values
                         }
                         else if (Keys.MButton == this.Key && this.Type == KeyBindType.Press)
                         {
-                            Active = false;
+                            this.Active = false;
                         }
                         else if (Keys.MButton == this.Key && this.Type == KeyBindType.Toggle)
                         {
                             this.Active = !this.Active;
                         }
+
                         break;
                     case WindowsMessages.RBUTTONDOWN:
-                        if (Key == Keys.RButton && this.Type == KeyBindType.Press)
+                        if (this.Key == Keys.RButton && this.Type == KeyBindType.Press)
                         {
-                            Active = true;
+                            this.Active = true;
                         }
+
                         break;
                     case WindowsMessages.RBUTTONUP:
                         if (this.Interacting)
@@ -303,31 +316,33 @@ namespace LeagueSharp.SDK.Core.UI.Values
                         }
                         else if (Keys.RButton == this.Key && this.Type == KeyBindType.Press)
                         {
-                            Active = false;
+                            this.Active = false;
                         }
                         else if (Keys.RButton == this.Key && this.Type == KeyBindType.Toggle)
                         {
                             this.Active = !this.Active;
                         }
+
                         break;
                     case WindowsMessages.LBUTTONDOWN:
-                        if (Interacting)
+                        if (this.Interacting)
                         {
                             this.Key = Keys.LButton;
                             args.Process = false;
                             this.Interacting = false;
                             this.Container.ResetWidth();
-                        } else if (Container.Visible && this.Position.IsValid())
+                        }
+                        else if (this.Container.Visible && this.Position.IsValid())
                         {
                             var container = ThemeManager.Current.KeyBind.AdditionalBoundries(
-                                this.Position,
+                                this.Position, 
                                 this.Container);
                             var content = ThemeManager.Current.KeyBind.Bounding(this.Position, this.Container);
 
                             if (args.Cursor.IsUnderRectangle(
-                                container.X,
-                                container.Y,
-                                container.Width,
+                                container.X, 
+                                container.Y, 
+                                container.Width, 
                                 container.Height))
                             {
                                 this.Active = !this.Active;
@@ -338,22 +353,24 @@ namespace LeagueSharp.SDK.Core.UI.Values
                             }
                             else
                             {
-                                if (Key == Keys.LButton && this.Type == KeyBindType.Press)
+                                if (this.Key == Keys.LButton && this.Type == KeyBindType.Press)
                                 {
-                                    Active = true;
+                                    this.Active = true;
                                 }
                             }
                         }
+
                         break;
                     case WindowsMessages.LBUTTONUP:
                         if (Keys.LButton == this.Key && this.Type == KeyBindType.Press)
                         {
-                            Active = false;
+                            this.Active = false;
                         }
                         else if (Keys.LButton == this.Key && this.Type == KeyBindType.Toggle)
                         {
                             this.Active = !this.Active;
                         }
+
                         break;
                 }
             }

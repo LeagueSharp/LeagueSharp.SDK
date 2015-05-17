@@ -19,7 +19,6 @@
 //   Menu Value Changed delegate
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace LeagueSharp.SDK.Core.UI
 {
     using System;
@@ -55,6 +54,11 @@ namespace LeagueSharp.SDK.Core.UI
         ///     Menu Component Sub-Components.
         /// </summary>
         public readonly IDictionary<string, AMenuComponent> Components = new Dictionary<string, AMenuComponent>();
+
+        /// <summary>
+        /// Local visible value.
+        /// </summary>
+        private bool visible;
 
         /// <summary>
         ///     Local toggled indicator.
@@ -176,27 +180,27 @@ namespace LeagueSharp.SDK.Core.UI
             }
         }
 
-        private bool _visible;
-
         /// <summary>
         ///     Returns the menu visibility.
         /// </summary>
-        public override sealed bool Visible {
+        public override sealed bool Visible
+        {
             get
             {
-                return _visible;
+                return this.visible;
             }
+
             set
             {
-                _visible = value;
-                if (Toggled)
+                this.visible = value;
+                if (this.Toggled)
                 {
-                    foreach (var comp in Components)
+                    foreach (var comp in this.Components)
                     {
                         comp.Value.Visible = value;
                     }
                 }
-            } 
+            }
         }
 
         /// <summary>
@@ -344,7 +348,9 @@ namespace LeagueSharp.SDK.Core.UI
         /// <summary>
         ///     Menu Update callback.
         /// </summary>
-        public override void OnUpdate() {}
+        public override void OnUpdate()
+        {
+        }
 
         /// <summary>
         ///     Menu Windows Process Messages callback.
@@ -355,9 +361,9 @@ namespace LeagueSharp.SDK.Core.UI
             if (this.Visible)
             {
                 if (args.Cursor.IsUnderRectangle(
-                    this.Position.X,
-                    this.Position.Y,
-                    this.MenuWidth,
+                    this.Position.X, 
+                    this.Position.Y, 
+                    this.MenuWidth, 
                     DefaultSettings.ContainerHeight))
                 {
                     this.Hovering = true;
@@ -391,7 +397,7 @@ namespace LeagueSharp.SDK.Core.UI
             }
 
             // Pass OnWndProc on to children
-            foreach (var item in Components)
+            foreach (var item in this.Components)
             {
                 item.Value.OnWndProc(args);
             }

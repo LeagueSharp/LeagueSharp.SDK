@@ -53,7 +53,7 @@ namespace LeagueSharp.SDK.Core
             Variables.LeagueSharpMenu = new Menu("LeagueSharp", "LeagueSharp", true).Attach();
 
             // Load the orbwalker
-            Orbwalker.BootstrapMenu();
+            Orbwalker.Initialize(Variables.LeagueSharpMenu);
         }
 
         #endregion

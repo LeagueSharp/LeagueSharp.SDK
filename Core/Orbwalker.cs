@@ -16,9 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   <c>Orbwalker</c> class, provides a utility tool for assemblies to implement an <c>orbwalker</c>.
-//   <c>An orbwalker</c> is a tool for
-//   performing an auto attack and moving as quickly as possible afterwards.
+//   <c>Orbwalker</c> part that contains the internal system functionality of the <c>orbwalker</c>.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core
@@ -28,10 +26,9 @@ namespace LeagueSharp.SDK.Core
     using System.Windows.Forms;
 
     using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Events;
     using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Managers;
-    using LeagueSharp.SDK.Core.Math.Prediction;
     using LeagueSharp.SDK.Core.UI;
     using LeagueSharp.SDK.Core.UI.Values;
     using LeagueSharp.SDK.Core.Utils;
@@ -39,146 +36,102 @@ namespace LeagueSharp.SDK.Core
 
     using SharpDX;
 
+    using Color = System.Drawing.Color;
     using Menu = LeagueSharp.SDK.Core.UI.Menu;
 
     /// <summary>
-    ///     <c>Orbwalker</c> class, provides a utility tool for assemblies to implement an <c>orbwalker</c>.
-    ///     <c>An orbwalker</c> is a tool for
-    ///     performing an auto attack and moving as quickly as possible afterwards.
+    ///     <c>Orbwalker</c> part that contains the internal system functionality of the <c>orbwalker</c>.
     /// </summary>
-    public static class Orbwalker
+    public partial class Orbwalker
     {
         #region Static Fields
 
         /// <summary>
-        ///     Contains the current mode (<see cref="OrbwalkerMode" />)
+        ///     The local attack value.
         /// </summary>
-        private static OrbwalkerMode activeMode = OrbwalkerMode.None;
+        private static bool attack = true;
 
         /// <summary>
-        ///     Contains the time of the last auto attack
+        ///     The local last auto attack tick value.
         /// </summary>
-        private static int lastAutoAttack;
+        private static int lastAutoAttackTick;
 
         /// <summary>
-        ///     Contains a <see cref="SDK.Core.UI.Menu" />
+        ///     The local last movement order tick value.
         /// </summary>
-        private static Menu menu;
+        private static int lastMovementOrderTick = Variables.TickCount;
 
         /// <summary>
-        ///     Returns if we are shooting a missile that isn't visible, yet
+        ///     The local movement value.
         /// </summary>
-        private static bool missleLaunched = true;
+        private static bool movement = true;
 
         #endregion
 
-        #region Constructors and Destructors
+        #region Public Properties
 
         /// <summary>
-        ///     Initializes static members of the <see cref="Orbwalker" /> class.
+        ///     Gets or sets the active mode.
         /// </summary>
-        static Orbwalker()
-        {
-            BootstrapMenu();
+        public static OrbwalkerMode ActiveMode { get; set; }
 
-            Game.OnUpdate += Game_OnUpdate;
-            GameObject.OnCreate += GameObject_OnCreate;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
-            Spellbook.OnStopCast += Spellbook_OnStopCast;
+        /// <summary>
+        ///     Gets or sets a value indicating whether attack.
+        /// </summary>
+        public static bool Attack
+        {
+            get
+            {
+                return attack
+                       && Variables.TickCount + (Game.Ping / 2)
+                       >= lastAutoAttackTick + (ObjectHandler.Player.AttackDelay * 1000)
+                       + menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value;
+            }
+
+            set
+            {
+                attack = value;
+            }
+        }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether movement.
+        /// </summary>
+        public static bool Movement
+        {
+            get
+            {
+                return movement && !InterruptableSpell.IsCastingInterruptableSpell(Player, true) && !IsMissileLaunched
+                       && (Player.CanCancelAutoAttack()
+                               ? Variables.TickCount + (Game.Ping / 2)
+                                 >= lastAutoAttackTick + (Player.AttackCastDelay * 1000) + 20
+                               : Variables.TickCount - lastAutoAttackTick > 250);
+            }
+
+            set
+            {
+                movement = value;
+            }
         }
 
         #endregion
 
-        #region Public Methods and Operators
+        #region Properties
 
         /// <summary>
-        ///     Returns if our hero is currently able to perform an auto attack
+        ///     Gets or sets a value indicating whether is missile launched.
         /// </summary>
-        /// <returns>The <see cref="bool" /></returns>
-        public static bool CanAttack()
+        private static bool IsMissileLaunched { get; set; }
+
+        /// <summary>
+        ///     Gets the player.
+        /// </summary>
+        private static Obj_AI_Hero Player
         {
-            if (lastAutoAttack <= Variables.TickCount)
+            get
             {
-                return Variables.TickCount + (Game.Ping / 2)
-                       >= lastAutoAttack + (ObjectHandler.Player.AttackDelay * 1000);
+                return ObjectHandler.Player;
             }
-
-            return false;
-        }
-
-        /// <summary>
-        ///     Returns if our hero is currently able to perform the <c>orbwalking</c> process on another
-        ///     <see cref="AttackableUnit" />
-        /// </summary>
-        /// <param name="target">Type of <see cref="AttackableUnit" /></param>
-        /// <returns>The <see cref="bool" /></returns>
-        public static bool CanGetOrbwalked(this AttackableUnit target)
-        {
-            return target != null && target.IsValidTarget() && target.InAutoAttackRange();
-        }
-
-        /// <summary>
-        ///     Returns if our hero is currently able to move and not attacking
-        /// </summary>
-        /// <returns>The <see cref="bool" /></returns>
-        public static bool CanMove()
-        {
-            if (lastAutoAttack <= Variables.TickCount && !missleLaunched)
-            {
-                return ObjectManager.Player.CanCancelAutoAttack()
-                           ? Variables.TickCount + (Game.Ping / 2)
-                             >= lastAutoAttack + (ObjectManager.Player.AttackCastDelay * 1000) + 20
-                           : Variables.TickCount - lastAutoAttack > 250;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        ///     Performs the <c>orbwalking</c> process on another <see cref="AttackableUnit" />
-        /// </summary>
-        /// <param name="mode"><see cref="OrbwalkerMode" /> mode</param>
-        /// <param name="target"><see cref="AttackableUnit" /> target</param>
-        public static void PerformMode(OrbwalkerMode mode, AttackableUnit target = null)
-        {
-            if (CanAttack())
-            {
-                switch (mode)
-                {
-                    case OrbwalkerMode.Combo:
-                        PerformModeCombo(target);
-                        break;
-
-                    case OrbwalkerMode.LaneClear:
-                        PerformModeLaneClear(target);
-                        break;
-
-                    case OrbwalkerMode.LaneFreeze:
-                        PerformModeLaneFreeze();
-                        break;
-
-                    case OrbwalkerMode.LastHit:
-                        PerformModeLastHit();
-                        break;
-
-                    case OrbwalkerMode.Mixed:
-                        PerformModeMixed();
-                        break;
-                }
-            }
-
-            if (mode != OrbwalkerMode.None && CanMove())
-            {
-                MoveTo(Game.CursorPos);
-            }
-        }
-
-        /// <summary>
-        ///     Resets the auto attack timer, which results in an instant attack again (if possible) or stuttering (if used wrong)
-        /// </summary>
-        public static void ResetSwingTimer()
-        {
-            lastAutoAttack = 0;
         }
 
         #endregion
@@ -186,98 +139,15 @@ namespace LeagueSharp.SDK.Core
         #region Methods
 
         /// <summary>
-        ///     TODO The bootstrap menu.
+        ///     On create event.
         /// </summary>
-        internal static void BootstrapMenu()
-        {
-            menu = new Menu("CommonEx.Orbwalker", "Orbwalker");
-
-            var drawingMenu = new Menu("Drawings", "Drawings");
-            drawingMenu.Add(new MenuItem<MenuBool>("HoldZone", "Draw Hold Zone") { Value = new MenuBool() });
-            drawingMenu.Add(
-                new MenuItem<MenuBool>("AttackedMinion", "Draw Attacked Minion")
-                    {
-                        Value = new MenuBool(true) // thats redundant :S
-                    });
-            drawingMenu.Add(new MenuItem<MenuBool>("AutoAttackRange", "Draw AA Range") { Value = new MenuBool(true) });
-            menu.Add(drawingMenu);
-
-            menu.Add(
-                new MenuItem<MenuKeyBind>("Combo", "Combo") { Value = new MenuKeyBind(Keys.Space, KeyBindType.Press) });
-            menu.Add(
-                new MenuItem<MenuKeyBind>("Harass", "Harass") { Value = new MenuKeyBind(Keys.C, KeyBindType.Press) });
-            menu.Add(
-                new MenuItem<MenuKeyBind>("LastHit", "Last Hit") { Value = new MenuKeyBind(Keys.X, KeyBindType.Press) });
-            menu.Add(
-                new MenuItem<MenuKeyBind>("WaveClear", "Wave Clear")
-                    {
-                       Value = new MenuKeyBind(Keys.V, KeyBindType.Press) 
-                    });
-            menu.Add(
-                new MenuItem<MenuKeyBind>("Freeze", "Freeze") { Value = new MenuKeyBind(Keys.F1, KeyBindType.Toggle) });
-
-            Variables.LeagueSharpMenu.Add(menu);
-
-            menu.MenuValueChanged += delegate(object sender, OnMenuValueChangedEventArgs args)
-                {
-                    if (args.Menu["Combo"].GetValue<MenuKeyBind>().Active)
-                    {
-                        activeMode = OrbwalkerMode.Combo;
-                    }
-
-                    if (args.Menu["Harass"].GetValue<MenuKeyBind>().Active)
-                    {
-                        activeMode = OrbwalkerMode.Mixed;
-                    }
-
-                    if (args.Menu["LastHit"].GetValue<MenuKeyBind>().Active)
-                    {
-                        activeMode = OrbwalkerMode.LastHit;
-                    }
-
-                    if (args.Menu["WaveClear"].GetValue<MenuKeyBind>().Active)
-                    {
-                        activeMode = OrbwalkerMode.LaneClear;
-                    }
-                };
-        }
-
-        /// <summary>
-        ///     Wrapper function to attack a target
-        /// </summary>
-        /// <param name="target">
-        ///     <see cref="AttackableUnit" /> target
+        /// <param name="sender">
+        ///     The sender
         /// </param>
-        /// <param name="setAttackTime">
-        ///     The set Attack Time.
+        /// <param name="args">
+        ///     The event data
         /// </param>
-        private static void Attack(GameObject target, bool setAttackTime = false)
-        {
-            ObjectHandler.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
-
-            if (setAttackTime)
-            {
-                lastAutoAttack = Variables.TickCount - (Game.Ping / 2);
-            }
-        }
-
-        /// <summary>
-        ///     Game.OnUpdate Event
-        /// </summary>
-        /// <param name="args"><see cref="EventArgs" /> args</param>
-        private static void Game_OnUpdate(EventArgs args)
-        {
-            PerformMode(
-                OrbwalkerMode.Combo, 
-                ObjectManager.Get<Obj_AI_Hero>().FirstOrDefault(hero => !hero.IsMe && hero.IsEnemy));
-        }
-
-        /// <summary>
-        ///     Game.OnCreate Event to detect missiles
-        /// </summary>
-        /// <param name="sender"><see cref="GameObject" /> sender</param>
-        /// <param name="args"><see cref="EventArgs" /> args</param>
-        private static void GameObject_OnCreate(GameObject sender, EventArgs args)
+        private static void OnCreate(GameObject sender, EventArgs args)
         {
             if (sender.IsValid && sender.Type == GameObjectType.MissileClient)
             {
@@ -285,62 +155,60 @@ namespace LeagueSharp.SDK.Core
 
                 if (missile != null && missile.SpellCaster.IsMe && AutoAttack.IsAutoAttack(missile.SData.Name))
                 {
-                    missleLaunched = false;
+                    IsMissileLaunched = false;
                 }
             }
         }
 
         /// <summary>
-        ///     Returns the best killable minion (if any)
+        ///     On draw event.
         /// </summary>
-        /// <param name="types"><see cref="MinionTypes" /> as filter</param>
-        /// <param name="predictionType"><see cref="HealthPredictionType" /> to support both lane clear/last hit</param>
-        /// <param name="adModifier">A modifier value for the lane freeze, passed as <see cref="float" /></param>
-        /// <returns>The kill-able minion as a <see cref="Obj_AI_Base" /> type</returns>
-        private static Obj_AI_Base GetKillableMinion(
-            MinionTypes types = MinionTypes.All, 
-            HealthPredictionType predictionType = HealthPredictionType.Default, 
-            double adModifier = 1.0)
+        /// <param name="e">
+        ///     The event data
+        /// </param>
+        private static void OnDraw(EventArgs e)
         {
-            return
-                MinionManager.GetMinions(
-                    ObjectHandler.Player.ServerPosition, 
-                    ObjectHandler.Player.GetRealAutoAttackRange() + 65, 
-                    types)
-                    .Where(CanGetOrbwalked)
-                    .Select(
-                        minion =>
-                        new
-                            {
-                                minion, 
-                                predictedHealth =
-                            Health.GetPrediction(minion, (int)minion.GetTimeToHit(), 20, predictionType)
-                            })
-                    .Where(
-                        @t =>
-                        @t.predictedHealth > 0
-                        && @t.predictedHealth <= ObjectManager.Player.GetAutoAttackDamage(@t.minion) * adModifier)
-                    .Select(@t => @t.minion)
-                    .FirstOrDefault();
+            if (menu["drawings"]["drawAARange"].GetValue<MenuBool>().Value)
+            {
+                Drawing.DrawCircle(Player.Position, Player.GetRealAutoAttackRange(), Color.Blue);
+            }
+
+            if (menu["drawings"]["drawTargetAARange"].GetValue<MenuBool>().Value)
+            {
+                // TODO: TargetSelector
+            }
+
+            if (menu["drawings"]["drawKillableMinion"].GetValue<MenuBool>().Value)
+            {
+                var minions =
+                    ObjectManager.Get<Obj_AI_Minion>()
+                        .Where(m => m.IsValidTarget(1200F) && m.Health < Player.GetAutoAttackDamage(m, true) * 1.5);
+                foreach (var minion in minions)
+                {
+                    if (minion.Health < Player.GetAutoAttackDamage(minion, true) * 1.5)
+                    {
+                        var colorG = 255 - (int)(255 * minion.Health / (Player.GetAutoAttackDamage(minion, true) * 1.5));
+                        var colorR = minion.Health < Player.GetAutoAttackDamage(minion, true)
+                                         ? 255 - (int)(255 * minion.Health / Player.GetAutoAttackDamage(minion, true))
+                                         : 0;
+                        Drawing.DrawCircle(
+                            minion.Position,
+                            minion.BoundingRadius * 2f,
+                            Color.FromArgb(255, 0, colorG > 0 ? colorG : 128, colorR < 0 ? 0 : colorR));
+                    }
+                }
+            }
         }
 
         /// <summary>
-        ///     Wrapper function to move to an extended position
+        ///     On process spell cast event.
         /// </summary>
-        /// <param name="position"><see cref="Vector3" /> position</param>
-        /// <param name="distance">Extend distance from the given position</param>
-        private static void MoveTo(Vector3 position, float distance = 500)
-        {
-            ObjectHandler.Player.IssueOrder(
-                GameObjectOrder.MoveTo, 
-                ObjectHandler.Player.Position.Extend(position, distance));
-        }
-
-        /// <summary>
-        ///     <c>Obj_AI_Base.OnProcessSpellCast</c> Event to detect auto attacks
-        /// </summary>
-        /// <param name="sender"><see cref="Obj_AI_Base" /> sender</param>
-        /// <param name="args"><see cref="GameObjectProcessSpellCastEventArgs" /> args</param>
+        /// <param name="sender">
+        ///     The sender
+        /// </param>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
         private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsMe)
@@ -349,141 +217,333 @@ namespace LeagueSharp.SDK.Core
 
                 if (AutoAttack.IsAutoAttack(spellName))
                 {
-                    lastAutoAttack = Variables.TickCount - (Game.Ping / 2);
+                    lastAutoAttackTick = Variables.TickCount - (Game.Ping / 2);
                 }
 
                 if (AutoAttack.IsAutoAttackReset(spellName))
                 {
-                    DelayAction.Add(250, ResetSwingTimer);
+                    DelayAction.Add(250, () => { lastAutoAttackTick = 0; });
                 }
+            }
+        }
 
-                if (AutoAttack.IsAutoAttack(spellName))
+        /// <summary>
+        ///     On game update event.
+        /// </summary>
+        /// <param name="e">
+        ///     The event data
+        /// </param>
+        private static void OnUpdate(EventArgs e)
+        {
+            if (menu == null || ActiveMode == OrbwalkerMode.None)
+            {
+                return;
+            }
+
+            if (Attack)
+            {
+                Preform(GetTarget(ActiveMode));
+            }
+
+            if (Movement
+                && Variables.TickCount - lastMovementOrderTick
+                > menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value)
+            {
+                MoveOrder(Game.CursorPos.SetZ());
+            }
+        }
+
+        #endregion
+    }
+
+    /// <summary>
+    ///     <c>Orbwalker</c> part that contains the internal modes functionality of the <c>orbwalker</c>.
+    /// </summary>
+    public partial class Orbwalker
+    {
+        #region Methods
+
+        /// <summary>
+        ///     Preforms the <c>orbwalker</c> action.
+        /// </summary>
+        /// <param name="target">
+        ///     A target to attack.
+        /// </param>
+        private static void Preform(AttackableUnit target)
+        {
+            if (target.IsValidTarget()
+                && Player.DistanceSquared(target) <= System.Math.Pow(target.GetRealAutoAttackRange(), 2))
+            {
+                Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+            }
+        }
+
+        #endregion
+    }
+
+    /// <summary>
+    ///     <c>Orbwalker</c> part that contains the internal menu functionality of the <c>orbwalker</c>.
+    /// </summary>
+    public partial class Orbwalker
+    {
+        #region Static Fields
+
+        /// <summary>
+        ///     The menu handle.
+        /// </summary>
+        private static Menu menu;
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Initializes the <c>orbwalker</c>, starting from the menu.
+        /// </summary>
+        /// <param name="rootMenu">
+        ///     The parent menu.
+        /// </param>
+        internal static void Initialize(Menu rootMenu)
+        {
+            menu = new Menu("orbwalker", "Orbwalker");
+
+            menu.Add(new Menu("resetSpells", "Reset Spells"));
+            menu.Add(new Menu("items", "Items"));
+
+            var drawing = new Menu("drawings", "Drawings");
+            drawing.Add(new MenuItem<MenuBool>("drawAARange", "Draw Auto-Attack Range") { Value = new MenuBool(true) });
+            drawing.Add(new MenuItem<MenuBool>("drawTargetAARange", "Draw Target Auto-Attack Range"));
+            drawing.Add(new MenuItem<MenuBool>("drawKillableMinion", "Draw Killable Minion"));
+            menu.Add(drawing);
+
+            var advanced = new Menu("advanced", "Advanced");
+            advanced.Add(new MenuItem<MenuSeparator>("separatorMovement", "Movement"));
+            advanced.Add(
+                new MenuItem<MenuSlider>("movementDelay", "Delay between Movement")
+                    {
+                       Value = new MenuSlider(new Random(Variables.TickCount).Next(200, 301), 0, 2500) 
+                    });
+            advanced.Add(
+                new MenuItem<MenuBool>("movementScramble", "Randomize movement location") { Value = new MenuBool(true) });
+            advanced.Add(
+                new MenuItem<MenuSlider>("movementExtraHold", "Extra Hold Position")
+                    {
+                       Value = new MenuSlider(25, 0, 250) 
+                    });
+            advanced.Add(
+                new MenuItem<MenuSlider>("movementMaximumDistance", "Maximum Movement Distance")
+                    {
+                       Value = new MenuSlider(new Random().Next(500, 1201), 0, 1200) 
+                    });
+            advanced.Add(new MenuItem<MenuSeparator>("separatorMisc", "Miscellaneous"));
+            advanced.Add(
+                new MenuItem<MenuSlider>("miscExtraWindup", "Extra Windup") { Value = new MenuSlider(80, 0, 200) });
+            advanced.Add(new MenuItem<MenuSlider>("miscFarmDelay", "Farm Delay") { Value = new MenuSlider(0, 0, 200) });
+            advanced.Add(new MenuItem<MenuSeparator>("separatorOther", "Other"));
+            advanced.Add(
+                new MenuItem<MenuButton>("resetAll", "Settings")
+                    {
+                       Value = new MenuButton("Reset All Settings") { Action = ResetSettings } 
+                    });
+            menu.Add(advanced);
+
+            menu.Add(new MenuItem<MenuSeparator>("separatorKeys", "Key Bindings"));
+            menu.Add(
+                new MenuItem<MenuKeyBind>("lasthitKey", "Farm") { Value = new MenuKeyBind(Keys.X, KeyBindType.Press) });
+            menu.Add(
+                new MenuItem<MenuKeyBind>("laneclearKey", "Lane Clear")
+                    {
+                       Value = new MenuKeyBind(Keys.V, KeyBindType.Press) 
+                    });
+            menu.Add(
+                new MenuItem<MenuKeyBind>("hybridKey", "Hybrid") { Value = new MenuKeyBind(Keys.C, KeyBindType.Press) });
+            menu.Add(
+                new MenuItem<MenuKeyBind>("orbwalkKey", "Orbwalk")
+                    {
+                       Value = new MenuKeyBind(Keys.Space, KeyBindType.Press) 
+                    });
+
+            menu.MenuValueChanged += (sender, args) =>
                 {
-                    missleLaunched = true;
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Commands to preform the combo mode.
-        /// </summary>
-        /// <param name="target"><see cref="AttackableUnit" /> target (usually <see cref="Obj_AI_Hero" />)</param>
-        private static void PerformModeCombo(AttackableUnit target = null)
-        {
-            if (CanAttack() && target.CanGetOrbwalked())
-            {
-                Attack(target);
-            }
-        }
-
-        /// <summary>
-        ///     Internal function for the lane clear logic
-        /// </summary>
-        /// <param name="target"><see cref="AttackableUnit" /> Optional target (usually <see cref="Obj_AI_Hero" />)</param>
-        private static void PerformModeLaneClear(AttackableUnit target = null)
-        {
-            if (target.CanGetOrbwalked() && !ShouldWait())
-            {
-                Attack(target);
-                return;
-            }
-
-            var minion = GetKillableMinion(MinionTypes.All, HealthPredictionType.Simulated);
-
-            if (minion != null)
-            {
-                Attack(minion);
-            }
-        }
-
-        /// <summary>
-        ///     Internal function for the lane freeze logic
-        /// </summary>
-        /// <param name="target"><see cref="AttackableUnit" /> Optional target (usually <see cref="Obj_AI_Hero" />)</param>
-        private static void PerformModeLaneFreeze(AttackableUnit target = null)
-        {
-            if (target.CanGetOrbwalked() && !ShouldWait())
-            {
-                Attack(target);
-                return;
-            }
-
-            var minion = GetKillableMinion(MinionTypes.All, HealthPredictionType.Default, 0.5);
-
-            if (minion != null)
-            {
-                Attack(minion);
-            }
-        }
-
-        /// <summary>
-        ///     Internal function for the last hit logic
-        /// </summary>
-        private static void PerformModeLastHit()
-        {
-            var minion = GetKillableMinion();
-
-            if (minion != null)
-            {
-                Attack(minion);
-            }
-        }
-
-        /// <summary>
-        ///     Internal function for the mixed mode logic
-        /// </summary>
-        /// <param name="target"><see cref="AttackableUnit" /> Optional target (usually <see cref="Obj_AI_Hero" />)</param>
-        private static void PerformModeMixed(AttackableUnit target = null)
-        {
-            if (target.CanGetOrbwalked() && !ShouldWait())
-            {
-                Attack(target);
-                return;
-            }
-
-            PerformModeLastHit();
-        }
-
-        /// <summary>
-        ///     Returns if a minion is killable soon and we should wait with our attack
-        /// </summary>
-        /// <returns>The <see cref="bool" /></returns>
-        private static bool ShouldWait()
-        {
-            return
-                MinionManager.GetMinions(
-                    ObjectHandler.Player.ServerPosition, 
-                    ObjectHandler.Player.GetRealAutoAttackRange() + 65)
-                    .Where(CanGetOrbwalked)
-                    .Select(
-                        minion =>
-                        new
+                    var keyBind = sender as MenuItem<MenuKeyBind>;
+                    if (keyBind != null)
+                    {
+                        var modeName = keyBind.Name.Substring(0, keyBind.Name.IndexOf("Key", StringComparison.Ordinal));
+                        OrbwalkerMode mode;
+                        if (Enum.TryParse(modeName, true, out mode))
+                        {
+                            if (keyBind.Value.Active)
                             {
-                                minion, 
-                                predictedHealth =
-                            Health.GetPrediction(
-                                minion, 
-                                (int)(ObjectHandler.Player.AttackDelay * 1.3), 
-                                20, 
-                                HealthPredictionType.Simulated)
-                            })
-                    .Select(
-                        @t =>
-                        @t.predictedHealth > 0
-                        && @t.predictedHealth <= ObjectManager.Player.GetAutoAttackDamage(@t.minion))
-                    .FirstOrDefault();
+                                ActiveMode = mode;
+                            }
+                            else
+                            {
+                                if (mode == ActiveMode)
+                                {
+                                    ActiveMode = OrbwalkerMode.None;
+                                }
+                            }
+                        }
+                    }
+                };
+
+            rootMenu.Add(menu);
+
+            Game.OnUpdate += OnUpdate;
+            GameObject.OnCreate += OnCreate;
+            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Drawing.OnDraw += OnDraw;
         }
 
         /// <summary>
-        ///     <c>Spellbook.OnStopCast</c> Event to detect canceled auto attacks
+        ///     Resets the <c>orbwalker</c> settings.
         /// </summary>
-        /// <param name="sender"><see cref="Spellbook" /> sender</param>
-        /// <param name="args"><see cref="SpellbookStopCastEventArgs" /> args</param>
-        private static void Spellbook_OnStopCast(Spellbook sender, SpellbookStopCastEventArgs args)
+        private static void ResetSettings()
         {
-            if (sender.Owner.IsValid && sender.Owner.IsMe && args.DestroyMissile && args.StopAnimation)
+            menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value = new Random(Variables.TickCount).Next(
+                200, 
+                301);
+            menu["advanced"]["movementScramble"].GetValue<MenuBool>().Value = true;
+            menu["advanced"]["movementExtraHold"].GetValue<MenuSlider>().Value = 25;
+            menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value = new Random().Next(500, 1201);
+            menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value = 80;
+            menu["advanced"]["miscFarmDelay"].GetValue<MenuSlider>().Value = 0;
+            menu["lasthitKey"].GetValue<MenuKeyBind>().Key = Keys.X;
+            menu["laneclearKey"].GetValue<MenuKeyBind>().Key = Keys.V;
+            menu["hybridKey"].GetValue<MenuKeyBind>().Key = Keys.C;
+            menu["orbwalkKey"].GetValue<MenuKeyBind>().Key = Keys.Space;
+        }
+
+        #endregion
+    }
+
+    /// <summary>
+    ///     <c>Orbwalker</c> part that contains the external API functionality of the <c>orbwalker</c>.
+    /// </summary>
+    public partial class Orbwalker
+    {
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Returns a target based on the <c>OrbwalkerMode</c>.
+        /// </summary>
+        /// <param name="mode">
+        ///     The <c>OrbwalkerMode</c>
+        /// </param>
+        /// <returns>
+        ///     The target in a <c>AttackableUnit</c> instance
+        /// </returns>
+        public static AttackableUnit GetTarget(OrbwalkerMode mode = OrbwalkerMode.None)
+        {
+            switch (mode)
             {
-                // _missleLaunched = false;
+                case OrbwalkerMode.None:
+                case OrbwalkerMode.Orbwalk:
+                    {
+                        // TODO: Fix TargetSelector
+                        break;
+                    }
+
+                case OrbwalkerMode.LastHit:
+                    {
+                        var turret =
+                            ObjectManager.Get<Obj_AI_Turret>()
+                                .Where(t => t.IsAlly)
+                                .OrderBy(t => t.Distance(Player.Position))
+                                .FirstOrDefault();
+                        if (turret != null && turret.IsValid)
+                        {
+                            var target = turret.Target as Obj_AI_Minion;
+                            if (target != null && target.IsValidTarget()
+                                && Player.Distance(target) <= target.GetRealAutoAttackRange())
+                            {
+                                var turretDamage = turret.GetAutoAttackDamage(target);
+                                var hits = target.Health / turretDamage;
+
+                                if (target.Health < Player.GetAutoAttackDamage(target, true))
+                                {
+                                    return target;
+                                }
+
+                                if (hits >= 2D)
+                                {
+                                    if (target.Health - (turretDamage * 2 + Player.GetAutoAttackDamage(target, true))
+                                        > 1D)
+                                    {
+                                        return target;
+                                    }
+
+                                    if (target.Health - Player.GetAutoAttackDamage(target, true) > turretDamage * 2)
+                                    {
+                                        return target;
+                                    }
+                                }
+
+                                if (hits > 1D && hits < 2D)
+                                {
+                                    if (target.Health - turretDamage - Player.GetAutoAttackDamage(target, true) > 1D)
+                                    {
+                                        return target;
+                                    }
+                                }
+                            }
+                        }
+
+                        // TODO: Add non-turret minions.
+                        break;
+                    }
+
+                case OrbwalkerMode.LaneClear:
+                    {
+                        // TODO: Add LaneClear logic with turret.
+                        break;
+                    }
+
+                case OrbwalkerMode.Hybrid:
+                    {
+                        // TODO: Add Hybrid logic.
+                        break;
+                    }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        ///     Orders a move onto the player, with the <c>orbwalker</c> parameters.
+        /// </summary>
+        /// <param name="position">
+        ///     The position to <c>orbwalk</c> to.
+        /// </param>
+        public static void MoveOrder(Vector3 position)
+        {
+            if (position.Distance(Player.Position)
+                > Player.BoundingRadius + menu["advanced"]["movementExtraHold"].GetValue<MenuSlider>().Value)
+            {
+                if (position.Distance(Player.Position)
+                    > menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value)
+                {
+                    position = Player.Position.Extend(
+                        position, 
+                        menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value);
+                }
+
+                if (menu["advanced"]["movementScramble"].GetValue<MenuBool>().Value)
+                {
+                    var random = new Random(Variables.TickCount);
+                    var angle = 2D * System.Math.PI * random.NextDouble();
+                    var radius = Player.Distance(Game.CursorPos) < 360 ? 0F : Player.BoundingRadius * 2F;
+                    position =
+                        new Vector3(
+                            (float)(position.X + radius * System.Math.Cos(angle)), 
+                            (float)(position.Y + radius * System.Math.Sin(angle)), 
+                            0f).SetZ();
+                }
+
+                if (Player.IssueOrder(GameObjectOrder.MoveTo, position))
+                {
+                    lastMovementOrderTick = Variables.TickCount;
+                }
             }
         }
 

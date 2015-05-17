@@ -24,6 +24,7 @@ namespace LeagueSharp.SDK.Core.UI
     using System;
     using System.IO;
     using System.Reflection;
+    using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
 
     using LeagueSharp.SDK.Core.Enumerations;
@@ -364,6 +365,7 @@ namespace LeagueSharp.SDK.Core.UI
             {
                 return;
             }
+
             this.value.OnWndProc(args);
         }
 
@@ -428,22 +430,40 @@ namespace LeagueSharp.SDK.Core.UI
         #endregion
     }
 
-    sealed class AllowAllAssemblyVersionsDeserializationBinder : System.Runtime.Serialization.SerializationBinder
+    /// <summary>
+    /// Allow all assembly versions deserialization binder.
+    /// </summary>
+    internal sealed class AllowAllAssemblyVersionsDeserializationBinder : SerializationBinder
     {
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The bind to type.
+        /// </summary>
+        /// <param name="assemblyName">
+        /// The assembly name
+        /// </param>
+        /// <param name="typeName">
+        /// The type name
+        /// </param>
+        /// <returns>
+        ///     The type which has been bind.
+        /// </returns>
         public override Type BindToType(string assemblyName, string typeName)
         {
             Type typeToDeserialize = null;
 
-            String currentAssembly = Assembly.GetExecutingAssembly().FullName;
+            var currentAssembly = Assembly.GetExecutingAssembly().FullName;
 
             // In this case we are always using the current assembly
             assemblyName = currentAssembly;
 
             // Get the type using the typeName and assemblyName
-            typeToDeserialize = Type.GetType(String.Format("{0}, {1}",
-                typeName, assemblyName));
+            typeToDeserialize = Type.GetType(string.Format("{0}, {1}", typeName, assemblyName));
 
             return typeToDeserialize;
         }
+
+        #endregion
     }
 }

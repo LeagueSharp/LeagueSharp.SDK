@@ -191,25 +191,25 @@ namespace LeagueSharp.SDK.Core.Managers
                     .Select(minion => new { minion, minionTeam = minion.Team })
                     .Where(
                         @t =>
-                        team == MinionTeam.Neutral && @t.minionTeam == GameObjectTeam.Neutral
-                        || team == MinionTeam.Ally
-                        && @t.minionTeam
-                        == (ObjectManager.Player.Team == GameObjectTeam.Chaos
-                                ? GameObjectTeam.Chaos
-                                : GameObjectTeam.Order)
-                        || team == MinionTeam.Enemy
-                        && @t.minionTeam
-                        == (ObjectManager.Player.Team == GameObjectTeam.Chaos
-                                ? GameObjectTeam.Order
-                                : GameObjectTeam.Chaos)
-                        || team == MinionTeam.NotAlly && @t.minionTeam != ObjectManager.Player.Team
-                        || team == MinionTeam.NotAllyForEnemy
-                        && (@t.minionTeam == ObjectManager.Player.Team || @t.minionTeam == GameObjectTeam.Neutral)
+                        (team == MinionTeam.Neutral && @t.minionTeam == GameObjectTeam.Neutral)
+                        || (team == MinionTeam.Ally
+                            && @t.minionTeam
+                            == (ObjectManager.Player.Team == GameObjectTeam.Chaos
+                                    ? GameObjectTeam.Chaos
+                                    : GameObjectTeam.Order))
+                        || (team == MinionTeam.Enemy
+                            && @t.minionTeam
+                            == (ObjectManager.Player.Team == GameObjectTeam.Chaos
+                                    ? GameObjectTeam.Order
+                                    : GameObjectTeam.Chaos))
+                        || (team == MinionTeam.NotAlly && @t.minionTeam != ObjectManager.Player.Team)
+                        || (team == MinionTeam.NotAllyForEnemy
+                            && (@t.minionTeam == ObjectManager.Player.Team || @t.minionTeam == GameObjectTeam.Neutral))
                         || team == MinionTeam.All)
                     .Where(
                         @t =>
-                        @t.minion.CombatType == GameObjectCombatType.Melee && type == MinionTypes.Melee
-                        || @t.minion.CombatType != GameObjectCombatType.Melee && type == MinionTypes.Ranged
+                        (@t.minion.CombatType == GameObjectCombatType.Melee && type == MinionTypes.Melee)
+                        || (@t.minion.CombatType != GameObjectCombatType.Melee && type == MinionTypes.Ranged)
                         || type == MinionTypes.All)
                     .Where(@t => IsMinion(@t.minion) || @t.minionTeam == GameObjectTeam.Neutral)
                     .Select(@t => @t.minion)

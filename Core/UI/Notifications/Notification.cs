@@ -217,6 +217,8 @@ namespace LeagueSharp.SDK.Core.UI.Notifications
             {
                 switch (this.AnimationId)
                 {
+                    case 0:
+                        break;
                 }
 
                 this.Flags = this.Flags.ClearFlags(NotificationFlags.Animation).SetFlags(NotificationFlags.Idle);

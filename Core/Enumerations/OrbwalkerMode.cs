@@ -32,14 +32,14 @@ namespace LeagueSharp.SDK.Core.Enumerations
         None, 
 
         /// <summary>
-        ///     Combo Mode
+        ///     <c>Orbwalk</c> Mode
         /// </summary>
-        Combo, 
+        Orbwalk, 
 
         /// <summary>
-        ///     Mixed Mode
+        ///     Hybrid Mode
         /// </summary>
-        Mixed, 
+        Hybrid, 
 
         /// <summary>
         ///     Last Hit Mode

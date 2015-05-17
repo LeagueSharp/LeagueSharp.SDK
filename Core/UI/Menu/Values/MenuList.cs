@@ -106,9 +106,12 @@ namespace LeagueSharp.SDK.Core.UI.Values
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref="MenuList{T}" /> class based upon the given Enum type.
+        ///     Initializes a new instance of the <see cref="MenuList{T}" /> class based upon the given Enumeration type.
         /// </summary>
-        public MenuList() : this(Enum.GetValues(typeof(T)).Cast<T>()) {}
+        public MenuList()
+            : this(Enum.GetValues(typeof(T)).Cast<T>())
+        {
+        }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuList{T}" /> class.
@@ -252,10 +255,11 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void OnWndProc(WindowsKeys args)
         {
-            if (!Container.Visible)
+            if (!this.Container.Visible)
             {
                 return;
             }
+
             var rightArrowRect = ThemeManager.Current.List.RightArrow(this.Position, this.Container, this);
             var leftArrowRect = ThemeManager.Current.List.LeftArrow(this.Position, this.Container, this);
             if (args.Cursor.IsUnderRectangle(

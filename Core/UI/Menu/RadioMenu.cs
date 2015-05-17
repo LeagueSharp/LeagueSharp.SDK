@@ -1,54 +1,85 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="RadioMenu.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Defines the RadioMenu type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace LeagueSharp.SDK.Core.UI
 {
-    using System.ComponentModel.Design;
+    using System;
 
-    using LeagueSharp.SDK.Core.UI.Abstracts;
     using LeagueSharp.SDK.Core.UI.Values;
 
     /// <summary>
-    /// 
+    ///     RadioMenu Item.
     /// </summary>
     public class RadioMenu : Menu
     {
+        #region Constructors and Destructors
+
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Menu" /> class.
+        /// Initializes a new instance of the <see cref="RadioMenu"/> class. 
+        ///     Initializes a new instance of the <see cref="Menu"/> class.
         ///     Menu Constructor.
         /// </summary>
         /// <param name="name">
-        ///     Menu Name
+        /// Menu Name
         /// </param>
         /// <param name="displayName">
-        ///     Menu Display Name
+        /// Menu Display Name
         /// </param>
         /// <param name="root">
-        ///     Root component
+        /// Root component
         /// </param>
         /// <param name="uniqueString">
-        ///     Unique string
+        /// Unique string
         /// </param>
         public RadioMenu(string name, string displayName, bool root = false, string uniqueString = "")
             : base(name, displayName, root, uniqueString)
         {
-            MenuValueChanged += RadioMenuMenuValueChanged;
+            this.MenuValueChanged += this.RadioMenuValueChanged;
         }
 
-        private void RadioMenuMenuValueChanged(object sender, OnMenuValueChangedEventArgs args)
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Radio Menu when a value is changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender
+        /// </param>
+        /// <param name="args">
+        /// The event data
+        /// </param>
+        private void RadioMenuValueChanged(object sender, OnMenuValueChangedEventArgs args)
         {
             try
             {
-                MenuItem<MenuBool> menuBool = args.MenuItem as MenuItem<MenuBool>;
+                var menuBool = args.MenuItem as MenuItem<MenuBool>;
 
                 if (menuBool != null && menuBool.Value.Value)
                 {
-                    foreach (var comp in Components)
+                    foreach (var comp in this.Components)
                     {
-                        MenuItem<MenuBool> child = comp.Value as MenuItem<MenuBool>;
+                        var child = comp.Value as MenuItem<MenuBool>;
                         if (child != null && child.Name != menuBool.Name)
                         {
                             child.Value.Value = false;
@@ -61,5 +92,7 @@ namespace LeagueSharp.SDK.Core.UI
                 Console.WriteLine(e.ToString());
             }
         }
+
+        #endregion
     }
 }

@@ -63,6 +63,17 @@ namespace LeagueSharp.SDK.Core.Utils
         #region Public Properties
 
         /// <summary>
+        ///     Gets the textual representation of the input.
+        /// </summary>
+        public char Char
+        {
+            get
+            {
+                return Convert.ToChar(this.args.WParam);
+            }
+        }
+
+        /// <summary>
         ///     Gets the Cursor Position
         /// </summary>
         public Vector2 Cursor { get; private set; }
@@ -116,6 +127,34 @@ namespace LeagueSharp.SDK.Core.Utils
         }
 
         /// <summary>
+        ///     Gets the side button.
+        /// </summary>
+        public Keys SideButton
+        {
+            get
+            {
+                var bytes = BitConverter.GetBytes(this.args.WParam);
+                if (bytes.Count() > 2)
+                {
+                    int buttonId = bytes[2];
+                    var sideButton = Keys.None;
+                    if (buttonId == 1)
+                    {
+                        sideButton = Keys.XButton1;
+                    }
+                    else if (buttonId == 2)
+                    {
+                        sideButton = Keys.XButton2;
+                    }
+
+                    return sideButton;
+                }
+
+                return Keys.None;
+            }
+        }
+
+        /// <summary>
         ///     Gets the single name of the mapped key.
         /// </summary>
         public Keys SingleKey
@@ -127,51 +166,16 @@ namespace LeagueSharp.SDK.Core.Utils
         }
 
         /// <summary>
-        /// Gets the WParam
+        ///     Gets the <c>WParam</c>
         /// </summary>
         public uint WParam
         {
             get
             {
-                return args.WParam;
-            }
-        }
-
-        public Keys SideButton
-        {
-            get
-            {
-                byte[] bytes = BitConverter.GetBytes(args.WParam);
-                if (bytes.Count() > 2)
-                {
-                    int buttonId = bytes[2];
-                    Keys sideButton = Keys.None;
-                    if (buttonId == 1)
-                    {
-                        sideButton = Keys.XButton1;
-                    }
-                    else if (buttonId == 2)
-                    {
-                        sideButton = Keys.XButton2;
-                    }
-                    return sideButton;
-                }
-                return Keys.None;
-            }
-        }
-
-        /// <summary>
-        /// Returns the textual representation of the input. 
-        /// </summary>
-        public char Char
-        {
-            get
-            {
-                return Convert.ToChar(args.WParam);
+                return this.args.WParam;
             }
         }
 
         #endregion
-        
     }
 }

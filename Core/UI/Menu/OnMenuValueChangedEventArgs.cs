@@ -50,7 +50,7 @@ namespace LeagueSharp.SDK.Core.UI
 
 
         /// <summary>
-        ///  The MenuItem that changed value.
+        ///  Gets the MenuItem that changed value.
         /// </summary>
         public MenuItem MenuItem { get; private set; }
 

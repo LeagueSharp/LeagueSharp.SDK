@@ -19,7 +19,6 @@
 //   Menu Interface class, used to control the menu.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace LeagueSharp.SDK.Core.UI
 {
     using System;
@@ -53,8 +52,8 @@ namespace LeagueSharp.SDK.Core.UI
         private static DirectoryInfo configFolder =
             Directory.CreateDirectory(
                 Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                    "LS" + Environment.UserName.GetHashCode().ToString("X"),
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
+                    "LS" + Environment.UserName.GetHashCode().ToString("X"), 
                     "MenuConfigEx"));
 
         #endregion
@@ -166,7 +165,7 @@ namespace LeagueSharp.SDK.Core.UI
             set
             {
                 this.menuVisible = value;
-                foreach (Menu menu in menus)
+                foreach (var menu in this.menus)
                 {
                     menu.Visible = value;
                 }
@@ -276,22 +275,21 @@ namespace LeagueSharp.SDK.Core.UI
         private void Game_OnWndProc(WndEventArgs args)
         {
             var keys = new WindowsKeys(args);
-            if (!ForcedOpen)
+            if (!this.ForcedOpen)
             {
                 if (keys.SingleKey == Keys.ShiftKey)
                 {
-                    //Game.Say("Shift " + keys.Msg);
                     var keyDown = keys.Msg == WindowsMessages.KEYDOWN;
                     var keyUp = keys.Msg == WindowsMessages.KEYUP;
 
                     if (keyDown)
                     {
-                        MenuVisible = true;
+                        this.MenuVisible = true;
                         this.FireOnOpen();
                     }
                     else if (keyUp)
                     {
-                        MenuVisible = false;
+                        this.MenuVisible = false;
                         this.FireOnClose();
                     }
                 }
