@@ -41,7 +41,7 @@ namespace LeagueSharp.SDK.Core.UI
     /// </summary>
     /// <param name="sender">The sender</param>
     /// <param name="args">The Menu Value Changed Event Data</param>
-    public delegate void OnMenuValueChanged(object sender, OnMenuValueChangedEventArgs args);
+    public delegate void OnMenuValueChanged(object sender, MenuValueChangedEventArgs args);
 
     /// <summary>
     ///     Menu User Interface.
@@ -441,7 +441,7 @@ namespace LeagueSharp.SDK.Core.UI
         {
             if (this.MenuValueChanged != null)
             {
-                this.MenuValueChanged(sender, new OnMenuValueChangedEventArgs(this, sender));
+                this.MenuValueChanged(sender, new MenuValueChangedEventArgs(this, sender));
             }
         }
 

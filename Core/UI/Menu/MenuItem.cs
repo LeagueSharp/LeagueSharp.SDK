@@ -128,7 +128,7 @@ namespace LeagueSharp.SDK.Core.UI
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="args">The OnValueChangedEventArgs instance containing the event data.</param>
-        public delegate void OnValueChanged(object sender, OnValueChangedEventArgs<T> args);
+        public delegate void OnValueChanged(object sender, ValueChangedEventArgs<T> args);
 
         #endregion
 
@@ -263,7 +263,7 @@ namespace LeagueSharp.SDK.Core.UI
 
             if (this.ValueChanged != null)
             {
-                this.ValueChanged(this, new OnValueChangedEventArgs<T>(this.Value));
+                this.ValueChanged(this, new ValueChangedEventArgs<T>(this.Value));
             }
         }
 
@@ -342,6 +342,7 @@ namespace LeagueSharp.SDK.Core.UI
 
             if (this.Visible)
             {
+                value.Position = position;
                 this.value.OnDraw(this, position, index);
             }
         }

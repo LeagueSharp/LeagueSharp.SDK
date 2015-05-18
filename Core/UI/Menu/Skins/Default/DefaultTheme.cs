@@ -705,6 +705,21 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                        GetContainerRectangle(position, component)
                                            .GetCenteredText(null, component.DisplayName, CenteredFlags.VerticalCenter)
                                            .Y;
+                                   var value = ((MenuItem<MenuSlider>)component).Value;
+                                   var percent = (value.Value - value.MinValue) / (float)(value.MaxValue - value.MinValue);
+                                   var x = position.X + (percent * component.MenuWidth);
+
+                                   var line = new Line(Drawing.Direct3DDevice) { Antialias = false, GLLines = true, Width = 2 };
+                                   line.Begin();
+                                   line.Draw(
+                                       new[]
+                                           {
+                                               new Vector2(x, position.Y + 1), 
+                                               new Vector2(x, position.Y + DefaultSettings.ContainerHeight)
+                                           },
+                                       value.Interacting ? new ColorBGRA(255, 0, 0, 255) : new ColorBGRA(50, 154, 205, 255));
+                                   line.End();
+
                                    DefaultSettings.Font.DrawText(
                                        null, 
                                        component.DisplayName, 
@@ -723,21 +738,7 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                        (int)(position.X + component.MenuWidth - 5 - measureText.Width), 
                                        centeredY, 
                                        DefaultSettings.TextColor);
-
-                                   var value = ((MenuItem<MenuSlider>)component).Value;
-                                   var percent = (value.Value - value.MinValue) / (float)(value.MaxValue - value.MinValue);
-                                   var x = position.X + (percent * component.MenuWidth);
-
-                                   var line = new Line(Drawing.Direct3DDevice) { Antialias = false, GLLines = true, Width = 2 };
-                                   line.Begin();
-                                   line.Draw(
-                                       new[]
-                                           {
-                                               new Vector2(x, position.Y + 1), 
-                                               new Vector2(x, position.Y + DefaultSettings.ContainerHeight)
-                                           }, 
-                                       value.Interacting ? new ColorBGRA(255, 0, 0, 255) : new ColorBGRA(50, 154, 205, 255));
-                                   line.End();
+                                  
                                    line.Width = DefaultSettings.ContainerHeight;
                                    line.Begin();
                                    line.Draw(

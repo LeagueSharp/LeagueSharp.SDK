@@ -122,7 +122,18 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <param name="value">The value.</param>
         public override void Extract(AMenuValue value)
         {
-            this.Value = ((MenuSlider)value).Value;
+            int oldValue = ((MenuSlider)value).Value;
+            if (oldValue < MinValue)
+            {
+                Value = MinValue;
+            } else if (oldValue > MaxValue)
+            {
+                Value = MaxValue;
+            }
+            else
+            {
+                Value = oldValue;
+            }
         }
 
         /// <summary>
@@ -149,11 +160,6 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// </param>
         public override void OnDraw(AMenuComponent component, Vector2 position, int index)
         {
-            if (!this.Position.Equals(position))
-            {
-                this.Position = position;
-            }
-
             var animation = ThemeManager.Current.Boolean.Animation;
             if (animation != null && animation.IsAnimating())
             {
