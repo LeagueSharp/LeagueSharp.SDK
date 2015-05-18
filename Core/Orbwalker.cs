@@ -460,6 +460,11 @@ namespace LeagueSharp.SDK.Core
                                 var turretDamage = turret.GetAutoAttackDamage(target);
                                 var hits = target.Health / turretDamage;
 
+                                var turretApply = turret.AttackCastDelay * 1000
+                                                  + turret.Distance(target) / turret.BasicAttack.MissileSpeed * 1000;
+                                var heroApply = target.GetTimeToHit();
+                                Console.WriteLine(@"turretApply[{0}] // heroApply[{1}]", turretApply, heroApply);
+
                                 if (target.Health < Player.GetAutoAttackDamage(target, true))
                                 {
                                     return target;
@@ -471,14 +476,8 @@ namespace LeagueSharp.SDK.Core
                                     {
                                         return target;
                                     }
-                                }
 
-                                if (hits > 1D && hits < 2D)
-                                {
-                                    if (target.Health - turretDamage > Player.GetAutoAttackDamage(target, true))
-                                    {
-                                        return target;
-                                    }
+
                                 }
                             }
                         }

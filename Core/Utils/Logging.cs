@@ -105,7 +105,7 @@ namespace LeagueSharp.SDK.Core.Utils
                     if (cacheMessage)
                     {
                         if (CachedMessage == finalMessage
-                            && Variables.TickCount - CachedMessageDelay > CachedMessageTick)
+                            && Variables.TickCount - CachedMessageTick < CachedMessageDelay)
                         {
                             return;
                         }
