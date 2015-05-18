@@ -120,7 +120,6 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// </param>
         public override void OnDraw(AMenuComponent component, Vector2 position, int index)
         {
-            this.Position = position;
             ThemeManager.Current.Button.OnDraw(component, position, index);
         }
 

@@ -69,7 +69,7 @@ namespace LeagueSharp.SDK.Core.UI
         /// <param name="args">
         /// The event data
         /// </param>
-        private void RadioMenuValueChanged(object sender, OnMenuValueChangedEventArgs args)
+        private void RadioMenuValueChanged(object sender, MenuValueChangedEventArgs args)
         {
             try
             {

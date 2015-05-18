@@ -244,8 +244,6 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <param name="index">Item Index</param>
         public override void OnDraw(AMenuComponent component, Vector2 position, int index)
         {
-            this.Position = position;
-
             ThemeManager.Current.List.OnDraw(component, position, index);
         }
 

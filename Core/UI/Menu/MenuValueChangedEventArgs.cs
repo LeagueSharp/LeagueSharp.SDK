@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OnValueChangedEventArgs.cs" company="LeagueSharp">
+// <copyright file="OnMenuValueChangedEventArgs.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -21,31 +21,22 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI
 {
-    using System;
-
-    using LeagueSharp.SDK.Core.UI.Abstracts;
-
     /// <summary>
     ///     Arguments for the OnValueChanged event.
     /// </summary>
-    /// <typeparam name="T">
-    ///     <see cref="AMenuValue" /> type
-    /// </typeparam>
-    public class OnValueChangedEventArgs<T> : EventArgs
-        where T : AMenuValue
+    public class MenuValueChangedEventArgs
     {
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="OnValueChangedEventArgs{T}" /> class.
-        ///     Initializes a new instance of the OnValueChangedEventArgs class.
+        ///     Initializes a new instance of the <see cref="MenuValueChangedEventArgs" /> class.
         /// </summary>
-        /// <param name="value">
-        ///     The value.
-        /// </param>
-        public OnValueChangedEventArgs(T value)
+        /// <param name="menu">The menu.</param>
+        /// <param name="menuItem">The MenuItem that changed value</param>
+        public MenuValueChangedEventArgs(Menu menu, MenuItem menuItem)
         {
-            this.Value = value;
+            this.Menu = menu;
+            this.MenuItem = menuItem;
         }
 
         #endregion
@@ -53,9 +44,15 @@ namespace LeagueSharp.SDK.Core.UI
         #region Public Properties
 
         /// <summary>
-        ///     Gets the new Value.
+        ///     Gets the menu that contains the changed MenuItem.
         /// </summary>
-        public T Value { get; private set; }
+        public Menu Menu { get; private set; }
+
+
+        /// <summary>
+        ///  Gets the MenuItem that changed value.
+        /// </summary>
+        public MenuItem MenuItem { get; private set; }
 
         #endregion
     }

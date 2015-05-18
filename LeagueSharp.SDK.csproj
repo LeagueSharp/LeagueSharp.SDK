@@ -109,8 +109,8 @@
     <Compile Include="Core\UI\Menu\MenuFactory.cs" />
     <Compile Include="Core\UI\Menu\MenuManager.cs" />
     <Compile Include="Core\UI\Menu\MenuItem.cs" />
-    <Compile Include="Core\UI\Menu\OnMenuValueChangedEventArgs.cs" />
-    <Compile Include="Core\UI\Menu\OnValueChangedEventArgs.cs" />
+    <Compile Include="Core\UI\Menu\MenuValueChangedEventArgs.cs" />
+    <Compile Include="Core\UI\Menu\ValueChangedEventArgs.cs" />
     <Compile Include="Core\UI\Menu\Skins\Default\DefaultSettings.cs" />
     <Compile Include="Core\UI\Menu\Skins\Default\DefaultTheme.cs" />
     <Compile Include="Core\UI\Menu\Skins\Theme.cs" />

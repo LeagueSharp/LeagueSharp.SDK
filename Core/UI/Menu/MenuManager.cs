@@ -127,13 +127,28 @@ namespace LeagueSharp.SDK.Core.UI
             }
         }
 
+        private bool _forcedOpen;
+
         /// <summary>
         ///     Gets or sets a value indicating whether the menu was forced to open.
         /// </summary>
         /// <value>
         ///     <c>true</c> if the menu was forced to open; otherwise, <c>false</c>.
         /// </value>
-        public bool ForcedOpen { get; set; }
+        public bool ForcedOpen {
+            get
+            {
+                return _forcedOpen;
+            }
+            set
+            {
+                _forcedOpen = value;
+                if (_forcedOpen)
+                {
+                    MenuVisible = true;
+                }
+            } 
+        }
 
         /// <summary>
         ///     Gets the menus.
@@ -284,18 +299,32 @@ namespace LeagueSharp.SDK.Core.UI
 
                     if (keyDown)
                     {
-                        this.MenuVisible = true;
-                        this.FireOnOpen();
+                        if (!MenuVisible)
+                        {
+                            this.MenuVisible = true;
+                            this.FireOnOpen();
+                        }
                     }
                     else if (keyUp)
                     {
-                        this.MenuVisible = false;
-                        this.FireOnClose();
+                        if (MenuVisible)
+                        {
+                            this.MenuVisible = false;
+                            this.FireOnClose();
+                        }
                     }
                 }
                 else if (keys.SingleKey == Keys.CapsLock && keys.Msg == WindowsMessages.KEYDOWN)
                 {
                     this.MenuVisible = !this.MenuVisible;
+                    if (MenuVisible)
+                    {
+                        this.FireOnOpen();
+                    }
+                    else
+                    {
+                        this.FireOnClose();
+                    }
                 }
             }
 

@@ -118,8 +118,6 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <param name="index">Item Index</param>
         public override void OnDraw(AMenuComponent component, Vector2 position, int index)
         {
-            this.Position = position;
-
             var animation = ThemeManager.Current.Boolean.Animation;
 
             if (animation != null && animation.IsAnimating())
