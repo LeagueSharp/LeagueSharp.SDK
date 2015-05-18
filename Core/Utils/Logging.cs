@@ -44,6 +44,31 @@ namespace LeagueSharp.SDK.Core.Utils
 
         #endregion
 
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets or sets the cached message.
+        /// </summary>
+        public static string CachedMessage { get; set; }
+
+        /// <summary>
+        ///     Gets the cached message delay.
+        /// </summary>
+        public static int CachedMessageDelay
+        {
+            get
+            {
+                return 10000;
+            }
+        }
+
+        /// <summary>
+        ///     Gets or sets the cached message tick.
+        /// </summary>
+        public static int CachedMessageTick { get; set; }
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -51,6 +76,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         /// <param name="logToFile">Write logging data to file. (Optional)</param>
         /// <param name="printColor">Print to Console with colors. (Optional)</param>
+        /// <param name="cacheMessage">Cache message to prevent duplication on console</param>
         /// <param name="memberName">Function name (Auto / Optional)</param>
         /// <see cref="WriteDelegate" />
         /// <example>Write()(LogLevel.Debug, "I am a debug, arguments: {0}, {1}.", "argument1", 123);</example>
@@ -58,18 +84,34 @@ namespace LeagueSharp.SDK.Core.Utils
         public static WriteDelegate Write(
             bool logToFile = false, 
             bool printColor = true, 
+            bool cacheMessage = false, 
             [CallerMemberName] string memberName = "")
         {
             return (logLevel, message, args) =>
                 {
-                    string finalMessage;
-                    try
+                    var finalMessage = message;
+                    if (args.Length > 0)
                     {
-                        finalMessage = string.Format(message, args);
+                        try
+                        {
+                            finalMessage = string.Format(message, args);
+                        }
+                        catch (Exception)
+                        {
+                            // Ignored.
+                        }
                     }
-                    catch (Exception)
+
+                    if (cacheMessage)
                     {
-                        finalMessage = message;
+                        if (CachedMessage == finalMessage
+                            && Variables.TickCount - CachedMessageDelay > CachedMessageTick)
+                        {
+                            return;
+                        }
+
+                        CachedMessage = finalMessage;
+                        CachedMessageTick = Variables.TickCount;
                     }
 
                     Write(logLevel, finalMessage, logToFile, printColor, memberName);
@@ -114,7 +156,7 @@ namespace LeagueSharp.SDK.Core.Utils
                         return;
                     }
 
-                    Write(true)(LogLevel.Error, ((Exception)args.ExceptionObject).Message);
+                    Write(true, true, true)(LogLevel.Error, ((Exception)args.ExceptionObject).Message);
                 };
         }
 
