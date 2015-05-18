@@ -192,8 +192,8 @@ namespace LeagueSharp.SDK.Core
                                          ? 255 - (int)(255 * minion.Health / Player.GetAutoAttackDamage(minion, true))
                                          : 0;
                         Drawing.DrawCircle(
-                            minion.Position,
-                            minion.BoundingRadius * 2f,
+                            minion.Position, 
+                            minion.BoundingRadius * 2f, 
                             Color.FromArgb(255, 0, colorG > 0 ? colorG : 128, colorR < 0 ? 0 : colorR));
                     }
                 }
@@ -467,13 +467,7 @@ namespace LeagueSharp.SDK.Core
 
                                 if (hits >= 2D)
                                 {
-                                    if (target.Health - (turretDamage * 2 + Player.GetAutoAttackDamage(target, true))
-                                        > 1D)
-                                    {
-                                        return target;
-                                    }
-
-                                    if (target.Health - Player.GetAutoAttackDamage(target, true) > turretDamage * 2)
+                                    if (target.Health - turretDamage * 2 > Player.GetAutoAttackDamage(target, true))
                                     {
                                         return target;
                                     }
@@ -481,7 +475,7 @@ namespace LeagueSharp.SDK.Core
 
                                 if (hits > 1D && hits < 2D)
                                 {
-                                    if (target.Health - turretDamage - Player.GetAutoAttackDamage(target, true) > 1D)
+                                    if (target.Health - turretDamage > Player.GetAutoAttackDamage(target, true))
                                     {
                                         return target;
                                     }

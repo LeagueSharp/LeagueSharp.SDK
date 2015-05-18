@@ -40,7 +40,10 @@ namespace LeagueSharp.SDK.Core
         /// <summary>
         ///     External attachment handle for the AppDomainManager
         /// </summary>
-        public static void Init()
+        /// <param name="args">
+        ///     The args.
+        /// </param>
+        public static void Init(string[] args)
         {
             // Load the Damage class async.
             Task.Factory.StartNew(Damage.LoadDamage)
