@@ -82,10 +82,11 @@ namespace LeagueSharp.SDK.Core.Events
         /// <param name="sender">GameObject sender</param>
         /// <param name="args">Integer Property Change Data</param>
         private static void GameObject_OnIntegerPropertyChange(
-            GameObject sender, 
+            GameObject sender,
             GameObjectIntegerPropertyChangeEventArgs args)
         {
-            if (!args.Property.Equals("ActionState"))
+            var hero = sender as Obj_AI_Hero;
+            if (hero == null || !args.Property.Equals("ActionState"))
             {
                 return;
             }
@@ -96,13 +97,12 @@ namespace LeagueSharp.SDK.Core.Events
             if (!oldState.HasFlag(GameObjectCharacterState.IsStealth)
                 && newState.HasFlag(GameObjectCharacterState.IsStealth))
             {
-                FireOnStealth(
-                    new OnStealthEventArgs { Sender = (Obj_AI_Hero)sender, Time = Game.Time, IsStealthed = true });
+                FireOnStealth(new OnStealthEventArgs { Sender = hero, Time = Game.Time, IsStealthed = true });
             }
             else if (oldState.HasFlag(GameObjectCharacterState.IsStealth)
                      && !newState.HasFlag(GameObjectCharacterState.IsStealth))
             {
-                FireOnStealth(new OnStealthEventArgs { Sender = (Obj_AI_Hero)sender, IsStealthed = false });
+                FireOnStealth(new OnStealthEventArgs { Sender = hero, IsStealthed = false });
             }
         }
 

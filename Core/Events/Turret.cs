@@ -16,32 +16,46 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Contains events involving turrets.
+//   Turret tracker and event handler.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.Events
 {
     using System;
-    using System.Reflection;
+    using System.Collections.Generic;
+    using System.Linq;
 
-    using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
-    ///     Contains events involving turrets.
+    ///     Turret tracker and event handler.
     /// </summary>
     public class Turret
     {
+        #region Static Fields
+
+        /// <summary>
+        ///     The Turrets list.
+        /// </summary>
+        public static readonly IDictionary<Obj_AI_Turret, TurretArgs> Turrets =
+            new Dictionary<Obj_AI_Turret, TurretArgs>();
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
         ///     Initializes static members of the <see cref="Turret" /> class.
-        ///     Static Constructor
         /// </summary>
         static Turret()
         {
+            GameObject.OnCreate += OnCreate;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+
+            foreach (var turret in ObjectManager.Get<Obj_AI_Turret>())
+            {
+                Turrets.Add(turret, new TurretArgs { Turret = turret });
+            }
         }
 
         #endregion
@@ -49,107 +63,147 @@ namespace LeagueSharp.SDK.Core.Events
         #region Delegates
 
         /// <summary>
-        ///     OnTurretShot Delegate.
+        ///     On turret attack event delegate.
         /// </summary>
-        /// <param name="sender">The sender</param>
-        /// <param name="e">OnTurretShot Arguments Container</param>
-        public delegate void OnTurretShotDelegate(object sender, TurretShotArgs e);
+        /// <param name="sender">
+        ///     The sender
+        /// </param>
+        /// <param name="e">
+        ///     The event data
+        /// </param>
+        public delegate void OnTurretAttackDelegate(object sender, TurretArgs e);
 
         #endregion
 
         #region Public Events
 
         /// <summary>
-        ///     This event gets called when any unit gets shot by a tower.
+        ///     On turret attack event.
         /// </summary>
-        public static event OnTurretShotDelegate OnTurretShot;
+        public static event OnTurretAttackDelegate OnTurretAttack;
 
         #endregion
 
         #region Methods
 
         /// <summary>
-        ///     Attempts to fire the <see cref="OnTurretShot" /> event.
-        /// </summary>
-        /// <param name="gameObject">
-        ///     The target
-        /// </param>
-        /// <param name="turret">
-        ///     The turret
-        /// </param>
-        /// <param name="type">
-        ///     Turret shot type
-        /// </param>
-        private static void FireOnTurretShot(GameObject gameObject, Obj_AI_Turret turret, TurretShotType type)
-        {
-            if (OnTurretShot != null)
-            {
-                OnTurretShot(MethodBase.GetCurrentMethod().DeclaringType, new TurretShotArgs(gameObject, turret, type));
-            }
-        }
-
-        /// <summary>
-        ///     On Process Spell Cast event catch.
+        ///     On Create event.
         /// </summary>
         /// <param name="sender">
         ///     The sender
         /// </param>
         /// <param name="args">
-        ///     Process Spell Cast event data
+        ///     The event data
+        /// </param>
+        private static void OnCreate(GameObject sender, EventArgs args)
+        {
+            if (sender.Type == GameObjectType.obj_GeneralParticleEmitter && sender.Name.Contains("Turret"))
+            {
+                var turret = Turrets.OrderBy(t => t.Key.Distance(sender.Position)).FirstOrDefault().Value;
+                if (turret != null)
+                {
+                    turret.TurretBoltObject = sender;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     On process spell cast event.
+        /// </summary>
+        /// <param name="sender">
+        ///     The sender
+        /// </param>
+        /// <param name="args">
+        ///     The event data
         /// </param>
         private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            var turret = sender as Obj_AI_Turret;
-
-            if (turret == null)
+            Obj_AI_Turret[] turret = { sender as Obj_AI_Turret };
+            if (turret[0] != null)
             {
-                return;
+                if (Turrets.Count == 0)
+                {
+                    foreach (var gameObjectTurret in
+                        ObjectManager.Get<Obj_AI_Turret>())
+                    {
+                        Turrets.Add(gameObjectTurret, new TurretArgs { Turret = gameObjectTurret });
+                        if (gameObjectTurret.NetworkId == turret[0].NetworkId)
+                        {
+                            turret[0] = gameObjectTurret;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var gameObjectTurret in
+                        Turrets.Where(gameObjectTurret => gameObjectTurret.Key.NetworkId == turret[0].NetworkId))
+                    {
+                        turret[0] = gameObjectTurret.Key;
+                    }
+                }
+
+                Turrets[turret[0]].AttackStart = Variables.TickCount;
+                if (Turrets[turret[0]].Target != null && Turrets[turret[0]].Target.IsValid)
+                {
+                    Turrets[turret[0]].AttackDelay = turret[0].AttackCastDelay * 1000
+                                                     + turret[0].Distance(Turrets[turret[0]].Target)
+                                                     / turret[0].BasicAttack.MissileSpeed * 1000;
+                    Turrets[turret[0]].AttackEnd = (int)(Variables.TickCount + Turrets[turret[0]].AttackDelay);
+                }
+
+                if (OnTurretAttack != null)
+                {
+                    OnTurretAttack(turret[0], Turrets[turret[0]]);
+                }
             }
-
-            FireOnTurretShot(args.Target, turret, TurretShotType.TurretShot);
-
-            DelayAction.Add(
-                (int)(1000 * turret.Distance(args.Target) / args.SData.MissileSpeed), 
-                () => FireOnTurretShot(args.Target, turret, TurretShotType.TurretShotHit));
         }
 
         #endregion
     }
 
     /// <summary>
-    ///     Contains the event arguments for the OnTurretShot event.
+    ///     Turret event data which are passed with <see cref="SDK.Core.Events.Turret.OnTurretAttack" />
     /// </summary>
-    public class TurretShotArgs : EventArgs
+    public class TurretArgs : EventArgs
     {
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="TurretShotArgs" /> class.
-        /// </summary>
-        /// <param name="gameObject">
-        ///     The unit which is targeted by the turret
-        /// </param>
-        /// <param name="turret">
-        ///     The turret
-        /// </param>
-        /// <param name="type">
-        ///     Turret shot type
-        /// </param>
-        internal TurretShotArgs(GameObject gameObject, Obj_AI_Turret turret, TurretShotType type)
-        {
-            this.Target = gameObject;
-            this.Turret = turret;
-            this.Type = type;
-        }
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
-        ///     Gets or sets the target.
+        ///     Gets or sets the attack delay.
         /// </summary>
-        public GameObject Target { get; set; }
+        public float AttackDelay { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the attack end.
+        /// </summary>
+        public int AttackEnd { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the attack start.
+        /// </summary>
+        public int AttackStart { get; set; }
+
+        /// <summary>
+        ///     Gets a value indicating whether the turret is winding up.
+        /// </summary>
+        public bool IsWindingUp
+        {
+            get
+            {
+                return this.Turret.IsWindingUp;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the target.
+        /// </summary>
+        public AttackableUnit Target
+        {
+            get
+            {
+                return this.Turret != null ? this.Turret.Target : null;
+            }
+        }
 
         /// <summary>
         ///     Gets or sets the turret.
@@ -157,9 +211,9 @@ namespace LeagueSharp.SDK.Core.Events
         public Obj_AI_Turret Turret { get; set; }
 
         /// <summary>
-        ///     Gets or sets the type.
+        ///     Gets or sets the turret bolt object.
         /// </summary>
-        public TurretShotType Type { get; set; }
+        public GameObject TurretBoltObject { get; set; }
 
         #endregion
     }
