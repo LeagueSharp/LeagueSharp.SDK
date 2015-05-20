@@ -50,7 +50,6 @@ namespace LeagueSharp.SDK.Core.Events
         static Turret()
         {
             GameObject.OnCreate += OnCreate;
-            GameObject.OnDelete += OnDelete;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
 
             foreach (var turret in ObjectManager.Get<Obj_AI_Turret>())
@@ -106,20 +105,6 @@ namespace LeagueSharp.SDK.Core.Events
                     turret.TurretBoltObject = sender;
                 }
             }
-        }
-
-        /// <summary>
-        ///     On delete event.
-        /// </summary>
-        /// <param name="sender">
-        ///     The sender
-        /// </param>
-        /// <param name="args">
-        ///     The event data
-        /// </param>
-        private static void OnDelete(GameObject sender, EventArgs args)
-        {
-            // Console.WriteLine("sender: {0} // {1}", sender.Type, sender.Name);
         }
 
         /// <summary>

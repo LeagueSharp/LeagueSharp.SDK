@@ -587,7 +587,6 @@ namespace LeagueSharp.SDK.Core.Events
                         || (gapcloser.SkillType == GapcloserType.Skillshot
                             && ObjectManager.Player.DistanceSquared(gapcloser.Sender) < 250000)))
             {
-                // 500 * 500
                 OnGapCloser(MethodBase.GetCurrentMethod().DeclaringType, gapcloser);
             }
         }
