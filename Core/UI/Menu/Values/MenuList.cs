@@ -270,7 +270,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
                 if (args.Msg == WindowsMessages.LBUTTONDOWN)
                 {
                     this.Index = (this.Index + 1) % this.Values.Count;
-                    this.Container.FireEvent();
+                    FireEvent();
                 }
             }
             else
@@ -294,7 +294,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
                     else
                     {
                         this.Index = (this.Index - 1) % this.Values.Count;
-                        this.Container.FireEvent();
+                        FireEvent();
                     }
                 }
             }

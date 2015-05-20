@@ -148,7 +148,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
                 if (args.Cursor.IsUnderRectangle(rect.X, rect.Y, rect.Width, rect.Height))
                 {
                     this.Value = !this.Value;
-                    this.Container.FireEvent();
+                    FireEvent();
                 }
             }
         }

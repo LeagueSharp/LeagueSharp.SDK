@@ -173,21 +173,25 @@ namespace LeagueSharp.SDK.Core.UI.Values
         private void UpdateRed(WindowsKeys args, Rectangle rect)
         {
             Color = new ColorBGRA(GetByte(args, rect), Color.G, Color.B, Color.A);
+            FireEvent();
         }
 
         private void UpdateGreen(WindowsKeys args, Rectangle rect)
         {
             Color = new ColorBGRA(Color.R, GetByte(args, rect), Color.B, Color.A);
+            FireEvent();
         }
 
         private void UpdateBlue(WindowsKeys args, Rectangle rect)
         {
             Color = new ColorBGRA(Color.R, Color.G, GetByte(args, rect), Color.A);
+            FireEvent();
         }
 
         private void UpdateAlpha(WindowsKeys args, Rectangle rect)
         {
             Color = new ColorBGRA(Color.R, Color.G, Color.B, GetByte(args, rect));
+            FireEvent();
         }
 
         private byte GetByte(WindowsKeys args, Rectangle rect)

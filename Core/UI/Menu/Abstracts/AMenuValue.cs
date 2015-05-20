@@ -74,6 +74,17 @@ namespace LeagueSharp.SDK.Core.UI.Abstracts
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public abstract void OnWndProc(WindowsKeys args);
 
+        /// <summary>
+        /// Orders the Container to fire an event
+        /// </summary>
+        protected void FireEvent()
+        {
+            if (Container != null)
+            {
+                Container.FireEvent();
+            }
+        }
+
         #endregion
     }
 }

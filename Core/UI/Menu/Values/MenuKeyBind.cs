@@ -109,7 +109,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
                 if (this.active != value)
                 {
                     this.active = value;
-                    this.Container.FireEvent();
+                    FireEvent();
                 }
             }
         }

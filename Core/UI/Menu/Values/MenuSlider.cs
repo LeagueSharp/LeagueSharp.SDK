@@ -233,7 +233,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
             if (newValue != this.Value)
             {
                 this.Value = newValue;
-                this.Container.FireEvent();
+                FireEvent();
             }
         }
 
