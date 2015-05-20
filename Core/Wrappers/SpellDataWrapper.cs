@@ -89,6 +89,14 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </summary>
         public float Width { get; set; }
 
+        /// <summary>
+        ///     Gets or sets a value indicating whether this spell hass collision.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this spell has collision; otherwise, <c>false</c>.
+        /// </value>
+        public bool Collision { get; set; }
+
         #endregion
 
         #region Methods
@@ -106,6 +114,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             this.Speed = spellData.MissileSpeed;
             this.Delay = spellData.DelayTotalTimePercent;
             this.Name = spellData.Name;
+            this.Collision = spellData.HaveHitBone;
         }
 
         #endregion
