@@ -19,8 +19,10 @@
 //   The default theme for the menu.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.Skins.Default
 {
+    using System;
     using System.Globalization;
     using System.Linq;
 
@@ -78,6 +80,11 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
         ///     The slider draw-able.
         /// </summary>
         private Drawable? slider;
+
+        /// <summary>
+        ///     The slider draw-able.
+        /// </summary>
+        private DrawableColor? colorPicker;
 
         #endregion
 
@@ -167,6 +174,276 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
             }
         }
 
+        /// <summary>
+        ///     Gets the color.
+        /// </summary>
+        /// <value>
+        ///     The color.
+        /// </value>
+        public override DrawableColor ColorPicker
+        {
+            get
+            {
+                return (DrawableColor)(this.colorPicker ?? (this.colorPicker = GetColorPicker()));
+            }
+        }
+
+        private DrawableColor? GetColorPicker()
+        {
+            const int SliderHeight = 30;
+            const int SliderOffset = 10;
+            const int PickerWidth = 300;
+            const int BorderOffset = 20;
+            const int TextOffset = 10;
+            int pickerHeight = (2 * BorderOffset) + DefaultSettings.ContainerHeight + (4 * SliderHeight)
+                               + (4 * SliderOffset);
+            int pickerX = (Drawing.Width - PickerWidth) / 2;
+            int pickerY = (Drawing.Height - pickerHeight) / 2;
+            int greenWidth = DefaultSettings.Font.MeasureText(null, "Green", 0).Width;
+            int sliderWidth = PickerWidth - (2 * BorderOffset) - (2 * TextOffset) - greenWidth - SliderHeight;
+
+            return new DrawableColor
+                       {
+                           OnDraw = (component, position, index) =>
+                               {
+                                   var rectangleName = GetContainerRectangle(position, component)
+                                       .GetCenteredText(null, component.DisplayName, CenteredFlags.VerticalCenter);
+
+                                   DefaultSettings.Font.DrawText(
+                                       null,
+                                       component.DisplayName,
+                                       (int)(position.X + DefaultSettings.ContainerTextOffset),
+                                       (int)rectangleName.Y,
+                                       DefaultSettings.TextColor);
+
+                                   MenuItem<MenuColor> menuColor = (MenuItem<MenuColor>)component;
+
+                                   Line previewLine = new Line(Drawing.Direct3DDevice)
+                                                          { Width = DefaultSettings.ContainerHeight, GLLines = true };
+                                   previewLine.Begin();
+                                   previewLine.Draw(
+                                       new[]
+                                           {
+                                               new Vector2(
+                                                   position.X + component.MenuWidth - (DefaultSettings.ContainerHeight / 2f),
+                                                   position.Y + 1),
+                                               new Vector2(
+                                                   position.X + component.MenuWidth - (DefaultSettings.ContainerHeight / 2f),
+                                                   position.Y + DefaultSettings.ContainerHeight)
+                                           },
+                                       menuColor.Value.Color);
+                                   previewLine.End();
+                                   if (menuColor.Value.HoveringPreview)
+                                   {
+                                       previewLine.Begin();
+                                       previewLine.Draw(
+                                           new[]
+                                               {
+                                                   new Vector2(
+                                                       position.X + component.MenuWidth - (DefaultSettings.ContainerHeight / 2f),
+                                                       position.Y + 1),
+                                                   new Vector2(
+                                                       position.X + component.MenuWidth - (DefaultSettings.ContainerHeight / 2f),
+                                                       position.Y + DefaultSettings.ContainerHeight)
+                                               },
+                                           DefaultSettings.HoverColor);
+                                       previewLine.End();
+                                   }
+
+                                   if (menuColor.Value.Active)
+                                   {
+                                       Line backgroundLine = new Line(Drawing.Direct3DDevice) { Width = PickerWidth, GLLines = true };
+                                       backgroundLine.Begin();
+                                       backgroundLine.Draw(
+                                           new[]
+                                               {
+                                                   new Vector2(pickerX + (PickerWidth / 2f), pickerY),
+                                                   new Vector2(pickerX + (PickerWidth / 2f), pickerY + pickerHeight)
+                                               },
+                                           DefaultSettings.RootContainerColor);
+                                       backgroundLine.End();
+                                       backgroundLine.Dispose();
+
+                                       previewLine.Begin();
+                                       previewLine.Draw(
+                                           new[]
+                                               {
+                                                   new Vector2(
+                                                       pickerX + BorderOffset,
+                                                       pickerY + BorderOffset + (DefaultSettings.ContainerHeight / 2f)),
+                                                   new Vector2(
+                                                       pickerX + PickerWidth - BorderOffset,
+                                                       pickerY + BorderOffset + (DefaultSettings.ContainerHeight / 2f))
+                                               },
+                                           menuColor.Value.Color);
+                                       previewLine.End();
+
+                                       ColorBGRA previewColor = menuColor.Value.Color;
+
+                                       String detail = string.Format(
+                                           "R:{0}  G:{1}  B:{2}  A:{3}",
+                                           previewColor.R,
+                                           previewColor.G,
+                                           previewColor.B,
+                                           previewColor.A);
+                                       var rectanglePreview =
+                                           new Rectangle(
+                                               pickerX + BorderOffset,
+                                               pickerY + BorderOffset,
+                                               PickerWidth - (2 * BorderOffset),
+                                               DefaultSettings.ContainerHeight).GetCenteredText(
+                                                   null,
+                                                   detail,
+                                                   CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
+                                       DefaultSettings.Font.DrawText(
+                                           null,
+                                           detail,
+                                           (int)rectanglePreview.X,
+                                           (int)rectanglePreview.Y,
+                                           new ColorBGRA(previewColor.R > 128 ? 0 : 255, previewColor.G > 128 ? 0 : 255, previewColor.B > 128 ? 0 : 255, 255));
+
+                                       int textY =
+                                           (int)
+                                           new Rectangle(
+                                               pickerX + BorderOffset,
+                                               pickerY + BorderOffset + DefaultSettings.ContainerHeight + SliderOffset,
+                                               PickerWidth,
+                                               SliderHeight).GetCenteredText(null, "Green", CenteredFlags.VerticalCenter).Y;
+
+                                       // DRAW SLIDER NAMES
+                                       string[] lineNames = { "Red", "Green", "Blue", "Alpha" };
+                                       for (int i = 0; i < lineNames.Length; i++)
+                                       {
+                                           DefaultSettings.Font.DrawText(
+                                               null,
+                                               lineNames[i],
+                                               pickerX + BorderOffset,
+                                               textY + (i * (SliderOffset + SliderHeight)),
+                                               Color.White);
+                                       }
+
+                                       //DRAW SLIDERS
+                                       Line sliderLine = new Line(Drawing.Direct3DDevice) { Width = 1, GLLines = true };
+                                       sliderLine.Begin();
+                                       for (int i = 1; i <= 4; i++)
+                                       {
+                                           sliderLine.Draw(
+                                               new[]
+                                                   {
+                                                       new Vector2(
+                                                           pickerX + BorderOffset + greenWidth + TextOffset,
+                                                           pickerY + BorderOffset + DefaultSettings.ContainerHeight
+                                                           + (i * SliderOffset) + ((i - 1) * SliderHeight) + (SliderHeight / 2f)),
+                                                       new Vector2(
+                                                           pickerX + BorderOffset + greenWidth + TextOffset + sliderWidth,
+                                                           pickerY + BorderOffset + DefaultSettings.ContainerHeight
+                                                           + (i * SliderOffset) + ((i - 1) * SliderHeight) + (SliderHeight / 2f))
+                                                   },
+                                               Color.White);
+                                       }
+                                       sliderLine.End();
+                                       sliderLine.Dispose();
+
+                                       //DRAW PREVIEW COLORS
+                                       ColorBGRA[] previewColors = new[]
+                                                                       {
+                                                                           new ColorBGRA(previewColor.R, 0, 0, 255),
+                                                                           new ColorBGRA(0, previewColor.G, 0, 255),
+                                                                           new ColorBGRA(0, 0, previewColor.B, 255),
+                                                                           new ColorBGRA(255, 255, 255, previewColor.A)
+                                                                       };
+                                       Line sliderPreviewLine = new Line(Drawing.Direct3DDevice)
+                                                                    { Width = SliderHeight, GLLines = true };
+                                       sliderPreviewLine.Begin();
+                                       for (int i = 1; i <= 4; i++)
+                                       {
+                                           sliderPreviewLine.Draw(
+                                               new[]
+                                                   {
+                                                       new Vector2(
+                                                           pickerX + BorderOffset + greenWidth + (2 * TextOffset) + sliderWidth,
+                                                           pickerY + BorderOffset + DefaultSettings.ContainerHeight
+                                                           + (i * SliderOffset) + ((i - 1) * SliderHeight) + (SliderHeight / 2f)),
+                                                       new Vector2(
+                                                           pickerX + BorderOffset + greenWidth + (2 * TextOffset) + sliderWidth
+                                                           + SliderHeight,
+                                                           pickerY + BorderOffset + DefaultSettings.ContainerHeight
+                                                           + (i * SliderOffset) + ((i - 1) * SliderHeight) + (SliderHeight / 2f))
+                                                   },
+                                               previewColors[i - 1]);
+                                       }
+                                       sliderPreviewLine.End();
+                                       sliderPreviewLine.Dispose();
+
+                                       //DRAW SLIDER INDICATORS
+                                       byte[] indicators = new[] { previewColor.R, previewColor.G, previewColor.B, previewColor.A };
+                                       Line sliderIndicatorLine = new Line(Drawing.Direct3DDevice) { Width = 2, GLLines = true };
+                                       sliderIndicatorLine.Begin();
+                                       for (int i = 0; i < indicators.Length; i++)
+                                       {
+                                           float x = ((indicators[i] / 255f) * sliderWidth);
+                                           sliderIndicatorLine.Draw(
+                                               new[]
+                                                   {
+                                                       new Vector2(
+                                                           pickerX + BorderOffset + greenWidth + TextOffset + x,
+                                                           pickerY + BorderOffset + DefaultSettings.ContainerHeight
+                                                           + ((i + 1) * SliderOffset) + (i * SliderHeight)),
+                                                       new Vector2(
+                                                           pickerX + BorderOffset + greenWidth + TextOffset + x,
+                                                           pickerY + BorderOffset + DefaultSettings.ContainerHeight
+                                                           + ((i + 1) * SliderOffset) + ((i + 1) * SliderHeight))
+                                                   },
+                                               new ColorBGRA(50, 154, 205, 255));
+                                       }
+                                       sliderIndicatorLine.End();
+                                       sliderIndicatorLine.Dispose();
+                                   }
+
+                                   previewLine.Dispose();
+                               },
+                           PreviewBoundaries =
+                               delegate(Vector2 position, AMenuComponent component)
+                                   {
+                                       return
+                                           new Rectangle(
+                                               (int)
+                                               (position.X + component.MenuWidth
+                                                - DefaultSettings.ContainerHeight),
+                                               (int)position.Y,
+                                               DefaultSettings.ContainerHeight,
+                                               DefaultSettings.ContainerHeight);
+                                   },
+                           PickerBoundaries =
+                               delegate(Vector2 position, AMenuComponent component)
+                                   {
+                                       return new Rectangle(pickerX, pickerY, PickerWidth, pickerHeight);
+                                   },
+                           RedPickerBoundaries =
+                              delegate(Vector2 position, AMenuComponent component)
+                              {
+                                  return new Rectangle(pickerX + BorderOffset + greenWidth + TextOffset, pickerY + BorderOffset + DefaultSettings.ContainerHeight + SliderOffset, sliderWidth, SliderHeight);
+                              },
+                           GreenPickerBoundaries =
+                             delegate(Vector2 position, AMenuComponent component)
+                             {
+                                 return new Rectangle(pickerX + BorderOffset + greenWidth + TextOffset, pickerY + BorderOffset + DefaultSettings.ContainerHeight + (2 * SliderOffset) + SliderHeight, sliderWidth, SliderHeight);
+                             },
+                           BluePickerBoundaries =
+                            delegate(Vector2 position, AMenuComponent component)
+                            {
+                                return new Rectangle(pickerX + BorderOffset + greenWidth + TextOffset, pickerY + BorderOffset + DefaultSettings.ContainerHeight + (3 * SliderOffset) + (2 * SliderHeight), sliderWidth, SliderHeight);
+                            },
+                           AlphaPickerBoundaries =
+                           delegate(Vector2 position, AMenuComponent component)
+                           {
+                               return new Rectangle(pickerX + BorderOffset + greenWidth + TextOffset, pickerY + BorderOffset + DefaultSettings.ContainerHeight + (4 * SliderOffset) + (3 * SliderHeight), sliderWidth, SliderHeight);
+                           },
+                           Width = menuButton => DefaultSettings.ContainerHeight,
+                           SliderWidth = color => sliderWidth
+                       };
+        }
+
         #endregion
 
         #region Public Methods and Operators
@@ -223,9 +500,9 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
             DefaultSettings.ContainerLine.Draw(
                 new[]
                     {
-                        new Vector2(position.X + (width / 2f), position.Y), 
+                        new Vector2(position.X + (width / 2f), position.Y),
                         new Vector2(position.X + (width / 2), position.Y + height)
-                    }, 
+                    },
                 DefaultSettings.RootContainerColor);
             DefaultSettings.ContainerLine.End();
 
@@ -239,11 +516,11 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                     DefaultSettings.ContainerSeparatorLine.Draw(
                         new[]
                             {
-                                new Vector2(childPos.X, childPos.Y + DefaultSettings.ContainerHeight), 
+                                new Vector2(childPos.X, childPos.Y + DefaultSettings.ContainerHeight),
                                 new Vector2(
-                                    childPos.X + menuManager.Menus[i].MenuWidth, 
+                                    childPos.X + menuManager.Menus[i].MenuWidth,
                                     childPos.Y + DefaultSettings.ContainerHeight)
-                            }, 
+                            },
                         DefaultSettings.ContainerSeparatorColor);
                     DefaultSettings.ContainerSeparatorLine.End();
                 }
@@ -254,22 +531,22 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
             var contour = new Line(Drawing.Direct3DDevice) { GLLines = true, Width = 1 };
             contour.Begin();
             contour.Draw(
-                new[] { new Vector2(position.X, position.Y), new Vector2(position.X + width, position.Y) }, 
+                new[] { new Vector2(position.X, position.Y), new Vector2(position.X + width, position.Y) },
                 Color.Black);
             contour.Draw(
                 new[]
                     {
                         new Vector2(position.X, position.Y + height), new Vector2(position.X + width, position.Y + height)
-                    }, 
+                    },
                 Color.Black);
             contour.Draw(
-                new[] { new Vector2(position.X, position.Y), new Vector2(position.X, position.Y + height) }, 
+                new[] { new Vector2(position.X, position.Y), new Vector2(position.X, position.Y + height) },
                 Color.Black);
             contour.Draw(
                 new[]
                     {
                         new Vector2(position.X + width, position.Y), new Vector2(position.X + width, position.Y + height)
-                    }, 
+                    },
                 Color.Black);
             contour.End();
             contour.Dispose();
@@ -289,11 +566,11 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                 DefaultSettings.HoverLine.Draw(
                     new[]
                         {
-                            new Vector2(position.X, position.Y + DefaultSettings.ContainerHeight / 2f), 
+                            new Vector2(position.X, position.Y + DefaultSettings.ContainerHeight / 2f),
                             new Vector2(
-                                position.X + menuComponent.MenuWidth, 
+                                position.X + menuComponent.MenuWidth,
                                 position.Y + DefaultSettings.ContainerHeight / 2f)
-                        }, 
+                        },
                     DefaultSettings.HoverColor);
                 DefaultSettings.HoverLine.End();
             }
@@ -305,19 +582,19 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                     .Y;
 
             Font.DrawText(
-                null, 
-                menuComponent.DisplayName, 
-                (int)(position.X + DefaultSettings.ContainerTextOffset), 
-                centerY, 
+                null,
+                menuComponent.DisplayName,
+                (int)(position.X + DefaultSettings.ContainerTextOffset),
+                centerY,
                 DefaultSettings.TextColor);
 
             Font.DrawText(
-                null, 
-                "»", 
+                null,
+                "»",
                 (int)
                 (position.X + menuComponent.MenuWidth - DefaultSettings.ContainerTextMarkWidth
-                 + DefaultSettings.ContainerTextMarkOffset), 
-                centerY, 
+                 - DefaultSettings.ContainerTextMarkOffset),
+                centerY,
                 menuComponent.Components.Count > 0 ? DefaultSettings.TextColor : DefaultSettings.ContainerSeparatorColor);
 
             if (menuComponent.Toggled)
@@ -327,11 +604,11 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                 DefaultSettings.ContainerLine.Draw(
                     new[]
                         {
-                            new Vector2(position.X + menuComponent.MenuWidth / 2f, position.Y), 
+                            new Vector2(position.X + menuComponent.MenuWidth / 2f, position.Y),
                             new Vector2(
-                                position.X + menuComponent.MenuWidth / 2f, 
+                                position.X + menuComponent.MenuWidth / 2f,
                                 position.Y + DefaultSettings.ContainerHeight)
-                        }, 
+                        },
                     DefaultSettings.ContainerSelectedColor);
                 DefaultSettings.ContainerLine.End();
 
@@ -347,9 +624,9 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                 DefaultSettings.ContainerLine.Draw(
                     new[]
                         {
-                            new Vector2((position.X + menuComponent.MenuWidth) + width / 2, position.Y), 
+                            new Vector2((position.X + menuComponent.MenuWidth) + width / 2, position.Y),
                             new Vector2((position.X + menuComponent.MenuWidth) + width / 2, position.Y + height)
-                        }, 
+                        },
                     DefaultSettings.RootContainerColor);
                 DefaultSettings.ContainerLine.End();
 
@@ -359,7 +636,7 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                     if (childComponent != null)
                     {
                         var childPos = new Vector2(
-                            position.X + menuComponent.MenuWidth, 
+                            position.X + menuComponent.MenuWidth,
                             position.Y + i * DefaultSettings.ContainerHeight);
 
                         if (i < menuComponent.Components.Count - 1)
@@ -368,11 +645,11 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                             DefaultSettings.ContainerSeparatorLine.Draw(
                                 new[]
                                     {
-                                        new Vector2(childPos.X, childPos.Y + DefaultSettings.ContainerHeight), 
+                                        new Vector2(childPos.X, childPos.Y + DefaultSettings.ContainerHeight),
                                         new Vector2(
-                                            childPos.X + childComponent.MenuWidth, 
+                                            childPos.X + childComponent.MenuWidth,
                                             childPos.Y + DefaultSettings.ContainerHeight)
-                                    }, 
+                                    },
                                 DefaultSettings.ContainerSeparatorColor);
                             DefaultSettings.ContainerSeparatorLine.End();
                         }
@@ -386,30 +663,30 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                 contour.Draw(
                     new[]
                         {
-                            new Vector2(position.X + menuComponent.MenuWidth, position.Y), 
+                            new Vector2(position.X + menuComponent.MenuWidth, position.Y),
                             new Vector2(position.X + menuComponent.MenuWidth + width, position.Y)
-                        }, 
+                        },
                     Color.Black);
                 contour.Draw(
                     new[]
                         {
-                            new Vector2(position.X + menuComponent.MenuWidth, position.Y + height), 
+                            new Vector2(position.X + menuComponent.MenuWidth, position.Y + height),
                             new Vector2(position.X + menuComponent.MenuWidth + width, position.Y + height)
-                        }, 
+                        },
                     Color.Black);
                 contour.Draw(
                     new[]
                         {
-                            new Vector2(position.X + menuComponent.MenuWidth, position.Y), 
+                            new Vector2(position.X + menuComponent.MenuWidth, position.Y),
                             new Vector2(position.X + menuComponent.MenuWidth, position.Y + height)
-                        }, 
+                        },
                     Color.Black);
                 contour.Draw(
                     new[]
                         {
-                            new Vector2(position.X + menuComponent.MenuWidth + width, position.Y), 
+                            new Vector2(position.X + menuComponent.MenuWidth + width, position.Y),
                             new Vector2(position.X + menuComponent.MenuWidth + width, position.Y + height)
-                        }, 
+                        },
                     Color.Black);
                 contour.End();
                 contour.Dispose();
@@ -439,10 +716,10 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                        .GetCenteredText(null, component.DisplayName, CenteredFlags.VerticalCenter);
 
                                    DefaultSettings.Font.DrawText(
-                                       null, 
-                                       component.DisplayName, 
-                                       (int)(position.X + DefaultSettings.ContainerTextOffset), 
-                                       (int)rectangleName.Y, 
+                                       null,
+                                       component.DisplayName,
+                                       (int)(position.X + DefaultSettings.ContainerTextOffset),
+                                       (int)rectangleName.Y,
                                        DefaultSettings.TextColor);
 
                                    var button = (MenuItem<MenuButton>)component;
@@ -450,20 +727,18 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                    var buttonTextWidth = DefaultSettings.Font.MeasureText(null, button.Value.ButtonText, 0).Width;
 
                                    var line = new Line(Drawing.Direct3DDevice)
-                                                  {
-                                                     Antialias = false, GLLines = true, Width = DefaultSettings.ContainerHeight 
-                                                  };
+                                                  { Antialias = false, GLLines = true, Width = DefaultSettings.ContainerHeight };
                                    line.Begin();
                                    line.Draw(
                                        new[]
                                            {
                                                new Vector2(
-                                                   position.X + component.MenuWidth - buttonTextWidth - (2 * TextGap), 
-                                                   position.Y + (DefaultSettings.ContainerHeight / 2f)), 
+                                                   position.X + component.MenuWidth - buttonTextWidth - (2 * TextGap),
+                                                   position.Y + (DefaultSettings.ContainerHeight / 2f)),
                                                new Vector2(
-                                                   position.X + component.MenuWidth, 
-                                                   position.Y + (DefaultSettings.ContainerHeight / 2f)), 
-                                           }, 
+                                                   position.X + component.MenuWidth,
+                                                   position.Y + (DefaultSettings.ContainerHeight / 2f)),
+                                           },
                                        DefaultSettings.HoverColor);
                                    line.End();
                                    line.Width = DefaultSettings.ContainerHeight - 5;
@@ -472,23 +747,23 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                        new[]
                                            {
                                                new Vector2(
-                                                   position.X + component.MenuWidth - buttonTextWidth - (2 * TextGap) + 2, 
-                                                   position.Y + (DefaultSettings.ContainerHeight / 2f)), 
+                                                   position.X + component.MenuWidth - buttonTextWidth - (2 * TextGap) + 2,
+                                                   position.Y + (DefaultSettings.ContainerHeight / 2f)),
                                                new Vector2(
-                                                   position.X + component.MenuWidth - 2, 
-                                                   position.Y + (DefaultSettings.ContainerHeight / 2f)), 
-                                           }, 
+                                                   position.X + component.MenuWidth - 2,
+                                                   position.Y + (DefaultSettings.ContainerHeight / 2f)),
+                                           },
                                        button.Value.Hovering ? buttonHoverColor : buttonColor);
                                    line.End();
                                    line.Dispose();
 
                                    DefaultSettings.Font.DrawText(
-                                       null, 
+                                       null,
                                        button.Value.ButtonText,
-                                       (int)(position.X + component.MenuWidth - buttonTextWidth - TextGap), 
-                                       (int)rectangleName.Y, 
+                                       (int)(position.X + component.MenuWidth - buttonTextWidth - TextGap),
+                                       (int)rectangleName.Y,
                                        DefaultSettings.TextColor);
-                               }, 
+                               },
                            ButtonBoundaries = delegate(Vector2 position, AMenuComponent component)
                                {
                                    var button = (MenuItem<MenuButton>)component;
@@ -499,11 +774,11 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                        new Rectangle(
                                            (int)
                                            (position.X + component.MenuWidth - buttonTextWidth
-                                            - (2 * TextGap)), 
+                                            - (2 * TextGap)),
                                            (int)position.Y,
-                                           (2 * TextGap) + buttonTextWidth, 
+                                           (2 * TextGap) + buttonTextWidth,
                                            DefaultSettings.ContainerHeight);
-                               }, 
+                               },
                            Width =
                                menuButton =>
                                (2 * TextGap)
@@ -555,15 +830,15 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                        .GetCenteredText(null, component.DisplayName, CenteredFlags.VerticalCenter);
 
                                    DefaultSettings.Font.DrawText(
-                                       null, 
-                                       component.DisplayName, 
-                                       (int)(position.X + DefaultSettings.ContainerTextOffset), 
-                                       (int)rectangleName.Y, 
+                                       null,
+                                       component.DisplayName,
+                                       (int)(position.X + DefaultSettings.ContainerTextOffset),
+                                       (int)rectangleName.Y,
                                        DefaultSettings.TextColor);
 
                                    var line = new Line(Drawing.Direct3DDevice)
                                                   {
-                                                      Antialias = false, GLLines = true, 
+                                                      Antialias = false, GLLines = true,
                                                       Width = arrowRectangle.Width + (2 * ArrowSpacing)
                                                   };
 
@@ -572,38 +847,38 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                        new[]
                                            {
                                                new Vector2(
-                                                   position.X + component.MenuWidth - (arrowRectangle.Width / 2f) - ArrowSpacing, 
-                                                   position.Y), 
+                                                   position.X + component.MenuWidth - (arrowRectangle.Width / 2f) - ArrowSpacing,
+                                                   position.Y),
                                                new Vector2(
-                                                   position.X + component.MenuWidth - (arrowRectangle.Width / 2f) - ArrowSpacing, 
+                                                   position.X + component.MenuWidth - (arrowRectangle.Width / 2f) - ArrowSpacing,
                                                    position.Y + DefaultSettings.ContainerHeight)
-                                           }, 
+                                           },
                                        list.RightArrowHover ? DefaultSettings.ContainerSelectedColor : DefaultSettings.HoverColor);
                                    line.End();
 
                                    DefaultSettings.Font.DrawText(
-                                       null, 
-                                       ">", 
-                                       (int)(position.X + component.MenuWidth - arrowRectangle.Width - ArrowSpacing), 
-                                       (int)rectangleName.Y, 
+                                       null,
+                                       ">",
+                                       (int)(position.X + component.MenuWidth - arrowRectangle.Width - ArrowSpacing),
+                                       (int)rectangleName.Y,
                                        DefaultSettings.TextColor);
 
                                    var textPos =
                                        new Rectangle(
                                            (int)
                                            (position.X + component.MenuWidth - (2 * ArrowSpacing) - arrowRectangle.Width
-                                            - list.MaxStringWidth - TextSpacing), 
-                                           (int)position.Y, 
-                                           list.MaxStringWidth, 
+                                            - list.MaxStringWidth - TextSpacing),
+                                           (int)position.Y,
+                                           list.MaxStringWidth,
                                            DefaultSettings.ContainerHeight).GetCenteredText(
-                                               null, 
-                                               list.SelectedValueAsObject.ToString(), 
+                                               null,
+                                               list.SelectedValueAsObject.ToString(),
                                                CenteredFlags.HorizontalCenter | CenteredFlags.VerticalCenter);
                                    DefaultSettings.Font.DrawText(
-                                       null, 
-                                       list.SelectedValueAsObject.ToString(), 
-                                       (int)textPos.X, 
-                                       (int)textPos.Y, 
+                                       null,
+                                       list.SelectedValueAsObject.ToString(),
+                                       (int)textPos.X,
+                                       (int)textPos.Y,
                                        DefaultSettings.TextColor);
 
                                    line.Begin();
@@ -612,49 +887,49 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                            {
                                                new Vector2(
                                                    position.X + component.MenuWidth - arrowRectangle.Width - (3 * ArrowSpacing)
-                                                   - list.MaxStringWidth - (2 * TextSpacing) - (arrowRectangle.Width / 2f), 
-                                                   position.Y), 
+                                                   - list.MaxStringWidth - (2 * TextSpacing) - (arrowRectangle.Width / 2f),
+                                                   position.Y),
                                                new Vector2(
                                                    position.X + component.MenuWidth - arrowRectangle.Width - (3 * ArrowSpacing)
-                                                   - list.MaxStringWidth - (2 * TextSpacing) - (arrowRectangle.Width / 2f), 
+                                                   - list.MaxStringWidth - (2 * TextSpacing) - (arrowRectangle.Width / 2f),
                                                    position.Y + DefaultSettings.ContainerHeight)
-                                           }, 
+                                           },
                                        list.LeftArrowHover ? DefaultSettings.ContainerSelectedColor : DefaultSettings.HoverColor);
                                    line.End();
 
                                    DefaultSettings.Font.DrawText(
-                                       null, 
-                                       "<", 
+                                       null,
+                                       "<",
                                        (int)
                                        (position.X + component.MenuWidth - (2 * arrowRectangle.Width) - (2 * ArrowSpacing)
-                                        - list.MaxStringWidth - (2 * TextSpacing)) - 2, 
-                                       (int)rectangleName.Y, 
+                                        - list.MaxStringWidth - (2 * TextSpacing)) - 2,
+                                       (int)rectangleName.Y,
                                        DefaultSettings.TextColor);
                                    line.Dispose();
-                               }, 
-                           Bounding = GetContainerRectangle, AdditionalBoundries = GetContainerRectangle, 
+                               },
+                           Bounding = GetContainerRectangle, AdditionalBoundries = GetContainerRectangle,
                            RightArrow =
                                (position, component, menuList) =>
                                new Rectangle(
                                    (int)
                                    (position.X + component.MenuWidth - (2 * ArrowSpacing)
-                                    - arrowRectangle.Width), 
-                                   (int)position.Y, 
-                                   (2 * ArrowSpacing) + arrowRectangle.Width, 
-                                   DefaultSettings.ContainerHeight), 
+                                    - arrowRectangle.Width),
+                                   (int)position.Y,
+                                   (2 * ArrowSpacing) + arrowRectangle.Width,
+                                   DefaultSettings.ContainerHeight),
                            Width =
                                list =>
                                list.MaxStringWidth + (2 * TextSpacing) + (4 * ArrowSpacing)
-                               + (2 * arrowRectangle.Width), 
+                               + (2 * arrowRectangle.Width),
                            LeftArrow =
                                (position, component, menuList) =>
                                new Rectangle(
                                    (int)
                                    (position.X + component.MenuWidth - (4 * ArrowSpacing)
                                     - (2 * arrowRectangle.Width) - (2 * TextSpacing)
-                                    - menuList.MaxStringWidth), 
-                                   (int)position.Y, 
-                                   (2 * ArrowSpacing) + arrowRectangle.Width, 
+                                    - menuList.MaxStringWidth),
+                                   (int)position.Y,
+                                   (2 * ArrowSpacing) + arrowRectangle.Width,
                                    DefaultSettings.ContainerHeight)
                        };
         }
@@ -673,17 +948,17 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                {
                                    var centerY = GetContainerRectangle(position, component)
                                        .GetCenteredText(
-                                           null, 
-                                           component.DisplayName, 
+                                           null,
+                                           component.DisplayName,
                                            CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
                                    DefaultSettings.Font.DrawText(
-                                       null, 
-                                       component.DisplayName, 
-                                       (int)centerY.X, 
-                                       (int)centerY.Y, 
+                                       null,
+                                       component.DisplayName,
+                                       (int)centerY.X,
+                                       (int)centerY.Y,
                                        DefaultSettings.TextColor);
-                               }, 
+                               },
                            Bounding = GetContainerRectangle, AdditionalBoundries = GetContainerRectangle
                        };
         }
@@ -714,43 +989,43 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                    line.Draw(
                                        new[]
                                            {
-                                               new Vector2(x, position.Y + 1), 
+                                               new Vector2(x, position.Y + 1),
                                                new Vector2(x, position.Y + DefaultSettings.ContainerHeight)
                                            },
                                        value.Interacting ? new ColorBGRA(255, 0, 0, 255) : new ColorBGRA(50, 154, 205, 255));
                                    line.End();
 
                                    DefaultSettings.Font.DrawText(
-                                       null, 
-                                       component.DisplayName, 
-                                       (int)(position.X + DefaultSettings.ContainerTextOffset), 
-                                       centeredY, 
+                                       null,
+                                       component.DisplayName,
+                                       (int)(position.X + DefaultSettings.ContainerTextOffset),
+                                       centeredY,
                                        DefaultSettings.TextColor);
 
                                    var currentValue = ((MenuItem<MenuSlider>)component).Value.Value;
                                    var measureText = DefaultSettings.Font.MeasureText(
-                                       null, 
-                                       currentValue.ToString(CultureInfo.InvariantCulture), 
+                                       null,
+                                       currentValue.ToString(CultureInfo.InvariantCulture),
                                        0);
                                    DefaultSettings.Font.DrawText(
-                                       null, 
-                                       currentValue.ToString(CultureInfo.InvariantCulture), 
-                                       (int)(position.X + component.MenuWidth - 5 - measureText.Width), 
-                                       centeredY, 
+                                       null,
+                                       currentValue.ToString(CultureInfo.InvariantCulture),
+                                       (int)(position.X + component.MenuWidth - 5 - measureText.Width),
+                                       centeredY,
                                        DefaultSettings.TextColor);
-                                  
+
                                    line.Width = DefaultSettings.ContainerHeight;
                                    line.Begin();
                                    line.Draw(
                                        new[]
                                            {
-                                               new Vector2(position.X, position.Y + DefaultSettings.ContainerHeight / 2f), 
+                                               new Vector2(position.X, position.Y + DefaultSettings.ContainerHeight / 2f),
                                                new Vector2(x, position.Y + DefaultSettings.ContainerHeight / 2f)
-                                           }, 
+                                           },
                                        DefaultSettings.HoverColor);
                                    line.End();
                                    line.Dispose();
-                               }, 
+                               },
                            AdditionalBoundries = GetContainerRectangle, Bounding = GetContainerRectangle
                        };
         }
@@ -768,31 +1043,31 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                            AdditionalBoundries =
                                (position, component) =>
                                new Rectangle(
-                                   (int)(position.X + component.MenuWidth - DefaultSettings.ContainerHeight), 
-                                   (int)position.Y, 
-                                   DefaultSettings.ContainerHeight, 
-                                   DefaultSettings.ContainerHeight), 
+                                   (int)(position.X + component.MenuWidth - DefaultSettings.ContainerHeight),
+                                   (int)position.Y,
+                                   DefaultSettings.ContainerHeight,
+                                   DefaultSettings.ContainerHeight),
                            OnDraw = (component, position, index) =>
                                {
                                    var centerY =
                                        (int)
                                        GetContainerRectangle(position, component)
                                            .GetCenteredText(
-                                               null, 
-                                               component.DisplayName, 
+                                               null,
+                                               component.DisplayName,
                                                CenteredFlags.VerticalCenter)
                                            .Y;
 
                                    DefaultSettings.Font.DrawText(
-                                       null, 
-                                       component.DisplayName, 
-                                       (int)(position.X + DefaultSettings.ContainerTextOffset), 
-                                       centerY, 
+                                       null,
+                                       component.DisplayName,
+                                       (int)(position.X + DefaultSettings.ContainerTextOffset),
+                                       centerY,
                                        DefaultSettings.TextColor);
 
                                    var line = new Line(Drawing.Direct3DDevice)
                                                   {
-                                                      Antialias = false, GLLines = true, 
+                                                      Antialias = false, GLLines = true,
                                                       Width = DefaultSettings.ContainerHeight
                                                   };
                                    line.Begin();
@@ -802,14 +1077,14 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                                new Vector2(
                                                    (position.X + component.MenuWidth
                                                     - DefaultSettings.ContainerHeight)
-                                                   + DefaultSettings.ContainerHeight / 2f, 
-                                                   position.Y + 1), 
+                                                   + DefaultSettings.ContainerHeight / 2f,
+                                                   position.Y + 1),
                                                new Vector2(
                                                    (position.X + component.MenuWidth
                                                     - DefaultSettings.ContainerHeight)
-                                                   + DefaultSettings.ContainerHeight / 2f, 
+                                                   + DefaultSettings.ContainerHeight / 2f,
                                                    position.Y + DefaultSettings.ContainerHeight)
-                                           }, 
+                                           },
                                        ((MenuItem<MenuBool>)component).Value.Value
                                            ? new ColorBGRA(0, 100, 0, 255)
                                            : new ColorBGRA(255, 0, 0, 255));
@@ -820,20 +1095,20 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                        (int)
                                        new Rectangle(
                                            (int)
-                                           (position.X + component.MenuWidth - DefaultSettings.ContainerHeight), 
-                                           (int)position.Y, 
-                                           DefaultSettings.ContainerHeight, 
+                                           (position.X + component.MenuWidth - DefaultSettings.ContainerHeight),
+                                           (int)position.Y,
+                                           DefaultSettings.ContainerHeight,
                                            DefaultSettings.ContainerHeight).GetCenteredText(
-                                               null, 
-                                               ((MenuItem<MenuBool>)component).Value.Value ? "ON" : "OFF", 
+                                               null,
+                                               ((MenuItem<MenuBool>)component).Value.Value ? "ON" : "OFF",
                                                CenteredFlags.HorizontalCenter).X;
                                    DefaultSettings.Font.DrawText(
-                                       null, 
-                                       ((MenuItem<MenuBool>)component).Value.Value ? "ON" : "OFF", 
-                                       centerX, 
-                                       centerY, 
+                                       null,
+                                       ((MenuItem<MenuBool>)component).Value.Value ? "ON" : "OFF",
+                                       centerX,
+                                       centerY,
                                        DefaultSettings.TextColor);
-                               }, 
+                               },
                            Bounding = GetContainerRectangle
                        };
         }
@@ -851,10 +1126,10 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                            AdditionalBoundries =
                                (position, component) =>
                                new Rectangle(
-                                   (int)(position.X + component.MenuWidth - DefaultSettings.ContainerHeight), 
-                                   (int)position.Y, 
-                                   DefaultSettings.ContainerHeight, 
-                                   DefaultSettings.ContainerHeight), 
+                                   (int)(position.X + component.MenuWidth - DefaultSettings.ContainerHeight),
+                                   (int)position.Y,
+                                   DefaultSettings.ContainerHeight,
+                                   DefaultSettings.ContainerHeight),
                            OnDraw = (component, position, index) =>
                                {
                                    var value = ((MenuItem<MenuKeyBind>)component).Value;
@@ -863,34 +1138,34 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                        (int)
                                        GetContainerRectangle(position, component)
                                            .GetCenteredText(
-                                               null, 
-                                               component.DisplayName, 
+                                               null,
+                                               component.DisplayName,
                                                CenteredFlags.VerticalCenter)
                                            .Y;
                                    DefaultSettings.Font.DrawText(
-                                       null, 
-                                       value.Interacting ? "Press a key" : component.DisplayName, 
-                                       (int)(position.X + DefaultSettings.ContainerTextOffset), 
-                                       centerY, 
+                                       null,
+                                       value.Interacting ? "Press a key" : component.DisplayName,
+                                       (int)(position.X + DefaultSettings.ContainerTextOffset),
+                                       centerY,
                                        DefaultSettings.TextColor);
 
                                    if (!value.Interacting)
                                    {
                                        var keyString = "[" + value.Key + "]";
                                        DefaultSettings.Font.DrawText(
-                                           null, 
-                                           keyString, 
+                                           null,
+                                           keyString,
                                            (int)
                                            (position.X + component.MenuWidth - DefaultSettings.ContainerHeight
                                             - this.CalcWidthText(keyString)
-                                            - DefaultSettings.ContainerTextOffset), 
-                                           centerY, 
+                                            - DefaultSettings.ContainerTextOffset),
+                                           centerY,
                                            DefaultSettings.TextColor);
                                    }
 
                                    var line = new Line(Drawing.Direct3DDevice)
                                                   {
-                                                      Antialias = false, GLLines = true, 
+                                                      Antialias = false, GLLines = true,
                                                       Width = DefaultSettings.ContainerHeight
                                                   };
                                    line.Begin();
@@ -900,14 +1175,14 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                                new Vector2(
                                                    (position.X + component.MenuWidth
                                                     - DefaultSettings.ContainerHeight)
-                                                   + DefaultSettings.ContainerHeight / 2f, 
-                                                   position.Y + 1), 
+                                                   + DefaultSettings.ContainerHeight / 2f,
+                                                   position.Y + 1),
                                                new Vector2(
                                                    (position.X + component.MenuWidth
                                                     - DefaultSettings.ContainerHeight)
-                                                   + DefaultSettings.ContainerHeight / 2f, 
+                                                   + DefaultSettings.ContainerHeight / 2f,
                                                    position.Y + DefaultSettings.ContainerHeight)
-                                           }, 
+                                           },
                                        value.Active
                                            ? new ColorBGRA(0, 100, 0, 255)
                                            : new ColorBGRA(255, 0, 0, 255));
@@ -918,20 +1193,20 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                        (int)
                                        new Rectangle(
                                            (int)
-                                           (position.X + component.MenuWidth - DefaultSettings.ContainerHeight), 
-                                           (int)position.Y, 
-                                           DefaultSettings.ContainerHeight, 
+                                           (position.X + component.MenuWidth - DefaultSettings.ContainerHeight),
+                                           (int)position.Y,
+                                           DefaultSettings.ContainerHeight,
                                            DefaultSettings.ContainerHeight).GetCenteredText(
-                                               null, 
-                                               value.Active ? "ON" : "OFF", 
+                                               null,
+                                               value.Active ? "ON" : "OFF",
                                                CenteredFlags.HorizontalCenter).X;
                                    DefaultSettings.Font.DrawText(
-                                       null, 
-                                       value.Active ? "ON" : "OFF", 
-                                       centerX, 
-                                       centerY, 
+                                       null,
+                                       value.Active ? "ON" : "OFF",
+                                       centerX,
+                                       centerY,
                                        DefaultSettings.TextColor);
-                               }, 
+                               },
                            Bounding = GetContainerRectangle
                        };
         }

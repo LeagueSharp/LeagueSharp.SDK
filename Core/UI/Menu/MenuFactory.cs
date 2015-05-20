@@ -27,6 +27,8 @@ namespace LeagueSharp.SDK.Core.UI
     using LeagueSharp.SDK.Core.UI.Abstracts;
     using LeagueSharp.SDK.Core.UI.Values;
 
+    using SharpDX;
+
     /// <summary>
     ///     Menu Value Factory.
     /// </summary>
@@ -42,7 +44,8 @@ namespace LeagueSharp.SDK.Core.UI
                 {
                     { typeof(MenuBool), () => new MenuBool() }, { typeof(MenuKeyBind), () => new MenuKeyBind() }, 
                     { typeof(MenuSlider), () => new MenuSlider() }, { typeof(MenuInputText), () => new MenuInputText() }, 
-                    { typeof(MenuSeparator), () => new MenuSeparator() }
+                    { typeof(MenuSeparator), () => new MenuSeparator() },
+                    { typeof(MenuColor), () => new MenuColor(Color.Green) }
                 };
 
         #endregion

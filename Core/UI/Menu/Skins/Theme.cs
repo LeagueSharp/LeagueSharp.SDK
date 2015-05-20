@@ -83,6 +83,14 @@ namespace LeagueSharp.SDK.Core.UI.Skins
         /// </value>
         public abstract DrawableButton Button { get; }
 
+        /// <summary>
+        ///     Gets the color.
+        /// </summary>
+        /// <value>
+        ///     The color.
+        /// </value>
+        public abstract DrawableColor ColorPicker { get; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -221,6 +229,61 @@ namespace LeagueSharp.SDK.Core.UI.Skins
             ///     Gets the width
             /// </summary>
             public Func<MenuButton, int> Width;
+
+            #endregion
+        }
+
+        /// <summary>
+        ///     A draw-able list.
+        /// </summary>
+        public struct DrawableColor
+        {
+            #region Fields
+
+            /// <summary>
+            ///     Gets the preview boundaries.
+            /// </summary>
+            public Func<Vector2, AMenuComponent, Rectangle> PreviewBoundaries;
+
+            /// <summary>
+            ///     Gets the color picker boundaries.
+            /// </summary>
+            public Func<Vector2, AMenuComponent, Rectangle> PickerBoundaries;
+
+            /// <summary>
+            ///     Gets the red picker boundaries.
+            /// </summary>
+            public Func<Vector2, AMenuComponent, Rectangle> RedPickerBoundaries;
+
+            /// <summary>
+            ///     Gets the green picker boundaries.
+            /// </summary>
+            public Func<Vector2, AMenuComponent, Rectangle> GreenPickerBoundaries;
+
+            /// <summary>
+            ///     Gets the blue picker boundaries.
+            /// </summary>
+            public Func<Vector2, AMenuComponent, Rectangle> BluePickerBoundaries;
+
+            /// <summary>
+            ///     Gets the alpha picker boundaries.
+            /// </summary>
+            public Func<Vector2, AMenuComponent, Rectangle> AlphaPickerBoundaries;
+
+            /// <summary>
+            ///     Methods that draws this <c>DrawableList</c>.
+            /// </summary>
+            public Action<AMenuComponent, Vector2, int> OnDraw;
+
+            /// <summary>
+            ///     Gets the width
+            /// </summary>
+            public Func<MenuColor, int> Width;
+
+            /// <summary>
+            ///     Gets the slider width
+            /// </summary>
+            public Func<MenuColor, int> SliderWidth;
 
             #endregion
         }

@@ -65,7 +65,7 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
         /// <summary>
         ///     Container Text Marking Offset.
         /// </summary>
-        private static float containerTextMarkOffset = -8f;
+        private static float containerTextMarkOffset = 8f;
 
         /// <summary>
         ///     Container Text Addition Offset.
