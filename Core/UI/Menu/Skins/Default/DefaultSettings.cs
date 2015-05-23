@@ -59,7 +59,7 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
         /// </summary>
         private static Line containerSeparatorLine = new Line(Drawing.Direct3DDevice)
                                                          {
-                                                            Antialias = true, GLLines = true, Width = 1f 
+                                                            Antialias = false, GLLines = false, Width = 1f 
                                                          };
 
         /// <summary>

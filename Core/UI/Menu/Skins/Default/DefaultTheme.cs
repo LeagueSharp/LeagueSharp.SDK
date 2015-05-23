@@ -23,6 +23,7 @@
 namespace LeagueSharp.SDK.Core.UI.Skins.Default
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
 
@@ -300,7 +301,11 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                            detail,
                                            (int)rectanglePreview.X,
                                            (int)rectanglePreview.Y,
-                                           new ColorBGRA(previewColor.R > 128 ? 0 : 255, previewColor.G > 128 ? 0 : 255, previewColor.B > 128 ? 0 : 255, 255));
+                                           new ColorBGRA(
+                                               previewColor.R > 128 ? 0 : 255,
+                                               previewColor.G > 128 ? 0 : 255,
+                                               previewColor.B > 128 ? 0 : 255,
+                                               255));
 
                                        int textY =
                                            (int)
@@ -420,25 +425,45 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                        return new Rectangle(pickerX, pickerY, PickerWidth, pickerHeight);
                                    },
                            RedPickerBoundaries =
-                              delegate(Vector2 position, AMenuComponent component)
-                              {
-                                  return new Rectangle(pickerX + BorderOffset + greenWidth + TextOffset, pickerY + BorderOffset + DefaultSettings.ContainerHeight + SliderOffset, sliderWidth, SliderHeight);
-                              },
+                               delegate(Vector2 position, AMenuComponent component)
+                                   {
+                                       return new Rectangle(
+                                           pickerX + BorderOffset + greenWidth + TextOffset,
+                                           pickerY + BorderOffset + DefaultSettings.ContainerHeight
+                                           + SliderOffset,
+                                           sliderWidth,
+                                           SliderHeight);
+                                   },
                            GreenPickerBoundaries =
-                             delegate(Vector2 position, AMenuComponent component)
-                             {
-                                 return new Rectangle(pickerX + BorderOffset + greenWidth + TextOffset, pickerY + BorderOffset + DefaultSettings.ContainerHeight + (2 * SliderOffset) + SliderHeight, sliderWidth, SliderHeight);
-                             },
+                               delegate(Vector2 position, AMenuComponent component)
+                                   {
+                                       return new Rectangle(
+                                           pickerX + BorderOffset + greenWidth + TextOffset,
+                                           pickerY + BorderOffset + DefaultSettings.ContainerHeight
+                                           + (2 * SliderOffset) + SliderHeight,
+                                           sliderWidth,
+                                           SliderHeight);
+                                   },
                            BluePickerBoundaries =
-                            delegate(Vector2 position, AMenuComponent component)
-                            {
-                                return new Rectangle(pickerX + BorderOffset + greenWidth + TextOffset, pickerY + BorderOffset + DefaultSettings.ContainerHeight + (3 * SliderOffset) + (2 * SliderHeight), sliderWidth, SliderHeight);
-                            },
+                               delegate(Vector2 position, AMenuComponent component)
+                                   {
+                                       return new Rectangle(
+                                           pickerX + BorderOffset + greenWidth + TextOffset,
+                                           pickerY + BorderOffset + DefaultSettings.ContainerHeight
+                                           + (3 * SliderOffset) + (2 * SliderHeight),
+                                           sliderWidth,
+                                           SliderHeight);
+                                   },
                            AlphaPickerBoundaries =
-                           delegate(Vector2 position, AMenuComponent component)
-                           {
-                               return new Rectangle(pickerX + BorderOffset + greenWidth + TextOffset, pickerY + BorderOffset + DefaultSettings.ContainerHeight + (4 * SliderOffset) + (3 * SliderHeight), sliderWidth, SliderHeight);
-                           },
+                               delegate(Vector2 position, AMenuComponent component)
+                                   {
+                                       return new Rectangle(
+                                           pickerX + BorderOffset + greenWidth + TextOffset,
+                                           pickerY + BorderOffset + DefaultSettings.ContainerHeight
+                                           + (4 * SliderOffset) + (3 * SliderHeight),
+                                           sliderWidth,
+                                           SliderHeight);
+                                   },
                            Width = menuButton => DefaultSettings.ContainerHeight,
                            SliderWidth = color => sliderWidth
                        };
@@ -531,21 +556,11 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
             var contour = new Line(Drawing.Direct3DDevice) { GLLines = true, Width = 1 };
             contour.Begin();
             contour.Draw(
-                new[] { new Vector2(position.X, position.Y), new Vector2(position.X + width, position.Y) },
-                Color.Black);
-            contour.Draw(
                 new[]
                     {
-                        new Vector2(position.X, position.Y + height), new Vector2(position.X + width, position.Y + height)
-                    },
-                Color.Black);
-            contour.Draw(
-                new[] { new Vector2(position.X, position.Y), new Vector2(position.X, position.Y + height) },
-                Color.Black);
-            contour.Draw(
-                new[]
-                    {
-                        new Vector2(position.X + width, position.Y), new Vector2(position.X + width, position.Y + height)
+                        new Vector2(position.X, position.Y), new Vector2(position.X + width, position.Y),
+                        new Vector2(position.X + width, position.Y + height), new Vector2(position.X, position.Y + height),
+                        new Vector2(position.X, position.Y)
                     },
                 Color.Black);
             contour.End();
@@ -817,14 +832,16 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
         /// </returns>
         private static DrawableList GetList()
         {
-            const int ArrowSpacing = 2;
+            const int ArrowSpacing = 6;
             const int TextSpacing = 8;
-            var arrowRectangle = DefaultSettings.Font.MeasureText(null, ">", 0);
+            Rectangle arrowSize = DefaultSettings.Font.MeasureText(null, "V", 0);
+            int dropDownButtonWidth = arrowSize.Width + (2 * ArrowSpacing);
             return new DrawableList
                        {
                            OnDraw = (component, position, index) =>
                                {
                                    var list = (MenuList)((MenuItem)component).ValueAsObject;
+                                   int dropdownMenuWidth = dropDownButtonWidth + (2 * TextSpacing) + list.MaxStringWidth;
 
                                    var rectangleName = GetContainerRectangle(position, component)
                                        .GetCenteredText(null, component.DisplayName, CenteredFlags.VerticalCenter);
@@ -837,100 +854,217 @@ namespace LeagueSharp.SDK.Core.UI.Skins.Default
                                        DefaultSettings.TextColor);
 
                                    var line = new Line(Drawing.Direct3DDevice)
-                                                  {
-                                                      Antialias = false, GLLines = true,
-                                                      Width = arrowRectangle.Width + (2 * ArrowSpacing)
-                                                  };
+                                                  { Antialias = false, GLLines = false, Width = dropDownButtonWidth };
 
                                    line.Begin();
                                    line.Draw(
                                        new[]
                                            {
+                                               new Vector2(position.X + component.MenuWidth - (dropDownButtonWidth / 2f), position.Y + 1),
                                                new Vector2(
-                                                   position.X + component.MenuWidth - (arrowRectangle.Width / 2f) - ArrowSpacing,
-                                                   position.Y),
-                                               new Vector2(
-                                                   position.X + component.MenuWidth - (arrowRectangle.Width / 2f) - ArrowSpacing,
+                                                   position.X + component.MenuWidth - (dropDownButtonWidth / 2f),
                                                    position.Y + DefaultSettings.ContainerHeight)
                                            },
-                                       list.RightArrowHover ? DefaultSettings.ContainerSelectedColor : DefaultSettings.HoverColor);
+                                       DefaultSettings.HoverColor);
                                    line.End();
-
+                                   if (list.Hovering || list.Active)
+                                   {
+                                       line.Width = DefaultSettings.ContainerHeight;
+                                       line.Begin();
+                                       line.Draw(
+                                           new[]
+                                               {
+                                                   new Vector2(
+                                                       position.X + component.MenuWidth - dropdownMenuWidth,
+                                                       position.Y + line.Width / 2),
+                                                   new Vector2(position.X + component.MenuWidth, position.Y + line.Width / 2)
+                                               },
+                                           DefaultSettings.HoverColor);
+                                       line.End();
+                                   }
+                                   line.Dispose();
                                    DefaultSettings.Font.DrawText(
                                        null,
-                                       ">",
-                                       (int)(position.X + component.MenuWidth - arrowRectangle.Width - ArrowSpacing),
-                                       (int)rectangleName.Y,
+                                       "V",
+                                       (int)(position.X + component.MenuWidth - dropDownButtonWidth + ArrowSpacing),
+                                       (int)(rectangleName.Y),
                                        DefaultSettings.TextColor);
-
-                                   var textPos =
-                                       new Rectangle(
-                                           (int)
-                                           (position.X + component.MenuWidth - (2 * ArrowSpacing) - arrowRectangle.Width
-                                            - list.MaxStringWidth - TextSpacing),
-                                           (int)position.Y,
-                                           list.MaxStringWidth,
-                                           DefaultSettings.ContainerHeight).GetCenteredText(
-                                               null,
-                                               list.SelectedValueAsObject.ToString(),
-                                               CenteredFlags.HorizontalCenter | CenteredFlags.VerticalCenter);
+                                   DefaultSettings.ContainerSeparatorLine.Draw(
+                                       new[]
+                                           {
+                                               new Vector2(position.X + component.MenuWidth - dropDownButtonWidth - 1, position.Y + 1),
+                                               new Vector2(
+                                                   position.X + component.MenuWidth - dropDownButtonWidth - 1,
+                                                   position.Y + DefaultSettings.ContainerHeight)
+                                           },
+                                       DefaultSettings.ContainerSeparatorColor);
                                    DefaultSettings.Font.DrawText(
                                        null,
                                        list.SelectedValueAsObject.ToString(),
-                                       (int)textPos.X,
-                                       (int)textPos.Y,
+                                       (int)position.X + component.MenuWidth - dropDownButtonWidth - TextSpacing - list.MaxStringWidth,
+                                       (int)rectangleName.Y,
                                        DefaultSettings.TextColor);
-
-                                   line.Begin();
-                                   line.Draw(
+                                   DefaultSettings.ContainerSeparatorLine.Draw(
                                        new[]
                                            {
                                                new Vector2(
-                                                   position.X + component.MenuWidth - arrowRectangle.Width - (3 * ArrowSpacing)
-                                                   - list.MaxStringWidth - (2 * TextSpacing) - (arrowRectangle.Width / 2f),
-                                                   position.Y),
+                                                   position.X + component.MenuWidth - dropDownButtonWidth - (2 * TextSpacing)
+                                                   - list.MaxStringWidth,
+                                                   position.Y + 1),
                                                new Vector2(
-                                                   position.X + component.MenuWidth - arrowRectangle.Width - (3 * ArrowSpacing)
-                                                   - list.MaxStringWidth - (2 * TextSpacing) - (arrowRectangle.Width / 2f),
+                                                   position.X + component.MenuWidth - dropDownButtonWidth - (2 * TextSpacing)
+                                                   - list.MaxStringWidth,
                                                    position.Y + DefaultSettings.ContainerHeight)
                                            },
-                                       list.LeftArrowHover ? DefaultSettings.ContainerSelectedColor : DefaultSettings.HoverColor);
-                                   line.End();
+                                       DefaultSettings.ContainerSeparatorColor);
 
-                                   DefaultSettings.Font.DrawText(
-                                       null,
-                                       "<",
-                                       (int)
-                                       (position.X + component.MenuWidth - (2 * arrowRectangle.Width) - (2 * ArrowSpacing)
-                                        - list.MaxStringWidth - (2 * TextSpacing)) - 2,
-                                       (int)rectangleName.Y,
-                                       DefaultSettings.TextColor);
-                                   line.Dispose();
+                                   if (list.Active)
+                                   {
+                                       string[] valueStrings = list.ValuesAsStrings;
+                                       int dropdownMenuHeight = valueStrings.Length * DefaultSettings.ContainerHeight;
+                                       MenuManager.Instance.DrawDelayed(
+                                           delegate
+                                               {
+                                                   Line backgroundLine = new Line(Drawing.Direct3DDevice)
+                                                                             {
+                                                                                 Width = dropdownMenuWidth, Antialias = false,
+                                                                                 GLLines = false
+                                                                             };
+                                                   backgroundLine.Begin();
+                                                   backgroundLine.Draw(
+                                                       new[]
+                                                           {
+                                                               new Vector2(
+                                                                   position.X + component.MenuWidth - (backgroundLine.Width / 2),
+                                                                   position.Y + DefaultSettings.ContainerHeight),
+                                                               new Vector2(
+                                                                   position.X + component.MenuWidth - (backgroundLine.Width / 2),
+                                                                   position.Y + DefaultSettings.ContainerHeight + dropdownMenuHeight),
+                                                           },
+                                                       Color.Black);
+                                                   backgroundLine.End();
+                                                   backgroundLine.Dispose();
+
+                                                   int x =
+                                                       (int)
+                                                       (position.X + component.MenuWidth - dropDownButtonWidth - TextSpacing
+                                                        - list.MaxStringWidth);
+                                                   int y = (int)rectangleName.Y;
+                                                   for (int i = 0; i < valueStrings.Length; i++)
+                                                   {
+                                                       if (i == list.HoveringIndex)
+                                                       {
+                                                           Line hoverLine = new Line(Drawing.Direct3DDevice)
+                                                           {
+                                                               Width = DefaultSettings.ContainerHeight,
+                                                               Antialias = false,
+                                                               GLLines = false
+                                                           };
+                                                           hoverLine.Begin();
+                                                           hoverLine.Draw(
+                                                               new[]
+                                                           {
+                                                               new Vector2(
+                                                                   position.X + component.MenuWidth - dropdownMenuWidth,
+                                                                   position.Y + ((i + 1) * DefaultSettings.ContainerHeight) + DefaultSettings.ContainerHeight/2f),
+                                                               new Vector2(
+                                                                   position.X + component.MenuWidth,
+                                                                   position.Y + ((i + 1) * DefaultSettings.ContainerHeight) + DefaultSettings.ContainerHeight/2f)
+                                                           },
+                                                               DefaultSettings.HoverColor);
+                                                           hoverLine.End();
+                                                           hoverLine.Dispose();
+                                                       }
+                                                       DefaultSettings.ContainerSeparatorLine.Draw(
+                                                           new[]
+                                                               {
+                                                                   new Vector2(
+                                                                       position.X + component.MenuWidth - dropdownMenuWidth,
+                                                                       position.Y + (DefaultSettings.ContainerHeight * (i + 1))),
+                                                                   new Vector2(
+                                                                       position.X + component.MenuWidth,
+                                                                       position.Y + (DefaultSettings.ContainerHeight * (i + 1))),
+                                                               },
+                                                           DefaultSettings.ContainerSeparatorColor);
+                                                       y += DefaultSettings.ContainerHeight;
+                                                       DefaultSettings.Font.DrawText(
+                                                           null,
+                                                           valueStrings[i],
+                                                           x,
+                                                           y,
+                                                           DefaultSettings.TextColor);
+                                                       if (list.Index == i)
+                                                       {
+                                                           int checkmarkWidth =
+                                                               DefaultSettings.Font.MeasureText(null, "\u221A", 0).Width;
+                                                           DefaultSettings.Font.DrawText(
+                                                               null,
+                                                               "\u221A",
+                                                               (int)(position.X + component.MenuWidth - checkmarkWidth - TextSpacing),
+                                                               y,
+                                                               DefaultSettings.TextColor);
+                                                       }
+                                                   }
+                                                   DefaultSettings.ContainerSeparatorLine.Draw(
+                                                       new[]
+                                                           {
+                                                               new Vector2(
+                                                                   position.X + component.MenuWidth - dropdownMenuWidth,
+                                                                   position.Y + DefaultSettings.ContainerHeight),
+                                                               new Vector2(
+                                                                   position.X + component.MenuWidth - dropdownMenuWidth,
+                                                                   position.Y
+                                                                   + DefaultSettings.ContainerHeight * (valueStrings.Length + 1)),
+                                                               new Vector2(
+                                                                   position.X + component.MenuWidth,
+                                                                   position.Y
+                                                                   + DefaultSettings.ContainerHeight * (valueStrings.Length + 1)),
+                                                               new Vector2(
+                                                                   position.X + component.MenuWidth,
+                                                                   position.Y + DefaultSettings.ContainerHeight),
+                                                           },
+                                                       DefaultSettings.ContainerSeparatorColor);
+                                               });
+                                   }
                                },
-                           Bounding = GetContainerRectangle, AdditionalBoundries = GetContainerRectangle,
-                           RightArrow =
-                               (position, component, menuList) =>
+                           Dropdown =
+                               (position, component, menulist) =>
                                new Rectangle(
                                    (int)
-                                   (position.X + component.MenuWidth - (2 * ArrowSpacing)
-                                    - arrowRectangle.Width),
+                                   (position.X + component.MenuWidth - dropDownButtonWidth
+                                    - (2 * TextSpacing) - menulist.MaxStringWidth),
                                    (int)position.Y,
-                                   (2 * ArrowSpacing) + arrowRectangle.Width,
+                                   dropDownButtonWidth + (2 * TextSpacing) + menulist.MaxStringWidth,
                                    DefaultSettings.ContainerHeight),
-                           Width =
-                               list =>
-                               list.MaxStringWidth + (2 * TextSpacing) + (4 * ArrowSpacing)
-                               + (2 * arrowRectangle.Width),
-                           LeftArrow =
-                               (position, component, menuList) =>
-                               new Rectangle(
-                                   (int)
-                                   (position.X + component.MenuWidth - (4 * ArrowSpacing)
-                                    - (2 * arrowRectangle.Width) - (2 * TextSpacing)
-                                    - menuList.MaxStringWidth),
-                                   (int)position.Y,
-                                   (2 * ArrowSpacing) + arrowRectangle.Width,
-                                   DefaultSettings.ContainerHeight)
+                           Width = list => list.MaxStringWidth + (2 * TextSpacing) + dropDownButtonWidth,
+                           DropdownList =
+                               delegate(Vector2 position, AMenuComponent component, MenuList menulist)
+                                   {
+                                       List<Rectangle> rectangles = new List<Rectangle>();
+                                       for (int i = 0; i < menulist.Count; i++)
+                                       {
+                                           rectangles.Add(
+                                               new Rectangle(
+                                                   (int)
+                                                   (position.X + component.MenuWidth - dropDownButtonWidth
+                                                    - (2 * TextSpacing) - menulist.MaxStringWidth),
+                                                   (int)
+                                                   (position.Y + ((i + 1) * DefaultSettings.ContainerHeight)),
+                                                   dropDownButtonWidth + (2 * TextSpacing)
+                                                   + menulist.MaxStringWidth,
+                                                   DefaultSettings.ContainerHeight + 1));
+                                       }
+                                       return rectangles;
+                                   },
+                            EntireDropDown =
+                                (position, component, menulist) =>
+                                new Rectangle(
+                                    (int)
+                                    (position.X + component.MenuWidth - dropDownButtonWidth - (2 * TextSpacing)
+                                     - menulist.MaxStringWidth),
+                                    (int)position.Y,
+                                    dropDownButtonWidth + (2 * TextSpacing) + menulist.MaxStringWidth,
+                                    (menulist.Count + 1) * DefaultSettings.ContainerHeight)
                        };
         }
 

@@ -22,6 +22,7 @@
 namespace LeagueSharp.SDK.Core.UI.Skins
 {
     using System;
+    using System.Collections.Generic;
 
     using LeagueSharp.SDK.Core.UI.Abstracts;
     using LeagueSharp.SDK.Core.UI.Values;
@@ -168,36 +169,25 @@ namespace LeagueSharp.SDK.Core.UI.Skins
         public struct DrawableList
         {
             #region Fields
-
-            /// <summary>
-            ///     Gets the additional boundaries.
-            /// </summary>
-            public Func<Vector2, AMenuComponent, Rectangle> AdditionalBoundries;
-
-            /// <summary>
-            ///     The animation
-            /// </summary>
-            public Animation Animation;
-
-            /// <summary>
-            ///     Gets the bounding.
-            /// </summary>
-            public Func<Vector2, AMenuComponent, Rectangle> Bounding;
-
-            /// <summary>
-            ///     Gets the left arrow
-            /// </summary>
-            public Func<Vector2, AMenuComponent, MenuList, Rectangle> LeftArrow;
-
             /// <summary>
             ///     Methods that draws this <c>DrawableList</c>.
             /// </summary>
             public Action<AMenuComponent, Vector2, int> OnDraw;
 
             /// <summary>
-            ///     Gets the right arrow.
+            ///     Gets the dropdown rectangle.
             /// </summary>
-            public Func<Vector2, AMenuComponent, MenuList, Rectangle> RightArrow;
+            public Func<Vector2, AMenuComponent, MenuList, Rectangle> Dropdown;
+
+            /// <summary>
+            ///     Gets the list of dropdown rectangles.
+            /// </summary>
+            public Func<Vector2, AMenuComponent, MenuList, List<Rectangle>> DropdownList;
+
+            /// <summary>
+            ///     Gets the entire dropdown rectangle.
+            /// </summary>
+            public Func<Vector2, AMenuComponent, MenuList, Rectangle> EntireDropDown;
 
             /// <summary>
             ///     Gets the width

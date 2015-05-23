@@ -47,7 +47,7 @@ namespace LeagueSharp.SDK.Core
             false, 
             FontCharacterSet.Default, 
             FontPrecision.Default, 
-            FontQuality.Default, 
+            FontQuality.Antialiased, 
             FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative, 
             "Tahoma");
 

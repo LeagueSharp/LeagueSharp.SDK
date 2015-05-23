@@ -362,7 +362,7 @@ namespace LeagueSharp.SDK.Core.UI
         /// </param>
         public override void OnWndProc(WindowsKeys args)
         {
-            if (this.value == null)
+            if (this.value == null || !args.Process)
             {
                 return;
             }

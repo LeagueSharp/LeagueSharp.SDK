@@ -56,6 +56,8 @@ namespace LeagueSharp.SDK.Core.UI
                     "LS" + Environment.UserName.GetHashCode().ToString("X"), 
                     "MenuConfigEx"));
 
+        private readonly Queue<Action> delayedDrawActions = new Queue<Action>(); 
+
         #endregion
 
         #region Fields
@@ -228,6 +230,15 @@ namespace LeagueSharp.SDK.Core.UI
             }
         }
 
+        /// <summary>
+        /// Draw actions in the specified action will happen after the menu has been drawn.
+        /// </summary>
+        /// <param name="a"></param>
+        public void DrawDelayed(Action a)
+        {
+            delayedDrawActions.Enqueue(a);
+        }
+
         #endregion
 
         #region Methods
@@ -278,6 +289,10 @@ namespace LeagueSharp.SDK.Core.UI
             if (this.MenuVisible)
             {
                 ThemeManager.Current.OnDraw(this.position);
+                while (delayedDrawActions.Count > 0)
+                {
+                    delayedDrawActions.Dequeue().Invoke();
+                }
             }
         }
 
