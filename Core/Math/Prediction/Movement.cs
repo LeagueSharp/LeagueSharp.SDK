@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Movement.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
@@ -358,7 +358,8 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
             // Normal prediction
             if (result == null)
             {
-                result = GetStandardPrediction(input);
+                //result = GetStandardPrediction(input);
+                result = GetAdvancedPrediction(input); 
             }
 
             // Check if the unit position is in range
@@ -446,6 +447,63 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                         || buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare))
                     .Aggregate(0d, (current, buff) => Math.Max(current, buff.EndTime));
             return result - Game.Time;
+        }
+
+        /// <summary>
+        ///     Calculates the position to cast a spell according to unit movement. 
+        /// </summary>
+        /// <param name="input">PredictionInput</param>
+        /// <param name="additionalSpeed">Additional Speed (Multiplicative)</param>
+        /// <returns></returns>
+        internal static PredictionOutput GetAdvancedPrediction(PredictionInput input, float additionalSpeed = 0)
+        {
+            var speed = additionalSpeed == 0 ? input.Speed : input.Speed * additionalSpeed;
+
+            if (speed == int.MaxValue)
+                speed = 90000;
+
+            var unit = input.Unit;
+            var position = PositionAfter(unit, 1, unit.MoveSpeed - 100);
+            var prediction = position + speed * (input.Delay / 1000);
+
+            return new PredictionOutput()
+            {
+                UnitPosition = new Vector3(position.X, position.Y, unit.ServerPosition.Z),
+                CastPosition = new Vector3(prediction.X, prediction.Y, unit.ServerPosition.Z),
+                Hitchance = HitChance.High
+            };
+        }
+
+
+        /// <summary>
+        ///     Calculates the unit position after "t" 
+        /// </summary>
+        /// <param name="unit">Unit to track</param>
+        /// <param name="t">Track time</param>
+        /// <param name="speed">Speed of unit</param>
+        /// <returns></returns>
+        internal static Vector2 PositionAfter(Obj_AI_Base unit, float t, float speed = float.MaxValue)
+        {
+            var distance = t * speed;
+            var path = unit.GetWaypoints();
+            var result = new List<Vector2>();
+
+            for (int i = 0; i < path.Count - 1; i++)
+            {
+                var a = path[i];
+                var b = path[i + 1];
+                var d = a.Distance(b);
+
+                if (d < distance)
+                {
+                    distance -= d;
+                }
+                else
+                {
+                    return (a + distance * (b - a).Normalized());
+                }
+            }
+            return path[path.Count - 1];
         }
 
         #endregion
