@@ -171,7 +171,7 @@
     <Compile Include="Core\Utils\Logging.cs" />
     <Compile Include="Core\Utils\Performance.cs" />
     <Compile Include="Core\Utils\TickOperation.cs" />
-    <Compile Include="Core\Utils\Spell.cs" />
+    <Compile Include="Core\Utils\SpellUtils.cs" />
     <Compile Include="Core\Utils\Version.cs" />
     <Compile Include="Core\Utils\WeightedRandom.cs" />
     <Compile Include="Core\Variables.cs" />

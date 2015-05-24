@@ -886,12 +886,25 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     Sets the Spell Data to Charged data.
         /// </summary>
-        /// <param name="spellName">Spell Name</param>
-        /// <param name="buffName">Spell Buff Name</param>
-        /// <param name="minRange">Spell Minimum Range</param>
-        /// <param name="maxRange">Spell Maximum Range</param>
-        /// <param name="deltaT">Charge Duration</param>
-        public void SetCharged(string spellName, string buffName, int minRange, int maxRange, float deltaT)
+        /// <param name="spellName">
+        ///     Spell Name
+        /// </param>
+        /// <param name="buffName">
+        ///     Spell Buff Name
+        /// </param>
+        /// <param name="minRange">
+        ///     Spell Minimum Range
+        /// </param>
+        /// <param name="maxRange">
+        ///     Spell Maximum Range
+        /// </param>
+        /// <param name="deltaT">
+        ///     Charge Duration
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Spell" />.
+        /// </returns>
+        public Spell SetCharged(string spellName, string buffName, int minRange, int maxRange, float deltaT)
         {
             this.IsChargedSpell = true;
             this.ChargedSpellName = spellName;
@@ -904,19 +917,38 @@ namespace LeagueSharp.SDK.Core.Wrappers
             Obj_AI_Base.OnProcessSpellCast += this.OnProcessSpellCast;
             Spellbook.OnUpdateChargedSpell += this.Spellbook_OnUpdateChargedSpell;
             Spellbook.OnCastSpell += this.SpellbookOnCastSpell;
+
+            return this;
         }
 
         /// <summary>
         ///     Sets the Spell Data to Skill-shot data.
         /// </summary>
-        /// <param name="delay">Spell Delay</param>
-        /// <param name="skillWidth">Spell Width</param>
-        /// <param name="speed">Spell Speed</param>
-        /// <param name="collision">Spell Collision Flag</param>
-        /// <param name="type">Skill-shot Type</param>
-        /// <param name="fromVector3">From Vector3 Source</param>
-        /// <param name="rangeCheckFromVector3">Range Check From Vector3 Source</param>
-        public void SetSkillshot(
+        /// <param name="delay">
+        ///     Spell Delay
+        /// </param>
+        /// <param name="skillWidth">
+        ///     Spell Width
+        /// </param>
+        /// <param name="speed">
+        ///     Spell Speed
+        /// </param>
+        /// <param name="collision">
+        ///     Spell Collision Flag
+        /// </param>
+        /// <param name="type">
+        ///     Skill-shot Type
+        /// </param>
+        /// <param name="fromVector3">
+        ///     From Vector3 Source
+        /// </param>
+        /// <param name="rangeCheckFromVector3">
+        ///     Range Check From Vector3 Source
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Spell" />.
+        /// </returns>
+        public Spell SetSkillshot(
             float delay, 
             float skillWidth, 
             float speed, 
@@ -933,16 +965,29 @@ namespace LeagueSharp.SDK.Core.Wrappers
             this.Type = type;
             this.RangeCheckFrom = rangeCheckFromVector3;
             this.IsSkillshot = true;
+
+            return this;
         }
 
         /// <summary>
         ///     Sets the Spell Data to Skill-shot data.
         /// </summary>
-        /// <param name="collision">Spell Collision Flag</param>
-        /// <param name="type">Skill-shot Type</param>
-        /// <param name="fromVector3">From Vector3 Source</param>
-        /// <param name="rangeCheckFromVector3">Range Check From Vector3 Source</param>
-        public void SetSkillshot(
+        /// <param name="collision">
+        ///     Spell Collision Flag
+        /// </param>
+        /// <param name="type">
+        ///     Skill-shot Type
+        /// </param>
+        /// <param name="fromVector3">
+        ///     From Vector3 Source
+        /// </param>
+        /// <param name="rangeCheckFromVector3">
+        ///     Range Check From Vector3 Source
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Spell" />.
+        /// </returns>
+        public Spell SetSkillshot(
             bool collision, 
             SkillshotType type, 
             Vector3 fromVector3 = new Vector3(), 
@@ -953,16 +998,29 @@ namespace LeagueSharp.SDK.Core.Wrappers
             this.Type = type;
             this.RangeCheckFrom = rangeCheckFromVector3;
             this.IsSkillshot = true;
+
+            return this;
         }
 
         /// <summary>
         ///     Sets the Spell Data to targeted data.
         /// </summary>
-        /// <param name="delay">Spell Delay</param>
-        /// <param name="speed">Spell Speed</param>
-        /// <param name="fromVector3">From Vector3 Source</param>
-        /// <param name="rangeCheckFromVector3">Range Check From Vector3 Source</param>
-        public void SetTargetted(
+        /// <param name="delay">
+        ///     Spell Delay
+        /// </param>
+        /// <param name="speed">
+        ///     Spell Speed
+        /// </param>
+        /// <param name="fromVector3">
+        ///     From Vector3 Source
+        /// </param>
+        /// <param name="rangeCheckFromVector3">
+        ///     Range Check From Vector3 Source
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Spell" />.
+        /// </returns>
+        public Spell SetTargetted(
             float delay, 
             float speed, 
             Vector3 fromVector3 = new Vector3(), 
@@ -973,18 +1031,29 @@ namespace LeagueSharp.SDK.Core.Wrappers
             this.From = fromVector3;
             this.RangeCheckFrom = rangeCheckFromVector3;
             this.IsSkillshot = false;
+
+            return this;
         }
 
         /// <summary>
         ///     Sets the Spell Data to targeted data.
         /// </summary>
-        /// <param name="fromVector3">From Vector3 Source</param>
-        /// <param name="rangeCheckFromVector3">Range Check From Vector3 Source</param>
-        public void SetTargetted(Vector3 fromVector3 = new Vector3(), Vector3 rangeCheckFromVector3 = new Vector3())
+        /// <param name="fromVector3">
+        ///     From Vector3 Source
+        /// </param>
+        /// <param name="rangeCheckFromVector3">
+        ///     Range Check From Vector3 Source
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Spell" />.
+        /// </returns>
+        public Spell SetTargetted(Vector3 fromVector3 = new Vector3(), Vector3 rangeCheckFromVector3 = new Vector3())
         {
             this.From = fromVector3;
             this.RangeCheckFrom = rangeCheckFromVector3;
             this.IsSkillshot = false;
+
+            return this;
         }
 
         /// <summary>

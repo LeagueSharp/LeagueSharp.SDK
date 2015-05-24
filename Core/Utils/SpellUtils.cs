@@ -24,9 +24,9 @@ namespace LeagueSharp.SDK.Core.Utils
     using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
-    ///     General Utils.
+    ///     General Spell Utils.
     /// </summary>
-    public static class Spell
+    public static class SpellUtils
     {
         #region Public Methods and Operators
 
