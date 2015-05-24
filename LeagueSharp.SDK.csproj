@@ -87,9 +87,12 @@
     <Compile Include="Core\Enumerations\OrbwalkerType.cs" />
     <Compile Include="Core\Enumerations\PerformanceType.cs" />
     <Compile Include="Core\Enumerations\TargetSelectorMode.cs" />
+    <Compile Include="Core\Enumerations\TeleportStatus.cs" />
+    <Compile Include="Core\Enumerations\TeleportType.cs" />
     <Compile Include="Core\Enumerations\TurretShotType.cs" />
     <Compile Include="Core\Enumerations\WindowsMessages.cs" />
     <Compile Include="Core\Events\Gapcloser.cs" />
+    <Compile Include="Core\Events\Teleport.cs" />
     <Compile Include="Core\Events\Turret.cs" />
     <Compile Include="Core\Extensions\Streams.cs" />
     <Compile Include="Core\UI\Menu\RadioMenu.cs" />
