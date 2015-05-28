@@ -210,7 +210,7 @@ namespace LeagueSharp.SDK.Core.UI
         {
             get
             {
-                return this.menus.First(menu => menu.Name.Equals(name));
+                return this.menus.FirstOrDefault(menu => menu.Name.Equals(name));
             }
         }
 
