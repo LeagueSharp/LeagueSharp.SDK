@@ -16,24 +16,26 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Gets a best target.
+//   Gets the best target.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.Wrappers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.UI;
+    using LeagueSharp.SDK.Core.UI.Values;
 
     using SharpDX;
 
     /// <summary>
-    ///     Gets a best target.
+    ///     Gets the best target.
     /// </summary>
-    //// TODO: Implement damage and menu.
     public class TargetSelector
     {
         #region Static Fields
@@ -46,7 +48,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 "Ahri", "Anivia", "Annie", "Ashe", "Brand", "Caitlyn", 
                 "Cassiopeia", "Corki", "Draven", "Ezreal", "Graves", "Jinx", 
                 "Kalista", "Karma", "Karthus", "Katarina", "Kennen", 
-                "KogMaw", "LeBlanc", "Lucian", "Lux", "Malzahar", 
+                "KogMaw", "Leblanc", "Lucian", "Lux", "Malzahar", 
                 "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", 
                 "Syndra", "Talon", "Teemo", "Tristana", "TwistedFate", 
                 "Twitch", "Varus", "Vayne", "Veigar", "VelKoz", "Viktor", 
@@ -91,20 +93,120 @@ namespace LeagueSharp.SDK.Core.Wrappers
             };
 
         /// <summary>
+        ///     The menu
+        /// </summary>
+        private static readonly Menu Menu;
+
+        /// <summary>
         ///     The current mode the TS is using.
         /// </summary>
         private static TargetSelectorMode mode = TargetSelectorMode.AutoPriority;
 
         #endregion
 
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes static members of the <see cref="TargetSelector" /> class.
+        /// </summary>
+        static TargetSelector()
+        {
+            // Create Menu
+            Menu = new Menu("TargetSelector", "Target Selector", true);
+
+            // Create Priority Menu
+            var priorityMenu = new Menu("Priorities", "Priorities");
+            foreach (var hero in ObjectHandler.EnemyHeroes.Select(x => x.ChampionName))
+            {
+                priorityMenu.Add(
+                    new MenuItem<MenuSlider>(hero, hero) { Value = new MenuSlider(GetPriorityFromDatabase(hero), 1, 4) });
+            }
+
+            var autoArrange = new MenuItem<MenuBool>("AutoArrange", "Auto Arrange Priorities")
+                                  {
+                                     Value = new MenuBool(true) 
+                                  };
+
+            autoArrange.ValueChanged += delegate(object sender, ValueChangedEventArgs<MenuBool> args)
+                {
+                    if (!args.Value.Value)
+                    {
+                        return;
+                    }
+
+                    foreach (var hero in ObjectHandler.EnemyHeroes.Select(x => x.ChampionName))
+                    {
+                        Menu["Priorities"][hero].GetValue<MenuSlider>().Value = GetPriorityFromDatabase(hero);
+                    }
+                };
+
+            priorityMenu.Add(autoArrange);
+
+            // Add info
+            priorityMenu.Add(
+                new MenuItem<MenuSeparator>("Info", "1 = Highest, 4 = Lowest Priority") { Value = new MenuSeparator() });
+
+            Menu.Add(new MenuItem<MenuBool>("FocusSelected", "Focus Selected Target") { Value = new MenuBool(true) });
+            Menu.Add(
+                new MenuItem<MenuBool>("AttackFocusedTarget", "Only Attack Selected Target") { Value = new MenuBool() });
+
+            var targetingMode = new MenuItem<MenuList<TargetSelectorMode>>("TargetingMode", "Targeting Mode")
+                                    {
+                                       Value = new MenuList<TargetSelectorMode>() 
+                                    };
+
+            targetingMode.ValueChanged +=
+                delegate(object sender, ValueChangedEventArgs<MenuList<TargetSelectorMode>> args)
+                    {
+                        mode = args.Value.SelectedValue;
+                    };
+
+            Menu.Add(targetingMode);
+
+            // Add target selector menu to LeagueSharp menu
+            Variables.LeagueSharpMenu.Add(Menu);
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets the selected target.
+        /// </summary>
+        /// <value>
+        ///     The selected target.
+        /// </value>
+        public static Obj_AI_Hero SelectedTarget
+        {
+            get
+            {
+                return Hud.SelectedUnit as Obj_AI_Hero;
+            }
+        }
+
+        #endregion
+
         #region Public Methods and Operators
+
+        /// <summary>
+        ///     Gets the priority of the champion from the menu.
+        /// </summary>
+        /// <param name="champName">Name of the champ.</param>
+        /// <returns>A value between 1 and 4 representing the priority of the target.</returns>
+        public static int GetPriority(string champName)
+        {
+            return Menu["Priorities"][champName].GetValue<MenuSlider>().Value;
+        }
 
         /// <summary>
         ///     Gets the priority of the champion. (1 being the highest, 4 being the lowest)
         /// </summary>
         /// <param name="champName">Champion Name</param>
-        /// <returns>Number representing the priority. (1 being the highest, 4 being the lowest)</returns>
-        public static int GetPriority(string champName)
+        /// <returns>
+        ///     Number representing the priority. (1 being the highest, 4 being the lowest)
+        /// </returns>
+        public static int GetPriorityFromDatabase(string champName)
         {
             if (HighestPriority.Contains(champName))
             {
@@ -132,6 +234,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="from">Position to get enemies around, defaults to player's position.</param>
         /// <param name="ignoredChampions">Any champions to ignore.</param>
         /// <returns>The target</returns>
+        /// <exception cref="ArgumentNullException">The LINQ predicate or source is null</exception>
         public static Obj_AI_Hero GetTarget(
             float range, 
             DamageType damageType = DamageType.True, 
@@ -154,6 +257,11 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     .Where(x => ignoredChampions.Any(y => y.NetworkId != x.NetworkId))
                     .Where(x => !IsInvulnerable(x, damageType));
 
+            if (Menu["FocusSelected"].GetValue<MenuBool>().Value && SelectedTarget != null)
+            {
+                return SelectedTarget;
+            }
+
             return GetChampionByMode(enemyChamps, damageType);
         }
 
@@ -163,6 +271,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="spell">The Spell</param>
         /// <param name="ignoredChampions">Champions that should be ignored.</param>
         /// <returns>Best target</returns>
+        /// <exception cref="ArgumentNullException">The LINQ predicate or source is null.</exception>
         public static Obj_AI_Hero GetTargetNoCollision(Spell spell, IEnumerable<Obj_AI_Hero> ignoredChampions = null)
         {
             if (ignoredChampions == null)
@@ -175,6 +284,11 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     .Where(x => ignoredChampions.Any(y => y.NetworkId != x.NetworkId))
                     .Where(x => spell.GetPrediction(x).Hitchance != HitChance.Collision)
                     .Where(x => !IsInvulnerable(x, spell.DamageType));
+
+            if (Menu["FocusSelected"].GetValue<MenuBool>().Value && SelectedTarget != null)
+            {
+                return SelectedTarget;
+            }
 
             return GetChampionByMode(enemyChamps, spell.DamageType);
         }
@@ -235,7 +349,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="targetSelectorMode">The Mode</param>
         public static void SetPriorityMode(TargetSelectorMode targetSelectorMode)
         {
-            // TODO: Replace this with menu code.
             mode = targetSelectorMode;
         }
 
@@ -251,9 +364,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <returns>The best hero.</returns>
         private static Obj_AI_Hero GetChampionByMode(IEnumerable<Obj_AI_Hero> heroes, DamageType damageType)
         {
+            // TODO use Damage.cs
             switch (mode)
             {
-                // TODO: Use Damage.cs
                 case TargetSelectorMode.LessAttacksToKill:
                     return heroes.MinOrDefault(x => x.Health / ObjectManager.Player.TotalAttackDamage);
 
