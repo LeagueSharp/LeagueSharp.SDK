@@ -25,6 +25,8 @@ namespace LeagueSharp.SDK.Core.Events
     using System.Reflection;
 
     using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Core.Enumerations;
+
 
     /// <summary>
     ///     Provides an event for when the game starts.
@@ -40,7 +42,17 @@ namespace LeagueSharp.SDK.Core.Events
         {
             if (Game.Mode == GameMode.Running)
             {
-                DelayAction.Add(0, () => Game_OnStart(new EventArgs()));
+                DelayAction.Add(0, () =>
+                {
+                    try
+                    {
+                        Game_OnStart(new EventArgs());
+                    }
+                    catch(Exception e)
+                    {
+                        Logging.Write()(LogLevel.Error, e.Message);
+                    }
+                });
             }
             else
             {
