@@ -1,45 +1,115 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Teleport.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   Teleport class, contains Teleport even which is triggered on recalls, teleports and <c>shen</c> or twisted fate
+//   <c>ultimates</c>.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.Events
 {
+    using System;
+    using System.Collections.Generic;
+
     using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
-    ///  Teleport class, contains Teleport even which is triggered on recalls, teleports and shen or twisted fate ultimates.
+    ///     Teleport class, contains Teleport even which is triggered on recalls, teleports and <c>shen</c> or twisted fate
+    ///     <c>ultimates</c>.
     /// </summary>
     public class Teleport
     {
+        #region Constants
 
         /// <summary>
-        /// Teleport eventhandler
+        ///     The error buffer.
+        /// </summary>
+        private const int ErrorBuffer = 100; // in ticks
+
+        #endregion
+
+        #region Static Fields
+
+        /// <summary>
+        ///     The teleport data by network id dictionary.
+        /// </summary>
+        private static readonly IDictionary<int, TeleportEventArgs> TeleportDataByNetworkId =
+            new Dictionary<int, TeleportEventArgs>();
+
+        /// <summary>
+        ///     The type by string dictionary.
+        /// </summary>
+        private static readonly IDictionary<string, ITeleport> TypeByString = new Dictionary<string, ITeleport>
+                                                                                  {
+                                                                                      { "Recall", new RecallTeleport() }, 
+                                                                                      {
+                                                                                          "Teleport", new TeleportTeleport()
+                                                                                      }, 
+                                                                                      {
+                                                                                          "Gate", new TwistedFateTeleport()
+                                                                                      }, 
+                                                                                      { "Shen", new ShenTeleport() }, 
+                                                                                  };
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes static members of the <see cref="Teleport" /> class.
+        /// </summary>
+        static Teleport()
+        {
+            Obj_AI_Base.OnTeleport += OnTeleportEvent;
+        }
+
+        #endregion
+
+        #region Delegates
+
+        /// <summary>
+        ///     Teleport <c>eventhandler</c>
         /// </summary>
         /// <param name="sender">The sender</param>
         /// <param name="args">Teleport arguments</param>
         public delegate void TeleportHandler(Obj_AI_Base sender, TeleportEventArgs args);
 
-        private const int ErrorBuffer = 100; //in ticks
+        #endregion
 
-        private static readonly IDictionary<string, ITeleport> TypeByString = new Dictionary<string, ITeleport>
-                {
-                    {"Recall", new RecallTeleport()},
-                    {"Teleport", new TeleportTeleport()},
-                    {"Gate", new TwistedFateTeleport()},
-                    {"Shen", new ShenTeleport()},
-                };
-        private static readonly IDictionary<int, TeleportEventArgs> TeleportDataByNetworkId =
-                    new Dictionary<int, TeleportEventArgs>();
+        #region Public Events
 
         /// <summary>
-        /// This event is triggered on recalls, teleports and shen or twisted fate ultimates.
+        ///     This event is triggered on recalls, teleports and <c>shen</c> or twisted fate <c>ultimates</c>.
         /// </summary>
         public static event TeleportHandler OnTeleport;
 
-        static Teleport()
-        {
-            Obj_AI_Base.OnTeleport += Obj_AI_Base_OnTeleport;
-        }
+        #endregion
 
+        #region Methods
+
+        /// <summary>
+        ///     Fires the event.
+        /// </summary>
+        /// <param name="sender">
+        ///     The sender
+        /// </param>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
         private static void FireEvent(Obj_AI_Base sender, TeleportEventArgs args)
         {
             if (OnTeleport != null)
@@ -48,13 +118,18 @@ namespace LeagueSharp.SDK.Core.Events
             }
         }
 
-        private static void Obj_AI_Base_OnTeleport(Obj_AI_Base sender, GameObjectTeleportEventArgs args)
+        /// <summary>
+        ///     OnTeleport event.
+        /// </summary>
+        /// <param name="sender">
+        ///     The sender
+        /// </param>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        private static void OnTeleportEvent(Obj_AI_Base sender, GameObjectTeleportEventArgs args)
         {
-            var eventArgs = new TeleportEventArgs
-            {
-                Status = TeleportStatus.Unknown,
-                Type = TeleportType.Unknown
-            };
+            var eventArgs = new TeleportEventArgs { Status = TeleportStatus.Unknown, Type = TeleportType.Unknown };
 
             if (sender == null || !sender.IsValid)
             {
@@ -69,9 +144,10 @@ namespace LeagueSharp.SDK.Core.Events
 
             if (!string.IsNullOrEmpty(args.RecallType))
             {
-                if (TypeByString.ContainsKey(args.RecallType))
+                ITeleport value;
+                if (TypeByString.TryGetValue(args.RecallType, out value))
                 {
-                    ITeleport teleportMethod = TypeByString[args.RecallType];
+                    var teleportMethod = value;
 
                     eventArgs.Status = TeleportStatus.Start;
                     eventArgs.Duration = teleportMethod.GetDuration(args);
@@ -83,60 +159,133 @@ namespace LeagueSharp.SDK.Core.Events
                 }
                 else
                 {
-                    Console.WriteLine(@"Teleport type {0} with name {1} is not supported yet. Please report it!", args.RecallType, args.RecallName);
+                    Console.WriteLine(
+                        @"Teleport type {0} with name {1} is not supported yet. Please report it!", 
+                        args.RecallType, 
+                        args.RecallName);
                 }
             }
             else
             {
                 eventArgs = TeleportDataByNetworkId[sender.NetworkId];
-                bool shorter = Variables.TickCount - eventArgs.Start < eventArgs.Duration - ErrorBuffer;
+                var shorter = Variables.TickCount - eventArgs.Start < eventArgs.Duration - ErrorBuffer;
                 eventArgs.Status = shorter ? TeleportStatus.Abort : TeleportStatus.Finish;
             }
+
             FireEvent(sender, eventArgs);
         }
+
+        #endregion
     }
 
     /// <summary>
-    /// Contains data about a teleport.
+    ///     Contains data about a teleport.
     /// </summary>
     public class TeleportEventArgs : EventArgs
     {
+        #region Public Properties
+
         /// <summary>
-        /// The duration of the teleport
+        ///     Gets the duration of the teleport
         /// </summary>
         public int Duration { get; internal set; }
+
         /// <summary>
-        /// The status of the teleport
-        /// </summary>
-        public TeleportStatus Status { get; internal set; }
-        /// <summary>
-        /// The type of teleport
-        /// </summary>
-        public TeleportType Type { get; internal set; }
-        /// <summary>
-        /// The start time of the teleport
-        /// </summary>
-        public int Start { get; internal set; }
-        /// <summary>
-        /// If the object is the target of a teleport: eg. turret is target of the summoner Teleport
+        ///     Gets a value indicating whether the object is the target of a teleport: <c>eg</c>. turret is target of the
+        ///     <c>summoner</c> Teleport
         /// </summary>
         public bool IsTarget { get; internal set; }
+
+        /// <summary>
+        ///     Gets the start time of the teleport
+        /// </summary>
+        public int Start { get; internal set; }
+
+        /// <summary>
+        ///     Gets the status of the teleport
+        /// </summary>
+        public TeleportStatus Status { get; internal set; }
+
+        /// <summary>
+        ///     Gets the type of teleport
+        /// </summary>
+        public TeleportType Type { get; internal set; }
+
+        #endregion
     }
 
+    /// <summary>
+    ///     The Teleport interface.
+    /// </summary>
     internal interface ITeleport
     {
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets the type.
+        /// </summary>
         TeleportType Type { get; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Get duration
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        /// <returns>
+        ///     Duration of the teleport.
+        /// </returns>
         int GetDuration(GameObjectTeleportEventArgs args);
+
+        /// <summary>
+        ///     Is Target
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        /// <returns>
+        ///     returns where the teleport is target.
+        /// </returns>
         bool IsTarget(GameObjectTeleportEventArgs args);
+
+        #endregion
     }
 
+    /// <summary>
+    ///     The recall teleport.
+    /// </summary>
     internal class RecallTeleport : ITeleport
     {
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets the type.
+        /// </summary>
         public TeleportType Type
         {
-            get { return TeleportType.Recall; }
+            get
+            {
+                return TeleportType.Recall;
+            }
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Get duration
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        /// <returns>
+        ///     Duration of the teleport.
+        /// </returns>
         public int GetDuration(GameObjectTeleportEventArgs args)
         {
             var duration = 0;
@@ -165,70 +314,183 @@ namespace LeagueSharp.SDK.Core.Events
                     Console.WriteLine(@"Recall {0} is not supported yet. Please report it!", args.RecallName);
                     break;
             }
+
             return duration;
         }
 
-
+        /// <summary>
+        ///     Is Target
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        /// <returns>
+        ///     returns where the teleport is target.
+        /// </returns>
         public bool IsTarget(GameObjectTeleportEventArgs args)
         {
             return false;
         }
+
+        #endregion
     }
 
+    /// <summary>
+    ///     The teleport teleport.
+    /// </summary>
     internal class TeleportTeleport : ITeleport
     {
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets the type.
+        /// </summary>
         public TeleportType Type
         {
-            get { return TeleportType.Teleport; }
+            get
+            {
+                return TeleportType.Teleport;
+            }
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Get duration
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        /// <returns>
+        ///     Duration of the teleport.
+        /// </returns>
         public int GetDuration(GameObjectTeleportEventArgs args)
         {
             return 3500;
         }
 
-
+        /// <summary>
+        ///     Is Target
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        /// <returns>
+        ///     returns where the teleport is target.
+        /// </returns>
         public bool IsTarget(GameObjectTeleportEventArgs args)
         {
             return !string.Equals(args.RecallName, "summonerteleport", StringComparison.InvariantCultureIgnoreCase);
         }
+
+        #endregion
     }
 
+    /// <summary>
+    ///     The twisted fate teleport.
+    /// </summary>
     internal class TwistedFateTeleport : ITeleport
     {
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets the type.
+        /// </summary>
         public TeleportType Type
         {
-            get { return TeleportType.TwistedFate; }
+            get
+            {
+                return TeleportType.TwistedFate;
+            }
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Get duration
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        /// <returns>
+        ///     Duration of the teleport.
+        /// </returns>
         public int GetDuration(GameObjectTeleportEventArgs args)
         {
             return 1500;
         }
 
-
+        /// <summary>
+        ///     Is Target
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        /// <returns>
+        ///     returns where the teleport is target.
+        /// </returns>
         public bool IsTarget(GameObjectTeleportEventArgs args)
         {
             return !string.Equals(args.RecallName, "gate", StringComparison.InvariantCultureIgnoreCase);
         }
+
+        #endregion
     }
 
+    /// <summary>
+    ///     The <c>she</c> teleport.
+    /// </summary>
     internal class ShenTeleport : ITeleport
     {
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets the type.
+        /// </summary>
         public TeleportType Type
         {
-            get { return TeleportType.Shen; }
+            get
+            {
+                return TeleportType.Shen;
+            }
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Get duration
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        /// <returns>
+        ///     Duration of the teleport.
+        /// </returns>
         public int GetDuration(GameObjectTeleportEventArgs args)
         {
             return 3000;
         }
 
-
+        /// <summary>
+        ///     Is Target
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        /// <returns>
+        ///     returns where the teleport is target.
+        /// </returns>
         public bool IsTarget(GameObjectTeleportEventArgs args)
         {
             return !string.Equals(args.RecallName, "ShenStandUnited", StringComparison.InvariantCultureIgnoreCase);
         }
+
+        #endregion
     }
 }

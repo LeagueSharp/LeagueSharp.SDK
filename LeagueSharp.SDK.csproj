@@ -95,6 +95,14 @@
     <Compile Include="Core\Events\Teleport.cs" />
     <Compile Include="Core\Events\Turret.cs" />
     <Compile Include="Core\Extensions\Streams.cs" />
+    <Compile Include="Core\IDrawing\DrawCircle.cs" />
+    <Compile Include="Core\IDrawing\DrawLine.cs" />
+    <Compile Include="Core\IDrawing\DrawObject.cs" />
+    <Compile Include="Core\IDrawing\DrawRectangle.cs" />
+    <Compile Include="Core\IDrawing\DrawText.cs" />
+    <Compile Include="Core\IDrawing\DrawTexture.cs" />
+    <Compile Include="Core\IDrawing\DrawType.cs" />
+    <Compile Include="Core\IDrawing\Render.cs" />
     <Compile Include="Core\UI\Menu\RadioMenu.cs" />
     <Compile Include="Core\UI\Menu\Values\MenuButton.cs" />
     <Compile Include="Core\UI\Menu\Values\MenuColor.cs" />
@@ -103,8 +111,6 @@
     <Compile Include="Core\Math\Geometry.cs" />
     <Compile Include="Core\Math\Prediction\Health.cs" />
     <Compile Include="Core\Orbwalker.cs" />
-    <Compile Include="Core\Render\2D\Circle.cs" />
-    <Compile Include="Core\Render\2D\Sprite.cs" />
     <Compile Include="Core\Signals\Signal.cs" />
     <Compile Include="Core\Signals\SignalManager.cs" />
     <Compile Include="Core\UI\Menu\Abstracts\AMenuComponent.cs" />
@@ -166,9 +172,6 @@
     <Compile Include="Core\Network\Packet.cs" />
     <Compile Include="Core\Utils\Network.cs" />
     <Compile Include="Core\ObjectHandler.cs" />
-    <Compile Include="Core\Render\2D\Line.cs" />
-    <Compile Include="Core\Render\2D\Rectangle.cs" />
-    <Compile Include="Core\Render\Text.cs" />
     <Compile Include="Core\Utils\Cache.cs" />
     <Compile Include="Core\Utils\DelayAction.cs" />
     <Compile Include="Core\Utils\Logging.cs" />

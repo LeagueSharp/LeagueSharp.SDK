@@ -1,50 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MenuColor.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// </copyright>
+// <summary>
+//   The menu color.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.Values
 {
+    using System;
     using System.Runtime.Serialization;
-    using System.Windows.Forms;
 
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.UI.Abstracts;
     using LeagueSharp.SDK.Core.UI.Skins;
-    using LeagueSharp.SDK.Core.UI.Skins.Default;
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
 
-    using Math = System.Math;
-
+    /// <summary>
+    ///     The menu color.
+    /// </summary>
     [Serializable]
     public class MenuColor : AMenuValue, ISerializable
     {
-        public override Vector2 Position { get; set; }
+        #region Constructors and Destructors
 
-        public ColorBGRA Color { get; set; }
-
-        public bool Active { get; set; }
-
-        public bool HoveringPreview { get; set; }
-
-        public bool InteractingRed { get; set; }
-
-        public bool InteractingGreen { get; set; }
-
-        public bool InteractingBlue { get; set; }
-
-        public bool InteractingAlpha { get; set; }
-
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MenuColor" /> class.
+        /// </summary>
         public MenuColor()
-            : this(new ColorBGRA(0, 0, 0, 255)) {}
+            : this(new ColorBGRA(0, 0, 0, 255))
+        {
+        }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MenuColor" /> class.
+        /// </summary>
+        /// <param name="color">
+        ///     The color
+        /// </param>
         public MenuColor(ColorBGRA color)
         {
-            Color = color;
+            this.Color = color;
         }
 
         /// <summary>
@@ -54,13 +66,60 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <param name="context">The context.</param>
         public MenuColor(SerializationInfo info, StreamingContext context)
         {
-            byte red = (byte)info.GetValue("red", typeof(byte));
-            byte green = (byte)info.GetValue("green", typeof(byte));
-            byte blue = (byte)info.GetValue("blue", typeof(byte));
-            byte alpha = (byte)info.GetValue("alpha", typeof(byte));
+            var red = (byte)info.GetValue("red", typeof(byte));
+            var green = (byte)info.GetValue("green", typeof(byte));
+            var blue = (byte)info.GetValue("blue", typeof(byte));
+            var alpha = (byte)info.GetValue("alpha", typeof(byte));
             this.Color = new ColorBGRA(red, green, blue, alpha);
         }
 
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether active.
+        /// </summary>
+        public bool Active { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the color.
+        /// </summary>
+        public ColorBGRA Color { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether hovering preview.
+        /// </summary>
+        public bool HoveringPreview { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether interacting alpha.
+        /// </summary>
+        public bool InteractingAlpha { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether interacting blue.
+        /// </summary>
+        public bool InteractingBlue { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether interacting green.
+        /// </summary>
+        public bool InteractingGreen { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether interacting red.
+        /// </summary>
+        public bool InteractingRed { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the position.
+        /// </summary>
+        public override Vector2 Position { get; set; }
+
+        /// <summary>
+        ///     Gets the width.
+        /// </summary>
         public override int Width
         {
             get
@@ -69,17 +128,62 @@ namespace LeagueSharp.SDK.Core.UI.Values
             }
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Extracts the component.
+        /// </summary>
+        /// <param name="component">
+        ///     The component
+        /// </param>
         public override void Extract(AMenuValue component)
         {
-            Color = ((MenuColor)component).Color;
+            this.Color = ((MenuColor)component).Color;
         }
 
+        /// <summary>
+        ///     Gets the object data.
+        /// </summary>
+        /// <param name="info">
+        ///     The info
+        /// </param>
+        /// <param name="context">
+        ///     The context
+        /// </param>
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("red", this.Color.R, typeof(byte));
+            info.AddValue("green", this.Color.G, typeof(byte));
+            info.AddValue("blue", this.Color.B, typeof(byte));
+            info.AddValue("alpha", this.Color.A, typeof(byte));
+        }
+
+        /// <summary>
+        ///     OnDraw event.
+        /// </summary>
+        /// <param name="component">
+        ///     The component
+        /// </param>
+        /// <param name="position">
+        ///     The position
+        /// </param>
+        /// <param name="index">
+        ///     The index
+        /// </param>
         public override void OnDraw(AMenuComponent component, Vector2 position, int index)
         {
             ThemeManager.Current.ColorPicker.OnDraw(component, position, index);
         }
 
-        public override void OnWndProc(Utils.WindowsKeys args)
+        /// <summary>
+        ///     <c>OnWndProc</c> event.
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        public override void OnWndProc(WindowsKeys args)
         {
             if (!this.Container.Visible)
             {
@@ -95,125 +199,181 @@ namespace LeagueSharp.SDK.Core.UI.Values
 
             if (args.Msg == WindowsMessages.MOUSEMOVE)
             {
-                if (args.Cursor.IsUnderRectangle(previewRect.X, previewRect.Y, previewRect.Width, previewRect.Height))
-                {
-                    HoveringPreview = true;
-                }
-                else
-                {
-                    HoveringPreview = false;
-                }
+                this.HoveringPreview = args.Cursor.IsUnderRectangle(
+                    previewRect.X, 
+                    previewRect.Y, 
+                    previewRect.Width, 
+                    previewRect.Height);
 
-                if (Active)
+                if (this.Active)
                 {
-                    if (InteractingRed)
+                    if (this.InteractingRed)
                     {
-                        UpdateRed(args, redRect);
+                        this.UpdateRed(args, redRect);
                     }
-                    else if (InteractingGreen)
+                    else if (this.InteractingGreen)
                     {
-                        UpdateGreen(args, greenRect);
+                        this.UpdateGreen(args, greenRect);
                     }
-                    else if (InteractingBlue)
+                    else if (this.InteractingBlue)
                     {
-                        UpdateBlue(args, blueRect);
+                        this.UpdateBlue(args, blueRect);
                     }
-                    else if (InteractingAlpha)
+                    else if (this.InteractingAlpha)
                     {
-                        UpdateAlpha(args, alphaRect);
+                        this.UpdateAlpha(args, alphaRect);
                     }
                 }
-                
             }
 
             if (args.Msg == WindowsMessages.LBUTTONUP)
             {
-                InteractingRed = false;
-                InteractingGreen = false;
-                InteractingBlue = false;
-                InteractingAlpha = false;
+                this.InteractingRed = false;
+                this.InteractingGreen = false;
+                this.InteractingBlue = false;
+                this.InteractingAlpha = false;
             }
 
             if (args.Msg == WindowsMessages.LBUTTONDOWN)
             {
                 if (args.Cursor.IsUnderRectangle(previewRect.X, previewRect.Y, previewRect.Width, previewRect.Height))
                 {
-                    Active = true;
+                    this.Active = true;
                 }
-                else if (args.Cursor.IsUnderRectangle(pickerRect.X, pickerRect.Y, pickerRect.Width, pickerRect.Height) && Active)
+                else if (args.Cursor.IsUnderRectangle(pickerRect.X, pickerRect.Y, pickerRect.Width, pickerRect.Height)
+                         && this.Active)
                 {
                     if (args.Cursor.IsUnderRectangle(redRect.X, redRect.Y, redRect.Width, redRect.Height))
                     {
-                        InteractingRed = true;
-                        UpdateRed(args, redRect);
+                        this.InteractingRed = true;
+                        this.UpdateRed(args, redRect);
                     }
-                    else if (args.Cursor.IsUnderRectangle(greenRect.X, greenRect.Y, greenRect.Width, greenRect.Height))
+                    else if (args.Cursor.IsUnderRectangle(
+                        greenRect.X, 
+                        greenRect.Y, 
+                        greenRect.Width, 
+                        greenRect.Height))
                     {
-                        InteractingGreen = true;
-                        UpdateGreen(args, greenRect);
+                        this.InteractingGreen = true;
+                        this.UpdateGreen(args, greenRect);
                     }
-                    else if (args.Cursor.IsUnderRectangle(blueRect.X, blueRect.Y, blueRect.Width, blueRect.Height))
+                    else if (args.Cursor.IsUnderRectangle(
+                        blueRect.X, 
+                        blueRect.Y, 
+                        blueRect.Width, 
+                        blueRect.Height))
                     {
-                        InteractingBlue = true;
-                        UpdateBlue(args, blueRect);
+                        this.InteractingBlue = true;
+                        this.UpdateBlue(args, blueRect);
                     }
-                    else if (args.Cursor.IsUnderRectangle(alphaRect.X, alphaRect.Y, alphaRect.Width, alphaRect.Height))
+                    else if (args.Cursor.IsUnderRectangle(
+                        alphaRect.X, 
+                        alphaRect.Y, 
+                        alphaRect.Width, 
+                        alphaRect.Height))
                     {
-                        InteractingAlpha = true;
-                        UpdateAlpha(args, alphaRect);
+                        this.InteractingAlpha = true;
+                        this.UpdateAlpha(args, alphaRect);
                     }
                 }
                 else
                 {
-                    Active = false;
+                    this.Active = false;
                 }
             }
         }
 
-        private void UpdateRed(WindowsKeys args, Rectangle rect)
-        {
-            Color = new ColorBGRA(GetByte(args, rect), Color.G, Color.B, Color.A);
-            FireEvent();
-        }
+        #endregion
 
-        private void UpdateGreen(WindowsKeys args, Rectangle rect)
-        {
-            Color = new ColorBGRA(Color.R, GetByte(args, rect), Color.B, Color.A);
-            FireEvent();
-        }
+        #region Methods
 
-        private void UpdateBlue(WindowsKeys args, Rectangle rect)
-        {
-            Color = new ColorBGRA(Color.R, Color.G, GetByte(args, rect), Color.A);
-            FireEvent();
-        }
-
+        /// <summary>
+        ///     Updates the alpha value.
+        /// </summary>
+        /// <param name="args">
+        ///     The windows keys
+        /// </param>
+        /// <param name="rect">
+        ///     The rectangle
+        /// </param>
         private void UpdateAlpha(WindowsKeys args, Rectangle rect)
         {
-            Color = new ColorBGRA(Color.R, Color.G, Color.B, GetByte(args, rect));
-            FireEvent();
+            this.Color = new ColorBGRA(this.Color.R, this.Color.G, this.Color.B, GetByte(args, rect));
+            this.FireEvent();
         }
 
-        private byte GetByte(WindowsKeys args, Rectangle rect)
+        /// <summary>
+        ///     Updates the blue value.
+        /// </summary>
+        /// <param name="args">
+        ///     The windows keys
+        /// </param>
+        /// <param name="rect">
+        ///     The rectangle
+        /// </param>
+        private void UpdateBlue(WindowsKeys args, Rectangle rect)
+        {
+            this.Color = new ColorBGRA(this.Color.R, this.Color.G, GetByte(args, rect), this.Color.A);
+            this.FireEvent();
+        }
+
+        /// <summary>
+        ///     Updates the green value.
+        /// </summary>
+        /// <param name="args">
+        ///     The windows keys
+        /// </param>
+        /// <param name="rect">
+        ///     The rectangle
+        /// </param>
+        private void UpdateGreen(WindowsKeys args, Rectangle rect)
+        {
+            this.Color = new ColorBGRA(this.Color.R, GetByte(args, rect), this.Color.B, this.Color.A);
+            this.FireEvent();
+        }
+
+        /// <summary>
+        ///     Updates the red value.
+        /// </summary>
+        /// <param name="args">
+        ///     The windows keys
+        /// </param>
+        /// <param name="rect">
+        ///     The rectangle
+        /// </param>
+        private void UpdateRed(WindowsKeys args, Rectangle rect)
+        {
+            this.Color = new ColorBGRA(GetByte(args, rect), this.Color.G, this.Color.B, this.Color.A);
+            this.FireEvent();
+        }
+
+        /// <summary>
+        ///     Gets the byte value.
+        /// </summary>
+        /// <param name="args">
+        ///     The windows keys
+        /// </param>
+        /// <param name="rect">
+        ///     The rectangle
+        /// </param>
+        /// <returns>
+        ///     The byte value.
+        /// </returns>
+        private static byte GetByte(WindowsKeys args, Rectangle rect)
         {
             if (args.Cursor.X < rect.X)
             {
                 return 0;
             }
-            
+
             if (args.Cursor.X > rect.X + rect.Width)
             {
                 return 255;
             }
-            return (byte) (((args.Cursor.X - rect.X) / rect.Width) * 255);
+
+            return (byte)(((args.Cursor.X - rect.X) / rect.Width) * 255);
         }
 
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("red", Color.R, typeof(byte));
-            info.AddValue("green", Color.G, typeof(byte));
-            info.AddValue("blue", Color.B, typeof(byte));
-            info.AddValue("alpha", Color.A, typeof(byte));
-        }
+        #endregion
     }
 }

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Rectangle.cs" company="LeagueSharp">
+// <copyright file="DrawType.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,18 +16,32 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Rectangle class, holds information for drawing a rectangle onto the screen using SharpDX (Direct3D9 cover) and/or
-//   draws a rectangle.
+//   The draw type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace LeagueSharp.SDK.Core.Render._2D
+namespace LeagueSharp.SDK.Core.IDrawing
 {
+    using System;
+
     /// <summary>
-    ///     Rectangle class, holds information for drawing a rectangle onto the screen using SharpDX (Direct3D9 cover) and/or
-    ///     draws a rectangle.
+    ///     The draw type.
     /// </summary>
-    public class Rectangle
+    [Flags]
+    public enum DrawType
     {
+        /// <summary>
+        ///     The OnBeginScene drawing type.
+        /// </summary>
+        OnBeginScene, 
+
+        /// <summary>
+        ///     The OnDraw drawing type.
+        /// </summary>
+        OnDraw, 
+
+        /// <summary>
+        ///     The OnEndScene drawing type.
+        /// </summary>
+        OnEndScene
     }
 }

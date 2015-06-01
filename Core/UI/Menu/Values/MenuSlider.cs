@@ -122,17 +122,18 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <param name="value">The value.</param>
         public override void Extract(AMenuValue value)
         {
-            int oldValue = ((MenuSlider)value).Value;
-            if (oldValue < MinValue)
+            var oldValue = ((MenuSlider)value).Value;
+            if (oldValue < this.MinValue)
             {
-                Value = MinValue;
-            } else if (oldValue > MaxValue)
+                this.Value = this.MinValue;
+            }
+            else if (oldValue > this.MaxValue)
             {
-                Value = MaxValue;
+                this.Value = this.MaxValue;
             }
             else
             {
-                Value = oldValue;
+                this.Value = oldValue;
             }
         }
 
@@ -179,7 +180,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// </param>
         public override void OnWndProc(WindowsKeys args)
         {
-            if (!Container.Visible)
+            if (!this.Container.Visible)
             {
                 return;
             }
@@ -233,7 +234,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
             if (newValue != this.Value)
             {
                 this.Value = newValue;
-                FireEvent();
+                this.FireEvent();
             }
         }
 
