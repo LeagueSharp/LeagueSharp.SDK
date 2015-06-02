@@ -28,7 +28,9 @@ namespace LeagueSharp.SDK.Core.UI
     using System.Windows.Forms;
 
     using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.UI.Abstracts;
     using LeagueSharp.SDK.Core.UI.Skins;
+    using LeagueSharp.SDK.Core.UI.Skins.Default;
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
@@ -56,14 +58,11 @@ namespace LeagueSharp.SDK.Core.UI
                     "LS" + Environment.UserName.GetHashCode().ToString("X"), 
                     "MenuConfigEx"));
 
+        private readonly Queue<Action> delayedDrawActions = new Queue<Action>(); 
+
         #endregion
 
         #region Fields
-
-        /// <summary>
-        ///     The delayed draw actions.
-        /// </summary>
-        private readonly Queue<Action> delayedDrawActions = new Queue<Action>();
 
         /// <summary>
         ///     The menus list.
@@ -74,11 +73,6 @@ namespace LeagueSharp.SDK.Core.UI
         ///     The default menu zero-position.
         /// </summary>
         private readonly Vector2 position = new Vector2(30, 30);
-
-        /// <summary>
-        ///     The forced open value.
-        /// </summary>
-        private bool forcedOpen;
 
         /// <summary>
         ///     Menu visible <c>bool</c>
@@ -95,7 +89,6 @@ namespace LeagueSharp.SDK.Core.UI
         private MenuManager()
         {
             this.Sprite = new Sprite(Drawing.Direct3DDevice);
-            this.MenuVisible = true;
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnEndScene += this.Drawing_OnDraw;
             Game.OnWndProc += this.Game_OnWndProc;
@@ -122,26 +115,42 @@ namespace LeagueSharp.SDK.Core.UI
         #region Public Properties
 
         /// <summary>
+        ///     Gets or sets the configuration folder
+        /// </summary>
+        public static DirectoryInfo ConfigFolder
+        {
+            get
+            {
+                return configFolder;
+            }
+
+            set
+            {
+                configFolder = value;
+            }
+        }
+
+        private bool forcedOpen;
+
+        /// <summary>
         ///     Gets or sets a value indicating whether the menu was forced to open.
         /// </summary>
         /// <value>
         ///     <c>true</c> if the menu was forced to open; otherwise, <c>false</c>.
         /// </value>
-        public bool ForcedOpen
-        {
+        public bool ForcedOpen {
             get
             {
-                return this.forcedOpen;
+                return forcedOpen;
             }
-
             set
             {
-                this.forcedOpen = value;
-                if (this.forcedOpen)
+                forcedOpen = value;
+                if (forcedOpen)
                 {
-                    this.MenuVisible = true;
+                    MenuVisible = true;
                 }
-            }
+            } 
         }
 
         /// <summary>
@@ -186,22 +195,6 @@ namespace LeagueSharp.SDK.Core.UI
         /// </summary>
         public Sprite Sprite { get; private set; }
 
-        /// <summary>
-        ///     Gets or sets the configuration folder
-        /// </summary>
-        public static DirectoryInfo ConfigFolder
-        {
-            get
-            {
-                return configFolder;
-            }
-
-            set
-            {
-                configFolder = value;
-            }
-        }
-
         #endregion
 
         #region Public Indexers
@@ -239,12 +232,12 @@ namespace LeagueSharp.SDK.Core.UI
         }
 
         /// <summary>
-        ///     Draw actions in the specified action will happen after the menu has been drawn.
+        /// Draw actions in the specified action will happen after the menu has been drawn.
         /// </summary>
-        /// <param name="a">The action</param>
+        /// <param name="a"></param>
         public void DrawDelayed(Action a)
         {
-            this.delayedDrawActions.Enqueue(a);
+            delayedDrawActions.Enqueue(a);
         }
 
         #endregion
@@ -276,6 +269,17 @@ namespace LeagueSharp.SDK.Core.UI
         }
 
         /// <summary>
+        ///     On update event.
+        /// </summary>
+        /// <param name="args">
+        ///     Event data
+        /// </param>
+        private static void Game_OnUpdate(EventArgs args)
+        {
+            // nothing
+        }
+
+        /// <summary>
         ///     On Draw event.
         /// </summary>
         /// <param name="args">
@@ -285,11 +289,15 @@ namespace LeagueSharp.SDK.Core.UI
         {
             if (this.MenuVisible)
             {
+                Sprite.Begin(SpriteFlags.AlphaBlend);
                 ThemeManager.Current.OnDraw(this.position);
-                while (this.delayedDrawActions.Count > 0)
+                Sprite.End();
+                Sprite.Begin(SpriteFlags.AlphaBlend);
+                while (delayedDrawActions.Count > 0)
                 {
-                    this.delayedDrawActions.Dequeue().Invoke();
+                    delayedDrawActions.Dequeue().Invoke();
                 }
+                Sprite.End();
             }
         }
 
@@ -311,7 +319,7 @@ namespace LeagueSharp.SDK.Core.UI
 
                     if (keyDown)
                     {
-                        if (!this.MenuVisible)
+                        if (!MenuVisible)
                         {
                             this.MenuVisible = true;
                             this.FireOnOpen();
@@ -319,7 +327,7 @@ namespace LeagueSharp.SDK.Core.UI
                     }
                     else if (keyUp)
                     {
-                        if (this.MenuVisible)
+                        if (MenuVisible)
                         {
                             this.MenuVisible = false;
                             this.FireOnClose();
@@ -329,7 +337,7 @@ namespace LeagueSharp.SDK.Core.UI
                 else if (keys.SingleKey == Keys.CapsLock && keys.Msg == WindowsMessages.KEYDOWN)
                 {
                     this.MenuVisible = !this.MenuVisible;
-                    if (this.MenuVisible)
+                    if (MenuVisible)
                     {
                         this.FireOnOpen();
                     }
@@ -362,17 +370,6 @@ namespace LeagueSharp.SDK.Core.UI
                     Console.WriteLine(e.ToString());
                 }
             }
-        }
-
-        /// <summary>
-        ///     On update event.
-        /// </summary>
-        /// <param name="args">
-        ///     Event data
-        /// </param>
-        private static void Game_OnUpdate(EventArgs args)
-        {
-            // nothing
         }
 
         #endregion

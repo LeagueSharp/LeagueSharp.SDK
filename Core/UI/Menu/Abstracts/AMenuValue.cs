@@ -41,11 +41,6 @@ namespace LeagueSharp.SDK.Core.UI.Abstracts
         public MenuItem Container { get; set; }
 
         /// <summary>
-        ///     Gets or sets the Menu Value Position.
-        /// </summary>
-        public abstract Vector2 Position { get; set; }
-
-        /// <summary>
         ///     Gets the Value Width.
         /// </summary>
         public abstract int Width { get; }
@@ -63,10 +58,7 @@ namespace LeagueSharp.SDK.Core.UI.Abstracts
         /// <summary>
         ///     Drawing callback.
         /// </summary>
-        /// <param name="component">Parent Component</param>
-        /// <param name="position">The Position</param>
-        /// <param name="index">Item Index</param>
-        public abstract void OnDraw(AMenuComponent component, Vector2 position, int index);
+        public abstract void OnDraw();
 
         /// <summary>
         ///     Windows Process Messages callback.

@@ -67,11 +67,6 @@ namespace LeagueSharp.SDK.Core.UI.Values
         #region Public Properties
 
         /// <summary>
-        ///     Boolean Item Position.
-        /// </summary>
-        public override Vector2 Position { get; set; }
-
-        /// <summary>
         ///     Gets or sets a value indicating whether the boolean value is true or false.
         /// </summary>
         public bool Value { get; set; }
@@ -113,21 +108,9 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <summary>
         ///     Boolean Item Draw callback.
         /// </summary>
-        /// <param name="component">Parent Component</param>
-        /// <param name="position">The Position</param>
-        /// <param name="index">Item Index</param>
-        public override void OnDraw(AMenuComponent component, Vector2 position, int index)
+        public override void OnDraw()
         {
-            var animation = ThemeManager.Current.Boolean.Animation;
-
-            if (animation != null && animation.IsAnimating())
-            {
-                animation.OnDraw(component, position, index);
-
-                return;
-            }
-
-            ThemeManager.Current.Boolean.OnDraw(component, position, index);
+            ThemeManager.Current.Bool.Draw(this);
         }
 
         /// <summary>
@@ -141,9 +124,9 @@ namespace LeagueSharp.SDK.Core.UI.Values
                 return;
             }
 
-            if (args.Msg == WindowsMessages.LBUTTONDOWN && this.Position.IsValid())
+            if (args.Msg == WindowsMessages.LBUTTONDOWN)
             {
-                var rect = ThemeManager.Current.Boolean.AdditionalBoundries(this.Position, this.Container);
+                var rect = ThemeManager.Current.Bool.ButtonBoundaries(this);
 
                 if (args.Cursor.IsUnderRectangle(rect.X, rect.Y, rect.Width, rect.Height))
                 {

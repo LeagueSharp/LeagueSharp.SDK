@@ -29,28 +29,23 @@ namespace LeagueSharp.SDK.Core.UI.Skins
     public class ThemeManager
     {
         #region Static Fields
-
-        /// <summary>
-        ///     The current theme.
-        /// </summary>
-        private static Theme current;
+       
 
         /// <summary>
         ///     The default theme.
         /// </summary>
-        private static Theme @default;
+        private static ITheme @default;
+
+        private static ITheme current;
 
         #endregion
 
         #region Public Properties
 
         /// <summary>
-        ///     Gets or sets the current theme.
+        /// Gets or sets the current ITheme used by the menu.
         /// </summary>
-        /// <value>
-        ///     The current theme.
-        /// </value>
-        public static Theme Current
+        public static ITheme Current
         {
             get
             {
@@ -69,7 +64,7 @@ namespace LeagueSharp.SDK.Core.UI.Skins
         /// <value>
         ///     The default theme.
         /// </value>
-        public static Theme Default
+        public static ITheme Default
         {
             get
             {

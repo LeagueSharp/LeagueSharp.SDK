@@ -329,10 +329,7 @@ namespace LeagueSharp.SDK.Core.UI
         /// <param name="position">
         ///     The position.
         /// </param>
-        /// <param name="index">
-        ///     The index.
-        /// </param>
-        public override void OnDraw(Vector2 position, int index)
+        public override void OnDraw(Vector2 position)
         {
             if (this.value == null)
             {
@@ -342,8 +339,8 @@ namespace LeagueSharp.SDK.Core.UI
 
             if (this.Visible)
             {
-                value.Position = position;
-                this.value.OnDraw(this, position, index);
+                Position = position;
+                this.value.OnDraw();
             }
         }
 

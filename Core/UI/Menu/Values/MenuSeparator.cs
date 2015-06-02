@@ -35,11 +35,6 @@ namespace LeagueSharp.SDK.Core.UI.Values
         #region Public Properties
 
         /// <summary>
-        ///     Menu Value Position.
-        /// </summary>
-        public override Vector2 Position { get; set; }
-
-        /// <summary>
         ///     Value Width.
         /// </summary>
         public override int Width
@@ -65,21 +60,9 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <summary>
         ///     Drawing callback.
         /// </summary>
-        /// <param name="component">Parent Component</param>
-        /// <param name="position">The Position</param>
-        /// <param name="index">Item Index</param>
-        public override void OnDraw(AMenuComponent component, Vector2 position, int index)
+        public override void OnDraw()
         {
-            var animation = ThemeManager.Current.Boolean.Animation;
-
-            if (animation != null && animation.IsAnimating())
-            {
-                animation.OnDraw(component, position, index);
-
-                return;
-            }
-
-            ThemeManager.Current.Separator.OnDraw(component, position, index);
+            ThemeManager.Current.Separator.Draw(this);
         }
 
         /// <summary>

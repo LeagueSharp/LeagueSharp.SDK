@@ -64,11 +64,6 @@ namespace LeagueSharp.SDK.Core.UI.Values
         public bool IsFocused { get; set; }
 
         /// <summary>
-        ///     InputText Item Position.
-        /// </summary>
-        public override Vector2 Position { get; set; }
-
-        /// <summary>
         ///     Gets or sets the InputText's text string.
         /// </summary>
         public string Text { get; set; }
@@ -99,10 +94,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <summary>
         ///     InputText Draw callback.
         /// </summary>
-        /// <param name="component">Parent Component</param>
-        /// <param name="position">The Position</param>
-        /// <param name="index">Item Index</param>
-        public override void OnDraw(AMenuComponent component, Vector2 position, int index)
+        public override void OnDraw()
         {
         }
 

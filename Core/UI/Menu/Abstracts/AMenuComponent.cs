@@ -61,11 +61,10 @@ namespace LeagueSharp.SDK.Core.UI.Abstracts
         /// </param>
         protected AMenuComponent(string name, string displayName, string uniqueString)
         {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(displayName))
+            if (String.IsNullOrEmpty(name) || String.IsNullOrEmpty(displayName))
             {
                 throw new Exception("Please enter a valid name.\nName: " + name + "\nDisplayName: " + displayName);
             }
-
             this.AssemblyName = Assembly.GetEntryAssembly().GetName().Name;
             this.UniqueString = uniqueString;
             this.Name = name;
@@ -210,10 +209,7 @@ namespace LeagueSharp.SDK.Core.UI.Abstracts
         /// <param name="position">
         ///     The position.
         /// </param>
-        /// <param name="index">
-        ///     The index.
-        /// </param>
-        public abstract void OnDraw(Vector2 position, int index);
+        public abstract void OnDraw(Vector2 position);
 
         /// <summary>
         ///     Component Update callback.

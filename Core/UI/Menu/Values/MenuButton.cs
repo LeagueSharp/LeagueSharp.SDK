@@ -76,11 +76,6 @@ namespace LeagueSharp.SDK.Core.UI.Values
         public bool Hovering { get; set; }
 
         /// <summary>
-        ///     Gets or sets the position.
-        /// </summary>
-        public override Vector2 Position { get; set; }
-
-        /// <summary>
         ///     Gets the width.
         /// </summary>
         public override int Width
@@ -109,18 +104,9 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <summary>
         ///     On Draw event.
         /// </summary>
-        /// <param name="component">
-        ///     The component.
-        /// </param>
-        /// <param name="position">
-        ///     The position.
-        /// </param>
-        /// <param name="index">
-        ///     The index.
-        /// </param>
-        public override void OnDraw(AMenuComponent component, Vector2 position, int index)
+        public override void OnDraw()
         {
-            ThemeManager.Current.Button.OnDraw(component, position, index);
+            ThemeManager.Current.Button.Draw(this);
         }
 
         /// <summary>
@@ -136,7 +122,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
                 return;
             }
 
-            var rect = ThemeManager.Current.Button.ButtonBoundaries(this.Position, this.Container);
+            var rect = ThemeManager.Current.Button.ButtonBoundaries(this);
 
             if (args.Cursor.IsUnderRectangle(rect.X, rect.Y, rect.Width, rect.Height))
             {

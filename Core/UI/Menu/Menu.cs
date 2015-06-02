@@ -336,13 +336,10 @@ namespace LeagueSharp.SDK.Core.UI
         /// <param name="position">
         ///     The position.
         /// </param>
-        /// <param name="index">
-        ///     The index.
-        /// </param>
-        public override void OnDraw(Vector2 position, int index)
+        public override void OnDraw(Vector2 position)
         {
             this.Position = position;
-            ThemeManager.Current.OnMenu(this, position, index);
+            ThemeManager.Current.DrawMenu(this);
         }
 
         /// <summary>

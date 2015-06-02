@@ -43,7 +43,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
         #region Fields
 
         /// <summary>
-        ///     The local active value.
+        /// The local active value.
         /// </summary>
         private bool active;
 
@@ -109,7 +109,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
                 if (this.active != value)
                 {
                     this.active = value;
-                    this.FireEvent();
+                    FireEvent();
                 }
             }
         }
@@ -140,11 +140,6 @@ namespace LeagueSharp.SDK.Core.UI.Values
         public Keys Key { get; set; }
 
         /// <summary>
-        ///     KeyBind Item Position.
-        /// </summary>
-        public override Vector2 Position { get; set; }
-
-        /// <summary>
         ///     Gets or sets the KeyBind Type.
         /// </summary>
         public KeyBindType Type { get; set; }
@@ -156,10 +151,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
         {
             get
             {
-                return
-                    (int)
-                    (DefaultSettings.ContainerHeight + ThemeManager.Current.CalcWidthText("[" + this.Key + "]")
-                     + DefaultSettings.ContainerTextOffset);
+                return ThemeManager.Current.KeyBind.Width(this);
             }
         }
 
@@ -190,21 +182,9 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <summary>
         ///     KeyBind Item Draw callback.
         /// </summary>
-        /// <param name="component">Parent Component</param>
-        /// <param name="position">The Position</param>
-        /// <param name="index">Item Index</param>
-        public override void OnDraw(AMenuComponent component, Vector2 position, int index)
+        public override void OnDraw()
         {
-            var animation = ThemeManager.Current.Boolean.Animation;
-
-            if (animation != null && animation.IsAnimating())
-            {
-                animation.OnDraw(component, position, index);
-
-                return;
-            }
-
-            ThemeManager.Current.KeyBind.OnDraw(component, position, index);
+            ThemeManager.Current.KeyBind.Draw(this);
         }
 
         /// <summary>
@@ -220,72 +200,66 @@ namespace LeagueSharp.SDK.Core.UI.Values
                 switch (args.Msg)
                 {
                     case WindowsMessages.KEYDOWN:
-                        this.HandleDown(args.Key);
+                        HandleDown(args.Key);
                         break;
                     case WindowsMessages.KEYUP:
                         if (this.Interacting && args.SingleKey != Keys.ShiftKey)
                         {
-                            this.ChangeKey(args.SingleKey == Keys.Escape ? Keys.None : args.Key);
+                            ChangeKey(args.SingleKey == Keys.Escape ? Keys.None : args.Key);
                         }
                         else
                         {
-                            this.HandleUp(args.Key);
+                            HandleUp(args.Key);
                         }
-
                         break;
                     case WindowsMessages.XBUTTONDOWN:
-                        this.HandleDown(args.SideButton);
+                        HandleDown(args.SideButton);
                         break;
                     case WindowsMessages.XBUTTONUP:
                         if (this.Interacting)
                         {
-                            this.ChangeKey(args.SideButton);
+                            ChangeKey(args.SideButton);
                         }
                         else
                         {
-                            this.HandleUp(args.SideButton);
+                            HandleUp(args.SideButton);
                         }
-
                         break;
                     case WindowsMessages.MBUTTONDOWN:
-                        this.HandleDown(Keys.MButton);
+                        HandleDown(Keys.MButton);
                         break;
                     case WindowsMessages.MBUTTONUP:
                         if (this.Interacting)
                         {
-                            this.ChangeKey(Keys.MButton);
+                            ChangeKey(Keys.MButton);
                         }
                         else
                         {
-                            this.HandleUp(Keys.MButton);
+                            HandleUp(Keys.MButton);
                         }
-
                         break;
                     case WindowsMessages.RBUTTONDOWN:
-                        this.HandleDown(Keys.RButton);
+                        HandleDown(Keys.RButton);
                         break;
                     case WindowsMessages.RBUTTONUP:
                         if (this.Interacting)
                         {
-                            this.ChangeKey(Keys.RButton);
+                            ChangeKey(Keys.RButton);
                         }
                         else
                         {
-                            this.HandleUp(Keys.RButton);
+                            HandleUp(Keys.RButton);
                         }
-
                         break;
                     case WindowsMessages.LBUTTONDOWN:
                         if (this.Interacting)
                         {
-                            this.ChangeKey(Keys.LButton);
+                            ChangeKey(Keys.LButton);
                         }
-                        else if (this.Container.Visible && this.Position.IsValid())
+                        else if (this.Container.Visible)
                         {
-                            var container = ThemeManager.Current.KeyBind.AdditionalBoundries(
-                                this.Position, 
-                                this.Container);
-                            var content = ThemeManager.Current.KeyBind.Bounding(this.Position, this.Container);
+                            var container = ThemeManager.Current.KeyBind.ButtonBoundaries(this);
+                            var content = ThemeManager.Current.KeyBind.KeyBindBoundaries(this);
 
                             if (args.Cursor.IsUnderRectangle(
                                 container.X, 
@@ -301,41 +275,18 @@ namespace LeagueSharp.SDK.Core.UI.Values
                             }
                             else
                             {
-                                this.HandleDown(Keys.LButton);
+                                HandleDown(Keys.LButton);
                             }
                         }
 
                         break;
                     case WindowsMessages.LBUTTONUP:
-                        this.HandleUp(Keys.LButton);
+                        HandleUp(Keys.LButton);
                         break;
                 }
             }
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        ///     Change key method.
-        /// </summary>
-        /// <param name="newKey">
-        ///     The new key
-        /// </param>
-        private void ChangeKey(Keys newKey)
-        {
-            this.Key = newKey;
-            this.Interacting = false;
-            this.Container.ResetWidth();
-        }
-
-        /// <summary>
-        ///     Handle down method.
-        /// </summary>
-        /// <param name="expectedKey">
-        ///     The expected key
-        /// </param>
         private void HandleDown(Keys expectedKey)
         {
             if (expectedKey == this.Key && this.Type == KeyBindType.Press)
@@ -344,26 +295,27 @@ namespace LeagueSharp.SDK.Core.UI.Values
             }
         }
 
-        /// <summary>
-        ///     Handle up method.
-        /// </summary>
-        /// <param name="expectedKey">
-        ///     The expected key.
-        /// </param>
         private void HandleUp(Keys expectedKey)
         {
-            if (expectedKey == this.Key)
+            if (expectedKey == Key)
             {
                 switch (this.Type)
                 {
                     case KeyBindType.Press:
-                        this.Active = false;
+                        Active = false;
                         break;
                     case KeyBindType.Toggle:
-                        this.Active = !this.Active;
+                        Active = !Active;
                         break;
                 }
             }
+        }
+
+        private void ChangeKey(Keys newKey)
+        {
+            this.Key = newKey;
+            this.Interacting = false;
+            this.Container.ResetWidth();
         }
 
         #endregion

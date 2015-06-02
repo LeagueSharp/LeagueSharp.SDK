@@ -92,11 +92,6 @@ namespace LeagueSharp.SDK.Core.UI.Values
         public int MinValue { get; set; }
 
         /// <summary>
-        ///     Slider Item Position.
-        /// </summary>
-        public override Vector2 Position { get; set; }
-
-        /// <summary>
         ///     Gets or sets the Slider Current Value.
         /// </summary>
         public int Value { get; set; }
@@ -122,18 +117,17 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <param name="value">The value.</param>
         public override void Extract(AMenuValue value)
         {
-            var oldValue = ((MenuSlider)value).Value;
-            if (oldValue < this.MinValue)
+            int oldValue = ((MenuSlider)value).Value;
+            if (oldValue < MinValue)
             {
-                this.Value = this.MinValue;
-            }
-            else if (oldValue > this.MaxValue)
+                Value = MinValue;
+            } else if (oldValue > MaxValue)
             {
-                this.Value = this.MaxValue;
+                Value = MaxValue;
             }
             else
             {
-                this.Value = oldValue;
+                Value = oldValue;
             }
         }
 
@@ -150,26 +144,9 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <summary>
         ///     Slider Item Draw callback.
         /// </summary>
-        /// <param name="component">
-        ///     The component.
-        /// </param>
-        /// <param name="position">
-        ///     The position.
-        /// </param>
-        /// <param name="index">
-        ///     The index.
-        /// </param>
-        public override void OnDraw(AMenuComponent component, Vector2 position, int index)
+        public override void OnDraw()
         {
-            var animation = ThemeManager.Current.Boolean.Animation;
-            if (animation != null && animation.IsAnimating())
-            {
-                animation.OnDraw(component, position, index);
-
-                return;
-            }
-
-            ThemeManager.Current.Slider.OnDraw(component, position, index);
+            ThemeManager.Current.Slider.Draw(this);
         }
 
         /// <summary>
@@ -180,7 +157,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// </param>
         public override void OnWndProc(WindowsKeys args)
         {
-            if (!this.Container.Visible)
+            if (!Container.Visible)
             {
                 return;
             }
@@ -191,7 +168,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
             }
             else if (args.Msg == WindowsMessages.LBUTTONDOWN && !this.Interacting)
             {
-                var container = ThemeManager.Current.Slider.Bounding(this.Position, this.Container);
+                var container = ThemeManager.Current.Slider.Bounding(this);
 
                 if (args.Cursor.IsUnderRectangle(container.X, container.Y, container.Width, container.Height))
                 {
@@ -221,7 +198,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
                 (int)
                 Math.Round(
                     this.MinValue
-                    + ((args.Cursor.X - this.Position.X) * (this.MaxValue - this.MinValue)) / this.Container.MenuWidth);
+                    + ((args.Cursor.X - Container.Position.X) * (this.MaxValue - this.MinValue)) / this.Container.MenuWidth);
             if (newValue < this.MinValue)
             {
                 newValue = this.MinValue;
@@ -234,7 +211,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
             if (newValue != this.Value)
             {
                 this.Value = newValue;
-                this.FireEvent();
+                FireEvent();
             }
         }
 

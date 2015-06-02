@@ -19,12 +19,14 @@
 //   A list of values.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.Values
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
+    using System.Threading;
 
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
@@ -41,66 +43,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
     [Serializable]
     public abstract class MenuList : AMenuValue
     {
-        #region Fields
-
-        /// <summary>
-        ///     The index.
-        /// </summary>
-        private int index;
-
-        #endregion
-
         #region Public Properties
-
-        /// <summary>
-        ///     Gets or sets a value indicating whether the Dropdown menu is active.
-        /// </summary>
-        public bool Active { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the index.
-        /// </summary>
-        /// <value>
-        ///     The index.
-        /// </value>
-        public int Index
-        {
-            get
-            {
-                return this.index;
-            }
-
-            set
-            {
-                if (value != this.index)
-                {
-                    this.index = value;
-                    this.FireEvent();
-                }
-            }
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        ///     Gets the amount of options available
-        /// </summary>
-        internal abstract int Count { get; }
-
-        /// <summary>
-        ///     Gets or sets a value indicating whether if the user is hovering over the dropdown.
-        /// </summary>
-        /// <value>
-        ///     <c>true</c> if the user is hovering over the dropdown; otherwise, <c>false</c>.
-        /// </value>
-        internal bool Hovering { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the index of the option that is currently being hovered at by the user.
-        /// </summary>
-        internal int HoveringIndex { get; set; }
 
         /// <summary>
         ///     Gets the maximum width of the string.
@@ -111,6 +54,24 @@ namespace LeagueSharp.SDK.Core.UI.Values
         internal abstract int MaxStringWidth { get; }
 
         /// <summary>
+        ///     Gets or sets a value indicating whether if the user is hovering over the dropdown.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if the user is hovering over the dropdown; otherwise, <c>false</c>.
+        /// </value>
+        internal bool Hovering { get; set; }
+
+        /// <summary>
+        /// The index of the option that is currently being hovered at by the user.
+        /// </summary>
+        internal int HoveringIndex { get; set; }
+
+        /// <summary>
+        /// Dropdown menu active
+        /// </summary>
+        public bool Active { get; set; }
+
+        /// <summary>
         ///     Gets the selected value as an object.
         /// </summary>
         /// <value>
@@ -119,9 +80,37 @@ namespace LeagueSharp.SDK.Core.UI.Values
         internal abstract object SelectedValueAsObject { get; }
 
         /// <summary>
-        ///     Gets a list of strings that represent the different options
+        /// A list of strings that represent the different options
         /// </summary>
         internal abstract string[] ValuesAsStrings { get; }
+
+        private int index;
+
+        /// <summary>
+        ///     Gets or sets the index.
+        /// </summary>
+        /// <value>
+        ///     The index.
+        /// </value>
+        public int Index {
+            get
+            {
+                return index;
+            }
+            set
+            {
+                if (value != index)
+                {
+                    index = value;
+                    FireEvent();
+                }
+            }
+        }
+
+        /// <summary>
+        /// The amount of options available
+        /// </summary>
+        internal abstract int Count { get; }
 
         #endregion
     }
@@ -157,9 +146,7 @@ namespace LeagueSharp.SDK.Core.UI.Values
         ///     Initializes a new instance of the <see cref="MenuList{T}" /> class based upon the given Enumeration type.
         /// </summary>
         public MenuList()
-            : this(Enum.GetValues(typeof(T)).Cast<T>())
-        {
-        }
+            : this(Enum.GetValues(typeof(T)).Cast<T>()) {}
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuList{T}" /> class.
@@ -174,59 +161,6 @@ namespace LeagueSharp.SDK.Core.UI.Values
         #endregion
 
         #region Public Properties
-
-        /// <summary>
-        ///     Menu Value Position.
-        /// </summary>
-        public override Vector2 Position { get; set; }
-
-        /// <summary>
-        ///     Gets the selected value.
-        /// </summary>
-        /// <value>
-        ///     The selected value.
-        /// </value>
-        public T SelectedValue
-        {
-            get
-            {
-                return this.Values[this.Index];
-            }
-        }
-
-        /// <summary>
-        ///     Gets the values.
-        /// </summary>
-        /// <value>
-        ///     The values.
-        /// </value>
-        public List<T> Values { get; private set; }
-
-        /// <summary>
-        ///     Value Width.
-        /// </summary>
-        public override int Width
-        {
-            get
-            {
-                return ThemeManager.Current.List.Width(this);
-            }
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        ///     Gets the count.
-        /// </summary>
-        internal override int Count
-        {
-            get
-            {
-                return this.Values.Count;
-            }
-        }
 
         /// <summary>
         ///     Gets the maximum width of the string.
@@ -255,6 +189,20 @@ namespace LeagueSharp.SDK.Core.UI.Values
         }
 
         /// <summary>
+        ///     Gets the selected value.
+        /// </summary>
+        /// <value>
+        ///     The selected value.
+        /// </value>
+        public T SelectedValue
+        {
+            get
+            {
+                return this.Values[this.Index];
+            }
+        }
+
+        /// <summary>
         ///     Gets the selected value as an object.
         /// </summary>
         /// <value>
@@ -269,19 +217,21 @@ namespace LeagueSharp.SDK.Core.UI.Values
         }
 
         /// <summary>
-        ///     Gets the values as strings.
+        ///     Gets the values.
         /// </summary>
-        internal override string[] ValuesAsStrings
+        /// <value>
+        ///     The values.
+        /// </value>
+        public List<T> Values { get; private set; }
+
+        /// <summary>
+        ///     Value Width.
+        /// </summary>
+        public override int Width
         {
             get
             {
-                var arr = new string[this.Values.Count];
-                for (var i = 0; i < arr.Length; i++)
-                {
-                    arr[i] = this.Values[i].ToString();
-                }
-
-                return arr;
+                return ThemeManager.Current.List.Width(this);
             }
         }
 
@@ -311,12 +261,9 @@ namespace LeagueSharp.SDK.Core.UI.Values
         /// <summary>
         ///     Drawing callback.
         /// </summary>
-        /// <param name="component">Parent Component</param>
-        /// <param name="position">The Position</param>
-        /// <param name="index">Item Index</param>
-        public override void OnDraw(AMenuComponent component, Vector2 position, int index)
+        public override void OnDraw()
         {
-            ThemeManager.Current.List.OnDraw(component, position, index);
+            ThemeManager.Current.List.Draw(this);
         }
 
         /// <summary>
@@ -330,63 +277,83 @@ namespace LeagueSharp.SDK.Core.UI.Values
                 return;
             }
 
-            var dropdownRect = ThemeManager.Current.List.Dropdown(this.Position, this.Container, this);
-            var entireDropdownRect = ThemeManager.Current.List.EntireDropDown(this.Position, this.Container, this);
+            var dropdownRect = ThemeManager.Current.List.DropDownBoundaries(this);
+            var entireDropdownRect = ThemeManager.Current.List.DropDownExpandedBoundaries(this);
 
             if (args.Cursor.IsUnderRectangle(dropdownRect.X, dropdownRect.Y, dropdownRect.Width, dropdownRect.Height))
             {
-                this.Hovering = true;
+                Hovering = true;
 
                 if (args.Msg == WindowsMessages.LBUTTONDOWN)
                 {
-                    this.Active = !this.Active;
+                    Active = !Active;
                 }
             }
             else
             {
-                this.Hovering = false;
+                Hovering = false;
             }
 
             const int Buffer = 20;
-            if (this.Active
+            if (Active
                 && !args.Cursor.IsUnderRectangle(
-                    entireDropdownRect.X - Buffer, 
-                    entireDropdownRect.Y - Buffer, 
-                    entireDropdownRect.Width + (2 * Buffer), 
+                    entireDropdownRect.X - Buffer,
+                    entireDropdownRect.Y - Buffer,
+                    entireDropdownRect.Width + (2 * Buffer),
                     entireDropdownRect.Height + (2 * Buffer)))
             {
-                this.Active = false;
+                Active = false;
             }
 
-            if (this.Active)
+            if (Active)
             {
-                var found = false;
-                var dropdownRectangles = ThemeManager.Current.List.DropdownList(this.Position, this.Container, this);
-                for (var i = 0; i < dropdownRectangles.Count; i++)
+                Boolean found = false;
+                List<Rectangle> dropdownRectangles = ThemeManager.Current.List.DropDownListBoundaries(this);
+                for (int i = 0; i < dropdownRectangles.Count; i++)
                 {
                     if (args.Cursor.IsUnderRectangle(
-                        dropdownRectangles[i].X, 
-                        dropdownRectangles[i].Y, 
-                        dropdownRectangles[i].Width, 
+                        dropdownRectangles[i].X,
+                        dropdownRectangles[i].Y,
+                        dropdownRectangles[i].Width,
                         dropdownRectangles[i].Height))
                     {
-                        this.HoveringIndex = i;
+                        HoveringIndex = i;
                         found = true;
                     }
                 }
-
                 if (!found)
                 {
-                    this.HoveringIndex = -1;
+                    HoveringIndex = -1;
                 }
                 else if (args.Msg == WindowsMessages.LBUTTONDOWN)
                 {
-                    this.Index = this.HoveringIndex;
+                    Index = HoveringIndex;
                     args.Process = false;
                 }
             }
         }
 
         #endregion
+
+        internal override string[] ValuesAsStrings
+        {
+            get
+            {
+                string[] arr = new string[Values.Count];
+                for (int i = 0; i < arr.Length; i++)
+                {
+                    arr[i] = Values[i].ToString();
+                }
+                return arr;
+            }
+        }
+
+        internal override int Count
+        {
+            get
+            {
+                return Values.Count;
+            }
+        }
     }
 }
