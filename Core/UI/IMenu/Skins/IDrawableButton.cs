@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Variables.cs" company="LeagueSharp">
+// <copyright file="IDrawableButton.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,43 +16,45 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Class that contains helpful variables.
+//   Defines how to draw a Button
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
-    using LeagueSharp.SDK.Core.UI;
-    using LeagueSharp.SDK.Core.UI.IMenu;
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+
+    using SharpDX;
 
     /// <summary>
-    ///     Class that contains helpful variables.
+    ///     Defines how to draw a Button
     /// </summary>
-    public class Variables
+    public interface IDrawableButton
     {
-        #region Public Properties
+        #region Public Methods and Operators
 
         /// <summary>
-        ///     Gets the Safe TickCount.
+        ///     Calculate the Rectangle that defines the Button
         /// </summary>
-        public static int TickCount
-        {
-            get
-            {
-                return (int)(Game.ClockTime * 1000);
-            }
-        }
-
-        #endregion
-
-        #region Properties
+        /// <param name="component">The <see cref="MenuButton"/></param>
+        /// <returns>The <see cref="Rectangle" /></returns>
+        Rectangle ButtonBoundaries(MenuButton component);
 
         /// <summary>
-        ///     Gets or sets the LeagueSharp menu.
+        ///     Draws a <see cref="MenuButton"/>
         /// </summary>
-        /// <value>
-        ///     The LeagueSharp menu.
-        /// </value>
-        internal static Menu LeagueSharpMenu { get; set; }
+        /// <param name="component">The <see cref="MenuButton"/></param>
+        void Draw(MenuButton component);
+
+        /// <summary>
+        ///     Gets the width of the MenuButton
+        /// </summary>
+        /// <param name="component">
+        ///     The component.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="int" />.
+        /// </returns>
+        int Width(MenuButton component);
 
         #endregion
     }

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Variables.cs" company="LeagueSharp">
+// <copyright file="IDrawableSeparator.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,43 +16,25 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Class that contains helpful variables.
+//   Defines how to draw a separator.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
-    using LeagueSharp.SDK.Core.UI;
-    using LeagueSharp.SDK.Core.UI.IMenu;
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
 
     /// <summary>
-    ///     Class that contains helpful variables.
+    ///     Defines how to draw a separator.
     /// </summary>
-    public class Variables
+    public interface IDrawableSeparator
     {
-        #region Public Properties
+        #region Public Methods and Operators
 
         /// <summary>
-        ///     Gets the Safe TickCount.
+        ///     Draw a <see cref="MenuSeparator" />
         /// </summary>
-        public static int TickCount
-        {
-            get
-            {
-                return (int)(Game.ClockTime * 1000);
-            }
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        ///     Gets or sets the LeagueSharp menu.
-        /// </summary>
-        /// <value>
-        ///     The LeagueSharp menu.
-        /// </value>
-        internal static Menu LeagueSharpMenu { get; set; }
+        /// <param name="component">The <see cref="MenuSeparator" /></param>
+        void Draw(MenuSeparator component);
 
         #endregion
     }

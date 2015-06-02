@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Variables.cs" company="LeagueSharp">
+// <copyright file="ValueChangedEventArgs.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,43 +16,46 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Class that contains helpful variables.
+//   Arguments for the OnValueChanged event.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core
+namespace LeagueSharp.SDK.Core.UI.IMenu
 {
-    using LeagueSharp.SDK.Core.UI;
-    using LeagueSharp.SDK.Core.UI.IMenu;
+    using System;
+
+    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
 
     /// <summary>
-    ///     Class that contains helpful variables.
+    ///     Arguments for the OnValueChanged event.
     /// </summary>
-    public class Variables
+    /// <typeparam name="T">
+    ///     <see cref="AMenuValue" /> type
+    /// </typeparam>
+    public class ValueChangedEventArgs<T> : EventArgs
+        where T : AMenuValue
     {
-        #region Public Properties
+        #region Constructors and Destructors
 
         /// <summary>
-        ///     Gets the Safe TickCount.
+        ///     Initializes a new instance of the <see cref="ValueChangedEventArgs{T}" /> class.
+        ///     Initializes a new instance of the OnValueChangedEventArgs class.
         /// </summary>
-        public static int TickCount
+        /// <param name="value">
+        ///     The value.
+        /// </param>
+        public ValueChangedEventArgs(T value)
         {
-            get
-            {
-                return (int)(Game.ClockTime * 1000);
-            }
+            this.Value = value;
         }
 
         #endregion
 
-        #region Properties
+        #region Public Properties
 
         /// <summary>
-        ///     Gets or sets the LeagueSharp menu.
+        ///     Gets the new Value.
         /// </summary>
-        /// <value>
-        ///     The LeagueSharp menu.
-        /// </value>
-        internal static Menu LeagueSharpMenu { get; set; }
+        public T Value { get; private set; }
 
         #endregion
     }

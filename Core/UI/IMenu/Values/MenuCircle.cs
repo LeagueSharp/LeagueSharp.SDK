@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Variables.cs" company="LeagueSharp">
+// <copyright file="MenuCircle.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,44 +16,15 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Class that contains helpful variables.
+//   TODO The menu circle.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core
+namespace LeagueSharp.SDK.Core.UI.IMenu.Values
 {
-    using LeagueSharp.SDK.Core.UI;
-    using LeagueSharp.SDK.Core.UI.IMenu;
-
     /// <summary>
-    ///     Class that contains helpful variables.
+    ///     TODO The menu circle.
     /// </summary>
-    public class Variables
+    internal class MenuCircle
     {
-        #region Public Properties
-
-        /// <summary>
-        ///     Gets the Safe TickCount.
-        /// </summary>
-        public static int TickCount
-        {
-            get
-            {
-                return (int)(Game.ClockTime * 1000);
-            }
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        ///     Gets or sets the LeagueSharp menu.
-        /// </summary>
-        /// <value>
-        ///     The LeagueSharp menu.
-        /// </value>
-        internal static Menu LeagueSharpMenu { get; set; }
-
-        #endregion
     }
 }

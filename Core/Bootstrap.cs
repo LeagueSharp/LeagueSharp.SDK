@@ -26,6 +26,7 @@ namespace LeagueSharp.SDK.Core
 
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.UI;
+    using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers;
 

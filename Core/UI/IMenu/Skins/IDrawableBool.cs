@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Variables.cs" company="LeagueSharp">
+// <copyright file="IDrawableBool.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,43 +16,34 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Class that contains helpful variables.
+//   Defines how to draw a On/Off button
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
-    using LeagueSharp.SDK.Core.UI;
-    using LeagueSharp.SDK.Core.UI.IMenu;
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+
+    using SharpDX;
 
     /// <summary>
-    ///     Class that contains helpful variables.
+    ///     Defines how to draw a On/Off button
     /// </summary>
-    public class Variables
+    public interface IDrawableBool
     {
-        #region Public Properties
+        #region Public Methods and Operators
 
         /// <summary>
-        ///     Gets the Safe TickCount.
+        ///     Calculates the On/Off button Rectangle
         /// </summary>
-        public static int TickCount
-        {
-            get
-            {
-                return (int)(Game.ClockTime * 1000);
-            }
-        }
-
-        #endregion
-
-        #region Properties
+        /// <param name="component">The <see cref="MenuBool" /></param>
+        /// <returns>The <see cref="Rectangle" /></returns>
+        Rectangle ButtonBoundaries(MenuBool component);
 
         /// <summary>
-        ///     Gets or sets the LeagueSharp menu.
+        ///     Draws a <see cref="MenuBool"/>
         /// </summary>
-        /// <value>
-        ///     The LeagueSharp menu.
-        /// </value>
-        internal static Menu LeagueSharpMenu { get; set; }
+        /// <param name="component">The <see cref="MenuBool" /></param>
+        void Draw(MenuBool component);
 
         #endregion
     }

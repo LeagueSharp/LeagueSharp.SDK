@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Variables.cs" company="LeagueSharp">
+// <copyright file="MenuValueChangedEventArgs.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,43 +16,42 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Class that contains helpful variables.
+//   Arguments for the OnValueChanged event.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core
+namespace LeagueSharp.SDK.Core.UI.IMenu
 {
-    using LeagueSharp.SDK.Core.UI;
-    using LeagueSharp.SDK.Core.UI.IMenu;
-
     /// <summary>
-    ///     Class that contains helpful variables.
+    ///     Arguments for the OnValueChanged event.
     /// </summary>
-    public class Variables
+    public class MenuValueChangedEventArgs
     {
-        #region Public Properties
+        #region Constructors and Destructors
 
         /// <summary>
-        ///     Gets the Safe TickCount.
+        ///     Initializes a new instance of the <see cref="MenuValueChangedEventArgs" /> class.
         /// </summary>
-        public static int TickCount
+        /// <param name="menu">The menu.</param>
+        /// <param name="menuItem">The MenuItem that changed value</param>
+        public MenuValueChangedEventArgs(Menu menu, MenuItem menuItem)
         {
-            get
-            {
-                return (int)(Game.ClockTime * 1000);
-            }
+            this.Menu = menu;
+            this.MenuItem = menuItem;
         }
 
         #endregion
 
-        #region Properties
+        #region Public Properties
 
         /// <summary>
-        ///     Gets or sets the LeagueSharp menu.
+        ///     Gets the menu that contains the changed MenuItem.
         /// </summary>
-        /// <value>
-        ///     The LeagueSharp menu.
-        /// </value>
-        internal static Menu LeagueSharpMenu { get; set; }
+        public Menu Menu { get; private set; }
+
+        /// <summary>
+        ///     Gets the MenuItem that changed value.
+        /// </summary>
+        public MenuItem MenuItem { get; private set; }
 
         #endregion
     }

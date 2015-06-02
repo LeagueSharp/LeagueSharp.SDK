@@ -30,14 +30,15 @@ namespace LeagueSharp.SDK.Core
     using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.UI;
-    using LeagueSharp.SDK.Core.UI.Values;
+    using LeagueSharp.SDK.Core.UI.IMenu;
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers;
 
     using SharpDX;
 
     using Color = System.Drawing.Color;
-    using Menu = LeagueSharp.SDK.Core.UI.Menu;
+    using Menu = LeagueSharp.SDK.Core.UI.IMenu.Menu;
 
     /// <summary>
     ///     <c>Orbwalker</c> part that contains the internal system functionality of the <c>orbwalker</c>.

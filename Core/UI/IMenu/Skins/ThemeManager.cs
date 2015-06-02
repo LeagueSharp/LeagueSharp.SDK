@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Variables.cs" company="LeagueSharp">
+// <copyright file="ThemeManager.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,43 +16,63 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Class that contains helpful variables.
+//   Manages themes.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
-    using LeagueSharp.SDK.Core.UI;
-    using LeagueSharp.SDK.Core.UI.IMenu;
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Default;
 
     /// <summary>
-    ///     Class that contains helpful variables.
+    ///     Manages themes.
     /// </summary>
-    public class Variables
+    public class ThemeManager
     {
-        #region Public Properties
+        #region Static Fields
 
         /// <summary>
-        ///     Gets the Safe TickCount.
+        ///     The current theme.
         /// </summary>
-        public static int TickCount
-        {
-            get
-            {
-                return (int)(Game.ClockTime * 1000);
-            }
-        }
+        private static ITheme current;
+
+        /// <summary>
+        ///     The default theme.
+        /// </summary>
+        private static ITheme @default;
 
         #endregion
 
-        #region Properties
+        #region Public Properties
 
         /// <summary>
-        ///     Gets or sets the LeagueSharp menu.
+        ///     Gets or sets the current ITheme used by the menu.
+        /// </summary>
+        public static ITheme Current
+        {
+            get
+            {
+                return current ?? (current = Default);
+            }
+
+            set
+            {
+                current = value;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the default theme.
         /// </summary>
         /// <value>
-        ///     The LeagueSharp menu.
+        ///     The default theme.
         /// </value>
-        internal static Menu LeagueSharpMenu { get; set; }
+        public static ITheme Default
+        {
+            get
+            {
+                return @default ?? (@default = new DefaultTheme());
+            }
+        }
 
         #endregion
     }

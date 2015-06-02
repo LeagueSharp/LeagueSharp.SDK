@@ -29,7 +29,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
     using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.UI;
-    using LeagueSharp.SDK.Core.UI.Values;
+    using LeagueSharp.SDK.Core.UI.IMenu;
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
 
     using SharpDX;
 
