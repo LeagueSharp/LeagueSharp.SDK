@@ -246,6 +246,8 @@ namespace LeagueSharp.SDK.Core.IDrawing
                 this.Sprite.Flush();
                 this.Sprite.End();
             }
+
+            this.CallOnDraw();
         }
 
         /// <summary>
@@ -329,6 +331,7 @@ namespace LeagueSharp.SDK.Core.IDrawing
         /// </summary>
         public override void Update()
         {
+            this.CallOnUpdate();
         }
 
         #endregion

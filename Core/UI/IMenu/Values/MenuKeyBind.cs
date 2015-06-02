@@ -23,6 +23,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
 {
     using System;
     using System.Runtime.Serialization;
+    using System.Security.Permissions;
     using System.Windows.Forms;
 
     using LeagueSharp.SDK.Core.Enumerations;
@@ -71,20 +72,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuKeyBind" /> class.
-        /// </summary>
-        /// <param name="info">The information.</param>
-        /// <param name="context">The context.</param>
-        public MenuKeyBind(SerializationInfo info, StreamingContext context)
-        {
-            this.Key = (Keys)info.GetValue("key", typeof(Keys));
-        }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="MenuKeyBind" /> class.
         ///     Menu KeyBind Constructor
         /// </summary>
         public MenuKeyBind()
         {
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MenuKeyBind" /> class.
+        /// </summary>
+        /// <param name="info">The information.</param>
+        /// <param name="context">The context.</param>
+        protected MenuKeyBind(SerializationInfo info, StreamingContext context)
+        {
+            this.Key = (Keys)info.GetValue("key", typeof(Keys));
         }
 
         #endregion
@@ -164,16 +165,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             var keybind = (MenuKeyBind)value;
             this.Key = keybind.Key;
-        }
-
-        /// <summary>
-        ///     Gets the object data.
-        /// </summary>
-        /// <param name="info">The information.</param>
-        /// <param name="context">The context.</param>
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("key", this.Key, typeof(Keys));
         }
 
         /// <summary>
@@ -290,7 +281,48 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
 
         #endregion
 
+        #region Explicit Interface Methods
+
+        /// <summary>
+        ///     Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with the data needed to serialize the
+        ///     target object.
+        /// </summary>
+        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> to populate with data. </param>
+        /// <param name="context">
+        ///     The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext" />) for this
+        ///     serialization.
+        /// </param>
+        /// <exception cref="T:System.Security.SecurityException">The caller does not have the required permission. </exception>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+            {
+                throw new ArgumentNullException("info");
+            }
+
+            info.AddValue("key", this.Key, typeof(Keys));
+        }
+
+        #endregion
+
         #region Methods
+
+        /// <summary>
+        ///     Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with the data needed to serialize the
+        ///     target object.
+        /// </summary>
+        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> to populate with data. </param>
+        /// <param name="context">
+        ///     The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext" />) for this
+        ///     serialization.
+        /// </param>
+        /// <exception cref="T:System.Security.SecurityException">The caller does not have the required permission. </exception>
+        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("key", this.Key, typeof(Keys));
+        }
 
         /// <summary>
         ///     ChangeKey method.

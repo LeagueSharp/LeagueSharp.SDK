@@ -21,6 +21,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.IDrawing
 {
+    using System;
     using System.Linq;
 
     using SharpDX;
@@ -55,6 +56,35 @@ namespace LeagueSharp.SDK.Core.IDrawing
         {
             this.Position = position;
         }
+
+        #endregion
+
+        #region Delegates
+
+        /// <summary>
+        ///     The main message delegate.
+        /// </summary>
+        /// <param name="sender">
+        ///     The sender
+        /// </param>
+        /// <param name="e">
+        ///     The event data
+        /// </param>
+        public delegate void MessageDelegate(object sender, EventArgs e);
+
+        #endregion
+
+        #region Public Events
+
+        /// <summary>
+        ///     The OnDraw event.
+        /// </summary>
+        public event MessageDelegate OnDraw;
+
+        /// <summary>
+        ///     The OnUpdate event.
+        /// </summary>
+        public event MessageDelegate OnUpdate;
 
         #endregion
 
@@ -111,6 +141,34 @@ namespace LeagueSharp.SDK.Core.IDrawing
         ///     The OnUpdate event.
         /// </summary>
         public abstract void Update();
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Call <see cref="OnDraw" /> event.
+        /// </summary>
+        protected virtual void CallOnDraw()
+        {
+            var handler = this.OnDraw;
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        ///     Call <see cref="OnUpdate" /> event.
+        /// </summary>
+        protected virtual void CallOnUpdate()
+        {
+            var handler = this.OnUpdate;
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
 
         #endregion
     }

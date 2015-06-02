@@ -25,6 +25,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
+    using System.Security.Permissions;
 
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
@@ -164,7 +165,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </summary>
         /// <param name="info">The information.</param>
         /// <param name="context">The context.</param>
-        public MenuList(SerializationInfo info, StreamingContext context)
+        protected MenuList(SerializationInfo info, StreamingContext context)
         {
             this.Index = (int)info.GetValue("index", typeof(int));
         }
@@ -292,16 +293,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         /// <summary>
-        ///     Gets the object data.
-        /// </summary>
-        /// <param name="info">The information.</param>
-        /// <param name="context">The context.</param>
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("index", this.Index, typeof(int));
-        }
-
-        /// <summary>
         ///     Drawing callback.
         /// </summary>
         public override void OnDraw()
@@ -375,6 +366,51 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
                     args.Process = false;
                 }
             }
+        }
+
+        #endregion
+
+        #region Explicit Interface Methods
+
+        /// <summary>
+        ///     Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with the data needed to serialize the
+        ///     target object.
+        /// </summary>
+        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> to populate with data. </param>
+        /// <param name="context">
+        ///     The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext" />) for this
+        ///     serialization.
+        /// </param>
+        /// <exception cref="T:System.Security.SecurityException">The caller does not have the required permission. </exception>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+            {
+                throw new ArgumentNullException("info");
+            }
+
+            info.AddValue("index", this.Index, typeof(int));
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with the data needed to serialize the
+        ///     target object.
+        /// </summary>
+        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> to populate with data. </param>
+        /// <param name="context">
+        ///     The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext" />) for this
+        ///     serialization.
+        /// </param>
+        /// <exception cref="T:System.Security.SecurityException">The caller does not have the required permission. </exception>
+        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("index", this.Index, typeof(int));
         }
 
         #endregion

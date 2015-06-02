@@ -23,6 +23,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
 {
     using System;
     using System.Runtime.Serialization;
+    using System.Security.Permissions;
 
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
@@ -64,7 +65,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </summary>
         /// <param name="info">The information.</param>
         /// <param name="context">The context.</param>
-        public MenuColor(SerializationInfo info, StreamingContext context)
+        protected MenuColor(SerializationInfo info, StreamingContext context)
         {
             var red = (byte)info.GetValue("red", typeof(byte));
             var green = (byte)info.GetValue("green", typeof(byte));
@@ -134,24 +135,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         public override void Extract(AMenuValue component)
         {
             this.Color = ((MenuColor)component).Color;
-        }
-
-        /// <summary>
-        ///     Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with the data needed to serialize the
-        ///     target object.
-        /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> to populate with data. </param>
-        /// <param name="context">
-        ///     The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext" />) for this
-        ///     serialization.
-        /// </param>
-        /// <exception cref="T:System.Security.SecurityException">The caller does not have the required permission. </exception>
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("red", this.Color.R, typeof(byte));
-            info.AddValue("green", this.Color.G, typeof(byte));
-            info.AddValue("blue", this.Color.B, typeof(byte));
-            info.AddValue("alpha", this.Color.A, typeof(byte));
         }
 
         /// <summary>
@@ -268,7 +251,54 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
 
         #endregion
 
+        #region Explicit Interface Methods
+
+        /// <summary>
+        ///     Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with the data needed to serialize the
+        ///     target object.
+        /// </summary>
+        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> to populate with data. </param>
+        /// <param name="context">
+        ///     The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext" />) for this
+        ///     serialization.
+        /// </param>
+        /// <exception cref="T:System.Security.SecurityException">The caller does not have the required permission. </exception>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+            {
+                throw new ArgumentNullException("info");
+            }
+
+            info.AddValue("red", this.Color.R, typeof(byte));
+            info.AddValue("green", this.Color.G, typeof(byte));
+            info.AddValue("blue", this.Color.B, typeof(byte));
+            info.AddValue("alpha", this.Color.A, typeof(byte));
+        }
+
+        #endregion
+
         #region Methods
+
+        /// <summary>
+        ///     Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with the data needed to serialize the
+        ///     target object.
+        /// </summary>
+        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> to populate with data. </param>
+        /// <param name="context">
+        ///     The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext" />) for this
+        ///     serialization.
+        /// </param>
+        /// <exception cref="T:System.Security.SecurityException">The caller does not have the required permission. </exception>
+        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("red", this.Color.R, typeof(byte));
+            info.AddValue("green", this.Color.G, typeof(byte));
+            info.AddValue("blue", this.Color.B, typeof(byte));
+            info.AddValue("alpha", this.Color.A, typeof(byte));
+        }
 
         /// <summary>
         ///     Updates the alpha value.

@@ -56,6 +56,38 @@ namespace LeagueSharp.SDK.Core.IDrawing
 
         #endregion
 
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Adds a <see cref="DrawObject" /> to the render list.
+        /// </summary>
+        /// <param name="drawObject">
+        ///     The <see cref="DrawObject" />
+        /// </param>
+        public void Add(DrawObject drawObject)
+        {
+            if (!Objects.Contains(drawObject))
+            {
+                Objects.Add(drawObject);
+            }
+        }
+
+        /// <summary>
+        ///     Removes a <see cref="DrawObject" /> from the render list.
+        /// </summary>
+        /// <param name="drawObject">
+        ///     The <see cref="DrawObject" />
+        /// </param>
+        public void Remove(DrawObject drawObject)
+        {
+            if (Objects.Contains(drawObject))
+            {
+                Objects.Remove(drawObject);
+            }
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>

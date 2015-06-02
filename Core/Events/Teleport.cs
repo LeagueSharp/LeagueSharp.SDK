@@ -85,8 +85,8 @@ namespace LeagueSharp.SDK.Core.Events
         ///     Teleport <c>eventhandler</c>
         /// </summary>
         /// <param name="sender">The sender</param>
-        /// <param name="args">Teleport arguments</param>
-        public delegate void TeleportHandler(Obj_AI_Base sender, TeleportEventArgs args);
+        /// <param name="e">Teleport arguments</param>
+        public delegate void TeleportHandler(object sender, TeleportEventArgs e);
 
         #endregion
 

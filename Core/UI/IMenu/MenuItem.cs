@@ -128,8 +128,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         ///     Delegate for <see cref="ValueChanged" />
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="args">The OnValueChangedEventArgs instance containing the event data.</param>
-        public delegate void OnValueChanged(object sender, ValueChangedEventArgs<T> args);
+        /// <param name="e">The OnValueChangedEventArgs instance containing the event data.</param>
+        public delegate void OnValueChanged(object sender, ValueChangedEventArgs<T> e);
 
         #endregion
 

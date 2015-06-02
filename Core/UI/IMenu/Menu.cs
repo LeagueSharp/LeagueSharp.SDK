@@ -40,8 +40,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     ///     Menu Value Changed delegate
     /// </summary>
     /// <param name="sender">The sender</param>
-    /// <param name="args">The Menu Value Changed Event Data</param>
-    public delegate void OnMenuValueChanged(object sender, MenuValueChangedEventArgs args);
+    /// <param name="e">The Menu Value Changed Event Data</param>
+    public delegate void OnMenuValueChanged(object sender, MenuValueChangedEventArgs e);
 
     /// <summary>
     ///     Menu User Interface.

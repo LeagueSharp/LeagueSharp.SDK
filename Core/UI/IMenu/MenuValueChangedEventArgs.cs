@@ -21,10 +21,12 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu
 {
+    using System;
+
     /// <summary>
     ///     Arguments for the OnValueChanged event.
     /// </summary>
-    public class MenuValueChangedEventArgs
+    public class MenuValueChangedEventArgs : EventArgs
     {
         #region Constructors and Destructors
 
