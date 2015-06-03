@@ -230,15 +230,6 @@
     <Folder Include="Core\UI\Console\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Menu\Skin0\img_000.png" />
-    <Content Include="Resources\Menu\Skin0\img_001.png" />
-    <Content Include="Resources\Menu\Skin0\img_001_sub.png" />
-    <Content Include="Resources\Menu\Skin0\img_002.png" />
-    <Content Include="Resources\Menu\Skin0\img_002_sub.png" />
-    <Content Include="Resources\Menu\Skin0\img_003.png" />
-    <Content Include="Resources\Menu\Skin0\img_003_sub.png" />
-    <Content Include="Resources\Menu\Skin0\img_004.png" />
-    <Content Include="Resources\Menu\Special\F3VD2VG.png" />
     <EmbeddedResource Include="Resources\Data\ItemData.json" />
     <None Include="packages.config" />
     <None Include="Third_Party\Clipper\License.txt" />
