@@ -86,7 +86,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// </summary>
         /// <param name="sender">The sender</param>
         /// <param name="e">Teleport arguments</param>
-        public delegate void TeleportHandler(Obj_AI_Base sender, TeleportEventArgs e);
+        public delegate void TeleportHandler(object sender, TeleportEventArgs e);
 
         #endregion
 
@@ -192,7 +192,7 @@ namespace LeagueSharp.SDK.Core.Events
 
         /// <summary>
         ///     Gets a value indicating whether the sender is the target of a teleport: <c>eg</c>. turret is target of the
-        ///     <c>summoner</c> Teleport, or Obj_AI_Hero is target of a shen ultimate.
+        ///     <c>summoner</c> Teleport, or <see cref="Obj_AI_Hero" /> is target of a <c>shen</c> ultimate.
         /// </summary>
         public bool IsTarget { get; internal set; }
 
