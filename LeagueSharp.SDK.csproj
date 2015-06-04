@@ -140,6 +140,7 @@
     <Compile Include="Core\UI\IMenu\Values\MenuList.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuSeparator.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuSlider.cs" />
+    <Compile Include="Core\Utils\DefaultValue.cs" />
     <Compile Include="Core\Utils\Items.cs" />
     <Compile Include="Core\Math\ConvexHull.cs" />
     <Compile Include="Core\Math\Geometry.cs" />
