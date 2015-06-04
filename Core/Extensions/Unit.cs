@@ -290,7 +290,7 @@ namespace LeagueSharp.SDK.Core.Extensions
         {
             return
                 unit.Buffs.Any(
-                    buff => buff.Name.ToLower().Contains("recall") && !buff.Name.ToLower().Contains("override"));
+                    buff => buff.Name.ToLower().Contains("recall") && buff.Type == BuffType.Aura);
         }
 
         /// <summary>
