@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NotificationFlags.cs" company="LeagueSharp">
+// <copyright file="NotificationIconType.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,47 +16,39 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Notification runtime flags.
+//   The notification icon type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.Notifications
+namespace LeagueSharp.SDK.Core.UI.INotifications
 {
-    using System;
-
     /// <summary>
-    ///     Notification runtime flags.
+    ///     The notification icon type.
     /// </summary>
-    [Flags]
-    public enum NotificationFlags
+    public enum NotificationIconType
     {
         /// <summary>
-        ///     Drawing runtime flag.
+        ///     No Icon.
         /// </summary>
-        Draw = 1 << 0, 
+        None = 0, 
 
         /// <summary>
-        ///     Windows Process Messages flag.
+        ///     Error Icon.
         /// </summary>
-        Wpm = Draw << 1, 
+        Error = 1, 
 
         /// <summary>
-        ///     Update flag.
+        ///     Warning Icon.
         /// </summary>
-        Update = Wpm << 2, 
+        Warning = 2, 
 
         /// <summary>
-        ///     Initialization flag.
+        ///     Check Icon.
         /// </summary>
-        Initalized = Update << 3, 
+        Check = 3, 
 
         /// <summary>
-        ///     Idle flag.
+        ///     Select Icon.
         /// </summary>
-        Idle = Initalized << 4, 
-
-        /// <summary>
-        ///     Animation flag.
-        /// </summary>
-        Animation = Idle << 5
+        Select = 4
     }
 }

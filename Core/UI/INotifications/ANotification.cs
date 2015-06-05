@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="INotification.cs" company="LeagueSharp">
+// <copyright file="ANotification.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,48 +16,54 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Notification Interface to communicate between a notification type and the notifications manager.
+//   Abstract notification class, used as base template.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.Notifications
+namespace LeagueSharp.SDK.Core.UI.INotifications
 {
-    using System;
-
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
 
     /// <summary>
-    ///     Notification Interface to communicate between a notification type and the notifications manager.
+    ///     Abstract notification class, used as base template.
     /// </summary>
-    public interface INotification : IDisposable, ICloneable
+    public abstract class ANotification
     {
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Sends a global unique identification request to the notification type.
+        ///     The get reserved height.
         /// </summary>
-        /// <returns>Global Unique Identification</returns>
-        string GetGuid();
+        /// <returns>
+        ///     The reserved height in float units.
+        /// </returns>
+        public abstract float GetReservedHeight();
 
         /// <summary>
-        ///     Send an drawing request to the callback.
+        ///     OnDraw event, specifies a drawing callback which is after IDirect3DDevice9::BeginScene and before
+        ///     IDirect3DDevice9::EndScene.
         /// </summary>
-        /// <param name="parentPosition">
-        ///     The parent Position.
+        /// <param name="basePosition">
+        ///     The base position
         /// </param>
-        void OnDraw(Vector2 parentPosition);
+        public abstract void OnDraw(Vector2 basePosition);
 
         /// <summary>
-        ///     Send an update request to the callback.
+        ///     OnUpdate event, occurring after a game tick.
         /// </summary>
-        void OnUpdate();
+        public abstract void OnUpdate();
 
         /// <summary>
-        ///     Send an windows process message to the callback with formatted keys.
+        ///     <c>OnWndProc</c> event, occurs on a windows process message to the thread.
         /// </summary>
-        /// <param name="keys">Formatted Keys</param>
-        void OnWndProc(WindowsKeys keys);
+        /// <param name="basePosition">
+        ///     The base position
+        /// </param>
+        /// <param name="windowsKeys">
+        ///     The windows keys
+        /// </param>
+        public abstract void OnWndProc(Vector2 basePosition, WindowsKeys windowsKeys);
 
         #endregion
     }

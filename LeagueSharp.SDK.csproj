@@ -140,6 +140,11 @@
     <Compile Include="Core\UI\IMenu\Values\MenuList.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuSeparator.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuSlider.cs" />
+    <Compile Include="Core\UI\INotifications\ANotification.cs" />
+    <Compile Include="Core\UI\INotifications\Notification.cs" />
+    <Compile Include="Core\UI\INotifications\NotificationIcons.cs" />
+    <Compile Include="Core\UI\INotifications\NotificationIconType.cs" />
+    <Compile Include="Core\UI\INotifications\Notifications.cs" />
     <Compile Include="Core\Utils\DefaultValue.cs" />
     <Compile Include="Core\Utils\Items.cs" />
     <Compile Include="Core\Math\ConvexHull.cs" />
@@ -148,13 +153,8 @@
     <Compile Include="Core\Orbwalker.cs" />
     <Compile Include="Core\Signals\Signal.cs" />
     <Compile Include="Core\Signals\SignalManager.cs" />
-    <Compile Include="Core\UI\Notifications\INotification.cs" />
-    <Compile Include="Core\UI\Notifications\Notification.cs" />
-    <Compile Include="Core\UI\Notifications\NotificationBase.cs" />
-    <Compile Include="Core\UI\Notifications\NotificationFlags.cs" />
     <Compile Include="Core\Utils\Spells.cs" />
     <Compile Include="Core\UI\Developer\Developer.cs" />
-    <Compile Include="Core\UI\Notifications\Notifications.cs" />
     <Compile Include="Core\Utils\AutoAttack.cs" />
     <Compile Include="Core\Utils\AutoPinner.cs" />
     <Compile Include="Core\Utils\CallbackPerformance.cs" />
@@ -234,6 +234,24 @@
     <EmbeddedResource Include="Resources\Data\ItemData.json" />
     <None Include="packages.config" />
     <None Include="Third_Party\Clipper\License.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1433414783_accepted_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1433414817_cancel_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1433414835_warning_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1433416529_navigate_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1433417092_star_off_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1433417093_arrow_right_48.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
