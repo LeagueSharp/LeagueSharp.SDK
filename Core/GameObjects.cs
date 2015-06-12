@@ -100,7 +100,7 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return AllyList.Where(o => o.IsValid).ToArray();
+                return AllyList;
             }
         }
 
@@ -111,7 +111,7 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return AllyHeroesList.Where(o => o.IsValid).ToArray();
+                return AllyHeroesList;
             }
         }
 
@@ -122,7 +122,7 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return AllyMinionsList.Where(o => o.IsValid).ToArray();
+                return AllyMinionsList;
             }
         }
 
@@ -133,7 +133,7 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return AllyTurretsList.Where(o => o.IsValid).ToArray();
+                return AllyTurretsList;
             }
         }
 
@@ -144,7 +144,7 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return EnemyList.Where(o => o.IsValid).ToArray();
+                return EnemyList;
             }
         }
 
@@ -155,7 +155,7 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return EnemyHeroesList.Where(o => o.IsValid).ToArray();
+                return EnemyHeroesList;
             }
         }
 
@@ -166,7 +166,7 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return EnemyMinionsList.Where(o => o.IsValid).ToArray();
+                return EnemyMinionsList;
             }
         }
 
@@ -177,7 +177,7 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return EnemyTurretsList.Where(o => o.IsValid).ToArray();
+                return EnemyTurretsList;
             }
         }
 
@@ -188,7 +188,7 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return HeroesList.Where(o => o.IsValid).ToArray();
+                return HeroesList;
             }
         }
 
@@ -199,7 +199,7 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return MinionsList.Where(o => o.IsValid).ToArray();
+                return MinionsList;
             }
         }
 
@@ -210,7 +210,7 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return TurretsList.Where(o => o.IsValid).ToArray();
+                return TurretsList;
             }
         }
 
