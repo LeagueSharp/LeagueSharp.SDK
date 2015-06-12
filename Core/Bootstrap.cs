@@ -53,6 +53,10 @@ namespace LeagueSharp.SDK.Core
             Task.Factory.StartNew(Damage.LoadDamage)
                 .ContinueWith(task => Logging.Write()(LogLevel.Info, "Damage loaded!"));
 
+            // Load the GameObjects class async.
+            Task.Factory.StartNew(GameObjects.Initialize)
+                .ContinueWith(task => Logging.Write()(LogLevel.Info, "GameObjects loaded."));
+
             // Log all of the exceptions
             Logging.LogAllExceptions();
 

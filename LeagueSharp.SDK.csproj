@@ -95,6 +95,7 @@
     <Compile Include="Core\Events\Teleport.cs" />
     <Compile Include="Core\Events\Turret.cs" />
     <Compile Include="Core\Extensions\Streams.cs" />
+    <Compile Include="Core\GameObjects.cs" />
     <Compile Include="Core\IDrawing\DrawCircle.cs" />
     <Compile Include="Core\IDrawing\DrawLine.cs" />
     <Compile Include="Core\IDrawing\DrawObject.cs" />
@@ -187,7 +188,6 @@
     <Compile Include="Core\Network\GamePacket.cs" />
     <Compile Include="Core\Network\Packet.cs" />
     <Compile Include="Core\Utils\Network.cs" />
-    <Compile Include="Core\ObjectHandler.cs" />
     <Compile Include="Core\Utils\Cache.cs" />
     <Compile Include="Core\Utils\DelayAction.cs" />
     <Compile Include="Core\Utils\Logging.cs" />
@@ -207,7 +207,6 @@
     <Compile Include="Core\Wrappers\Spell.cs" />
     <Compile Include="Core\Wrappers\SpellDataWrapper.cs" />
     <Compile Include="Core\Wrappers\TargetSelector.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

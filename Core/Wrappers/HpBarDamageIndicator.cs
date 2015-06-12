@@ -157,7 +157,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             foreach (var unit in
-                ObjectHandler.EnemyHeroes.Where(h => h.IsValid && h.IsHPBarRendered))
+                GameObjects.EnemyHeroes.Where(h => h.IsValid && h.IsHPBarRendered))
             {
                 var barPos = unit.HPBarPosition;
                 var damage = damageToUnit(unit);

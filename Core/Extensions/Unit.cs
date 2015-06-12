@@ -242,7 +242,7 @@ namespace LeagueSharp.SDK.Core.Extensions
             }
 
             return hero.IsVisible
-                   && ObjectHandler.GetFast<Obj_SpawnPoint>()
+                   && ObjectManager.Get<Obj_SpawnPoint>()
                           .Any(sp => sp.Team == hero.Team && hero.DistanceSquared(sp.Position) < fountainRange);
         }
 
@@ -254,7 +254,7 @@ namespace LeagueSharp.SDK.Core.Extensions
         public static bool InShop(this Obj_AI_Hero hero)
         {
             return hero.IsVisible
-                   && ObjectHandler.GetFast<Obj_Shop>()
+                   && ObjectManager.Get<Obj_Shop>()
                           .Any(s => s.Team == hero.Team && hero.DistanceSquared(s.Position) < 1562500); // 1250²
         }
 

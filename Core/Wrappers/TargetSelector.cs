@@ -28,7 +28,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.UI;
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
 
@@ -40,6 +39,11 @@ namespace LeagueSharp.SDK.Core.Wrappers
     public class TargetSelector
     {
         #region Static Fields
+
+        /// <summary>
+        ///     The current mode the TS is using.
+        /// </summary>
+        private static TargetSelectorMode mode = TargetSelectorMode.AutoPriority;
 
         /// <summary>
         ///     Champions that should be prioritized first. (1)
@@ -98,11 +102,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </summary>
         private static readonly Menu Menu;
 
-        /// <summary>
-        ///     The current mode the TS is using.
-        /// </summary>
-        private static TargetSelectorMode mode = TargetSelectorMode.AutoPriority;
-
         #endregion
 
         #region Constructors and Destructors
@@ -117,7 +116,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             // Create Priority Menu
             var priorityMenu = new Menu("Priorities", "Priorities");
-            foreach (var hero in ObjectHandler.EnemyHeroes.Select(x => x.ChampionName))
+            foreach (var hero in GameObjects.EnemyHeroes.Select(x => x.ChampionName))
             {
                 priorityMenu.Add(
                     new MenuItem<MenuSlider>(hero, hero) { Value = new MenuSlider(GetPriorityFromDatabase(hero), 1, 4) });
@@ -135,7 +134,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                         return;
                     }
 
-                    foreach (var hero in ObjectHandler.EnemyHeroes.Select(x => x.ChampionName))
+                    foreach (var hero in GameObjects.EnemyHeroes.Select(x => x.ChampionName))
                     {
                         Menu["Priorities"][hero].GetValue<MenuSlider>().Value = GetPriorityFromDatabase(hero);
                     }
@@ -254,7 +253,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             // Filter out champions that we are ignoring
             var enemyChamps =
-                ObjectHandler.EnemyHeroes.Where(x => x.IsValidTarget(range, true, from))
+                GameObjects.EnemyHeroes.Where(x => x.IsValidTarget(range, true, from))
                     .Where(x => ignoredChampions.Any(y => y.NetworkId != x.NetworkId))
                     .Where(x => !IsInvulnerable(x, damageType));
 
@@ -281,7 +280,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             var enemyChamps =
-                ObjectHandler.EnemyHeroes.Where(x => x.IsValidTarget(spell.Range, true, spell.From))
+                GameObjects.EnemyHeroes.Where(x => x.IsValidTarget(spell.Range, true, spell.From))
                     .Where(x => ignoredChampions.Any(y => y.NetworkId != x.NetworkId))
                     .Where(x => spell.GetPrediction(x).Hitchance != HitChance.Collision)
                     .Where(x => !IsInvulnerable(x, spell.DamageType));

@@ -29,7 +29,6 @@ namespace LeagueSharp.SDK.Core
     using LeagueSharp.SDK.Core.Events;
     using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.UI;
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
@@ -85,7 +84,7 @@ namespace LeagueSharp.SDK.Core
             {
                 return attack
                        && Variables.TickCount + (Game.Ping / 2)
-                       >= lastAutoAttackTick + (ObjectHandler.Player.AttackDelay * 1000)
+                       >= lastAutoAttackTick + (Player.AttackDelay * 1000)
                        + menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value;
             }
 
@@ -131,7 +130,7 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return ObjectHandler.Player;
+                return ObjectManager.Player;
             }
         }
 
@@ -477,8 +476,6 @@ namespace LeagueSharp.SDK.Core
                                     {
                                         return target;
                                     }
-
-
                                 }
                             }
                         }

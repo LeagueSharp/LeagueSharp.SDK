@@ -111,8 +111,8 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>The <see cref="float" /></returns>
         public static float GetTimeToHit(this AttackableUnit target)
         {
-            return ObjectHandler.Player.AttackCastDelay * 1000 - 100 + Game.Ping / 2f
-                   + 1000 * ObjectHandler.Player.Distance(target) / GetProjectileSpeed();
+            return ObjectManager.Player.AttackCastDelay * 1000 - 100 + Game.Ping / 2f
+                   + 1000 * ObjectManager.Player.Distance(target) / GetProjectileSpeed();
         }
 
         /// <summary>
