@@ -25,7 +25,9 @@ namespace LeagueSharp.SDK.Core
     using System.Collections.Generic;
     using System.Linq;
 
+    using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Events;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     A static (stack) class which contains a sort-of cached versions of the important game objects.
@@ -55,6 +57,11 @@ namespace LeagueSharp.SDK.Core
         private static readonly List<Obj_AI_Turret> AllyTurretsList = new List<Obj_AI_Turret>();
 
         /// <summary>
+        ///     The ally wards list.
+        /// </summary>
+        private static readonly List<Obj_AI_Minion> AllyWardsList = new List<Obj_AI_Minion>();
+
+        /// <summary>
         ///     The enemy heroes list.
         /// </summary>
         private static readonly List<Obj_AI_Hero> EnemyHeroesList = new List<Obj_AI_Hero>();
@@ -75,9 +82,34 @@ namespace LeagueSharp.SDK.Core
         private static readonly List<Obj_AI_Turret> EnemyTurretsList = new List<Obj_AI_Turret>();
 
         /// <summary>
+        ///     The enemy wards list.
+        /// </summary>
+        private static readonly List<Obj_AI_Minion> EnemyWardsList = new List<Obj_AI_Minion>();
+
+        /// <summary>
         ///     The heroes list.
         /// </summary>
         private static readonly List<Obj_AI_Hero> HeroesList = new List<Obj_AI_Hero>();
+
+        /// <summary>
+        ///     The jungle large list.
+        /// </summary>
+        private static readonly List<Obj_AI_Minion> JungleLargeList = new List<Obj_AI_Minion>();
+
+        /// <summary>
+        ///     The jungle legendary list.
+        /// </summary>
+        private static readonly List<Obj_AI_Minion> JungleLegendaryList = new List<Obj_AI_Minion>();
+
+        /// <summary>
+        ///     The jungle list.
+        /// </summary>
+        private static readonly List<Obj_AI_Minion> JungleList = new List<Obj_AI_Minion>();
+
+        /// <summary>
+        ///     The jungle small list.
+        /// </summary>
+        private static readonly List<Obj_AI_Minion> JungleSmallList = new List<Obj_AI_Minion>();
 
         /// <summary>
         ///     The minions list.
@@ -88,6 +120,11 @@ namespace LeagueSharp.SDK.Core
         ///     The turrets list.
         /// </summary>
         private static readonly List<Obj_AI_Turret> TurretsList = new List<Obj_AI_Turret>();
+
+        /// <summary>
+        ///     The wards list.
+        /// </summary>
+        private static readonly List<Obj_AI_Minion> WardsList = new List<Obj_AI_Minion>();
 
         #endregion
 
@@ -138,6 +175,17 @@ namespace LeagueSharp.SDK.Core
         }
 
         /// <summary>
+        ///     Gets the ally wards.
+        /// </summary>
+        public static IEnumerable<Obj_AI_Minion> AllyWards
+        {
+            get
+            {
+                return AllyWardsList;
+            }
+        }
+
+        /// <summary>
         ///     Gets the enemy.
         /// </summary>
         public static IEnumerable<Obj_AI_Base> Enemy
@@ -182,6 +230,17 @@ namespace LeagueSharp.SDK.Core
         }
 
         /// <summary>
+        ///     Gets the enemy wards.
+        /// </summary>
+        public static IEnumerable<Obj_AI_Minion> EnemyWards
+        {
+            get
+            {
+                return EnemyWardsList;
+            }
+        }
+
+        /// <summary>
         ///     Gets the heroes.
         /// </summary>
         public static IEnumerable<Obj_AI_Hero> Heroes
@@ -189,6 +248,50 @@ namespace LeagueSharp.SDK.Core
             get
             {
                 return HeroesList;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the jungle.
+        /// </summary>
+        public static IEnumerable<Obj_AI_Minion> Jungle
+        {
+            get
+            {
+                return JungleList;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the jungle large.
+        /// </summary>
+        public static IEnumerable<Obj_AI_Minion> JungleLarge
+        {
+            get
+            {
+                return JungleLargeList;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the jungle legendary.
+        /// </summary>
+        public static IEnumerable<Obj_AI_Minion> JungleLegendary
+        {
+            get
+            {
+                return JungleLegendaryList;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the jungle small.
+        /// </summary>
+        public static IEnumerable<Obj_AI_Minion> JungleSmall
+        {
+            get
+            {
+                return JungleSmallList;
             }
         }
 
@@ -211,6 +314,17 @@ namespace LeagueSharp.SDK.Core
             get
             {
                 return TurretsList;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the wards.
+        /// </summary>
+        public static IEnumerable<Obj_AI_Minion> Wards
+        {
+            get
+            {
+                return WardsList;
             }
         }
 
@@ -278,16 +392,58 @@ namespace LeagueSharp.SDK.Core
             var minion = sender as Obj_AI_Minion;
             if (minion != null)
             {
-                MinionsList.Add(minion);
-                if (minion.IsEnemy)
+                if (minion.Team != GameObjectTeam.Neutral)
                 {
-                    EnemyMinionsList.Add(minion);
-                    EnemyList.Add(minion);
+                    if (!minion.Name.Contains("ward") || minion.Name.Contains("trinket"))
+                    {
+                        MinionsList.Add(minion);
+                        if (minion.IsEnemy)
+                        {
+                            EnemyMinionsList.Add(minion);
+                        }
+                        else
+                        {
+                            AllyMinionsList.Add(minion);
+                        }
+                    }
+                    else
+                    {
+                        WardsList.Add(minion);
+                        if (minion.IsEnemy)
+                        {
+                            EnemyWardsList.Add(minion);
+                        }
+                        else
+                        {
+                            AllyWardsList.Add(minion);
+                        }
+                    }
+
+                    if (minion.IsEnemy)
+                    {
+                        EnemyList.Add(minion);
+                    }
+                    else
+                    {
+                        AllyList.Add(minion);
+                    }
                 }
                 else
                 {
-                    AllyMinionsList.Add(minion);
-                    AllyList.Add(minion);
+                    switch (minion.GetJungleType())
+                    {
+                        case JungleType.Small:
+                            JungleSmallList.Add(minion);
+                            break;
+                        case JungleType.Large:
+                            JungleLargeList.Add(minion);
+                            break;
+                        case JungleType.Legendary:
+                            JungleLegendaryList.Add(minion);
+                            break;
+                    }
+
+                    JungleList.Add(minion);
                 }
 
                 return;
