@@ -52,6 +52,16 @@ namespace LeagueSharp.SDK.Core
         private static readonly List<Obj_AI_Minion> AllyMinionsList = new List<Obj_AI_Minion>();
 
         /// <summary>
+        ///     The ally shops list.
+        /// </summary>
+        private static readonly List<Obj_Shop> AllyShopsList = new List<Obj_Shop>();
+
+        /// <summary>
+        ///     The ally spawn points list.
+        /// </summary>
+        private static readonly List<Obj_SpawnPoint> AllySpawnPointsList = new List<Obj_SpawnPoint>();
+
+        /// <summary>
         ///     The ally turrets list.
         /// </summary>
         private static readonly List<Obj_AI_Turret> AllyTurretsList = new List<Obj_AI_Turret>();
@@ -75,6 +85,16 @@ namespace LeagueSharp.SDK.Core
         ///     The enemy minions list.
         /// </summary>
         private static readonly List<Obj_AI_Minion> EnemyMinionsList = new List<Obj_AI_Minion>();
+
+        /// <summary>
+        ///     The enemy shops list.
+        /// </summary>
+        private static readonly List<Obj_Shop> EnemyShopsList = new List<Obj_Shop>();
+
+        /// <summary>
+        ///     The enemy spawn points list.
+        /// </summary>
+        private static readonly List<Obj_SpawnPoint> EnemySpawnPointsList = new List<Obj_SpawnPoint>();
 
         /// <summary>
         ///     The enemy turrets list.
@@ -115,6 +135,16 @@ namespace LeagueSharp.SDK.Core
         ///     The minions list.
         /// </summary>
         private static readonly List<Obj_AI_Minion> MinionsList = new List<Obj_AI_Minion>();
+
+        /// <summary>
+        ///     The shops list.
+        /// </summary>
+        private static readonly List<Obj_Shop> ShopsList = new List<Obj_Shop>();
+
+        /// <summary>
+        ///     The spawn points list.
+        /// </summary>
+        private static readonly List<Obj_SpawnPoint> SpawnPointsList = new List<Obj_SpawnPoint>();
 
         /// <summary>
         ///     The turrets list.
@@ -160,6 +190,28 @@ namespace LeagueSharp.SDK.Core
             get
             {
                 return AllyMinionsList;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the ally shops.
+        /// </summary>
+        public static IEnumerable<Obj_Shop> AllyShops
+        {
+            get
+            {
+                return AllyShopsList;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the ally spawn points.
+        /// </summary>
+        public static IEnumerable<Obj_SpawnPoint> AllySpawnPoints
+        {
+            get
+            {
+                return AllySpawnPointsList;
             }
         }
 
@@ -215,6 +267,28 @@ namespace LeagueSharp.SDK.Core
             get
             {
                 return EnemyMinionsList;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the enemy shops.
+        /// </summary>
+        public static IEnumerable<Obj_Shop> EnemyShops
+        {
+            get
+            {
+                return EnemyShopsList;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the enemy spawn points.
+        /// </summary>
+        public static IEnumerable<Obj_SpawnPoint> EnemySpawnPoints
+        {
+            get
+            {
+                return EnemySpawnPointsList;
             }
         }
 
@@ -307,6 +381,28 @@ namespace LeagueSharp.SDK.Core
         }
 
         /// <summary>
+        ///     Gets the shops.
+        /// </summary>
+        public static IEnumerable<Obj_Shop> Shops
+        {
+            get
+            {
+                return ShopsList;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the spawn points.
+        /// </summary>
+        public static IEnumerable<Obj_SpawnPoint> SpawnPoints
+        {
+            get
+            {
+                return SpawnPointsList;
+            }
+        }
+
+        /// <summary>
         ///     Gets the turrets.
         /// </summary>
         public static IEnumerable<Obj_AI_Turret> Turrets
@@ -343,8 +439,19 @@ namespace LeagueSharp.SDK.Core
             Load.OnLoad += (sender, args) =>
                 {
                     HeroesList.AddRange(ObjectManager.Get<Obj_AI_Hero>());
-                    MinionsList.AddRange(ObjectManager.Get<Obj_AI_Minion>());
+                    MinionsList.AddRange(
+                        ObjectManager.Get<Obj_AI_Minion>()
+                            .Where(
+                                o =>
+                                o.Team != GameObjectTeam.Neutral && !o.Name.Contains("ward")
+                                && !o.Name.Contains("trinket")));
                     TurretsList.AddRange(ObjectManager.Get<Obj_AI_Turret>());
+                    JungleList.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(o => o.Team == GameObjectTeam.Neutral));
+                    WardsList.AddRange(
+                        ObjectManager.Get<Obj_AI_Minion>()
+                            .Where(o => o.Name.Contains("ward") || o.Name.Contains("trinket")));
+                    ShopsList.AddRange(ObjectManager.Get<Obj_Shop>());
+                    SpawnPointsList.AddRange(ObjectManager.Get<Obj_SpawnPoint>());
 
                     EnemyHeroesList.AddRange(HeroesList.Where(o => o.IsEnemy));
                     EnemyMinionsList.AddRange(MinionsList.Where(o => o.IsEnemy));
@@ -357,6 +464,19 @@ namespace LeagueSharp.SDK.Core
                     AllyTurretsList.AddRange(TurretsList.Where(o => o.IsAlly));
                     AllyList.AddRange(
                         AllyHeroesList.Cast<Obj_AI_Base>().Concat(AllyMinionsList).Concat(AllyTurretsList));
+
+                    JungleSmallList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Small));
+                    JungleLargeList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Large));
+                    JungleLegendaryList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Legendary));
+
+                    AllyWardsList.AddRange(WardsList.Where(o => o.IsAlly));
+                    EnemyWardsList.AddRange(WardsList.Where(o => o.IsEnemy));
+
+                    AllyShopsList.AddRange(ShopsList.Where(o => o.IsAlly));
+                    EnemyShopsList.AddRange(ShopsList.Where(o => o.IsEnemy));
+
+                    AllySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsAlly));
+                    EnemySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsEnemy));
                 };
         }
 
@@ -462,6 +582,34 @@ namespace LeagueSharp.SDK.Core
                 {
                     AllyTurretsList.Add(turret);
                     AllyList.Add(turret);
+                }
+            }
+
+            var shop = sender as Obj_Shop;
+            if (shop != null)
+            {
+                ShopsList.Add(shop);
+                if (shop.IsAlly)
+                {
+                    AllyShopsList.Add(shop);
+                }
+                else
+                {
+                    EnemyShopsList.Add(shop);
+                }
+            }
+
+            var spawnPoint = sender as Obj_SpawnPoint;
+            if (spawnPoint != null)
+            {
+                SpawnPointsList.Add(spawnPoint);
+                if (spawnPoint.IsAlly)
+                {
+                    AllySpawnPointsList.Add(spawnPoint);
+                }
+                else
+                {
+                    EnemySpawnPointsList.Add(spawnPoint);
                 }
             }
         }

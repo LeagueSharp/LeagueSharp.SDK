@@ -242,8 +242,7 @@ namespace LeagueSharp.SDK.Core.Extensions
             }
 
             return hero.IsVisible
-                   && ObjectManager.Get<Obj_SpawnPoint>()
-                          .Any(sp => sp.Team == hero.Team && hero.DistanceSquared(sp.Position) < fountainRange);
+                   && GameObjects.AllySpawnPoints.Any(sp => hero.DistanceSquared(sp.Position) < fountainRange);
         }
 
         /// <summary>
@@ -253,9 +252,7 @@ namespace LeagueSharp.SDK.Core.Extensions
         /// <returns>Is Hero in shop range</returns>
         public static bool InShop(this Obj_AI_Hero hero)
         {
-            return hero.IsVisible
-                   && ObjectManager.Get<Obj_Shop>()
-                          .Any(s => s.Team == hero.Team && hero.DistanceSquared(s.Position) < 1562500); // 1250²
+            return hero.IsVisible && GameObjects.AllyShops.Any(s => hero.DistanceSquared(s.Position) < 1562500); // 1250²
         }
 
         /// <summary>
