@@ -514,7 +514,7 @@ namespace LeagueSharp.SDK.Core
             {
                 if (minion.Team != GameObjectTeam.Neutral)
                 {
-                    if (!minion.Name.Contains("ward") || minion.Name.Contains("trinket"))
+                    if (!minion.Name.Contains("ward") || !minion.Name.Contains("trinket"))
                     {
                         MinionsList.Add(minion);
                         if (minion.IsEnemy)
