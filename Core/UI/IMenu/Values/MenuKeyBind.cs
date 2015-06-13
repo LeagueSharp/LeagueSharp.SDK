@@ -334,7 +334,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             this.Key = newKey;
             this.Interacting = false;
-            this.Container.ResetWidth();
+            MenuManager.Instance.ResetWidth();
         }
 
         /// <summary>

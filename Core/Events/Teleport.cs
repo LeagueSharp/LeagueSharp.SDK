@@ -186,12 +186,17 @@ namespace LeagueSharp.SDK.Core.Events
         #region Public Properties
 
         /// <summary>
+        /// Gets the <see cref="Obj_AI_Hero" /> who is teleporting or is the target of a teleport.
+        /// </summary>
+        public Obj_AI_Base Object { get; internal set; }
+
+        /// <summary>
         ///     Gets the duration of the teleport
         /// </summary>
         public int Duration { get; internal set; }
 
         /// <summary>
-        ///     Gets a value indicating whether the sender is the target of a teleport: <c>eg</c>. turret is target of the
+        ///     Gets a bool indicating whether the sender is the target of a teleport: <c>eg</c>. turret is target of the
         ///     <c>summoner</c> Teleport, or <see cref="Obj_AI_Hero" /> is target of a <c>shen</c> ultimate.
         /// </summary>
         public bool IsTarget { get; internal set; }

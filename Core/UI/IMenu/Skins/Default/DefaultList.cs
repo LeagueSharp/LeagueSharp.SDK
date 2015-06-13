@@ -83,7 +83,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             var dropdownMenuWidth = this.dropDownButtonWidth + (2 * TextSpacing) + component.MaxStringWidth;
             var position = component.Container.Position;
             var rectangleName = GetContainerRectangle(component.Container)
-                .GetCenteredText(null, component.Container.DisplayName, CenteredFlags.VerticalCenter);
+                .GetCenteredText(null, DefaultSettings.Font, component.Container.DisplayName, CenteredFlags.VerticalCenter);
 
             DefaultSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 

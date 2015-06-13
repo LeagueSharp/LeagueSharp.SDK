@@ -73,7 +73,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     The default menu zero-position.
         /// </summary>
-        private readonly Vector2 position = new Vector2(30, 30);
+        public Vector2 Position { get; set; }
 
         /// <summary>
         ///     The forced open.
@@ -85,6 +85,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private bool menuVisible;
 
+        internal bool PpSpriteDrawnProtection;
+
         #endregion
 
         #region Constructors and Destructors
@@ -94,6 +96,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private MenuManager()
         {
+            Position = new Vector2(30, 30);
             this.Sprite = new Sprite(Drawing.Direct3DDevice);
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnEndScene += this.Drawing_OnDraw;
@@ -251,6 +254,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Methods
 
         /// <summary>
+        /// Causes the entire Menu tree to recalculate their widths.
+        /// </summary>
+        public void ResetWidth()
+        {
+            foreach (var menu in Menus)
+            {
+                menu.ResetWidth();
+            }
+        }
+
+        /// <summary>
         ///     Fires the on close.
         /// </summary>
         protected virtual void FireOnClose()
@@ -284,16 +298,32 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         {
             if (this.MenuVisible)
             {
-                this.Sprite.Begin(SpriteFlags.AlphaBlend);
-                ThemeManager.Current.OnDraw(this.position);
-                this.Sprite.End();
-                this.Sprite.Begin(SpriteFlags.AlphaBlend);
+                if (!PpSpriteDrawnProtection)
+                {
+                    this.Sprite.Begin(SpriteFlags.AlphaBlend);
+                    PpSpriteDrawnProtection = true;
+                }
+                ThemeManager.Current.OnDraw(Position);
+                if (PpSpriteDrawnProtection)
+                {
+                    this.Sprite.End();
+                    PpSpriteDrawnProtection = false;
+                }
+                if (!PpSpriteDrawnProtection)
+                {
+                    this.Sprite.Begin(SpriteFlags.AlphaBlend);
+                    PpSpriteDrawnProtection = true;
+                }
                 while (this.delayedDrawActions.Count > 0)
                 {
                     this.delayedDrawActions.Dequeue().Invoke();
                 }
 
-                this.Sprite.End();
+                if (PpSpriteDrawnProtection)
+                {
+                    this.Sprite.End();
+                    PpSpriteDrawnProtection = false;
+                }
             }
         }
 

@@ -226,22 +226,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         /// <summary>
         ///     Resets the width.
         /// </summary>
-        public void ResetWidth()
+        public virtual void ResetWidth()
         {
-            if (this.Parent != null)
-            {
-                foreach (var comp in this.Parent.Components)
-                {
-                    comp.Value.MenuWidth = 0;
-                }
-            }
-            else
-            {
-                foreach (var menu in MenuManager.Instance.Menus)
-                {
-                    menu.MenuWidth = 0;
-                }
-            }
+            MenuWidth = 0;
         }
 
         /// <summary>

@@ -223,7 +223,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             var centerY =
                 (int)
                 GetContainerRectangle(menuComponent)
-                    .GetCenteredText(null, menuComponent.DisplayName, CenteredFlags.VerticalCenter)
+                    .GetCenteredText(null, DefaultSettings.Font, menuComponent.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
 
             DefaultSettings.Font.DrawText(

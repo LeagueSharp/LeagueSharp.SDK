@@ -67,7 +67,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             var centeredY =
                 (int)
                 GetContainerRectangle(component.Container)
-                    .GetCenteredText(null, component.Container.DisplayName, CenteredFlags.VerticalCenter)
+                    .GetCenteredText(null, DefaultSettings.Font, component.Container.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
             var percent = (component.Value - component.MinValue) / (float)(component.MaxValue - component.MinValue);
             var x = position.X + (percent * component.Container.MenuWidth);
