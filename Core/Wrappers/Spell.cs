@@ -704,7 +704,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <returns>Hit Count</returns>
         public float GetHitCount(HitChance hitChance = HitChance.High)
         {
-            return GameObjects.EnemyHeroes.Select(e => this.GetPrediction(e)).Count(p => p.Hitchance >= hitChance);
+            return ObjectHandler.EnemyHeroes.Select(e => this.GetPrediction(e)).Count(p => p.Hitchance >= hitChance);
         }
 
         /// <summary>
@@ -810,7 +810,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public IEnumerable<Obj_AI_Base> GetUnitsByHitChance(HitChance minimumHitChance = HitChance.High)
         {
             return
-                GameObjects.Enemy.Where(
+                ObjectHandler.Enemy.Where(
                     unit => this.WillHit(unit, ObjectManager.Player.ServerPosition, 0, minimumHitChance));
         }
 

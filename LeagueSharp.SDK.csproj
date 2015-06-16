@@ -96,7 +96,7 @@
     <Compile Include="Core\Events\Teleport.cs" />
     <Compile Include="Core\Events\Turret.cs" />
     <Compile Include="Core\Extensions\Streams.cs" />
-    <Compile Include="Core\GameObjects.cs" />
+    <Compile Include="Core\ObjectHandler.cs" />
     <Compile Include="Core\IDrawing\DrawCircle.cs" />
     <Compile Include="Core\IDrawing\DrawLine.cs" />
     <Compile Include="Core\IDrawing\DrawObject.cs" />
