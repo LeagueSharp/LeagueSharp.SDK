@@ -54,7 +54,7 @@ namespace LeagueSharp.SDK.Core
                 .ContinueWith(task => Logging.Write()(LogLevel.Info, "Damage loaded!"));
 
             // Load the GameObjects class async.
-            Task.Factory.StartNew(GameObjects.Initialize)
+            Task.Factory.StartNew(ObjectHandler.Initialize)
                 .ContinueWith(task => Logging.Write()(LogLevel.Info, "GameObjects loaded."));
 
             // Log all of the exceptions

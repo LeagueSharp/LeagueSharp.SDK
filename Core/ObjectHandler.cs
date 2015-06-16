@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GameObjects.cs" company="LeagueSharp">
+// <copyright file="ObjectHandler.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@ namespace LeagueSharp.SDK.Core
     /// <summary>
     ///     A static (stack) class which contains a sort-of cached versions of the important game objects.
     /// </summary>
-    public static class GameObjects
+    public static class ObjectHandler
     {
         #region Static Fields
 
@@ -107,6 +107,11 @@ namespace LeagueSharp.SDK.Core
         private static readonly List<Obj_AI_Minion> EnemyWardsList = new List<Obj_AI_Minion>();
 
         /// <summary>
+        ///     The game objects list.
+        /// </summary>
+        private static readonly List<GameObject> GameObjectList = new List<GameObject>();
+
+        /// <summary>
         ///     The heroes list.
         /// </summary>
         private static readonly List<Obj_AI_Hero> HeroesList = new List<Obj_AI_Hero>();
@@ -155,11 +160,6 @@ namespace LeagueSharp.SDK.Core
         ///     The wards list.
         /// </summary>
         private static readonly List<Obj_AI_Minion> WardsList = new List<Obj_AI_Minion>();
-        
-        /// <summary>
-        ///     The game objects list.
-        /// </summary>
-        private static readonly List<GameObject> GameObjectList = new List<GameObject>();
 
         #endregion
 
@@ -320,6 +320,17 @@ namespace LeagueSharp.SDK.Core
         }
 
         /// <summary>
+        ///     Gets all game objects.
+        /// </summary>
+        public static IEnumerable<GameObject> GameObjects
+        {
+            get
+            {
+                return GameObjectList;
+            }
+        }
+
+        /// <summary>
         ///     Gets the heroes.
         /// </summary>
         public static IEnumerable<Obj_AI_Hero> Heroes
@@ -386,6 +397,14 @@ namespace LeagueSharp.SDK.Core
         }
 
         /// <summary>
+        ///     Gets the player.
+        /// </summary>
+        /// <value>
+        ///     The player.
+        /// </value>
+        public static Obj_AI_Hero Player { get; private set; }
+
+        /// <summary>
         ///     Gets the shops.
         /// </summary>
         public static IEnumerable<Obj_Shop> Shops
@@ -428,16 +447,19 @@ namespace LeagueSharp.SDK.Core
                 return WardsList;
             }
         }
-        
+
+        #endregion
+
+        #region Public Methods and Operators
+
         /// <summary>
-        ///     Gets all game objects.
+        ///     Gets all of the objects with the specific type.
         /// </summary>
-        public static IEnumerable<GameObject> GameObjects
+        /// <typeparam name="T">The type of <see cref="GameObject" /></typeparam>
+        /// <returns><see cref="IEnumerable{T}" /> of GameObjects of the type <typeparamref name="T" /></returns>
+        public static IEnumerable<T> Get<T>() where T : GameObject, new()
         {
-            get
-            {
-                return GameObjectList;
-            }
+            return GameObjectList.OfType<T>();
         }
 
         #endregion
@@ -493,8 +515,10 @@ namespace LeagueSharp.SDK.Core
 
                     AllySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsAlly));
                     EnemySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsEnemy));
-                    
-                     GameObjectList.AddRange(ObjectManager.Get<GameObject>());
+
+                    GameObjectList.AddRange(ObjectManager.Get<GameObject>());
+
+                    Player = ObjectManager.Player;
                 };
         }
 
@@ -630,12 +654,8 @@ namespace LeagueSharp.SDK.Core
                     EnemySpawnPointsList.Add(spawnPoint);
                 }
             }
-            
-            var gameObject = sender as GameObject;
-            if (gameObject != null)
-            {
-                GameObjectList.Add(gameObject);
-            }
+
+            GameObjectList.Add(sender);
         }
 
         /// <summary>
@@ -694,12 +714,8 @@ namespace LeagueSharp.SDK.Core
                     AllyTurretsList.Remove(turret);
                 }
             }
-            
-            var gameObject = sender as GameObject;
-            if (gameObject != null)
-            {
-                GameObjectList.Remove(gameObject);
-            }
+
+            GameObjectList.Remove(sender);
         }
 
         #endregion

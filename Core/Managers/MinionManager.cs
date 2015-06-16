@@ -186,7 +186,7 @@ namespace LeagueSharp.SDK.Core.Managers
             MinionOrderTypes order = MinionOrderTypes.Health)
         {
             var result =
-                GameObjects.Minions
+                ObjectHandler.Minions
                     .Where(minion => minion.IsValidTarget(range, false, @from))
                     .Select(minion => new { minion, minionTeam = minion.Team })
                     .Where(

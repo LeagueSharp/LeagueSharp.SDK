@@ -51,7 +51,7 @@ namespace LeagueSharp.SDK.Core.Utils
         {
             Load.OnLoad += (sender, e) =>
                 {
-                    foreach (var obj in GameObjects.Heroes)
+                    foreach (var obj in ObjectHandler.Heroes)
                     {
                         SpellsList.Add(
                             obj, 

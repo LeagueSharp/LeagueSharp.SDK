@@ -166,7 +166,7 @@ namespace LeagueSharp.SDK.Core.Events
         private static void Game_OnGameUpdate(EventArgs args)
         {
             foreach (var hero in
-                GameObjects.Heroes.Where(
+                ObjectHandler.Heroes.Where(
                     hero =>
                     CastingInterruptableSpell.ContainsKey(hero.NetworkId) && !hero.Spellbook.IsCastingSpell
                     && !hero.Spellbook.IsChanneling && !hero.Spellbook.IsCharging))
@@ -181,7 +181,7 @@ namespace LeagueSharp.SDK.Core.Events
             }
 
             foreach (var newArgs in
-                GameObjects.EnemyHeroes.Select(GetInterruptableTargetData).Where(newArgs => newArgs != null))
+                ObjectHandler.EnemyHeroes.Select(GetInterruptableTargetData).Where(newArgs => newArgs != null))
             {
                 OnInterruptableTarget(MethodBase.GetCurrentMethod().DeclaringType, newArgs);
             }

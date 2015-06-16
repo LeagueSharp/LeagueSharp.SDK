@@ -116,7 +116,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             // Create Priority Menu
             var priorityMenu = new Menu("Priorities", "Priorities");
-            foreach (var hero in GameObjects.EnemyHeroes.Select(x => x.ChampionName))
+            foreach (var hero in ObjectHandler.EnemyHeroes.Select(x => x.ChampionName))
             {
                 priorityMenu.Add(
                     new MenuItem<MenuSlider>(hero, hero) { Value = new MenuSlider(GetPriorityFromDatabase(hero), 1, 4) });
@@ -134,7 +134,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                         return;
                     }
 
-                    foreach (var hero in GameObjects.EnemyHeroes.Select(x => x.ChampionName))
+                    foreach (var hero in ObjectHandler.EnemyHeroes.Select(x => x.ChampionName))
                     {
                         Menu["Priorities"][hero].GetValue<MenuSlider>().Value = GetPriorityFromDatabase(hero);
                     }
@@ -253,7 +253,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             // Filter out champions that we are ignoring
             var enemyChamps =
-                GameObjects.EnemyHeroes.Where(x => x.IsValidTarget(range, true, from))
+                ObjectHandler.EnemyHeroes.Where(x => x.IsValidTarget(range, true, from))
                     .Where(x => ignoredChampions.Any(y => y.NetworkId != x.NetworkId))
                     .Where(x => !IsInvulnerable(x, damageType));
 
@@ -280,7 +280,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             var enemyChamps =
-                GameObjects.EnemyHeroes.Where(x => x.IsValidTarget(spell.Range, true, spell.From))
+                ObjectHandler.EnemyHeroes.Where(x => x.IsValidTarget(spell.Range, true, spell.From))
                     .Where(x => ignoredChampions.Any(y => y.NetworkId != x.NetworkId))
                     .Where(x => spell.GetPrediction(x).Hitchance != HitChance.Collision)
                     .Where(x => !IsInvulnerable(x, spell.DamageType));
