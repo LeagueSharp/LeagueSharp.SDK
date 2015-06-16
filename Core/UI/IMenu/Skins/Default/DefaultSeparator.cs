@@ -40,7 +40,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         {
             var centerY = GetContainerRectangle(component.Container)
                 .GetCenteredText(
-                    null, 
+                    null, DefaultSettings.Font,
                     component.Container.DisplayName, 
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 

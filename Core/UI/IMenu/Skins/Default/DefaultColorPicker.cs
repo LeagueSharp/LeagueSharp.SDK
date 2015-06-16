@@ -103,7 +103,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                 + (4 * SliderOffset);
             this.pickerX = (Drawing.Width - PickerWidth) / 2;
             this.pickerY = (Drawing.Height - this.pickerHeight) / 2;
-            this.greenWidth = DefaultSettings.Font.MeasureText(MenuManager.Instance.Sprite, "Green", 0).Width;
+            this.greenWidth = DefaultSettings.Font.MeasureText(MenuManager.Instance.Sprite, "Opacity", 0).Width;
             this.sliderWidth = PickerWidth - (2 * BorderOffset) - (2 * TextOffset) - this.greenWidth - SliderHeight;
         }
 
@@ -146,7 +146,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         public void Draw(MenuColor component)
         {
             var rectangleName = GetContainerRectangle(component.Container)
-                .GetCenteredText(null, component.Container.DisplayName, CenteredFlags.VerticalCenter);
+                .GetCenteredText(null, DefaultSettings.Font, component.Container.DisplayName, CenteredFlags.VerticalCenter);
 
             DefaultSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
@@ -235,7 +235,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         this.pickerY + BorderOffset, 
                         PickerWidth - (2 * BorderOffset), 
                         DefaultSettings.ContainerHeight).GetCenteredText(
-                            null, 
+                            null, DefaultSettings.Font,
                             detail, 
                             CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
                 DefaultSettings.Font.DrawText(
@@ -254,11 +254,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                     new Rectangle(
                         this.pickerX + BorderOffset, 
                         this.pickerY + BorderOffset + DefaultSettings.ContainerHeight + SliderOffset, 
-                        PickerWidth, 
-                        SliderHeight).GetCenteredText(null, "Green", CenteredFlags.VerticalCenter).Y;
+                        PickerWidth,
+                        SliderHeight).GetCenteredText(null, DefaultSettings.Font, "Green", CenteredFlags.VerticalCenter).Y;
 
                 // DRAW SLIDER NAMES
-                string[] lineNames = { "Red", "Green", "Blue", "Alpha" };
+                string[] lineNames = { "Red", "Green", "Blue", "Opacity" };
                 for (var i = 0; i < lineNames.Length; i++)
                 {
                     DefaultSettings.Font.DrawText(

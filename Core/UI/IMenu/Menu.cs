@@ -350,19 +350,51 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
+        ///     Resets the width.
+        /// </summary>
+        public override void ResetWidth()
+        {
+            base.ResetWidth();
+            foreach (var comp in Components)
+            {
+                comp.Value.ResetWidth();
+            }
+        }
+
+        private bool dragging;
+
+        private float xd;
+
+        private float yd;
+
+        /// <summary>
         ///     Menu Windows Process Messages callback.
         /// </summary>
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void OnWndProc(WindowsKeys args)
         {
+            if (args.Msg == WindowsMessages.LBUTTONUP)
+            {
+                dragging = false;
+            }
             if (this.Visible)
             {
+                if (args.Msg == WindowsMessages.MOUSEMOVE && dragging)
+                { 
+                    MenuManager.Instance.Position = new Vector2(args.Cursor.X - xd, args.Cursor.Y - yd);
+                }
                 if (args.Cursor.IsUnderRectangle(
                     this.Position.X, 
                     this.Position.Y, 
                     this.MenuWidth, 
                     DefaultSettings.ContainerHeight))
                 {
+                    if (args.Msg == WindowsMessages.LBUTTONDOWN)
+                    {
+                        xd = args.Cursor.X - MenuManager.Instance.Position.X;
+                        yd = args.Cursor.Y - MenuManager.Instance.Position.Y;
+                        dragging = true;
+                    }
                     this.Hovering = true;
                     if (args.Msg == WindowsMessages.LBUTTONDOWN && this.Components.Count > 0)
                     {

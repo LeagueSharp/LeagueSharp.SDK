@@ -83,7 +83,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         public void Draw(MenuButton component)
         {
             var rectangleName = GetContainerRectangle(component.Container)
-                .GetCenteredText(null, component.Container.DisplayName, CenteredFlags.VerticalCenter);
+                .GetCenteredText(null, DefaultSettings.Font, component.Container.DisplayName, CenteredFlags.VerticalCenter);
 
             DefaultSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
