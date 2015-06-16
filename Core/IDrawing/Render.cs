@@ -64,7 +64,7 @@ namespace LeagueSharp.SDK.Core.IDrawing
         /// <param name="drawObject">
         ///     The <see cref="DrawObject" />
         /// </param>
-        public void Add(DrawObject drawObject)
+        public static void Add(DrawObject drawObject)
         {
             if (!Objects.Contains(drawObject))
             {
@@ -78,7 +78,7 @@ namespace LeagueSharp.SDK.Core.IDrawing
         /// <param name="drawObject">
         ///     The <see cref="DrawObject" />
         /// </param>
-        public void Remove(DrawObject drawObject)
+        public static void Remove(DrawObject drawObject)
         {
             if (Objects.Contains(drawObject))
             {
