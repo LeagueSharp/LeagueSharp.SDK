@@ -155,6 +155,11 @@ namespace LeagueSharp.SDK.Core
         ///     The wards list.
         /// </summary>
         private static readonly List<Obj_AI_Minion> WardsList = new List<Obj_AI_Minion>();
+        
+        /// <summary>
+        ///     The game objects list.
+        /// </summary>
+        private static readonly List<GameObject> GameObjectList = new List<GameObject>();
 
         #endregion
 
@@ -423,6 +428,17 @@ namespace LeagueSharp.SDK.Core
                 return WardsList;
             }
         }
+        
+        /// <summary>
+        ///     Gets all game objects.
+        /// </summary>
+        public static IEnumerable<GameObject> GameObjects
+        {
+            get
+            {
+                return GameObjectList;
+            }
+        }
 
         #endregion
 
@@ -477,6 +493,8 @@ namespace LeagueSharp.SDK.Core
 
                     AllySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsAlly));
                     EnemySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsEnemy));
+                    
+                     GameObjectList.AddRange(ObjectManager.Get<GameObject>());
                 };
         }
 
@@ -612,6 +630,12 @@ namespace LeagueSharp.SDK.Core
                     EnemySpawnPointsList.Add(spawnPoint);
                 }
             }
+            
+            var gameObject = sender as GameObject;
+            if (gameObject != null)
+            {
+                GameObjectList.Add(gameObject);
+            }
         }
 
         /// <summary>
@@ -669,6 +693,12 @@ namespace LeagueSharp.SDK.Core
                 {
                     AllyTurretsList.Remove(turret);
                 }
+            }
+            
+            var gameObject = sender as GameObject;
+            if (gameObject != null)
+            {
+                GameObjectList.Remove(gameObject);
             }
         }
 
