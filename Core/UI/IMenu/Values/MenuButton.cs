@@ -30,7 +30,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     /// <summary>
     ///     A Button designed to perform an action when clicked
     /// </summary>
-    public class MenuButton : AMenuValue
+    public class MenuButton : MenuItem
     {
         #region Constructors and Destructors
 
@@ -40,7 +40,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="buttonText">
         ///     The button text
         /// </param>
-        public MenuButton(string buttonText)
+        public MenuButton(string name, string displayName, string buttonText, string uniqueString = "")
+            : base(name, displayName, uniqueString)
         {
             this.ButtonText = buttonText;
         }
@@ -94,7 +95,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="component">
         ///     The component.
         /// </param>
-        public override void Extract(AMenuValue component)
+        public override void Extract(MenuItem component)
         {
             // Do nothing.
         }
@@ -102,7 +103,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     On Draw event.
         /// </summary>
-        public override void OnDraw()
+        public override void Draw()
         {
             ThemeManager.Current.Button.Draw(this);
         }
@@ -113,9 +114,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="args">
         ///     The event data.
         /// </param>
-        public override void OnWndProc(WindowsKeys args)
+        public override void WndProc(WindowsKeys args)
         {
-            if (!this.Container.Visible)
+            if (!this.Visible)
             {
                 return;
             }

@@ -44,7 +44,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <returns>The <see cref="Rectangle" /></returns>
         public Rectangle AdditionalBoundries(MenuSlider component)
         {
-            return GetContainerRectangle(component.Container);
+            return GetContainerRectangle(component);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <returns>The <see cref="Rectangle" /></returns>
         public Rectangle Bounding(MenuSlider component)
         {
-            return GetContainerRectangle(component.Container);
+            return GetContainerRectangle(component);
         }
 
         /// <summary>
@@ -63,14 +63,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <param name="component">The <see cref="MenuSlider" /></param>
         public void Draw(MenuSlider component)
         {
-            var position = component.Container.Position;
+            var position = component.Position;
             var centeredY =
                 (int)
-                GetContainerRectangle(component.Container)
-                    .GetCenteredText(null, DefaultSettings.Font, component.Container.DisplayName, CenteredFlags.VerticalCenter)
+                GetContainerRectangle(component)
+                    .GetCenteredText(null, DefaultSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
             var percent = (component.Value - component.MinValue) / (float)(component.MaxValue - component.MinValue);
-            var x = position.X + (percent * component.Container.MenuWidth);
+            var x = position.X + (percent * component.MenuWidth);
 
             var line = new Line(Drawing.Direct3DDevice) { Antialias = false, GLLines = true, Width = 2 };
             line.Begin();
@@ -81,7 +81,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 
             DefaultSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
-                component.Container.DisplayName, 
+                component.DisplayName, 
                 (int)(position.X + DefaultSettings.ContainerTextOffset), 
                 centeredY, 
                 DefaultSettings.TextColor);
@@ -93,7 +93,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             DefaultSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 component.Value.ToString(CultureInfo.InvariantCulture), 
-                (int)(position.X + component.Container.MenuWidth - 5 - measureText.Width), 
+                (int)(position.X + component.MenuWidth - 5 - measureText.Width), 
                 centeredY, 
                 DefaultSettings.TextColor);
 

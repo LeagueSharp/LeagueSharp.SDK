@@ -296,33 +296,25 @@ namespace LeagueSharp.SDK.Core.Wrappers
                                                : MedHighPriority.Any(t => t == enemy.ChampionName)
                                                      ? 2
                                                      : MedLowPriority.Any(t => t == enemy.ChampionName) ? 3 : 4;
-                            menu.Add(
-                                new MenuItem<MenuSlider>("ts" + enemy.ChampionName, enemy.ChampionName)
-                                    {
-                                       Value = new MenuSlider(priority, 0, 5) 
-                                    });
+                            menu.Add(new MenuSlider("ts" + enemy.ChampionName, enemy.ChampionName,priority,0,5));
                         }
 
-                        menu.Add(new MenuItem<MenuSeparator>("separatorOther", "Other Settings"));
+                        menu.Add(new MenuSeparator("separatorOther","Other Settings"));
                     }
 
-                    menu.Add(new MenuItem<MenuBool>("focusTarget", "Focus Selected Target"));
-                    menu.Add(new MenuItem<MenuBool>("drawTarget", "Draw Target") { Value = new MenuBool(true) });
-                    menu.Add(new MenuItem<MenuSeparator>("separatorMode", "Mode Selection"));
-                    menu.Add(
-                        new MenuItem<MenuList>("mode", "Mode")
-                            {
-                               Value = new MenuList<TargetSelectorMode> { Index = 7 } 
-                            });
+                    menu.Add(new MenuBool("focusTarget", "Focus Selected Target"));
+                    menu.Add(new MenuBool("drawTarget", "Draw Target",true));
+                    menu.Add(new MenuSeparator("separatorMode", "Mode Selection"));
+                    menu.Add(new MenuList<TargetSelectorMode>("mode", "Mode") { Index = 7 });
 
                     rootMenu.Add(menu);
 
                     menu.MenuValueChanged += (objSender, objArgs) =>
                         {
-                            var list = objSender as MenuItem<MenuList>;
+                            var list = objSender as MenuList<TargetSelectorMode>;
                             if (list != null)
                             {
-                                Mode = list.GetValue<MenuList<TargetSelectorMode>>().SelectedValue;
+                                Mode = list.SelectedValue;
                             }
                         };
 

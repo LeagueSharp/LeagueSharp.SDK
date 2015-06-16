@@ -25,11 +25,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using LeagueSharp.SDK.Core.UI.IMenu.Skins;
     using LeagueSharp.SDK.Core.Utils;
 
+    using SharpDX;
+
     /// <summary>
     ///     A menu separator.
     /// </summary>
-    public class MenuSeparator : AMenuValue
+    public class MenuSeparator : MenuItem
     {
+        public MenuSeparator(string name, string displayName, string uniqueString = "")
+            : base(name, displayName, uniqueString)
+        {
+            
+        }
+
         #region Public Properties
 
         /// <summary>
@@ -51,14 +59,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     Extracts the specified component.
         /// </summary>
         /// <param name="component">The component.</param>
-        public override void Extract(AMenuValue component)
+        public override void Extract(MenuItem component)
         {
         }
 
         /// <summary>
         ///     Drawing callback.
         /// </summary>
-        public override void OnDraw()
+        public override void Draw()
         {
             ThemeManager.Current.Separator.Draw(this);
         }
@@ -67,7 +75,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     Windows Process Messages callback.
         /// </summary>
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
-        public override void OnWndProc(WindowsKeys args)
+        public override void WndProc(WindowsKeys args)
         {
             // not needed                        
         }

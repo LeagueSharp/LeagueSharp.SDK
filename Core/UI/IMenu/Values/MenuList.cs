@@ -38,8 +38,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     ///     A list of values.
     /// </summary>
     [Serializable]
-    public abstract class MenuList : AMenuValue
+    public abstract class MenuList : MenuItem
     {
+        protected MenuList(string name, string displayName, string uniqueString = "")
+            : base(name, displayName, uniqueString)
+        {
+            
+        }
+
+        internal MenuList()
+            : base()
+        {
+            
+        }
+
         #region Fields
 
         /// <summary>
@@ -143,7 +155,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     Initializes a new instance of the <see cref="MenuList{T}" /> class.
         /// </summary>
         /// <param name="objects">The objects.</param>
-        public MenuList(IEnumerable<T> objects)
+        public MenuList(string name, string displayName, IEnumerable<T> objects, string uniqueString = "")
+            : base(name, displayName, uniqueString)
         {
             this.Values = objects.ToList();
         }
@@ -151,8 +164,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuList{T}" /> class based upon the given Enumeration type.
         /// </summary>
-        public MenuList()
-            : this(Enum.GetValues(typeof(T)).Cast<T>())
+        public MenuList(string name, string displayName, string uniqueString = "")
+            : this(name, displayName, Enum.GetValues(typeof(T)).Cast<T>(), uniqueString)
         {
         }
 
@@ -277,7 +290,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     Extracts the specified component.
         /// </summary>
         /// <param name="component">The component.</param>
-        public override void Extract(AMenuValue component)
+        public override void Extract(MenuItem component)
         {
             this.Index = ((MenuList<T>)component).Index;
         }
@@ -285,7 +298,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Drawing callback.
         /// </summary>
-        public override void OnDraw()
+        public override void Draw()
         {
             ThemeManager.Current.List.Draw(this);
         }
@@ -294,9 +307,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     Windows Process Messages callback.
         /// </summary>
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
-        public override void OnWndProc(WindowsKeys args)
+        public override void WndProc(WindowsKeys args)
         {
-            if (!this.Container.Visible)
+            if (!this.Visible)
             {
                 return;
             }

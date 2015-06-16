@@ -36,7 +36,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     ///     Menu KeyBind.
     /// </summary>
     [Serializable]
-    public class MenuKeyBind : AMenuValue, ISerializable
+    public class MenuKeyBind : IMenu.MenuItem, ISerializable
     {
         #region Fields
 
@@ -64,18 +64,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="type">
         ///     Key bind type
         /// </param>
-        public MenuKeyBind(Keys key, KeyBindType type)
+        public MenuKeyBind(string name, string displayName, Keys key, KeyBindType type, string uniqueString = "")
+            : base(name, displayName, uniqueString)
         {
             this.Key = key;
             this.Type = type;
-        }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="MenuKeyBind" /> class.
-        ///     Menu KeyBind Constructor
-        /// </summary>
-        public MenuKeyBind()
-        {
         }
 
         /// <summary>
@@ -161,7 +154,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     Extracts the specified value.
         /// </summary>
         /// <param name="value">The value.</param>
-        public override void Extract(AMenuValue value)
+        public override void Extract(IMenu.MenuItem value)
         {
             var keybind = (MenuKeyBind)value;
             this.Key = keybind.Key;
@@ -170,7 +163,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     KeyBind Item Draw callback.
         /// </summary>
-        public override void OnDraw()
+        public override void Draw()
         {
             ThemeManager.Current.KeyBind.Draw(this);
         }
@@ -181,7 +174,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="args">
         ///     <see cref="WindowsKeys" /> data
         /// </param>
-        public override void OnWndProc(WindowsKeys args)
+        public override void WndProc(WindowsKeys args)
         {
             if (!MenuGUI.IsChatOpen)
             {
@@ -248,7 +241,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
                         {
                             this.ChangeKey(Keys.LButton);
                         }
-                        else if (this.Container.Visible)
+                        else if (Visible)
                         {
                             var container = ThemeManager.Current.KeyBind.ButtonBoundaries(this);
                             var content = ThemeManager.Current.KeyBind.KeyBindBoundaries(this);

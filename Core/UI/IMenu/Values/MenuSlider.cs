@@ -35,7 +35,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     ///     Menu Slider.
     /// </summary>
     [Serializable]
-    public class MenuSlider : AMenuValue, ISerializable
+    public class MenuSlider : MenuItem, ISerializable
     {
         #region Constructors and Destructors
 
@@ -51,7 +51,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="maxValue">
         ///     Maximum Value Boundary
         /// </param>
-        public MenuSlider(int value = 0, int minValue = 0, int maxValue = 100)
+        public MenuSlider(string name, string displayName, int value = 0, int minValue = 0, int maxValue = 100, string uniqueString = "")
+            : base(name, displayName, uniqueString)
         {
             this.Value = value;
             this.MinValue = minValue;
@@ -114,7 +115,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     Extracts the specified value.
         /// </summary>
         /// <param name="value">The value.</param>
-        public override void Extract(AMenuValue value)
+        public override void Extract(MenuItem value)
         {
             var oldValue = ((MenuSlider)value).Value;
             if (oldValue < this.MinValue)
@@ -134,7 +135,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Slider Item Draw callback.
         /// </summary>
-        public override void OnDraw()
+        public override void Draw()
         {
             ThemeManager.Current.Slider.Draw(this);
         }
@@ -145,9 +146,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="args">
         ///     <see cref="WindowsKeys" /> data
         /// </param>
-        public override void OnWndProc(WindowsKeys args)
+        public override void WndProc(WindowsKeys args)
         {
-            if (!this.Container.Visible)
+            if (!this.Visible)
             {
                 return;
             }
@@ -229,8 +230,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
                 (int)
                 Math.Round(
                     this.MinValue
-                    + ((args.Cursor.X - this.Container.Position.X) * (this.MaxValue - this.MinValue))
-                    / this.Container.MenuWidth);
+                    + ((args.Cursor.X - Position.X) * (this.MaxValue - this.MinValue))
+                    / MenuWidth);
             if (newValue < this.MinValue)
             {
                 newValue = this.MinValue;

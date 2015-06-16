@@ -321,69 +321,45 @@ namespace LeagueSharp.SDK.Core
             menu.Add(new Menu("items", "Items"));
 
             var drawing = new Menu("drawings", "Drawings");
-            drawing.Add(new MenuItem<MenuBool>("drawAARange", "Draw Auto-Attack Range") { Value = new MenuBool(true) });
-            drawing.Add(new MenuItem<MenuBool>("drawTargetAARange", "Draw Target Auto-Attack Range"));
-            drawing.Add(new MenuItem<MenuBool>("drawKillableMinion", "Draw Killable Minion"));
-            drawing.Add(new MenuItem<MenuBool>("drawKillableMinionFade", "Enable Killable Minion Fade Effect"));
+            drawing.Add(new MenuBool("drawAARange", "Draw Auto-Attack Range", true));
+            drawing.Add(new MenuBool("drawTargetAARange", "Draw Target Auto-Attack Range"));
+            drawing.Add(new MenuBool("drawKillableMinion", "Draw Killable Minion"));
+            drawing.Add(new MenuBool("drawKillableMinionFade", "Enable Killable Minion Fade Effect"));
             menu.Add(drawing);
 
             var advanced = new Menu("advanced", "Advanced");
-            advanced.Add(new MenuItem<MenuSeparator>("separatorMovement", "Movement"));
+            advanced.Add(new MenuSeparator("separatorMovement", "Movement"));
+            advanced.Add(new MenuSlider("movementDelay", "Delay between Movement", new Random(Variables.TickCount).Next(200, 301), 0, 2500));
+            advanced.Add(new MenuBool("movementScramble", "Randomize movement location", true));
+            advanced.Add(new MenuSlider("movementExtraHold", "Extra Hold Position", 25, 0, 250));
+            advanced.Add(new MenuSlider("movementMaximumDistance", "Maximum Movement Distance", new Random().Next(500, 1201), 0, 1200));
+            advanced.Add(new MenuSeparator("separatorMisc", "Miscellaneous"));
+            advanced.Add(new MenuSlider("miscExtraWindup", "Extra Windup", 80, 0, 200));
+            advanced.Add(new MenuSlider("miscFarmDelay", "Farm Delay", 0, 0, 200));
+            advanced.Add(new MenuSeparator("separatorOther", "Other"));
             advanced.Add(
-                new MenuItem<MenuSlider>("movementDelay", "Delay between Movement")
+                new MenuButton("resetAll", "Settings", "Reset All Settings")
                     {
-                       Value = new MenuSlider(new Random(Variables.TickCount).Next(200, 301), 0, 2500) 
-                    });
-            advanced.Add(
-                new MenuItem<MenuBool>("movementScramble", "Randomize movement location") { Value = new MenuBool(true) });
-            advanced.Add(
-                new MenuItem<MenuSlider>("movementExtraHold", "Extra Hold Position")
-                    {
-                       Value = new MenuSlider(25, 0, 250) 
-                    });
-            advanced.Add(
-                new MenuItem<MenuSlider>("movementMaximumDistance", "Maximum Movement Distance")
-                    {
-                       Value = new MenuSlider(new Random().Next(500, 1201), 0, 1200) 
-                    });
-            advanced.Add(new MenuItem<MenuSeparator>("separatorMisc", "Miscellaneous"));
-            advanced.Add(
-                new MenuItem<MenuSlider>("miscExtraWindup", "Extra Windup") { Value = new MenuSlider(80, 0, 200) });
-            advanced.Add(new MenuItem<MenuSlider>("miscFarmDelay", "Farm Delay") { Value = new MenuSlider(0, 0, 200) });
-            advanced.Add(new MenuItem<MenuSeparator>("separatorOther", "Other"));
-            advanced.Add(
-                new MenuItem<MenuButton>("resetAll", "Settings")
-                    {
-                       Value = new MenuButton("Reset All Settings") { Action = ResetSettings } 
+                       Action = ResetSettings 
                     });
             menu.Add(advanced);
 
-            menu.Add(new MenuItem<MenuSeparator>("separatorKeys", "Key Bindings"));
-            menu.Add(
-                new MenuItem<MenuKeyBind>("lasthitKey", "Farm") { Value = new MenuKeyBind(Keys.X, KeyBindType.Press) });
-            menu.Add(
-                new MenuItem<MenuKeyBind>("laneclearKey", "Lane Clear")
-                    {
-                       Value = new MenuKeyBind(Keys.V, KeyBindType.Press) 
-                    });
-            menu.Add(
-                new MenuItem<MenuKeyBind>("hybridKey", "Hybrid") { Value = new MenuKeyBind(Keys.C, KeyBindType.Press) });
-            menu.Add(
-                new MenuItem<MenuKeyBind>("orbwalkKey", "Orbwalk")
-                    {
-                       Value = new MenuKeyBind(Keys.Space, KeyBindType.Press) 
-                    });
+            menu.Add(new MenuSeparator("separatorKeys", "Key Bindings"));
+            menu.Add(new MenuKeyBind("lasthitKey", "Farm", Keys.X, KeyBindType.Press));
+            menu.Add(new MenuKeyBind("laneclearKey", "Lane Clear", Keys.V, KeyBindType.Press));
+            menu.Add(new MenuKeyBind("hybridKey", "Hybrid", Keys.C, KeyBindType.Press));
+            menu.Add(new MenuKeyBind("orbwalkKey", "Orbwalk", Keys.Space, KeyBindType.Press));
 
             menu.MenuValueChanged += (sender, args) =>
                 {
-                    var keyBind = sender as MenuItem<MenuKeyBind>;
+                    var keyBind = sender as MenuKeyBind;
                     if (keyBind != null)
                     {
                         var modeName = keyBind.Name.Substring(0, keyBind.Name.IndexOf("Key", StringComparison.Ordinal));
                         OrbwalkerMode mode;
                         if (Enum.TryParse(modeName, true, out mode))
                         {
-                            if (keyBind.Value.Active)
+                            if (keyBind.Active)
                             {
                                 ActiveMode = mode;
                             }

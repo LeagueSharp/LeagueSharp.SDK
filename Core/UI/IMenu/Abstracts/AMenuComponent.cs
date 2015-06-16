@@ -102,8 +102,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
                 if (this.menuWidthCached == 0)
                 {
                     this.menuWidthCached = this.Parent != null
-                                               ? this.Parent.Components.Max(comp => comp.Value.Width)
-                                               : MenuManager.Instance.Menus.Max(menu => menu.Width);
+                                               ? this.Parent.Components.Max(comp => comp.Value.TotalWidth)
+                                               : MenuManager.Instance.Menus.Max(menu => menu.TotalWidth);
                 }
 
                 return this.menuWidthCached;
@@ -167,7 +167,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         /// <value>
         ///     The width.
         /// </value>
-        public abstract int Width { get; }
+        public abstract int TotalWidth { get; }
 
         #endregion
 
@@ -190,14 +190,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         /// <typeparam name="T">The type of MenuValue of this child.</typeparam>
         /// <param name="name">The name of the child.</param>
         /// <returns>The value that is attached to this Child.</returns>
-        public abstract T GetValue<T>(string name) where T : AMenuValue;
+        public abstract T GetValue<T>(string name) where T : MenuItem;
 
         /// <summary>
         ///     Get the value of this component.
         /// </summary>
         /// <typeparam name="T">The type of MenuValue of this component.</typeparam>
         /// <returns>The value that is attached to this component.</returns>
-        public abstract T GetValue<T>() where T : AMenuValue;
+        public abstract T GetValue<T>() where T : MenuItem;
 
         /// <summary>
         ///     Loads this instance.
@@ -235,28 +235,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         ///     Saves this instance.
         /// </summary>
         public abstract void Save();
-
-        /// <summary>
-        ///     Dynamic Object Member Resolver.
-        /// </summary>
-        /// <param name="binder">Member Binder</param>
-        /// <param name="result">Object Result</param>
-        /// <returns>Whether was found</returns>
-        public override bool TryGetMember(GetMemberBinder binder, out object result)
-        {
-            try
-            {
-                var comp = this[binder.Name];
-                var item = comp as MenuItem;
-                result = item != null ? item.ValueAsObject : comp;
-                return true;
-            }
-            catch (Exception)
-            {
-                result = null;
-                return false;
-            }
-        }
 
         #endregion
     }

@@ -38,15 +38,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <param name="component">The <see cref="MenuSeparator" /></param>
         public void Draw(MenuSeparator component)
         {
-            var centerY = GetContainerRectangle(component.Container)
+            var centerY = GetContainerRectangle(component)
                 .GetCenteredText(
                     null, DefaultSettings.Font,
-                    component.Container.DisplayName, 
+                    component.DisplayName, 
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
             DefaultSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
-                component.Container.DisplayName, 
+                component.DisplayName, 
                 (int)centerY.X, 
                 (int)centerY.Y, 
                 DefaultSettings.TextColor);

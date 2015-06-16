@@ -36,7 +36,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     ///     Menu boolean.
     /// </summary>
     [Serializable]
-    public class MenuBool : AMenuValue, ISerializable
+    public class MenuBool : MenuItem, ISerializable
     {
         #region Constructors and Destructors
 
@@ -46,7 +46,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="value">
         ///     Boolean Value
         /// </param>
-        public MenuBool(bool value = false)
+        public MenuBool(string name, string displayName, bool value = false, string uniqueString = "") : base(name, displayName,uniqueString)
         {
             this.Value = value;
         }
@@ -85,11 +85,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
 
         #region Public Methods and Operators
 
+
         /// <summary>
         ///     Extracts the specified component.
         /// </summary>
         /// <param name="component">The component.</param>
-        public override void Extract(AMenuValue component)
+        public override void Extract(MenuItem component)
         {
             this.Value = ((MenuBool)component).Value;
         }
@@ -97,7 +98,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Boolean Item Draw callback.
         /// </summary>
-        public override void OnDraw()
+        public override void Draw()
         {
             ThemeManager.Current.Bool.Draw(this);
         }
@@ -106,9 +107,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     Boolean Item Windows Process Messages callback.
         /// </summary>
         /// <param name="args">The <see cref="WindowsKeys" /> instance</param>
-        public override void OnWndProc(WindowsKeys args)
+        public override void WndProc(WindowsKeys args)
         {
-            if (!this.Container.Visible)
+            if (!this.Visible)
             {
                 return;
             }
@@ -171,5 +172,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         #endregion
+        
     }
 }

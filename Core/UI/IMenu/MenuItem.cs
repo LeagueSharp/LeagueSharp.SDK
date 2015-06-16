@@ -36,10 +36,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     using SharpDX;
 
     /// <summary>
-    ///     Abstract build of a Menu Item.
+    ///     Menu Item
     /// </summary>
     public abstract class MenuItem : AMenuComponent
     {
+        #region Fields
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -60,64 +64,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         {
         }
 
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        ///     Gets the item value as a generic object.
-        /// </summary>
-        public abstract object ValueAsObject { get; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        ///     Event handler
-        /// </summary>
-        public abstract void FireEvent();
-
-        #endregion
-    }
-
-    /// <summary>
-    ///     Menu Item
-    /// </summary>
-    /// <typeparam name="T">
-    ///     <see cref="AMenuValue" /> type
-    /// </typeparam>
-    public class MenuItem<T> : MenuItem
-        where T : AMenuValue
-    {
-        #region Fields
-
-        /// <summary>
-        ///     Local Value of the MenuItem Type.
-        /// </summary>
-        private T value;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="MenuItem{T}" /> class.
-        ///     Menu Item Constructor
-        /// </summary>
-        /// <param name="name">
-        ///     Item Name
-        /// </param>
-        /// <param name="displayName">
-        ///     Item Display Name
-        /// </param>
-        /// <param name="uniqueString">
-        ///     Unique string
-        /// </param>
-        public MenuItem(string name, string displayName, string uniqueString = "")
-            : base(name, displayName, uniqueString)
+        internal MenuItem()
+            : base("test","test","test")
         {
-            this.Value = MenuFactory.Create<T>();
+            
         }
 
         #endregion
@@ -129,7 +79,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The OnValueChangedEventArgs instance containing the event data.</param>
-        public delegate void OnValueChanged(object sender, ValueChangedEventArgs<T> e);
+        public delegate void OnValueChanged(object sender, EventArgs e);
 
         #endregion
 
@@ -154,15 +104,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         {
             get
             {
+                var fileName = this.Name + this.UniqueString + "." + GetType().Name + ".bin";
                 if (this.Parent == null)
                 {
                     return
                         System.IO.Path.Combine(
-                            MenuManager.ConfigFolder.CreateSubdirectory(this.AssemblyName).FullName, 
-                            this.Name + this.UniqueString + ".bin");
+                            MenuManager.ConfigFolder.CreateSubdirectory(this.AssemblyName).FullName,
+                            fileName);
                 }
 
-                return System.IO.Path.Combine(this.Parent.Path, this.Name + this.UniqueString + ".bin");
+                return System.IO.Path.Combine(this.Parent.Path, fileName);
             }
         }
 
@@ -182,37 +133,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         public override bool Toggled { get; set; }
 
         /// <summary>
-        ///     Gets or sets the Value Container.
-        /// </summary>
-        public T Value
-        {
-            get
-            {
-                return this.value;
-            }
-
-            set
-            {
-                this.value = value;
-                if (this.value != null)
-                {
-                    this.value.Container = this;
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Returns the item value as a generic object.
-        /// </summary>
-        public override object ValueAsObject
-        {
-            get
-            {
-                return this.Value;
-            }
-        }
-
-        /// <summary>
         ///     Returns the item visibility.
         /// </summary>
         public override sealed bool Visible { get; set; }
@@ -223,13 +143,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <value>
         ///     The width.
         /// </value>
-        public override int Width
+        public override int TotalWidth
         {
             get
             {
-                return ThemeManager.Current.CalcWidthItem(this) + this.Value.Width;
+                return ThemeManager.Current.CalcWidthItem(this) + Width;
             }
         }
+
+        /// <summary>
+        ///     Gets the Value Width.
+        /// </summary>
+        public abstract int Width { get; }
 
         #endregion
 
@@ -255,34 +180,29 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     Event Handler
         /// </summary>
-        public override void FireEvent()
+        public void FireEvent()
         {
             if (this.Parent != null)
             {
                 this.Parent.FireEvent(this);
             }
-
+            
             if (this.ValueChanged != null)
             {
-                this.ValueChanged(this, new ValueChangedEventArgs<T>(this.Value));
+                this.ValueChanged(this, EventArgs.Empty);
             }
+            
         }
 
         /// <summary>
         ///     Gets the value.
         /// </summary>
-        /// <typeparam name="T1">The type of the 1.</typeparam>
+        /// <typeparam name="T">The type of the 1.</typeparam>
         /// <returns>Returns the value as the given type</returns>
         /// <exception cref="Exception">Cannot cast value  + Value.GetType() +  to  + typeof(T1)</exception>
-        public override T1 GetValue<T1>()
+        public override T GetValue<T>() 
         {
-            var val = this.Value as T1;
-            if (val != null)
-            {
-                return val;
-            }
-
-            throw new Exception("Cannot cast value " + this.Value.GetType() + " to " + typeof(T1));
+            return (T) this;
         }
 
         /// <summary>
@@ -292,30 +212,29 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <param name="name">The name.</param>
         /// <returns>An Exception, there is no child for a MenuItem.</returns>
         /// <exception cref="Exception">Cannot get child of a MenuItem</exception>
-        public override T2 GetValue<T2>(string name)
+        public override T GetValue<T>(string name)
         {
             throw new Exception("Cannot get child of a MenuItem");
         }
+
+        /// <summary>
+        ///     Extracts the specified component.
+        /// </summary>
+        /// <param name="component">The component.</param>
+        public abstract void Extract(MenuItem component);
 
         /// <summary>
         ///     Loads this instance.
         /// </summary>
         public override void Load()
         {
-            if (!this.SettingsLoaded && File.Exists(this.Path) && typeof(T).IsSerializable)
+            if (!this.SettingsLoaded && File.Exists(this.Path) && GetType().IsSerializable)
             {
                 this.SettingsLoaded = true;
                 try
                 {
-                    var newValue = Deserialize<T>(File.ReadAllBytes(this.Path));
-                    if (this.Value != null)
-                    {
-                        this.Value.Extract(newValue);
-                    }
-                    else
-                    {
-                        this.Value = newValue;
-                    }
+                    var newValue = Deserialize<MenuItem>(File.ReadAllBytes(this.Path));
+                    Extract(newValue);
                 }
                 catch (Exception e)
                 {
@@ -332,18 +251,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </param>
         public override void OnDraw(Vector2 position)
         {
-            if (this.value == null)
-            {
-                Logging.Write()(LogLevel.Error, "Attempting to draw a null value item. [Item Name: {0}]", this.Name);
-                return;
-            }
-
             if (this.Visible)
             {
                 this.Position = position;
-                this.value.OnDraw();
+                Draw();
             }
         }
+
+        /// <summary>
+        ///     Drawing callback.
+        /// </summary>
+        public abstract void Draw();
 
         /// <summary>
         ///     Item Update callback.
@@ -360,22 +278,27 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </param>
         public override void OnWndProc(WindowsKeys args)
         {
-            if (this.value == null || !args.Process)
+            if (!args.Process)
             {
                 return;
             }
-
-            this.value.OnWndProc(args);
+            WndProc(args);
         }
+
+        /// <summary>
+        ///     Windows Process Messages callback.
+        /// </summary>
+        /// <param name="args"><see cref="WindowsKeys" /> data</param>
+        public abstract void WndProc(WindowsKeys args);
 
         /// <summary>
         ///     Saves this instance.
         /// </summary>
         public override void Save()
         {
-            if (this.Value != null && this.Value.GetType().IsSerializable)
+            if (this.GetType().IsSerializable)
             {
-                File.WriteAllBytes(this.Path, Serialize(this.Value));
+                File.WriteAllBytes(this.Path, Serialize(this));
             }
         }
 

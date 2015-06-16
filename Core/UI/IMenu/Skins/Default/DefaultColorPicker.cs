@@ -145,13 +145,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <param name="component">The <see cref="MenuColor" /></param>
         public void Draw(MenuColor component)
         {
-            var rectangleName = GetContainerRectangle(component.Container)
-                .GetCenteredText(null, DefaultSettings.Font, component.Container.DisplayName, CenteredFlags.VerticalCenter);
+            var rectangleName = GetContainerRectangle(component)
+                .GetCenteredText(null, DefaultSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter);
 
             DefaultSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
-                component.Container.DisplayName, 
-                (int)(component.Container.Position.X + DefaultSettings.ContainerTextOffset), 
+                component.DisplayName, 
+                (int)(component.Position.X + DefaultSettings.ContainerTextOffset), 
                 (int)rectangleName.Y, 
                 DefaultSettings.TextColor);
 
@@ -164,13 +164,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 new[]
                     {
                         new Vector2(
-                            component.Container.Position.X + component.Container.MenuWidth
+                            component.Position.X + component.MenuWidth
                             - (DefaultSettings.ContainerHeight / 2f), 
-                            component.Container.Position.Y + 1), 
+                            component.Position.Y + 1), 
                         new Vector2(
-                            component.Container.Position.X + component.Container.MenuWidth
+                            component.Position.X + component.MenuWidth
                             - (DefaultSettings.ContainerHeight / 2f), 
-                            component.Container.Position.Y + DefaultSettings.ContainerHeight)
+                            component.Position.Y + DefaultSettings.ContainerHeight)
                     }, 
                 component.Color);
             previewLine.End();
@@ -181,13 +181,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                     new[]
                         {
                             new Vector2(
-                                component.Container.Position.X + component.Container.MenuWidth
+                                component.Position.X + component.MenuWidth
                                 - (DefaultSettings.ContainerHeight / 2f), 
-                                component.Container.Position.Y + 1), 
+                                component.Position.Y + 1), 
                             new Vector2(
-                                component.Container.Position.X + component.Container.MenuWidth
+                                component.Position.X + component.MenuWidth
                                 - (DefaultSettings.ContainerHeight / 2f), 
-                                component.Container.Position.Y + DefaultSettings.ContainerHeight)
+                                component.Position.Y + DefaultSettings.ContainerHeight)
                         }, 
                     DefaultSettings.HoverColor);
                 previewLine.End();
@@ -386,8 +386,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             return
                 new Rectangle(
                     (int)
-                    (component.Container.Position.X + component.Container.MenuWidth - DefaultSettings.ContainerHeight), 
-                    (int)component.Container.Position.Y, 
+                    (component.Position.X + component.MenuWidth - DefaultSettings.ContainerHeight), 
+                    (int)component.Position.Y, 
                     DefaultSettings.ContainerHeight, 
                     DefaultSettings.ContainerHeight);
         }

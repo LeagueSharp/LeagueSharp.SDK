@@ -45,8 +45,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             return
                 new Rectangle(
                     (int)
-                    (component.Container.Position.X + component.Container.MenuWidth - DefaultSettings.ContainerHeight), 
-                    (int)component.Container.Position.Y, 
+                    (component.Position.X + component.MenuWidth - DefaultSettings.ContainerHeight), 
+                    (int)component.Position.Y, 
                     DefaultSettings.ContainerHeight, 
                     DefaultSettings.ContainerHeight);
         }
@@ -59,14 +59,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         {
             var centerY =
                 (int)
-                GetContainerRectangle(component.Container)
-                    .GetCenteredText(null, DefaultSettings.Font, component.Container.DisplayName, CenteredFlags.VerticalCenter)
+                GetContainerRectangle(component)
+                    .GetCenteredText(null, DefaultSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
 
             DefaultSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
-                component.Container.DisplayName, 
-                (int)(component.Container.Position.X + DefaultSettings.ContainerTextOffset), 
+                component.DisplayName, 
+                (int)(component.Position.X + DefaultSettings.ContainerTextOffset), 
                 centerY, 
                 DefaultSettings.TextColor);
 
@@ -79,13 +79,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 new[]
                     {
                         new Vector2(
-                            (component.Container.Position.X + component.Container.MenuWidth
+                            (component.Position.X + component.MenuWidth
                              - DefaultSettings.ContainerHeight) + DefaultSettings.ContainerHeight / 2f, 
-                            component.Container.Position.Y + 1), 
+                            component.Position.Y + 1), 
                         new Vector2(
-                            (component.Container.Position.X + component.Container.MenuWidth
+                            (component.Position.X + component.MenuWidth
                              - DefaultSettings.ContainerHeight) + DefaultSettings.ContainerHeight / 2f, 
-                            component.Container.Position.Y + DefaultSettings.ContainerHeight)
+                            component.Position.Y + DefaultSettings.ContainerHeight)
                     }, 
                 component.Value ? new ColorBGRA(0, 100, 0, 255) : new ColorBGRA(255, 0, 0, 255));
             line.End();
@@ -95,8 +95,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 (int)
                 new Rectangle(
                     (int)
-                    (component.Container.Position.X + component.Container.MenuWidth - DefaultSettings.ContainerHeight), 
-                    (int)component.Container.Position.Y, 
+                    (component.Position.X + component.MenuWidth - DefaultSettings.ContainerHeight), 
+                    (int)component.Position.Y, 
                     DefaultSettings.ContainerHeight, 
                     DefaultSettings.ContainerHeight).GetCenteredText(
                         null, DefaultSettings.Font, 

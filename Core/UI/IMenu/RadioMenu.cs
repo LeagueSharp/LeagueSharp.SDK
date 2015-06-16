@@ -70,7 +70,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </param>
         private void RadioMenuValueChanged(object sender, MenuValueChangedEventArgs args)
         {
-            try
+            /*TODO try
             {
                 var menuBool = args.MenuItem as MenuItem<MenuBool>;
 
@@ -89,7 +89,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
-            }
+            }*/
         }
 
         #endregion

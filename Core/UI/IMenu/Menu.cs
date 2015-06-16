@@ -209,7 +209,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <value>
         ///     The width.
         /// </value>
-        public override int Width
+        public override int TotalWidth
         {
             get
             {
@@ -300,7 +300,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             AMenuComponent value;
             if (this.Components.TryGetValue(name, out value))
             {
-                return ((MenuItem<T>)value).Value;
+                return (T) value;
             }
 
             throw new Exception("Could not find child with name " + name);

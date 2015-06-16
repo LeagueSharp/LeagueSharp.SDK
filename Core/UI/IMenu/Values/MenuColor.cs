@@ -37,17 +37,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     ///     The menu color.
     /// </summary>
     [Serializable]
-    public class MenuColor : AMenuValue, ISerializable
+    public class MenuColor : MenuItem, ISerializable
     {
         #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="MenuColor" /> class.
-        /// </summary>
-        public MenuColor()
-            : this(new ColorBGRA(0, 0, 0, 255))
-        {
-        }
+        
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuColor" /> class.
@@ -55,7 +48,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="color">
         ///     The color
         /// </param>
-        public MenuColor(ColorBGRA color)
+        public MenuColor(string name, string displayName, ColorBGRA color, string uniqueString = "")
+            : base(name, displayName, uniqueString)
         {
             this.Color = color;
         }
@@ -132,7 +126,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     Extracts the specified component.
         /// </summary>
         /// <param name="component">The component.</param>
-        public override void Extract(AMenuValue component)
+        public override void Extract(MenuItem component)
         {
             this.Color = ((MenuColor)component).Color;
         }
@@ -140,7 +134,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Drawing callback.
         /// </summary>
-        public override void OnDraw()
+        public override void Draw()
         {
             ThemeManager.Current.ColorPicker.Draw(this);
         }
@@ -149,9 +143,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     Windows Process Messages callback.
         /// </summary>
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
-        public override void OnWndProc(WindowsKeys args)
+        public override void WndProc(WindowsKeys args)
         {
-            if (!this.Container.Visible)
+            if (!this.Visible)
             {
                 return;
             }
