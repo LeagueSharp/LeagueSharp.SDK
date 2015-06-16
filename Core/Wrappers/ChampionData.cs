@@ -53,7 +53,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         ///     Initializes a new instance of the <see cref="ChampionData" /> class.
         /// </summary>
         public ChampionData()
-            : this(ObjectManager.Player.ChampionName)
+            : this(GameObjects.Player.ChampionName)
         {
         }
 

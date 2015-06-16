@@ -79,9 +79,9 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static float GetProjectileSpeed()
         {
-            return IsMelee(ObjectManager.Player) || ObjectManager.Player.ChampionName == "Azir"
+            return IsMelee(GameObjects.Player) || GameObjects.Player.ChampionName == "Azir"
                        ? float.MaxValue
-                       : ObjectManager.Player.BasicAttack.MissileSpeed;
+                       : GameObjects.Player.BasicAttack.MissileSpeed;
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static float GetRealAutoAttackRange(this AttackableUnit target)
         {
-            var result = ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius;
+            var result = GameObjects.Player.AttackRange + GameObjects.Player.BoundingRadius;
             if (target.IsValidTarget())
             {
                 return result + target.BoundingRadius;
@@ -111,8 +111,8 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>The <see cref="float" /></returns>
         public static float GetTimeToHit(this AttackableUnit target)
         {
-            return ObjectManager.Player.AttackCastDelay * 1000 - 100 + Game.Ping / 2f
-                   + 1000 * ObjectManager.Player.Distance(target) / GetProjectileSpeed();
+            return GameObjects.Player.AttackCastDelay * 1000 - 100 + Game.Ping / 2f
+                   + 1000 * GameObjects.Player.Distance(target) / GetProjectileSpeed();
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace LeagueSharp.SDK.Core.Utils
                     (target is Obj_AI_Base)
                         ? ((Obj_AI_Base)target).ServerPosition.ToVector2()
                         : target.Position.ToVector2(), 
-                    ObjectManager.Player.ServerPosition.ToVector2()) <= myRange * myRange;
+                    GameObjects.Player.ServerPosition.ToVector2()) <= myRange * myRange;
         }
 
         /// <summary>

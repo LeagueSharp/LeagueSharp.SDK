@@ -36,20 +36,9 @@ namespace LeagueSharp.SDK.Core
         #region Static Fields
 
         /// <summary>
-        ///     LeagueSharp Font.
+        ///     The league sharp font.
         /// </summary>
-        public static readonly Font LeagueSharpFont = new Font(
-            Drawing.Direct3DDevice, 
-            14, 
-            0, 
-            FontWeight.DoNotCare, 
-            0, 
-            false, 
-            FontCharacterSet.Default, 
-            FontPrecision.Default, 
-            FontQuality.Antialiased, 
-            FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative, 
-            "Tahoma");
+        private static Font leagueSharpFont;
 
         #endregion
 
@@ -69,6 +58,35 @@ namespace LeagueSharp.SDK.Core
                         Path.Combine(
                             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
                             "LS" + Environment.UserName.GetHashCode().ToString("X"))).ToString();
+            }
+        }
+
+        /// <summary>
+        ///     Gets the league sharp font.
+        /// </summary>
+        public static Font LeagueSharpFont
+        {
+            get
+            {
+                if (leagueSharpFont != null && !leagueSharpFont.IsDisposed)
+                {
+                    return leagueSharpFont;
+                }
+
+                return
+                    leagueSharpFont =
+                    new Font(
+                        Drawing.Direct3DDevice, 
+                        14, 
+                        0, 
+                        FontWeight.DoNotCare, 
+                        0, 
+                        false, 
+                        FontCharacterSet.Default, 
+                        FontPrecision.Default, 
+                        FontQuality.Antialiased, 
+                        FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative, 
+                        "Tahoma");
             }
         }
 

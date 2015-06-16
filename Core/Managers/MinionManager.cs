@@ -55,7 +55,7 @@ namespace LeagueSharp.SDK.Core.Managers
         {
             var result = new Vector2();
             var minionCount = 0;
-            var startPos = ObjectManager.Player.ServerPosition.ToVector2();
+            var startPos = GameObjects.Player.ServerPosition.ToVector2();
 
             range = range * range;
 
@@ -121,7 +121,7 @@ namespace LeagueSharp.SDK.Core.Managers
         {
             var result = new Vector2();
             var minionCount = 0;
-            var startPos = ObjectManager.Player.ServerPosition.ToVector2();
+            var startPos = GameObjects.Player.ServerPosition.ToVector2();
 
             var max = minionPositions.Count;
             for (var i = 0; i < max; i++)
@@ -194,17 +194,17 @@ namespace LeagueSharp.SDK.Core.Managers
                         (team == MinionTeam.Neutral && @t.minionTeam == GameObjectTeam.Neutral)
                         || (team == MinionTeam.Ally
                             && @t.minionTeam
-                            == (ObjectManager.Player.Team == GameObjectTeam.Chaos
+                            == (GameObjects.Player.Team == GameObjectTeam.Chaos
                                     ? GameObjectTeam.Chaos
                                     : GameObjectTeam.Order))
                         || (team == MinionTeam.Enemy
                             && @t.minionTeam
-                            == (ObjectManager.Player.Team == GameObjectTeam.Chaos
+                            == (GameObjects.Player.Team == GameObjectTeam.Chaos
                                     ? GameObjectTeam.Order
                                     : GameObjectTeam.Chaos))
-                        || (team == MinionTeam.NotAlly && @t.minionTeam != ObjectManager.Player.Team)
+                        || (team == MinionTeam.NotAlly && @t.minionTeam != GameObjects.Player.Team)
                         || (team == MinionTeam.NotAllyForEnemy
-                            && (@t.minionTeam == ObjectManager.Player.Team || @t.minionTeam == GameObjectTeam.Neutral))
+                            && (@t.minionTeam == GameObjects.Player.Team || @t.minionTeam == GameObjectTeam.Neutral))
                         || team == MinionTeam.All)
                     .Where(
                         @t =>
@@ -243,7 +243,7 @@ namespace LeagueSharp.SDK.Core.Managers
             MinionTeam team = MinionTeam.Enemy, 
             MinionOrderTypes order = MinionOrderTypes.Health)
         {
-            return GetMinions(ObjectManager.Player.ServerPosition, range, type, team, order);
+            return GetMinions(GameObjects.Player.ServerPosition, range, type, team, order);
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace LeagueSharp.SDK.Core.Managers
             SkillshotType stype, 
             Vector3 rangeCheckFrom = new Vector3())
         {
-            from = from.ToVector2().IsValid() ? from : ObjectManager.Player.ServerPosition;
+            from = from.ToVector2().IsValid() ? from : GameObjects.Player.ServerPosition;
 
             return (from minion in minions
                     select

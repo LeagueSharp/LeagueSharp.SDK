@@ -48,10 +48,10 @@ namespace LeagueSharp.SDK.Core.Utils
         public static bool CanUseItem(string name)
         {
             return
-                ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name)
+                GameObjects.Player.InventoryItems.Where(slot => slot.Name == name)
                     .Select(
                         slot =>
-                        ObjectManager.Player.Spellbook.Spells.FirstOrDefault(
+                        GameObjects.Player.Spellbook.Spells.FirstOrDefault(
                             spell => (int)spell.Slot == slot.Slot + (int)SpellSlot.Item1))
                     .Select(inst => inst != null && inst.State == SpellState.Ready)
                     .FirstOrDefault();
@@ -69,10 +69,10 @@ namespace LeagueSharp.SDK.Core.Utils
         public static bool CanUseItem(int id)
         {
             return
-                ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id)
+                GameObjects.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id)
                     .Select(
                         slot =>
-                        ObjectManager.Player.Spellbook.Spells.FirstOrDefault(
+                        GameObjects.Player.Spellbook.Spells.FirstOrDefault(
                             spell => (int)spell.Slot == slot.Slot + (int)SpellSlot.Item1))
                     .Select(inst => inst != null && inst.State == SpellState.Ready)
                     .FirstOrDefault();
@@ -89,7 +89,7 @@ namespace LeagueSharp.SDK.Core.Utils
             var wardIds = new[] { 3340, 3350, 3361, 3154, 2045, 2049, 2050, 2044 };
             return (from wardId in wardIds
                     where CanUseItem(wardId)
-                    select ObjectManager.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId)wardId))
+                    select GameObjects.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId)wardId))
                 .FirstOrDefault();
         }
 
@@ -107,7 +107,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static bool HasItem(string name, Obj_AI_Hero hero = null)
         {
-            return (hero ?? ObjectManager.Player).InventoryItems.Any(slot => slot.Name == name);
+            return (hero ?? GameObjects.Player).InventoryItems.Any(slot => slot.Name == name);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static bool HasItem(int id, Obj_AI_Hero hero = null)
         {
-            return (hero ?? ObjectManager.Player).InventoryItems.Any(slot => slot.Id == (ItemId)id);
+            return (hero ?? GameObjects.Player).InventoryItems.Any(slot => slot.Id == (ItemId)id);
         }
 
         /// <summary>
@@ -142,12 +142,12 @@ namespace LeagueSharp.SDK.Core.Utils
         public static bool UseItem(string name, Obj_AI_Base target = null)
         {
             return
-                ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name)
+                GameObjects.Player.InventoryItems.Where(slot => slot.Name == name)
                     .Select(
                         slot =>
                         target != null
-                            ? ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target)
-                            : ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot))
+                            ? GameObjects.Player.Spellbook.CastSpell(slot.SpellSlot, target)
+                            : GameObjects.Player.Spellbook.CastSpell(slot.SpellSlot))
                     .FirstOrDefault();
         }
 
@@ -166,12 +166,12 @@ namespace LeagueSharp.SDK.Core.Utils
         public static bool UseItem(int id, Obj_AI_Base target = null)
         {
             return
-                ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id)
+                GameObjects.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id)
                     .Select(
                         slot =>
                         target != null
-                            ? ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target)
-                            : ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot))
+                            ? GameObjects.Player.Spellbook.CastSpell(slot.SpellSlot, target)
+                            : GameObjects.Player.Spellbook.CastSpell(slot.SpellSlot))
                     .FirstOrDefault();
         }
 
@@ -207,8 +207,8 @@ namespace LeagueSharp.SDK.Core.Utils
         public static bool UseItem(int id, Vector3 position)
         {
             return position != Vector3.Zero
-                   && ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id)
-                          .Select(slot => ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, position))
+                   && GameObjects.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id)
+                          .Select(slot => GameObjects.Player.Spellbook.CastSpell(slot.SpellSlot, position))
                           .FirstOrDefault();
         }
 
@@ -380,7 +380,7 @@ namespace LeagueSharp.SDK.Core.Utils
                 get
                 {
                     return
-                        ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)this.Id)
+                        GameObjects.Player.InventoryItems.Where(slot => slot.Id == (ItemId)this.Id)
                             .Select(slot => slot.SpellSlot)
                             .ToList();
                 }
@@ -415,7 +415,7 @@ namespace LeagueSharp.SDK.Core.Utils
             /// </summary>
             public void Buy()
             {
-                ObjectManager.Player.BuyItem((ItemId)this.Id);
+                GameObjects.Player.BuyItem((ItemId)this.Id);
             }
 
             /// <summary>
@@ -510,7 +510,7 @@ namespace LeagueSharp.SDK.Core.Utils
             /// </returns>
             public bool IsInRange(Vector3 position)
             {
-                return ObjectManager.Player.ServerPosition.DistanceSquared(position) < this.RangeSqr;
+                return GameObjects.Player.ServerPosition.DistanceSquared(position) < this.RangeSqr;
             }
 
             /// <summary>

@@ -52,10 +52,13 @@ namespace LeagueSharp.SDK.Core.Events
             GameObject.OnCreate += OnCreate;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
 
-            foreach (var turret in ObjectManager.Get<Obj_AI_Turret>())
-            {
-                Turrets.Add(turret, new TurretArgs { Turret = turret });
-            }
+            Load.OnLoad += (sender, args) =>
+                {
+                    foreach (var turret in GameObjects.Turrets)
+                    {
+                        Turrets.Add(turret, new TurretArgs { Turret = turret });
+                    }
+                };
         }
 
         #endregion
@@ -124,7 +127,7 @@ namespace LeagueSharp.SDK.Core.Events
                 if (Turrets.Count == 0)
                 {
                     foreach (var gameObjectTurret in
-                        ObjectManager.Get<Obj_AI_Turret>())
+                        GameObjects.Turrets)
                     {
                         Turrets.Add(gameObjectTurret, new TurretArgs { Turret = gameObjectTurret });
                         if (gameObjectTurret.NetworkId == turret[0].NetworkId)

@@ -28,7 +28,7 @@ namespace LeagueSharp.SDK.Core.IDrawing
     /// <summary>
     ///     The Render class, main handler for projecting objects onto screen.
     /// </summary>
-    public class Render
+    public static class Render
     {
         #region Static Fields
 
@@ -64,7 +64,7 @@ namespace LeagueSharp.SDK.Core.IDrawing
         /// <param name="drawObject">
         ///     The <see cref="DrawObject" />
         /// </param>
-        public void Add(DrawObject drawObject)
+        public static void Add(this DrawObject drawObject)
         {
             if (!Objects.Contains(drawObject))
             {
@@ -78,7 +78,7 @@ namespace LeagueSharp.SDK.Core.IDrawing
         /// <param name="drawObject">
         ///     The <see cref="DrawObject" />
         /// </param>
-        public void Remove(DrawObject drawObject)
+        public static void Remove(this DrawObject drawObject)
         {
             if (Objects.Contains(drawObject))
             {

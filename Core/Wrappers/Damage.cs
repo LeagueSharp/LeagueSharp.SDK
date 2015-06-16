@@ -445,8 +445,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     };
             attackPassives.Add(p);
 
-            
-
             p = new PassiveDamage
                     {
                         ChampionName = "Draven", IsActive = (source, target) => source.HasBuff("dravenspinning"), 
@@ -462,8 +460,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             
 
-            #region Corki
-
             p = new PassiveDamage
                     {
                         ChampionName = "Corki", IsActive = (source, target) => source.HasBuff("RapidReload"), 
@@ -472,7 +468,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     };
             attackPassives.Add(p);
 
-            #endregion
+            
 
             #region Gnar
 
@@ -3546,7 +3542,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                                 Slot = SpellSlot.Q, DamageType = DamageType.Physical, 
                                 Damage =
                                     (source, target, level) =>
-                                    (from buff in ObjectManager.Player.Buffs
+                                    (from buff in GameObjects.Player.Buffs
                                      where buff.DisplayName == "NasusQStacks"
                                      select buff.Count).FirstOrDefault()
                                     + new double[] { 30, 50, 70, 90, 110 }[level]

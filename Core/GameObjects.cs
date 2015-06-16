@@ -107,6 +107,11 @@ namespace LeagueSharp.SDK.Core
         private static readonly List<Obj_AI_Minion> EnemyWardsList = new List<Obj_AI_Minion>();
 
         /// <summary>
+        ///     The game objects list.
+        /// </summary>
+        private static readonly List<GameObject> GameObjectsList = new List<GameObject>();
+
+        /// <summary>
         ///     The heroes list.
         /// </summary>
         private static readonly List<Obj_AI_Hero> HeroesList = new List<Obj_AI_Hero>();
@@ -156,9 +161,40 @@ namespace LeagueSharp.SDK.Core
         /// </summary>
         private static readonly List<Obj_AI_Minion> WardsList = new List<Obj_AI_Minion>();
 
+        /// <summary>
+        ///     Indicates whether the <see cref="GameObjects" /> stack was initialized and saved required instances.
+        /// </summary>
+        private static bool initialized;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes static members of the <see cref="GameObjects" /> class.
+        /// </summary>
+        static GameObjects()
+        {
+            if (!initialized)
+            {
+                Initialize();
+            }
+        }
+
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        ///     Gets the game objects.
+        /// </summary>
+        public static IEnumerable<GameObject> AllGameObjects
+        {
+            get
+            {
+                return GameObjectsList;
+            }
+        }
 
         /// <summary>
         ///     Gets the ally.
@@ -381,6 +417,11 @@ namespace LeagueSharp.SDK.Core
         }
 
         /// <summary>
+        ///     Gets or sets the player.
+        /// </summary>
+        public static Obj_AI_Hero Player { get; set; }
+
+        /// <summary>
         ///     Gets the shops.
         /// </summary>
         public static IEnumerable<Obj_Shop> Shops
@@ -426,6 +467,21 @@ namespace LeagueSharp.SDK.Core
 
         #endregion
 
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Compares two <see cref="GameObject" /> and returns if they are identical.
+        /// </summary>
+        /// <param name="gameObject">The GameObject</param>
+        /// <param name="object">The Compare GameObject</param>
+        /// <returns>Whether the <see cref="GameObject" />s are identical.</returns>
+        public static bool Compare(this GameObject gameObject, GameObject @object)
+        {
+            return gameObject.NetworkId == @object.NetworkId;
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -433,11 +489,17 @@ namespace LeagueSharp.SDK.Core
         /// </summary>
         internal static void Initialize()
         {
-            GameObject.OnCreate += OnCreate;
-            GameObject.OnDelete += OnDelete;
+            if (initialized)
+            {
+                return;
+            }
+
+            initialized = true;
 
             Load.OnLoad += (sender, args) =>
                 {
+                    Player = ObjectManager.Player;
+
                     HeroesList.AddRange(ObjectManager.Get<Obj_AI_Hero>());
                     MinionsList.AddRange(
                         ObjectManager.Get<Obj_AI_Minion>()
@@ -452,6 +514,7 @@ namespace LeagueSharp.SDK.Core
                             .Where(o => o.Name.Contains("ward") || o.Name.Contains("trinket")));
                     ShopsList.AddRange(ObjectManager.Get<Obj_Shop>());
                     SpawnPointsList.AddRange(ObjectManager.Get<Obj_SpawnPoint>());
+                    GameObjectsList.AddRange(ObjectManager.Get<GameObject>());
 
                     EnemyHeroesList.AddRange(HeroesList.Where(o => o.IsEnemy));
                     EnemyMinionsList.AddRange(MinionsList.Where(o => o.IsEnemy));
@@ -477,6 +540,10 @@ namespace LeagueSharp.SDK.Core
 
                     AllySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsAlly));
                     EnemySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsEnemy));
+
+                    GameObject.OnCreate += OnCreate;
+                    GameObject.OnDelete += OnDelete;
+                    Game.OnUpdate += OnUpdate;
                 };
         }
 
@@ -491,6 +558,8 @@ namespace LeagueSharp.SDK.Core
         /// </param>
         private static void OnCreate(GameObject sender, EventArgs args)
         {
+            GameObjectsList.Add(sender);
+
             var hero = sender as Obj_AI_Hero;
             if (hero != null)
             {
@@ -520,10 +589,12 @@ namespace LeagueSharp.SDK.Core
                         if (minion.IsEnemy)
                         {
                             EnemyMinionsList.Add(minion);
+                            EnemyList.Add(minion);
                         }
                         else
                         {
                             AllyMinionsList.Add(minion);
+                            AllyList.Add(minion);
                         }
                     }
                     else
@@ -537,15 +608,6 @@ namespace LeagueSharp.SDK.Core
                         {
                             AllyWardsList.Add(minion);
                         }
-                    }
-
-                    if (minion.IsEnemy)
-                    {
-                        EnemyList.Add(minion);
-                    }
-                    else
-                    {
-                        AllyList.Add(minion);
                     }
                 }
                 else
@@ -583,6 +645,8 @@ namespace LeagueSharp.SDK.Core
                     AllyTurretsList.Add(turret);
                     AllyList.Add(turret);
                 }
+
+                return;
             }
 
             var shop = sender as Obj_Shop;
@@ -597,6 +661,8 @@ namespace LeagueSharp.SDK.Core
                 {
                     EnemyShopsList.Add(shop);
                 }
+
+                return;
             }
 
             var spawnPoint = sender as Obj_SpawnPoint;
@@ -625,6 +691,8 @@ namespace LeagueSharp.SDK.Core
         /// </param>
         private static void OnDelete(GameObject sender, EventArgs args)
         {
+            GameObjectsList.Remove(sender);
+
             var hero = sender as Obj_AI_Hero;
             if (hero != null)
             {
@@ -632,10 +700,12 @@ namespace LeagueSharp.SDK.Core
                 if (hero.IsEnemy)
                 {
                     EnemyHeroesList.Remove(hero);
+                    EnemyList.Remove(hero);
                 }
                 else
                 {
                     AllyHeroesList.Remove(hero);
+                    AllyList.Remove(hero);
                 }
 
                 return;
@@ -644,14 +714,58 @@ namespace LeagueSharp.SDK.Core
             var minion = sender as Obj_AI_Minion;
             if (minion != null)
             {
-                MinionsList.Remove(minion);
-                if (minion.IsEnemy)
+                if (minion.Team != GameObjectTeam.Neutral)
                 {
-                    EnemyMinionsList.Remove(minion);
+                    if (!minion.Name.Contains("ward") || !minion.Name.Contains("trinket"))
+                    {
+                        MinionsList.Remove(minion);
+                        if (minion.IsEnemy)
+                        {
+                            EnemyMinionsList.Remove(minion);
+                        }
+                        else
+                        {
+                            AllyMinionsList.Remove(minion);
+                        }
+                    }
+                    else
+                    {
+                        WardsList.Remove(minion);
+                        if (minion.IsEnemy)
+                        {
+                            EnemyWardsList.Remove(minion);
+                        }
+                        else
+                        {
+                            AllyWardsList.Remove(minion);
+                        }
+                    }
+
+                    if (minion.IsEnemy)
+                    {
+                        EnemyList.Remove(minion);
+                    }
+                    else
+                    {
+                        AllyList.Remove(minion);
+                    }
                 }
                 else
                 {
-                    AllyMinionsList.Remove(minion);
+                    switch (minion.GetJungleType())
+                    {
+                        case JungleType.Small:
+                            JungleSmallList.Remove(minion);
+                            break;
+                        case JungleType.Large:
+                            JungleLargeList.Remove(minion);
+                            break;
+                        case JungleType.Legendary:
+                            JungleLegendaryList.Remove(minion);
+                            break;
+                    }
+
+                    JungleList.Remove(minion);
                 }
 
                 return;
@@ -664,11 +778,83 @@ namespace LeagueSharp.SDK.Core
                 if (turret.IsEnemy)
                 {
                     EnemyTurretsList.Remove(turret);
+                    EnemyList.Remove(turret);
                 }
                 else
                 {
                     AllyTurretsList.Remove(turret);
+                    AllyList.Remove(turret);
                 }
+
+                return;
+            }
+
+            var shop = sender as Obj_Shop;
+            if (shop != null)
+            {
+                ShopsList.Remove(shop);
+                if (shop.IsAlly)
+                {
+                    AllyShopsList.Remove(shop);
+                }
+                else
+                {
+                    EnemyShopsList.Remove(shop);
+                }
+
+                return;
+            }
+
+            var spawnPoint = sender as Obj_SpawnPoint;
+            if (spawnPoint != null)
+            {
+                SpawnPointsList.Remove(spawnPoint);
+                if (spawnPoint.IsAlly)
+                {
+                    AllySpawnPointsList.Remove(spawnPoint);
+                }
+                else
+                {
+                    EnemySpawnPointsList.Remove(spawnPoint);
+                }
+            }
+        }
+
+        /// <summary>
+        ///     OnUpdate event.
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        private static void OnUpdate(EventArgs args)
+        {
+            foreach (var minion in MinionsList.Where(m => !m.IsValid).ToArray())
+            {
+                MinionsList.Remove(minion);
+                AllyMinionsList.Remove(minion);
+                EnemyMinionsList.Remove(minion);
+            }
+
+            foreach (var mob in JungleList.Where(m => !m.IsValid).ToArray())
+            {
+                JungleList.Remove(mob);
+                JungleSmallList.Remove(mob);
+                JungleLargeList.Remove(mob);
+                JungleLegendaryList.Remove(mob);
+            }
+
+            foreach (var ward in WardsList.Where(w => !w.IsValid).ToArray())
+            {
+                WardsList.Remove(ward);
+                AllyWardsList.Remove(ward);
+                EnemyWardsList.Remove(ward);
+            }
+
+            foreach (var turret in TurretsList.Where(t => !t.IsValid).ToArray())
+            {
+                TurretsList.Remove(turret);
+                AllyTurretsList.Remove(turret);
+                EnemyTurretsList.Remove(turret);
             }
         }
 

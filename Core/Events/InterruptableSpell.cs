@@ -46,7 +46,7 @@ namespace LeagueSharp.SDK.Core.Events
 
             InitializeSpells();
 
-            ObjectManager.Player.GetLastCastedSpell();
+            GameObjects.Player.GetLastCastedSpell();
 
             Game.OnUpdate += Game_OnGameUpdate;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;

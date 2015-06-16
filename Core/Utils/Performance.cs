@@ -53,6 +53,11 @@ namespace LeagueSharp.SDK.Core.Utils
         private readonly PerformanceType performanceType;
 
         /// <summary>
+        ///     Indicates whether to print on dispose operation.
+        /// </summary>
+        private readonly bool printDispose;
+
+        /// <summary>
         ///     Private, Stopwatch instance, this will track the time it takes to execute functions inside the block.
         /// </summary>
         private Stopwatch stopwatch;
@@ -67,12 +72,19 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <param name="performanceType">
         ///     The performance Type.
         /// </param>
+        /// <param name="printDispose">
+        ///     The print on dispose operation.
+        /// </param>
         /// <param name="memberName">
         ///     The member Name.
         /// </param>
-        public Performance(PerformanceType performanceType, [CallerMemberName] string memberName = "")
+        public Performance(
+            PerformanceType performanceType, 
+            bool printDispose = true, 
+            [CallerMemberName] string memberName = "")
         {
             this.memberName = memberName;
+            this.printDispose = printDispose;
             this.performanceType = performanceType;
             this.stopwatch = Stopwatch.StartNew();
         }
@@ -141,22 +153,26 @@ namespace LeagueSharp.SDK.Core.Utils
 
             this.stopwatch.Stop();
 
-            var format = "{0} has taken {1} elapsed ticks to execute, and was executed successfuly.";
-            var argument = this.GetTickCount().ToString();
-
-            switch (this.performanceType)
+            if (this.printDispose)
             {
-                case PerformanceType.Milliseconds:
-                    format = "{0} has taken {1} elapsed milliseconds to execute, and was executed successfuly.";
-                    argument = this.GetMilliseconds().ToString();
-                    break;
-                case PerformanceType.TimeSpan:
-                    format = "{0} has taken {1} elapsed time span to execute, and was executed successfuly.";
-                    argument = this.GetTimeSpan().ToString("g");
-                    break;
+                var format = "{0} has taken {1} elapsed ticks to execute, and was executed successfuly.";
+                var argument = this.GetTickCount().ToString();
+
+                switch (this.performanceType)
+                {
+                    case PerformanceType.Milliseconds:
+                        format = "{0} has taken {1} elapsed milliseconds to execute, and was executed successfuly.";
+                        argument = this.GetMilliseconds().ToString();
+                        break;
+                    case PerformanceType.TimeSpan:
+                        format = "{0} has taken {1} elapsed time span to execute, and was executed successfuly.";
+                        argument = this.GetTimeSpan().ToString("g");
+                        break;
+                }
+
+                Logging.Write()(LogLevel.Info, format, this.memberName, argument);
             }
 
-            Logging.Write()(LogLevel.Info, format, this.memberName, argument);
             this.stopwatch = null;
         }
 

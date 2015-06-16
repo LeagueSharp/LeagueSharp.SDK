@@ -463,7 +463,7 @@ namespace LeagueSharp.SDK.Core.IDrawing
                     this.Effect.EndPass();
                     this.Effect.End();
                 }
-                else
+                else if (!this.Is3D)
                 {
                     this.Line.Begin();
                     this.Line.Draw(this.vector2Vertices.Where(v => v.IsValid()).ToArray(), this.Color);

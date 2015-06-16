@@ -101,11 +101,12 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return movement && !InterruptableSpell.IsCastingInterruptableSpell(Player, true) && !IsMissileLaunched
-                       && (Player.CanCancelAutoAttack()
-                               ? Variables.TickCount + (Game.Ping / 2)
-                                 >= lastAutoAttackTick + (Player.AttackCastDelay * 1000) + 20
-                               : Variables.TickCount - lastAutoAttackTick > 250);
+                return movement && !InterruptableSpell.IsCastingInterruptableSpell(Player, true)
+                       && (!IsMissileLaunched
+                           || (Player.CanCancelAutoAttack()
+                                   ? Variables.TickCount + (Game.Ping / 2)
+                                     >= lastAutoAttackTick + (Player.AttackCastDelay * 1000) + 20
+                                   : Variables.TickCount - lastAutoAttackTick > 250));
             }
 
             set
@@ -130,7 +131,7 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return ObjectManager.Player;
+                return GameObjects.Player;
             }
         }
 
@@ -149,14 +150,11 @@ namespace LeagueSharp.SDK.Core
         /// </param>
         private static void OnCreate(GameObject sender, EventArgs args)
         {
-            if (sender.IsValid && sender.Type == GameObjectType.MissileClient)
-            {
-                var missile = sender as MissileClient;
+            var missile = sender as MissileClient;
 
-                if (missile != null && missile.SpellCaster.IsMe && AutoAttack.IsAutoAttack(missile.SData.Name))
-                {
-                    IsMissileLaunched = false;
-                }
+            if (missile != null && missile.SpellCaster.IsMe && AutoAttack.IsAutoAttack(missile.SData.Name))
+            {
+                IsMissileLaunched = false;
             }
         }
 
@@ -168,33 +166,45 @@ namespace LeagueSharp.SDK.Core
         /// </param>
         private static void OnDraw(EventArgs e)
         {
-            if (menu["drawings"]["drawAARange"].GetValue<MenuBool>().Value)
+            if (Player == null || !Player.IsValid)
             {
-                Drawing.DrawCircle(Player.Position, Player.GetRealAutoAttackRange(), Color.Blue);
+                return;
             }
 
-            if (menu["drawings"]["drawTargetAARange"].GetValue<MenuBool>().Value)
+            if (menu["drawings"]["drawAARange"].GetValue<MenuBool>().Value)
             {
-                // TODO: TargetSelector
+                if (Player.Position.IsValid())
+                {
+                    Drawing.DrawCircle(Player.Position, Player.GetRealAutoAttackRange(), Color.Blue);
+                }
             }
 
             if (menu["drawings"]["drawKillableMinion"].GetValue<MenuBool>().Value)
             {
-                var minions =
-                    ObjectManager.Get<Obj_AI_Minion>()
-                        .Where(m => m.IsValidTarget(1200F) && m.Health < Player.GetAutoAttackDamage(m, true) * 1.5);
-                foreach (var minion in minions)
+                if (menu["drawings"]["drawKillableMinionFade"].GetValue<MenuBool>().Value)
                 {
-                    if (minion.Health < Player.GetAutoAttackDamage(minion, true) * 1.5)
+                    var minions =
+                        GameObjects.EnemyMinions.Where(
+                            m => m.IsValidTarget(1200F) && m.Health < Player.GetAutoAttackDamage(m, true) * 2);
+                    foreach (var minion in minions)
                     {
-                        var colorG = 255 - (int)(255 * minion.Health / (Player.GetAutoAttackDamage(minion, true) * 1.5));
-                        var colorR = minion.Health < Player.GetAutoAttackDamage(minion, true)
-                                         ? 255 - (int)(255 * minion.Health / Player.GetAutoAttackDamage(minion, true))
-                                         : 0;
+                        var value = 255 - (minion.Health * 2);
+                        value = value > 255 ? 255 : value < 0 ? 0 : value;
+
                         Drawing.DrawCircle(
                             minion.Position, 
                             minion.BoundingRadius * 2f, 
-                            Color.FromArgb(255, 0, colorG > 0 ? colorG : 128, colorR < 0 ? 0 : colorR));
+                            Color.FromArgb(255, 0, 255, (byte)(255 - value)));
+                    }
+                }
+                else
+                {
+                    var minions =
+                        GameObjects.EnemyMinions.Where(
+                            m => m.IsValidTarget(1200F) && m.Health < Player.GetAutoAttackDamage(m, true));
+                    foreach (var minion in minions)
+                    {
+                        Drawing.DrawCircle(minion.Position, minion.BoundingRadius * 2f, Color.FromArgb(255, 0, 255, 0));
                     }
                 }
             }
@@ -298,7 +308,7 @@ namespace LeagueSharp.SDK.Core
         #region Methods
 
         /// <summary>
-        ///     Initializes the <c>orbwalker</c>, starting from the menu.
+        ///     Initializes the <c>Orbwalker</c>, starting from the menu.
         /// </summary>
         /// <param name="rootMenu">
         ///     The parent menu.
@@ -314,6 +324,7 @@ namespace LeagueSharp.SDK.Core
             drawing.Add(new MenuItem<MenuBool>("drawAARange", "Draw Auto-Attack Range") { Value = new MenuBool(true) });
             drawing.Add(new MenuItem<MenuBool>("drawTargetAARange", "Draw Target Auto-Attack Range"));
             drawing.Add(new MenuItem<MenuBool>("drawKillableMinion", "Draw Killable Minion"));
+            drawing.Add(new MenuItem<MenuBool>("drawKillableMinionFade", "Enable Killable Minion Fade Effect"));
             menu.Add(drawing);
 
             var advanced = new Menu("advanced", "Advanced");
@@ -440,59 +451,11 @@ namespace LeagueSharp.SDK.Core
                 case OrbwalkerMode.None:
                 case OrbwalkerMode.Orbwalk:
                     {
-                        // TODO: Fix TargetSelector
-                        break;
+                        return TargetSelector.GetTarget(-1f);
                     }
 
-                case OrbwalkerMode.LastHit:
+                default:
                     {
-                        var turret =
-                            ObjectManager.Get<Obj_AI_Turret>()
-                                .Where(t => t.IsAlly)
-                                .OrderBy(t => t.Distance(Player.Position))
-                                .FirstOrDefault();
-                        if (turret != null && turret.IsValid)
-                        {
-                            var target = turret.Target as Obj_AI_Minion;
-                            if (target != null && target.IsValidTarget()
-                                && Player.Distance(target) <= target.GetRealAutoAttackRange())
-                            {
-                                var turretDamage = turret.GetAutoAttackDamage(target);
-                                var hits = target.Health / turretDamage;
-
-                                var turretApply = turret.AttackCastDelay * 1000
-                                                  + turret.Distance(target) / turret.BasicAttack.MissileSpeed * 1000;
-                                var heroApply = target.GetTimeToHit();
-                                Console.WriteLine(@"turretApply[{0}] // heroApply[{1}]", turretApply, heroApply);
-
-                                if (target.Health < Player.GetAutoAttackDamage(target, true))
-                                {
-                                    return target;
-                                }
-
-                                if (hits >= 2D)
-                                {
-                                    if (target.Health - turretDamage * 2 > Player.GetAutoAttackDamage(target, true))
-                                    {
-                                        return target;
-                                    }
-                                }
-                            }
-                        }
-
-                        // TODO: Add non-turret minions.
-                        break;
-                    }
-
-                case OrbwalkerMode.LaneClear:
-                    {
-                        // TODO: Add LaneClear logic with turret.
-                        break;
-                    }
-
-                case OrbwalkerMode.Hybrid:
-                    {
-                        // TODO: Add Hybrid logic.
                         break;
                     }
             }

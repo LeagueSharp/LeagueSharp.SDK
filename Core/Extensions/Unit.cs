@@ -252,7 +252,9 @@ namespace LeagueSharp.SDK.Core.Extensions
         /// <returns>Is Hero in shop range</returns>
         public static bool InShop(this Obj_AI_Hero hero)
         {
-            return hero.IsVisible && GameObjects.AllyShops.Any(s => hero.DistanceSquared(s.Position) < 1562500); // 1250²
+            return hero.IsVisible && GameObjects.AllyShops.Any(s => hero.DistanceSquared(s.Position) < 1562500);
+
+                // 1250²
         }
 
         /// <summary>
@@ -285,9 +287,7 @@ namespace LeagueSharp.SDK.Core.Extensions
         /// <returns>Returns if the unit is recalling (boolean)</returns>
         public static bool IsRecalling(this Obj_AI_Hero unit)
         {
-            return
-                unit.Buffs.Any(
-                    buff => buff.Name.ToLower().Contains("recall") && buff.Type == BuffType.Aura);
+            return unit.Buffs.Any(buff => buff.Name.ToLower().Contains("recall") && buff.Type == BuffType.Aura);
         }
 
         /// <summary>
@@ -355,7 +355,7 @@ namespace LeagueSharp.SDK.Core.Extensions
                 return false;
             }
 
-            if (checkTeam && ObjectManager.Player.Team == unit.Team)
+            if (checkTeam && GameObjects.Player.Team == unit.Team)
             {
                 return false;
             }
@@ -365,7 +365,7 @@ namespace LeagueSharp.SDK.Core.Extensions
 
             return @from.IsValid()
                        ? @from.DistanceSquared(unitPosition) < range * range
-                       : ObjectManager.Player.ServerPosition.DistanceSquared(unitPosition) < range * range;
+                       : GameObjects.Player.ServerPosition.DistanceSquared(unitPosition) < range * range;
         }
 
         #endregion

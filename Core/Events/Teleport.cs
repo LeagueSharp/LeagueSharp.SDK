@@ -442,7 +442,7 @@ namespace LeagueSharp.SDK.Core.Events
     }
 
     /// <summary>
-    ///     The <c>she</c> teleport.
+    ///     The <c>shen</c> teleport.
     /// </summary>
     internal class ShenTeleport : ITeleport
     {

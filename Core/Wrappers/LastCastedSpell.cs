@@ -154,7 +154,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="args">Processed Spell Cast Data</param>
         private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!(sender is Obj_AI_Hero))
+            var hero = sender as Obj_AI_Hero;
+            if (hero != null)
             {
                 var entry = new LastCastedSpellEntry(args);
                 if (!CastedSpells.ContainsKey(sender.NetworkId))

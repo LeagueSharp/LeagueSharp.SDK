@@ -36,14 +36,14 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
         #region Static Fields
 
         /// <summary>
-        ///     List of Active Attacks.
-        /// </summary>
-        private static readonly Dictionary<int, PredictedDamage> ActiveAttacks = new Dictionary<int, PredictedDamage>();
-
-        /// <summary>
         ///     Last Tick Update
         /// </summary>
         private static int lastTick;
+
+        /// <summary>
+        ///     List of Active Attacks.
+        /// </summary>
+        private static readonly Dictionary<int, PredictedDamage> ActiveAttacks = new Dictionary<int, PredictedDamage>();
 
         #endregion
 
@@ -197,7 +197,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
         /// <param name="args">Processed Spell Cast Data</param>
         private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsValidTarget(3000, false) || sender.Team != ObjectManager.Player.Team || sender is Obj_AI_Hero
+            if (!sender.IsValidTarget(3000, false) || sender.Team != GameObjects.Player.Team || sender is Obj_AI_Hero
                 || !args.SData.ConsideredAsAutoAttack || !(args.Target is Obj_AI_Base))
             {
                 return;

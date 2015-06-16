@@ -58,8 +58,6 @@ namespace LeagueSharp.SDK.Core.Events
                         SkillType = GapcloserType.Targeted
                     });
 
-            
-
             Spells.Add(
                 new GapCloser
                     {
@@ -69,8 +67,6 @@ namespace LeagueSharp.SDK.Core.Events
 
             
 
-            #region Corki
-
             Spells.Add(
                 new GapCloser
                     {
@@ -78,7 +74,7 @@ namespace LeagueSharp.SDK.Core.Events
                         SkillType = GapcloserType.Skillshot
                     });
 
-            #endregion
+            
 
             #region Diana
 
@@ -585,7 +581,7 @@ namespace LeagueSharp.SDK.Core.Events
                         gapcloser =>
                         gapcloser.SkillType == GapcloserType.Targeted
                         || (gapcloser.SkillType == GapcloserType.Skillshot
-                            && ObjectManager.Player.DistanceSquared(gapcloser.Sender) < 250000)))
+                            && GameObjects.Player.DistanceSquared(gapcloser.Sender) < 250000)))
             {
                 OnGapCloser(MethodBase.GetCurrentMethod().DeclaringType, gapcloser);
             }
@@ -611,8 +607,8 @@ namespace LeagueSharp.SDK.Core.Events
                             (args.Target != null && args.Target.IsMe) ? GapcloserType.Targeted : GapcloserType.Skillshot, 
                         Slot = ((Obj_AI_Hero)sender).GetSpellSlot(args.SData.Name), 
                         IsDirectedToPlayer =
-                            ObjectManager.Player.Distance(args.End) < ObjectManager.Player.Distance(args.Start)
-                            || sender.IsFacing(ObjectManager.Player), 
+                            GameObjects.Player.Distance(args.End) < GameObjects.Player.Distance(args.Start)
+                            || sender.IsFacing(GameObjects.Player), 
                         SpellName = args.SData.Name
                     });
         }

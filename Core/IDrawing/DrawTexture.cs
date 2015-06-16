@@ -69,6 +69,7 @@ namespace LeagueSharp.SDK.Core.IDrawing
             : base(position ?? new Vector2())
         {
             this.Scale = new Vector2(1f, 1f);
+            this.Color = SharpDX.Color.White;
         }
 
         /// <summary>

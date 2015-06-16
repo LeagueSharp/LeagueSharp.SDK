@@ -57,6 +57,24 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         public bool Active { get; set; }
 
         /// <summary>
+        ///     Gets the amount of options available
+        /// </summary>
+        public abstract int Count { get; }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether if the user is hovering over the dropdown.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if the user is hovering over the dropdown; otherwise, <c>false</c>.
+        /// </value>
+        public bool Hovering { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the index of the option that is currently being hovered at by the user.
+        /// </summary>
+        public int HoveringIndex { get; set; }
+
+        /// <summary>
         ///     Gets or sets the index.
         /// </summary>
         /// <value>
@@ -79,35 +97,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
             }
         }
 
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        ///     Gets the amount of options available
-        /// </summary>
-        internal abstract int Count { get; }
-
-        /// <summary>
-        ///     Gets or sets a value indicating whether if the user is hovering over the dropdown.
-        /// </summary>
-        /// <value>
-        ///     <c>true</c> if the user is hovering over the dropdown; otherwise, <c>false</c>.
-        /// </value>
-        internal bool Hovering { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the index of the option that is currently being hovered at by the user.
-        /// </summary>
-        internal int HoveringIndex { get; set; }
-
         /// <summary>
         ///     Gets the maximum width of the string.
         /// </summary>
         /// <value>
         ///     The maximum width of the string.
         /// </value>
-        internal abstract int MaxStringWidth { get; }
+        public abstract int MaxStringWidth { get; }
 
         /// <summary>
         ///     Gets the selected value as an object.
@@ -115,12 +111,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <value>
         ///     The selected value as an object.
         /// </value>
-        internal abstract object SelectedValueAsObject { get; }
+        public abstract object SelectedValueAsObject { get; }
 
         /// <summary>
         ///     Gets a list of strings that represent the different options
         /// </summary>
-        internal abstract string[] ValuesAsStrings { get; }
+        public abstract string[] ValuesAsStrings { get; }
 
         #endregion
     }
@@ -175,6 +171,41 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         #region Public Properties
 
         /// <summary>
+        ///     Gets the count.
+        /// </summary>
+        public override int Count
+        {
+            get
+            {
+                return this.Values.Count;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the maximum width of the string.
+        /// </summary>
+        /// <value>
+        ///     The maximum width of the string.
+        /// </value>
+        public override int MaxStringWidth
+        {
+            get
+            {
+                if (this.width == 0)
+                {
+                    foreach (var newWidth in
+                        this.Values.Select(obj => DefaultSettings.Font.MeasureText(null, obj.ToString(), 0).Width)
+                            .Where(newWidth => newWidth > this.width))
+                    {
+                        this.width = newWidth;
+                    }
+                }
+
+                return this.width;
+            }
+        }
+
+        /// <summary>
         ///     Gets the selected value.
         /// </summary>
         /// <value>
@@ -189,72 +220,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         /// <summary>
-        ///     Gets the values.
-        /// </summary>
-        /// <value>
-        ///     The values.
-        /// </value>
-        public List<T> Values { get; private set; }
-
-        /// <summary>
-        ///     Value Width.
-        /// </summary>
-        public override int Width
-        {
-            get
-            {
-                return ThemeManager.Current.List.Width(this);
-            }
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        ///     Gets the count.
-        /// </summary>
-        internal override int Count
-        {
-            get
-            {
-                return this.Values.Count;
-            }
-        }
-
-        /// <summary>
-        ///     Gets the maximum width of the string.
-        /// </summary>
-        /// <value>
-        ///     The maximum width of the string.
-        /// </value>
-        internal override int MaxStringWidth
-        {
-            get
-            {
-                if (this.width == 0)
-                {
-                    foreach (var obj in this.Values)
-                    {
-                        var newWidth = DefaultSettings.Font.MeasureText(null, obj.ToString(), 0).Width;
-                        if (newWidth > this.width)
-                        {
-                            this.width = newWidth;
-                        }
-                    }
-                }
-
-                return this.width;
-            }
-        }
-
-        /// <summary>
         ///     Gets the selected value as an object.
         /// </summary>
         /// <value>
         ///     The selected value as an object.
         /// </value>
-        internal override object SelectedValueAsObject
+        public override object SelectedValueAsObject
         {
             get
             {
@@ -263,9 +234,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         /// <summary>
+        ///     Gets the values.
+        /// </summary>
+        /// <value>
+        ///     The values.
+        /// </value>
+        public List<T> Values { get; private set; }
+
+        /// <summary>
         ///     Gets the values as strings.
         /// </summary>
-        internal override string[] ValuesAsStrings
+        public override string[] ValuesAsStrings
         {
             get
             {
@@ -276,6 +255,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
                 }
 
                 return arr;
+            }
+        }
+
+        /// <summary>
+        ///     Value Width.
+        /// </summary>
+        public override int Width
+        {
+            get
+            {
+                return ThemeManager.Current.List.Width(this);
             }
         }
 

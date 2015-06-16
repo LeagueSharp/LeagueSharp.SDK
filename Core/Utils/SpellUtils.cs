@@ -64,7 +64,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>Is Spell Ready to use</returns>
         public static bool IsReady(this SpellSlot slot, int t = 0)
         {
-            var s = ObjectManager.Player.Spellbook.GetSpell(slot);
+            var s = GameObjects.Player.Spellbook.GetSpell(slot);
             return s != null && IsReady(s, t);
         }
 

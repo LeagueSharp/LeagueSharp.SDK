@@ -117,7 +117,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 return;
             }
 
-            var spellData = ObjectManager.Player.Spellbook.GetSpell(slot).SData;
+            var spellData = GameObjects.Player.Spellbook.GetSpell(slot).SData;
 
             this.Range = spellData.CastRange;
             this.Width = spellData.LineWidth.Equals(0) ? spellData.CastRadius : spellData.LineWidth;
@@ -193,7 +193,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         {
             get
             {
-                return !this.@from.ToVector2().IsValid() ? ObjectManager.Player.ServerPosition : this.@from;
+                return !this.@from.ToVector2().IsValid() ? GameObjects.Player.ServerPosition : this.@from;
             }
 
             set
@@ -209,7 +209,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         {
             get
             {
-                return ObjectManager.Player.Spellbook.GetSpell(this.Slot);
+                return GameObjects.Player.Spellbook.GetSpell(this.Slot);
             }
         }
 
@@ -225,7 +225,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         {
             get
             {
-                return ObjectManager.Player.HasBuff(this.ChargedBuffName)
+                return GameObjects.Player.HasBuff(this.ChargedBuffName)
                        || Variables.TickCount - this.chargedCastedT < 300 + Game.Ping;
             }
         }
@@ -247,7 +247,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         {
             get
             {
-                return ObjectManager.Player.Spellbook.GetSpell(this.Slot).Level;
+                return GameObjects.Player.Spellbook.GetSpell(this.Slot).Level;
             }
         }
 
@@ -294,7 +294,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             get
             {
                 return !this.rangeCheckFrom.ToVector2().IsValid()
-                           ? ObjectManager.Player.ServerPosition
+                           ? GameObjects.Player.ServerPosition
                            : this.rangeCheckFrom;
             }
 
@@ -406,7 +406,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
                 this.LastCastAttemptT = Variables.TickCount;
 
-                return !ObjectManager.Player.Spellbook.CastSpell(this.Slot, unit)
+                return !GameObjects.Player.Spellbook.CastSpell(this.Slot, unit)
                            ? CastStates.NotCasted
                            : CastStates.SuccessfullyCasted;
             }
@@ -450,7 +450,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
             else
             {
-                if (!ObjectManager.Player.Spellbook.CastSpell(this.Slot, prediction.CastPosition))
+                if (!GameObjects.Player.Spellbook.CastSpell(this.Slot, prediction.CastPosition))
                 {
                     return CastStates.NotCasted;
                 }
@@ -465,7 +465,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <returns>Was Spell Casted</returns>
         public bool Cast()
         {
-            return this.CastOnUnit(ObjectManager.Player);
+            return this.CastOnUnit(GameObjects.Player);
         }
 
         /// <summary>
@@ -487,7 +487,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <returns>Was Spell Casted</returns>
         public bool Cast(Vector3 fromPosition, Vector3 toPosition)
         {
-            return this.Slot.IsReady() && ObjectManager.Player.Spellbook.CastSpell(this.Slot, fromPosition, toPosition);
+            return this.Slot.IsReady() && GameObjects.Player.Spellbook.CastSpell(this.Slot, fromPosition, toPosition);
         }
 
         /// <summary>
@@ -527,7 +527,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
             else
             {
-                return ObjectManager.Player.Spellbook.CastSpell(this.Slot, position);
+                return GameObjects.Player.Spellbook.CastSpell(this.Slot, position);
             }
 
             return false;
@@ -592,7 +592,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             this.LastCastAttemptT = Variables.TickCount;
 
-            return ObjectManager.Player.Spellbook.CastSpell(this.Slot, unit);
+            return GameObjects.Player.Spellbook.CastSpell(this.Slot, unit);
         }
 
         /// <summary>
@@ -683,7 +683,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <returns>The damage</returns>
         public float GetDamage(Obj_AI_Base target, int stage = 0)
         {
-            return (float)ObjectManager.Player.GetSpellDamage(target, this.Slot, stage);
+            return (float)GameObjects.Player.GetSpellDamage(target, this.Slot, stage);
         }
 
         /// <summary>
@@ -779,7 +779,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="extraRange">
         ///     Extra Range
         /// </param>
-        /// <param name="acccountForCollision">
+        /// <param name="accountForCollision">
         ///     If true, will get a target that can be hit by the spell.
         /// </param>
         /// <param name="champsToIgnore">
@@ -790,12 +790,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </returns>
         public Obj_AI_Hero GetTarget(
             float extraRange = 0, 
-            bool acccountForCollision = false, 
+            bool accountForCollision = false, 
             IEnumerable<Obj_AI_Hero> champsToIgnore = null)
         {
-            return acccountForCollision
+            return accountForCollision
                        ? TargetSelector.GetTargetNoCollision(this, champsToIgnore)
-                       : TargetSelector.GetTarget(this.Range + extraRange, this.DamageType, this.From);
+                       : TargetSelector.GetTarget(this.Range + extraRange, this.DamageType, champsToIgnore, this.From);
         }
 
         /// <summary>
@@ -811,7 +811,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         {
             return
                 GameObjects.Enemy.Where(
-                    unit => this.WillHit(unit, ObjectManager.Player.ServerPosition, 0, minimumHitChance));
+                    unit => this.WillHit(unit, GameObjects.Player.ServerPosition, 0, minimumHitChance));
         }
 
         /// <summary>
@@ -880,7 +880,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </returns>
         public bool IsKillable(Obj_AI_Base target, int stage = 0)
         {
-            return ObjectManager.Player.GetSpellDamage(target, this.Slot) > target.Health;
+            return GameObjects.Player.GetSpellDamage(target, this.Slot) > target.Health;
         }
 
         /// <summary>
@@ -1066,7 +1066,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 return;
             }
 
-            ObjectManager.Player.Spellbook.CastSpell(this.Slot);
+            GameObjects.Player.Spellbook.CastSpell(this.Slot);
             this.chargedReqSentT = Variables.TickCount;
         }
 
@@ -1083,7 +1083,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 return;
             }
 
-            ObjectManager.Player.Spellbook.CastSpell(this.Slot, position);
+            GameObjects.Player.Spellbook.CastSpell(this.Slot, position);
             this.chargedReqSentT = Variables.TickCount;
         }
 
@@ -1167,18 +1167,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
         #region Methods
 
         /// <summary>
-        ///     Shoot Charged Spell
-        /// </summary>
-        /// <param name="slot">The SpellSlot</param>
-        /// <param name="position">Vector3 Position</param>
-        /// <param name="releaseCast">Release Cast</param>
-        private static void ShootChargedSpell(SpellSlot slot, Vector3 position, bool releaseCast = true)
-        {
-            ObjectManager.Player.Spellbook.CastSpell(slot, position, false);
-            ObjectManager.Player.Spellbook.UpdateChargedSpell(slot, position, releaseCast, false);
-        }
-
-        /// <summary>
         ///     On Process Spell Cast event catch.
         /// </summary>
         /// <param name="sender"><see cref="Obj_AI_Base" /> sender</param>
@@ -1223,6 +1211,18 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     this.Cast(new Vector2(args.EndPosition.X, args.EndPosition.Y));
                 }
             }
+        }
+
+        /// <summary>
+        ///     Shoot Charged Spell
+        /// </summary>
+        /// <param name="slot">The SpellSlot</param>
+        /// <param name="position">Vector3 Position</param>
+        /// <param name="releaseCast">Release Cast</param>
+        private static void ShootChargedSpell(SpellSlot slot, Vector3 position, bool releaseCast = true)
+        {
+            GameObjects.Player.Spellbook.CastSpell(slot, position, false);
+            GameObjects.Player.Spellbook.UpdateChargedSpell(slot, position, releaseCast, false);
         }
 
         #endregion

@@ -88,13 +88,12 @@ namespace LeagueSharp.SDK.Core.Math
                 if (input.CollisionObjects.HasFlag(CollisionableObjects.Minions))
                 {
                     foreach (var minion in
-                        ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(
-                                minion =>
-                                minion.IsValidTarget(
-                                    Math.Min(input.Range + input.Radius + 100, 2000), 
-                                    true, 
-                                    input.RangeCheckFrom)))
+                        GameObjects.EnemyMinions.Where(
+                            minion =>
+                            minion.IsValidTarget(
+                                Math.Min(input.Range + input.Radius + 100, 2000), 
+                                true, 
+                                input.RangeCheckFrom)))
                     {
                         input.Unit = minion;
                         var minionPrediction = Movement.GetPrediction(input, false, false);
@@ -136,7 +135,7 @@ namespace LeagueSharp.SDK.Core.Math
                         var p = input.From.ToVector2().Extend(position.ToVector2(), step * i);
                         if (NavMesh.GetCollisionFlags(p.X, p.Y).HasFlag(CollisionFlags.Wall))
                         {
-                            result.Add(ObjectManager.Player);
+                            result.Add(GameObjects.Player);
                         }
                     }
                 }
@@ -150,14 +149,10 @@ namespace LeagueSharp.SDK.Core.Math
 
                     GameObject wall = null;
                     foreach (var gameObject in
-                        ObjectManager.Get<GameObject>()
-                            .Where(
-                                gameObject =>
-                                gameObject.IsValid
-                                && Regex.IsMatch(
-                                    gameObject.Name, 
-                                    "_w_windwall_enemy_0.\\.troy", 
-                                    RegexOptions.IgnoreCase)))
+                        GameObjects.AllGameObjects.Where(
+                            gameObject =>
+                            gameObject.IsValid
+                            && Regex.IsMatch(gameObject.Name, "_w_windwall_enemy_0.\\.troy", RegexOptions.IgnoreCase)))
                     {
                         wall = gameObject;
                     }
@@ -181,7 +176,7 @@ namespace LeagueSharp.SDK.Core.Math
                                        .Point.Distance(input.From) / input.Speed + input.Delay) * 1000;
                         if (t < wallCastT + 4000)
                         {
-                            result.Add(ObjectManager.Player);
+                            result.Add(GameObjects.Player);
                         }
                     }
                 }
@@ -201,7 +196,7 @@ namespace LeagueSharp.SDK.Core.Math
         /// <param name="args">Processed Spell Cast Data</param>
         private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsValid && sender.Team != ObjectManager.Player.Team && args.SData.Name == "YasuoWMovingWall")
+            if (sender.IsValid && sender.Team != GameObjects.Player.Team && args.SData.Name == "YasuoWMovingWall")
             {
                 wallCastT = Variables.TickCount;
                 yasuoWallCastedPos = sender.ServerPosition.ToVector2();

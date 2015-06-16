@@ -22,16 +22,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core
 {
-    using System.Threading.Tasks;
-
     using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.UI;
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.UI.INotifications;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers;
-
-    using SharpDX;
 
     /// <summary>
     ///     Bootstrap is an initialization pointer for the AppDomainManager to initialize the library correctly once loaded in
@@ -49,25 +44,31 @@ namespace LeagueSharp.SDK.Core
         /// </param>
         public static void Init(string[] args)
         {
-            // Load the Damage class async.
-            Task.Factory.StartNew(Damage.LoadDamage)
-                .ContinueWith(task => Logging.Write()(LogLevel.Info, "Damage loaded!"));
-
-            // Load the GameObjects class async.
-            Task.Factory.StartNew(GameObjects.Initialize)
-                .ContinueWith(task => Logging.Write()(LogLevel.Info, "GameObjects loaded."));
-
-            // Log all of the exceptions
-            Logging.LogAllExceptions();
+            // Initial notification.
+            Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");
 
             // Create L# menu
             Variables.LeagueSharpMenu = new Menu("LeagueSharp", "LeagueSharp", true).Attach();
+            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Created L# Menu.");
 
-            // Load the orbwalker
+            // Load the Orbwalker
             Orbwalker.Initialize(Variables.LeagueSharpMenu);
+            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Orbwalker Initialized.");
 
-            // Register events.
+            // Load the TargetSelector.
+            TargetSelector.Initialize(Variables.LeagueSharpMenu);
+            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] TargetSelector Initialized.");
+
+            // Load the Notifications
             Notifications.Initialize();
+            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Notifications Initialized.");
+
+            // Load GameObjects.
+            GameObjects.Initialize();
+            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] GameObjects loaded.");
+
+            // Final notification.
+            Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");
         }
 
         #endregion

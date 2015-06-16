@@ -316,8 +316,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Is Position under a turret</returns>
         public static bool IsUnderTurret(this Vector3 position, bool enemyTurretsOnly)
         {
-            return
-                ObjectManager.Get<Obj_AI_Turret>().Any(turret => turret.IsValidTarget(950, enemyTurretsOnly, position));
+            return GameObjects.Turrets.Any(turret => turret.IsValidTarget(950, enemyTurretsOnly, position));
         }
 
         /// <summary>

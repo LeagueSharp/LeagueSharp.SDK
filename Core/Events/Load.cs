@@ -22,6 +22,8 @@
 namespace LeagueSharp.SDK.Core.Events
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
 
     using LeagueSharp.SDK.Core.Enumerations;
@@ -32,6 +34,15 @@ namespace LeagueSharp.SDK.Core.Events
     /// </summary>
     public class Load
     {
+        #region Static Fields
+
+        /// <summary>
+        ///     The invocation list.
+        /// </summary>
+        private static readonly List<Delegate> InvocationList = new List<Delegate>();
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -41,23 +52,16 @@ namespace LeagueSharp.SDK.Core.Events
         {
             if (Game.Mode == GameMode.Running)
             {
-                DelayAction.Add(
-                    0, 
-                    () =>
-                        {
-                            try
-                            {
-                                Game_OnStart(new EventArgs());
-                            }
-                            catch (Exception e)
-                            {
-                                Logging.Write()(LogLevel.Error, e.Message);
-                            }
-                        });
+                CallOnLoad();
+                Game.OnUpdate += OnUpdate;
             }
             else
             {
-                Game.OnStart += Game_OnStart;
+                Game.OnStart += args =>
+                    {
+                        CallOnLoad();
+                        Game.OnUpdate += OnUpdate;
+                    };
             }
         }
 
@@ -87,14 +91,41 @@ namespace LeagueSharp.SDK.Core.Events
         #region Methods
 
         /// <summary>
-        ///     Internal event that is called when the game starts or is already running (when you get in-game).
+        ///     Calls the OnLoad event.
         /// </summary>
-        /// <param name="args"><see cref="System.EventArgs" /> event data</param>
-        private static void Game_OnStart(EventArgs args)
+        private static void CallOnLoad()
         {
             if (OnLoad != null)
             {
-                OnLoad(MethodBase.GetCurrentMethod().DeclaringType, new EventArgs());
+                InvocationList.AddRange(OnLoad.GetInvocationList());
+                OnLoad(MethodBase.GetCurrentMethod().DeclaringType, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        ///     OnUpdate event.
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        private static void OnUpdate(EventArgs args)
+        {
+            if (OnLoad == null)
+            {
+                return;
+            }
+
+            foreach (var invocation in OnLoad.GetInvocationList().Where(i => InvocationList.All(l => l != i)))
+            {
+                InvocationList.Add(invocation);
+                try
+                {
+                    invocation.DynamicInvoke(MethodBase.GetCurrentMethod().DeclaringType, EventArgs.Empty);
+                }
+                catch (Exception e)
+                {
+                    Logging.Write()(LogLevel.Fatal, "Failure to invoke invocation.\n{0}", e);
+                }
             }
         }
 
