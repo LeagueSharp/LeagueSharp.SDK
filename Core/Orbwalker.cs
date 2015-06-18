@@ -22,14 +22,15 @@
 namespace LeagueSharp.SDK.Core
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Windows.Forms;
 
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Events;
     using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers;
@@ -45,6 +46,11 @@ namespace LeagueSharp.SDK.Core
     public partial class Orbwalker
     {
         #region Static Fields
+
+        /// <summary>
+        ///     The attack time tracking list.
+        /// </summary>
+        private static readonly IDictionary<float, ActionArgs> AfterAttackTime = new Dictionary<float, ActionArgs>();
 
         /// <summary>
         ///     The local attack value.
@@ -84,7 +90,7 @@ namespace LeagueSharp.SDK.Core
             {
                 return attack
                        && Variables.TickCount + (Game.Ping / 2)
-                       >= lastAutoAttackTick + (Player.AttackDelay * 1000)
+                       >= lastAutoAttackTick + (Player.AttackDelay * 1000) + 40
                        + menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value;
             }
 
@@ -102,10 +108,10 @@ namespace LeagueSharp.SDK.Core
             get
             {
                 return movement && !InterruptableSpell.IsCastingInterruptableSpell(Player, true)
-                       && (!IsMissileLaunched
+                       && ((!IsMissileLaunched && Player.IsRanged)
                            || (Player.CanCancelAutoAttack()
                                    ? Variables.TickCount + (Game.Ping / 2)
-                                     >= lastAutoAttackTick + (Player.AttackCastDelay * 1000) + 20
+                                     >= lastAutoAttackTick + (Player.AttackCastDelay * 1000) + 40
                                    : Variables.TickCount - lastAutoAttackTick > 250));
             }
 
@@ -225,9 +231,29 @@ namespace LeagueSharp.SDK.Core
             {
                 var spellName = args.SData.Name;
 
-                if (AutoAttack.IsAutoAttack(spellName))
+                var target = args.Target as AttackableUnit;
+                var eventArgs = new ActionArgs
+                                    {
+                                        Target = target, Position = target != null ? target.Position : Player.Position, 
+                                        Type = OrbwalkerType.AfterAttack
+                                    };
+
+                if (AutoAttack.IsAutoAttack(spellName) && args.Target.IsValid)
                 {
                     lastAutoAttackTick = Variables.TickCount - (Game.Ping / 2);
+                    var time = sender.AttackCastDelay * 1000 + 40;
+
+                    if (!AfterAttackTime.ContainsKey(time))
+                    {
+                        AfterAttackTime.Add(time, eventArgs);
+                    }
+
+                    eventArgs = new ActionArgs
+                                    {
+                                        Target = target, Position = target != null ? target.Position : Player.Position, 
+                                        Type = OrbwalkerType.OnAttack
+                                    };
+                    CallOnAction(eventArgs);
                 }
 
                 if (AutoAttack.IsAutoAttackReset(spellName))
@@ -245,23 +271,111 @@ namespace LeagueSharp.SDK.Core
         /// </param>
         private static void OnUpdate(EventArgs e)
         {
-            if (menu == null || ActiveMode == OrbwalkerMode.None)
+            if (menu == null)
             {
                 return;
             }
 
-            if (Attack)
+            foreach (var item in AfterAttackTime.ToArray().Where(item => Variables.TickCount - item.Key >= 0))
             {
-                Preform(GetTarget(ActiveMode));
+                CallOnAction(item.Value);
+                AfterAttackTime.Remove(item);
             }
 
-            if (Movement
-                && Variables.TickCount - lastMovementOrderTick
-                > menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value)
+            if (ActiveMode != OrbwalkerMode.None)
             {
-                MoveOrder(Game.CursorPos.SetZ());
+                if (Attack)
+                {
+                    Preform(GetTarget(ActiveMode));
+                }
+
+                if (Movement
+                    && Variables.TickCount - lastMovementOrderTick
+                    > menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value)
+                {
+                    MoveOrder(Game.CursorPos.SetZ());
+                }
             }
         }
+
+        #endregion
+    }
+
+    /// <summary>
+    ///     <c>Orbwalker</c> part that handles the events.
+    /// </summary>
+    public partial class Orbwalker
+    {
+        #region Delegates
+
+        /// <summary>
+        ///     The on action delegate.
+        /// </summary>
+        /// <param name="sender">
+        ///     The sender
+        /// </param>
+        /// <param name="e">
+        ///     The event data
+        /// </param>
+        public delegate void OnActionDelegate(object sender, ActionArgs e);
+
+        #endregion
+
+        #region Public Events
+
+        /// <summary>
+        ///     The on action event.
+        /// </summary>
+        public static event OnActionDelegate OnAction;
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Calls the OnAction event.
+        /// </summary>
+        /// <param name="e">
+        ///     The event data
+        /// </param>
+        protected static void CallOnAction(ActionArgs e)
+        {
+            var handler = OnAction;
+            if (handler != null)
+            {
+                handler(MethodBase.GetCurrentMethod().DeclaringType, e);
+            }
+        }
+
+        #endregion
+    }
+
+    /// <summary>
+    ///     The Action event data.
+    /// </summary>
+    public class ActionArgs : EventArgs
+    {
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets the position.
+        /// </summary>
+        public Vector3 Position { get; internal set; }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether process.
+        /// </summary>
+        public bool Process { get; set; }
+
+        /// <summary>
+        ///     Gets the target.
+        /// </summary>
+        public AttackableUnit Target { get; internal set; }
+
+        /// <summary>
+        ///     Gets the type.
+        /// </summary>
+        public OrbwalkerType Type { get; internal set; }
 
         #endregion
     }
@@ -271,6 +385,15 @@ namespace LeagueSharp.SDK.Core
     /// </summary>
     public partial class Orbwalker
     {
+        #region Static Fields
+
+        /// <summary>
+        ///     The preform tick, block the command <c>Player.IssueOrder</c> spam.
+        /// </summary>
+        private static int preformTick;
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -282,9 +405,21 @@ namespace LeagueSharp.SDK.Core
         private static void Preform(AttackableUnit target)
         {
             if (target.IsValidTarget()
-                && Player.DistanceSquared(target) <= System.Math.Pow(target.GetRealAutoAttackRange(), 2))
+                && Player.DistanceSquared(target) <= System.Math.Pow(target.GetRealAutoAttackRange(), 2)
+                && Variables.TickCount - preformTick > 0)
             {
-                Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+                var eventArgs = new ActionArgs
+                                    {
+                                        Target = target, Position = target.Position, Process = true, 
+                                        Type = OrbwalkerType.BeforeAttack
+                                    };
+                CallOnAction(eventArgs);
+
+                if (eventArgs.Process)
+                {
+                    preformTick = Variables.TickCount + Game.Ping;
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+                }
             }
         }
 
@@ -329,19 +464,27 @@ namespace LeagueSharp.SDK.Core
 
             var advanced = new Menu("advanced", "Advanced");
             advanced.Add(new MenuSeparator("separatorMovement", "Movement"));
-            advanced.Add(new MenuSlider("movementDelay", "Delay between Movement", new Random(Variables.TickCount).Next(200, 301), 0, 2500));
+            advanced.Add(
+                new MenuSlider(
+                    "movementDelay", 
+                    "Delay between Movement", 
+                    new Random(Variables.TickCount).Next(200, 301), 
+                    0, 
+                    2500));
             advanced.Add(new MenuBool("movementScramble", "Randomize movement location", true));
             advanced.Add(new MenuSlider("movementExtraHold", "Extra Hold Position", 25, 0, 250));
-            advanced.Add(new MenuSlider("movementMaximumDistance", "Maximum Movement Distance", new Random().Next(500, 1201), 0, 1200));
+            advanced.Add(
+                new MenuSlider(
+                    "movementMaximumDistance", 
+                    "Maximum Movement Distance", 
+                    new Random().Next(500, 1201), 
+                    0, 
+                    1200));
             advanced.Add(new MenuSeparator("separatorMisc", "Miscellaneous"));
             advanced.Add(new MenuSlider("miscExtraWindup", "Extra Windup", 80, 0, 200));
             advanced.Add(new MenuSlider("miscFarmDelay", "Farm Delay", 0, 0, 200));
             advanced.Add(new MenuSeparator("separatorOther", "Other"));
-            advanced.Add(
-                new MenuButton("resetAll", "Settings", "Reset All Settings")
-                    {
-                       Action = ResetSettings 
-                    });
+            advanced.Add(new MenuButton("resetAll", "Settings", "Reset All Settings") { Action = ResetSettings });
             menu.Add(advanced);
 
             menu.Add(new MenuSeparator("separatorKeys", "Key Bindings"));
@@ -470,7 +613,10 @@ namespace LeagueSharp.SDK.Core
                             0f).SetZ();
                 }
 
-                if (Player.IssueOrder(GameObjectOrder.MoveTo, position))
+                var eventArgs = new ActionArgs { Position = position, Process = true, Type = OrbwalkerType.Movement };
+                CallOnAction(eventArgs);
+
+                if (eventArgs.Process && Player.IssueOrder(GameObjectOrder.MoveTo, position))
                 {
                     lastMovementOrderTick = Variables.TickCount;
                 }

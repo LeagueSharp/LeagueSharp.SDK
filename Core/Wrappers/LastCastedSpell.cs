@@ -40,7 +40,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         internal LastCastedSpellEntry(GameObjectProcessSpellCastEventArgs args)
         {
             this.Name = args.SData.Name;
-            this.Target = (Obj_AI_Base)args.Target;
+            this.Target = args.Target as Obj_AI_Base;
             this.StartTime = Variables.TickCount;
             this.EndTime = Variables.TickCount + args.SData.SpellCastTime;
             this.SpellData = args.SData;

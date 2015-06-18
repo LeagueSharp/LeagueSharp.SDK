@@ -33,12 +33,18 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         #region Public Methods and Operators
 
         /// <summary>
-        ///     The get reserved height.
+        ///     Get the notification reserved height.
         /// </summary>
         /// <returns>
         ///     The reserved height in float units.
         /// </returns>
         public abstract float GetReservedHeight();
+
+        /// <summary>
+        ///     Get the notification reserved width.
+        /// </summary>
+        /// <returns>The reserved width in float units.</returns>
+        public abstract float GetReservedWidth();
 
         /// <summary>
         ///     OnDraw event, specifies a drawing callback which is after IDirect3DDevice9::BeginScene and before
@@ -63,7 +69,10 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         /// <param name="windowsKeys">
         ///     The windows keys
         /// </param>
-        public abstract void OnWndProc(Vector2 basePosition, WindowsKeys windowsKeys);
+        /// <param name="isEdit">
+        ///     Indicates whether it's an edit message.
+        /// </param>
+        public abstract void OnWndProc(Vector2 basePosition, WindowsKeys windowsKeys, bool isEdit);
 
         #endregion
     }
