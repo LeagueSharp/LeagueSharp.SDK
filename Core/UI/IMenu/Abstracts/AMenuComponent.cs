@@ -42,6 +42,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         /// </summary>
         private int menuWidthCached;
 
+        /// <summary>
+        ///     True if MenuWidth should be recalculated.
+        /// </summary>
+        private bool resetWidth = true;
+
         #endregion
 
         #region Constructors and Destructors
@@ -72,6 +77,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
             this.DisplayName = displayName;
         }
 
+        internal AMenuComponent()
+        {
+            
+        }
+
         #endregion
 
         #region Public Properties
@@ -99,11 +109,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         {
             get
             {
-                if (this.menuWidthCached == 0)
+                if (this.resetWidth)
                 {
                     this.menuWidthCached = this.Parent != null
                                                ? this.Parent.Components.Max(comp => comp.Value.TotalWidth)
                                                : MenuManager.Instance.Menus.Max(menu => menu.TotalWidth);
+                    resetWidth = false;
                 }
 
                 return this.menuWidthCached;
@@ -228,7 +239,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         /// </summary>
         public virtual void ResetWidth()
         {
-            MenuWidth = 0;
+            resetWidth = true;
         }
 
         /// <summary>

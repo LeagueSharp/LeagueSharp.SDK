@@ -105,9 +105,7 @@
     <Compile Include="Core\IDrawing\DrawType.cs" />
     <Compile Include="Core\IDrawing\Render.cs" />
     <Compile Include="Core\UI\IMenu\Abstracts\AMenuComponent.cs" />
-    <Compile Include="Core\UI\IMenu\Abstracts\AMenuValue.cs" />
     <Compile Include="Core\UI\IMenu\Menu.cs" />
-    <Compile Include="Core\UI\IMenu\MenuFactory.cs" />
     <Compile Include="Core\UI\IMenu\MenuItem.cs" />
     <Compile Include="Core\UI\IMenu\MenuManager.cs" />
     <Compile Include="Core\UI\IMenu\MenuValueChangedEventArgs.cs" />
@@ -131,12 +129,10 @@
     <Compile Include="Core\UI\IMenu\Skins\IDrawableSlider.cs" />
     <Compile Include="Core\UI\IMenu\Skins\ITheme.cs" />
     <Compile Include="Core\UI\IMenu\Skins\ThemeManager.cs" />
-    <Compile Include="Core\UI\IMenu\ValueChangedEventArgs.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuBool.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuButton.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuCircle.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuColor.cs" />
-    <Compile Include="Core\UI\IMenu\Values\MenuInputText.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuKeyBind.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuList.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuSeparator.cs" />

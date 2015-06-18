@@ -61,14 +61,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </param>
         protected MenuItem(string name, string displayName, string uniqueString = "")
             : base(name, displayName, uniqueString)
-        {
-        }
+        {}
 
-        internal MenuItem()
-            : base("test","test","test")
-        {
-            
-        }
+        internal MenuItem(){}
 
         #endregion
 

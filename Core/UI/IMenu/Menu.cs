@@ -263,8 +263,21 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
             else
             {
-                throw new Exception("This menu already contains a component with the name " + component.Name);
+                Menu existingComponent = Components[component.Name] as Menu;
+                Menu newComponent = component as Menu;
+                if (existingComponent != null && newComponent != null)
+                {
+                    foreach (var comp in newComponent.Components)
+                    {
+                        existingComponent.Add(comp.Value);
+                    }
+                }
+                else
+                {
+                    throw new Exception("This menu already contains a component with the name " + component.Name);  
+                }
             }
+            MenuManager.Instance.ResetWidth();
         }
 
         /// <summary>
