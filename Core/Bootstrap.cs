@@ -60,7 +60,7 @@ namespace LeagueSharp.SDK.Core
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] TargetSelector Initialized.");
 
             // Load the Notifications
-            Notifications.Initialize();
+            Notifications.Initialize(Variables.LeagueSharpMenu);
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Notifications Initialized.");
 
             // Load GameObjects.

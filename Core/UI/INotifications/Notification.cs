@@ -561,7 +561,7 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         }
 
         /// <summary>
-        ///     The get reserved height.
+        /// Gets the notification reserved height.
         /// </summary>
         /// <returns>
         ///     The reserved height in float units.
@@ -569,6 +569,17 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         public override float GetReservedHeight()
         {
             return this.HeaderHeight + this.DrawBodyHeight + this.DrawFooterHeight + this.ExtraFooterPadding;
+        }
+
+        /// <summary>
+        /// Gets the notification reserved width.
+        /// </summary>
+        /// <returns>
+        ///     The reserved width in float units.
+        /// </returns>
+        public override float GetReservedWidth()
+        {
+            return this.Width;
         }
 
         /// <summary>
@@ -722,39 +733,45 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         }
 
         /// <summary>
-        ///     <c>OnWndProc</c> event, occurs on a windows process message to the thread.
+        /// <c>OnWndProc</c> event, occurs on a windows process message to the thread.
         /// </summary>
         /// <param name="basePosition">
-        ///     The base position
+        /// The base position
         /// </param>
         /// <param name="windowsKeys">
-        ///     The windows keys
+        /// The windows keys
         /// </param>
-        public override void OnWndProc(Vector2 basePosition, WindowsKeys windowsKeys)
+        /// <param name="isEdit">
+        /// Indicates whether it's an edit message.
+        /// </param>
+        public override void OnWndProc(Vector2 basePosition, WindowsKeys windowsKeys, bool isEdit)
         {
             basePosition.X += this.hideOffsetX;
 
-            if (windowsKeys.Msg == WindowsMessages.LBUTTONDOWN
-                && windowsKeys.Cursor.IsUnderRectangle(
-                    basePosition.X - this.Width - 5, 
-                    basePosition.Y, 
-                    this.Width, 
-                    this.HeaderHeight))
+            if (!isEdit)
             {
-                windowsKeys.Process = false;
-                this.IsOpen = !this.IsOpen;
-            }
+                if (windowsKeys.Msg == WindowsMessages.LBUTTONDOWN
+                    && windowsKeys.Cursor.IsUnderRectangle(
+                        basePosition.X - this.Width - 5,
+                        basePosition.Y,
+                        this.Width,
+                        this.HeaderHeight))
+                {
+                    windowsKeys.Process = false;
+                    this.IsOpen = !this.IsOpen;
+                }
 
-            if (windowsKeys.Msg == WindowsMessages.LBUTTONDOWN
-                && windowsKeys.Cursor.IsUnderRectangle(
-                    basePosition.X - this.Width + 5f, 
-                    basePosition.Y + this.HeaderHeight + this.BodyHeight + 1.5f, 
-                    HideBitmap.Width - 3, 
-                    HideBitmap.Height * 0.7f) && this.DrawBodyHeight >= this.BodyHeight
-                && this.DrawFooterHeight >= this.FooterHeight)
-            {
-                windowsKeys.Process = false;
-                this.hideAnimation = !this.hideAnimation;
+                if (windowsKeys.Msg == WindowsMessages.LBUTTONDOWN
+                    && windowsKeys.Cursor.IsUnderRectangle(
+                        basePosition.X - this.Width + 5f,
+                        basePosition.Y + this.HeaderHeight + this.BodyHeight + 1.5f,
+                        HideBitmap.Width - 3,
+                        HideBitmap.Height * 0.7f) && this.DrawBodyHeight >= this.BodyHeight
+                    && this.DrawFooterHeight >= this.FooterHeight)
+                {
+                    windowsKeys.Process = false;
+                    this.hideAnimation = !this.hideAnimation;
+                }
             }
         }
 

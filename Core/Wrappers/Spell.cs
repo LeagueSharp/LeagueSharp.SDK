@@ -225,6 +225,11 @@ namespace LeagueSharp.SDK.Core.Wrappers
         {
             get
             {
+                if (!this.Slot.IsReady())
+                {
+                    return false;
+                }
+
                 return GameObjects.Player.HasBuff(this.ChargedBuffName)
                        || Variables.TickCount - this.chargedCastedT < 300 + Game.Ping;
             }

@@ -170,6 +170,7 @@
     <Compile Include="Core\Extensions\Unit.cs" />
     <Compile Include="Core\Math\Collision.cs" />
     <Compile Include="Core\Utils\Cursor.cs" />
+    <Compile Include="Core\Utils\Storage.cs" />
     <Compile Include="Core\Utils\WindowsKeys.cs" />
     <Compile Include="Core\Utils\Math.cs" />
     <Compile Include="Core\Math\Polygons\Arc.cs" />

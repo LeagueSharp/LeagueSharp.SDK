@@ -37,8 +37,18 @@ namespace LeagueSharp.SDK.Core.Enumerations
         Movement, 
 
         /// <summary>
-        ///     AA Type
+        ///     BeforeAttack Type
         /// </summary>
-        AutoAttack
+        BeforeAttack, 
+
+        /// <summary>
+        ///     AfterAttack Type
+        /// </summary>
+        AfterAttack,
+
+        /// <summary>
+        ///     OnAttack Type
+        /// </summary>
+        OnAttack
     }
 }
