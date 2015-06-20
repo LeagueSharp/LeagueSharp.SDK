@@ -40,7 +40,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <returns>The <see cref="int" /></returns>
         public int CalcWidthText(string text)
         {
-            return DefaultSettings.Font.MeasureText(MenuManager.Instance.Sprite, text, 0).Width;
+            return MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, text, 0).Width;
         }
 
         #endregion
@@ -62,7 +62,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 (int)component.Position.X, 
                 (int)component.Position.Y, 
                 component.MenuWidth, 
-                DefaultSettings.ContainerHeight);
+                MenuSettings.ContainerHeight);
         }
 
         #endregion

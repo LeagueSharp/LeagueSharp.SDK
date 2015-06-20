@@ -45,10 +45,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             return
                 new Rectangle(
                     (int)
-                    (component.Position.X + component.MenuWidth - DefaultSettings.ContainerHeight), 
+                    (component.Position.X + component.MenuWidth - MenuSettings.ContainerHeight), 
                     (int)component.Position.Y, 
-                    DefaultSettings.ContainerHeight, 
-                    DefaultSettings.ContainerHeight);
+                    MenuSettings.ContainerHeight, 
+                    MenuSettings.ContainerHeight);
         }
 
         /// <summary>
@@ -60,19 +60,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             var centerY =
                 (int)
                 GetContainerRectangle(component)
-                    .GetCenteredText(null, DefaultSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter)
+                    .GetCenteredText(null, MenuSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
 
-            DefaultSettings.Font.DrawText(
+            MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 component.DisplayName, 
-                (int)(component.Position.X + DefaultSettings.ContainerTextOffset), 
+                (int)(component.Position.X + MenuSettings.ContainerTextOffset), 
                 centerY, 
-                DefaultSettings.TextColor);
+                MenuSettings.TextColor);
 
             var line = new Line(Drawing.Direct3DDevice)
                            {
-                              Antialias = false, GLLines = true, Width = DefaultSettings.ContainerHeight 
+                              Antialias = false, GLLines = true, Width = MenuSettings.ContainerHeight 
                            };
             line.Begin();
             line.Draw(
@@ -80,12 +80,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                     {
                         new Vector2(
                             (component.Position.X + component.MenuWidth
-                             - DefaultSettings.ContainerHeight) + DefaultSettings.ContainerHeight / 2f, 
+                             - MenuSettings.ContainerHeight) + MenuSettings.ContainerHeight / 2f, 
                             component.Position.Y + 1), 
                         new Vector2(
                             (component.Position.X + component.MenuWidth
-                             - DefaultSettings.ContainerHeight) + DefaultSettings.ContainerHeight / 2f, 
-                            component.Position.Y + DefaultSettings.ContainerHeight)
+                             - MenuSettings.ContainerHeight) + MenuSettings.ContainerHeight / 2f, 
+                            component.Position.Y + MenuSettings.ContainerHeight)
                     }, 
                 component.Value ? new ColorBGRA(0, 100, 0, 255) : new ColorBGRA(255, 0, 0, 255));
             line.End();
@@ -95,19 +95,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 (int)
                 new Rectangle(
                     (int)
-                    (component.Position.X + component.MenuWidth - DefaultSettings.ContainerHeight), 
+                    (component.Position.X + component.MenuWidth - MenuSettings.ContainerHeight), 
                     (int)component.Position.Y, 
-                    DefaultSettings.ContainerHeight, 
-                    DefaultSettings.ContainerHeight).GetCenteredText(
-                        null, DefaultSettings.Font, 
+                    MenuSettings.ContainerHeight, 
+                    MenuSettings.ContainerHeight).GetCenteredText(
+                        null, MenuSettings.Font, 
                         component.Value ? "ON" : "OFF", 
                         CenteredFlags.HorizontalCenter).X;
-            DefaultSettings.Font.DrawText(
+            MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 component.Value ? "ON" : "OFF", 
                 centerX, 
                 centerY, 
-                DefaultSettings.TextColor);
+                MenuSettings.TextColor);
         }
 
         #endregion

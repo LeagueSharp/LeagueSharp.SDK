@@ -65,6 +65,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private bool visible;
 
+        private bool dragging;
+
+        private bool hasDragged;
+
         #endregion
 
         #region Constructors and Destructors
@@ -111,6 +115,35 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         ///     <c>true</c> if hovering; otherwise, <c>false</c>.
         /// </value>
         public bool Hovering { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the user is dragging the menu.
+        /// </summary>
+        public bool Dragging {
+            get
+            {
+                return Root && dragging;
+            }
+            private set
+            {
+                dragging = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the user has moved the menu at least 1 pixel.
+        /// </summary>
+        public bool HasDragged
+        {
+            get
+            {
+                return Dragging && hasDragged;
+            }
+            private set
+            {
+                hasDragged = value;
+            }
+        }
 
         /// <summary>
         ///     Gets the path.
@@ -374,8 +407,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
-        private bool dragging;
-
         private float xd;
 
         private float yd;
@@ -388,25 +419,27 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         {
             if (args.Msg == WindowsMessages.LBUTTONUP)
             {
-                dragging = false;
+                HasDragged = false;
+                Dragging = false;
             }
             if (this.Visible)
             {
-                if (args.Msg == WindowsMessages.MOUSEMOVE && dragging)
+                if (args.Msg == WindowsMessages.MOUSEMOVE && Dragging)
                 { 
                     MenuManager.Instance.Position = new Vector2(args.Cursor.X - xd, args.Cursor.Y - yd);
+                    HasDragged = true;
                 }
                 if (args.Cursor.IsUnderRectangle(
                     this.Position.X, 
                     this.Position.Y, 
                     this.MenuWidth, 
-                    DefaultSettings.ContainerHeight))
+                    MenuSettings.ContainerHeight))
                 {
                     if (args.Msg == WindowsMessages.LBUTTONDOWN)
                     {
                         xd = args.Cursor.X - MenuManager.Instance.Position.X;
                         yd = args.Cursor.Y - MenuManager.Instance.Position.Y;
-                        dragging = true;
+                        Dragging = true;
                     }
                     this.Hovering = true;
                     if (args.Msg == WindowsMessages.LBUTTONDOWN && this.Components.Count > 0)

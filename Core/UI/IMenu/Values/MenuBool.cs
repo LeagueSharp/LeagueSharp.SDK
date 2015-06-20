@@ -77,7 +77,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return DefaultSettings.ContainerHeight;
+                return MenuSettings.ContainerHeight;
             }
         }
 

@@ -66,7 +66,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         public DefaultList()
         {
-            var arrowSize = DefaultSettings.Font.MeasureText(null, "V", 0);
+            var arrowSize = MenuSettings.Font.MeasureText(null, "V", 0);
             this.dropDownButtonWidth = arrowSize.Width + (2 * ArrowSpacing);
         }
 
@@ -83,14 +83,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             var dropdownMenuWidth = this.dropDownButtonWidth + (2 * TextSpacing) + component.MaxStringWidth;
             var position = component.Position;
             var rectangleName = GetContainerRectangle(component)
-                .GetCenteredText(null, DefaultSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter);
+                .GetCenteredText(null, MenuSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter);
 
-            DefaultSettings.Font.DrawText(
+            MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 component.DisplayName, 
-                (int)(position.X + DefaultSettings.ContainerTextOffset), 
+                (int)(position.X + MenuSettings.ContainerTextOffset), 
                 (int)rectangleName.Y, 
-                DefaultSettings.TextColor);
+                MenuSettings.TextColor);
 
             var line = new Line(Drawing.Direct3DDevice)
                            {
@@ -106,13 +106,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                             position.Y + 1), 
                         new Vector2(
                             position.X + component.MenuWidth - (this.dropDownButtonWidth / 2f), 
-                            position.Y + DefaultSettings.ContainerHeight)
+                            position.Y + MenuSettings.ContainerHeight)
                     }, 
-                DefaultSettings.HoverColor);
+                MenuSettings.HoverColor);
             line.End();
             if (component.Hovering || component.Active)
             {
-                line.Width = DefaultSettings.ContainerHeight;
+                line.Width = MenuSettings.ContainerHeight;
                 line.Begin();
                 line.Draw(
                     new[]
@@ -122,18 +122,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                 position.Y + line.Width / 2), 
                             new Vector2(position.X + component.MenuWidth, position.Y + line.Width / 2)
                         }, 
-                    DefaultSettings.HoverColor);
+                    MenuSettings.HoverColor);
                 line.End();
             }
 
             line.Dispose();
-            DefaultSettings.Font.DrawText(
+            MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 "V", 
                 (int)(position.X + component.MenuWidth - this.dropDownButtonWidth + ArrowSpacing), 
                 (int)rectangleName.Y, 
-                DefaultSettings.TextColor);
-            DefaultSettings.ContainerSeparatorLine.Draw(
+                MenuSettings.TextColor);
+            MenuSettings.ContainerSeparatorLine.Draw(
                 new[]
                     {
                         new Vector2(
@@ -141,17 +141,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                             position.Y + 1), 
                         new Vector2(
                             position.X + component.MenuWidth - this.dropDownButtonWidth - 1, 
-                            position.Y + DefaultSettings.ContainerHeight)
+                            position.Y + MenuSettings.ContainerHeight)
                     }, 
-                DefaultSettings.ContainerSeparatorColor);
-            DefaultSettings.Font.DrawText(
+                MenuSettings.ContainerSeparatorColor);
+            MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 component.SelectedValueAsObject.ToString(), 
                 (int)position.X + component.MenuWidth - this.dropDownButtonWidth - TextSpacing
                 - component.MaxStringWidth, 
                 (int)rectangleName.Y, 
-                DefaultSettings.TextColor);
-            DefaultSettings.ContainerSeparatorLine.Draw(
+                MenuSettings.TextColor);
+            MenuSettings.ContainerSeparatorLine.Draw(
                 new[]
                     {
                         new Vector2(
@@ -161,14 +161,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         new Vector2(
                             position.X + component.MenuWidth - this.dropDownButtonWidth - (2 * TextSpacing)
                             - component.MaxStringWidth, 
-                            position.Y + DefaultSettings.ContainerHeight)
+                            position.Y + MenuSettings.ContainerHeight)
                     }, 
-                DefaultSettings.ContainerSeparatorColor);
+                MenuSettings.ContainerSeparatorColor);
 
             if (component.Active)
             {
                 var valueStrings = component.ValuesAsStrings;
-                var dropdownMenuHeight = valueStrings.Length * DefaultSettings.ContainerHeight;
+                var dropdownMenuHeight = valueStrings.Length * MenuSettings.ContainerHeight;
                 MenuManager.Instance.DrawDelayed(
                     delegate
                         {
@@ -182,10 +182,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                     {
                                         new Vector2(
                                             position.X + component.MenuWidth - (backgroundLine.Width / 2), 
-                                            position.Y + DefaultSettings.ContainerHeight), 
+                                            position.Y + MenuSettings.ContainerHeight), 
                                         new Vector2(
                                             position.X + component.MenuWidth - (backgroundLine.Width / 2), 
-                                            position.Y + DefaultSettings.ContainerHeight + dropdownMenuHeight)
+                                            position.Y + MenuSettings.ContainerHeight + dropdownMenuHeight)
                                     }, 
                                 Color.Black);
                             backgroundLine.End();
@@ -202,7 +202,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                 {
                                     var hoverLine = new Line(Drawing.Direct3DDevice)
                                                         {
-                                                            Width = DefaultSettings.ContainerHeight, Antialias = false, 
+                                                            Width = MenuSettings.ContainerHeight, Antialias = false, 
                                                             GLLines = false
                                                         };
                                     hoverLine.Begin();
@@ -211,65 +211,65 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                             {
                                                 new Vector2(
                                                     position.X + component.MenuWidth - dropdownMenuWidth, 
-                                                    position.Y + ((i + 1) * DefaultSettings.ContainerHeight)
-                                                    + DefaultSettings.ContainerHeight / 2f), 
+                                                    position.Y + ((i + 1) * MenuSettings.ContainerHeight)
+                                                    + MenuSettings.ContainerHeight / 2f), 
                                                 new Vector2(
                                                     position.X + component.MenuWidth, 
-                                                    position.Y + ((i + 1) * DefaultSettings.ContainerHeight)
-                                                    + DefaultSettings.ContainerHeight / 2f)
+                                                    position.Y + ((i + 1) * MenuSettings.ContainerHeight)
+                                                    + MenuSettings.ContainerHeight / 2f)
                                             }, 
-                                        DefaultSettings.HoverColor);
+                                        MenuSettings.HoverColor);
                                     hoverLine.End();
                                     hoverLine.Dispose();
                                 }
 
-                                DefaultSettings.ContainerSeparatorLine.Draw(
+                                MenuSettings.ContainerSeparatorLine.Draw(
                                     new[]
                                         {
                                             new Vector2(
                                                 position.X + component.MenuWidth - dropdownMenuWidth, 
-                                                position.Y + (DefaultSettings.ContainerHeight * (i + 1))), 
+                                                position.Y + (MenuSettings.ContainerHeight * (i + 1))), 
                                             new Vector2(
                                                 position.X + component.MenuWidth, 
-                                                position.Y + (DefaultSettings.ContainerHeight * (i + 1)))
+                                                position.Y + (MenuSettings.ContainerHeight * (i + 1)))
                                         }, 
-                                    DefaultSettings.ContainerSeparatorColor);
-                                y += DefaultSettings.ContainerHeight;
-                                DefaultSettings.Font.DrawText(
+                                    MenuSettings.ContainerSeparatorColor);
+                                y += MenuSettings.ContainerHeight;
+                                MenuSettings.Font.DrawText(
                                     MenuManager.Instance.Sprite, 
                                     valueStrings[i], 
                                     x, 
                                     y, 
-                                    DefaultSettings.TextColor);
+                                    MenuSettings.TextColor);
                                 if (component.Index == i)
                                 {
-                                    var checkmarkWidth = DefaultSettings.Font.MeasureText(null, "\u221A", 0).Width;
-                                    DefaultSettings.Font.DrawText(
+                                    var checkmarkWidth = MenuSettings.Font.MeasureText(null, "\u221A", 0).Width;
+                                    MenuSettings.Font.DrawText(
                                         MenuManager.Instance.Sprite, 
                                         "\u221A", 
                                         (int)(position.X + component.MenuWidth - checkmarkWidth - TextSpacing), 
                                         y, 
-                                        DefaultSettings.TextColor);
+                                        MenuSettings.TextColor);
                                 }
                             }
 
-                            DefaultSettings.ContainerSeparatorLine.Draw(
+                            MenuSettings.ContainerSeparatorLine.Draw(
                                 new[]
                                     {
                                         new Vector2(
                                             position.X + component.MenuWidth - dropdownMenuWidth, 
-                                            position.Y + DefaultSettings.ContainerHeight), 
+                                            position.Y + MenuSettings.ContainerHeight), 
                                         new Vector2(
                                             position.X + component.MenuWidth - dropdownMenuWidth, 
-                                            position.Y + DefaultSettings.ContainerHeight * (valueStrings.Length + 1)), 
+                                            position.Y + MenuSettings.ContainerHeight * (valueStrings.Length + 1)), 
                                         new Vector2(
                                             position.X + component.MenuWidth, 
-                                            position.Y + DefaultSettings.ContainerHeight * (valueStrings.Length + 1)), 
+                                            position.Y + MenuSettings.ContainerHeight * (valueStrings.Length + 1)), 
                                         new Vector2(
                                             position.X + component.MenuWidth, 
-                                            position.Y + DefaultSettings.ContainerHeight)
+                                            position.Y + MenuSettings.ContainerHeight)
                                     }, 
-                                DefaultSettings.ContainerSeparatorColor);
+                                MenuSettings.ContainerSeparatorColor);
                         });
             }
         }
@@ -288,7 +288,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                      - (2 * TextSpacing) - component.MaxStringWidth), 
                     (int)component.Position.Y, 
                     this.dropDownButtonWidth + (2 * TextSpacing) + component.MaxStringWidth, 
-                    DefaultSettings.ContainerHeight);
+                    MenuSettings.ContainerHeight);
         }
 
         /// <summary>
@@ -305,7 +305,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                      - (2 * TextSpacing) - component.MaxStringWidth), 
                     (int)component.Position.Y, 
                     this.dropDownButtonWidth + (2 * TextSpacing) + component.MaxStringWidth, 
-                    (component.Count + 1) * DefaultSettings.ContainerHeight);
+                    (component.Count + 1) * MenuSettings.ContainerHeight);
         }
 
         /// <summary>
@@ -323,9 +323,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         (int)
                         (component.Position.X + component.MenuWidth - this.dropDownButtonWidth
                          - (2 * TextSpacing) - component.MaxStringWidth), 
-                        (int)(component.Position.Y + ((i + 1) * DefaultSettings.ContainerHeight)), 
+                        (int)(component.Position.Y + ((i + 1) * MenuSettings.ContainerHeight)), 
                         this.dropDownButtonWidth + (2 * TextSpacing) + component.MaxStringWidth, 
-                        DefaultSettings.ContainerHeight + 1));
+                        MenuSettings.ContainerHeight + 1));
             }
 
             return rectangles;

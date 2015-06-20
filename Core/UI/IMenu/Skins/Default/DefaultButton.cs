@@ -66,14 +66,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         public Rectangle ButtonBoundaries(MenuButton component)
         {
             var buttonTextWidth =
-                DefaultSettings.Font.MeasureText(MenuManager.Instance.Sprite, component.ButtonText, 0).Width;
+                MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, component.ButtonText, 0).Width;
             return
                 new Rectangle(
                     (int)
                     (component.Position.X + component.MenuWidth - buttonTextWidth - (2 * TextGap)), 
                     (int)component.Position.Y, 
                     (2 * TextGap) + buttonTextWidth, 
-                    DefaultSettings.ContainerHeight);
+                    MenuSettings.ContainerHeight);
         }
 
         /// <summary>
@@ -83,21 +83,21 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         public void Draw(MenuButton component)
         {
             var rectangleName = GetContainerRectangle(component)
-                .GetCenteredText(null, DefaultSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter);
+                .GetCenteredText(null, MenuSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter);
 
-            DefaultSettings.Font.DrawText(
+            MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 component.DisplayName, 
-                (int)(component.Position.X + DefaultSettings.ContainerTextOffset), 
+                (int)(component.Position.X + MenuSettings.ContainerTextOffset), 
                 (int)rectangleName.Y, 
-                DefaultSettings.TextColor);
+                MenuSettings.TextColor);
 
             var buttonTextWidth =
-                DefaultSettings.Font.MeasureText(MenuManager.Instance.Sprite, component.ButtonText, 0).Width;
+                MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, component.ButtonText, 0).Width;
 
             var line = new Line(Drawing.Direct3DDevice)
                            {
-                              Antialias = false, GLLines = true, Width = DefaultSettings.ContainerHeight 
+                              Antialias = false, GLLines = true, Width = MenuSettings.ContainerHeight 
                            };
             line.Begin();
             line.Draw(
@@ -106,14 +106,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         new Vector2(
                             component.Position.X + component.MenuWidth - buttonTextWidth
                             - (2 * TextGap), 
-                            component.Position.Y + (DefaultSettings.ContainerHeight / 2f)), 
+                            component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
                         new Vector2(
                             component.Position.X + component.MenuWidth, 
-                            component.Position.Y + (DefaultSettings.ContainerHeight / 2f)), 
+                            component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
                     }, 
-                DefaultSettings.HoverColor);
+                MenuSettings.HoverColor);
             line.End();
-            line.Width = DefaultSettings.ContainerHeight - 5;
+            line.Width = MenuSettings.ContainerHeight - 5;
             line.Begin();
             line.Draw(
                 new[]
@@ -121,21 +121,21 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         new Vector2(
                             component.Position.X + component.MenuWidth - buttonTextWidth
                             - (2 * TextGap) + 2, 
-                            component.Position.Y + (DefaultSettings.ContainerHeight / 2f)), 
+                            component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
                         new Vector2(
                             component.Position.X + component.MenuWidth - 2, 
-                            component.Position.Y + (DefaultSettings.ContainerHeight / 2f)), 
+                            component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
                     }, 
                 component.Hovering ? this.buttonHoverColor : this.buttonColor);
             line.End();
             line.Dispose();
 
-            DefaultSettings.Font.DrawText(
+            MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 component.ButtonText, 
                 (int)(component.Position.X + component.MenuWidth - buttonTextWidth - TextGap), 
                 (int)rectangleName.Y, 
-                DefaultSettings.TextColor);
+                MenuSettings.TextColor);
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         public int Width(MenuButton menuButton)
         {
             return (2 * TextGap)
-                   + DefaultSettings.Font.MeasureText(MenuManager.Instance.Sprite, menuButton.ButtonText, 0).Width;
+                   + MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, menuButton.ButtonText, 0).Width;
         }
 
         #endregion

@@ -67,7 +67,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             var centeredY =
                 (int)
                 GetContainerRectangle(component)
-                    .GetCenteredText(null, DefaultSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter)
+                    .GetCenteredText(null, MenuSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
             var percent = (component.Value - component.MinValue) / (float)(component.MaxValue - component.MinValue);
             var x = position.X + (percent * component.MenuWidth);
@@ -75,37 +75,37 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             var line = new Line(Drawing.Direct3DDevice) { Antialias = false, GLLines = true, Width = 2 };
             line.Begin();
             line.Draw(
-                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + DefaultSettings.ContainerHeight) }, 
+                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) }, 
                 component.Interacting ? new ColorBGRA(255, 0, 0, 255) : new ColorBGRA(50, 154, 205, 255));
             line.End();
 
-            DefaultSettings.Font.DrawText(
+            MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 component.DisplayName, 
-                (int)(position.X + DefaultSettings.ContainerTextOffset), 
+                (int)(position.X + MenuSettings.ContainerTextOffset), 
                 centeredY, 
-                DefaultSettings.TextColor);
+                MenuSettings.TextColor);
 
-            var measureText = DefaultSettings.Font.MeasureText(
+            var measureText = MenuSettings.Font.MeasureText(
                 null, 
                 component.Value.ToString(CultureInfo.InvariantCulture), 
                 0);
-            DefaultSettings.Font.DrawText(
+            MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 component.Value.ToString(CultureInfo.InvariantCulture), 
                 (int)(position.X + component.MenuWidth - 5 - measureText.Width), 
                 centeredY, 
-                DefaultSettings.TextColor);
+                MenuSettings.TextColor);
 
-            line.Width = DefaultSettings.ContainerHeight;
+            line.Width = MenuSettings.ContainerHeight;
             line.Begin();
             line.Draw(
                 new[]
                     {
-                        new Vector2(position.X, position.Y + DefaultSettings.ContainerHeight / 2f), 
-                        new Vector2(x, position.Y + DefaultSettings.ContainerHeight / 2f)
+                        new Vector2(position.X, position.Y + MenuSettings.ContainerHeight / 2f), 
+                        new Vector2(x, position.Y + MenuSettings.ContainerHeight / 2f)
                     }, 
-                DefaultSettings.HoverColor);
+                MenuSettings.HoverColor);
             line.End();
             line.Dispose();
         }

@@ -40,16 +40,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         {
             var centerY = GetContainerRectangle(component)
                 .GetCenteredText(
-                    null, DefaultSettings.Font,
+                    null, MenuSettings.Font,
                     component.DisplayName, 
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
-            DefaultSettings.Font.DrawText(
+            MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 component.DisplayName, 
                 (int)centerY.X, 
                 (int)centerY.Y, 
-                DefaultSettings.TextColor);
+                MenuSettings.TextColor);
         }
 
         #endregion

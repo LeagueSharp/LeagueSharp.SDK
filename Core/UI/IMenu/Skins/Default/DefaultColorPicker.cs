@@ -99,11 +99,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         public DefaultColorPicker()
         {
-            this.pickerHeight = (2 * BorderOffset) + DefaultSettings.ContainerHeight + (4 * SliderHeight)
+            this.pickerHeight = (2 * BorderOffset) + MenuSettings.ContainerHeight + (4 * SliderHeight)
                                 + (4 * SliderOffset);
             this.pickerX = (Drawing.Width - PickerWidth) / 2;
             this.pickerY = (Drawing.Height - this.pickerHeight) / 2;
-            this.greenWidth = DefaultSettings.Font.MeasureText(MenuManager.Instance.Sprite, "Opacity", 0).Width;
+            this.greenWidth = MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, "Opacity", 0).Width;
             this.sliderWidth = PickerWidth - (2 * BorderOffset) - (2 * TextOffset) - this.greenWidth - SliderHeight;
         }
 
@@ -120,7 +120,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         {
             return new Rectangle(
                 this.pickerX + BorderOffset + this.greenWidth + TextOffset, 
-                this.pickerY + BorderOffset + DefaultSettings.ContainerHeight + (4 * SliderOffset) + (3 * SliderHeight), 
+                this.pickerY + BorderOffset + MenuSettings.ContainerHeight + (4 * SliderOffset) + (3 * SliderHeight), 
                 this.sliderWidth, 
                 SliderHeight);
         }
@@ -134,7 +134,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         {
             return new Rectangle(
                 this.pickerX + BorderOffset + this.greenWidth + TextOffset, 
-                this.pickerY + BorderOffset + DefaultSettings.ContainerHeight + (3 * SliderOffset) + (2 * SliderHeight), 
+                this.pickerY + BorderOffset + MenuSettings.ContainerHeight + (3 * SliderOffset) + (2 * SliderHeight), 
                 this.sliderWidth, 
                 SliderHeight);
         }
@@ -146,18 +146,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         public void Draw(MenuColor component)
         {
             var rectangleName = GetContainerRectangle(component)
-                .GetCenteredText(null, DefaultSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter);
+                .GetCenteredText(null, MenuSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter);
 
-            DefaultSettings.Font.DrawText(
+            MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 component.DisplayName, 
-                (int)(component.Position.X + DefaultSettings.ContainerTextOffset), 
+                (int)(component.Position.X + MenuSettings.ContainerTextOffset), 
                 (int)rectangleName.Y, 
-                DefaultSettings.TextColor);
+                MenuSettings.TextColor);
 
             var previewLine = new Line(Drawing.Direct3DDevice)
                                   {
-                                     Width = DefaultSettings.ContainerHeight, GLLines = true 
+                                     Width = MenuSettings.ContainerHeight, GLLines = true 
                                   };
             previewLine.Begin();
             previewLine.Draw(
@@ -165,12 +165,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                     {
                         new Vector2(
                             component.Position.X + component.MenuWidth
-                            - (DefaultSettings.ContainerHeight / 2f), 
+                            - (MenuSettings.ContainerHeight / 2f), 
                             component.Position.Y + 1), 
                         new Vector2(
                             component.Position.X + component.MenuWidth
-                            - (DefaultSettings.ContainerHeight / 2f), 
-                            component.Position.Y + DefaultSettings.ContainerHeight)
+                            - (MenuSettings.ContainerHeight / 2f), 
+                            component.Position.Y + MenuSettings.ContainerHeight)
                     }, 
                 component.Color);
             previewLine.End();
@@ -182,14 +182,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         {
                             new Vector2(
                                 component.Position.X + component.MenuWidth
-                                - (DefaultSettings.ContainerHeight / 2f), 
+                                - (MenuSettings.ContainerHeight / 2f), 
                                 component.Position.Y + 1), 
                             new Vector2(
                                 component.Position.X + component.MenuWidth
-                                - (DefaultSettings.ContainerHeight / 2f), 
-                                component.Position.Y + DefaultSettings.ContainerHeight)
+                                - (MenuSettings.ContainerHeight / 2f), 
+                                component.Position.Y + MenuSettings.ContainerHeight)
                         }, 
-                    DefaultSettings.HoverColor);
+                    MenuSettings.HoverColor);
                 previewLine.End();
             }
 
@@ -203,7 +203,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                             new Vector2(this.pickerX + (PickerWidth / 2f), this.pickerY), 
                             new Vector2(this.pickerX + (PickerWidth / 2f), this.pickerY + this.pickerHeight)
                         }, 
-                    DefaultSettings.RootContainerColor);
+                    MenuSettings.RootContainerColor);
                 backgroundLine.End();
                 backgroundLine.Dispose();
 
@@ -213,10 +213,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         {
                             new Vector2(
                                 this.pickerX + BorderOffset, 
-                                this.pickerY + BorderOffset + (DefaultSettings.ContainerHeight / 2f)), 
+                                this.pickerY + BorderOffset + (MenuSettings.ContainerHeight / 2f)), 
                             new Vector2(
                                 this.pickerX + PickerWidth - BorderOffset, 
-                                this.pickerY + BorderOffset + (DefaultSettings.ContainerHeight / 2f))
+                                this.pickerY + BorderOffset + (MenuSettings.ContainerHeight / 2f))
                         }, 
                     component.Color);
                 previewLine.End();
@@ -234,11 +234,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         this.pickerX + BorderOffset, 
                         this.pickerY + BorderOffset, 
                         PickerWidth - (2 * BorderOffset), 
-                        DefaultSettings.ContainerHeight).GetCenteredText(
-                            null, DefaultSettings.Font,
+                        MenuSettings.ContainerHeight).GetCenteredText(
+                            null, MenuSettings.Font,
                             detail, 
                             CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
-                DefaultSettings.Font.DrawText(
+                MenuSettings.Font.DrawText(
                     MenuManager.Instance.Sprite, 
                     detail, 
                     (int)rectanglePreview.X, 
@@ -253,15 +253,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                     (int)
                     new Rectangle(
                         this.pickerX + BorderOffset, 
-                        this.pickerY + BorderOffset + DefaultSettings.ContainerHeight + SliderOffset, 
+                        this.pickerY + BorderOffset + MenuSettings.ContainerHeight + SliderOffset, 
                         PickerWidth,
-                        SliderHeight).GetCenteredText(null, DefaultSettings.Font, "Green", CenteredFlags.VerticalCenter).Y;
+                        SliderHeight).GetCenteredText(null, MenuSettings.Font, "Green", CenteredFlags.VerticalCenter).Y;
 
                 // DRAW SLIDER NAMES
                 string[] lineNames = { "Red", "Green", "Blue", "Opacity" };
                 for (var i = 0; i < lineNames.Length; i++)
                 {
-                    DefaultSettings.Font.DrawText(
+                    MenuSettings.Font.DrawText(
                         MenuManager.Instance.Sprite, 
                         lineNames[i], 
                         this.pickerX + BorderOffset, 
@@ -279,11 +279,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                             {
                                 new Vector2(
                                     this.pickerX + BorderOffset + this.greenWidth + TextOffset, 
-                                    this.pickerY + BorderOffset + DefaultSettings.ContainerHeight + (i * SliderOffset)
+                                    this.pickerY + BorderOffset + MenuSettings.ContainerHeight + (i * SliderOffset)
                                     + ((i - 1) * SliderHeight) + (SliderHeight / 2f)), 
                                 new Vector2(
                                     this.pickerX + BorderOffset + this.greenWidth + TextOffset + this.sliderWidth, 
-                                    this.pickerY + BorderOffset + DefaultSettings.ContainerHeight + (i * SliderOffset)
+                                    this.pickerY + BorderOffset + MenuSettings.ContainerHeight + (i * SliderOffset)
                                     + ((i - 1) * SliderHeight) + (SliderHeight / 2f))
                             }, 
                         Color.White);
@@ -309,12 +309,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                             {
                                 new Vector2(
                                     this.pickerX + BorderOffset + this.greenWidth + (2 * TextOffset) + this.sliderWidth, 
-                                    this.pickerY + BorderOffset + DefaultSettings.ContainerHeight + (i * SliderOffset)
+                                    this.pickerY + BorderOffset + MenuSettings.ContainerHeight + (i * SliderOffset)
                                     + ((i - 1) * SliderHeight) + (SliderHeight / 2f)), 
                                 new Vector2(
                                     this.pickerX + BorderOffset + this.greenWidth + (2 * TextOffset) + this.sliderWidth
                                     + SliderHeight, 
-                                    this.pickerY + BorderOffset + DefaultSettings.ContainerHeight + (i * SliderOffset)
+                                    this.pickerY + BorderOffset + MenuSettings.ContainerHeight + (i * SliderOffset)
                                     + ((i - 1) * SliderHeight) + (SliderHeight / 2f))
                             }, 
                         previewColors[i - 1]);
@@ -335,11 +335,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                             {
                                 new Vector2(
                                     this.pickerX + BorderOffset + this.greenWidth + TextOffset + x, 
-                                    this.pickerY + BorderOffset + DefaultSettings.ContainerHeight
+                                    this.pickerY + BorderOffset + MenuSettings.ContainerHeight
                                     + ((i + 1) * SliderOffset) + (i * SliderHeight)), 
                                 new Vector2(
                                     this.pickerX + BorderOffset + this.greenWidth + TextOffset + x, 
-                                    this.pickerY + BorderOffset + DefaultSettings.ContainerHeight
+                                    this.pickerY + BorderOffset + MenuSettings.ContainerHeight
                                     + ((i + 1) * SliderOffset) + ((i + 1) * SliderHeight))
                             }, 
                         new ColorBGRA(50, 154, 205, 255));
@@ -361,7 +361,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         {
             return new Rectangle(
                 this.pickerX + BorderOffset + this.greenWidth + TextOffset, 
-                this.pickerY + BorderOffset + DefaultSettings.ContainerHeight + (2 * SliderOffset) + SliderHeight, 
+                this.pickerY + BorderOffset + MenuSettings.ContainerHeight + (2 * SliderOffset) + SliderHeight, 
                 this.sliderWidth, 
                 SliderHeight);
         }
@@ -386,10 +386,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             return
                 new Rectangle(
                     (int)
-                    (component.Position.X + component.MenuWidth - DefaultSettings.ContainerHeight), 
+                    (component.Position.X + component.MenuWidth - MenuSettings.ContainerHeight), 
                     (int)component.Position.Y, 
-                    DefaultSettings.ContainerHeight, 
-                    DefaultSettings.ContainerHeight);
+                    MenuSettings.ContainerHeight, 
+                    MenuSettings.ContainerHeight);
         }
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         {
             return new Rectangle(
                 this.pickerX + BorderOffset + this.greenWidth + TextOffset, 
-                this.pickerY + BorderOffset + DefaultSettings.ContainerHeight + SliderOffset, 
+                this.pickerY + BorderOffset + MenuSettings.ContainerHeight + SliderOffset, 
                 this.sliderWidth, 
                 SliderHeight);
         }
@@ -423,7 +423,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <returns>The <see cref="int" /></returns>
         public int Width(MenuColor component)
         {
-            return DefaultSettings.ContainerHeight;
+            return MenuSettings.ContainerHeight;
         }
 
         #endregion

@@ -207,7 +207,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
                 if (this.width == 0)
                 {
                     foreach (var newWidth in
-                        this.Values.Select(obj => DefaultSettings.Font.MeasureText(null, obj.ToString(), 0).Width)
+                        this.Values.Select(obj => MenuSettings.Font.MeasureText(null, obj.ToString(), 0).Width)
                             .Where(newWidth => newWidth > this.width))
                     {
                         this.width = newWidth;

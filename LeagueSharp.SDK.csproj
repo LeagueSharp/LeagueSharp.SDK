@@ -117,7 +117,7 @@
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultKeyBind.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultList.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultSeparator.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultSettings.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\MenuSettings.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultSlider.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultTheme.cs" />
     <Compile Include="Core\UI\IMenu\Skins\IDrawableBool.cs" />
@@ -249,6 +249,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\1433417093_arrow_right_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cursor_drag.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

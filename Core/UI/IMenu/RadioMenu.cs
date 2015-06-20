@@ -34,7 +34,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="RadioMenu" /> class.
-        ///     Initializes a new instance of the <see cref="Menu" /> class.
         ///     Menu Constructor.
         /// </summary>
         /// <param name="name">
@@ -70,18 +69,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </param>
         private void RadioMenuValueChanged(object sender, MenuValueChangedEventArgs args)
         {
-            /*TODO try
+            try
             {
-                var menuBool = args.MenuItem as MenuItem<MenuBool>;
+                var menuBool = args.MenuItem as MenuBool;
 
-                if (menuBool != null && menuBool.Value.Value)
+                if (menuBool != null && menuBool.Value)
                 {
                     foreach (var comp in this.Components)
                     {
-                        var child = comp.Value as MenuItem<MenuBool>;
+                        var child = comp.Value as MenuBool;
                         if (child != null && child.Name != menuBool.Name)
                         {
-                            child.Value.Value = false;
+                            child.Value = false;
                         }
                     }
                 }
@@ -89,7 +88,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
-            }*/
+            }
         }
 
         #endregion

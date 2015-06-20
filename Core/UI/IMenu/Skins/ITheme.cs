@@ -92,8 +92,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         /// <summary>
         ///     Draws the list of root menus on the given position.
         /// </summary>
-        /// <param name="position">Upper-left position of the menu</param>
-        void OnDraw(Vector2 position);
+        void Draw();
 
         #endregion
     }

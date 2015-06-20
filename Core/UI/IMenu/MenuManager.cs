@@ -303,7 +303,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                     this.Sprite.Begin(SpriteFlags.AlphaBlend);
                     PpSpriteDrawnProtection = true;
                 }
-                ThemeManager.Current.OnDraw(Position);
+                ThemeManager.Current.Draw();
                 if (PpSpriteDrawnProtection)
                 {
                     this.Sprite.End();

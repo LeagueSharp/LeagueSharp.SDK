@@ -27,7 +27,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     /// <summary>
     ///     Default Skin Settings.
     /// </summary>
-    public class DefaultSettings
+    public class MenuSettings
     {
         #region Static Fields
 
@@ -110,13 +110,25 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes static members of the <see cref="DefaultSettings" /> class.
+        ///     Initializes static members of the <see cref="MenuSettings" /> class.
         ///     Default Settings Static Constructor.
         /// </summary>
-        static DefaultSettings()
+        static MenuSettings()
         {
             ContainerWidth = 200f;
-            Font = Constants.LeagueSharpFont;
+            Font =
+                    new Font(
+                        Drawing.Direct3DDevice, 
+                        14, 
+                        0, 
+                        FontWeight.DoNotCare, 
+                        0, 
+                        false, 
+                        FontCharacterSet.Default, 
+                        FontPrecision.Default, 
+                        FontQuality.Antialiased, 
+                        FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative, 
+                        "Tahoma");
         }
 
         #endregion
