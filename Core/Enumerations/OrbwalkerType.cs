@@ -44,11 +44,16 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     AfterAttack Type
         /// </summary>
-        AfterAttack,
+        AfterAttack, 
 
         /// <summary>
         ///     OnAttack Type
         /// </summary>
-        OnAttack
+        OnAttack, 
+
+        /// <summary>
+        ///     Non Kill-able Minion Type
+        /// </summary>
+        NonKillableMinion
     }
 }

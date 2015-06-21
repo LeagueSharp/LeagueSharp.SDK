@@ -33,7 +33,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
     /// <summary>
     ///     Cluster (Area of Effect) Prediction class.
     /// </summary>
-    internal static class Cluster
+    public static class Cluster
     {
         #region Public Methods and Operators
 

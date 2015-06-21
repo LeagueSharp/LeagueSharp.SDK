@@ -43,6 +43,11 @@ namespace LeagueSharp.SDK.Core
         private static readonly List<Obj_AI_Hero> AllyHeroesList = new List<Obj_AI_Hero>();
 
         /// <summary>
+        ///     The ally inhibitors list.
+        /// </summary>
+        private static readonly List<Obj_BarracksDampener> AllyInhibitorsList = new List<Obj_BarracksDampener>();
+
+        /// <summary>
         ///     The ally list.
         /// </summary>
         private static readonly List<Obj_AI_Base> AllyList = new List<Obj_AI_Base>();
@@ -76,6 +81,11 @@ namespace LeagueSharp.SDK.Core
         ///     The enemy heroes list.
         /// </summary>
         private static readonly List<Obj_AI_Hero> EnemyHeroesList = new List<Obj_AI_Hero>();
+
+        /// <summary>
+        ///     The enemy inhibitors list.
+        /// </summary>
+        private static readonly List<Obj_BarracksDampener> EnemyInhibitorsList = new List<Obj_BarracksDampener>();
 
         /// <summary>
         ///     The enemy list.
@@ -118,6 +128,11 @@ namespace LeagueSharp.SDK.Core
         private static readonly List<Obj_AI_Hero> HeroesList = new List<Obj_AI_Hero>();
 
         /// <summary>
+        ///     The inhibitors list.
+        /// </summary>
+        private static readonly List<Obj_BarracksDampener> InhibitorsList = new List<Obj_BarracksDampener>();
+
+        /// <summary>
         ///     The jungle large list.
         /// </summary>
         private static readonly List<Obj_AI_Minion> JungleLargeList = new List<Obj_AI_Minion>();
@@ -141,6 +156,11 @@ namespace LeagueSharp.SDK.Core
         ///     The minions list.
         /// </summary>
         private static readonly List<Obj_AI_Minion> MinionsList = new List<Obj_AI_Minion>();
+
+        /// <summary>
+        ///     The nexus list.
+        /// </summary>
+        private static readonly List<Obj_HQ> NexusList = new List<Obj_HQ>();
 
         /// <summary>
         ///     The shops list.
@@ -220,6 +240,17 @@ namespace LeagueSharp.SDK.Core
         }
 
         /// <summary>
+        ///     Gets the ally inhibitors.
+        /// </summary>
+        public static IEnumerable<Obj_BarracksDampener> AllyInhibitors
+        {
+            get
+            {
+                return AllyInhibitorsList;
+            }
+        }
+
+        /// <summary>
         ///     Gets the ally minions.
         /// </summary>
         public static IEnumerable<Obj_AI_Minion> AllyMinions
@@ -229,6 +260,11 @@ namespace LeagueSharp.SDK.Core
                 return AllyMinionsList;
             }
         }
+
+        /// <summary>
+        ///     Gets or sets the ally nexus.
+        /// </summary>
+        public static Obj_HQ AllyNexus { get; set; }
 
         /// <summary>
         ///     Gets the ally shops.
@@ -297,6 +333,17 @@ namespace LeagueSharp.SDK.Core
         }
 
         /// <summary>
+        ///     Gets the enemy inhibitors.
+        /// </summary>
+        public static IEnumerable<Obj_BarracksDampener> EnemyInhibitors
+        {
+            get
+            {
+                return EnemyInhibitorsList;
+            }
+        }
+
+        /// <summary>
         ///     Gets the enemy minions.
         /// </summary>
         public static IEnumerable<Obj_AI_Minion> EnemyMinions
@@ -306,6 +353,11 @@ namespace LeagueSharp.SDK.Core
                 return EnemyMinionsList;
             }
         }
+
+        /// <summary>
+        ///     Gets or sets the enemy nexus.
+        /// </summary>
+        public static Obj_HQ EnemyNexus { get; set; }
 
         /// <summary>
         ///     Gets the enemy shops.
@@ -363,6 +415,17 @@ namespace LeagueSharp.SDK.Core
         }
 
         /// <summary>
+        ///     Gets the inhibitors.
+        /// </summary>
+        public static IEnumerable<Obj_BarracksDampener> Inhibitors
+        {
+            get
+            {
+                return InhibitorsList;
+            }
+        }
+
+        /// <summary>
         ///     Gets the jungle.
         /// </summary>
         public static IEnumerable<Obj_AI_Minion> Jungle
@@ -414,6 +477,17 @@ namespace LeagueSharp.SDK.Core
             get
             {
                 return MinionsList;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the nexuses.
+        /// </summary>
+        public static IEnumerable<Obj_HQ> Nexuses
+        {
+            get
+            {
+                return NexusList;
             }
         }
 
@@ -539,6 +613,7 @@ namespace LeagueSharp.SDK.Core
                                 o.Team != GameObjectTeam.Neutral && !o.Name.Contains("ward")
                                 && !o.Name.Contains("trinket")));
                     TurretsList.AddRange(ObjectManager.Get<Obj_AI_Turret>());
+                    InhibitorsList.AddRange(ObjectManager.Get<Obj_BarracksDampener>());
                     JungleList.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(o => o.Team == GameObjectTeam.Neutral));
                     WardsList.AddRange(
                         ObjectManager.Get<Obj_AI_Minion>()
@@ -546,18 +621,23 @@ namespace LeagueSharp.SDK.Core
                     ShopsList.AddRange(ObjectManager.Get<Obj_Shop>());
                     SpawnPointsList.AddRange(ObjectManager.Get<Obj_SpawnPoint>());
                     GameObjectsList.AddRange(ObjectManager.Get<GameObject>());
+                    NexusList.AddRange(ObjectManager.Get<Obj_HQ>());
 
                     EnemyHeroesList.AddRange(HeroesList.Where(o => o.IsEnemy));
                     EnemyMinionsList.AddRange(MinionsList.Where(o => o.IsEnemy));
                     EnemyTurretsList.AddRange(TurretsList.Where(o => o.IsEnemy));
+                    EnemyInhibitorsList.AddRange(InhibitorsList.Where(o => o.IsEnemy));
                     EnemyList.AddRange(
                         EnemyHeroesList.Cast<Obj_AI_Base>().Concat(EnemyMinionsList).Concat(EnemyTurretsList));
+                    EnemyNexus = NexusList.FirstOrDefault(n => n.IsEnemy);
 
                     AllyHeroesList.AddRange(HeroesList.Where(o => o.IsAlly));
                     AllyMinionsList.AddRange(MinionsList.Where(o => o.IsAlly));
                     AllyTurretsList.AddRange(TurretsList.Where(o => o.IsAlly));
+                    AllyInhibitorsList.AddRange(InhibitorsList.Where(o => o.IsAlly));
                     AllyList.AddRange(
                         AllyHeroesList.Cast<Obj_AI_Base>().Concat(AllyMinionsList).Concat(AllyTurretsList));
+                    AllyNexus = NexusList.FirstOrDefault(n => n.IsAlly);
 
                     JungleSmallList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Small));
                     JungleLargeList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Large));
@@ -706,6 +786,34 @@ namespace LeagueSharp.SDK.Core
                 else
                 {
                     EnemySpawnPointsList.Add(spawnPoint);
+                }
+            }
+
+            var inhibitor = sender as Obj_BarracksDampener;
+            if (inhibitor != null)
+            {
+                InhibitorsList.Add(inhibitor);
+                if (inhibitor.IsAlly)
+                {
+                    AllyInhibitorsList.Add(inhibitor);
+                }
+                else
+                {
+                    EnemyInhibitorsList.Add(inhibitor);
+                }
+            }
+
+            var nexus = sender as Obj_HQ;
+            if (nexus != null)
+            {
+                NexusList.Add(nexus);
+                if (nexus.IsAlly)
+                {
+                    AllyNexus = nexus;
+                }
+                else
+                {
+                    EnemyNexus = nexus;
                 }
             }
         }
@@ -862,6 +970,40 @@ namespace LeagueSharp.SDK.Core
                     else
                     {
                         EnemySpawnPointsList.Remove(spawnPointObject);
+                    }
+                }
+            }
+
+            var inhibitor = sender as Obj_BarracksDampener;
+            if (inhibitor != null)
+            {
+                foreach (var inhibitorObject in InhibitorsList.Where(i => i.Compare(inhibitor)).ToList())
+                {
+                    InhibitorsList.Remove(inhibitorObject);
+                    if (inhibitor.IsAlly)
+                    {
+                        AllyInhibitorsList.Remove(inhibitorObject);
+                    }
+                    else
+                    {
+                        EnemyInhibitorsList.Remove(inhibitorObject);
+                    }
+                }
+            }
+
+            var nexus = sender as Obj_HQ;
+            if (nexus != null)
+            {
+                foreach (var nexusObject in NexusList.Where(n => n.Compare(nexus)).ToList())
+                {
+                    NexusList.Remove(nexusObject);
+                    if (nexusObject.IsAlly)
+                    {
+                        AllyNexus = null;
+                    }
+                    else
+                    {
+                        EnemyNexus = null;
                     }
                 }
             }
