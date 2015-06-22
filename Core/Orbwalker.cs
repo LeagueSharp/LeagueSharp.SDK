@@ -96,7 +96,7 @@ namespace LeagueSharp.SDK.Core
             {
                 return attack
                        && Variables.TickCount + (Game.Ping / 2)
-                       >= lastAutoAttackTick + (Player.BasicAttack.CastFrame * 1000)
+                       >= lastAutoAttackTick + (Player.AttackDelay * 1000)
                        + menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value;
             }
 
@@ -250,7 +250,7 @@ namespace LeagueSharp.SDK.Core
                 var spellName = args.SData.Name;
                 var target = args.Target as AttackableUnit;
 
-                if (AutoAttack.IsAutoAttack(spellName))
+                if (AutoAttack.IsAutoAttack(spellName) && target != null && target.IsValid)
                 {
                     lastAutoAttackTick = Variables.TickCount - (Game.Ping / 2);
                     IsMissileLaunched = false;
@@ -258,8 +258,7 @@ namespace LeagueSharp.SDK.Core
                     var time = sender.AttackCastDelay * 1000 + 40;
                     var eventArgs = new ActionArgs
                                         {
-                                            Target = target, Position = target != null ? target.Position : Player.Position, 
-                                            Type = OrbwalkerType.AfterAttack
+                                            Target = target, Position = target.Position, Type = OrbwalkerType.AfterAttack
                                         };
 
                     if (!AfterAttackTime.ContainsKey(time))
@@ -269,8 +268,7 @@ namespace LeagueSharp.SDK.Core
 
                     eventArgs = new ActionArgs
                                     {
-                                        Target = target, Position = target != null ? target.Position : Player.Position, 
-                                        Type = OrbwalkerType.OnAttack
+                                       Target = target, Position = target.Position, Type = OrbwalkerType.OnAttack 
                                     };
                     CallOnAction(eventArgs);
                 }
@@ -299,8 +297,10 @@ namespace LeagueSharp.SDK.Core
             {
                 if (Attack)
                 {
-                    Preform(GetTarget(ActiveMode));
-                    lastMovementOrderTick = Variables.TickCount;
+                    if (Preform(GetTarget(ActiveMode)))
+                    {
+                        return;
+                    }
                 }
 
                 if (Movement
@@ -413,9 +413,12 @@ namespace LeagueSharp.SDK.Core
         /// <param name="target">
         ///     A target to attack.
         /// </param>
-        private static void Preform(AttackableUnit target)
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
+        private static bool Preform(AttackableUnit target)
         {
-            if (target != null && Player.IssueOrder(GameObjectOrder.AttackUnit, target))
+            if (target != null && target.IsValidTarget(target.GetRealAutoAttackRange()))
             {
                 var eventArgs = new ActionArgs
                                     {
@@ -423,7 +426,14 @@ namespace LeagueSharp.SDK.Core
                                         Type = OrbwalkerType.BeforeAttack
                                     };
                 CallOnAction(eventArgs);
+
+                if (eventArgs.Process)
+                {
+                    return Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+                }
             }
+
+            return false;
         }
 
         #endregion
@@ -613,7 +623,7 @@ namespace LeagueSharp.SDK.Core
                             let time =
                                 (int)
                                 (Player.BasicAttack.CastFrame * 1000
-                                 + (Player.Distance(turret) / Player.GetProjectileSpeed() * 1000) + Game.Ping / 2f)
+                                 + Player.Distance(turret) / Player.GetProjectileSpeed() * 1000 + Game.Ping / 2f)
                             let predictedHealth = Health.GetPrediction(turret, time, 0)
                             where predictedHealth > 0 && predictedHealth <= Player.GetAutoAttackDamage(turret, true)
                             select turret)
