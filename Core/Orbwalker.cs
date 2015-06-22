@@ -31,6 +31,7 @@ namespace LeagueSharp.SDK.Core
     using LeagueSharp.SDK.Core.Events;
     using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Math.Prediction;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers;
@@ -56,6 +57,11 @@ namespace LeagueSharp.SDK.Core
         ///     The local attack value.
         /// </summary>
         private static bool attack = true;
+
+        /// <summary>
+        ///     Indicates whether the missile was launched.
+        /// </summary>
+        private static bool isMissileLaunched = true;
 
         /// <summary>
         ///     The local last auto attack tick value.
@@ -107,12 +113,13 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return movement && !InterruptableSpell.IsCastingInterruptableSpell(Player, true)
-                       && ((!IsMissileLaunched && Player.IsRanged)
-                           || (Player.CanCancelAutoAttack()
-                                   ? Variables.TickCount + (Game.Ping / 2)
-                                     >= lastAutoAttackTick + (Player.AttackCastDelay * 1000) + 40
-                                   : Variables.TickCount - lastAutoAttackTick > 250));
+                var flag = movement && !InterruptableSpell.IsCastingInterruptableSpell(Player, true);
+
+                return (IsMissileLaunched
+                        || (Player.CanCancelAutoAttack()
+                                ? Variables.TickCount + (Game.Ping / 2)
+                                  >= lastAutoAttackTick + (Player.AttackCastDelay * 1000) + 40
+                                : Variables.TickCount - lastAutoAttackTick > 250)) && flag;
             }
 
             set
@@ -128,7 +135,18 @@ namespace LeagueSharp.SDK.Core
         /// <summary>
         ///     Gets or sets a value indicating whether is missile launched.
         /// </summary>
-        private static bool IsMissileLaunched { get; set; }
+        private static bool IsMissileLaunched
+        {
+            get
+            {
+                return isMissileLaunched;
+            }
+
+            set
+            {
+                isMissileLaunched = value;
+            }
+        }
 
         /// <summary>
         ///     Gets the player.
@@ -160,7 +178,7 @@ namespace LeagueSharp.SDK.Core
 
             if (missile != null && missile.SpellCaster.IsMe && AutoAttack.IsAutoAttack(missile.SData.Name))
             {
-                IsMissileLaunched = false;
+                IsMissileLaunched = true;
             }
         }
 
@@ -238,9 +256,10 @@ namespace LeagueSharp.SDK.Core
                                         Type = OrbwalkerType.AfterAttack
                                     };
 
-                if (AutoAttack.IsAutoAttack(spellName) && args.Target.IsValid)
+                if (AutoAttack.IsAutoAttack(spellName))
                 {
                     lastAutoAttackTick = Variables.TickCount - (Game.Ping / 2);
+                    IsMissileLaunched = false;
                     var time = sender.AttackCastDelay * 1000 + 40;
 
                     if (!AfterAttackTime.ContainsKey(time))
@@ -286,7 +305,10 @@ namespace LeagueSharp.SDK.Core
             {
                 if (Attack)
                 {
-                    Preform(GetTarget(ActiveMode));
+                    if (Preform(GetTarget(ActiveMode)))
+                    {
+                        return;
+                    }
                 }
 
                 if (Movement
@@ -385,15 +407,6 @@ namespace LeagueSharp.SDK.Core
     /// </summary>
     public partial class Orbwalker
     {
-        #region Static Fields
-
-        /// <summary>
-        ///     The preform tick, block the command <c>Player.IssueOrder</c> spam.
-        /// </summary>
-        private static int preformTick;
-
-        #endregion
-
         #region Methods
 
         /// <summary>
@@ -402,11 +415,13 @@ namespace LeagueSharp.SDK.Core
         /// <param name="target">
         ///     A target to attack.
         /// </param>
-        private static void Preform(AttackableUnit target)
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
+        private static bool Preform(AttackableUnit target)
         {
             if (target.IsValidTarget()
-                && Player.DistanceSquared(target) <= System.Math.Pow(target.GetRealAutoAttackRange(), 2)
-                && Variables.TickCount - preformTick > 0)
+                && Player.DistanceSquared(target) <= System.Math.Pow(target.GetRealAutoAttackRange(), 2))
             {
                 var eventArgs = new ActionArgs
                                     {
@@ -417,10 +432,11 @@ namespace LeagueSharp.SDK.Core
 
                 if (eventArgs.Process)
                 {
-                    preformTick = Variables.TickCount + Game.Ping;
-                    Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+                    return Player.IssueOrder(GameObjectOrder.AttackUnit, target);
                 }
             }
+
+            return false;
         }
 
         #endregion
@@ -575,11 +591,135 @@ namespace LeagueSharp.SDK.Core
 
                 default:
                     {
-                        break;
+                        var target = TargetSelector.GetTarget(-1f);
+                        if (mode == OrbwalkerMode.Hybrid && target != null)
+                        {
+                            return target;
+                        }
+
+                        var minionList =
+                            GameObjects.EnemyMinions.Where(m => m.IsValidTarget(m.GetRealAutoAttackRange())).ToList();
+                        var lowMinions =
+                            minionList.Where(m => m.Health < 2 * Player.GetAutoAttackDamage(m))
+                                .OrderByDescending(m => m.MaxHealth);
+
+                        foreach (var minion in lowMinions)
+                        {
+                            var time =
+                                (int)
+                                (Player.AttackCastDelay * 1000
+                                 + Player.Distance(minion) / Player.GetProjectileSpeed() * 1000 + Game.Ping / 2f);
+                            var predictedHealth = Health.GetPrediction(minion, time, 0);
+
+                            if (predictedHealth <= 0)
+                            {
+                                var eventArgs = new ActionArgs
+                                {
+                                    Target = minion,
+                                    Position = minion.Position,
+                                    Process = true,
+                                    Type = OrbwalkerType.NonKillableMinion
+                                };
+                                CallOnAction(eventArgs);
+                            }
+                            else if (predictedHealth <= Player.GetAutoAttackDamage(minion, true))
+                            {
+                                return minion;
+                            }
+                        }
+
+                        foreach (var turret in
+                            from turret in
+                                GameObjects.EnemyTurrets.Where(t => t.IsValidTarget(t.GetRealAutoAttackRange()))
+                            let time =
+                                (int)
+                                (Player.AttackCastDelay * 1000
+                                 + Player.Distance(turret) / Player.GetProjectileSpeed() * 1000 + Game.Ping / 2f)
+                            let predictedHealth = Health.GetPrediction(turret, time, 0)
+                            where predictedHealth > 0 && predictedHealth <= Player.GetAutoAttackDamage(turret)
+                            select turret)
+                        {
+                            return turret;
+                        }
+
+                        if (mode != OrbwalkerMode.LastHit)
+                        {
+                            var shouldWait =
+                                minionList.Any(
+                                    m =>
+                                    Health.GetPrediction(
+                                        m,
+                                        (int)
+                                        ((Player.AttackCastDelay * 1000) * 2
+                                         + Player.Distance(m) / Player.GetProjectileSpeed() * 1000 + Game.Ping / 2f),
+                                        0,
+                                        HealthPredictionType.Simulated) <= Player.GetAutoAttackDamage(m));
+
+                            if (!shouldWait)
+                            {
+                                var minion = (from m in minionList
+                                              let predictedHealth =
+                                                  Health.GetPrediction(
+                                                      m,
+                                                      (int)
+                                                      ((Player.AttackCastDelay * 1000) * 2
+                                                       + Player.Distance(m) / Player.GetProjectileSpeed() * 1000
+                                                       + Game.Ping / 2f),
+                                                      0,
+                                                      HealthPredictionType.Simulated)
+                                              where
+                                                  predictedHealth >= 2 * Player.GetAutoAttackDamage(m)
+                                                  || System.Math.Abs(predictedHealth - m.Health) < float.Epsilon
+                                              select m).MaxOrDefault(m => m.Health);
+                                if (minion != null)
+                                {
+                                    return minion;
+                                }
+
+                                var mob =
+                                    (GameObjects.JungleLegendary.FirstOrDefault(
+                                        j => j.IsValidTarget(j.GetRealAutoAttackRange()))
+                                     ?? GameObjects.JungleSmall.FirstOrDefault(
+                                         j =>
+                                         j.IsValidTarget(j.GetRealAutoAttackRange()) && j.Name.Contains("Mini")
+                                         && j.Name.Contains("SRU_Razorbeak"))
+                                     ?? GameObjects.JungleLarge.FirstOrDefault(
+                                         j => j.IsValidTarget(j.GetRealAutoAttackRange())))
+                                    ?? GameObjects.JungleSmall.FirstOrDefault(
+                                        j => j.IsValidTarget(j.GetRealAutoAttackRange()));
+                                if (mob != null)
+                                {
+                                    return mob;
+                                }
+
+                                var turret =
+                                    GameObjects.EnemyTurrets.FirstOrDefault(
+                                        t => t.IsValidTarget(t.GetRealAutoAttackRange()));
+                                if (turret != null)
+                                {
+                                    return turret;
+                                }
+
+                                var inhibitor =
+                                    GameObjects.EnemyInhibitors.FirstOrDefault(
+                                        i => i.IsValidTarget(i.GetRealAutoAttackRange()));
+                                if (inhibitor != null)
+                                {
+                                    return inhibitor;
+                                }
+
+                                if (GameObjects.EnemyNexus != null
+                                    && GameObjects.EnemyNexus.IsValidTarget(
+                                        GameObjects.EnemyNexus.GetRealAutoAttackRange()))
+                                {
+                                    return GameObjects.EnemyNexus;
+                                }
+                            }
+                        }
+
+                        return null;
                     }
             }
-
-            return null;
         }
 
         /// <summary>

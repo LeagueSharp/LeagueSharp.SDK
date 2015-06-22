@@ -36,14 +36,14 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
         #region Static Fields
 
         /// <summary>
-        ///     Last Tick Update
-        /// </summary>
-        private static int lastTick;
-
-        /// <summary>
         ///     List of Active Attacks.
         /// </summary>
         private static readonly Dictionary<int, PredictedDamage> ActiveAttacks = new Dictionary<int, PredictedDamage>();
+
+        /// <summary>
+        ///     Last Tick Update
+        /// </summary>
+        private static int lastTick;
 
         #endregion
 

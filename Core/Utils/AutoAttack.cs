@@ -53,6 +53,30 @@ namespace LeagueSharp.SDK.Core.Utils
             };
 
         /// <summary>
+        ///     Spells that are attacks even if they don't have the "attack" word in their name.
+        /// </summary>
+        private static readonly string[] Attacks =
+            {
+                "caitlynheadshotmissile", "frostarrow", "garenslash2", 
+                "kennenmegaproc", "lucianpassiveattack", "masteryidoublestrike", 
+                "quinnwenhanced", "renektonexecute", "renektonsuperexecute", 
+                "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust", 
+                "xenzhaothrust2", "xenzhaothrust3", "viktorqbuff"
+            };
+
+        /// <summary>
+        ///     Spells that are not attacks even if they have the "attack" word in their name.
+        /// </summary>
+        private static readonly string[] NoAttacks =
+            {
+                "jarvanivcataclysmattack", "monkeykingdoubleattack", 
+                "shyvanadoubleattack", "shyvanadoubleattackdragon", 
+                "zyragraspingplantattack", "zyragraspingplantattack2", 
+                "zyragraspingplantattackfire", "zyragraspingplantattack2fire", 
+                "viktorpowertransfer", "sivirwattackbounce"
+            };
+
+        /// <summary>
         ///     Champions which can't cancel AA.
         /// </summary>
         private static readonly string[] NoCancelChamps = { "Kalista" };
@@ -74,14 +98,15 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <summary>
         ///     Returns player auto-attack missile speed.
         /// </summary>
+        /// <param name="hero">
+        ///     The hero.
+        /// </param>
         /// <returns>
         ///     The <see cref="float" />.
         /// </returns>
-        public static float GetProjectileSpeed()
+        public static float GetProjectileSpeed(this Obj_AI_Hero hero)
         {
-            return IsMelee(GameObjects.Player) || GameObjects.Player.ChampionName == "Azir"
-                       ? float.MaxValue
-                       : GameObjects.Player.BasicAttack.MissileSpeed;
+            return IsMelee(hero) || hero.ChampionName == "Azir" ? float.MaxValue : hero.BasicAttack.MissileSpeed;
         }
 
         /// <summary>
@@ -112,7 +137,7 @@ namespace LeagueSharp.SDK.Core.Utils
         public static float GetTimeToHit(this AttackableUnit target)
         {
             return GameObjects.Player.AttackCastDelay * 1000 - 100 + Game.Ping / 2f
-                   + 1000 * GameObjects.Player.Distance(target) / GetProjectileSpeed();
+                   + 1000 * GameObjects.Player.Distance(target) / GameObjects.Player.GetProjectileSpeed();
         }
 
         /// <summary>
@@ -148,7 +173,8 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>The <see cref="bool" /></returns>
         public static bool IsAutoAttack(string name)
         {
-            return name.ToLower().Contains("attack");
+            return (name.ToLower().Contains("attack") && !NoAttacks.Contains(name.ToLower()))
+                   || Attacks.Contains(name.ToLower());
         }
 
         /// <summary>
