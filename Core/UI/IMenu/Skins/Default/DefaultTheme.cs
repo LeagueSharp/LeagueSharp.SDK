@@ -103,15 +103,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             dragTexture = Texture.FromMemory(
                 Drawing.Direct3DDevice,
                 (byte[])new ImageConverter().ConvertTo(resized, typeof(byte[])),
-            resized.Width,
-            resized.Height,
-            0,
-            Usage.None,
-            Format.A1,
-            Pool.Managed,
-            Filter.Default,
-            Filter.Default,
-            0);
+                resized.Width,
+                resized.Height,
+                0,
+                Usage.None,
+                Format.A1,
+                Pool.Managed,
+                Filter.Default,
+                Filter.Default,
+                0);
         }
 
         #endregion
@@ -360,46 +360,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 contour.End();
                 contour.Dispose();
             }
-
-            if (menuComponent.HasDragged)
-            {
-                var sprite = MenuManager.Instance.Sprite;
-                var oldMatrix = sprite.Transform;
-                int y = (int)(MenuManager.Instance.Position.Y + (MenuManager.Instance.Menus.Count * MenuSettings.ContainerHeight));
-                float x = MenuManager.Instance.Position.X - dragTextureSize;
-                sprite.Transform = Matrix.Translation(x - 1, y + 2, 0);
-                sprite.Draw(
-                    dragTexture,
-                    Color.White);
-                sprite.Transform = oldMatrix;
-
-                Line line = new Line(Drawing.Direct3DDevice)
-                {
-                    Width = 1
-                };
-                line.Begin();
-                line.Draw(
-                        new[]
-                        {
-                            new Vector2(x - 1, y + 1), 
-                            new Vector2(x - 1 + dragTextureSize, y + 1),
-                            new Vector2(x - 1 + dragTextureSize, y + dragTextureSize + 2), 
-                            new Vector2(x - 2, y + dragTextureSize + 2),
-                            new Vector2(x - 2, y),
-                        },
-                        MenuSettings.ContainerSeparatorColor);
-                line.End();
-                line.Dispose();
-            }
+           
         }
 
         /// <summary>
         ///     OnDraw event.
         /// </summary>
-        /// <param name="position">The position</param>
         public void Draw()
         {
-            var position = MenuManager.Instance.Position;
+            var position = MenuSettings.Position;
             var menuManager = MenuManager.Instance;
             var height = MenuSettings.ContainerHeight * menuManager.Menus.Count;
             var width = MenuSettings.ContainerWidth;
@@ -453,6 +422,37 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 Color.Black);
             contour.End();
             contour.Dispose();
+
+            if (menuManager.HasDragged)
+            {
+                var sprite = MenuManager.Instance.Sprite;
+                var oldMatrix = sprite.Transform;
+                int y = (int)(MenuSettings.Position.Y + (MenuManager.Instance.Menus.Count * MenuSettings.ContainerHeight));
+                float x = MenuSettings.Position.X - dragTextureSize;
+                sprite.Transform = Matrix.Translation(x - 1, y + 2, 0);
+                sprite.Draw(
+                    dragTexture,
+                    Color.White);
+                sprite.Transform = oldMatrix;
+
+                Line line = new Line(Drawing.Direct3DDevice)
+                {
+                    Width = 1
+                };
+                line.Begin();
+                line.Draw(
+                        new[]
+                        {
+                            new Vector2(x - 1, y + 1), 
+                            new Vector2(x - 1 + dragTextureSize, y + 1),
+                            new Vector2(x - 1 + dragTextureSize, y + dragTextureSize + 2), 
+                            new Vector2(x - 2, y + dragTextureSize + 2),
+                            new Vector2(x - 2, y),
+                        },
+                        MenuSettings.ContainerSeparatorColor);
+                line.End();
+                line.Dispose();
+            }
         }
 
         #endregion

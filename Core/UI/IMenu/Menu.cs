@@ -65,10 +65,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private bool visible;
 
-        private bool dragging;
-
-        private bool hasDragged;
-
         #endregion
 
         #region Constructors and Destructors
@@ -117,35 +113,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         public bool Hovering { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether the user is dragging the menu.
-        /// </summary>
-        public bool Dragging {
-            get
-            {
-                return Root && dragging;
-            }
-            private set
-            {
-                dragging = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the user has moved the menu at least 1 pixel.
-        /// </summary>
-        public bool HasDragged
-        {
-            get
-            {
-                return Dragging && hasDragged;
-            }
-            private set
-            {
-                hasDragged = value;
-            }
-        }
-
-        /// <summary>
         ///     Gets the path.
         /// </summary>
         /// <value>
@@ -173,11 +140,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                         .FullName;
             }
         }
-
-        /// <summary>
-        ///     Menu Position
-        /// </summary>
-        public override Vector2 Position { get; set; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether that the settings are shared.
@@ -276,7 +238,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         ///     Add a menu component to this menu.
         /// </summary>
         /// <param name="component"><see cref="AMenuComponent" /> component</param>
-        public virtual void Add(AMenuComponent component)
+        public virtual T Add<T>(T component) where T : AMenuComponent
         {
             if (!this.Components.ContainsKey(component.Name))
             {
@@ -311,6 +273,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 }
             }
             MenuManager.Instance.ResetWidth();
+            return component;
         }
 
         /// <summary>
@@ -417,17 +380,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void OnWndProc(WindowsKeys args)
         {
+            var menuManager = MenuManager.Instance;
             if (args.Msg == WindowsMessages.LBUTTONUP)
             {
-                HasDragged = false;
-                Dragging = false;
+                menuManager.HasDragged = false;
+                menuManager.Dragging = false;
             }
             if (this.Visible)
             {
-                if (args.Msg == WindowsMessages.MOUSEMOVE && Dragging)
+                if (args.Msg == WindowsMessages.MOUSEMOVE && menuManager.Dragging)
                 { 
-                    MenuManager.Instance.Position = new Vector2(args.Cursor.X - xd, args.Cursor.Y - yd);
-                    HasDragged = true;
+                    MenuSettings.Position = new Vector2(args.Cursor.X - xd, args.Cursor.Y - yd);
+                    menuManager.HasDragged = true;
                 }
                 if (args.Cursor.IsUnderRectangle(
                     this.Position.X, 
@@ -435,11 +399,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                     this.MenuWidth, 
                     MenuSettings.ContainerHeight))
                 {
-                    if (args.Msg == WindowsMessages.LBUTTONDOWN)
+                    if (args.Msg == WindowsMessages.LBUTTONDOWN && Root)
                     {
-                        xd = args.Cursor.X - MenuManager.Instance.Position.X;
-                        yd = args.Cursor.Y - MenuManager.Instance.Position.Y;
-                        Dragging = true;
+                        var pos = MenuSettings.Position;
+                        xd = args.Cursor.X - pos.X;
+                        yd = args.Cursor.Y - pos.Y;
+                        menuManager.Dragging = true;
                     }
                     this.Hovering = true;
                     if (args.Msg == WindowsMessages.LBUTTONDOWN && this.Components.Count > 0)
@@ -482,13 +447,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         ///     Removes a menu component from this menu.
         /// </summary>
         /// <param name="component"><see cref="AMenuComponent" /> component instance</param>
-        public void Remove(AMenuComponent component)
+        public bool Remove(AMenuComponent component)
         {
             if (this.Components.ContainsKey(component.Name))
             {
+                component.Save();
                 component.Parent = null;
-                this.Components.Remove(component.Name);
+                return this.Components.Remove(component.Name);
             }
+            return false;
         }
 
         /// <summary>

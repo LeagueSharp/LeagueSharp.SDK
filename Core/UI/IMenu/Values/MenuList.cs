@@ -40,6 +40,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     [Serializable]
     public abstract class MenuList : MenuItem
     {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MenuList" /> class.
+        /// </summary>
+        /// <param name="name">Internal name of the component</param>
+        /// <param name="displayName">Display name of the component</param>
+        /// <param name="uniqueString">String to make this component unique</param>
         protected MenuList(string name, string displayName, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {

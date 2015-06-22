@@ -115,6 +115,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         static MenuSettings()
         {
+            Position = new Vector2(30, 30);
             ContainerWidth = 200f;
             Font =
                     new Font(
@@ -134,6 +135,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        ///     The default menu zero-position.
+        /// </summary>
+        public static Vector2 Position { get; set; }
 
         /// <summary>
         ///     Gets or sets the Global Container Height.

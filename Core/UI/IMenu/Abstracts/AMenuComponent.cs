@@ -147,7 +147,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         /// <summary>
         ///     Gets or sets the Component Position
         /// </summary>
-        public abstract Vector2 Position { get; set; }
+        public Vector2 Position { get; set; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether component is on the uppermost level.

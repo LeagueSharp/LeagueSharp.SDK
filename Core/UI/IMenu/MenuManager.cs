@@ -49,7 +49,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     The configuration folder
         /// </summary>
-        private static DirectoryInfo configFolder =
+        public static readonly DirectoryInfo ConfigFolder =
             Directory.CreateDirectory(
                 Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
@@ -69,11 +69,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         ///     The menus list.
         /// </summary>
         private readonly List<Menu> menus = new List<Menu>();
-
-        /// <summary>
-        ///     The default menu zero-position.
-        /// </summary>
-        public Vector2 Position { get; set; }
 
         /// <summary>
         ///     The forced open.
@@ -96,7 +91,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private MenuManager()
         {
-            Position = new Vector2(30, 30);
             this.Sprite = new Sprite(Drawing.Direct3DDevice);
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnEndScene += this.Drawing_OnDraw;
@@ -189,20 +183,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         public Sprite Sprite { get; private set; }
 
         /// <summary>
-        ///     Gets or sets the configuration folder
+        /// Gets a value indicating whether the user is dragging the menu.
         /// </summary>
-        public static DirectoryInfo ConfigFolder
-        {
-            get
-            {
-                return configFolder;
-            }
+        public bool Dragging { get; set; }
 
-            set
-            {
-                configFolder = value;
-            }
-        }
+        /// <summary>
+        /// Gets a value indicating whether the user has moved the menu at least 1 pixel.
+        /// </summary>
+        public bool HasDragged { get; set; }
 
         #endregion
 

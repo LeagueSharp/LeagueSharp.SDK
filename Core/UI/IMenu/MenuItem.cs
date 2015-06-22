@@ -113,11 +113,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        ///     Item Position
-        /// </summary>
-        public override Vector2 Position { get; set; }
-
-        /// <summary>
         ///     Gets or sets a value indicating whether the settings are loaded.
         /// </summary>
         public bool SettingsLoaded { get; set; }
