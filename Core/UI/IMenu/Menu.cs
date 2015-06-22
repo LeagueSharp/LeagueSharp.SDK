@@ -105,6 +105,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Public Properties
 
         /// <summary>
+        /// Gets a value indicating whether the user is dragging the menu.
+        /// </summary>
+        public bool Dragging { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the user has moved the menu at least 1 pixel.
+        /// </summary>
+        public bool HasDragged { get; set; }
+
+        /// <summary>
         ///     Gets a value indicating whether this <see cref="Menu" /> is hovering.
         /// </summary>
         /// <value>
@@ -383,15 +393,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             var menuManager = MenuManager.Instance;
             if (args.Msg == WindowsMessages.LBUTTONUP)
             {
-                menuManager.HasDragged = false;
-                menuManager.Dragging = false;
+                HasDragged = false;
+                Dragging = false;
             }
             if (this.Visible)
             {
-                if (args.Msg == WindowsMessages.MOUSEMOVE && menuManager.Dragging)
+                if (args.Msg == WindowsMessages.MOUSEMOVE && Dragging)
                 { 
                     MenuSettings.Position = new Vector2(args.Cursor.X - xd, args.Cursor.Y - yd);
-                    menuManager.HasDragged = true;
+                    HasDragged = true;
                 }
                 if (args.Cursor.IsUnderRectangle(
                     this.Position.X, 
@@ -404,7 +414,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                         var pos = MenuSettings.Position;
                         xd = args.Cursor.X - pos.X;
                         yd = args.Cursor.Y - pos.Y;
-                        menuManager.Dragging = true;
+                        Dragging = true;
                     }
                     this.Hovering = true;
                     if (args.Msg == WindowsMessages.LBUTTONDOWN && this.Components.Count > 0)

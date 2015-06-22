@@ -37,6 +37,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     [Serializable]
     public class MenuSlider : MenuItem, ISerializable
     {
+
+        private readonly int original;
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -57,6 +60,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
             this.Value = value;
             this.MinValue = minValue;
             this.MaxValue = maxValue;
+            original = value;
         }
 
         /// <summary>
@@ -249,5 +253,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         #endregion
+
+        /// <summary>
+        /// Resets the MenuItem back to his default values.
+        /// </summary>
+        public override void RestoreDefault()
+        {
+            Value = original;
+        }
     }
 }

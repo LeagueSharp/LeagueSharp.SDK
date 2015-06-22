@@ -423,5 +423,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         #endregion
+
+        /// <summary>
+        /// Resets the MenuItem back to his default values.
+        /// </summary>
+        public override void RestoreDefault()
+        {
+            //do nothing
+        }
     }
 }

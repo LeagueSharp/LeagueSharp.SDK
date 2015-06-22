@@ -28,7 +28,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
 
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins;
     using LeagueSharp.SDK.Core.Utils;
 
@@ -50,6 +49,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </summary>
         private bool interacting;
 
+        private readonly Keys original;
+
         #endregion
 
         #region Constructors and Destructors
@@ -69,6 +70,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             this.Key = key;
             this.Type = type;
+            original = key;
         }
 
         /// <summary>
@@ -79,6 +81,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         protected MenuKeyBind(SerializationInfo info, StreamingContext context)
         {
             this.Key = (Keys)info.GetValue("key", typeof(Keys));
+            this.original = (Keys)info.GetValue("original", typeof(Keys));
         }
 
         #endregion
@@ -157,7 +160,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         public override void Extract(IMenu.MenuItem value)
         {
             var keybind = (MenuKeyBind)value;
-            this.Key = keybind.Key;
+            if (original == keybind.original)
+            {
+                this.Key = keybind.Key;
+            }
+            
         }
 
         /// <summary>
@@ -295,6 +302,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
             }
 
             info.AddValue("key", this.Key, typeof(Keys));
+            info.AddValue("original", this.original, typeof(Keys));
         }
 
         #endregion
@@ -315,6 +323,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("key", this.Key, typeof(Keys));
+            info.AddValue("original", this.original, typeof(Keys));
         }
 
         /// <summary>
@@ -338,7 +347,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </param>
         private void HandleDown(Keys expectedKey)
         {
-            if (expectedKey == this.Key && this.Type == KeyBindType.Press)
+            if (!Interacting && expectedKey == this.Key && this.Type == KeyBindType.Press)
             {
                 this.Active = true;
             }
@@ -367,5 +376,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         #endregion
+
+        /// <summary>
+        /// Resets the MenuItem back to his default values.
+        /// </summary>
+        public override void RestoreDefault()
+        {
+            Key = original;
+        }
     }
 }

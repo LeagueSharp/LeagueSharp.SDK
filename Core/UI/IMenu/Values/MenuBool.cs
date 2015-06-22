@@ -38,6 +38,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     [Serializable]
     public class MenuBool : MenuItem, ISerializable
     {
+
+        private readonly bool original;
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -49,6 +52,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         public MenuBool(string name, string displayName, bool value = false, string uniqueString = "") : base(name, displayName,uniqueString)
         {
             this.Value = value;
+            original = value;
         }
 
         /// <summary>
@@ -172,6 +176,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         #endregion
-        
+
+        /// <summary>
+        /// Resets the MenuItem back to his default values.
+        /// </summary>
+        public override void RestoreDefault()
+        {
+            Value = original;
+        }
     }
 }

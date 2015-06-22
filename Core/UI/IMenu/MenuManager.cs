@@ -182,16 +182,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         public Sprite Sprite { get; private set; }
 
-        /// <summary>
-        /// Gets a value indicating whether the user is dragging the menu.
-        /// </summary>
-        public bool Dragging { get; set; }
-
-        /// <summary>
-        /// Gets a value indicating whether the user has moved the menu at least 1 pixel.
-        /// </summary>
-        public bool HasDragged { get; set; }
-
         #endregion
 
         #region Public Indexers
