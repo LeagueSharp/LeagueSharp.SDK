@@ -90,6 +90,7 @@
     <Compile Include="Core\Enumerations\TeleportStatus.cs" />
     <Compile Include="Core\Enumerations\TeleportType.cs" />
     <Compile Include="Core\Enumerations\TurretShotType.cs" />
+    <Compile Include="Core\Enumerations\TweenState.cs" />
     <Compile Include="Core\Enumerations\WindowsMessages.cs" />
     <Compile Include="Core\Events\Gapcloser.cs" />
     <Compile Include="Core\Events\Teleport.cs" />
@@ -151,6 +152,8 @@
     <Compile Include="Core\Signals\Signal.cs" />
     <Compile Include="Core\Signals\SignalManager.cs" />
     <Compile Include="Core\Utils\Jungle.cs" />
+    <Compile Include="Core\Utils\Tween\LerpFuncs.cs" />
+    <Compile Include="Core\Utils\Tween\ScaleFuncs.cs" />
     <Compile Include="Core\Utils\Spells.cs" />
     <Compile Include="Core\UI\Developer\Developer.cs" />
     <Compile Include="Core\Utils\AutoAttack.cs" />
@@ -171,6 +174,7 @@
     <Compile Include="Core\Math\Collision.cs" />
     <Compile Include="Core\Utils\Cursor.cs" />
     <Compile Include="Core\Utils\Storage.cs" />
+    <Compile Include="Core\Utils\Tween\Tween.cs" />
     <Compile Include="Core\Utils\WindowsKeys.cs" />
     <Compile Include="Core\Utils\Math.cs" />
     <Compile Include="Core\Math\Polygons\Arc.cs" />
