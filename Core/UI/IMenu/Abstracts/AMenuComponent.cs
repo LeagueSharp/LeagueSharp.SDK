@@ -235,6 +235,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         public abstract void OnWndProc(WindowsKeys args);
 
         /// <summary>
+        /// Resets the MenuItem back to his default values.
+        /// </summary>
+        public abstract void RestoreDefault();
+
+        /// <summary>
         ///     Resets the width.
         /// </summary>
         public virtual void ResetWidth()
