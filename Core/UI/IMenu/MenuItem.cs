@@ -213,12 +213,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <param name="component">The component.</param>
         public abstract void Extract(MenuItem component);
 
-
-        /// <summary>
-        /// Resets the MenuItem back to his default values.
-        /// </summary>
-        public abstract void RestoreDefault();
-
         /// <summary>
         ///     Loads this instance.
         /// </summary>

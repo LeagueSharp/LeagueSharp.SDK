@@ -498,5 +498,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         #endregion
+
+        public override void RestoreDefault()
+        {
+            foreach (var comp in Components)
+            {
+                comp.Value.RestoreDefault();
+            }
+        }
     }
 }
