@@ -21,9 +21,13 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
+    using System;
+
     using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -116,7 +120,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         /// <param name="component">The <see cref="MenuColor" /></param>
         /// <returns>The <see cref="Rectangle" /></returns>
-        public Rectangle AlphaPickerBoundaries(MenuColor component)
+        private Rectangle AlphaPickerBoundaries(MenuColor component)
         {
             return new Rectangle(
                 this.pickerX + BorderOffset + this.greenWidth + TextOffset, 
@@ -130,7 +134,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         /// <param name="component">The <see cref="MenuColor" /></param>
         /// <returns>The <see cref="Rectangle" /></returns>
-        public Rectangle BluePickerBoundaries(MenuColor component)
+        private Rectangle BluePickerBoundaries(MenuColor component)
         {
             return new Rectangle(
                 this.pickerX + BorderOffset + this.greenWidth + TextOffset, 
@@ -143,7 +147,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         ///     Draws a MenuColor
         /// </summary>
         /// <param name="component">The <see cref="MenuColor" /></param>
-        public void Draw(MenuColor component)
+        public virtual void Draw(MenuColor component)
         {
             var rectangleName = GetContainerRectangle(component)
                 .GetCenteredText(null, MenuSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter);
@@ -223,7 +227,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 
                 var previewColor = component.Color;
 
-                var detail = string.Format(
+                var detail = String.Format(
                     "R:{0}  G:{1}  B:{2}  A:{3}", 
                     previewColor.R, 
                     previewColor.G, 
@@ -357,7 +361,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         /// <param name="component">The <see cref="MenuColor" /></param>
         /// <returns>The <see cref="Rectangle" /></returns>
-        public Rectangle GreenPickerBoundaries(MenuColor component)
+        private Rectangle GreenPickerBoundaries(MenuColor component)
         {
             return new Rectangle(
                 this.pickerX + BorderOffset + this.greenWidth + TextOffset, 
@@ -371,7 +375,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         /// <param name="component">The <see cref="MenuColor" /></param>
         /// <returns>The <see cref="Rectangle" /></returns>
-        public Rectangle PickerBoundaries(MenuColor component)
+        private Rectangle PickerBoundaries(MenuColor component)
         {
             return new Rectangle(this.pickerX, this.pickerY, PickerWidth, this.pickerHeight);
         }
@@ -381,7 +385,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         /// <param name="component">The <see cref="MenuColor" /></param>
         /// <returns>The <see cref="Rectangle" /></returns>
-        public Rectangle PreviewBoundaries(MenuColor component)
+        private Rectangle PreviewBoundaries(MenuColor component)
         {
             return
                 new Rectangle(
@@ -397,7 +401,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         /// <param name="component">>The <see cref="MenuColor" /></param>
         /// <returns>The <see cref="Rectangle" /></returns>
-        public Rectangle RedPickerBoundaries(MenuColor component)
+        private Rectangle RedPickerBoundaries(MenuColor component)
         {
             return new Rectangle(
                 this.pickerX + BorderOffset + this.greenWidth + TextOffset, 
@@ -411,7 +415,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         /// <param name="component">>The <see cref="MenuColor" /></param>
         /// <returns>The <see cref="int" /></returns>
-        public int SliderWidth(MenuColor component)
+        private int SliderWidth(MenuColor component)
         {
             return this.sliderWidth;
         }
@@ -421,11 +425,207 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         /// <param name="component">>The <see cref="MenuColor" /></param>
         /// <returns>The <see cref="int" /></returns>
-        public int Width(MenuColor component)
+        public virtual int Width(MenuColor component)
         {
             return MenuSettings.ContainerHeight;
         }
 
         #endregion
+
+        /// <summary>
+        ///     Updates the alpha value.
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">
+        ///     The windows keys.
+        /// </param>
+        /// <param name="rect">
+        ///     The <see cref="Rectangle" />
+        /// </param>
+        private void UpdateAlpha(MenuColor component, WindowsKeys args, Rectangle rect)
+        {
+            component.Color = new ColorBGRA(component.Color.R, component.Color.G, component.Color.B, GetByte(args, rect));
+            component.FireEvent();
+        }
+
+        /// <summary>
+        ///     Updates the blue value.
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">
+        ///     The windows keys.
+        /// </param>
+        /// <param name="rect">
+        ///     The <see cref="Rectangle" />
+        /// </param>
+        private void UpdateBlue(MenuColor component, WindowsKeys args, Rectangle rect)
+        {
+            component.Color = new ColorBGRA(component.Color.R, component.Color.G, GetByte(args, rect), component.Color.A);
+            component.FireEvent();
+        }
+
+        /// <summary>
+        ///     Updates the green value.
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">
+        ///     The windows keys.
+        /// </param>
+        /// <param name="rect">
+        ///     The <see cref="Rectangle" />
+        /// </param>
+        private void UpdateGreen(MenuColor component, WindowsKeys args, Rectangle rect)
+        {
+            component.Color = new ColorBGRA(component.Color.R, GetByte(args, rect), component.Color.B, component.Color.A);
+            component.FireEvent();
+        }
+
+        /// <summary>
+        ///     Updates the red value.
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">
+        ///     The windows keys.
+        /// </param>
+        /// <param name="rect">
+        ///     The <see cref="Rectangle" />
+        /// </param>
+        private void UpdateRed(MenuColor component, WindowsKeys args, Rectangle rect)
+        {
+            component.Color = new ColorBGRA(GetByte(args, rect), component.Color.G, component.Color.B, component.Color.A);
+            component.FireEvent();
+        }
+
+        /// <summary>
+        ///     Gets the byte.
+        /// </summary>
+        /// <param name="args">
+        ///     The windows keys.
+        /// </param>
+        /// <param name="rect">
+        ///     The <see cref="Rectangle" />
+        /// </param>
+        /// <returns>
+        ///     The byte.
+        /// </returns>
+        private static byte GetByte(WindowsKeys args, Rectangle rect)
+        {
+            if (args.Cursor.X < rect.X)
+            {
+                return 0;
+            }
+
+            if (args.Cursor.X > rect.X + rect.Width)
+            {
+                return 255;
+            }
+
+            return (byte)(((args.Cursor.X - rect.X) / rect.Width) * 255);
+        }
+
+        /// <summary>
+        /// Processes windows events
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">events</param>
+        public virtual void OnWndProc(MenuColor component, WindowsKeys args)
+        {
+            if (!component.Visible)
+            {
+                return;
+            }
+
+            var previewRect = PreviewBoundaries(component);
+            var pickerRect = PickerBoundaries(component);
+            var redRect = RedPickerBoundaries(component);
+            var greenRect = GreenPickerBoundaries(component);
+            var blueRect = BluePickerBoundaries(component);
+            var alphaRect = AlphaPickerBoundaries(component);
+
+            if (args.Msg == WindowsMessages.MOUSEMOVE)
+            {
+                component.HoveringPreview = args.Cursor.IsUnderRectangle(
+                    previewRect.X,
+                    previewRect.Y,
+                    previewRect.Width,
+                    previewRect.Height);
+
+                if (component.Active)
+                {
+                    if (component.InteractingRed)
+                    {
+                        this.UpdateRed(component, args, redRect);
+                    }
+                    else if (component.InteractingGreen)
+                    {
+                        this.UpdateGreen(component, args, greenRect);
+                    }
+                    else if (component.InteractingBlue)
+                    {
+                        this.UpdateBlue(component, args, blueRect);
+                    }
+                    else if (component.InteractingAlpha)
+                    {
+                        this.UpdateAlpha(component, args, alphaRect);
+                    }
+                }
+            }
+
+            if (args.Msg == WindowsMessages.LBUTTONUP)
+            {
+                component.InteractingRed = false;
+                component.InteractingGreen = false;
+                component.InteractingBlue = false;
+                component.InteractingAlpha = false;
+            }
+
+            if (args.Msg == WindowsMessages.LBUTTONDOWN)
+            {
+                if (args.Cursor.IsUnderRectangle(previewRect.X, previewRect.Y, previewRect.Width, previewRect.Height))
+                {
+                    component.Active = true;
+                }
+                else if (args.Cursor.IsUnderRectangle(pickerRect.X, pickerRect.Y, pickerRect.Width, pickerRect.Height)
+                         && component.Active)
+                {
+                    if (args.Cursor.IsUnderRectangle(redRect.X, redRect.Y, redRect.Width, redRect.Height))
+                    {
+                        component.InteractingRed = true;
+                        this.UpdateRed(component, args, redRect);
+                    }
+                    else if (args.Cursor.IsUnderRectangle(
+                        greenRect.X,
+                        greenRect.Y,
+                        greenRect.Width,
+                        greenRect.Height))
+                    {
+                        component.InteractingGreen = true;
+                        this.UpdateGreen(component, args, greenRect);
+                    }
+                    else if (args.Cursor.IsUnderRectangle(
+                        blueRect.X,
+                        blueRect.Y,
+                        blueRect.Width,
+                        blueRect.Height))
+                    {
+                        component.InteractingBlue = true;
+                        this.UpdateBlue(component, args, blueRect);
+                    }
+                    else if (args.Cursor.IsUnderRectangle(
+                        alphaRect.X,
+                        alphaRect.Y,
+                        alphaRect.Width,
+                        alphaRect.Height))
+                    {
+                        component.InteractingAlpha = true;
+                        this.UpdateAlpha(component, args, alphaRect);
+                    }
+                }
+                else
+                {
+                    component.Active = false;
+                }
+            }
+        }
     }
 }

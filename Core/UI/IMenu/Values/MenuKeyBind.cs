@@ -59,12 +59,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     Initializes a new instance of the <see cref="MenuKeyBind" /> class.
         ///     Menu KeyBind Constructor
         /// </summary>
+        /// <param name="displayName">The display name of the component</param>
         /// <param name="key">
         ///     The Key to bind
         /// </param>
         /// <param name="type">
         ///     Key bind type
         /// </param>
+        /// <param name="name">The internal name of the component</param>
+        /// <param name="uniqueString">String used in saving settings</param>
         public MenuKeyBind(string name, string displayName, Keys key, KeyBindType type, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
@@ -183,100 +186,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </param>
         public override void WndProc(WindowsKeys args)
         {
-            if (!MenuGUI.IsChatOpen)
-            {
-                switch (args.Msg)
-                {
-                    case WindowsMessages.KEYDOWN:
-                        this.HandleDown(args.Key);
-                        break;
-                    case WindowsMessages.KEYUP:
-                        if (this.Interacting && args.SingleKey != Keys.ShiftKey)
-                        {
-                            this.ChangeKey(args.SingleKey == Keys.Escape ? Keys.None : args.Key);
-                        }
-                        else
-                        {
-                            this.HandleUp(args.Key);
-                        }
-
-                        break;
-                    case WindowsMessages.XBUTTONDOWN:
-                        this.HandleDown(args.SideButton);
-                        break;
-                    case WindowsMessages.XBUTTONUP:
-                        if (this.Interacting)
-                        {
-                            this.ChangeKey(args.SideButton);
-                        }
-                        else
-                        {
-                            this.HandleUp(args.SideButton);
-                        }
-
-                        break;
-                    case WindowsMessages.MBUTTONDOWN:
-                        this.HandleDown(Keys.MButton);
-                        break;
-                    case WindowsMessages.MBUTTONUP:
-                        if (this.Interacting)
-                        {
-                            this.ChangeKey(Keys.MButton);
-                        }
-                        else
-                        {
-                            this.HandleUp(Keys.MButton);
-                        }
-
-                        break;
-                    case WindowsMessages.RBUTTONDOWN:
-                        this.HandleDown(Keys.RButton);
-                        break;
-                    case WindowsMessages.RBUTTONUP:
-                        if (this.Interacting)
-                        {
-                            this.ChangeKey(Keys.RButton);
-                        }
-                        else
-                        {
-                            this.HandleUp(Keys.RButton);
-                        }
-
-                        break;
-                    case WindowsMessages.LBUTTONDOWN:
-                        if (this.Interacting)
-                        {
-                            this.ChangeKey(Keys.LButton);
-                        }
-                        else if (Visible)
-                        {
-                            var container = ThemeManager.Current.KeyBind.ButtonBoundaries(this);
-                            var content = ThemeManager.Current.KeyBind.KeyBindBoundaries(this);
-
-                            if (args.Cursor.IsUnderRectangle(
-                                container.X, 
-                                container.Y, 
-                                container.Width, 
-                                container.Height))
-                            {
-                                this.Active = !this.Active;
-                            }
-                            else if (args.Cursor.IsUnderRectangle(content.X, content.Y, content.Width, content.Height))
-                            {
-                                this.Interacting = !this.Interacting;
-                            }
-                            else
-                            {
-                                this.HandleDown(Keys.LButton);
-                            }
-                        }
-
-                        break;
-                    case WindowsMessages.LBUTTONUP:
-                        this.HandleUp(Keys.LButton);
-                        break;
-                }
-            }
+            ThemeManager.Current.KeyBind.OnWndproc(this, args);
         }
 
         #endregion
@@ -324,55 +234,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             info.AddValue("key", this.Key, typeof(Keys));
             info.AddValue("original", this.original, typeof(Keys));
-        }
-
-        /// <summary>
-        ///     ChangeKey method.
-        /// </summary>
-        /// <param name="newKey">
-        ///     The new key
-        /// </param>
-        private void ChangeKey(Keys newKey)
-        {
-            this.Key = newKey;
-            this.Interacting = false;
-            MenuManager.Instance.ResetWidth();
-        }
-
-        /// <summary>
-        ///     HandleDown method.
-        /// </summary>
-        /// <param name="expectedKey">
-        ///     The expected key
-        /// </param>
-        private void HandleDown(Keys expectedKey)
-        {
-            if (!Interacting && expectedKey == this.Key && this.Type == KeyBindType.Press)
-            {
-                this.Active = true;
-            }
-        }
-
-        /// <summary>
-        ///     HandleUp method.
-        /// </summary>
-        /// <param name="expectedKey">
-        ///     The expected key
-        /// </param>
-        private void HandleUp(Keys expectedKey)
-        {
-            if (expectedKey == this.Key)
-            {
-                switch (this.Type)
-                {
-                    case KeyBindType.Press:
-                        this.Active = false;
-                        break;
-                    case KeyBindType.Toggle:
-                        this.Active = !this.Active;
-                        break;
-                }
-            }
         }
 
         #endregion

@@ -37,9 +37,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuButton" /> class, with a specified button text.
         /// </summary>
+        /// <param name="displayName">The display name of this component</param>
         /// <param name="buttonText">
         ///     The button text
         /// </param>
+        /// <param name="name">The internal name of this component</param>
+        /// <param name="uniqueString">String used in saving settings</param>
         public MenuButton(string name, string displayName, string buttonText, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
@@ -116,25 +119,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </param>
         public override void WndProc(WindowsKeys args)
         {
-            if (!this.Visible)
-            {
-                return;
-            }
-
-            var rect = ThemeManager.Current.Button.ButtonBoundaries(this);
-
-            if (args.Cursor.IsUnderRectangle(rect.X, rect.Y, rect.Width, rect.Height))
-            {
-                this.Hovering = true;
-                if (args.Msg == WindowsMessages.LBUTTONDOWN && this.Action != null)
-                {
-                    this.Action();
-                }
-            }
-            else
-            {
-                this.Hovering = false;
-            }
+           ThemeManager.Current.Button.OnWndProc(this, args);
         }
 
         #endregion

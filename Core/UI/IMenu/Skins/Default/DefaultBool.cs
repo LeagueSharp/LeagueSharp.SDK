@@ -22,6 +22,7 @@
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
     using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
 
@@ -51,11 +52,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                     MenuSettings.ContainerHeight);
         }
 
+
+
         /// <summary>
         ///     Draws a <see cref="MenuBool" />
         /// </summary>
         /// <param name="component">The <see cref="MenuBool" /></param>
-        public void Draw(MenuBool component)
+        public virtual void Draw(MenuBool component)
         {
             var centerY =
                 (int)
@@ -111,5 +114,39 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         }
 
         #endregion
+
+        /// <summary>
+        /// Processes windows messages
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">event data</param>
+        public virtual void OnWndProc(MenuBool component, Utils.WindowsKeys args)
+        {
+            if (!component.Visible)
+            {
+                return;
+            }
+
+            if (args.Msg == WindowsMessages.LBUTTONDOWN)
+            {
+                var rect = ButtonBoundaries(component);
+
+                if (args.Cursor.IsUnderRectangle(rect.X, rect.Y, rect.Width, rect.Height))
+                {
+                    component.Value = !component.Value;
+                    component.FireEvent();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Calculates the Width of a MenuBool
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <returns>width</returns>
+        public virtual int Width(MenuBool component)
+        {
+            return MenuSettings.ContainerHeight;
+        }
     }
 }

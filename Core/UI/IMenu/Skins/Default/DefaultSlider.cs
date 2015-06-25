@@ -21,11 +21,14 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
+    using System;
     using System.Globalization;
 
     using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -61,7 +64,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         ///     Draws a <see cref="MenuSlider" />
         /// </summary>
         /// <param name="component">The <see cref="MenuSlider" /></param>
-        public void Draw(MenuSlider component)
+        public virtual void Draw(MenuSlider component)
         {
             var position = component.Position;
             var centeredY =
@@ -111,5 +114,74 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         }
 
         #endregion
+
+
+        public virtual void OnWndProc(MenuSlider component, WindowsKeys args)
+        {
+            if (!component.Visible)
+            {
+                return;
+            }
+
+            if (args.Msg == WindowsMessages.MOUSEMOVE && component.Interacting)
+            {
+                this.CalculateNewValue(component, args);
+            }
+            else if (args.Msg == WindowsMessages.LBUTTONDOWN && !component.Interacting)
+            {
+                var container = Bounding(component);
+
+                if (args.Cursor.IsUnderRectangle(container.X, container.Y, container.Width, container.Height))
+                {
+                    component.Interacting = true;
+                    CalculateNewValue(component, args);
+                }
+            }
+            else if (args.Msg == WindowsMessages.LBUTTONUP)
+            {
+                component.Interacting = false;
+            }
+        }
+
+        /// <summary>
+        ///     Calculate the new value based onto the cursor position.
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">
+        ///     <see cref="WindowsKeys" /> data
+        /// </param>
+        private void CalculateNewValue(MenuSlider component, WindowsKeys args)
+        {
+            var newValue =
+                (int)
+                Math.Round(
+                    component.MinValue
+                    + ((args.Cursor.X - component.Position.X) * (component.MaxValue - component.MinValue))
+                    / component.MenuWidth);
+            if (newValue < component.MinValue)
+            {
+                newValue = component.MinValue;
+            }
+            else if (newValue > component.MaxValue)
+            {
+                newValue = component.MaxValue;
+            }
+
+            if (newValue != component.Value)
+            {
+                component.Value = newValue;
+                component.FireEvent();
+            }
+        }
+
+        /// <summary>
+        /// Calculates the width of this component
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <returns>width</returns>
+        public virtual int Width(MenuSlider component)
+        {
+            return 100;
+        }
     }
 }

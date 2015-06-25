@@ -22,6 +22,7 @@
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
 
@@ -33,59 +34,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Get the alpha picker boundaries
-        /// </summary>
-        /// <param name="component">The <see cref="MenuColor" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        Rectangle AlphaPickerBoundaries(MenuColor component);
-
-        /// <summary>
-        ///     Get the blue picker boundaries
-        /// </summary>
-        /// <param name="component">The <see cref="MenuColor" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        Rectangle BluePickerBoundaries(MenuColor component);
-
-        /// <summary>
         ///     Draws a <see cref="MenuColor"/>
         /// </summary>
         /// <param name="component">The <see cref="MenuColor" /></param>
         void Draw(MenuColor component);
-
-        /// <summary>
-        ///     Get the green picker boundaries
-        /// </summary>
-        /// <param name="component">The <see cref="MenuColor" /></param>
-        /// <returns>The <c>Rectangle</c></returns>
-        Rectangle GreenPickerBoundaries(MenuColor component);
-
-        /// <summary>
-        ///     Get the picker boundaries
-        /// </summary>
-        /// <param name="component">The <see cref="MenuColor" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        Rectangle PickerBoundaries(MenuColor component);
-
-        /// <summary>
-        ///     Get the preview boundaries
-        /// </summary>
-        /// <param name="component">The <see cref="MenuColor" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        Rectangle PreviewBoundaries(MenuColor component);
-
-        /// <summary>
-        ///     Get the red picker boundaries
-        /// </summary>
-        /// <param name="component">The <see cref="MenuColor" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        Rectangle RedPickerBoundaries(MenuColor component);
-
-        /// <summary>
-        ///     Gets the width of the slider
-        /// </summary>
-        /// <param name="component">The <see cref="MenuColor" /></param>
-        /// <returns>The <see cref="int" /></returns>
-        int SliderWidth(MenuColor component);
+        
 
         /// <summary>
         ///     Gets the width of a <c>MenuColor</c>
@@ -93,6 +46,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         /// <param name="component">The <see cref="MenuColor" /></param>
         /// <returns>The <see cref="int" /></returns>
         int Width(MenuColor component);
+
+        /// <summary>
+        /// Processes windows events
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">events</param>
+        void OnWndProc(MenuColor component, WindowsKeys args);
 
         #endregion
     }

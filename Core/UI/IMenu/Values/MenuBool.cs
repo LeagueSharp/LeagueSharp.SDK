@@ -25,11 +25,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System.Runtime.Serialization;
     using System.Security.Permissions;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins;
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Default;
     using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
@@ -46,9 +42,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuBool" /> class.
         /// </summary>
+        /// <param name="displayName">Display name of this component</param>
         /// <param name="value">
         ///     Boolean Value
         /// </param>
+        /// <param name="uniqueString">String used when saving settings.</param>
+        /// <param name="name">Internal name of this component</param>
         public MenuBool(string name, string displayName, bool value = false, string uniqueString = "") : base(name, displayName,uniqueString)
         {
             this.Value = value;
@@ -81,7 +80,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return MenuSettings.ContainerHeight;
+                return ThemeManager.Current.Bool.Width(this);
             }
         }
 
@@ -113,21 +112,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="args">The <see cref="WindowsKeys" /> instance</param>
         public override void WndProc(WindowsKeys args)
         {
-            if (!this.Visible)
-            {
-                return;
-            }
-
-            if (args.Msg == WindowsMessages.LBUTTONDOWN)
-            {
-                var rect = ThemeManager.Current.Bool.ButtonBoundaries(this);
-
-                if (args.Cursor.IsUnderRectangle(rect.X, rect.Y, rect.Width, rect.Height))
-                {
-                    this.Value = !this.Value;
-                    this.FireEvent();
-                }
-            }
+            ThemeManager.Current.Bool.OnWndProc(this, args);
         }
 
         #endregion

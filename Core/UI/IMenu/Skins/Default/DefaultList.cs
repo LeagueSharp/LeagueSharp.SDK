@@ -24,6 +24,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using System.Collections.Generic;
 
     using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
 
@@ -78,7 +79,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         ///     Draw a <see cref="MenuList" />
         /// </summary>
         /// <param name="component">The <see cref="MenuList" /></param>
-        public void Draw(MenuList component)
+        public virtual void Draw(MenuList component)
         {
             var dropdownMenuWidth = this.dropDownButtonWidth + (2 * TextSpacing) + component.MaxStringWidth;
             var position = component.Position;
@@ -336,11 +337,76 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         /// <param name="menuList">The <see cref="MenuList" /></param>
         /// <returns>The <see cref="int" /></returns>
-        public int Width(MenuList menuList)
+        public virtual int Width(MenuList menuList)
         {
             return menuList.MaxStringWidth + (2 * TextSpacing) + this.dropDownButtonWidth;
         }
 
         #endregion
+
+
+        public virtual void OnWndProc(MenuList component, Utils.WindowsKeys args)
+        {
+            if (!component.Visible)
+            {
+                return;
+            }
+
+            var dropdownRect = DropDownBoundaries(component);
+            var entireDropdownRect = DropDownExpandedBoundaries(component);
+
+            if (args.Cursor.IsUnderRectangle(dropdownRect.X, dropdownRect.Y, dropdownRect.Width, dropdownRect.Height))
+            {
+                component.Hovering = true;
+
+                if (args.Msg == WindowsMessages.LBUTTONDOWN)
+                {
+                    component.Active = !component.Active;
+                }
+            }
+            else
+            {
+                component.Hovering = false;
+            }
+
+            const int Buffer = 20;
+            if (component.Active
+                && !args.Cursor.IsUnderRectangle(
+                    entireDropdownRect.X - Buffer,
+                    entireDropdownRect.Y - Buffer,
+                    entireDropdownRect.Width + (2 * Buffer),
+                    entireDropdownRect.Height + (2 * Buffer)))
+            {
+                component.Active = false;
+            }
+
+            if (component.Active)
+            {
+                var found = false;
+                var dropdownRectangles = DropDownListBoundaries(component);
+                for (var i = 0; i < dropdownRectangles.Count; i++)
+                {
+                    if (args.Cursor.IsUnderRectangle(
+                        dropdownRectangles[i].X,
+                        dropdownRectangles[i].Y,
+                        dropdownRectangles[i].Width,
+                        dropdownRectangles[i].Height))
+                    {
+                        component.HoveringIndex = i;
+                        found = true;
+                    }
+                }
+
+                if (!found)
+                {
+                    component.HoveringIndex = -1;
+                }
+                else if (args.Msg == WindowsMessages.LBUTTONDOWN)
+                {
+                    component.Index = component.HoveringIndex;
+                    args.Process = false;
+                }
+            }
+        }
     }
 }

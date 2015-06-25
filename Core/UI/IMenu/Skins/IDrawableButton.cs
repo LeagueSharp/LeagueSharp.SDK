@@ -22,6 +22,7 @@
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
 
@@ -31,13 +32,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
     public interface IDrawableButton
     {
         #region Public Methods and Operators
-
-        /// <summary>
-        ///     Calculate the Rectangle that defines the Button
-        /// </summary>
-        /// <param name="component">The <see cref="MenuButton"/></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        Rectangle ButtonBoundaries(MenuButton component);
 
         /// <summary>
         ///     Draws a <see cref="MenuButton"/>
@@ -55,6 +49,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         ///     The <see cref="int" />.
         /// </returns>
         int Width(MenuButton component);
+
+        /// <summary>
+        /// Processes windows events
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">event</param>
+        void OnWndProc(MenuButton component, WindowsKeys args);
 
         #endregion
     }

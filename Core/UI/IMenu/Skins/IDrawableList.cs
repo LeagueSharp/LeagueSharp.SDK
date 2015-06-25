@@ -24,6 +24,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
     using System.Collections.Generic;
 
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
 
@@ -41,32 +42,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         void Draw(MenuList component);
 
         /// <summary>
-        ///     Gets the dropdown boundaries (preview)
-        /// </summary>
-        /// <param name="component">The <see cref="MenuList" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        Rectangle DropDownBoundaries(MenuList component);
-
-        /// <summary>
-        ///     Gets the complete dropdown boundaries
-        /// </summary>
-        /// <param name="component">The <see cref="MenuList" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        Rectangle DropDownExpandedBoundaries(MenuList component);
-
-        /// <summary>
-        ///     Gets the list of dropdown item boundaries.
-        /// </summary>
-        /// <param name="component">The <see cref="MenuList" /></param>
-        /// <returns>List of <see cref="Rectangle" /></returns>
-        List<Rectangle> DropDownListBoundaries(MenuList component);
-
-        /// <summary>
         ///     Gets the width of the <see cref="MenuList" />
         /// </summary>
         /// <param name="menuList">The <see cref="MenuList" /></param>
         /// <returns>The <see cref="int" /></returns>
         int Width(MenuList menuList);
+
+        /// <summary>
+        /// Processes window events
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">event</param>
+        void OnWndProc(MenuList component, WindowsKeys args);
 
         #endregion
     }

@@ -22,6 +22,7 @@
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
 
@@ -33,24 +34,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Gets the On/Off boundaries
-        /// </summary>
-        /// <param name="component">The <see cref="MenuKeyBind" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        Rectangle ButtonBoundaries(MenuKeyBind component);
-
-        /// <summary>
         ///     Draws a <see cref="MenuKeyBind" />
         /// </summary>
         /// <param name="component">The <see cref="MenuKeyBind" /></param>
         void Draw(MenuKeyBind component);
-
-        /// <summary>
-        ///     Gets the <c>keybind</c> boundaries
-        /// </summary>
-        /// <param name="component">The <see cref="MenuKeyBind" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        Rectangle KeyBindBoundaries(MenuKeyBind component);
 
         /// <summary>
         ///     Gets the width of the MenuKeyBind
@@ -58,6 +45,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         /// <param name="keyBind">The <see cref="MenuKeyBind" /></param>
         /// <returns>The <see cref="int" /></returns>
         int Width(MenuKeyBind keyBind);
+
+        /// <summary>
+        /// Processes window events
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">event</param>
+        void OnWndproc(MenuKeyBind component, WindowsKeys args);
 
         #endregion
     }

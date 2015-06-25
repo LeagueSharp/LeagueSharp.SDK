@@ -45,6 +45,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuSlider" /> class.
         /// </summary>
+        /// <param name="displayName">The display name of this component</param>
         /// <param name="value">
         ///     The Value
         /// </param>
@@ -54,6 +55,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="maxValue">
         ///     Maximum Value Boundary
         /// </param>
+        /// <param name="name">The internal name of this component</param>
+        /// <param name="uniqueString">String used in saving settings</param>
         public MenuSlider(string name, string displayName, int value = 0, int minValue = 0, int maxValue = 100, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
@@ -83,7 +86,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <value>
         ///     <c>true</c> if interacting; otherwise, <c>false</c>.
         /// </value>
-        public bool Interacting { get; private set; }
+        public bool Interacting { get; set; }
 
         /// <summary>
         ///     Gets or sets the Slider Maximum Value.
@@ -107,7 +110,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return 100;
+                return ThemeManager.Current.Slider.Width(this); ;
             }
         }
 
@@ -152,29 +155,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </param>
         public override void WndProc(WindowsKeys args)
         {
-            if (!this.Visible)
-            {
-                return;
-            }
-
-            if (args.Msg == WindowsMessages.MOUSEMOVE && this.Interacting)
-            {
-                this.CalculateNewValue(args);
-            }
-            else if (args.Msg == WindowsMessages.LBUTTONDOWN && !this.Interacting)
-            {
-                var container = ThemeManager.Current.Slider.Bounding(this);
-
-                if (args.Cursor.IsUnderRectangle(container.X, container.Y, container.Width, container.Height))
-                {
-                    this.Interacting = true;
-                    this.CalculateNewValue(args);
-                }
-            }
-            else if (args.Msg == WindowsMessages.LBUTTONUP)
-            {
-                this.Interacting = false;
-            }
+            ThemeManager.Current.Slider.OnWndProc(this, args);
         }
 
         #endregion
@@ -221,36 +202,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             info.AddValue("value", this.Value, typeof(int));
         }
-
-        /// <summary>
-        ///     Calculate the new value based onto the cursor position.
-        /// </summary>
-        /// <param name="args">
-        ///     <see cref="WindowsKeys" /> data
-        /// </param>
-        private void CalculateNewValue(WindowsKeys args)
-        {
-            var newValue =
-                (int)
-                Math.Round(
-                    this.MinValue
-                    + ((args.Cursor.X - Position.X) * (this.MaxValue - this.MinValue))
-                    / MenuWidth);
-            if (newValue < this.MinValue)
-            {
-                newValue = this.MinValue;
-            }
-            else if (newValue > this.MaxValue)
-            {
-                newValue = this.MaxValue;
-            }
-
-            if (newValue != this.Value)
-            {
-                this.Value = newValue;
-                this.FireEvent();
-            }
-        }
+       
 
         #endregion
 

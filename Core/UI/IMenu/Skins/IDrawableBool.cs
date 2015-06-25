@@ -22,6 +22,7 @@
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
 
@@ -33,17 +34,24 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Calculates the On/Off button Rectangle
-        /// </summary>
-        /// <param name="component">The <see cref="MenuBool" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        Rectangle ButtonBoundaries(MenuBool component);
-
-        /// <summary>
         ///     Draws a <see cref="MenuBool"/>
         /// </summary>
         /// <param name="component">The <see cref="MenuBool" /></param>
         void Draw(MenuBool component);
+
+        /// <summary>
+        /// Processes windows messages
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">event data</param>
+        void OnWndProc(MenuBool component, WindowsKeys args);
+
+        /// <summary>
+        /// Calculates the Width of a MenuBool
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <returns>width</returns>
+        int Width(MenuBool component);
 
         #endregion
     }

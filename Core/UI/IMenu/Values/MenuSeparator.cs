@@ -21,11 +21,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Values
 {
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins;
     using LeagueSharp.SDK.Core.Utils;
-
-    using SharpDX;
 
     /// <summary>
     ///     A menu separator.
@@ -61,6 +58,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="component">The component.</param>
         public override void Extract(MenuItem component)
         {
+            //do nothing
         }
 
         /// <summary>
@@ -77,7 +75,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void WndProc(WindowsKeys args)
         {
-            // not needed                        
+            //do nothing                   
         }
 
         #endregion

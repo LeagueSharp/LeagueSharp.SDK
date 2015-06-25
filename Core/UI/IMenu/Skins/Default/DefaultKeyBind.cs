@@ -21,9 +21,13 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
+    using System.Windows.Forms;
+
     using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -55,7 +59,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         ///     Draws a MenuKeyBind
         /// </summary>
         /// <param name="component">The <see cref="MenuKeyBind" /></param>
-        public void Draw(MenuKeyBind component)
+        public virtual void Draw(MenuKeyBind component)
         {
             var centerY =
                 (int)
@@ -137,7 +141,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         /// <param name="keyBind">The <see cref="MenuKeyBind" /></param>
         /// <returns>The <see cref="int" /></returns>
-        public int Width(MenuKeyBind keyBind)
+        public virtual int Width(MenuKeyBind keyBind)
         {
             return
                 (int)
@@ -146,5 +150,156 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         }
 
         #endregion
+
+
+        public virtual void OnWndproc(MenuKeyBind component, WindowsKeys args)
+        {
+            if (!MenuGUI.IsChatOpen)
+            {
+                switch (args.Msg)
+                {
+                    case WindowsMessages.KEYDOWN:
+                        this.HandleDown(component, args.Key);
+                        break;
+                    case WindowsMessages.KEYUP:
+                        if (component.Interacting && args.SingleKey != Keys.ShiftKey)
+                        {
+                            this.ChangeKey(component, args.SingleKey == Keys.Escape ? Keys.None : args.Key);
+                        }
+                        else
+                        {
+                            this.HandleUp(component, args.Key);
+                        }
+
+                        break;
+                    case WindowsMessages.XBUTTONDOWN:
+                        this.HandleDown(component, args.SideButton);
+                        break;
+                    case WindowsMessages.XBUTTONUP:
+                        if (component.Interacting)
+                        {
+                            this.ChangeKey(component, args.SideButton);
+                        }
+                        else
+                        {
+                            this.HandleUp(component, args.SideButton);
+                        }
+
+                        break;
+                    case WindowsMessages.MBUTTONDOWN:
+                        this.HandleDown(component, Keys.MButton);
+                        break;
+                    case WindowsMessages.MBUTTONUP:
+                        if (component.Interacting)
+                        {
+                            this.ChangeKey(component, Keys.MButton);
+                        }
+                        else
+                        {
+                            this.HandleUp(component, Keys.MButton);
+                        }
+
+                        break;
+                    case WindowsMessages.RBUTTONDOWN:
+                        this.HandleDown(component, Keys.RButton);
+                        break;
+                    case WindowsMessages.RBUTTONUP:
+                        if (component.Interacting)
+                        {
+                            this.ChangeKey(component, Keys.RButton);
+                        }
+                        else
+                        {
+                            this.HandleUp(component, Keys.RButton);
+                        }
+
+                        break;
+                    case WindowsMessages.LBUTTONDOWN:
+                        if (component.Interacting)
+                        {
+                            this.ChangeKey(component, Keys.LButton);
+                        }
+                        else if (component.Visible)
+                        {
+                            var container = ButtonBoundaries(component);
+                            var content = KeyBindBoundaries(component);
+
+                            if (args.Cursor.IsUnderRectangle(
+                                container.X,
+                                container.Y,
+                                container.Width,
+                                container.Height))
+                            {
+                                component.Active = !component.Active;
+                            }
+                            else if (args.Cursor.IsUnderRectangle(content.X, content.Y, content.Width, content.Height))
+                            {
+                                component.Interacting = !component.Interacting;
+                            }
+                            else
+                            {
+                                this.HandleDown(component, Keys.LButton);
+                            }
+                        }
+
+                        break;
+                    case WindowsMessages.LBUTTONUP:
+                        this.HandleUp(component, Keys.LButton);
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     ChangeKey method.
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="newKey">
+        ///     The new key
+        /// </param>
+        private void ChangeKey(MenuKeyBind component, Keys newKey)
+        {
+            component.Key = newKey;
+            component.Interacting = false;
+            MenuManager.Instance.ResetWidth();
+        }
+
+        /// <summary>
+        ///     HandleDown method.
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="expectedKey">
+        ///     The expected key
+        /// </param>
+        private void HandleDown(MenuKeyBind component, Keys expectedKey)
+        {
+            if (!component.Interacting && expectedKey == component.Key && component.Type == KeyBindType.Press)
+            {
+                component.Active = true;
+            }
+        }
+
+        /// <summary>
+        ///     HandleUp method.
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="expectedKey">
+        ///     The expected key
+        /// </param>
+        private void HandleUp(MenuKeyBind component, Keys expectedKey)
+        {
+            if (expectedKey == component.Key)
+            {
+                switch (component.Type)
+                {
+                    case KeyBindType.Press:
+                        component.Active = false;
+                        break;
+                    case KeyBindType.Toggle:
+                        component.Active = !component.Active;
+                        break;
+                }
+            }
+        }
     }
 }

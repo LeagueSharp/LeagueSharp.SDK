@@ -27,9 +27,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System.Runtime.Serialization;
     using System.Security.Permissions;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins.Default;
     using LeagueSharp.SDK.Core.Utils;
@@ -267,13 +264,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                var arr = new string[this.Values.Count];
-                for (var i = 0; i < arr.Length; i++)
-                {
-                    arr[i] = this.Values[i].ToString();
-                }
-
-                return arr;
+                return Values.Select(arg => arg.ToString()).ToArray();
             }
         }
 
@@ -315,66 +306,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void WndProc(WindowsKeys args)
         {
-            if (!this.Visible)
-            {
-                return;
-            }
-
-            var dropdownRect = ThemeManager.Current.List.DropDownBoundaries(this);
-            var entireDropdownRect = ThemeManager.Current.List.DropDownExpandedBoundaries(this);
-
-            if (args.Cursor.IsUnderRectangle(dropdownRect.X, dropdownRect.Y, dropdownRect.Width, dropdownRect.Height))
-            {
-                this.Hovering = true;
-
-                if (args.Msg == WindowsMessages.LBUTTONDOWN)
-                {
-                    this.Active = !this.Active;
-                }
-            }
-            else
-            {
-                this.Hovering = false;
-            }
-
-            const int Buffer = 20;
-            if (this.Active
-                && !args.Cursor.IsUnderRectangle(
-                    entireDropdownRect.X - Buffer, 
-                    entireDropdownRect.Y - Buffer, 
-                    entireDropdownRect.Width + (2 * Buffer), 
-                    entireDropdownRect.Height + (2 * Buffer)))
-            {
-                this.Active = false;
-            }
-
-            if (this.Active)
-            {
-                var found = false;
-                var dropdownRectangles = ThemeManager.Current.List.DropDownListBoundaries(this);
-                for (var i = 0; i < dropdownRectangles.Count; i++)
-                {
-                    if (args.Cursor.IsUnderRectangle(
-                        dropdownRectangles[i].X, 
-                        dropdownRectangles[i].Y, 
-                        dropdownRectangles[i].Width, 
-                        dropdownRectangles[i].Height))
-                    {
-                        this.HoveringIndex = i;
-                        found = true;
-                    }
-                }
-
-                if (!found)
-                {
-                    this.HoveringIndex = -1;
-                }
-                else if (args.Msg == WindowsMessages.LBUTTONDOWN)
-                {
-                    this.Index = this.HoveringIndex;
-                    args.Process = false;
-                }
-            }
+            ThemeManager.Current.List.OnWndProc(this, args);
         }
 
         #endregion

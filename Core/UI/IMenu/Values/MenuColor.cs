@@ -42,14 +42,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         private readonly ColorBGRA original;
 
         #region Constructors and Destructors
-        
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuColor" /> class.
         /// </summary>
+        /// <param name="displayName">The display name of this component</param>
         /// <param name="color">
         ///     The color
         /// </param>
+        /// <param name="name">The internal name of this component</param>
+        /// <param name="uniqueString">String used in saving settings</param>
         public MenuColor(string name, string displayName, ColorBGRA color, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
@@ -148,102 +150,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void WndProc(WindowsKeys args)
         {
-            if (!this.Visible)
-            {
-                return;
-            }
-
-            var previewRect = ThemeManager.Current.ColorPicker.PreviewBoundaries(this);
-            var pickerRect = ThemeManager.Current.ColorPicker.PickerBoundaries(this);
-            var redRect = ThemeManager.Current.ColorPicker.RedPickerBoundaries(this);
-            var greenRect = ThemeManager.Current.ColorPicker.GreenPickerBoundaries(this);
-            var blueRect = ThemeManager.Current.ColorPicker.BluePickerBoundaries(this);
-            var alphaRect = ThemeManager.Current.ColorPicker.AlphaPickerBoundaries(this);
-
-            if (args.Msg == WindowsMessages.MOUSEMOVE)
-            {
-                this.HoveringPreview = args.Cursor.IsUnderRectangle(
-                    previewRect.X, 
-                    previewRect.Y, 
-                    previewRect.Width, 
-                    previewRect.Height);
-
-                if (this.Active)
-                {
-                    if (this.InteractingRed)
-                    {
-                        this.UpdateRed(args, redRect);
-                    }
-                    else if (this.InteractingGreen)
-                    {
-                        this.UpdateGreen(args, greenRect);
-                    }
-                    else if (this.InteractingBlue)
-                    {
-                        this.UpdateBlue(args, blueRect);
-                    }
-                    else if (this.InteractingAlpha)
-                    {
-                        this.UpdateAlpha(args, alphaRect);
-                    }
-                }
-            }
-
-            if (args.Msg == WindowsMessages.LBUTTONUP)
-            {
-                this.InteractingRed = false;
-                this.InteractingGreen = false;
-                this.InteractingBlue = false;
-                this.InteractingAlpha = false;
-            }
-
-            if (args.Msg == WindowsMessages.LBUTTONDOWN)
-            {
-                if (args.Cursor.IsUnderRectangle(previewRect.X, previewRect.Y, previewRect.Width, previewRect.Height))
-                {
-                    this.Active = true;
-                }
-                else if (args.Cursor.IsUnderRectangle(pickerRect.X, pickerRect.Y, pickerRect.Width, pickerRect.Height)
-                         && this.Active)
-                {
-                    if (args.Cursor.IsUnderRectangle(redRect.X, redRect.Y, redRect.Width, redRect.Height))
-                    {
-                        this.InteractingRed = true;
-                        this.UpdateRed(args, redRect);
-                    }
-                    else if (args.Cursor.IsUnderRectangle(
-                        greenRect.X, 
-                        greenRect.Y, 
-                        greenRect.Width, 
-                        greenRect.Height))
-                    {
-                        this.InteractingGreen = true;
-                        this.UpdateGreen(args, greenRect);
-                    }
-                    else if (args.Cursor.IsUnderRectangle(
-                        blueRect.X, 
-                        blueRect.Y, 
-                        blueRect.Width, 
-                        blueRect.Height))
-                    {
-                        this.InteractingBlue = true;
-                        this.UpdateBlue(args, blueRect);
-                    }
-                    else if (args.Cursor.IsUnderRectangle(
-                        alphaRect.X, 
-                        alphaRect.Y, 
-                        alphaRect.Width, 
-                        alphaRect.Height))
-                    {
-                        this.InteractingAlpha = true;
-                        this.UpdateAlpha(args, alphaRect);
-                    }
-                }
-                else
-                {
-                    this.Active = false;
-                }
-            }
+            ThemeManager.Current.ColorPicker.OnWndProc(this, args);
         }
 
         #endregion
@@ -295,93 +202,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
             info.AddValue("green", this.Color.G, typeof(byte));
             info.AddValue("blue", this.Color.B, typeof(byte));
             info.AddValue("alpha", this.Color.A, typeof(byte));
-        }
-
-        /// <summary>
-        ///     Updates the alpha value.
-        /// </summary>
-        /// <param name="args">
-        ///     The windows keys.
-        /// </param>
-        /// <param name="rect">
-        ///     The <see cref="Rectangle" />
-        /// </param>
-        private void UpdateAlpha(WindowsKeys args, Rectangle rect)
-        {
-            this.Color = new ColorBGRA(this.Color.R, this.Color.G, this.Color.B, GetByte(args, rect));
-            this.FireEvent();
-        }
-
-        /// <summary>
-        ///     Updates the blue value.
-        /// </summary>
-        /// <param name="args">
-        ///     The windows keys.
-        /// </param>
-        /// <param name="rect">
-        ///     The <see cref="Rectangle" />
-        /// </param>
-        private void UpdateBlue(WindowsKeys args, Rectangle rect)
-        {
-            this.Color = new ColorBGRA(this.Color.R, this.Color.G, GetByte(args, rect), this.Color.A);
-            this.FireEvent();
-        }
-
-        /// <summary>
-        ///     Updates the green value.
-        /// </summary>
-        /// <param name="args">
-        ///     The windows keys.
-        /// </param>
-        /// <param name="rect">
-        ///     The <see cref="Rectangle" />
-        /// </param>
-        private void UpdateGreen(WindowsKeys args, Rectangle rect)
-        {
-            this.Color = new ColorBGRA(this.Color.R, GetByte(args, rect), this.Color.B, this.Color.A);
-            this.FireEvent();
-        }
-
-        /// <summary>
-        ///     Updates the red value.
-        /// </summary>
-        /// <param name="args">
-        ///     The windows keys.
-        /// </param>
-        /// <param name="rect">
-        ///     The <see cref="Rectangle" />
-        /// </param>
-        private void UpdateRed(WindowsKeys args, Rectangle rect)
-        {
-            this.Color = new ColorBGRA(GetByte(args, rect), this.Color.G, this.Color.B, this.Color.A);
-            this.FireEvent();
-        }
-
-        /// <summary>
-        ///     Gets the byte.
-        /// </summary>
-        /// <param name="args">
-        ///     The windows keys.
-        /// </param>
-        /// <param name="rect">
-        ///     The <see cref="Rectangle" />
-        /// </param>
-        /// <returns>
-        ///     The byte.
-        /// </returns>
-        private static byte GetByte(WindowsKeys args, Rectangle rect)
-        {
-            if (args.Cursor.X < rect.X)
-            {
-                return 0;
-            }
-
-            if (args.Cursor.X > rect.X + rect.Width)
-            {
-                return 255;
-            }
-
-            return (byte)(((args.Cursor.X - rect.X) / rect.Width) * 255);
         }
 
         #endregion

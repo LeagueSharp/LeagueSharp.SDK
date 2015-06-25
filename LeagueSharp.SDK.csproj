@@ -131,7 +131,6 @@
     <Compile Include="Core\UI\IMenu\Skins\ThemeManager.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuBool.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuButton.cs" />
-    <Compile Include="Core\UI\IMenu\Values\MenuCircle.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuColor.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuKeyBind.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuList.cs" />

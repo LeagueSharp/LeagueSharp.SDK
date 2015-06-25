@@ -22,8 +22,10 @@
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
     using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -80,7 +82,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         ///     Draws a <see cref="MenuButton" />
         /// </summary>
         /// <param name="component">The <see cref="MenuButton" /></param>
-        public void Draw(MenuButton component)
+        public virtual void Draw(MenuButton component)
         {
             var rectangleName = GetContainerRectangle(component)
                 .GetCenteredText(null, MenuSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter);
@@ -147,12 +149,40 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <returns>
         ///     The <see cref="int" />.
         /// </returns>
-        public int Width(MenuButton menuButton)
+        public virtual int Width(MenuButton menuButton)
         {
             return (2 * TextGap)
                    + MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, menuButton.ButtonText, 0).Width;
         }
 
         #endregion
+
+        /// <summary>
+        /// Processes windows events
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">event</param>
+        public virtual void OnWndProc(MenuButton component, WindowsKeys args)
+        {
+            if (!component.Visible)
+            {
+                return;
+            }
+
+            var rect = ButtonBoundaries(component);
+
+            if (args.Cursor.IsUnderRectangle(rect.X, rect.Y, rect.Width, rect.Height))
+            {
+                component.Hovering = true;
+                if (args.Msg == WindowsMessages.LBUTTONDOWN && component.Action != null)
+                {
+                    component.Action();
+                }
+            }
+            else
+            {
+                component.Hovering = false;
+            }
+        }
     }
 }

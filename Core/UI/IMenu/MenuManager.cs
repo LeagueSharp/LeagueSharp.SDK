@@ -54,7 +54,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
                     "LS" + Environment.UserName.GetHashCode().ToString("X"), 
-                    "MenuConfigEx"));
+                    "MenuConfigSDK"));
 
         #endregion
 
@@ -313,6 +313,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </param>
         private void Game_OnWndProc(WndEventArgs args)
         {
+            if (MenuGUI.IsChatOpen)
+            {
+                return;
+            }
+
             var keys = new WindowsKeys(args);
             if (!this.ForcedOpen)
             {

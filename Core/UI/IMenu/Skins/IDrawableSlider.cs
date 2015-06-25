@@ -22,6 +22,7 @@
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
 
@@ -33,24 +34,24 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Gets the additional boundaries.
-        /// </summary>
-        /// <param name="component">The <see cref="MenuSlider" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        Rectangle AdditionalBoundries(MenuSlider component);
-
-        /// <summary>
-        ///     Gets the boundaries
-        /// </summary>
-        /// <param name="component">The <see cref="MenuSlider" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        Rectangle Bounding(MenuSlider component);
-
-        /// <summary>
         ///     Draws a <see cref="MenuSlider" />
         /// </summary>
         /// <param name="component">The <see cref="MenuSlider" /></param>
         void Draw(MenuSlider component);
+
+        /// <summary>
+        /// Processes window events
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">event</param>
+        void OnWndProc(MenuSlider component, WindowsKeys args);
+
+        /// <summary>
+        /// Calculates the width of this component
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <returns>width</returns>
+        int Width(MenuSlider component);
 
         #endregion
     }
