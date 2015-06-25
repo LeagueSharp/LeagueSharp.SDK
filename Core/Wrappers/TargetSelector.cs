@@ -149,7 +149,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             IEnumerable<Obj_AI_Hero> ignoredChamps = null, 
             Vector3? rangeCheckFrom = null)
         {
-            if (menu["focusTarget"].GetValue<MenuBool>().Value
+            if (menu["focusTarget"].GetValue<MenuBool>().Value && SelectedTarget != null
                 && SelectedTarget.IsValidTarget(range < 0 ? SelectedTarget.GetRealAutoAttackRange() : range))
             {
                 return SelectedTarget;
@@ -296,10 +296,10 @@ namespace LeagueSharp.SDK.Core.Wrappers
                                                : MedHighPriority.Any(t => t == enemy.ChampionName)
                                                      ? 2
                                                      : MedLowPriority.Any(t => t == enemy.ChampionName) ? 3 : 4;
-                            menu.Add(new MenuSlider("ts" + enemy.ChampionName, enemy.ChampionName,priority,0,5));
+                            menu.Add(new MenuSlider("ts" + enemy.ChampionName, enemy.ChampionName, priority, 0, 5));
                         }
 
-                        menu.Add(new MenuSeparator("separatorOther","Other Settings"));
+                        menu.Add(new MenuSeparator("separatorOther", "Other Settings"));
                     }
 
                     menu.Add(new MenuBool("focusTarget", "Focus Selected Target"));

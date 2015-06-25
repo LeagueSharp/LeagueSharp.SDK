@@ -564,11 +564,9 @@ namespace LeagueSharp.SDK.Core
         /// <returns>
         ///     The List containing the requested type.
         /// </returns>
-        [SuppressMessage("ReSharper", "TryCastAndCheckForNull.1", 
-            Justification = "operation type 'as' is faster than 'is'")]
         public static IEnumerable<T> Get<T>() where T : GameObject, new()
         {
-            return AllGameObjects.Where(o => o as T != null).Cast<T>();
+            return AllGameObjects.OfType<T>();
         }
 
         /// <summary>

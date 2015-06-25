@@ -96,7 +96,7 @@ namespace LeagueSharp.SDK.Core
             {
                 return attack
                        && Variables.TickCount + (Game.Ping / 2)
-                       >= lastAutoAttackTick + (Player.AttackDelay * 1000) + 40
+                       >= lastAutoAttackTick + (Player.AttackDelay * 1000)
                        + menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value;
             }
 
@@ -248,19 +248,18 @@ namespace LeagueSharp.SDK.Core
             if (sender.IsMe)
             {
                 var spellName = args.SData.Name;
-
                 var target = args.Target as AttackableUnit;
-                var eventArgs = new ActionArgs
-                                    {
-                                        Target = target, Position = target != null ? target.Position : Player.Position, 
-                                        Type = OrbwalkerType.AfterAttack
-                                    };
 
-                if (AutoAttack.IsAutoAttack(spellName))
+                if (AutoAttack.IsAutoAttack(spellName) && target != null && target.IsValid)
                 {
                     lastAutoAttackTick = Variables.TickCount - (Game.Ping / 2);
                     IsMissileLaunched = false;
+
                     var time = sender.AttackCastDelay * 1000 + 40;
+                    var eventArgs = new ActionArgs
+                                        {
+                                            Target = target, Position = target.Position, Type = OrbwalkerType.AfterAttack
+                                        };
 
                     if (!AfterAttackTime.ContainsKey(time))
                     {
@@ -269,8 +268,7 @@ namespace LeagueSharp.SDK.Core
 
                     eventArgs = new ActionArgs
                                     {
-                                        Target = target, Position = target != null ? target.Position : Player.Position, 
-                                        Type = OrbwalkerType.OnAttack
+                                       Target = target, Position = target.Position, Type = OrbwalkerType.OnAttack 
                                     };
                     CallOnAction(eventArgs);
                 }
@@ -295,12 +293,6 @@ namespace LeagueSharp.SDK.Core
                 return;
             }
 
-            foreach (var item in AfterAttackTime.ToArray().Where(item => Variables.TickCount - item.Key >= 0))
-            {
-                CallOnAction(item.Value);
-                AfterAttackTime.Remove(item);
-            }
-
             if (ActiveMode != OrbwalkerMode.None)
             {
                 if (Attack)
@@ -317,6 +309,12 @@ namespace LeagueSharp.SDK.Core
                 {
                     MoveOrder(Game.CursorPos.SetZ());
                 }
+            }
+
+            foreach (var item in AfterAttackTime.ToArray().Where(item => Variables.TickCount - item.Key >= 0))
+            {
+                CallOnAction(item.Value);
+                AfterAttackTime.Remove(item);
             }
         }
 
@@ -420,8 +418,7 @@ namespace LeagueSharp.SDK.Core
         /// </returns>
         private static bool Preform(AttackableUnit target)
         {
-            if (target.IsValidTarget()
-                && Player.DistanceSquared(target) <= System.Math.Pow(target.GetRealAutoAttackRange(), 2))
+            if (target != null && target.IsValidTarget(target.GetRealAutoAttackRange()))
             {
                 var eventArgs = new ActionArgs
                                     {
@@ -546,18 +543,16 @@ namespace LeagueSharp.SDK.Core
         /// </summary>
         private static void ResetSettings()
         {
-            menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value = new Random(Variables.TickCount).Next(
-                200, 
-                301);
-            menu["advanced"]["movementScramble"].GetValue<MenuBool>().Value = true;
-            menu["advanced"]["movementExtraHold"].GetValue<MenuSlider>().Value = 25;
+            menu["advanced"]["movementScramble"].GetValue<MenuBool>().RestoreDefault();
+            menu["advanced"]["movementExtraHold"].GetValue<MenuSlider>().RestoreDefault();
+            menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().RestoreDefault();
+            menu["advanced"]["miscFarmDelay"].GetValue<MenuSlider>().RestoreDefault();
+            menu["lasthitKey"].GetValue<MenuKeyBind>().RestoreDefault();
+            menu["laneclearKey"].GetValue<MenuKeyBind>().RestoreDefault();
+            menu["hybridKey"].GetValue<MenuKeyBind>().RestoreDefault();
+            menu["orbwalkKey"].GetValue<MenuKeyBind>().RestoreDefault();
             menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value = new Random().Next(500, 1201);
-            menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value = 80;
-            menu["advanced"]["miscFarmDelay"].GetValue<MenuSlider>().Value = 0;
-            menu["lasthitKey"].GetValue<MenuKeyBind>().Key = Keys.X;
-            menu["laneclearKey"].GetValue<MenuKeyBind>().Key = Keys.V;
-            menu["hybridKey"].GetValue<MenuKeyBind>().Key = Keys.C;
-            menu["orbwalkKey"].GetValue<MenuKeyBind>().Key = Keys.Space;
+            menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value = new Random().Next(200, 301);
         }
 
         #endregion
@@ -599,30 +594,24 @@ namespace LeagueSharp.SDK.Core
 
                         var minionList =
                             GameObjects.EnemyMinions.Where(m => m.IsValidTarget(m.GetRealAutoAttackRange())).ToList();
-                        var lowMinions =
-                            minionList.Where(m => m.Health < 2 * Player.GetAutoAttackDamage(m))
-                                .OrderByDescending(m => m.MaxHealth);
-
-                        foreach (var minion in lowMinions)
+                        foreach (var minion in minionList)
                         {
                             var time =
                                 (int)
-                                (Player.AttackCastDelay * 1000
-                                 + Player.Distance(minion) / Player.GetProjectileSpeed() * 1000 + Game.Ping / 2f);
-                            var predictedHealth = Health.GetPrediction(minion, time, 0);
+                                (Player.BasicAttack.CastFrame * 1000
+                                 + (Player.Distance(minion) / Player.GetProjectileSpeed() * 1000) + Game.Ping / 2f);
+                            var prediction = Health.GetPrediction(minion, time, 0);
 
-                            if (predictedHealth <= 0)
+                            if (prediction <= 0)
                             {
                                 var eventArgs = new ActionArgs
-                                {
-                                    Target = minion,
-                                    Position = minion.Position,
-                                    Process = true,
-                                    Type = OrbwalkerType.NonKillableMinion
-                                };
+                                                    {
+                                                        Target = minion, Position = minion.Position, Process = true, 
+                                                        Type = OrbwalkerType.NonKillableMinion
+                                                    };
                                 CallOnAction(eventArgs);
                             }
-                            else if (predictedHealth <= Player.GetAutoAttackDamage(minion, true))
+                            else if (prediction <= Player.GetAutoAttackDamage(minion))
                             {
                                 return minion;
                             }
@@ -633,42 +622,46 @@ namespace LeagueSharp.SDK.Core
                                 GameObjects.EnemyTurrets.Where(t => t.IsValidTarget(t.GetRealAutoAttackRange()))
                             let time =
                                 (int)
-                                (Player.AttackCastDelay * 1000
+                                (Player.BasicAttack.CastFrame * 1000
                                  + Player.Distance(turret) / Player.GetProjectileSpeed() * 1000 + Game.Ping / 2f)
                             let predictedHealth = Health.GetPrediction(turret, time, 0)
-                            where predictedHealth > 0 && predictedHealth <= Player.GetAutoAttackDamage(turret)
+                            where predictedHealth > 0 && predictedHealth <= Player.GetAutoAttackDamage(turret, true)
                             select turret)
                         {
                             return turret;
                         }
 
-                        if (mode != OrbwalkerMode.LastHit)
+                        if (mode == OrbwalkerMode.LaneClear)
                         {
                             var shouldWait =
                                 minionList.Any(
                                     m =>
                                     Health.GetPrediction(
-                                        m,
+                                        m, 
                                         (int)
                                         ((Player.AttackCastDelay * 1000) * 2
-                                         + Player.Distance(m) / Player.GetProjectileSpeed() * 1000 + Game.Ping / 2f),
-                                        0,
-                                        HealthPredictionType.Simulated) <= Player.GetAutoAttackDamage(m));
+                                         + Player.Distance(m) / Player.GetProjectileSpeed() * 1000 + Game.Ping / 2f) * 2, 
+                                        0) <= Player.GetAutoAttackDamage(m, true));
 
                             if (!shouldWait)
                             {
+                                target = TargetSelector.GetTarget(-1f);
+                                if (target != null)
+                                {
+                                    return target;
+                                }
+
                                 var minion = (from m in minionList
                                               let predictedHealth =
                                                   Health.GetPrediction(
-                                                      m,
+                                                      m, 
                                                       (int)
                                                       ((Player.AttackCastDelay * 1000) * 2
                                                        + Player.Distance(m) / Player.GetProjectileSpeed() * 1000
-                                                       + Game.Ping / 2f),
-                                                      0,
-                                                      HealthPredictionType.Simulated)
+                                                       + Game.Ping / 2f) * 2, 
+                                                      0)
                                               where
-                                                  predictedHealth >= 2 * Player.GetAutoAttackDamage(m)
+                                                  predictedHealth >= 2 * Player.GetAutoAttackDamage(m, true)
                                                   || System.Math.Abs(predictedHealth - m.Health) < float.Epsilon
                                               select m).MaxOrDefault(m => m.Health);
                                 if (minion != null)
