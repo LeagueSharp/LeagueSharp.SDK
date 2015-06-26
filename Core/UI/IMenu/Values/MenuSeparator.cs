@@ -29,6 +29,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     /// </summary>
     public class MenuSeparator : MenuItem
     {
+        /// <summary>
+        /// A new instance of MenuSeperator
+        /// </summary>
+        /// <param name="name">The internal name of this menu component</param>
+        /// <param name="displayName">The display name of this menu component</param>
+        /// <param name="uniqueString">String used in saving settings</param>
         public MenuSeparator(string name, string displayName, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {

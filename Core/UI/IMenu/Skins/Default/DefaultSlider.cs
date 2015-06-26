@@ -34,9 +34,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using SharpDX.Direct3D9;
 
     /// <summary>
-    ///     A default implementation of an <see cref="IDrawableSlider" />
+    ///     A default implementation of an <see cref="IDrawable{MenuSlider}" />
     /// </summary>
-    public class DefaultSlider : DefaultComponent, IDrawableSlider
+    public class DefaultSlider : DefaultComponent, IDrawable<MenuSlider>
     {
         #region Public Methods and Operators
 
@@ -115,7 +115,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 
         #endregion
 
-
+        /// <summary>
+        /// Processes windows messages
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">event data</param>
         public virtual void OnWndProc(MenuSlider component, WindowsKeys args)
         {
             if (!component.Visible)
@@ -181,7 +185,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <returns>width</returns>
         public virtual int Width(MenuSlider component)
         {
-            return 100;
+            return CalcWidthItem(component) + 100;
         }
     }
 }

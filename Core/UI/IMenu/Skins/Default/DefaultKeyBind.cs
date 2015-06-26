@@ -33,9 +33,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using SharpDX.Direct3D9;
 
     /// <summary>
-    ///     A default implementation of <see cref="IDrawableKeyBind" />
+    ///     A default implementation of <see cref="IDrawable{MenuKeyBind}" />
     /// </summary>
-    public class DefaultKeyBind : DefaultComponent, IDrawableKeyBind
+    public class DefaultKeyBind : DefaultComponent, IDrawable<MenuKeyBind>
     {
         #region Public Methods and Operators
 
@@ -143,7 +143,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <returns>The <see cref="int" /></returns>
         public virtual int Width(MenuKeyBind keyBind)
         {
-            return
+            return CalcWidthItem(keyBind) + 
                 (int)
                 (MenuSettings.ContainerHeight + this.CalcWidthText("[" + keyBind.Key + "]")
                  + MenuSettings.ContainerTextOffset);
@@ -151,8 +151,64 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 
         #endregion
 
+        /// <summary>
+        ///     ChangeKey method.
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="newKey">
+        ///     The new key
+        /// </param>
+        private void ChangeKey(MenuKeyBind component, Keys newKey)
+        {
+            component.Key = newKey;
+            component.Interacting = false;
+            MenuManager.Instance.ResetWidth();
+        }
 
-        public virtual void OnWndproc(MenuKeyBind component, WindowsKeys args)
+        /// <summary>
+        ///     HandleDown method.
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="expectedKey">
+        ///     The expected key
+        /// </param>
+        private void HandleDown(MenuKeyBind component, Keys expectedKey)
+        {
+            if (!component.Interacting && expectedKey == component.Key && component.Type == KeyBindType.Press)
+            {
+                component.Active = true;
+            }
+        }
+
+        /// <summary>
+        ///     HandleUp method.
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="expectedKey">
+        ///     The expected key
+        /// </param>
+        private void HandleUp(MenuKeyBind component, Keys expectedKey)
+        {
+            if (expectedKey == component.Key)
+            {
+                switch (component.Type)
+                {
+                    case KeyBindType.Press:
+                        component.Active = false;
+                        break;
+                    case KeyBindType.Toggle:
+                        component.Active = !component.Active;
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Processes windows messages
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">event data</param>
+        public virtual void OnWndProc(MenuKeyBind component, WindowsKeys args)
         {
             if (!MenuGUI.IsChatOpen)
             {
@@ -245,58 +301,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         break;
                     case WindowsMessages.LBUTTONUP:
                         this.HandleUp(component, Keys.LButton);
-                        break;
-                }
-            }
-        }
-
-        /// <summary>
-        ///     ChangeKey method.
-        /// </summary>
-        /// <param name="component">menu component</param>
-        /// <param name="newKey">
-        ///     The new key
-        /// </param>
-        private void ChangeKey(MenuKeyBind component, Keys newKey)
-        {
-            component.Key = newKey;
-            component.Interacting = false;
-            MenuManager.Instance.ResetWidth();
-        }
-
-        /// <summary>
-        ///     HandleDown method.
-        /// </summary>
-        /// <param name="component">menu component</param>
-        /// <param name="expectedKey">
-        ///     The expected key
-        /// </param>
-        private void HandleDown(MenuKeyBind component, Keys expectedKey)
-        {
-            if (!component.Interacting && expectedKey == component.Key && component.Type == KeyBindType.Press)
-            {
-                component.Active = true;
-            }
-        }
-
-        /// <summary>
-        ///     HandleUp method.
-        /// </summary>
-        /// <param name="component">menu component</param>
-        /// <param name="expectedKey">
-        ///     The expected key
-        /// </param>
-        private void HandleUp(MenuKeyBind component, Keys expectedKey)
-        {
-            if (expectedKey == component.Key)
-            {
-                switch (component.Type)
-                {
-                    case KeyBindType.Press:
-                        component.Active = false;
-                        break;
-                    case KeyBindType.Toggle:
-                        component.Active = !component.Active;
                         break;
                 }
             }

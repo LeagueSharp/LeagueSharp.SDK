@@ -33,9 +33,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using SharpDX.Direct3D9;
 
     /// <summary>
-    ///     A default implementation of an <see cref="IDrawableColorPicker" />
+    ///     A default implementation of an <see cref="IDrawable{MenuColor}" />
     /// </summary>
-    public class DefaultColorPicker : DefaultComponent, IDrawableColorPicker
+    public class DefaultColorPicker : DefaultComponent, IDrawable<MenuColor>
     {
         #region Constants
 
@@ -427,7 +427,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <returns>The <see cref="int" /></returns>
         public virtual int Width(MenuColor component)
         {
-            return MenuSettings.ContainerHeight;
+            return CalcWidthItem(component) + MenuSettings.ContainerHeight;
         }
 
         #endregion

@@ -186,7 +186,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </param>
         public override void WndProc(WindowsKeys args)
         {
-            ThemeManager.Current.KeyBind.OnWndproc(this, args);
+            ThemeManager.Current.KeyBind.OnWndProc(this, args);
         }
 
         #endregion

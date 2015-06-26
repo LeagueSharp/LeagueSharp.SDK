@@ -26,9 +26,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
 
     /// <summary>
-    ///     Implements <see cref="IDrawableSeparator" /> as a default skin.
+    ///     Implements <see cref="IDrawable{MenuSeperator}" /> as a default skin.
     /// </summary>
-    public class DefaultSeparator : DefaultComponent, IDrawableSeparator
+    public class DefaultSeparator : DefaultComponent, IDrawable<MenuSeparator>
     {
         #region Public Methods and Operators
 
@@ -53,5 +53,25 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         }
 
         #endregion
+
+        /// <summary>
+        /// Calculates the Width of an AMenuComponent
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <returns>width</returns>
+        public int Width(MenuSeparator component)
+        {
+            return CalcWidthItem(component);
+        }
+
+        /// <summary>
+        /// Processes windows messages
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">event data</param>
+        public void OnWndProc(MenuSeparator component, Utils.WindowsKeys args)
+        {
+            //nothing
+        }
     }
 }

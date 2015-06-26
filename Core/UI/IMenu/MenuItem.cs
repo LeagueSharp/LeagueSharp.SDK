@@ -127,25 +127,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         public override sealed bool Visible { get; set; }
 
-        /// <summary>
-        ///     Gets the width.
-        /// </summary>
-        /// <value>
-        ///     The width.
-        /// </value>
-        public override int TotalWidth
-        {
-            get
-            {
-                return ThemeManager.Current.CalcWidthItem(this) + Width;
-            }
-        }
-
-        /// <summary>
-        ///     Gets the Value Width.
-        /// </summary>
-        public abstract int Width { get; }
-
         #endregion
 
         #region Public Indexers
@@ -198,7 +179,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     Gets the value.
         /// </summary>
-        /// <typeparam name="T2">The type of the 2.</typeparam>
+        /// <typeparam name="T">The type of the value.</typeparam>
         /// <param name="name">The name.</param>
         /// <returns>An Exception, there is no child for a MenuItem.</returns>
         /// <exception cref="Exception">Cannot get child of a MenuItem</exception>

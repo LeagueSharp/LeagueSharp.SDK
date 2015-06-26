@@ -157,7 +157,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuList{T}" /> class.
         /// </summary>
+        /// <param name="name">The internal name of this component</param>
+        /// <param name="displayName">The display name of this component</param>
         /// <param name="objects">The objects.</param>
+        /// <param name="uniqueString">String used in saving settings</param>
         public MenuList(string name, string displayName, IEnumerable<T> objects, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {

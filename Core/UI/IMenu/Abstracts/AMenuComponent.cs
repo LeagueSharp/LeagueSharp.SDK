@@ -112,8 +112,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
                 if (this.resetWidth)
                 {
                     this.menuWidthCached = this.Parent != null
-                                               ? this.Parent.Components.Max(comp => comp.Value.TotalWidth)
-                                               : MenuManager.Instance.Menus.Max(menu => menu.TotalWidth);
+                                               ? this.Parent.Components.Max(comp => comp.Value.Width)
+                                               : MenuManager.Instance.Menus.Max(menu => menu.Width);
                     resetWidth = false;
                 }
 
@@ -178,7 +178,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         /// <value>
         ///     The width.
         /// </value>
-        public abstract int TotalWidth { get; }
+        public abstract int Width { get; }
 
         #endregion
 

@@ -31,9 +31,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using SharpDX.Direct3D9;
 
     /// <summary>
-    ///     A default implementation of <see cref="IDrawableButton" />
+    ///     A default implementation of <see cref="IDrawable{MenuButton}" />
     /// </summary>
-    public class DefaultButton : DefaultComponent, IDrawableButton
+    public class DefaultButton : DefaultComponent, IDrawable<MenuButton>
     {
         #region Constants
 
@@ -151,7 +151,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </returns>
         public virtual int Width(MenuButton menuButton)
         {
-            return (2 * TextGap)
+            return CalcWidthItem(menuButton) + (2 * TextGap)
                    + MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, menuButton.ButtonText, 0).Width;
         }
 

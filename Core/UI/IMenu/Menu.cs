@@ -214,13 +214,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <value>
         ///     The width.
         /// </value>
-        public override int TotalWidth
+        public override int Width
         {
             get
             {
-                return ThemeManager.Current.CalcWidthMenu(this);
+                return ThemeManager.Current.Menu.Width(this);
             }
         }
+        
 
         #endregion
 
@@ -358,7 +359,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         public override void OnDraw(Vector2 position)
         {
             this.Position = position;
-            ThemeManager.Current.DrawMenu(this);
+            ThemeManager.Current.Menu.Draw(this);
         }
 
         /// <summary>
@@ -499,6 +500,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 
         #endregion
 
+        /// <summary>
+        /// Resets the children of this menu back to his default values.
+        /// </summary>
         public override void RestoreDefault()
         {
             foreach (var comp in Components)

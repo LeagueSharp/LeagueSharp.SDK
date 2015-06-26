@@ -30,9 +30,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using SharpDX.Direct3D9;
 
     /// <summary>
-    ///     A default implementation of <see cref="IDrawableBool" />
+    ///     A default implementation of a MenuBool IDrawable
     /// </summary>
-    public class DefaultBool : DefaultComponent, IDrawableBool
+    public class DefaultBool : DefaultComponent, IDrawable<MenuBool>
     {
         #region Public Methods and Operators
 
@@ -146,7 +146,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <returns>width</returns>
         public virtual int Width(MenuBool component)
         {
-            return MenuSettings.ContainerHeight;
+            return CalcWidthItem(component) + MenuSettings.ContainerHeight;
         }
     }
 }

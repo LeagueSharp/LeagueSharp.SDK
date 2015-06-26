@@ -32,9 +32,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using SharpDX.Direct3D9;
 
     /// <summary>
-    ///     A default implementation of a <see cref="IDrawableList" />
+    ///     A default implementation of a <see cref="IDrawable{MenuList}" />
     /// </summary>
-    public class DefaultList : DefaultComponent, IDrawableList
+    public class DefaultList : DefaultComponent, IDrawable<MenuList>
     {
         #region Constants
 
@@ -339,12 +339,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <returns>The <see cref="int" /></returns>
         public virtual int Width(MenuList menuList)
         {
-            return menuList.MaxStringWidth + (2 * TextSpacing) + this.dropDownButtonWidth;
+            return CalcWidthItem(menuList) + menuList.MaxStringWidth + (2 * TextSpacing) + this.dropDownButtonWidth;
         }
 
         #endregion
 
-
+        /// <summary>
+        /// Processes windows messages
+        /// </summary>
+        /// <param name="component">menu component</param>
+        /// <param name="args">event data</param>
         public virtual void OnWndProc(MenuList component, Utils.WindowsKeys args)
         {
             if (!component.Visible)

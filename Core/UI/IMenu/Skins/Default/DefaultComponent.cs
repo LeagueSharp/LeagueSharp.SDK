@@ -43,6 +43,30 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             return MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, text, 0).Width;
         }
 
+        /// <summary>
+        ///     Calculate the item's width.
+        /// </summary>
+        /// <param name="menuItem">The <see cref="MenuItem" /></param>
+        /// <returns>The width</returns>
+        public int CalcWidthItem(MenuItem menuItem)
+        {
+            return (int)(MeasureString(menuItem.DisplayName).Width + (MenuSettings.ContainerTextOffset * 2));
+        }
+
+        /// <summary>
+        ///     Calculates the string measurements.
+        /// </summary>
+        /// <param name="text">
+        ///     The text.
+        /// </param>
+        /// <returns>
+        ///     The measured rectangle.
+        /// </returns>
+        public Rectangle MeasureString(string text)
+        {
+            return MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, text, 0);
+        }
+
         #endregion
 
         #region Methods

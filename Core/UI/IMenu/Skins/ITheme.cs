@@ -21,6 +21,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+
     using SharpDX;
 
     /// <summary>
@@ -31,63 +33,48 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         #region Public Properties
 
         /// <summary>
-        ///     Gets the <see cref="IDrawableBool" />
+        ///     Gets the <see cref="IDrawable{MenuBool}"/> 
         /// </summary>
-        IDrawableBool Bool { get; }
+        IDrawable<MenuBool> Bool { get; }
 
         /// <summary>
-        ///     Gets the <see cref="IDrawableButton" />
+        ///     Gets the <see cref="IDrawable{MenuButton}"/> 
         /// </summary>
-        IDrawableButton Button { get; }
+        IDrawable<MenuButton> Button { get; }
 
         /// <summary>
-        ///     Gets the <see cref="IDrawableColorPicker" />
+        ///     Gets the <see cref="IDrawable{MenuColor}"/> 
         /// </summary>
-        IDrawableColorPicker ColorPicker { get; }
+        IDrawable<MenuColor> ColorPicker { get; }
 
         /// <summary>
-        ///     Gets the <see cref="IDrawableKeyBind" />
+        ///     Gets the <see cref="IDrawable{MenuKeyBind}"/> 
         /// </summary>
-        IDrawableKeyBind KeyBind { get; }
+        IDrawable<MenuKeyBind> KeyBind { get; }
 
         /// <summary>
-        ///     Gets the <see cref="IDrawableList" />
+        ///     Gets the <see cref="IDrawable{MenuList}"/> 
         /// </summary>
-        IDrawableList List { get; }
+        IDrawable<MenuList> List { get; }
 
         /// <summary>
-        ///     Gets the <see cref="IDrawableSeparator" />
+        ///     Gets the <see cref="IDrawable{MenuSeparator}"/> 
         /// </summary>
-        IDrawableSeparator Separator { get; }
+        IDrawable<MenuSeparator> Separator { get; }
 
         /// <summary>
-        ///     Gets the <see cref="IDrawableSlider" />
+        ///     Gets the <see cref="IDrawable{MenuSlider}"/> 
         /// </summary>
-        IDrawableSlider Slider { get; }
+        IDrawable<MenuSlider> Slider { get; }
+
+        /// <summary>
+        ///     Gets the <see cref="IDrawable{Menu}"/> 
+        /// </summary>
+        IDrawable<Menu> Menu { get; }
 
         #endregion
 
         #region Public Methods and Operators
-
-        /// <summary>
-        ///     Calculates the width of a MenuItem without his value
-        /// </summary>
-        /// <param name="menuItem">The <see cref="MenuItem" /></param>
-        /// <returns>The Width</returns>
-        int CalcWidthItem(MenuItem menuItem);
-
-        /// <summary>
-        ///     Calculates the width of a menu or submenu
-        /// </summary>
-        /// <param name="menu">The <see cref="Menu" /></param>
-        /// <returns>The Width</returns>
-        int CalcWidthMenu(Menu menu);
-
-        /// <summary>
-        ///     Draws a menu
-        /// </summary>
-        /// <param name="menuComponent">The <see cref="Menu" /></param>
-        void DrawMenu(Menu menuComponent);
 
         /// <summary>
         ///     Draws the list of root menus on the given position.
