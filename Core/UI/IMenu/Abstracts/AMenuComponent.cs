@@ -26,6 +26,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
     using System.Linq;
     using System.Reflection;
 
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
@@ -46,6 +47,48 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         ///     True if MenuWidth should be recalculated.
         /// </summary>
         private bool resetWidth = true;
+
+        private ITheme currentTheme;
+
+        private ADrawable themeHandler;
+
+        private readonly ADrawable defaultThemeHandler = new ADrawableAdapter();
+
+        /// <summary>
+        /// Gets the current handler for this AMenuComponent. If it is null it will ask the current theme to build a new one.
+        /// </summary>
+        protected ADrawable Handler
+        {
+            get
+            {
+                if (themeHandler != null && currentTheme != ThemeManager.Current)
+                {
+                    themeHandler.Dispose();
+                    themeHandler = null;
+                }
+                if (themeHandler == null || currentTheme != ThemeManager.Current)
+                {
+                    currentTheme = ThemeManager.Current;
+                    themeHandler = BuildHandler(ThemeManager.Current);
+                    if (themeHandler == null)
+                    {
+                        themeHandler = defaultThemeHandler;
+                        Console.WriteLine(@"No ADrawable handler exists for the component of type "+GetType());
+                    }
+                }
+                return themeHandler; 
+            }
+        }
+
+        /// <summary>
+        /// Builds an <see cref="ADrawable"/> for this component.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual ADrawable BuildHandler(ITheme theme)
+        {
+            return null;
+        }
+
 
         #endregion
 

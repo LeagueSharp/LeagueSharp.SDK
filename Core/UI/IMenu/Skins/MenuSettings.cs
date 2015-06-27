@@ -19,7 +19,7 @@
 //   Default Skin Settings.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
     using SharpDX;
     using SharpDX.Direct3D9;

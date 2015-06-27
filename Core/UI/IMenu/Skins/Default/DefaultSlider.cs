@@ -27,6 +27,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
+    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
 
@@ -34,11 +35,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using SharpDX.Direct3D9;
 
     /// <summary>
-    ///     A default implementation of an <see cref="IDrawable{MenuSlider}" />
+    ///     A default implementation of an <see cref="ADrawable{MenuSlider}" />
     /// </summary>
-    public class DefaultSlider : DefaultComponent, IDrawable<MenuSlider>
+    public class DefaultSlider : ADrawable<MenuSlider>
     {
         #region Public Methods and Operators
+
+        /// <summary>
+        /// Creates a new handler responsible for the given <see cref="AMenuComponent"/>.
+        /// </summary>
+        /// <param name="component">The menu component</param>
+        public DefaultSlider(MenuSlider component)
+            : base(component) {}
 
         /// <summary>
         ///     Gets the additional boundaries.
@@ -47,7 +55,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <returns>The <see cref="Rectangle" /></returns>
         public Rectangle AdditionalBoundries(MenuSlider component)
         {
-            return GetContainerRectangle(component);
+            return DefaultUtilities.GetContainerRectangle(component);
         }
 
         /// <summary>
@@ -57,46 +65,45 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <returns>The <see cref="Rectangle" /></returns>
         public Rectangle Bounding(MenuSlider component)
         {
-            return GetContainerRectangle(component);
+            return DefaultUtilities.GetContainerRectangle(component);
         }
 
         /// <summary>
         ///     Draws a <see cref="MenuSlider" />
         /// </summary>
-        /// <param name="component">The <see cref="MenuSlider" /></param>
-        public virtual void Draw(MenuSlider component)
+        public override void Draw()
         {
-            var position = component.Position;
+            var position = Component.Position;
             var centeredY =
                 (int)
-                GetContainerRectangle(component)
-                    .GetCenteredText(null, MenuSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter)
+                DefaultUtilities.GetContainerRectangle(Component)
+                    .GetCenteredText(null, MenuSettings.Font, Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
-            var percent = (component.Value - component.MinValue) / (float)(component.MaxValue - component.MinValue);
-            var x = position.X + (percent * component.MenuWidth);
+            var percent = (Component.Value - Component.MinValue) / (float)(Component.MaxValue - Component.MinValue);
+            var x = position.X + (percent * Component.MenuWidth);
 
             var line = new Line(Drawing.Direct3DDevice) { Antialias = false, GLLines = true, Width = 2 };
             line.Begin();
             line.Draw(
-                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) }, 
-                component.Interacting ? new ColorBGRA(255, 0, 0, 255) : new ColorBGRA(50, 154, 205, 255));
+                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) },
+                Component.Interacting ? new ColorBGRA(255, 0, 0, 255) : new ColorBGRA(50, 154, 205, 255));
             line.End();
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                component.DisplayName, 
+                MenuManager.Instance.Sprite,
+                Component.DisplayName, 
                 (int)(position.X + MenuSettings.ContainerTextOffset), 
                 centeredY, 
                 MenuSettings.TextColor);
 
             var measureText = MenuSettings.Font.MeasureText(
-                null, 
-                component.Value.ToString(CultureInfo.InvariantCulture), 
+                null,
+                Component.Value.ToString(CultureInfo.InvariantCulture), 
                 0);
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                component.Value.ToString(CultureInfo.InvariantCulture), 
-                (int)(position.X + component.MenuWidth - 5 - measureText.Width), 
+                MenuManager.Instance.Sprite,
+                Component.Value.ToString(CultureInfo.InvariantCulture),
+                (int)(position.X + Component.MenuWidth - 5 - measureText.Width), 
                 centeredY, 
                 MenuSettings.TextColor);
 
@@ -118,32 +125,31 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <summary>
         /// Processes windows messages
         /// </summary>
-        /// <param name="component">menu component</param>
         /// <param name="args">event data</param>
-        public virtual void OnWndProc(MenuSlider component, WindowsKeys args)
+        public override void OnWndProc(WindowsKeys args)
         {
-            if (!component.Visible)
+            if (!Component.Visible)
             {
                 return;
             }
 
-            if (args.Msg == WindowsMessages.MOUSEMOVE && component.Interacting)
+            if (args.Msg == WindowsMessages.MOUSEMOVE && Component.Interacting)
             {
-                this.CalculateNewValue(component, args);
+                this.CalculateNewValue(Component, args);
             }
-            else if (args.Msg == WindowsMessages.LBUTTONDOWN && !component.Interacting)
+            else if (args.Msg == WindowsMessages.LBUTTONDOWN && !Component.Interacting)
             {
-                var container = Bounding(component);
+                var container = Bounding(Component);
 
                 if (args.Cursor.IsUnderRectangle(container.X, container.Y, container.Width, container.Height))
                 {
-                    component.Interacting = true;
-                    CalculateNewValue(component, args);
+                    Component.Interacting = true;
+                    CalculateNewValue(Component, args);
                 }
             }
             else if (args.Msg == WindowsMessages.LBUTTONUP)
             {
-                component.Interacting = false;
+                Component.Interacting = false;
             }
         }
 
@@ -181,11 +187,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <summary>
         /// Calculates the width of this component
         /// </summary>
-        /// <param name="component">menu component</param>
         /// <returns>width</returns>
-        public virtual int Width(MenuSlider component)
+        public override int Width()
         {
-            return CalcWidthItem(component) + 100;
+            return DefaultUtilities.CalcWidthItem(Component) + 100;
+        }
+
+        /// <summary>
+        /// Disposes any resources used in this handler.
+        /// </summary>
+        public override void Dispose()
+        {
+            //do nothing
         }
     }
 }

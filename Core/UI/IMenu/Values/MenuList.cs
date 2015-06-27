@@ -133,6 +133,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </summary>
         public abstract string[] ValuesAsStrings { get; }
 
+        /// <summary>
+        /// Builds an <see cref="ADrawable"/> for this component.
+        /// </summary>
+        /// <returns></returns>
+        protected override ADrawable BuildHandler(ITheme theme)
+        {
+            return theme.BuildListHandler(this);
+        }
+
         #endregion
     }
 
@@ -278,7 +287,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return ThemeManager.Current.List.Width(this);
+                return Handler.Width();
             }
         }
 
@@ -300,7 +309,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </summary>
         public override void Draw()
         {
-            ThemeManager.Current.List.Draw(this);
+            Handler.Draw();
         }
 
         /// <summary>
@@ -309,7 +318,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void WndProc(WindowsKeys args)
         {
-            ThemeManager.Current.List.OnWndProc(this, args);
+            Handler.OnWndProc(args);
         }
 
         #endregion

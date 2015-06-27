@@ -21,9 +21,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Values
 {
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins;
     using LeagueSharp.SDK.Core.Utils;
 
@@ -84,7 +81,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return ThemeManager.Current.Button.Width(this);
+                return Handler.Width();
             }
         }
 
@@ -108,7 +105,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </summary>
         public override void Draw()
         {
-            ThemeManager.Current.Button.Draw(this);
+            Handler.Draw();
         }
 
         /// <summary>
@@ -119,7 +116,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </param>
         public override void WndProc(WindowsKeys args)
         {
-           ThemeManager.Current.Button.OnWndProc(this, args);
+            Handler.OnWndProc(args);
         }
 
         #endregion
@@ -130,6 +127,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         public override void RestoreDefault()
         {
             //do nothing
+        }
+
+        /// <summary>
+        /// Builds an <see cref="ADrawable"/> for this component.
+        /// </summary>
+        /// <returns></returns>
+        protected override ADrawable BuildHandler(ITheme theme)
+        {
+            return theme.BuildButtonHandler(this);
         }
     }
 }

@@ -119,7 +119,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return ThemeManager.Current.ColorPicker.Width(this);
+                return Handler.Width();
             }
         }
 
@@ -141,7 +141,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </summary>
         public override void Draw()
         {
-            ThemeManager.Current.ColorPicker.Draw(this);
+            Handler.Draw();
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void WndProc(WindowsKeys args)
         {
-            ThemeManager.Current.ColorPicker.OnWndProc(this, args);
+            Handler.OnWndProc(args);
         }
 
         #endregion
@@ -212,6 +212,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         public override void RestoreDefault()
         {
             Color = original;
+        }
+
+        /// <summary>
+        /// Builds an <see cref="ADrawable"/> for this component.
+        /// </summary>
+        /// <returns></returns>
+        protected override ADrawable BuildHandler(ITheme theme)
+        {
+            return theme.BuildColorHandler(this);
         }
     }
 }

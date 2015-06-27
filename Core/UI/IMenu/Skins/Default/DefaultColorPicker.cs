@@ -33,9 +33,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using SharpDX.Direct3D9;
 
     /// <summary>
-    ///     A default implementation of an <see cref="IDrawable{MenuColor}" />
+    ///     A default implementation of an <see cref="ADrawable{MenuColor}" />
     /// </summary>
-    public class DefaultColorPicker : DefaultComponent, IDrawable<MenuColor>
+    public class DefaultColorPicker : ADrawable<MenuColor>
     {
         #region Constants
 
@@ -101,7 +101,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         ///     Initializes a new instance of the <see cref="DefaultColorPicker" /> class.
         ///     Creates a new instance of a DefaultColorPicker
         /// </summary>
-        public DefaultColorPicker()
+        public DefaultColorPicker(MenuColor component):base(component)
         {
             this.pickerHeight = (2 * BorderOffset) + MenuSettings.ContainerHeight + (4 * SliderHeight)
                                 + (4 * SliderOffset);
@@ -146,16 +146,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <summary>
         ///     Draws a MenuColor
         /// </summary>
-        /// <param name="component">The <see cref="MenuColor" /></param>
-        public virtual void Draw(MenuColor component)
+        public override void Draw()
         {
-            var rectangleName = GetContainerRectangle(component)
-                .GetCenteredText(null, MenuSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter);
+            var rectangleName = DefaultUtilities.GetContainerRectangle(Component)
+                .GetCenteredText(null, MenuSettings.Font, Component.DisplayName, CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                component.DisplayName, 
-                (int)(component.Position.X + MenuSettings.ContainerTextOffset), 
+                MenuManager.Instance.Sprite,
+                Component.DisplayName,
+                (int)(Component.Position.X + MenuSettings.ContainerTextOffset), 
                 (int)rectangleName.Y, 
                 MenuSettings.TextColor);
 
@@ -168,36 +167,36 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 new[]
                     {
                         new Vector2(
-                            component.Position.X + component.MenuWidth
+                            Component.Position.X + Component.MenuWidth
                             - (MenuSettings.ContainerHeight / 2f), 
-                            component.Position.Y + 1), 
+                            Component.Position.Y + 1), 
                         new Vector2(
-                            component.Position.X + component.MenuWidth
+                            Component.Position.X + Component.MenuWidth
                             - (MenuSettings.ContainerHeight / 2f), 
-                            component.Position.Y + MenuSettings.ContainerHeight)
-                    }, 
-                component.Color);
+                            Component.Position.Y + MenuSettings.ContainerHeight)
+                    },
+                Component.Color);
             previewLine.End();
-            if (component.HoveringPreview)
+            if (Component.HoveringPreview)
             {
                 previewLine.Begin();
                 previewLine.Draw(
                     new[]
                         {
                             new Vector2(
-                                component.Position.X + component.MenuWidth
+                                Component.Position.X + Component.MenuWidth
                                 - (MenuSettings.ContainerHeight / 2f), 
-                                component.Position.Y + 1), 
+                                Component.Position.Y + 1), 
                             new Vector2(
-                                component.Position.X + component.MenuWidth
+                                Component.Position.X + Component.MenuWidth
                                 - (MenuSettings.ContainerHeight / 2f), 
-                                component.Position.Y + MenuSettings.ContainerHeight)
+                                Component.Position.Y + MenuSettings.ContainerHeight)
                         }, 
                     MenuSettings.HoverColor);
                 previewLine.End();
             }
 
-            if (component.Active)
+            if (Component.Active)
             {
                 var backgroundLine = new Line(Drawing.Direct3DDevice) { Width = PickerWidth, GLLines = true };
                 backgroundLine.Begin();
@@ -221,11 +220,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                             new Vector2(
                                 this.pickerX + PickerWidth - BorderOffset, 
                                 this.pickerY + BorderOffset + (MenuSettings.ContainerHeight / 2f))
-                        }, 
-                    component.Color);
+                        },
+                    Component.Color);
                 previewLine.End();
 
-                var previewColor = component.Color;
+                var previewColor = Component.Color;
 
                 var detail = String.Format(
                     "R:{0}  G:{1}  B:{2}  A:{3}", 
@@ -423,11 +422,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <summary>
         ///     Gets the width of a <see cref="MenuColor" />
         /// </summary>
-        /// <param name="component">>The <see cref="MenuColor" /></param>
         /// <returns>The <see cref="int" /></returns>
-        public virtual int Width(MenuColor component)
+        public override int Width()
         {
-            return CalcWidthItem(component) + MenuSettings.ContainerHeight;
+            return DefaultUtilities.CalcWidthItem(Component) + MenuSettings.ContainerHeight;
         }
 
         #endregion
@@ -526,72 +524,71 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <summary>
         /// Processes windows events
         /// </summary>
-        /// <param name="component">menu component</param>
         /// <param name="args">events</param>
-        public virtual void OnWndProc(MenuColor component, WindowsKeys args)
+        public override void OnWndProc(WindowsKeys args)
         {
-            if (!component.Visible)
+            if (!Component.Visible)
             {
                 return;
             }
 
-            var previewRect = PreviewBoundaries(component);
-            var pickerRect = PickerBoundaries(component);
-            var redRect = RedPickerBoundaries(component);
-            var greenRect = GreenPickerBoundaries(component);
-            var blueRect = BluePickerBoundaries(component);
-            var alphaRect = AlphaPickerBoundaries(component);
+            var previewRect = PreviewBoundaries(Component);
+            var pickerRect = PickerBoundaries(Component);
+            var redRect = RedPickerBoundaries(Component);
+            var greenRect = GreenPickerBoundaries(Component);
+            var blueRect = BluePickerBoundaries(Component);
+            var alphaRect = AlphaPickerBoundaries(Component);
 
             if (args.Msg == WindowsMessages.MOUSEMOVE)
             {
-                component.HoveringPreview = args.Cursor.IsUnderRectangle(
+                Component.HoveringPreview = args.Cursor.IsUnderRectangle(
                     previewRect.X,
                     previewRect.Y,
                     previewRect.Width,
                     previewRect.Height);
 
-                if (component.Active)
+                if (Component.Active)
                 {
-                    if (component.InteractingRed)
+                    if (Component.InteractingRed)
                     {
-                        this.UpdateRed(component, args, redRect);
+                        this.UpdateRed(Component, args, redRect);
                     }
-                    else if (component.InteractingGreen)
+                    else if (Component.InteractingGreen)
                     {
-                        this.UpdateGreen(component, args, greenRect);
+                        this.UpdateGreen(Component, args, greenRect);
                     }
-                    else if (component.InteractingBlue)
+                    else if (Component.InteractingBlue)
                     {
-                        this.UpdateBlue(component, args, blueRect);
+                        this.UpdateBlue(Component, args, blueRect);
                     }
-                    else if (component.InteractingAlpha)
+                    else if (Component.InteractingAlpha)
                     {
-                        this.UpdateAlpha(component, args, alphaRect);
+                        this.UpdateAlpha(Component, args, alphaRect);
                     }
                 }
             }
 
             if (args.Msg == WindowsMessages.LBUTTONUP)
             {
-                component.InteractingRed = false;
-                component.InteractingGreen = false;
-                component.InteractingBlue = false;
-                component.InteractingAlpha = false;
+                Component.InteractingRed = false;
+                Component.InteractingGreen = false;
+                Component.InteractingBlue = false;
+                Component.InteractingAlpha = false;
             }
 
             if (args.Msg == WindowsMessages.LBUTTONDOWN)
             {
                 if (args.Cursor.IsUnderRectangle(previewRect.X, previewRect.Y, previewRect.Width, previewRect.Height))
                 {
-                    component.Active = true;
+                    Component.Active = true;
                 }
                 else if (args.Cursor.IsUnderRectangle(pickerRect.X, pickerRect.Y, pickerRect.Width, pickerRect.Height)
-                         && component.Active)
+                         && Component.Active)
                 {
                     if (args.Cursor.IsUnderRectangle(redRect.X, redRect.Y, redRect.Width, redRect.Height))
                     {
-                        component.InteractingRed = true;
-                        this.UpdateRed(component, args, redRect);
+                        Component.InteractingRed = true;
+                        this.UpdateRed(Component, args, redRect);
                     }
                     else if (args.Cursor.IsUnderRectangle(
                         greenRect.X,
@@ -599,8 +596,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         greenRect.Width,
                         greenRect.Height))
                     {
-                        component.InteractingGreen = true;
-                        this.UpdateGreen(component, args, greenRect);
+                        Component.InteractingGreen = true;
+                        this.UpdateGreen(Component, args, greenRect);
                     }
                     else if (args.Cursor.IsUnderRectangle(
                         blueRect.X,
@@ -608,8 +605,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         blueRect.Width,
                         blueRect.Height))
                     {
-                        component.InteractingBlue = true;
-                        this.UpdateBlue(component, args, blueRect);
+                        Component.InteractingBlue = true;
+                        this.UpdateBlue(Component, args, blueRect);
                     }
                     else if (args.Cursor.IsUnderRectangle(
                         alphaRect.X,
@@ -617,15 +614,23 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         alphaRect.Width,
                         alphaRect.Height))
                     {
-                        component.InteractingAlpha = true;
-                        this.UpdateAlpha(component, args, alphaRect);
+                        Component.InteractingAlpha = true;
+                        this.UpdateAlpha(Component, args, alphaRect);
                     }
                 }
                 else
                 {
-                    component.Active = false;
+                    Component.Active = false;
                 }
             }
+        }
+
+        /// <summary>
+        /// Disposes any resources used in this handler.
+        /// </summary>
+        public override void Dispose()
+        {
+            //do nothing
         }
     }
 }

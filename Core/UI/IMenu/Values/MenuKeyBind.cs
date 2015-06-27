@@ -148,7 +148,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return ThemeManager.Current.KeyBind.Width(this);
+                return Handler.Width();
             }
         }
 
@@ -175,7 +175,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </summary>
         public override void Draw()
         {
-            ThemeManager.Current.KeyBind.Draw(this);
+            Handler.Draw();
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </param>
         public override void WndProc(WindowsKeys args)
         {
-            ThemeManager.Current.KeyBind.OnWndProc(this, args);
+            Handler.OnWndProc(args);
         }
 
         #endregion
@@ -244,6 +244,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         public override void RestoreDefault()
         {
             Key = original;
+        }
+
+        /// <summary>
+        /// Builds an <see cref="ADrawable"/> for this component.
+        /// </summary>
+        /// <returns></returns>
+        protected override ADrawable BuildHandler(ITheme theme)
+        {
+            return theme.BuildKeyBindHandler(this);
         }
     }
 }

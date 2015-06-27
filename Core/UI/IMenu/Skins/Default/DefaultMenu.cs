@@ -21,9 +21,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using Color = SharpDX.Color;
 
     /// <summary>
-    /// Provides a default implementation of <see cref="IDrawable{Menu}"/>
+    /// Provides a default implementation of <see cref="ADrawable{Menu}"/>
     /// </summary>
-    public class DefaultMenu : DefaultComponent, IDrawable<Menu>
+    public class DefaultMenu : ADrawable<Menu>
     {
 
         private readonly Texture dragTexture;
@@ -33,7 +33,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <summary>
         /// Default constructor of <see cref="DefaultMenu"/>
         /// </summary>
-        public DefaultMenu()
+        public DefaultMenu(Menu component):base(component)
         {
             Bitmap resized = new Bitmap(Resources.cursor_drag, DragTextureSize, DragTextureSize);
             dragTexture = Texture.FromMemory(
@@ -53,11 +53,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <summary>
         ///     Draws an Menu
         /// </summary>
-        /// <param name="menuComponent">The <see cref="Menu" /></param>
-        public virtual void Draw(Menu menuComponent)
+        public override void Draw()
         {
-            var position = menuComponent.Position;
-            if (menuComponent.Hovering && !menuComponent.Toggled && menuComponent.Components.Count > 0)
+            var position = Component.Position;
+            if (Component.Hovering && !Component.Toggled && Component.Components.Count > 0)
             {
                 MenuSettings.HoverLine.Begin();
                 MenuSettings.HoverLine.Draw(
@@ -65,7 +64,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         {
                             new Vector2(position.X, position.Y + MenuSettings.ContainerHeight / 2f), 
                             new Vector2(
-                                position.X + menuComponent.MenuWidth, 
+                                position.X + Component.MenuWidth, 
                                 position.Y + MenuSettings.ContainerHeight / 2f)
                         },
                     MenuSettings.HoverColor);
@@ -74,13 +73,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 
             var centerY =
                 (int)
-                GetContainerRectangle(menuComponent)
-                    .GetCenteredText(null, MenuSettings.Font, menuComponent.DisplayName, CenteredFlags.VerticalCenter)
+                DefaultUtilities.GetContainerRectangle(Component)
+                    .GetCenteredText(null, MenuSettings.Font, Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                menuComponent.DisplayName,
+                Component.DisplayName,
                 (int)(position.X + MenuSettings.ContainerTextOffset),
                 centerY,
                 MenuSettings.TextColor);
@@ -89,31 +88,31 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 MenuManager.Instance.Sprite,
                 "»",
                 (int)
-                (position.X + menuComponent.MenuWidth - MenuSettings.ContainerTextMarkWidth
+                (position.X + Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
                  - MenuSettings.ContainerTextMarkOffset),
                 centerY,
-                menuComponent.Components.Count > 0 ? MenuSettings.TextColor : MenuSettings.ContainerSeparatorColor);
+                Component.Components.Count > 0 ? MenuSettings.TextColor : MenuSettings.ContainerSeparatorColor);
 
-            if (menuComponent.Toggled)
+            if (Component.Toggled)
             {
-                MenuSettings.ContainerLine.Width = menuComponent.MenuWidth;
+                MenuSettings.ContainerLine.Width = Component.MenuWidth;
                 MenuSettings.ContainerLine.Begin();
                 MenuSettings.ContainerLine.Draw(
                     new[]
                         {
-                            new Vector2(position.X + menuComponent.MenuWidth / 2f, position.Y), 
+                            new Vector2(position.X + Component.MenuWidth / 2f, position.Y), 
                             new Vector2(
-                                position.X + menuComponent.MenuWidth / 2f, 
+                                position.X + Component.MenuWidth / 2f, 
                                 position.Y + MenuSettings.ContainerHeight)
                         },
                     MenuSettings.ContainerSelectedColor);
                 MenuSettings.ContainerLine.End();
 
-                float height = MenuSettings.ContainerHeight * menuComponent.Components.Count;
+                float height = MenuSettings.ContainerHeight * Component.Components.Count;
                 var width = MenuSettings.ContainerWidth;
-                if (menuComponent.Components.Count > 0)
+                if (Component.Components.Count > 0)
                 {
-                    width = menuComponent.Components.First().Value.MenuWidth;
+                    width = Component.Components.First().Value.MenuWidth;
                 }
 
                 MenuSettings.ContainerLine.Width = width;
@@ -121,22 +120,22 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 MenuSettings.ContainerLine.Draw(
                     new[]
                         {
-                            new Vector2((position.X + menuComponent.MenuWidth) + width / 2, position.Y), 
-                            new Vector2((position.X + menuComponent.MenuWidth) + width / 2, position.Y + height)
+                            new Vector2((position.X + Component.MenuWidth) + width / 2, position.Y), 
+                            new Vector2((position.X + Component.MenuWidth) + width / 2, position.Y + height)
                         },
                     MenuSettings.RootContainerColor);
                 MenuSettings.ContainerLine.End();
 
-                for (var i = 0; i < menuComponent.Components.Count; ++i)
+                for (var i = 0; i < Component.Components.Count; ++i)
                 {
-                    var childComponent = menuComponent.Components.Values.ToList()[i];
+                    var childComponent = Component.Components.Values.ToList()[i];
                     if (childComponent != null)
                     {
                         var childPos = new Vector2(
-                            position.X + menuComponent.MenuWidth,
+                            position.X + Component.MenuWidth,
                             position.Y + i * MenuSettings.ContainerHeight);
 
-                        if (i < menuComponent.Components.Count - 1)
+                        if (i < Component.Components.Count - 1)
                         {
                             MenuSettings.ContainerSeparatorLine.Begin();
                             MenuSettings.ContainerSeparatorLine.Draw(
@@ -160,36 +159,36 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 contour.Draw(
                     new[]
                         {
-                            new Vector2(position.X + menuComponent.MenuWidth, position.Y), 
-                            new Vector2(position.X + menuComponent.MenuWidth + width, position.Y)
+                            new Vector2(position.X + Component.MenuWidth, position.Y), 
+                            new Vector2(position.X + Component.MenuWidth + width, position.Y)
                         },
                     Color.Black);
                 contour.Draw(
                     new[]
                         {
-                            new Vector2(position.X + menuComponent.MenuWidth, position.Y + height), 
-                            new Vector2(position.X + menuComponent.MenuWidth + width, position.Y + height)
+                            new Vector2(position.X + Component.MenuWidth, position.Y + height), 
+                            new Vector2(position.X + Component.MenuWidth + width, position.Y + height)
                         },
                     Color.Black);
                 contour.Draw(
                     new[]
                         {
-                            new Vector2(position.X + menuComponent.MenuWidth, position.Y), 
-                            new Vector2(position.X + menuComponent.MenuWidth, position.Y + height)
+                            new Vector2(position.X + Component.MenuWidth, position.Y), 
+                            new Vector2(position.X + Component.MenuWidth, position.Y + height)
                         },
                     Color.Black);
                 contour.Draw(
                     new[]
                         {
-                            new Vector2(position.X + menuComponent.MenuWidth + width, position.Y), 
-                            new Vector2(position.X + menuComponent.MenuWidth + width, position.Y + height)
+                            new Vector2(position.X + Component.MenuWidth + width, position.Y), 
+                            new Vector2(position.X + Component.MenuWidth + width, position.Y + height)
                         },
                     Color.Black);
                 contour.End();
                 contour.Dispose();
             }
 
-            if (menuComponent.HasDragged)
+            if (Component.HasDragged)
             {
                 var sprite = MenuManager.Instance.Sprite;
                 var oldMatrix = sprite.Transform;
@@ -224,24 +223,30 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <summary>
         /// Calculates the Width of an AMenuComponent
         /// </summary>
-        /// <param name="component">menu component</param>
         /// <returns>width</returns>
-        public virtual int Width(Menu component)
+        public override int Width()
         {
             return
                 (int)
-                (MeasureString(component.DisplayName + " »").Width + (MenuSettings.ContainerTextOffset * 2)
+                (DefaultUtilities.MeasureString(Component.DisplayName + " »").Width + (MenuSettings.ContainerTextOffset * 2)
                  + MenuSettings.ContainerTextMarkWidth);
         }
 
         /// <summary>
         /// Processes windows messages
         /// </summary>
-        /// <param name="component">menu component</param>
         /// <param name="args">event data</param>
-        public virtual void OnWndProc(Menu component, WindowsKeys args)
+        public override void OnWndProc(WindowsKeys args)
         {
             //
+        }
+
+        /// <summary>
+        /// Disposes any resources used in this handler.
+        /// </summary>
+        public override void Dispose()
+        {
+            dragTexture.Dispose();
         }
     }
 }

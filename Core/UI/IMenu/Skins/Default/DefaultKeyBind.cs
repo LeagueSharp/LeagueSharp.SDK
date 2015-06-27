@@ -26,6 +26,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
+    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
 
@@ -33,11 +34,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using SharpDX.Direct3D9;
 
     /// <summary>
-    ///     A default implementation of <see cref="IDrawable{MenuKeyBind}" />
+    ///     A default implementation of <see cref="ADrawable{MenuKeyBind}" />
     /// </summary>
-    public class DefaultKeyBind : DefaultComponent, IDrawable<MenuKeyBind>
+    public class DefaultKeyBind : ADrawable<MenuKeyBind>
     {
         #region Public Methods and Operators
+
+        /// <summary>
+        /// Creates a new handler responsible for the given <see cref="AMenuComponent"/>.
+        /// </summary>
+        /// <param name="component">The menu component</param>
+        public DefaultKeyBind(MenuKeyBind component)
+            : base(component) {}
 
         /// <summary>
         ///     Gets the On/Off boundaries
@@ -58,30 +66,29 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <summary>
         ///     Draws a MenuKeyBind
         /// </summary>
-        /// <param name="component">The <see cref="MenuKeyBind" /></param>
-        public virtual void Draw(MenuKeyBind component)
+        public override void Draw()
         {
             var centerY =
                 (int)
-                GetContainerRectangle(component)
-                    .GetCenteredText(null, MenuSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter)
+                DefaultUtilities.GetContainerRectangle(Component)
+                    .GetCenteredText(null, MenuSettings.Font, Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                component.Interacting ? "Press a key" : component.DisplayName, 
-                (int)(component.Position.X + MenuSettings.ContainerTextOffset), 
+                MenuManager.Instance.Sprite,
+                Component.Interacting ? "Press a key" : Component.DisplayName,
+                (int)(Component.Position.X + MenuSettings.ContainerTextOffset), 
                 centerY, 
                 MenuSettings.TextColor);
 
-            if (!component.Interacting)
+            if (!Component.Interacting)
             {
-                var keyString = "[" + component.Key + "]";
+                var keyString = "[" + Component.Key + "]";
                 MenuSettings.Font.DrawText(
                     MenuManager.Instance.Sprite, 
                     keyString, 
                     (int)
-                    (component.Position.X + component.MenuWidth - MenuSettings.ContainerHeight
-                     - this.CalcWidthText(keyString) - MenuSettings.ContainerTextOffset), 
+                    (Component.Position.X + Component.MenuWidth - MenuSettings.ContainerHeight
+                     - DefaultUtilities.CalcWidthText(keyString) - MenuSettings.ContainerTextOffset), 
                     centerY, 
                     MenuSettings.TextColor);
             }
@@ -95,15 +102,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 new[]
                     {
                         new Vector2(
-                            (component.Position.X + component.MenuWidth
+                            (Component.Position.X + Component.MenuWidth
                              - MenuSettings.ContainerHeight) + MenuSettings.ContainerHeight / 2f, 
-                            component.Position.Y + 1), 
+                            Component.Position.Y + 1), 
                         new Vector2(
-                            (component.Position.X + component.MenuWidth
+                            (Component.Position.X + Component.MenuWidth
                              - MenuSettings.ContainerHeight) + MenuSettings.ContainerHeight / 2f, 
-                            component.Position.Y + MenuSettings.ContainerHeight)
-                    }, 
-                component.Active ? new ColorBGRA(0, 100, 0, 255) : new ColorBGRA(255, 0, 0, 255));
+                            Component.Position.Y + MenuSettings.ContainerHeight)
+                    },
+                Component.Active ? new ColorBGRA(0, 100, 0, 255) : new ColorBGRA(255, 0, 0, 255));
             line.End();
             line.Dispose();
 
@@ -111,16 +118,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 (int)
                 new Rectangle(
                     (int)
-                    (component.Position.X + component.MenuWidth - MenuSettings.ContainerHeight), 
-                    (int)component.Position.Y, 
+                    (Component.Position.X + Component.MenuWidth - MenuSettings.ContainerHeight),
+                    (int)Component.Position.Y, 
                     MenuSettings.ContainerHeight, 
                     MenuSettings.ContainerHeight).GetCenteredText(
                         null, MenuSettings.Font,
-                        component.Active ? "ON" : "OFF", 
+                        Component.Active ? "ON" : "OFF", 
                         CenteredFlags.HorizontalCenter).X;
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                component.Active ? "ON" : "OFF", 
+                MenuManager.Instance.Sprite,
+                Component.Active ? "ON" : "OFF", 
                 centerX, 
                 centerY, 
                 MenuSettings.TextColor);
@@ -133,19 +140,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <returns>The <see cref="Rectangle" /></returns>
         public Rectangle KeyBindBoundaries(MenuKeyBind component)
         {
-            return GetContainerRectangle(component);
+            return DefaultUtilities.GetContainerRectangle(component);
         }
 
         /// <summary>
         ///     Gets the width of the MenuKeyBind
         /// </summary>
-        /// <param name="keyBind">The <see cref="MenuKeyBind" /></param>
         /// <returns>The <see cref="int" /></returns>
-        public virtual int Width(MenuKeyBind keyBind)
+        public override int Width()
         {
-            return CalcWidthItem(keyBind) + 
+            return DefaultUtilities.CalcWidthItem(Component) + 
                 (int)
-                (MenuSettings.ContainerHeight + this.CalcWidthText("[" + keyBind.Key + "]")
+                (MenuSettings.ContainerHeight + DefaultUtilities.CalcWidthText("[" + Component.Key + "]")
                  + MenuSettings.ContainerTextOffset);
         }
 
@@ -206,79 +212,78 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <summary>
         /// Processes windows messages
         /// </summary>
-        /// <param name="component">menu component</param>
         /// <param name="args">event data</param>
-        public virtual void OnWndProc(MenuKeyBind component, WindowsKeys args)
+        public override void OnWndProc(WindowsKeys args)
         {
             if (!MenuGUI.IsChatOpen)
             {
                 switch (args.Msg)
                 {
                     case WindowsMessages.KEYDOWN:
-                        this.HandleDown(component, args.Key);
+                        this.HandleDown(Component, args.Key);
                         break;
                     case WindowsMessages.KEYUP:
-                        if (component.Interacting && args.SingleKey != Keys.ShiftKey)
+                        if (Component.Interacting && args.SingleKey != Keys.ShiftKey)
                         {
-                            this.ChangeKey(component, args.SingleKey == Keys.Escape ? Keys.None : args.Key);
+                            this.ChangeKey(Component, args.SingleKey == Keys.Escape ? Keys.None : args.Key);
                         }
                         else
                         {
-                            this.HandleUp(component, args.Key);
+                            this.HandleUp(Component, args.Key);
                         }
 
                         break;
                     case WindowsMessages.XBUTTONDOWN:
-                        this.HandleDown(component, args.SideButton);
+                        this.HandleDown(Component, args.SideButton);
                         break;
                     case WindowsMessages.XBUTTONUP:
-                        if (component.Interacting)
+                        if (Component.Interacting)
                         {
-                            this.ChangeKey(component, args.SideButton);
+                            this.ChangeKey(Component, args.SideButton);
                         }
                         else
                         {
-                            this.HandleUp(component, args.SideButton);
+                            this.HandleUp(Component, args.SideButton);
                         }
 
                         break;
                     case WindowsMessages.MBUTTONDOWN:
-                        this.HandleDown(component, Keys.MButton);
+                        this.HandleDown(Component, Keys.MButton);
                         break;
                     case WindowsMessages.MBUTTONUP:
-                        if (component.Interacting)
+                        if (Component.Interacting)
                         {
-                            this.ChangeKey(component, Keys.MButton);
+                            this.ChangeKey(Component, Keys.MButton);
                         }
                         else
                         {
-                            this.HandleUp(component, Keys.MButton);
+                            this.HandleUp(Component, Keys.MButton);
                         }
 
                         break;
                     case WindowsMessages.RBUTTONDOWN:
-                        this.HandleDown(component, Keys.RButton);
+                        this.HandleDown(Component, Keys.RButton);
                         break;
                     case WindowsMessages.RBUTTONUP:
-                        if (component.Interacting)
+                        if (Component.Interacting)
                         {
-                            this.ChangeKey(component, Keys.RButton);
+                            this.ChangeKey(Component, Keys.RButton);
                         }
                         else
                         {
-                            this.HandleUp(component, Keys.RButton);
+                            this.HandleUp(Component, Keys.RButton);
                         }
 
                         break;
                     case WindowsMessages.LBUTTONDOWN:
-                        if (component.Interacting)
+                        if (Component.Interacting)
                         {
-                            this.ChangeKey(component, Keys.LButton);
+                            this.ChangeKey(Component, Keys.LButton);
                         }
-                        else if (component.Visible)
+                        else if (Component.Visible)
                         {
-                            var container = ButtonBoundaries(component);
-                            var content = KeyBindBoundaries(component);
+                            var container = ButtonBoundaries(Component);
+                            var content = KeyBindBoundaries(Component);
 
                             if (args.Cursor.IsUnderRectangle(
                                 container.X,
@@ -286,24 +291,32 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                 container.Width,
                                 container.Height))
                             {
-                                component.Active = !component.Active;
+                                Component.Active = !Component.Active;
                             }
                             else if (args.Cursor.IsUnderRectangle(content.X, content.Y, content.Width, content.Height))
                             {
-                                component.Interacting = !component.Interacting;
+                                Component.Interacting = !Component.Interacting;
                             }
                             else
                             {
-                                this.HandleDown(component, Keys.LButton);
+                                this.HandleDown(Component, Keys.LButton);
                             }
                         }
 
                         break;
                     case WindowsMessages.LBUTTONUP:
-                        this.HandleUp(component, Keys.LButton);
+                        this.HandleUp(Component, Keys.LButton);
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Disposes any resources used in this handler.
+        /// </summary>
+        public override void Dispose()
+        {
+            //do nothing
         }
     }
 }

@@ -21,8 +21,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
 
+    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
 
     using SharpDX;
@@ -34,72 +37,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     /// <summary>
     ///     Implements a default ITheme.
     /// </summary>
-    public class DefaultTheme : DefaultComponent, ITheme
+    public class DefaultTheme : ITheme
     {
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="DefaultTheme" /> class.
-        ///     Creates a new instance of DefaultTheme
-        /// </summary>
-        public DefaultTheme()
-        {
-            Bool = new DefaultBool();
-            ColorPicker = new DefaultColorPicker();
-            Button = new DefaultButton();
-            KeyBind = new DefaultKeyBind();
-            List = new DefaultList();
-            Separator = new DefaultSeparator();
-            Slider = new DefaultSlider();
-            Menu = new DefaultMenu();
-        }
-
-        #endregion
-
-        #region Public Properties
-        
-        /// <summary>
-        /// Gets the <see cref="IDrawable{MenuBool}"/>
-        /// </summary>
-        public IDrawable<MenuBool> Bool { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="IDrawable{MenuButton}"/>
-        /// </summary>
-        public IDrawable<MenuButton> Button { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="IDrawable{MenuColor}"/>
-        /// </summary>
-        public IDrawable<MenuColor> ColorPicker { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="IDrawable{MenuKeyBind}"/>
-        /// </summary>
-        public IDrawable<MenuKeyBind> KeyBind { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="IDrawable{MenuList}"/>
-        /// </summary>
-        public IDrawable<MenuList> List { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="IDrawable{MenuSeparator}"/>
-        /// </summary>
-        public IDrawable<MenuSeparator> Separator { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="IDrawable{MenuSlider}"/>
-        /// </summary>
-        public IDrawable<MenuSlider> Slider { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="IDrawable{Menu}"/>
-        /// </summary>
-        public IDrawable<Menu> Menu { get; private set; }
-
-        #endregion
 
         #region Public Methods and Operators
 
@@ -166,5 +105,85 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         }
 
         #endregion
+
+        /// <summary>
+        /// Builds a new handler for the given <see cref="Menu"/>.
+        /// </summary>
+        /// <param name="menu">The <see cref="Menu"/> where this handler is responsible for.</param>
+        /// <returns>The handler</returns>
+        public ADrawable<Menu> BuildMenuHandler(Menu menu)
+        {
+            return new DefaultMenu(menu);
+        }
+
+        /// <summary>
+        /// Builds a new handler for the given <see cref="MenuBool"/>.
+        /// </summary>
+        /// <param name="component">The <see cref="MenuBool"/> where this handler is responsible for.</param>
+        /// <returns>The handler</returns>
+        public ADrawable<MenuBool> BuildBoolHandler(MenuBool component)
+        {
+           return new DefaultBool(component);
+        }
+
+        /// <summary>
+        /// Builds a new handler for the given <see cref="MenuButton"/>.
+        /// </summary>
+        /// <param name="component">The <see cref="MenuButton"/> where this handler is responsible for.</param>
+        /// <returns>The handler</returns>
+        public ADrawable<MenuButton> BuildButtonHandler(MenuButton component)
+        {
+            return new DefaultButton(component);
+        }
+
+        /// <summary>
+        /// Builds a new handler for the given <see cref="MenuColor"/>.
+        /// </summary>
+        /// <param name="component">The <see cref="MenuColor"/> where this handler is responsible for.</param>
+        /// <returns>The handler</returns>
+        public ADrawable<MenuColor> BuildColorHandler(MenuColor component)
+        {
+            return new DefaultColorPicker(component);
+        }
+
+        /// <summary>
+        /// Builds a new handler for the given <see cref="MenuKeyBind"/>.
+        /// </summary>
+        /// <param name="component">The <see cref="MenuKeyBind"/> where this handler is responsible for.</param>
+        /// <returns>The handler</returns>
+        public ADrawable<MenuKeyBind> BuildKeyBindHandler(MenuKeyBind component)
+        {
+            return new DefaultKeyBind(component);
+        }
+
+        /// <summary>
+        /// Builds a new handler for the given <see cref="MenuList"/>.
+        /// </summary>
+        /// <param name="component">The <see cref="MenuList"/> where this handler is responsible for.</param>
+        /// <returns>The handler</returns>
+        public ADrawable<MenuList> BuildListHandler(MenuList component)
+        {
+            return new DefaultList(component);
+        }
+
+        /// <summary>
+        /// Builds a new handler for the given <see cref="MenuSeparator"/>.
+        /// </summary>
+        /// <param name="component">The <see cref="MenuSeparator"/> where this handler is responsible for.</param>
+        /// <returns>The handler</returns>
+        public ADrawable<MenuSeparator> BuildSeparatorHandler(MenuSeparator component)
+        {
+            return new DefaultSeparator(component);
+        }
+
+        /// <summary>
+        /// Builds a new handler for the given <see cref="MenuSlider"/>.
+        /// </summary>
+        /// <param name="component">The <see cref="MenuSlider"/> where this handler is responsible for.</param>
+        /// <returns>The handler</returns>
+        public ADrawable<MenuSlider> BuildSliderHandler(MenuSlider component)
+        {
+            return new DefaultSlider(component);
+        }
     }
 }

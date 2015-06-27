@@ -25,9 +25,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System.Runtime.Serialization;
     using System.Security.Permissions;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins;
     using LeagueSharp.SDK.Core.Utils;
 
@@ -37,6 +34,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     [Serializable]
     public class MenuSlider : MenuItem, ISerializable
     {
+        private int _value;
 
         private readonly int original;
 
@@ -60,9 +58,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         public MenuSlider(string name, string displayName, int value = 0, int minValue = 0, int maxValue = 100, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
-            this.Value = value;
             this.MinValue = minValue;
             this.MaxValue = maxValue;
+            this.Value = value;
             original = value;
         }
 
@@ -101,7 +99,27 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Gets or sets the Slider Current Value.
         /// </summary>
-        public int Value { get; set; }
+        public int Value {
+            get
+            {
+                return _value;
+            }
+            set
+            {
+                if (value < this.MinValue)
+                {
+                    _value = this.MinValue;
+                }
+                else if (value > this.MaxValue)
+                {
+                    _value = this.MaxValue;
+                }
+                else
+                {
+                    _value = value;
+                }
+            } 
+        }
 
         /// <summary>
         ///     Slider Item Width.
@@ -110,7 +128,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return ThemeManager.Current.Slider.Width(this); ;
+                return Handler.Width();
             }
         }
 
@@ -124,19 +142,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="value">The value.</param>
         public override void Extract(MenuItem value)
         {
-            var oldValue = ((MenuSlider)value).Value;
-            if (oldValue < this.MinValue)
-            {
-                this.Value = this.MinValue;
-            }
-            else if (oldValue > this.MaxValue)
-            {
-                this.Value = this.MaxValue;
-            }
-            else
-            {
-                this.Value = oldValue;
-            }
+            this.Value = ((MenuSlider)value).Value;
         }
 
         /// <summary>
@@ -144,7 +150,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </summary>
         public override void Draw()
         {
-            ThemeManager.Current.Slider.Draw(this);
+            Handler.Draw();
         }
 
         /// <summary>
@@ -155,7 +161,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </param>
         public override void WndProc(WindowsKeys args)
         {
-            ThemeManager.Current.Slider.OnWndProc(this, args);
+            Handler.OnWndProc(args);
         }
 
         #endregion
@@ -212,6 +218,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         public override void RestoreDefault()
         {
             Value = original;
+        }
+
+        /// <summary>
+        /// Builds an <see cref="ADrawable"/> for this component.
+        /// </summary>
+        /// <returns></returns>
+        protected override ADrawable BuildHandler(ITheme theme)
+        {
+            return theme.BuildSliderHandler(this);
         }
     }
 }

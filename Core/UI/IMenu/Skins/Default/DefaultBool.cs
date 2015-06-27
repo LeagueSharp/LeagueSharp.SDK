@@ -1,39 +1,33 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DefaultBool.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-// </copyright>
-// <summary>
-//   A default implementation of <see cref="IDrawableBool" />
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
+    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
 
     /// <summary>
-    ///     A default implementation of a MenuBool IDrawable
+    ///     A default implementation of a <see cref="ADrawable{MenuBool}"/>
     /// </summary>
-    public class DefaultBool : DefaultComponent, IDrawable<MenuBool>
+    public class DefaultBool : ADrawable<MenuBool>
     {
+        /// <summary>
+        /// Creates a default handler responsible for <see cref="MenuBool"/>.
+        /// </summary>
+        /// <param name="component"></param>
+        public DefaultBool(MenuBool component)
+            : base(component) {}
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -46,51 +40,50 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             return
                 new Rectangle(
                     (int)
-                    (component.Position.X + component.MenuWidth - MenuSettings.ContainerHeight), 
-                    (int)component.Position.Y, 
-                    MenuSettings.ContainerHeight, 
+                    (component.Position.X + component.MenuWidth - MenuSettings.ContainerHeight),
+                    (int)component.Position.Y,
+                    MenuSettings.ContainerHeight,
                     MenuSettings.ContainerHeight);
         }
-
-
 
         /// <summary>
         ///     Draws a <see cref="MenuBool" />
         /// </summary>
-        /// <param name="component">The <see cref="MenuBool" /></param>
-        public virtual void Draw(MenuBool component)
+        public override void Draw()
         {
             var centerY =
                 (int)
-                GetContainerRectangle(component)
-                    .GetCenteredText(null, MenuSettings.Font, component.DisplayName, CenteredFlags.VerticalCenter)
+                DefaultUtilities.GetContainerRectangle(Component)
+                    .GetCenteredText(null, MenuSettings.Font, Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                component.DisplayName, 
-                (int)(component.Position.X + MenuSettings.ContainerTextOffset), 
-                centerY, 
+                MenuManager.Instance.Sprite,
+                Component.DisplayName,
+                (int)(Component.Position.X + MenuSettings.ContainerTextOffset),
+                centerY,
                 MenuSettings.TextColor);
 
             var line = new Line(Drawing.Direct3DDevice)
-                           {
-                              Antialias = false, GLLines = true, Width = MenuSettings.ContainerHeight 
-                           };
+            {
+                Antialias = false,
+                GLLines = true,
+                Width = MenuSettings.ContainerHeight
+            };
             line.Begin();
             line.Draw(
                 new[]
                     {
                         new Vector2(
-                            (component.Position.X + component.MenuWidth
+                            (Component.Position.X + Component.MenuWidth
                              - MenuSettings.ContainerHeight) + MenuSettings.ContainerHeight / 2f, 
-                            component.Position.Y + 1), 
+                            Component.Position.Y + 1), 
                         new Vector2(
-                            (component.Position.X + component.MenuWidth
+                            (Component.Position.X + Component.MenuWidth
                              - MenuSettings.ContainerHeight) + MenuSettings.ContainerHeight / 2f, 
-                            component.Position.Y + MenuSettings.ContainerHeight)
-                    }, 
-                component.Value ? new ColorBGRA(0, 100, 0, 255) : new ColorBGRA(255, 0, 0, 255));
+                            Component.Position.Y + MenuSettings.ContainerHeight)
+                    },
+                Component.Value ? new ColorBGRA(0, 100, 0, 255) : new ColorBGRA(255, 0, 0, 255));
             line.End();
             line.Dispose();
 
@@ -98,18 +91,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 (int)
                 new Rectangle(
                     (int)
-                    (component.Position.X + component.MenuWidth - MenuSettings.ContainerHeight), 
-                    (int)component.Position.Y, 
-                    MenuSettings.ContainerHeight, 
+                    (Component.Position.X + Component.MenuWidth - MenuSettings.ContainerHeight),
+                    (int)Component.Position.Y,
+                    MenuSettings.ContainerHeight,
                     MenuSettings.ContainerHeight).GetCenteredText(
-                        null, MenuSettings.Font, 
-                        component.Value ? "ON" : "OFF", 
+                        null, MenuSettings.Font,
+                        Component.Value ? "ON" : "OFF",
                         CenteredFlags.HorizontalCenter).X;
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                component.Value ? "ON" : "OFF", 
-                centerX, 
-                centerY, 
+                MenuManager.Instance.Sprite,
+                Component.Value ? "ON" : "OFF",
+                centerX,
+                centerY,
                 MenuSettings.TextColor);
         }
 
@@ -118,23 +111,22 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <summary>
         /// Processes windows messages
         /// </summary>
-        /// <param name="component">menu component</param>
         /// <param name="args">event data</param>
-        public virtual void OnWndProc(MenuBool component, Utils.WindowsKeys args)
+        public override void OnWndProc(WindowsKeys args)
         {
-            if (!component.Visible)
+            if (!Component.Visible)
             {
                 return;
             }
 
             if (args.Msg == WindowsMessages.LBUTTONDOWN)
             {
-                var rect = ButtonBoundaries(component);
+                var rect = ButtonBoundaries(Component);
 
                 if (args.Cursor.IsUnderRectangle(rect.X, rect.Y, rect.Width, rect.Height))
                 {
-                    component.Value = !component.Value;
-                    component.FireEvent();
+                    Component.Value = !Component.Value;
+                    Component.FireEvent();
                 }
             }
         }
@@ -142,11 +134,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <summary>
         /// Calculates the Width of a MenuBool
         /// </summary>
-        /// <param name="component">menu component</param>
         /// <returns>width</returns>
-        public virtual int Width(MenuBool component)
+        public override int Width()
         {
-            return CalcWidthItem(component) + MenuSettings.ContainerHeight;
+            return DefaultUtilities.CalcWidthItem(Component) + MenuSettings.ContainerHeight;
+        }
+
+        /// <summary>
+        /// Disposes any resources used in this handler.
+        /// </summary>
+        public override void Dispose()
+        {
+            //do nothing
         }
     }
 }

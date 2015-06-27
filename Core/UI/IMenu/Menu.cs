@@ -218,7 +218,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         {
             get
             {
-                return ThemeManager.Current.Menu.Width(this);
+                return Handler.Width();
             }
         }
         
@@ -359,7 +359,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         public override void OnDraw(Vector2 position)
         {
             this.Position = position;
-            ThemeManager.Current.Menu.Draw(this);
+            Handler.Draw();
         }
 
         /// <summary>
@@ -509,6 +509,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             {
                 comp.Value.RestoreDefault();
             }
+        }
+
+        /// <summary>
+        /// Builds an <see cref="ADrawable"/> for this component.
+        /// </summary>
+        /// <returns></returns>
+        protected override ADrawable BuildHandler(ITheme theme)
+        {
+            return theme.BuildMenuHandler(this);
         }
     }
 }

@@ -23,30 +23,38 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Math;
+    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
-    ///     Implements <see cref="IDrawable{MenuSeperator}" /> as a default skin.
+    ///     Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.
     /// </summary>
-    public class DefaultSeparator : DefaultComponent, IDrawable<MenuSeparator>
+    public class DefaultSeparator : ADrawable<MenuSeparator>
     {
         #region Public Methods and Operators
 
         /// <summary>
+        /// Creates a new handler responsible for the given <see cref="AMenuComponent"/>.
+        /// </summary>
+        /// <param name="component">The menu component</param>
+        public DefaultSeparator(MenuSeparator component)
+            : base(component) {}
+
+        /// <summary>
         ///     Draw a <see cref="MenuSeparator" />
         /// </summary>
-        /// <param name="component">The <see cref="MenuSeparator" /></param>
-        public void Draw(MenuSeparator component)
+        public override void Draw()
         {
-            var centerY = GetContainerRectangle(component)
+            var centerY = DefaultUtilities.GetContainerRectangle(Component)
                 .GetCenteredText(
                     null, MenuSettings.Font,
-                    component.DisplayName, 
+                    Component.DisplayName, 
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                component.DisplayName, 
+                MenuManager.Instance.Sprite,
+                Component.DisplayName, 
                 (int)centerY.X, 
                 (int)centerY.Y, 
                 MenuSettings.TextColor);
@@ -57,21 +65,27 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <summary>
         /// Calculates the Width of an AMenuComponent
         /// </summary>
-        /// <param name="component">menu component</param>
         /// <returns>width</returns>
-        public int Width(MenuSeparator component)
+        public override int Width()
         {
-            return CalcWidthItem(component);
+            return DefaultUtilities.CalcWidthItem(Component);
         }
 
         /// <summary>
         /// Processes windows messages
         /// </summary>
-        /// <param name="component">menu component</param>
         /// <param name="args">event data</param>
-        public void OnWndProc(MenuSeparator component, Utils.WindowsKeys args)
+        public override void OnWndProc(WindowsKeys args)
         {
             //nothing
+        }
+
+        /// <summary>
+        /// Disposes any resources used in this handler.
+        /// </summary>
+        public override void Dispose()
+        {
+            //do nothing
         }
     }
 }
