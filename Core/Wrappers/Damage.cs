@@ -5948,11 +5948,11 @@ namespace LeagueSharp.SDK.Core.Wrappers
             if (source is Obj_AI_Turret)
             {
                 // Siege minions receive 70% damage from turrets
-                if (siegeMinionList.Contains(target.BaseSkinName))
+                if (siegeMinionList.Contains(target.CharData.BaseSkinName))
                 {
                     k = 0.7d * k;
                 }
-                else if (normalMinionList.Contains(target.BaseSkinName))
+                else if (normalMinionList.Contains(target.CharData.BaseSkinName))
                 {
                     // Normal minions take 114% more damage from towers.
                     k = (1 / 0.875) * k;

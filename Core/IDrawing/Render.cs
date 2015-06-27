@@ -61,15 +61,24 @@ namespace LeagueSharp.SDK.Core.IDrawing
         /// <summary>
         ///     Adds a <see cref="DrawObject" /> to the render list.
         /// </summary>
+        /// <typeparam name="T">
+        ///     DrawObject type
+        /// </typeparam>
         /// <param name="drawObject">
         ///     The <see cref="DrawObject" />
         /// </param>
-        public static void Add(this DrawObject drawObject)
+        /// <returns>
+        ///     The <see cref="DrawObject" />.
+        /// </returns>
+        public static T Add<T>(this T drawObject) where T : DrawObject
         {
             if (!Objects.Contains(drawObject))
             {
                 Objects.Add(drawObject);
+                return drawObject;
             }
+
+            return null;
         }
 
         /// <summary>

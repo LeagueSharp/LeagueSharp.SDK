@@ -21,11 +21,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.Utils
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Wrappers;
 
     using SharpDX;
 
@@ -48,7 +48,7 @@ namespace LeagueSharp.SDK.Core.Utils
         public static bool CanUseItem(string name)
         {
             return
-                GameObjects.Player.InventoryItems.Where(slot => slot.Name == name)
+                GameObjects.Player.InventoryItems.Where(slot => slot.IData.DisplayName == name)
                     .Select(
                         slot =>
                         GameObjects.Player.Spellbook.Spells.FirstOrDefault(
@@ -107,7 +107,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static bool HasItem(string name, Obj_AI_Hero hero = null)
         {
-            return (hero ?? GameObjects.Player).InventoryItems.Any(slot => slot.Name == name);
+            return (hero ?? GameObjects.Player).InventoryItems.Any(slot => slot.IData.DisplayName == name);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace LeagueSharp.SDK.Core.Utils
         public static bool UseItem(string name, Obj_AI_Base target = null)
         {
             return
-                GameObjects.Player.InventoryItems.Where(slot => slot.Name == name)
+                GameObjects.Player.InventoryItems.Where(slot => slot.IData.DisplayName == name)
                     .Select(
                         slot =>
                         target != null
@@ -241,28 +241,25 @@ namespace LeagueSharp.SDK.Core.Utils
             /// </param>
             public Item(int id, float range)
             {
-                var item = new ItemData(id);
+                var item = ItemData.Entries.FirstOrDefault(i => (int)i.Id == id);
+                if (item == null)
+                {
+                    throw new MissingMemberException(string.Format("Unable to find item with the id {0}", id));
+                }
 
-                // Values
-                this.Id = item.Id;
-                this.Name = item.Name;
+                this.Id = (int)item.Id;
+                this.Name = item.DisplayName;
                 this.Range = range;
-                this.Description = item.PlaintextDescription;
-                this.BasePrice = item.BasePrice;
-                this.SellPrice = item.SellPrice;
-                this.TotalPrice = item.TotalPrice;
-                this.Purchaseable = item.Purchaseable;
-                this.From = item.From;
-                this.Into = item.Into;
-                this.Stacks = item.Stacks;
-                this.Tags = item.Tags;
-                this.Consumable = item.Consumable;
-                this.ConsumableOnFull = item.ConsumableOnFull;
-                this.Depth = item.Depth;
+                this.BasePrice = item.Price;
+                this.SellPrice = (int)(item.Price * item.SellBackModifier);
+                this.TotalPrice = item.Price
+                                  + ItemData.Entries.Where(i => item.RecipeItem.Any(j => j == i.Id)).Sum(i => i.Price);
+                this.Purchaseable = item.CanBeSold;
+                this.From = item.RecipeItem.Cast<int>().ToArray();
+                this.Stacks = item.MaxStack;
                 this.RequiredChampion = item.RequiredChampion;
                 this.InStore = item.InStore;
-                this.SpecialRecipe = item.SpecialRecipe;
-                this.HideFromAll = item.HideFromAll;
+                this.HideFromAll = !item.UsableInStore;
             }
 
             #endregion
@@ -273,26 +270,6 @@ namespace LeagueSharp.SDK.Core.Utils
             ///     Gets the base price.
             /// </summary>
             public int BasePrice { get; private set; }
-
-            /// <summary>
-            ///     Gets a value indicating whether consumable.
-            /// </summary>
-            public bool Consumable { get; private set; }
-
-            /// <summary>
-            ///     Gets a value indicating whether consumable on full.
-            /// </summary>
-            public bool ConsumableOnFull { get; private set; }
-
-            /// <summary>
-            ///     Gets the depth.
-            /// </summary>
-            public int Depth { get; private set; }
-
-            /// <summary>
-            ///     Gets the description of the Item.
-            /// </summary>
-            public string Description { get; private set; }
 
             /// <summary>
             ///     Gets the Id's of the included Items.
@@ -313,11 +290,6 @@ namespace LeagueSharp.SDK.Core.Utils
             ///     Gets a value indicating whether in store.
             /// </summary>
             public bool InStore { get; private set; }
-
-            /// <summary>
-            ///     Gets the Id of the possible upgraded Item.
-            /// </summary>
-            public int[] Into { get; private set; }
 
             /// <summary>
             ///     Gets a value indicating whether is ready.
@@ -387,19 +359,9 @@ namespace LeagueSharp.SDK.Core.Utils
             }
 
             /// <summary>
-            ///     Gets the special recipe.
-            /// </summary>
-            public double SpecialRecipe { get; private set; }
-
-            /// <summary>
             ///     Gets the maximum stacks.
             /// </summary>
             public int Stacks { get; private set; }
-
-            /// <summary>
-            ///     Gets the tags.
-            /// </summary>
-            public string[] Tags { get; private set; }
 
             /// <summary>
             ///     Gets the total price.

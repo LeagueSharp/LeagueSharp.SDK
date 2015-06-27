@@ -190,10 +190,8 @@
     <Compile Include="Core\Utils\Version.cs" />
     <Compile Include="Core\Utils\WeightedRandom.cs" />
     <Compile Include="Core\Variables.cs" />
-    <Compile Include="Core\Wrappers\ChampionData.cs" />
     <Compile Include="Core\Wrappers\Damage.cs" />
     <Compile Include="Core\Wrappers\HpBarDamageIndicator.cs" />
-    <Compile Include="Core\Wrappers\ItemData.cs" />
     <Compile Include="Core\Wrappers\LastCastedSpell.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
     <Compile Include="Core\Managers\MinionManager.cs" />
@@ -216,34 +214,32 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Data\ChampionData.json" />
     <None Include="LeagueSharp.SDK.snk" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\UI\Console\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Data\ItemData.json" />
     <None Include="packages.config" />
     <None Include="Third_Party\Clipper\License.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\1433414783_accepted_48.png" />
+    <None Include="Resources\notifications_check.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\1433414817_cancel_48.png" />
+    <None Include="Resources\notifications_error.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\1433414835_warning_48.png" />
+    <None Include="Resources\notifications_warning.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\1433416529_navigate_48.png" />
+    <None Include="Resources\notifications_select.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\1433417092_star_off_48.png" />
+    <None Include="Resources\notifications_star.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\1433417093_arrow_right_48.png" />
+    <None Include="Resources\notifications_arrow.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\cursor_drag.png" />

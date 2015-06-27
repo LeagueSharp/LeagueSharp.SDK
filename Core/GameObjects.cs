@@ -23,7 +23,6 @@ namespace LeagueSharp.SDK.Core
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using LeagueSharp.SDK.Core.Enumerations;
@@ -76,6 +75,11 @@ namespace LeagueSharp.SDK.Core
         ///     The ally wards list.
         /// </summary>
         private static readonly List<Obj_AI_Minion> AllyWardsList = new List<Obj_AI_Minion>();
+
+        /// <summary>
+        ///     The attackable unit list.
+        /// </summary>
+        private static readonly List<AttackableUnit> AttackableUnitsList = new List<AttackableUnit>();
 
         /// <summary>
         ///     The enemy heroes list.
@@ -307,6 +311,17 @@ namespace LeagueSharp.SDK.Core
             get
             {
                 return AllyWardsList;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the attackable units.
+        /// </summary>
+        public static IEnumerable<AttackableUnit> AttackableUnits
+        {
+            get
+            {
+                return AttackableUnitsList;
             }
         }
 
@@ -620,6 +635,7 @@ namespace LeagueSharp.SDK.Core
                     SpawnPointsList.AddRange(ObjectManager.Get<Obj_SpawnPoint>());
                     GameObjectsList.AddRange(ObjectManager.Get<GameObject>());
                     NexusList.AddRange(ObjectManager.Get<Obj_HQ>());
+                    AttackableUnitsList.AddRange(ObjectManager.Get<AttackableUnit>());
 
                     EnemyHeroesList.AddRange(HeroesList.Where(o => o.IsEnemy));
                     EnemyMinionsList.AddRange(MinionsList.Where(o => o.IsEnemy));
@@ -667,6 +683,12 @@ namespace LeagueSharp.SDK.Core
         private static void OnCreate(GameObject sender, EventArgs args)
         {
             GameObjectsList.Add(sender);
+
+            var attackableUnit = sender as AttackableUnit;
+            if (attackableUnit != null)
+            {
+                AttackableUnitsList.Add(attackableUnit);
+            }
 
             var hero = sender as Obj_AI_Hero;
             if (hero != null)
@@ -830,6 +852,11 @@ namespace LeagueSharp.SDK.Core
             foreach (var gameObject in GameObjectsList.Where(o => o.Compare(sender)).ToList())
             {
                 GameObjectsList.Remove(gameObject);
+            }
+
+            foreach (var attackableUnitObject in AttackableUnitsList.Where(a => a.Compare(sender)).ToList())
+            {
+                AttackableUnitsList.Remove(attackableUnitObject);
             }
 
             var hero = sender as Obj_AI_Hero;
