@@ -112,7 +112,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             this.Range = spellData.CastRange;
             this.Width = spellData.LineWidth.Equals(0) ? spellData.CastRadius : spellData.LineWidth;
             this.Speed = spellData.MissileSpeed;
-            this.Delay = spellData.DelayTotalTimePercent;
+            this.Delay = spellData.CastFrame / 30;
             this.Name = spellData.Name;
             this.Collision = spellData.HaveHitBone;
         }

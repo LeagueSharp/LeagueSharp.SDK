@@ -186,8 +186,7 @@ namespace LeagueSharp.SDK.Core.Managers
             MinionOrderTypes order = MinionOrderTypes.Health)
         {
             var result =
-                GameObjects.Minions
-                    .Where(minion => minion.IsValidTarget(range, false, @from))
+                GameObjects.Minions.Where(minion => minion.IsValidTarget(range, false, @from))
                     .Select(minion => new { minion, minionTeam = minion.Team })
                     .Where(
                         @t =>
@@ -293,7 +292,7 @@ namespace LeagueSharp.SDK.Core.Managers
         /// <returns>Whether the <see cref="Obj_AI_Minion" /> is an actual minion.</returns>
         public static bool IsMinion(Obj_AI_Minion minion, bool includeWards = false)
         {
-            var name = minion.BaseSkinName.ToLower();
+            var name = minion.CharData.BaseSkinName.ToLower();
             return name.Contains("minion") || (includeWards && (name.Contains("ward") || name.Contains("trinket")));
         }
 

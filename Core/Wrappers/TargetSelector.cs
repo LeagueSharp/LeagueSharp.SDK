@@ -29,13 +29,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
     using LeagueSharp.SDK.Core.Events;
     using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.IDrawing;
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
-
-    using Color = System.Drawing.Color;
 
     /// <summary>
     ///     Target Selector, manageable utility to return the best candidate target based on chosen settings.
@@ -144,7 +143,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         ///     The <see cref="Obj_AI_Hero" /> target.
         /// </returns>
         public static Obj_AI_Hero GetTarget(
-            float range, 
+            float range = -1f, 
             DamageType damage = DamageType.Physical, 
             IEnumerable<Obj_AI_Hero> ignoredChamps = null, 
             Vector3? rangeCheckFrom = null)
@@ -309,6 +308,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
                     rootMenu.Add(menu);
 
+                    var circle = new DrawCircle(new Vector3(), 0f, Color.Red).Add();
                     menu.MenuValueChanged += (objSender, objArgs) =>
                         {
                             var list = objSender as MenuList<TargetSelectorMode>;
@@ -316,20 +316,22 @@ namespace LeagueSharp.SDK.Core.Wrappers
                             {
                                 Mode = list.SelectedValue;
                             }
+
+                            var @bool = objSender as MenuBool;
+                            if (@bool != null)
+                            {
+                                circle.IsVisible = @bool.Value;
+                            }
                         };
 
                     Mode = menu["mode"].GetValue<MenuList<TargetSelectorMode>>().SelectedValue;
 
-                    Drawing.OnDraw += eventArgs =>
+                    Game.OnUpdate += eventArgs =>
                         {
-                            if (menu["drawTarget"].GetValue<MenuBool>().Value)
-                            {
-                                var target = GetTarget(-1f);
-                                if (target.IsValidTarget())
-                                {
-                                    Drawing.DrawCircle(target.Position, target.BoundingRadius, Color.Red);
-                                }
-                            }
+                            var target = GetTarget();
+                            circle.GameObjectUnit = target;
+                            circle.Radius = target != null ? target.BoundingRadius : 0f;
+                            circle.IsVisible = target != null && menu["drawTarget"].GetValue<MenuBool>().Value;
                         };
                 };
         }
