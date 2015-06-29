@@ -308,7 +308,7 @@ namespace LeagueSharp.SDK.Core
                     var angle = 2D * System.Math.PI * random.NextDouble();
                     var radius = GameObjects.Player.Distance(Game.CursorPos) < 360
                                      ? 0F
-                                     : GameObjects.Player.BoundingRadius * 2F;
+                                     : GameObjects.Player.BoundingRadius / 2f;
                     var x = (float)(position.X + radius * System.Math.Cos(angle));
                     var y = (float)(position.Y + radius * System.Math.Sin(angle));
                     position = new Vector3(x, y, NavMesh.GetHeightForPosition(x, y));
@@ -385,10 +385,10 @@ namespace LeagueSharp.SDK.Core
             advanced.Add(new MenuSeparator("separatorMovement", "Movement"));
             advanced.Add(
                 new MenuSlider(
-                    "movementDelay", 
-                    "Delay between Movement", 
-                    new Random(Variables.TickCount).Next(200, 301), 
-                    0, 
+                    "movementDelay",
+                    "Delay between Movement",
+                    new Random(Variables.TickCount).Next(30, 101),
+                    0,
                     2500));
             advanced.Add(new MenuBool("movementScramble", "Randomize movement location", true));
             advanced.Add(new MenuSlider("movementExtraHold", "Extra Hold Position", 25, 0, 250));
@@ -413,7 +413,9 @@ namespace LeagueSharp.SDK.Core
                                 Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value = new Random().Next(
                                     500, 
                                     1201);
-                                Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value = new Random().Next(200, 301);
+                                Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value = new Random().Next(
+                                    30,
+                                    101);
                             }
                     });
             Menu.Add(advanced);

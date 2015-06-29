@@ -567,7 +567,8 @@ namespace LeagueSharp.SDK.Core
         /// <returns>Whether the <see cref="GameObject" />s are identical.</returns>
         public static bool Compare(this GameObject gameObject, GameObject @object)
         {
-            return gameObject.NetworkId == @object.NetworkId;
+            return gameObject != null && gameObject.IsValid && @object != null && @object.IsValid
+                   && gameObject.NetworkId == @object.NetworkId;
         }
 
         /// <summary>

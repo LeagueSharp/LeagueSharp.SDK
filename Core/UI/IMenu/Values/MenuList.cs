@@ -36,15 +36,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     [Serializable]
     public abstract class MenuList : MenuItem
     {
-        #region Fields
-
-        /// <summary>
-        ///     The index.
-        /// </summary>
-        protected int index;
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -102,7 +93,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return this.index;
+                return this.IndexField;
             }
 
             set
@@ -112,17 +103,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
                 {
                     newValue = 0;
                 }
-                else if (value >= ValuesAsStrings.Count())
+                else if (value >= this.ValuesAsStrings.Count())
                 {
-                    newValue = ValuesAsStrings.Count() - 1;
+                    newValue = this.ValuesAsStrings.Count() - 1;
                 }
                 else
                 {
                     newValue = value;
                 }
-                if (newValue != this.index)
+
+                if (newValue != this.IndexField)
                 {
-                    this.index = newValue;
+                    this.IndexField = newValue;
                     this.FireEvent();
                 }
             }
@@ -148,6 +140,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     Gets a list of strings that represent the different options
         /// </summary>
         public abstract string[] ValuesAsStrings { get; }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        ///     Gets or sets the index.
+        /// </summary>
+        protected int IndexField { get; set; }
 
         #endregion
 
@@ -229,7 +230,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="context">The context.</param>
         protected MenuList(SerializationInfo info, StreamingContext context)
         {
-            this.index = (int)info.GetValue("index", typeof(int));
+            this.IndexField = (int)info.GetValue("index", typeof(int));
         }
 
         #endregion
@@ -272,7 +273,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         /// <summary>
-        ///     Gets the selected value.
+        ///     Gets or sets the selected value.
         /// </summary>
         /// <value>
         ///     The selected value.
@@ -283,13 +284,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
             {
                 return this.Values[this.Index];
             }
+
             set
             {
-                for (int i = 0; i < Values.Count; i++)
+                for (var i = 0; i < this.Values.Count; i++)
                 {
-                    if (Values[i].Equals(value))
+                    if (this.Values[i].Equals(value))
                     {
-                        Index = i;
+                        this.Index = i;
                         return;
                     }
                 }
