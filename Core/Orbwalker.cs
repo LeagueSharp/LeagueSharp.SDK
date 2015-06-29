@@ -363,6 +363,14 @@ namespace LeagueSharp.SDK.Core
             }
         }
 
+        /// <summary>
+        ///     Resets the auto attack timer, <see cref="lastAutoAttackTick" />.
+        /// </summary>
+        public static void ResetAutoAttackTimer()
+        {
+            lastAutoAttackTick = 0;
+        }
+
         #endregion
 
         #region Methods
@@ -385,10 +393,10 @@ namespace LeagueSharp.SDK.Core
             advanced.Add(new MenuSeparator("separatorMovement", "Movement"));
             advanced.Add(
                 new MenuSlider(
-                    "movementDelay",
-                    "Delay between Movement",
-                    new Random(Variables.TickCount).Next(30, 101),
-                    0,
+                    "movementDelay", 
+                    "Delay between Movement", 
+                    new Random(Variables.TickCount).Next(30, 101), 
+                    0, 
                     2500));
             advanced.Add(new MenuBool("movementScramble", "Randomize movement location", true));
             advanced.Add(new MenuSlider("movementExtraHold", "Extra Hold Position", 25, 0, 250));
@@ -413,9 +421,7 @@ namespace LeagueSharp.SDK.Core
                                 Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value = new Random().Next(
                                     500, 
                                     1201);
-                                Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value = new Random().Next(
-                                    30,
-                                    101);
+                                Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value = new Random().Next(30, 101);
                             }
                     });
             Menu.Add(advanced);
@@ -540,7 +546,7 @@ namespace LeagueSharp.SDK.Core
 
                 if (AutoAttack.IsAutoAttackReset(spellName))
                 {
-                    DelayAction.Add(250, () => { lastAutoAttackTick = 0; });
+                    DelayAction.Add(250, ResetAutoAttackTimer);
                 }
 
                 if (target != null && target.IsValid)
