@@ -41,7 +41,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     The index.
         /// </summary>
-        private int index;
+        protected int index;
 
         #endregion
 
@@ -107,9 +107,22 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
 
             set
             {
-                if (value != this.index)
+                int newValue;
+                if (value < 0)
                 {
-                    this.index = value;
+                    newValue = 0;
+                }
+                else if (value >= ValuesAsStrings.Count())
+                {
+                    newValue = ValuesAsStrings.Count() - 1;
+                }
+                else
+                {
+                    newValue = value;
+                }
+                if (newValue != this.index)
+                {
+                    this.index = newValue;
                     this.FireEvent();
                 }
             }
@@ -216,7 +229,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="context">The context.</param>
         protected MenuList(SerializationInfo info, StreamingContext context)
         {
-            this.Index = (int)info.GetValue("index", typeof(int));
+            this.index = (int)info.GetValue("index", typeof(int));
         }
 
         #endregion
@@ -269,6 +282,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
             get
             {
                 return this.Values[this.Index];
+            }
+            set
+            {
+                for (int i = 0; i < Values.Count; i++)
+                {
+                    if (Values[i].Equals(value))
+                    {
+                        Index = i;
+                        return;
+                    }
+                }
             }
         }
 

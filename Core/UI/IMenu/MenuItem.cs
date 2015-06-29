@@ -236,7 +236,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             if (this.Visible)
             {
                 this.Position = position;
-                this.Draw();
+                try
+                {
+                    this.Draw();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
             }
         }
 

@@ -367,7 +367,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     menu.Add(new MenuBool("focusTarget", "Focus Selected Target"));
                     menu.Add(new MenuBool("drawTarget", "Draw Target", true));
                     menu.Add(new MenuSeparator("separatorMode", "Mode Selection"));
-                    menu.Add(new MenuList<TargetSelectorMode>("mode", "Mode") { Index = 7 });
+                    menu.Add(new MenuList<TargetSelectorMode>("mode", "Mode") { SelectedValue = TargetSelectorMode.AutoPriority});
 
                     rootMenu.Add(menu);
 
