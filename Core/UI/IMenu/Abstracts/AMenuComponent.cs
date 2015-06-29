@@ -86,7 +86,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         /// <param name="uniqueString">
         ///     Unique string (ID)
         /// </param>
-        protected AMenuComponent(string name, string displayName, string uniqueString)
+        protected AMenuComponent(string displayName, string name, string uniqueString)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(displayName))
             {
