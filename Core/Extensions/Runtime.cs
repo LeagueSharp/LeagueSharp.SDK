@@ -48,8 +48,7 @@ namespace LeagueSharp.SDK.Core.Extensions
         {
             using (var ms = new MemoryStream(Encoding.Default.GetBytes(json)))
             {
-                var js = new DataContractJsonSerializer(typeof(T));
-                return (T)js.ReadObject(ms);
+                return (T)(new DataContractJsonSerializer(typeof(T))).ReadObject(ms);
             }
         }
 
