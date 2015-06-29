@@ -22,7 +22,9 @@
 namespace LeagueSharp.SDK.Core
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Windows.Forms;
 
     using LeagueSharp.SDK.Core.Enumerations;
@@ -36,6 +38,7 @@ namespace LeagueSharp.SDK.Core
 
     using SharpDX;
 
+    using Color = System.Drawing.Color;
     using Menu = LeagueSharp.SDK.Core.UI.IMenu.Menu;
 
     /// <summary>
@@ -44,6 +47,12 @@ namespace LeagueSharp.SDK.Core
     public class Orbwalker
     {
         #region Static Fields
+
+        /// <summary>
+        ///     The attack time tracking list.
+        /// </summary>
+        private static readonly IDictionary<float, OrbwalkerActionArgs> AfterAttackTime =
+            new Dictionary<float, OrbwalkerActionArgs>();
 
         /// <summary>
         ///     The <c>orbwalker</c> menu.
@@ -59,6 +68,26 @@ namespace LeagueSharp.SDK.Core
         ///     The last movement order tick.
         /// </summary>
         private static int lastMovementOrderTick;
+
+        #endregion
+
+        #region Delegates
+
+        /// <summary>
+        ///     The<see cref="OnAction" /> event delegate.
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">The event data</param>
+        public delegate void OnActionDelegate(object sender, OrbwalkerActionArgs e);
+
+        #endregion
+
+        #region Public Events
+
+        /// <summary>
+        ///     The OnAction event.
+        /// </summary>
+        public static event OnActionDelegate OnAction;
 
         #endregion
 
@@ -112,6 +141,11 @@ namespace LeagueSharp.SDK.Core
         }
 
         /// <summary>
+        ///     Gets the last target.
+        /// </summary>
+        public static AttackableUnit LastTarget { get; private set; }
+
+        /// <summary>
         ///     Gets or sets a value indicating whether movement.
         /// </summary>
         public static bool Movement { get; set; }
@@ -160,6 +194,12 @@ namespace LeagueSharp.SDK.Core
 
                     if (healthPrediction <= 0)
                     {
+                        InvokeAction(
+                            new OrbwalkerActionArgs
+                                {
+                                    Position = minion.Position, Target = minion, Process = true, 
+                                    Type = OrbwalkerType.NonKillableMinion
+                                });
                     }
 
                     if (healthPrediction > 0 && healthPrediction <= GameObjects.Player.GetAutoAttackDamage(minion, true))
@@ -224,13 +264,7 @@ namespace LeagueSharp.SDK.Core
                     var minion = (from m in
                                       GameObjects.EnemyMinions.Where(m => m.IsValidTarget(m.GetRealAutoAttackRange()))
                                   let predictedHealth =
-                                      Health.GetPrediction(
-                                          m, 
-                                          (int)
-                                          ((GameObjects.Player.AttackCastDelay * 1000) * 2
-                                           + GameObjects.Player.Distance(m) / GameObjects.Player.GetProjectileSpeed()
-                                           * 1000 + Game.Ping / 2f) * 2, 
-                                          0)
+                                      Health.GetPrediction(m, (int)((GameObjects.Player.AttackDelay * 1000) * 2f), 100)
                                   where
                                       predictedHealth >= 2 * GameObjects.Player.GetAutoAttackDamage(m, true)
                                       || System.Math.Abs(predictedHealth - m.Health) < float.Epsilon
@@ -263,9 +297,9 @@ namespace LeagueSharp.SDK.Core
                 if (position.Distance(GameObjects.Player.Position)
                     > Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value)
                 {
-                    position = GameObjects.Player.Position.Extend(
-                        position, 
-                        Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value);
+                    var menuItem = Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>();
+                    var randomDistance = new Random(Variables.TickCount).Next(menuItem.MinValue, menuItem.Value + 1);
+                    position = GameObjects.Player.Position.Extend(position, randomDistance);
                 }
 
                 if (Menu["advanced"]["movementScramble"].GetValue<MenuBool>().Value)
@@ -280,10 +314,52 @@ namespace LeagueSharp.SDK.Core
                     position = new Vector3(x, y, NavMesh.GetHeightForPosition(x, y));
                 }
 
-                if (GameObjects.Player.IssueOrder(GameObjectOrder.MoveTo, position))
+                var eventArgs = new OrbwalkerActionArgs
+                                    {
+                                       Position = position, Process = true, Type = OrbwalkerType.Movement 
+                                    };
+                InvokeAction(eventArgs);
+
+                if (eventArgs.Process && GameObjects.Player.IssueOrder(GameObjectOrder.MoveTo, position))
                 {
                     lastMovementOrderTick = Variables.TickCount;
                 }
+            }
+        }
+
+        /// <summary>
+        ///     <c>Orbwalk</c> command, attempting to attack or move.
+        /// </summary>
+        /// <param name="target">
+        ///     The target of choice
+        /// </param>
+        /// <param name="position">
+        ///     The position of choice
+        /// </param>
+        public static void Orbwalk(Obj_AI_Base target = null, Vector3? position = null)
+        {
+            if (CanAttack)
+            {
+                var gTarget = target ?? GetTarget(ActiveMode);
+                if (gTarget != null && gTarget.IsValid)
+                {
+                    var eventArgs = new OrbwalkerActionArgs
+                                        {
+                                            Target = gTarget, Position = gTarget.Position, Process = true, 
+                                            Type = OrbwalkerType.BeforeAttack
+                                        };
+                    InvokeAction(eventArgs);
+
+                    if (eventArgs.Process && GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, gTarget))
+                    {
+                        return;
+                    }
+                }
+            }
+
+            if (CanMove)
+            {
+                MoveOrder(position ?? Game.CursorPos);
             }
         }
 
@@ -301,7 +377,6 @@ namespace LeagueSharp.SDK.Core
         {
             var drawing = new Menu("drawings", "Drawings");
             drawing.Add(new MenuBool("drawAARange", "Draw Auto-Attack Range", true));
-            drawing.Add(new MenuBool("drawTargetAARange", "Draw Target Auto-Attack Range"));
             drawing.Add(new MenuBool("drawKillableMinion", "Draw Killable Minion"));
             drawing.Add(new MenuBool("drawKillableMinionFade", "Enable Killable Minion Fade Effect"));
             Menu.Add(drawing);
@@ -322,7 +397,7 @@ namespace LeagueSharp.SDK.Core
                     "movementMaximumDistance", 
                     "Maximum Movement Distance", 
                     new Random().Next(500, 1201), 
-                    0, 
+                    350, 
                     1200));
             advanced.Add(new MenuSeparator("separatorMisc", "Miscellaneous"));
             advanced.Add(new MenuSlider("miscExtraWindup", "Extra Windup", 80, 0, 200));
@@ -367,6 +442,77 @@ namespace LeagueSharp.SDK.Core
 
             Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Drawing.OnDraw += OnDraw;
+        }
+
+        /// <summary>
+        ///     The <see cref="OnAction" /> invocator.
+        /// </summary>
+        /// <param name="e">
+        ///     The event data.
+        /// </param>
+        protected static void InvokeAction(OrbwalkerActionArgs e)
+        {
+            if (OnAction != null)
+            {
+                OnAction(MethodBase.GetCurrentMethod().DeclaringType, e);
+            }
+        }
+
+        /// <summary>
+        ///     OnDraw event.
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        private static void OnDraw(EventArgs args)
+        {
+            if (GameObjects.Player == null || !GameObjects.Player.IsValid)
+            {
+                return;
+            }
+
+            if (Menu["drawings"]["drawAARange"].GetValue<MenuBool>().Value)
+            {
+                if (GameObjects.Player.Position.IsValid())
+                {
+                    Drawing.DrawCircle(
+                        GameObjects.Player.Position, 
+                        GameObjects.Player.GetRealAutoAttackRange(), 
+                        Color.Blue);
+                }
+            }
+
+            if (Menu["drawings"]["drawKillableMinion"].GetValue<MenuBool>().Value)
+            {
+                if (Menu["drawings"]["drawKillableMinionFade"].GetValue<MenuBool>().Value)
+                {
+                    var minions =
+                        GameObjects.EnemyMinions.Where(
+                            m =>
+                            m.IsValidTarget(1200F) && m.Health < GameObjects.Player.GetAutoAttackDamage(m, true) * 2);
+                    foreach (var minion in minions)
+                    {
+                        var value = 255 - (minion.Health * 2);
+                        value = value > 255 ? 255 : value < 0 ? 0 : value;
+
+                        Drawing.DrawCircle(
+                            minion.Position, 
+                            minion.BoundingRadius * 2f, 
+                            Color.FromArgb(255, 0, 255, (byte)(255 - value)));
+                    }
+                }
+                else
+                {
+                    var minions =
+                        GameObjects.EnemyMinions.Where(
+                            m => m.IsValidTarget(1200F) && m.Health < GameObjects.Player.GetAutoAttackDamage(m, true));
+                    foreach (var minion in minions)
+                    {
+                        Drawing.DrawCircle(minion.Position, minion.BoundingRadius * 2f, Color.FromArgb(255, 0, 255, 0));
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -397,7 +543,23 @@ namespace LeagueSharp.SDK.Core
 
                 if (target != null && target.IsValid)
                 {
-                    // stuff.
+                    if (!target.Compare(LastTarget))
+                    {
+                        InvokeAction(new OrbwalkerActionArgs { Target = target, Type = OrbwalkerType.TargetSwitch });
+
+                        LastTarget = target;
+                    }
+
+                    var time = sender.AttackCastDelay * 1000 + 40;
+                    if (!AfterAttackTime.ContainsKey(time))
+                    {
+                        AfterAttackTime.Add(
+                            time, 
+                            new OrbwalkerActionArgs { Target = target, Type = OrbwalkerType.AfterAttack });
+                    }
+
+                    InvokeAction(
+                        new OrbwalkerActionArgs { Target = target, Sender = sender, Type = OrbwalkerType.OnAttack });
                 }
             }
         }
@@ -412,25 +574,51 @@ namespace LeagueSharp.SDK.Core
         {
             if (ActiveMode != OrbwalkerMode.None)
             {
-                if (CanAttack)
-                {
-                    var target = GetTarget(ActiveMode);
-                    if (target != null && target.IsValid)
-                    {
-                        if (GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, target))
-                        {
-                            return;
-                        }
-                    }
-                }
+                Orbwalk();
+            }
 
-                if (CanMove)
-                {
-                    MoveOrder(Game.CursorPos);
-                }
+            foreach (var item in AfterAttackTime.ToArray().Where(item => Variables.TickCount - item.Key >= 0))
+            {
+                InvokeAction(item.Value);
+                AfterAttackTime.Remove(item);
             }
         }
 
         #endregion
+
+        /// <summary>
+        ///     The <c>orbwalker</c> action event data.
+        /// </summary>
+        public class OrbwalkerActionArgs : EventArgs
+        {
+            #region Public Properties
+
+            /// <summary>
+            ///     Gets or sets the position.
+            /// </summary>
+            public Vector3 Position { get; set; }
+
+            /// <summary>
+            ///     Gets or sets a value indicating whether process.
+            /// </summary>
+            public bool Process { get; set; }
+
+            /// <summary>
+            ///     Gets or sets the sender.
+            /// </summary>
+            public Obj_AI_Base Sender { get; set; }
+
+            /// <summary>
+            ///     Gets or sets the target.
+            /// </summary>
+            public AttackableUnit Target { get; set; }
+
+            /// <summary>
+            ///     Gets the type.
+            /// </summary>
+            public OrbwalkerType Type { get; internal set; }
+
+            #endregion
+        }
     }
 }

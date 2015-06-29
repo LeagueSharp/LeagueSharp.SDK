@@ -27,33 +27,38 @@ namespace LeagueSharp.SDK.Core.Enumerations
     public enum OrbwalkerType
     {
         /// <summary>
-        ///     None Type
+        ///     None Type.
         /// </summary>
         None, 
 
         /// <summary>
-        ///     Movement Type
+        ///     Movement Type.
         /// </summary>
         Movement, 
 
         /// <summary>
-        ///     BeforeAttack Type
+        ///     BeforeAttack Type.
         /// </summary>
         BeforeAttack, 
 
         /// <summary>
-        ///     AfterAttack Type
+        ///     AfterAttack Type.
         /// </summary>
         AfterAttack, 
 
         /// <summary>
-        ///     OnAttack Type
+        ///     OnAttack Type.
         /// </summary>
         OnAttack, 
 
         /// <summary>
-        ///     Non Kill-able Minion Type
+        ///     Non Kill-able Minion Type.
         /// </summary>
-        NonKillableMinion
+        NonKillableMinion, 
+
+        /// <summary>
+        ///     Target Switch Type.
+        /// </summary>
+        TargetSwitch
     }
 }

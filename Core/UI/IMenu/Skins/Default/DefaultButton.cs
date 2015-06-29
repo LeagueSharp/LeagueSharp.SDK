@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   A default implementation of <see cref="IDrawableButton" />
+//   A default implementation of <see cref="ADrawable{MenuButton}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
@@ -24,7 +24,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
 
@@ -45,6 +44,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 
         #endregion
 
+        #region Static Fields
+
+        /// <summary>
+        ///     The line.
+        /// </summary>
+        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
+
+        #endregion
+
         #region Fields
 
         /// <summary>
@@ -59,31 +67,47 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 
         #endregion
 
-        #region Public Methods and Operators
+        #region Constructors and Destructors
 
         /// <summary>
-        /// Creates a new handler responsible for the given <see cref="AMenuComponent"/>.
+        ///     Initializes a new instance of the <see cref="DefaultButton" /> class.
         /// </summary>
-        /// <param name="component">The menu component</param>
+        /// <param name="component">
+        ///     The menu component
+        /// </param>
         public DefaultButton(MenuButton component)
-            : base(component) {}
+            : base(component)
+        {
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         ///     Calculate the Rectangle that defines the Button
         /// </summary>
         /// <param name="component">The <see cref="MenuButton" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
+        /// <returns>
+        ///     The <see cref="Rectangle" />
+        /// </returns>
         public Rectangle ButtonBoundaries(MenuButton component)
         {
             var buttonTextWidth =
                 MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, component.ButtonText, 0).Width;
-            return
-                new Rectangle(
-                    (int)
-                    (component.Position.X + component.MenuWidth - buttonTextWidth - (2 * TextGap)), 
-                    (int)component.Position.Y, 
-                    (2 * TextGap) + buttonTextWidth, 
-                    MenuSettings.ContainerHeight);
+            return new Rectangle(
+                (int)(component.Position.X + component.MenuWidth - buttonTextWidth - (2 * TextGap)), 
+                (int)component.Position.Y, 
+                (2 * TextGap) + buttonTextWidth, 
+                MenuSettings.ContainerHeight);
+        }
+
+        /// <summary>
+        ///     Disposes any resources used in this handler.
+        /// </summary>
+        public override void Dispose()
+        {
+            // Do nothing.
         }
 
         /// <summary>
@@ -91,60 +115,83 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         public override void Draw()
         {
-            var rectangleName = DefaultUtilities.GetContainerRectangle(Component)
-                .GetCenteredText(null, MenuSettings.Font, Component.DisplayName, CenteredFlags.VerticalCenter);
+            var rectangleName = DefaultUtilities.GetContainerRectangle(this.Component)
+                .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite,
-                Component.DisplayName,
-                (int)(Component.Position.X + MenuSettings.ContainerTextOffset), 
+                MenuManager.Instance.Sprite, 
+                this.Component.DisplayName, 
+                (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset), 
                 (int)rectangleName.Y, 
                 MenuSettings.TextColor);
 
             var buttonTextWidth =
-                MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, Component.ButtonText, 0).Width;
+                MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, this.Component.ButtonText, 0).Width;
 
-            var line = new Line(Drawing.Direct3DDevice)
-                           {
-                              Antialias = false, GLLines = true, Width = MenuSettings.ContainerHeight 
-                           };
-            line.Begin();
-            line.Draw(
+            Line.Width = MenuSettings.ContainerHeight;
+            Line.Begin();
+            Line.Draw(
                 new[]
                     {
                         new Vector2(
-                            Component.Position.X + Component.MenuWidth - buttonTextWidth
-                            - (2 * TextGap), 
-                            Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
+                            this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - (2 * TextGap), 
+                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
                         new Vector2(
-                            Component.Position.X + Component.MenuWidth, 
-                            Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
+                            this.Component.Position.X + this.Component.MenuWidth, 
+                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
                     }, 
                 MenuSettings.HoverColor);
-            line.End();
-            line.Width = MenuSettings.ContainerHeight - 5;
-            line.Begin();
-            line.Draw(
+            Line.End();
+            Line.Width = MenuSettings.ContainerHeight - 5;
+            Line.Begin();
+            Line.Draw(
                 new[]
                     {
                         new Vector2(
-                            Component.Position.X + Component.MenuWidth - buttonTextWidth
-                            - (2 * TextGap) + 2, 
-                            Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
+                            this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - (2 * TextGap) + 2, 
+                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
                         new Vector2(
-                            Component.Position.X + Component.MenuWidth - 2, 
-                            Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
-                    },
-                Component.Hovering ? this.buttonHoverColor : this.buttonColor);
-            line.End();
-            line.Dispose();
+                            this.Component.Position.X + this.Component.MenuWidth - 2, 
+                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
+                    }, 
+                this.Component.Hovering ? this.buttonHoverColor : this.buttonColor);
+            Line.End();
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite,
-                Component.ButtonText,
-                (int)(Component.Position.X + Component.MenuWidth - buttonTextWidth - TextGap), 
+                MenuManager.Instance.Sprite, 
+                this.Component.ButtonText, 
+                (int)(this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - TextGap), 
                 (int)rectangleName.Y, 
                 MenuSettings.TextColor);
+        }
+
+        /// <summary>
+        ///     Processes windows events
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        public override void OnWndProc(WindowsKeys args)
+        {
+            if (!this.Component.Visible)
+            {
+                return;
+            }
+
+            var rect = this.ButtonBoundaries(this.Component);
+
+            if (args.Cursor.IsUnderRectangle(rect.X, rect.Y, rect.Width, rect.Height))
+            {
+                this.Component.Hovering = true;
+                if (args.Msg == WindowsMessages.LBUTTONDOWN && this.Component.Action != null)
+                {
+                    this.Component.Action();
+                }
+            }
+            else
+            {
+                this.Component.Hovering = false;
+            }
         }
 
         /// <summary>
@@ -155,45 +202,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </returns>
         public override int Width()
         {
-            return DefaultUtilities.CalcWidthItem(Component) + (2 * TextGap)
-                   + MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, Component.ButtonText, 0).Width;
+            return DefaultUtilities.CalcWidthItem(this.Component) + (2 * TextGap)
+                   + MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, this.Component.ButtonText, 0).Width;
         }
 
         #endregion
-
-        /// <summary>
-        /// Processes windows events
-        /// </summary>
-        /// <param name="args">event</param>
-        public override void OnWndProc(WindowsKeys args)
-        {
-            if (!Component.Visible)
-            {
-                return;
-            }
-
-            var rect = ButtonBoundaries(Component);
-
-            if (args.Cursor.IsUnderRectangle(rect.X, rect.Y, rect.Width, rect.Height))
-            {
-                Component.Hovering = true;
-                if (args.Msg == WindowsMessages.LBUTTONDOWN && Component.Action != null)
-                {
-                    Component.Action();
-                }
-            }
-            else
-            {
-                Component.Hovering = false;
-            }
-        }
-
-        /// <summary>
-        /// Disposes any resources used in this handler.
-        /// </summary>
-        public override void Dispose()
-        {
-            //do nothing
-        }
     }
 }

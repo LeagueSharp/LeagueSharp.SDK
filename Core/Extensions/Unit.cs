@@ -228,6 +228,40 @@ namespace LeagueSharp.SDK.Core.Extensions
         }
 
         /// <summary>
+        ///     Gets the turret tier type.
+        /// </summary>
+        /// <param name="turret">
+        ///     The turret.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="TurretType" />.
+        /// </returns>
+        public static TurretType GetTurretType(this Obj_AI_Base turret)
+        {
+            switch (turret.CharData.BaseSkinName)
+            {
+                case "SRUAP_Turret_Order1":
+                case "SRUAP_Turret_Chaos1":
+                    return TurretType.TierOne;
+
+                case "SRUAP_Turret_Order2":
+                case "SRUAP_Turret_Chaos2":
+                    return TurretType.TierTwo;
+
+                case "SRUAP_Turret_Order3_Test":
+                case "SRUAP_Turret_Chaos3_Test":
+                    return TurretType.TierThree;
+
+                case "SRUAP_Turret_Order4":
+                case "SRUAP_Turret_Chaos4":
+                    return TurretType.TierFour;
+
+                default:
+                    return TurretType.Unknown;
+            }
+        }
+
+        /// <summary>
         ///     Returns whether the hero is in fountain range.
         /// </summary>
         /// <param name="hero">The Hero</param>
@@ -253,8 +287,6 @@ namespace LeagueSharp.SDK.Core.Extensions
         public static bool InShop(this Obj_AI_Hero hero)
         {
             return hero.IsVisible && GameObjects.AllyShops.Any(s => hero.DistanceSquared(s.Position) < 1562500);
-
-                // 1250²
         }
 
         /// <summary>

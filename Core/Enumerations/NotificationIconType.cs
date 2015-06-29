@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MinionTeam.cs" company="LeagueSharp">
+// <copyright file="NotificationIconType.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,44 +16,39 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   The team the minion is on.
+//   The notification icon type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.Enumerations
 {
     /// <summary>
-    ///     The team the minion is on.
+    ///     The notification icon type.
     /// </summary>
-    public enum MinionTeam
+    public enum NotificationIconType
     {
         /// <summary>
-        ///     Neutral(Jungle minions)
+        ///     No Icon.
         /// </summary>
-        Neutral, 
+        None = 0, 
 
         /// <summary>
-        ///     Ally minions
+        ///     Error Icon.
         /// </summary>
-        Ally, 
+        Error = 1, 
 
         /// <summary>
-        ///     Enemy minions
+        ///     Warning Icon.
         /// </summary>
-        Enemy, 
+        Warning = 2, 
 
         /// <summary>
-        ///     Minions that are not an ally.
+        ///     Check Icon.
         /// </summary>
-        NotAlly, 
+        Check = 3, 
 
         /// <summary>
-        ///     Minions that are not an ally for the the enemy.
+        ///     Select Icon.
         /// </summary>
-        NotAllyForEnemy, 
-
-        /// <summary>
-        ///     Any team.
-        /// </summary>
-        All
+        Select = 4
     }
 }

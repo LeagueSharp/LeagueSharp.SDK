@@ -24,6 +24,8 @@ namespace LeagueSharp.SDK.Core.IDrawing
     using System;
     using System.Linq;
 
+    using LeagueSharp.SDK.Core.Enumerations;
+
     using SharpDX;
 
     /// <summary>

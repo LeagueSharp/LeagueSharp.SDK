@@ -136,9 +136,7 @@ namespace LeagueSharp.SDK.Core.Extensions
 
             for (var counter = 0; counter < (1 << allValues.Count); ++counter)
             {
-                var combination = allValues.Where((t, i) => (counter & (1 << i)) == 0).ToList();
-
-                collection.Add(combination);
+                collection.Add(allValues.Where((t, i) => (counter & (1 << i)) == 0).ToList());
             }
 
             return collection;

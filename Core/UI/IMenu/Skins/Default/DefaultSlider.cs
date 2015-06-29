@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   A default implementation of an <see cref="IDrawableSlider" />
+//   A default implementation of an <see cref="ADrawable{MenuSlider}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
@@ -27,7 +27,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
 
@@ -39,14 +38,31 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     /// </summary>
     public class DefaultSlider : ADrawable<MenuSlider>
     {
-        #region Public Methods and Operators
+        #region Static Fields
 
         /// <summary>
-        /// Creates a new handler responsible for the given <see cref="AMenuComponent"/>.
+        ///     The line.
         /// </summary>
-        /// <param name="component">The menu component</param>
+        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="DefaultSlider" /> class.
+        /// </summary>
+        /// <param name="component">
+        ///     The menu component
+        /// </param>
         public DefaultSlider(MenuSlider component)
-            : base(component) {}
+            : base(component)
+        {
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         ///     Gets the additional boundaries.
@@ -69,89 +85,110 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         }
 
         /// <summary>
+        ///     Disposes any resources used in this handler.
+        /// </summary>
+        public override void Dispose()
+        {
+            // Do nothing.
+        }
+
+        /// <summary>
         ///     Draws a <see cref="MenuSlider" />
         /// </summary>
         public override void Draw()
         {
-            var position = Component.Position;
+            var position = this.Component.Position;
             var centeredY =
                 (int)
-                DefaultUtilities.GetContainerRectangle(Component)
-                    .GetCenteredText(null, MenuSettings.Font, Component.DisplayName, CenteredFlags.VerticalCenter)
+                DefaultUtilities.GetContainerRectangle(this.Component)
+                    .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
-            var percent = (Component.Value - Component.MinValue) / (float)(Component.MaxValue - Component.MinValue);
-            var x = position.X + (percent * Component.MenuWidth);
+            var percent = (this.Component.Value - this.Component.MinValue)
+                          / (float)(this.Component.MaxValue - this.Component.MinValue);
+            var x = position.X + (percent * this.Component.MenuWidth);
 
-            var line = new Line(Drawing.Direct3DDevice) { Antialias = false, GLLines = true, Width = 2 };
-            line.Begin();
-            line.Draw(
-                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) },
-                Component.Interacting ? new ColorBGRA(255, 0, 0, 255) : new ColorBGRA(50, 154, 205, 255));
-            line.End();
+            Line.Width = 2;
+            Line.Begin();
+            Line.Draw(
+                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) }, 
+                this.Component.Interacting ? new ColorBGRA(255, 0, 0, 255) : new ColorBGRA(50, 154, 205, 255));
+            Line.End();
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite,
-                Component.DisplayName, 
+                MenuManager.Instance.Sprite, 
+                this.Component.DisplayName, 
                 (int)(position.X + MenuSettings.ContainerTextOffset), 
                 centeredY, 
                 MenuSettings.TextColor);
 
             var measureText = MenuSettings.Font.MeasureText(
-                null,
-                Component.Value.ToString(CultureInfo.InvariantCulture), 
+                null, 
+                this.Component.Value.ToString(CultureInfo.InvariantCulture), 
                 0);
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite,
-                Component.Value.ToString(CultureInfo.InvariantCulture),
-                (int)(position.X + Component.MenuWidth - 5 - measureText.Width), 
+                MenuManager.Instance.Sprite, 
+                this.Component.Value.ToString(CultureInfo.InvariantCulture), 
+                (int)(position.X + this.Component.MenuWidth - 5 - measureText.Width), 
                 centeredY, 
                 MenuSettings.TextColor);
 
-            line.Width = MenuSettings.ContainerHeight;
-            line.Begin();
-            line.Draw(
+            Line.Width = MenuSettings.ContainerHeight;
+            Line.Begin();
+            Line.Draw(
                 new[]
                     {
                         new Vector2(position.X, position.Y + MenuSettings.ContainerHeight / 2f), 
                         new Vector2(x, position.Y + MenuSettings.ContainerHeight / 2f)
                     }, 
                 MenuSettings.HoverColor);
-            line.End();
-            line.Dispose();
+            Line.End();
         }
 
-        #endregion
-
         /// <summary>
-        /// Processes windows messages
+        ///     Processes windows messages
         /// </summary>
         /// <param name="args">event data</param>
         public override void OnWndProc(WindowsKeys args)
         {
-            if (!Component.Visible)
+            if (!this.Component.Visible)
             {
                 return;
             }
 
-            if (args.Msg == WindowsMessages.MOUSEMOVE && Component.Interacting)
+            if (args.Msg == WindowsMessages.MOUSEMOVE && this.Component.Interacting)
             {
-                this.CalculateNewValue(Component, args);
+                this.CalculateNewValue(this.Component, args);
             }
-            else if (args.Msg == WindowsMessages.LBUTTONDOWN && !Component.Interacting)
+            else if (args.Msg == WindowsMessages.LBUTTONDOWN && !this.Component.Interacting)
             {
-                var container = Bounding(Component);
+                var container = this.Bounding(this.Component);
 
                 if (args.Cursor.IsUnderRectangle(container.X, container.Y, container.Width, container.Height))
                 {
-                    Component.Interacting = true;
-                    CalculateNewValue(Component, args);
+                    this.Component.Interacting = true;
+                    this.CalculateNewValue(this.Component, args);
                 }
             }
             else if (args.Msg == WindowsMessages.LBUTTONUP)
             {
-                Component.Interacting = false;
+                this.Component.Interacting = false;
             }
         }
+
+        /// <summary>
+        ///     Calculates the width of this component
+        /// </summary>
+        /// <returns>
+        ///     The width.
+        /// </returns>
+        public override int Width()
+        {
+            return DefaultUtilities.CalcWidthItem(this.Component) + 100;
+        }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         ///     Calculate the new value based onto the cursor position.
@@ -184,21 +221,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             }
         }
 
-        /// <summary>
-        /// Calculates the width of this component
-        /// </summary>
-        /// <returns>width</returns>
-        public override int Width()
-        {
-            return DefaultUtilities.CalcWidthItem(Component) + 100;
-        }
-
-        /// <summary>
-        /// Disposes any resources used in this handler.
-        /// </summary>
-        public override void Dispose()
-        {
-            //do nothing
-        }
+        #endregion
     }
 }

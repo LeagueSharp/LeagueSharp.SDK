@@ -27,6 +27,8 @@ namespace LeagueSharp.SDK.Core.IDrawing
     using System.Drawing.Imaging;
     using System.IO;
 
+    using LeagueSharp.SDK.Core.Enumerations;
+
     using SharpDX;
     using SharpDX.Direct3D9;
 

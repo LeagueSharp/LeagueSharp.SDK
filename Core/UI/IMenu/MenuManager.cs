@@ -31,7 +31,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     using LeagueSharp.SDK.Core.UI.IMenu.Skins;
     using LeagueSharp.SDK.Core.Utils;
 
-    using SharpDX;
     using SharpDX.Direct3D9;
 
     /// <summary>
@@ -42,11 +41,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Static Fields
 
         /// <summary>
-        ///     The Instance.
-        /// </summary>
-        public static readonly MenuManager Instance = new MenuManager();
-
-        /// <summary>
         ///     The configuration folder
         /// </summary>
         public static readonly DirectoryInfo ConfigFolder =
@@ -55,6 +49,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
                     "LS" + Environment.UserName.GetHashCode().ToString("X"), 
                     "MenuConfigSDK"));
+
+        /// <summary>
+        ///     The Instance.
+        /// </summary>
+        public static readonly MenuManager Instance = new MenuManager();
 
         #endregion
 
@@ -80,7 +79,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private bool menuVisible;
 
-        internal bool PpSpriteDrawnProtection;
+        /// <summary>
+        ///     The sprite drawn protection.
+        /// </summary>
+        private bool ppSpriteDrawnProtection;
 
         #endregion
 
@@ -227,20 +229,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             this.delayedDrawActions.Enqueue(a);
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
-        /// Causes the entire Menu tree to recalculate their widths.
+        ///     Causes the entire Menu tree to recalculate their widths.
         /// </summary>
         public void ResetWidth()
         {
-            foreach (var menu in Menus)
+            foreach (var menu in this.Menus)
             {
                 menu.ResetWidth();
             }
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         ///     Fires the on close.
@@ -276,31 +278,34 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         {
             if (this.MenuVisible)
             {
-                if (!PpSpriteDrawnProtection)
+                if (!this.ppSpriteDrawnProtection)
                 {
                     this.Sprite.Begin(SpriteFlags.AlphaBlend);
-                    PpSpriteDrawnProtection = true;
+                    this.ppSpriteDrawnProtection = true;
                 }
+
                 ThemeManager.Current.Draw();
-                if (PpSpriteDrawnProtection)
+                if (this.ppSpriteDrawnProtection)
                 {
                     this.Sprite.End();
-                    PpSpriteDrawnProtection = false;
+                    this.ppSpriteDrawnProtection = false;
                 }
-                if (!PpSpriteDrawnProtection)
+
+                if (!this.ppSpriteDrawnProtection)
                 {
                     this.Sprite.Begin(SpriteFlags.AlphaBlend);
-                    PpSpriteDrawnProtection = true;
+                    this.ppSpriteDrawnProtection = true;
                 }
+
                 while (this.delayedDrawActions.Count > 0)
                 {
                     this.delayedDrawActions.Dequeue().Invoke();
                 }
 
-                if (PpSpriteDrawnProtection)
+                if (this.ppSpriteDrawnProtection)
                 {
                     this.Sprite.End();
-                    PpSpriteDrawnProtection = false;
+                    this.ppSpriteDrawnProtection = false;
                 }
             }
         }
@@ -382,14 +387,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        ///     On update event.
+        ///     OnUpdate event.
         /// </summary>
         /// <param name="args">
-        ///     Event data
+        ///     The event data
         /// </param>
         private static void Game_OnUpdate(EventArgs args)
         {
-            // nothing
+            // Do nothing.
         }
 
         #endregion

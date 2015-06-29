@@ -39,6 +39,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         #region Fields
 
         /// <summary>
+        ///     The default theme handler.
+        /// </summary>
+        private readonly ADrawable defaultThemeHandler = new ADrawableAdapter();
+
+        /// <summary>
+        ///     The current theme.
+        /// </summary>
+        private ITheme currentTheme;
+
+        /// <summary>
         ///     Local menu width.
         /// </summary>
         private int menuWidthCached;
@@ -48,47 +58,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         /// </summary>
         private bool resetWidth = true;
 
-        private ITheme currentTheme;
-
+        /// <summary>
+        ///     The theme handler.
+        /// </summary>
         private ADrawable themeHandler;
-
-        private readonly ADrawable defaultThemeHandler = new ADrawableAdapter();
-
-        /// <summary>
-        /// Gets the current handler for this AMenuComponent. If it is null it will ask the current theme to build a new one.
-        /// </summary>
-        protected ADrawable Handler
-        {
-            get
-            {
-                if (themeHandler != null && currentTheme != ThemeManager.Current)
-                {
-                    themeHandler.Dispose();
-                    themeHandler = null;
-                }
-                if (themeHandler == null || currentTheme != ThemeManager.Current)
-                {
-                    currentTheme = ThemeManager.Current;
-                    themeHandler = BuildHandler(ThemeManager.Current);
-                    if (themeHandler == null)
-                    {
-                        themeHandler = defaultThemeHandler;
-                        Console.WriteLine(@"No ADrawable handler exists for the component of type "+GetType());
-                    }
-                }
-                return themeHandler; 
-            }
-        }
-
-        /// <summary>
-        /// Builds an <see cref="ADrawable"/> for this component.
-        /// </summary>
-        /// <returns></returns>
-        protected virtual ADrawable BuildHandler(ITheme theme)
-        {
-            return null;
-        }
-
 
         #endregion
 
@@ -96,7 +69,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="AMenuComponent" /> class.
-        ///     Abstract Constructor
+        /// </summary>
+        internal AMenuComponent()
+        {
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="AMenuComponent" /> class.
         /// </summary>
         /// <param name="name">
         ///     Menu Name
@@ -118,11 +97,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
             this.UniqueString = uniqueString;
             this.Name = name;
             this.DisplayName = displayName;
-        }
-
-        internal AMenuComponent()
-        {
-            
         }
 
         #endregion
@@ -157,7 +131,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
                     this.menuWidthCached = this.Parent != null
                                                ? this.Parent.Components.Max(comp => comp.Value.Width)
                                                : MenuManager.Instance.Menus.Max(menu => menu.Width);
-                    resetWidth = false;
+                    this.resetWidth = false;
                 }
 
                 return this.menuWidthCached;
@@ -225,12 +199,46 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
 
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        ///     Gets the current handler for this AMenuComponent. If it is null it will ask the current theme to build a new one.
+        /// </summary>
+        protected ADrawable Handler
+        {
+            get
+            {
+                if (this.themeHandler != null && this.currentTheme != ThemeManager.Current)
+                {
+                    this.themeHandler.Dispose();
+                    this.themeHandler = null;
+                }
+
+                if (this.themeHandler == null || this.currentTheme != ThemeManager.Current)
+                {
+                    this.currentTheme = ThemeManager.Current;
+                    this.themeHandler = this.BuildHandler(ThemeManager.Current);
+                    if (this.themeHandler == null)
+                    {
+                        this.themeHandler = this.defaultThemeHandler;
+                        Console.WriteLine(@"No ADrawable handler exists for the component of type " + this.GetType());
+                    }
+                }
+
+                return this.themeHandler;
+            }
+        }
+
+        #endregion
+
         #region Public Indexers
 
         /// <summary>
         ///     Component Sub Object accessibility.
         /// </summary>
-        /// <param name="name">Child Menu Component name</param>
+        /// <param name="name">
+        ///     Child Menu Component name
+        /// </param>
         /// <returns>Child Menu Component of this component.</returns>
         public abstract AMenuComponent this[string name] { get; }
 
@@ -241,7 +249,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         /// <summary>
         ///     Get the value of a child with a certain name.
         /// </summary>
-        /// <typeparam name="T">The type of MenuValue of this child.</typeparam>
+        /// <typeparam name="T">
+        ///     The type of MenuValue of this child.
+        /// </typeparam>
         /// <param name="name">The name of the child.</param>
         /// <returns>The value that is attached to this Child.</returns>
         public abstract T GetValue<T>(string name) where T : MenuItem;
@@ -249,7 +259,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         /// <summary>
         ///     Get the value of this component.
         /// </summary>
-        /// <typeparam name="T">The type of MenuValue of this component.</typeparam>
+        /// <typeparam name="T">
+        ///     The type of MenuValue of this component.
+        /// </typeparam>
         /// <returns>The value that is attached to this component.</returns>
         public abstract T GetValue<T>() where T : MenuItem;
 
@@ -278,22 +290,40 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         public abstract void OnWndProc(WindowsKeys args);
 
         /// <summary>
-        /// Resets the MenuItem back to his default values.
-        /// </summary>
-        public abstract void RestoreDefault();
-
-        /// <summary>
         ///     Resets the width.
         /// </summary>
         public virtual void ResetWidth()
         {
-            resetWidth = true;
+            this.resetWidth = true;
         }
+
+        /// <summary>
+        ///     Resets the MenuItem back to his default values.
+        /// </summary>
+        public abstract void RestoreDefault();
 
         /// <summary>
         ///     Saves this instance.
         /// </summary>
         public abstract void Save();
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Builds an <see cref="ADrawable" /> for this component.
+        /// </summary>
+        /// <param name="theme">
+        ///     The theme.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="ADrawable" /> instance.
+        /// </returns>
+        protected virtual ADrawable BuildHandler(ITheme theme)
+        {
+            return null;
+        }
 
         #endregion
     }

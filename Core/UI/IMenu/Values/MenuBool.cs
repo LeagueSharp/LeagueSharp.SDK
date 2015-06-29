@@ -34,24 +34,37 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     [Serializable]
     public class MenuBool : MenuItem, ISerializable
     {
+        #region Fields
 
+        /// <summary>
+        ///     The original value.
+        /// </summary>
         private readonly bool original;
+
+        #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuBool" /> class.
         /// </summary>
-        /// <param name="displayName">Display name of this component</param>
+        /// <param name="name">
+        ///     Internal name of this component
+        /// </param>
+        /// <param name="displayName">
+        ///     Display name of this component
+        /// </param>
         /// <param name="value">
         ///     Boolean Value
         /// </param>
-        /// <param name="uniqueString">String used when saving settings.</param>
-        /// <param name="name">Internal name of this component</param>
-        public MenuBool(string name, string displayName, bool value = false, string uniqueString = "") : base(name, displayName,uniqueString)
+        /// <param name="uniqueString">
+        ///     String used when saving settings.
+        /// </param>
+        public MenuBool(string name, string displayName, bool value = false, string uniqueString = "")
+            : base(name, displayName, uniqueString)
         {
             this.Value = value;
-            original = value;
+            this.original = value;
         }
 
         /// <summary>
@@ -80,7 +93,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return Handler.Width();
+                return this.Handler.Width();
             }
         }
 
@@ -88,6 +101,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
 
         #region Public Methods and Operators
 
+        /// <summary>
+        ///     Boolean Item Draw callback.
+        /// </summary>
+        public override void Draw()
+        {
+            this.Handler.Draw();
+        }
 
         /// <summary>
         ///     Extracts the specified component.
@@ -99,11 +119,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         /// <summary>
-        ///     Boolean Item Draw callback.
+        ///     Resets the MenuItem back to his default values.
         /// </summary>
-        public override void Draw()
+        public override void RestoreDefault()
         {
-            Handler.Draw();
+            this.Value = this.original;
         }
 
         /// <summary>
@@ -112,7 +132,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="args">The <see cref="WindowsKeys" /> instance</param>
         public override void WndProc(WindowsKeys args)
         {
-            Handler.OnWndProc(args);
+            this.Handler.OnWndProc(args);
         }
 
         #endregion
@@ -145,6 +165,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         #region Methods
 
         /// <summary>
+        ///     Builds an <see cref="ADrawable" /> for this component.
+        /// </summary>
+        /// <param name="theme">
+        ///     The theme.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="ADrawable" /> instance.
+        /// </returns>
+        protected override ADrawable BuildHandler(ITheme theme)
+        {
+            return theme.BuildBoolHandler(this);
+        }
+
+        /// <summary>
         ///     Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with the data needed to serialize the
         ///     target object.
         /// </summary>
@@ -161,22 +195,5 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         #endregion
-
-        /// <summary>
-        /// Resets the MenuItem back to his default values.
-        /// </summary>
-        public override void RestoreDefault()
-        {
-            Value = original;
-        }
-
-        /// <summary>
-        /// Builds an <see cref="ADrawable"/> for this component.
-        /// </summary>
-        /// <returns></returns>
-        protected override ADrawable BuildHandler(ITheme theme)
-        {
-            return theme.BuildBoolHandler(this);
-        }
     }
 }

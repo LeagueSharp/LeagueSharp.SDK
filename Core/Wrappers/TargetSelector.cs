@@ -125,6 +125,42 @@ namespace LeagueSharp.SDK.Core.Wrappers
         #region Public Methods and Operators
 
         /// <summary>
+        ///     Returns the priority of the hero
+        /// </summary>
+        /// <param name="hero">
+        ///     The hero.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="float" />.
+        /// </returns>
+        public static float GetPriority(Obj_AI_Hero hero)
+        {
+            var p = 1;
+            try
+            {
+                p = menu["ts" + hero.ChampionName].GetValue<MenuSlider>().Value;
+            }
+            catch (Exception)
+            {
+                // Ignored.
+            }
+
+            switch (p)
+            {
+                case 2:
+                    return 1.5f;
+                case 3:
+                    return 1.75f;
+                case 4:
+                    return 2f;
+                case 5:
+                    return 2.5f;
+                default:
+                    return 1f;
+            }
+        }
+
+        /// <summary>
         ///     Gets the best candidate target.
         /// </summary>
         /// <param name="range">
@@ -170,7 +206,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             var excludedTargets = targets.Where(t => t.IsInvulnerable(damage));
 
-            return targets.Any() ? GetTarget(targets, rangeCheckFrom) : GetTarget(excludedTargets, rangeCheckFrom);
+            return targets.Any()
+                       ? GetTarget(targets, damage, rangeCheckFrom)
+                       : GetTarget(excludedTargets, damage, rangeCheckFrom);
         }
 
         /// <summary>
@@ -179,13 +217,19 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="targets">
         ///     The targets.
         /// </param>
+        /// <param name="damageType">
+        ///     The damage Type.
+        /// </param>
         /// <param name="rangeCheckFrom">
         ///     The range check from.
         /// </param>
         /// <returns>
         ///     The <see cref="Obj_AI_Hero" /> target.
         /// </returns>
-        public static Obj_AI_Hero GetTarget(IEnumerable<Obj_AI_Hero> targets, Vector3? rangeCheckFrom = null)
+        public static Obj_AI_Hero GetTarget(
+            IEnumerable<Obj_AI_Hero> targets, 
+            DamageType damageType = DamageType.Physical, 
+            Vector3? rangeCheckFrom = null)
         {
             switch (Mode)
             {
@@ -214,10 +258,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
                             hero => (rangeCheckFrom ?? GameObjects.Player.ServerPosition).DistanceSquared(hero.Position));
                 case TargetSelectorMode.NearMouse:
                     return targets.Find(t => t.DistanceSquared(Game.CursorPos) < 22500);
-                case TargetSelectorMode.LessCastPriority:
-                    break;
                 case TargetSelectorMode.AutoPriority:
-                    break;
+                    return
+                        targets.MaxOrDefault(
+                            hero =>
+                            GameObjects.Player.CalculateDamage(hero, damageType, 100) / (1 + hero.Health)
+                            * GetPriority(hero));
                 case TargetSelectorMode.LeastHealth:
                     return targets.MinOrDefault(t => t.Health);
             }
@@ -228,14 +274,31 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     Gets the best candidate target.
         /// </summary>
-        /// <param name="spell">The Spell instance</param>
-        /// <param name="champsToIgnore">Champions to ignore.</param>
+        /// <param name="spell">
+        ///     The Spell instance
+        /// </param>
+        /// <param name="champsToIgnore">
+        ///     Champions to ignore.
+        /// </param>
+        /// <param name="rangeCheckFrom">
+        ///     The range Check From.
+        /// </param>
         /// <returns>
         ///     The <see cref="Obj_AI_Hero" /> target.
         /// </returns>
-        public static Obj_AI_Hero GetTargetNoCollision(Spell spell, IEnumerable<Obj_AI_Hero> champsToIgnore)
+        public static Obj_AI_Hero GetTargetNoCollision(
+            Spell spell, 
+            IEnumerable<Obj_AI_Hero> champsToIgnore, 
+            Vector3? rangeCheckFrom = null)
         {
-            return null; // TODO: this.
+            var t = GetTarget(spell.Range, spell.DamageType, champsToIgnore, rangeCheckFrom);
+
+            if (spell.Collision && spell.GetPrediction(t).Hitchance != HitChance.Collision)
+            {
+                return t;
+            }
+
+            return null;
         }
 
         /// <summary>

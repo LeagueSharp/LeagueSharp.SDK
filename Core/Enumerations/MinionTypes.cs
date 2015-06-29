@@ -21,29 +21,47 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.Enumerations
 {
+    using System;
+
     /// <summary>
     ///     Types of minions
     /// </summary>
+    [Flags]
     public enum MinionTypes
     {
         /// <summary>
-        ///     Ranged minions
+        ///     The unknown type.
+        /// </summary>
+        Unknown, 
+
+        /// <summary>
+        ///     The normal type.
+        /// </summary>
+        Normal, 
+
+        /// <summary>
+        ///     The ranged type.
         /// </summary>
         Ranged, 
 
         /// <summary>
-        ///     Melee minions
+        ///     The melee type.
         /// </summary>
         Melee, 
 
         /// <summary>
-        ///     All minions(Ranged and Melee)
+        ///     The siege type.
         /// </summary>
-        All, 
+        Siege, 
 
         /// <summary>
-        ///     All wards.
+        ///     The super type.
         /// </summary>
-        Wards
+        Super, 
+
+        /// <summary>
+        ///     The ward type.
+        /// </summary>
+        Ward
     }
 }

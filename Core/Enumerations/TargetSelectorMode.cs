@@ -49,12 +49,7 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     Focuses targets base on the distance between the target and the mouse.
         /// </summary>
-        NearMouse, 
-
-        /// <summary>
-        ///     Focuses targets based on the amount skills needed to use to kill the target.
-        /// </summary>
-        LessCastPriority, 
+        NearMouse,
 
         /// <summary>
         ///     Focuses targets by their class.

@@ -16,14 +16,13 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Implements <see cref="IDrawableSeparator" /> as a default skin.
+//   Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Math;
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
 
@@ -32,60 +31,73 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     /// </summary>
     public class DefaultSeparator : ADrawable<MenuSeparator>
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="DefaultSeparator" /> class.
+        /// </summary>
+        /// <param name="component">
+        ///     The menu component
+        /// </param>
+        public DefaultSeparator(MenuSeparator component)
+            : base(component)
+        {
+        }
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>
-        /// Creates a new handler responsible for the given <see cref="AMenuComponent"/>.
+        ///     Disposes any resources used in this handler.
         /// </summary>
-        /// <param name="component">The menu component</param>
-        public DefaultSeparator(MenuSeparator component)
-            : base(component) {}
+        public override void Dispose()
+        {
+            // Do nothing.
+        }
 
         /// <summary>
         ///     Draw a <see cref="MenuSeparator" />
         /// </summary>
         public override void Draw()
         {
-            var centerY = DefaultUtilities.GetContainerRectangle(Component)
+            var centerY = DefaultUtilities.GetContainerRectangle(this.Component)
                 .GetCenteredText(
-                    null, MenuSettings.Font,
-                    Component.DisplayName, 
+                    null, 
+                    MenuSettings.Font, 
+                    this.Component.DisplayName, 
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite,
-                Component.DisplayName, 
+                MenuManager.Instance.Sprite, 
+                this.Component.DisplayName, 
                 (int)centerY.X, 
                 (int)centerY.Y, 
                 MenuSettings.TextColor);
         }
 
-        #endregion
-
         /// <summary>
-        /// Calculates the Width of an AMenuComponent
+        ///     Processes windows messages
         /// </summary>
-        /// <returns>width</returns>
-        public override int Width()
-        {
-            return DefaultUtilities.CalcWidthItem(Component);
-        }
-
-        /// <summary>
-        /// Processes windows messages
-        /// </summary>
-        /// <param name="args">event data</param>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
         public override void OnWndProc(WindowsKeys args)
         {
-            //nothing
+            // Do nothing.
         }
 
         /// <summary>
-        /// Disposes any resources used in this handler.
+        ///     Calculates the Width of an AMenuComponent
         /// </summary>
-        public override void Dispose()
+        /// <returns>
+        ///     The width.
+        /// </returns>
+        public override int Width()
         {
-            //do nothing
+            return DefaultUtilities.CalcWidthItem(this.Component);
         }
+
+        #endregion
     }
 }

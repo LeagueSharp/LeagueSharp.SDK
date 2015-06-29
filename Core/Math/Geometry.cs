@@ -113,20 +113,6 @@ namespace LeagueSharp.SDK.Core.Math
                        : rectangle.GetCenter(sprite, font.MeasureText(sprite, text, 0), flags);
         }
 
-        /// <summary>
-        ///     Returns true if the point is under the rectangle.
-        /// </summary>
-        /// <param name="point">The Point</param>
-        /// <param name="x">Rectangle X</param>
-        /// <param name="y">Rectangle Y</param>
-        /// <param name="width">Rectangle Width</param>
-        /// <param name="height">Rectangle Height</param>
-        /// <returns>Returns true if the point is under the rectangle, otherwise false</returns>
-        public static bool IsUnderRectangle(Vector2 point, float x, float y, float width, float height)
-        {
-            return point.X > x && point.X < x + width && point.Y > y && point.Y < y + height;
-        }
-
         #endregion
     }
 }

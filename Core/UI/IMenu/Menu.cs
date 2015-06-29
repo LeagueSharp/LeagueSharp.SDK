@@ -31,7 +31,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins;
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Default;
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
@@ -64,6 +63,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         ///     Local visible value.
         /// </summary>
         private bool visible;
+
+        /// <summary>
+        ///     The x-axis.
+        /// </summary>
+        private float xd;
+
+        /// <summary>
+        ///     The y-axis.
+        /// </summary>
+        private float yd;
 
         #endregion
 
@@ -105,12 +114,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Public Properties
 
         /// <summary>
-        /// Gets a value indicating whether the user is dragging the menu.
+        ///     Gets or sets a value indicating whether the user is dragging the menu.
         /// </summary>
         public bool Dragging { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether the user has moved the menu at least 1 pixel.
+        ///     Gets or sets a value indicating whether the user has moved the menu at least 1 pixel.
         /// </summary>
         public bool HasDragged { get; set; }
 
@@ -218,10 +227,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         {
             get
             {
-                return Handler.Width();
+                return this.Handler.Width();
             }
         }
-        
 
         #endregion
 
@@ -248,7 +256,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     Add a menu component to this menu.
         /// </summary>
-        /// <param name="component"><see cref="AMenuComponent" /> component</param>
+        /// <typeparam name="T">
+        ///     <see cref="AMenuComponent" /> type
+        /// </typeparam>
+        /// <param name="component">
+        ///     <see cref="AMenuComponent" /> component
+        /// </param>
+        /// <returns>
+        ///     The <see cref="AMenuComponent"/> instance.
+        /// </returns>
         public virtual T Add<T>(T component) where T : AMenuComponent
         {
             if (!this.Components.ContainsKey(component.Name))
@@ -269,8 +285,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
             else
             {
-                Menu existingComponent = Components[component.Name] as Menu;
-                Menu newComponent = component as Menu;
+                var existingComponent = this.Components[component.Name] as Menu;
+                var newComponent = component as Menu;
                 if (existingComponent != null && newComponent != null)
                 {
                     foreach (var comp in newComponent.Components)
@@ -280,9 +296,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 }
                 else
                 {
-                    throw new Exception("This menu already contains a component with the name " + component.Name);  
+                    throw new Exception("This menu already contains a component with the name " + component.Name);
                 }
             }
+
             MenuManager.Instance.ResetWidth();
             return component;
         }
@@ -320,7 +337,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             AMenuComponent value;
             if (this.Components.TryGetValue(name, out value))
             {
-                return (T) value;
+                return (T)value;
             }
 
             throw new Exception("Could not find child with name " + name);
@@ -359,7 +376,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         public override void OnDraw(Vector2 position)
         {
             this.Position = position;
-            Handler.Draw();
+            this.Handler.Draw();
         }
 
         /// <summary>
@@ -370,53 +387,39 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        ///     Resets the width.
-        /// </summary>
-        public override void ResetWidth()
-        {
-            base.ResetWidth();
-            foreach (var comp in Components)
-            {
-                comp.Value.ResetWidth();
-            }
-        }
-
-        private float xd;
-
-        private float yd;
-
-        /// <summary>
         ///     Menu Windows Process Messages callback.
         /// </summary>
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void OnWndProc(WindowsKeys args)
         {
-            var menuManager = MenuManager.Instance;
             if (args.Msg == WindowsMessages.LBUTTONUP)
             {
-                HasDragged = false;
-                Dragging = false;
+                this.HasDragged = false;
+                this.Dragging = false;
             }
+
             if (this.Visible)
             {
-                if (args.Msg == WindowsMessages.MOUSEMOVE && Dragging)
-                { 
-                    MenuSettings.Position = new Vector2(args.Cursor.X - xd, args.Cursor.Y - yd);
-                    HasDragged = true;
+                if (args.Msg == WindowsMessages.MOUSEMOVE && this.Dragging)
+                {
+                    MenuSettings.Position = new Vector2(args.Cursor.X - this.xd, args.Cursor.Y - this.yd);
+                    this.HasDragged = true;
                 }
+
                 if (args.Cursor.IsUnderRectangle(
                     this.Position.X, 
                     this.Position.Y, 
                     this.MenuWidth, 
                     MenuSettings.ContainerHeight))
                 {
-                    if (args.Msg == WindowsMessages.LBUTTONDOWN && Root)
+                    if (args.Msg == WindowsMessages.LBUTTONDOWN && this.Root)
                     {
                         var pos = MenuSettings.Position;
-                        xd = args.Cursor.X - pos.X;
-                        yd = args.Cursor.Y - pos.Y;
-                        Dragging = true;
+                        this.xd = args.Cursor.X - pos.X;
+                        this.yd = args.Cursor.Y - pos.Y;
+                        this.Dragging = true;
                     }
+
                     this.Hovering = true;
                     if (args.Msg == WindowsMessages.LBUTTONDOWN && this.Components.Count > 0)
                     {
@@ -457,7 +460,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     Removes a menu component from this menu.
         /// </summary>
-        /// <param name="component"><see cref="AMenuComponent" /> component instance</param>
+        /// <param name="component">
+        ///     <see cref="AMenuComponent" /> component instance
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
         public bool Remove(AMenuComponent component)
         {
             if (this.Components.ContainsKey(component.Name))
@@ -466,7 +474,31 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 component.Parent = null;
                 return this.Components.Remove(component.Name);
             }
+
             return false;
+        }
+
+        /// <summary>
+        ///     Resets the width.
+        /// </summary>
+        public override void ResetWidth()
+        {
+            base.ResetWidth();
+            foreach (var comp in this.Components)
+            {
+                comp.Value.ResetWidth();
+            }
+        }
+
+        /// <summary>
+        ///     Resets the children of this menu back to his default values.
+        /// </summary>
+        public override void RestoreDefault()
+        {
+            foreach (var comp in this.Components)
+            {
+                comp.Value.RestoreDefault();
+            }
         }
 
         /// <summary>
@@ -498,26 +530,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
-        #endregion
-
         /// <summary>
-        /// Resets the children of this menu back to his default values.
+        ///     Builds an <see cref="ADrawable" /> for this component.
         /// </summary>
-        public override void RestoreDefault()
-        {
-            foreach (var comp in Components)
-            {
-                comp.Value.RestoreDefault();
-            }
-        }
-
-        /// <summary>
-        /// Builds an <see cref="ADrawable"/> for this component.
-        /// </summary>
-        /// <returns></returns>
+        /// <param name="theme">
+        ///     The theme.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="ADrawable" /> instance.
+        /// </returns>
         protected override ADrawable BuildHandler(ITheme theme)
         {
             return theme.BuildMenuHandler(this);
         }
+
+        #endregion
     }
 }

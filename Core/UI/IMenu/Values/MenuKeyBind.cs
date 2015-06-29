@@ -27,17 +27,23 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System.Windows.Forms;
 
     using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins;
     using LeagueSharp.SDK.Core.Utils;
+
+    using MenuItem = LeagueSharp.SDK.Core.UI.IMenu.MenuItem;
 
     /// <summary>
     ///     Menu KeyBind.
     /// </summary>
     [Serializable]
-    public class MenuKeyBind : IMenu.MenuItem, ISerializable
+    public class MenuKeyBind : MenuItem, ISerializable
     {
         #region Fields
+
+        /// <summary>
+        ///     The original value.
+        /// </summary>
+        private readonly Keys original;
 
         /// <summary>
         ///     The local active value.
@@ -49,31 +55,34 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </summary>
         private bool interacting;
 
-        private readonly Keys original;
-
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuKeyBind" /> class.
-        ///     Menu KeyBind Constructor
         /// </summary>
-        /// <param name="displayName">The display name of the component</param>
+        /// <param name="name">
+        ///     The internal name of the component
+        /// </param>
+        /// <param name="displayName">
+        ///     The display name of the component
+        /// </param>
         /// <param name="key">
         ///     The Key to bind
         /// </param>
         /// <param name="type">
         ///     Key bind type
         /// </param>
-        /// <param name="name">The internal name of the component</param>
-        /// <param name="uniqueString">String used in saving settings</param>
+        /// <param name="uniqueString">
+        ///     String used in saving settings
+        /// </param>
         public MenuKeyBind(string name, string displayName, Keys key, KeyBindType type, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
             this.Key = key;
             this.Type = type;
-            original = key;
+            this.original = key;
         }
 
         /// <summary>
@@ -148,7 +157,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return Handler.Width();
+                return this.Handler.Width();
             }
         }
 
@@ -157,25 +166,32 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Extracts the specified value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        public override void Extract(IMenu.MenuItem value)
-        {
-            var keybind = (MenuKeyBind)value;
-            if (original == keybind.original)
-            {
-                this.Key = keybind.Key;
-            }
-            
-        }
-
-        /// <summary>
         ///     KeyBind Item Draw callback.
         /// </summary>
         public override void Draw()
         {
-            Handler.Draw();
+            this.Handler.Draw();
+        }
+
+        /// <summary>
+        ///     Extracts the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public override void Extract(MenuItem value)
+        {
+            var keybind = (MenuKeyBind)value;
+            if (this.original == keybind.original)
+            {
+                this.Key = keybind.Key;
+            }
+        }
+
+        /// <summary>
+        ///     Resets the MenuItem back to his default values.
+        /// </summary>
+        public override void RestoreDefault()
+        {
+            this.Key = this.original;
         }
 
         /// <summary>
@@ -186,7 +202,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </param>
         public override void WndProc(WindowsKeys args)
         {
-            Handler.OnWndProc(args);
+            this.Handler.OnWndProc(args);
         }
 
         #endregion
@@ -220,6 +236,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         #region Methods
 
         /// <summary>
+        ///     Builds an <see cref="ADrawable" /> for this component.
+        /// </summary>
+        /// <param name="theme">
+        ///     The theme.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="ADrawable" /> instance.
+        /// </returns>
+        protected override ADrawable BuildHandler(ITheme theme)
+        {
+            return theme.BuildKeyBindHandler(this);
+        }
+
+        /// <summary>
         ///     Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with the data needed to serialize the
         ///     target object.
         /// </summary>
@@ -237,22 +267,5 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         #endregion
-
-        /// <summary>
-        /// Resets the MenuItem back to his default values.
-        /// </summary>
-        public override void RestoreDefault()
-        {
-            Key = original;
-        }
-
-        /// <summary>
-        /// Builds an <see cref="ADrawable"/> for this component.
-        /// </summary>
-        /// <returns></returns>
-        protected override ADrawable BuildHandler(ITheme theme)
-        {
-            return theme.BuildKeyBindHandler(this);
-        }
     }
 }

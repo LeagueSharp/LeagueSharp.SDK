@@ -25,6 +25,8 @@ namespace LeagueSharp.SDK.Core.IDrawing
     using System.Collections.Generic;
     using System.Linq;
 
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     The Render class, main handler for projecting objects onto screen.
     /// </summary>

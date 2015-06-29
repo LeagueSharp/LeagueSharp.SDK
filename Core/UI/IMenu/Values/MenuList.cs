@@ -28,7 +28,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System.Security.Permissions;
 
     using LeagueSharp.SDK.Core.UI.IMenu.Skins;
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Default;
     using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
@@ -37,6 +36,24 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     [Serializable]
     public abstract class MenuList : MenuItem
     {
+        #region Fields
+
+        /// <summary>
+        ///     The index.
+        /// </summary>
+        private int index;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MenuList" /> class.
+        /// </summary>
+        internal MenuList()
+        {
+        }
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuList" /> class.
         /// </summary>
@@ -46,21 +63,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         protected MenuList(string name, string displayName, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
-            
         }
-
-        internal MenuList()
-            : base()
-        {
-            
-        }
-
-        #region Fields
-
-        /// <summary>
-        ///     The index.
-        /// </summary>
-        private int index;
 
         #endregion
 
@@ -133,10 +136,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </summary>
         public abstract string[] ValuesAsStrings { get; }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
-        /// Builds an <see cref="ADrawable"/> for this component.
+        ///     Builds an <see cref="ADrawable" /> for this component.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="theme">
+        ///     The theme.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="ADrawable" /> instance.
+        /// </returns>
         protected override ADrawable BuildHandler(ITheme theme)
         {
             return theme.BuildListHandler(this);
@@ -166,7 +178,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuList{T}" /> class.
         /// </summary>
-        /// <param name="name">The internal name of this component</param>
+        /// <param name="name">
+        ///     The internal name of this component
+        /// </param>
         /// <param name="displayName">The display name of this component</param>
         /// <param name="objects">The objects.</param>
         /// <param name="uniqueString">String used in saving settings</param>
@@ -179,6 +193,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuList{T}" /> class based upon the given Enumeration type.
         /// </summary>
+        /// <param name="name">
+        ///     The name.
+        /// </param>
+        /// <param name="displayName">
+        ///     The display Name.
+        /// </param>
+        /// <param name="uniqueString">
+        ///     The unique String.
+        /// </param>
         public MenuList(string name, string displayName, string uniqueString = "")
             : this(name, displayName, Enum.GetValues(typeof(T)).Cast<T>(), uniqueString)
         {
@@ -187,7 +210,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuList{T}" /> class.
         /// </summary>
-        /// <param name="info">The information.</param>
+        /// <param name="info">
+        ///     The information.
+        /// </param>
         /// <param name="context">The context.</param>
         protected MenuList(SerializationInfo info, StreamingContext context)
         {
@@ -276,7 +301,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return Values.Select(arg => arg.ToString()).ToArray();
+                return this.Values.Select(arg => arg.ToString()).ToArray();
             }
         }
 
@@ -287,7 +312,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return Handler.Width();
+                return this.Handler.Width();
             }
         }
 
@@ -296,20 +321,30 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         #region Public Methods and Operators
 
         /// <summary>
+        ///     Drawing callback.
+        /// </summary>
+        public override void Draw()
+        {
+            this.Handler.Draw();
+        }
+
+        /// <summary>
         ///     Extracts the specified component.
         /// </summary>
-        /// <param name="component">The component.</param>
+        /// <param name="component">
+        ///     The component.
+        /// </param>
         public override void Extract(MenuItem component)
         {
             this.Index = ((MenuList<T>)component).Index;
         }
 
         /// <summary>
-        ///     Drawing callback.
+        ///     Resets the MenuItem back to his default values.
         /// </summary>
-        public override void Draw()
+        public override void RestoreDefault()
         {
-            Handler.Draw();
+            // Do nothing.
         }
 
         /// <summary>
@@ -318,7 +353,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void WndProc(WindowsKeys args)
         {
-            Handler.OnWndProc(args);
+            this.Handler.OnWndProc(args);
         }
 
         #endregion
@@ -329,7 +364,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with the data needed to serialize the
         ///     target object.
         /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> to populate with data. </param>
+        /// <param name="info">
+        ///     The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> to populate with data.
+        /// </param>
         /// <param name="context">
         ///     The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext" />) for this
         ///     serialization.
@@ -354,7 +391,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with the data needed to serialize the
         ///     target object.
         /// </summary>
-        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> to populate with data. </param>
+        /// <param name="info">
+        ///     The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> to populate with data.
+        /// </param>
         /// <param name="context">
         ///     The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext" />) for this
         ///     serialization.
@@ -367,13 +406,5 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         #endregion
-
-        /// <summary>
-        /// Resets the MenuItem back to his default values.
-        /// </summary>
-        public override void RestoreDefault()
-        {
-            //do nothing
-        }
     }
 }

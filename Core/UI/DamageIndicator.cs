@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HpBarDamageIndicator.cs" company="LeagueSharp">
+// <copyright file="DamageIndicator.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 //   Utility which displays the damage done to a unit with a Line + Damage.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.Wrappers
+namespace LeagueSharp.SDK.Core.UI
 {
     using System;
     using System.Drawing;
@@ -28,7 +28,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
     /// <summary>
     ///     Utility which displays the damage done to a unit with a Line + Damage.
     /// </summary>
-    public static class HpBarDamageIndicator
+    public static class DamageIndicator
     {
         #region Constants
 

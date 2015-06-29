@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DefaultSettings.cs" company="LeagueSharp">
+// <copyright file="MenuSettings.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -117,29 +117,23 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         {
             Position = new Vector2(30, 30);
             ContainerWidth = 200f;
-            Font =
-                    new Font(
-                        Drawing.Direct3DDevice, 
-                        14, 
-                        0, 
-                        FontWeight.DoNotCare, 
-                        0, 
-                        false, 
-                        FontCharacterSet.Default, 
-                        FontPrecision.Default, 
-                        FontQuality.Antialiased, 
-                        FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative, 
-                        "Tahoma");
+            Font = new Font(
+                Drawing.Direct3DDevice, 
+                14, 
+                0, 
+                FontWeight.DoNotCare, 
+                0, 
+                false, 
+                FontCharacterSet.Default, 
+                FontPrecision.Default, 
+                FontQuality.Antialiased, 
+                FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative, 
+                "Tahoma");
         }
 
         #endregion
 
         #region Public Properties
-
-        /// <summary>
-        ///     The default menu zero-position.
-        /// </summary>
-        public static Vector2 Position { get; set; }
 
         /// <summary>
         ///     Gets or sets the Global Container Height.
@@ -326,6 +320,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
                 hoverLine = value;
             }
         }
+
+        /// <summary>
+        ///     Gets or sets the default menu zero-position.
+        /// </summary>
+        public static Vector2 Position { get; set; }
 
         /// <summary>
         ///     Gets or sets the Root Container Color.

@@ -29,17 +29,26 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     /// </summary>
     public class MenuSeparator : MenuItem
     {
+        #region Constructors and Destructors
+
         /// <summary>
-        /// A new instance of MenuSeperator
+        ///     Initializes a new instance of the <see cref="MenuSeparator" /> class.
         /// </summary>
-        /// <param name="name">The internal name of this menu component</param>
-        /// <param name="displayName">The display name of this menu component</param>
-        /// <param name="uniqueString">String used in saving settings</param>
+        /// <param name="name">
+        ///     The internal name of this menu component
+        /// </param>
+        /// <param name="displayName">
+        ///     The display name of this menu component
+        /// </param>
+        /// <param name="uniqueString">
+        ///     String used in saving settings
+        /// </param>
         public MenuSeparator(string name, string displayName, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
-            
         }
+
+        #endregion
 
         #region Public Properties
 
@@ -50,7 +59,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return Handler.Width();
+                return this.Handler.Width();
             }
         }
 
@@ -59,20 +68,30 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Extracts the specified component.
-        /// </summary>
-        /// <param name="component">The component.</param>
-        public override void Extract(MenuItem component)
-        {
-            //do nothing
-        }
-
-        /// <summary>
         ///     Drawing callback.
         /// </summary>
         public override void Draw()
         {
-            Handler.Draw();
+            this.Handler.Draw();
+        }
+
+        /// <summary>
+        ///     Extracts the specified component.
+        /// </summary>
+        /// <param name="component">
+        ///     The component.
+        /// </param>
+        public override void Extract(MenuItem component)
+        {
+            // Do nothing.
+        }
+
+        /// <summary>
+        ///     Resets the MenuItem back to his default values.
+        /// </summary>
+        public override void RestoreDefault()
+        {
+            // Do nothing.
         }
 
         /// <summary>
@@ -81,26 +100,27 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void WndProc(WindowsKeys args)
         {
-            Handler.OnWndProc(args);      
+            this.Handler.OnWndProc(args);
         }
 
         #endregion
 
-        /// <summary>
-        /// Resets the MenuItem back to his default values.
-        /// </summary>
-        public override void RestoreDefault()
-        {
-            //do nothing
-        }
+        #region Methods
 
         /// <summary>
-        /// Builds an <see cref="ADrawable"/> for this component.
+        ///     Builds an <see cref="ADrawable" /> for this component.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="theme">
+        ///     The theme.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="ADrawable" /> instance.
+        /// </returns>
         protected override ADrawable BuildHandler(ITheme theme)
         {
             return theme.BuildSeparatorHandler(this);
         }
+
+        #endregion
     }
 }

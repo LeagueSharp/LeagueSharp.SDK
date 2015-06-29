@@ -34,16 +34,31 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     [Serializable]
     public class MenuSlider : MenuItem, ISerializable
     {
-        private int _value;
+        #region Fields
 
+        /// <summary>
+        ///     The original.
+        /// </summary>
         private readonly int original;
+
+        /// <summary>
+        ///     The value.
+        /// </summary>
+        private int value;
+
+        #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuSlider" /> class.
         /// </summary>
-        /// <param name="displayName">The display name of this component</param>
+        /// <param name="name">
+        ///     The internal name of this component
+        /// </param>
+        /// <param name="displayName">
+        ///     The display name of this component
+        /// </param>
         /// <param name="value">
         ///     The Value
         /// </param>
@@ -53,15 +68,22 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="maxValue">
         ///     Maximum Value Boundary
         /// </param>
-        /// <param name="name">The internal name of this component</param>
-        /// <param name="uniqueString">String used in saving settings</param>
-        public MenuSlider(string name, string displayName, int value = 0, int minValue = 0, int maxValue = 100, string uniqueString = "")
+        /// <param name="uniqueString">
+        ///     String used in saving settings
+        /// </param>
+        public MenuSlider(
+            string name, 
+            string displayName, 
+            int value = 0, 
+            int minValue = 0, 
+            int maxValue = 100, 
+            string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
             this.MinValue = minValue;
             this.MaxValue = maxValue;
             this.Value = value;
-            original = value;
+            this.original = value;
         }
 
         /// <summary>
@@ -79,7 +101,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         #region Public Properties
 
         /// <summary>
-        ///     Gets a value indicating whether this <see cref="MenuSlider" /> is interacting.
+        ///     Gets or sets a value indicating whether this <see cref="MenuSlider" /> is interacting.
         /// </summary>
         /// <value>
         ///     <c>true</c> if interacting; otherwise, <c>false</c>.
@@ -99,26 +121,28 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Gets or sets the Slider Current Value.
         /// </summary>
-        public int Value {
+        public int Value
+        {
             get
             {
-                return _value;
+                return this.value;
             }
+
             set
             {
                 if (value < this.MinValue)
                 {
-                    _value = this.MinValue;
+                    this.value = this.MinValue;
                 }
                 else if (value > this.MaxValue)
                 {
-                    _value = this.MaxValue;
+                    this.value = this.MaxValue;
                 }
                 else
                 {
-                    _value = value;
+                    this.value = value;
                 }
-            } 
+            }
         }
 
         /// <summary>
@@ -128,7 +152,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return Handler.Width();
+                return this.Handler.Width();
             }
         }
 
@@ -137,20 +161,28 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Extracts the specified value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        public override void Extract(MenuItem value)
-        {
-            this.Value = ((MenuSlider)value).Value;
-        }
-
-        /// <summary>
         ///     Slider Item Draw callback.
         /// </summary>
         public override void Draw()
         {
-            Handler.Draw();
+            this.Handler.Draw();
+        }
+
+        /// <summary>
+        ///     Extracts the specified value.
+        /// </summary>
+        /// <param name="menuValue">The value.</param>
+        public override void Extract(MenuItem menuValue)
+        {
+            this.Value = ((MenuSlider)menuValue).Value;
+        }
+
+        /// <summary>
+        ///     Resets the MenuItem back to his default values.
+        /// </summary>
+        public override void RestoreDefault()
+        {
+            this.Value = this.original;
         }
 
         /// <summary>
@@ -161,7 +193,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </param>
         public override void WndProc(WindowsKeys args)
         {
-            Handler.OnWndProc(args);
+            this.Handler.OnWndProc(args);
         }
 
         #endregion
@@ -194,6 +226,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         #region Methods
 
         /// <summary>
+        ///     Builds an <see cref="ADrawable" /> for this component.
+        /// </summary>
+        /// <param name="theme">
+        ///     The theme.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="ADrawable" /> handle.
+        /// </returns>
+        protected override ADrawable BuildHandler(ITheme theme)
+        {
+            return theme.BuildSliderHandler(this);
+        }
+
+        /// <summary>
         ///     Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with the data needed to serialize the
         ///     target object.
         /// </summary>
@@ -208,25 +254,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             info.AddValue("value", this.Value, typeof(int));
         }
-       
 
         #endregion
-
-        /// <summary>
-        /// Resets the MenuItem back to his default values.
-        /// </summary>
-        public override void RestoreDefault()
-        {
-            Value = original;
-        }
-
-        /// <summary>
-        /// Builds an <see cref="ADrawable"/> for this component.
-        /// </summary>
-        /// <returns></returns>
-        protected override ADrawable BuildHandler(ITheme theme)
-        {
-            return theme.BuildSliderHandler(this);
-        }
     }
 }

@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   A default implementation of a <see cref="IDrawableList" />
+//   A default implementation of a <see cref="ADrawable{MenuList}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
@@ -51,6 +51,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 
         #endregion
 
+        #region Static Fields
+
+        /// <summary>
+        ///     The line.
+        /// </summary>
+        private static readonly Line Line = new Line(Drawing.Direct3DDevice);
+
+        #endregion
+
         #region Fields
 
         /// <summary>
@@ -64,9 +73,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="DefaultList" /> class.
-        ///     Creates a new instance of a DefaultList
         /// </summary>
-        public DefaultList(MenuList component):base(component)
+        /// <param name="component">
+        ///     The component.
+        /// </param>
+        public DefaultList(MenuList component)
+            : base(component)
         {
             var arrowSize = MenuSettings.Font.MeasureText(null, "V", 0);
             this.dropDownButtonWidth = arrowSize.Width + (2 * ArrowSpacing);
@@ -77,120 +89,117 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         #region Public Methods and Operators
 
         /// <summary>
+        ///     Disposes any resources used in this handler.
+        /// </summary>
+        public override void Dispose()
+        {
+            // do nothing
+        }
+
+        /// <summary>
         ///     Draw a <see cref="MenuList" />
         /// </summary>
         public override void Draw()
         {
-            var dropdownMenuWidth = this.dropDownButtonWidth + (2 * TextSpacing) + Component.MaxStringWidth;
-            var position = Component.Position;
-            var rectangleName = DefaultUtilities.GetContainerRectangle(Component)
-                .GetCenteredText(null, MenuSettings.Font, Component.DisplayName, CenteredFlags.VerticalCenter);
+            var dropdownMenuWidth = this.dropDownButtonWidth + (2 * TextSpacing) + this.Component.MaxStringWidth;
+            var position = this.Component.Position;
+            var rectangleName = DefaultUtilities.GetContainerRectangle(this.Component)
+                .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite,
-                Component.DisplayName, 
+                MenuManager.Instance.Sprite, 
+                this.Component.DisplayName, 
                 (int)(position.X + MenuSettings.ContainerTextOffset), 
                 (int)rectangleName.Y, 
                 MenuSettings.TextColor);
 
-            var line = new Line(Drawing.Direct3DDevice)
-                           {
-                              Antialias = false, GLLines = false, Width = this.dropDownButtonWidth 
-                           };
-
-            line.Begin();
-            line.Draw(
+            Line.Width = this.dropDownButtonWidth;
+            Line.Begin();
+            Line.Draw(
                 new[]
                     {
                         new Vector2(
-                            position.X + Component.MenuWidth - (this.dropDownButtonWidth / 2f), 
+                            position.X + this.Component.MenuWidth - (this.dropDownButtonWidth / 2f), 
                             position.Y + 1), 
                         new Vector2(
-                            position.X + Component.MenuWidth - (this.dropDownButtonWidth / 2f), 
+                            position.X + this.Component.MenuWidth - (this.dropDownButtonWidth / 2f), 
                             position.Y + MenuSettings.ContainerHeight)
                     }, 
                 MenuSettings.HoverColor);
-            line.End();
-            if (Component.Hovering || Component.Active)
+            Line.End();
+            if (this.Component.Hovering || this.Component.Active)
             {
-                line.Width = MenuSettings.ContainerHeight;
-                line.Begin();
-                line.Draw(
+                Line.Width = MenuSettings.ContainerHeight;
+                Line.Begin();
+                Line.Draw(
                     new[]
                         {
                             new Vector2(
-                                position.X + Component.MenuWidth - dropdownMenuWidth, 
-                                position.Y + line.Width / 2), 
-                            new Vector2(position.X + Component.MenuWidth, position.Y + line.Width / 2)
+                                position.X + this.Component.MenuWidth - dropdownMenuWidth, 
+                                position.Y + Line.Width / 2), 
+                            new Vector2(position.X + this.Component.MenuWidth, position.Y + Line.Width / 2)
                         }, 
                     MenuSettings.HoverColor);
-                line.End();
+                Line.End();
             }
 
-            line.Dispose();
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
-                "V",
-                (int)(position.X + Component.MenuWidth - this.dropDownButtonWidth + ArrowSpacing), 
+                "V", 
+                (int)(position.X + this.Component.MenuWidth - this.dropDownButtonWidth + ArrowSpacing), 
                 (int)rectangleName.Y, 
                 MenuSettings.TextColor);
             MenuSettings.ContainerSeparatorLine.Draw(
                 new[]
                     {
+                        new Vector2(position.X + this.Component.MenuWidth - this.dropDownButtonWidth - 1, position.Y + 1), 
                         new Vector2(
-                            position.X + Component.MenuWidth - this.dropDownButtonWidth - 1, 
-                            position.Y + 1), 
-                        new Vector2(
-                            position.X + Component.MenuWidth - this.dropDownButtonWidth - 1, 
+                            position.X + this.Component.MenuWidth - this.dropDownButtonWidth - 1, 
                             position.Y + MenuSettings.ContainerHeight)
                     }, 
                 MenuSettings.ContainerSeparatorColor);
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite,
-                Component.SelectedValueAsObject.ToString(),
-                (int)position.X + Component.MenuWidth - this.dropDownButtonWidth - TextSpacing
-                - Component.MaxStringWidth, 
+                MenuManager.Instance.Sprite, 
+                this.Component.SelectedValueAsObject.ToString(), 
+                (int)position.X + this.Component.MenuWidth - this.dropDownButtonWidth - TextSpacing
+                - this.Component.MaxStringWidth, 
                 (int)rectangleName.Y, 
                 MenuSettings.TextColor);
             MenuSettings.ContainerSeparatorLine.Draw(
                 new[]
                     {
                         new Vector2(
-                            position.X + Component.MenuWidth - this.dropDownButtonWidth - (2 * TextSpacing)
-                            - Component.MaxStringWidth, 
+                            position.X + this.Component.MenuWidth - this.dropDownButtonWidth - (2 * TextSpacing)
+                            - this.Component.MaxStringWidth, 
                             position.Y + 1), 
                         new Vector2(
-                            position.X + Component.MenuWidth - this.dropDownButtonWidth - (2 * TextSpacing)
-                            - Component.MaxStringWidth, 
+                            position.X + this.Component.MenuWidth - this.dropDownButtonWidth - (2 * TextSpacing)
+                            - this.Component.MaxStringWidth, 
                             position.Y + MenuSettings.ContainerHeight)
                     }, 
                 MenuSettings.ContainerSeparatorColor);
 
-            if (Component.Active)
+            if (this.Component.Active)
             {
-                var valueStrings = Component.ValuesAsStrings;
+                var valueStrings = this.Component.ValuesAsStrings;
                 var dropdownMenuHeight = valueStrings.Length * MenuSettings.ContainerHeight;
                 MenuManager.Instance.DrawDelayed(
                     delegate
                         {
-                            var backgroundLine = new Line(Drawing.Direct3DDevice)
-                                                     {
-                                                        Width = dropdownMenuWidth, Antialias = false, GLLines = false 
-                                                     };
-                            backgroundLine.Begin();
-                            backgroundLine.Draw(
+                            Line.Width = dropdownMenuWidth;
+                            Line.Begin();
+                            Line.Draw(
                                 new[]
                                     {
                                         new Vector2(
-                                            position.X + Component.MenuWidth - (backgroundLine.Width / 2), 
+                                            position.X + Component.MenuWidth - (Line.Width / 2), 
                                             position.Y + MenuSettings.ContainerHeight), 
                                         new Vector2(
-                                            position.X + Component.MenuWidth - (backgroundLine.Width / 2), 
+                                            position.X + Component.MenuWidth - (Line.Width / 2), 
                                             position.Y + MenuSettings.ContainerHeight + dropdownMenuHeight)
                                     }, 
                                 Color.Black);
-                            backgroundLine.End();
-                            backgroundLine.Dispose();
+                            Line.End();
 
                             var x =
                                 (int)
@@ -201,13 +210,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                             {
                                 if (i == Component.HoveringIndex)
                                 {
-                                    var hoverLine = new Line(Drawing.Direct3DDevice)
-                                                        {
-                                                            Width = MenuSettings.ContainerHeight, Antialias = false, 
-                                                            GLLines = false
-                                                        };
-                                    hoverLine.Begin();
-                                    hoverLine.Draw(
+                                    Line.Width = MenuSettings.ContainerHeight;
+                                    Line.Begin();
+                                    Line.Draw(
                                         new[]
                                             {
                                                 new Vector2(
@@ -220,8 +225,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                                     + MenuSettings.ContainerHeight / 2f)
                                             }, 
                                         MenuSettings.HoverColor);
-                                    hoverLine.End();
-                                    hoverLine.Dispose();
+                                    Line.End();
                                 }
 
                                 MenuSettings.ContainerSeparatorLine.Draw(
@@ -247,7 +251,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                     var checkmarkWidth = MenuSettings.Font.MeasureText(null, "\u221A", 0).Width;
                                     MenuSettings.Font.DrawText(
                                         MenuManager.Instance.Sprite, 
-                                        "\u221A",
+                                        "\u221A", 
                                         (int)(position.X + Component.MenuWidth - checkmarkWidth - TextSpacing), 
                                         y, 
                                         MenuSettings.TextColor);
@@ -285,8 +289,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             return
                 new Rectangle(
                     (int)
-                    (component.Position.X + component.MenuWidth - this.dropDownButtonWidth
-                     - (2 * TextSpacing) - component.MaxStringWidth), 
+                    (component.Position.X + component.MenuWidth - this.dropDownButtonWidth - (2 * TextSpacing)
+                     - component.MaxStringWidth), 
                     (int)component.Position.Y, 
                     this.dropDownButtonWidth + (2 * TextSpacing) + component.MaxStringWidth, 
                     MenuSettings.ContainerHeight);
@@ -302,8 +306,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             return
                 new Rectangle(
                     (int)
-                    (component.Position.X + component.MenuWidth - this.dropDownButtonWidth
-                     - (2 * TextSpacing) - component.MaxStringWidth), 
+                    (component.Position.X + component.MenuWidth - this.dropDownButtonWidth - (2 * TextSpacing)
+                     - component.MaxStringWidth), 
                     (int)component.Position.Y, 
                     this.dropDownButtonWidth + (2 * TextSpacing) + component.MaxStringWidth, 
                     (component.Count + 1) * MenuSettings.ContainerHeight);
@@ -322,8 +326,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 rectangles.Add(
                     new Rectangle(
                         (int)
-                        (component.Position.X + component.MenuWidth - this.dropDownButtonWidth
-                         - (2 * TextSpacing) - component.MaxStringWidth), 
+                        (component.Position.X + component.MenuWidth - this.dropDownButtonWidth - (2 * TextSpacing)
+                         - component.MaxStringWidth), 
                         (int)(component.Position.Y + ((i + 1) * MenuSettings.ContainerHeight)), 
                         this.dropDownButtonWidth + (2 * TextSpacing) + component.MaxStringWidth, 
                         MenuSettings.ContainerHeight + 1));
@@ -333,90 +337,83 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         }
 
         /// <summary>
-        ///     Gets the width of the MenuList
+        ///     Processes windows messages
         /// </summary>
-        /// <returns>The <see cref="int" /></returns>
-        public override int Width()
-        {
-            return DefaultUtilities.CalcWidthItem(Component) + Component.MaxStringWidth + (2 * TextSpacing) + this.dropDownButtonWidth;
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Processes windows messages
-        /// </summary>
-        /// <param name="args">event data</param>
+        /// <param name="args">The event data</param>
         public override void OnWndProc(WindowsKeys args)
         {
-            if (!Component.Visible)
+            if (!this.Component.Visible)
             {
                 return;
             }
 
-            var dropdownRect = DropDownBoundaries(Component);
-            var entireDropdownRect = DropDownExpandedBoundaries(Component);
+            var dropdownRect = this.DropDownBoundaries(this.Component);
+            var entireDropdownRect = this.DropDownExpandedBoundaries(this.Component);
 
             if (args.Cursor.IsUnderRectangle(dropdownRect.X, dropdownRect.Y, dropdownRect.Width, dropdownRect.Height))
             {
-                Component.Hovering = true;
+                this.Component.Hovering = true;
 
                 if (args.Msg == WindowsMessages.LBUTTONDOWN)
                 {
-                    Component.Active = !Component.Active;
+                    this.Component.Active = !this.Component.Active;
                 }
             }
             else
             {
-                Component.Hovering = false;
+                this.Component.Hovering = false;
             }
 
             const int Buffer = 20;
-            if (Component.Active
+            if (this.Component.Active
                 && !args.Cursor.IsUnderRectangle(
-                    entireDropdownRect.X - Buffer,
-                    entireDropdownRect.Y - Buffer,
-                    entireDropdownRect.Width + (2 * Buffer),
+                    entireDropdownRect.X - Buffer, 
+                    entireDropdownRect.Y - Buffer, 
+                    entireDropdownRect.Width + (2 * Buffer), 
                     entireDropdownRect.Height + (2 * Buffer)))
             {
-                Component.Active = false;
+                this.Component.Active = false;
             }
 
-            if (Component.Active)
+            if (this.Component.Active)
             {
                 var found = false;
-                var dropdownRectangles = DropDownListBoundaries(Component);
+                var dropdownRectangles = this.DropDownListBoundaries(this.Component);
                 for (var i = 0; i < dropdownRectangles.Count; i++)
                 {
                     if (args.Cursor.IsUnderRectangle(
-                        dropdownRectangles[i].X,
-                        dropdownRectangles[i].Y,
-                        dropdownRectangles[i].Width,
+                        dropdownRectangles[i].X, 
+                        dropdownRectangles[i].Y, 
+                        dropdownRectangles[i].Width, 
                         dropdownRectangles[i].Height))
                     {
-                        Component.HoveringIndex = i;
+                        this.Component.HoveringIndex = i;
                         found = true;
                     }
                 }
 
                 if (!found)
                 {
-                    Component.HoveringIndex = -1;
+                    this.Component.HoveringIndex = -1;
                 }
                 else if (args.Msg == WindowsMessages.LBUTTONDOWN)
                 {
-                    Component.Index = Component.HoveringIndex;
+                    this.Component.Index = this.Component.HoveringIndex;
                     args.Process = false;
                 }
             }
         }
 
         /// <summary>
-        /// Disposes any resources used in this handler.
+        ///     Gets the width of the MenuList
         /// </summary>
-        public override void Dispose()
+        /// <returns>The <see cref="int" /></returns>
+        public override int Width()
         {
-            //do nothing
+            return DefaultUtilities.CalcWidthItem(this.Component) + this.Component.MaxStringWidth + (2 * TextSpacing)
+                   + this.dropDownButtonWidth;
         }
+
+        #endregion
     }
 }

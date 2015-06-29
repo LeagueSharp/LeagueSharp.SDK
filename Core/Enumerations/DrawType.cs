@@ -19,7 +19,7 @@
 //   The draw type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.IDrawing
+namespace LeagueSharp.SDK.Core.Enumerations
 {
     using System;
 

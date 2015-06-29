@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Abstract build of a Menu Item.
+//   Menu Item
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu
@@ -28,9 +28,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
 
-    using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
@@ -40,15 +38,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     /// </summary>
     public abstract class MenuItem : AMenuComponent
     {
-        #region Fields
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuItem" /> class.
-        ///     Menu Item Constructor
+        /// </summary>
+        internal MenuItem()
+        {
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MenuItem" /> class.
         /// </summary>
         /// <param name="name">
         ///     Item Name
@@ -61,9 +61,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </param>
         protected MenuItem(string name, string displayName, string uniqueString = "")
             : base(name, displayName, uniqueString)
-        {}
-
-        internal MenuItem(){}
+        {
+        }
 
         #endregion
 
@@ -72,7 +71,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     Delegate for <see cref="ValueChanged" />
         /// </summary>
-        /// <param name="sender">The sender.</param>
+        /// <param name="sender">
+        ///     The sender.
+        /// </param>
         /// <param name="e">The OnValueChangedEventArgs instance containing the event data.</param>
         public delegate void OnValueChanged(object sender, EventArgs e);
 
@@ -99,12 +100,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         {
             get
             {
-                var fileName = this.Name + this.UniqueString + "." + GetType().Name + ".bin";
+                var fileName = this.Name + this.UniqueString + "." + this.GetType().Name + ".bin";
                 if (this.Parent == null)
                 {
                     return
                         System.IO.Path.Combine(
-                            MenuManager.ConfigFolder.CreateSubdirectory(this.AssemblyName).FullName,
+                            MenuManager.ConfigFolder.CreateSubdirectory(this.AssemblyName).FullName, 
                             fileName);
                 }
 
@@ -134,7 +135,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     Gets the Component Dynamic Object accessibility.
         /// </summary>
-        /// <param name="name">Child Menu Component name</param>
+        /// <param name="name">
+        ///     Child Menu Component name
+        /// </param>
         /// <returns>Null, a menu item is unable to hold an access-able sub component</returns>
         public override AMenuComponent this[string name]
         {
@@ -149,6 +152,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Public Methods and Operators
 
         /// <summary>
+        ///     Drawing callback.
+        /// </summary>
+        public abstract void Draw();
+
+        /// <summary>
+        ///     Extracts the specified component.
+        /// </summary>
+        /// <param name="component">
+        ///     The component.
+        /// </param>
+        public abstract void Extract(MenuItem component);
+
+        /// <summary>
         ///     Event Handler
         /// </summary>
         public void FireEvent()
@@ -157,23 +173,24 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             {
                 this.Parent.FireEvent(this);
             }
-            
+
             if (this.ValueChanged != null)
             {
                 this.ValueChanged(this, EventArgs.Empty);
             }
-            
         }
 
         /// <summary>
         ///     Gets the value.
         /// </summary>
-        /// <typeparam name="T">The type of the 1.</typeparam>
+        /// <typeparam name="T">
+        ///     The type of the 1.
+        /// </typeparam>
         /// <returns>Returns the value as the given type</returns>
         /// <exception cref="Exception">Cannot cast value  + Value.GetType() +  to  + typeof(T1)</exception>
-        public override T GetValue<T>() 
+        public override T GetValue<T>()
         {
-            return (T) this;
+            return (T)this;
         }
 
         /// <summary>
@@ -189,23 +206,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        ///     Extracts the specified component.
-        /// </summary>
-        /// <param name="component">The component.</param>
-        public abstract void Extract(MenuItem component);
-
-        /// <summary>
         ///     Loads this instance.
         /// </summary>
         public override void Load()
         {
-            if (!this.SettingsLoaded && File.Exists(this.Path) && GetType().IsSerializable)
+            if (!this.SettingsLoaded && File.Exists(this.Path) && this.GetType().IsSerializable)
             {
                 this.SettingsLoaded = true;
                 try
                 {
                     var newValue = Deserialize<MenuItem>(File.ReadAllBytes(this.Path));
-                    Extract(newValue);
+                    this.Extract(newValue);
                 }
                 catch (Exception e)
                 {
@@ -225,14 +236,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             if (this.Visible)
             {
                 this.Position = position;
-                Draw();
+                this.Draw();
             }
         }
-
-        /// <summary>
-        ///     Drawing callback.
-        /// </summary>
-        public abstract void Draw();
 
         /// <summary>
         ///     Item Update callback.
@@ -253,14 +259,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             {
                 return;
             }
-            WndProc(args);
-        }
 
-        /// <summary>
-        ///     Windows Process Messages callback.
-        /// </summary>
-        /// <param name="args"><see cref="WindowsKeys" /> data</param>
-        public abstract void WndProc(WindowsKeys args);
+            this.WndProc(args);
+        }
 
         /// <summary>
         ///     Saves this instance.
@@ -272,6 +273,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 File.WriteAllBytes(this.Path, Serialize(this));
             }
         }
+
+        /// <summary>
+        ///     Windows Process Messages callback.
+        /// </summary>
+        /// <param name="args"><see cref="WindowsKeys" /> data</param>
+        public abstract void WndProc(WindowsKeys args);
 
         #endregion
 

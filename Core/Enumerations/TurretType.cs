@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MinionOrderTypes.cs" company="LeagueSharp">
+// <copyright file="TurretType.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,29 +16,39 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Enumeration that specifies how to order minions
+//   The turret type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.Enumerations
 {
     /// <summary>
-    ///     Enumeration that specifies how to order minions
+    ///     The turret type.
     /// </summary>
-    public enum MinionOrderTypes
+    public enum TurretType
     {
         /// <summary>
-        ///     Don't order minion
+        ///     The unknown tier.
         /// </summary>
-        None, 
+        Unknown, 
 
         /// <summary>
-        ///     Order by health
+        ///     The tier one.
         /// </summary>
-        Health, 
+        TierOne, 
 
         /// <summary>
-        ///     Order by the maximum health
+        ///     The tier two.
         /// </summary>
-        MaxHealth
+        TierTwo, 
+
+        /// <summary>
+        ///     The tier three.
+        /// </summary>
+        TierThree, 
+
+        /// <summary>
+        ///     The tier four.
+        /// </summary>
+        TierFour
     }
 }

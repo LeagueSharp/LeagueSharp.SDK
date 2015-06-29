@@ -27,6 +27,7 @@ namespace LeagueSharp.SDK.Core.Events
     using System.Linq;
     using System.Reflection;
 
+    using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Wrappers;
 
     /// <summary>
@@ -72,31 +73,6 @@ namespace LeagueSharp.SDK.Core.Events
         ///     Gets fired when an enemy is casting a spellData that should be interrupted.
         /// </summary>
         public static event OnInterruptableTargetDelegate OnInterruptableTarget;
-
-        #endregion
-
-        #region Enums
-
-        /// <summary>
-        ///     The danger level of the spell.
-        /// </summary>
-        public enum DangerLevel
-        {
-            /// <summary>
-            ///     Low danger level
-            /// </summary>
-            Low, 
-
-            /// <summary>
-            ///     Medium danger level, should be interrupted
-            /// </summary>
-            Medium, 
-
-            /// <summary>
-            ///     High danger level, definitely should be interrupted
-            /// </summary>
-            High
-        }
 
         #endregion
 

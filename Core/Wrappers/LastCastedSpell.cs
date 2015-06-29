@@ -99,6 +99,54 @@ namespace LeagueSharp.SDK.Core.Wrappers
     }
 
     /// <summary>
+    ///     The last cast packet sent entry.
+    /// </summary>
+    public class LastCastPacketSentEntry
+    {
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="LastCastPacketSentEntry" /> class.
+        /// </summary>
+        /// <param name="slot">
+        ///     The slot
+        /// </param>
+        /// <param name="tick">
+        ///     The tick
+        /// </param>
+        /// <param name="targetNetworkId">
+        ///     The target network id
+        /// </param>
+        public LastCastPacketSentEntry(SpellSlot slot, int tick, int targetNetworkId)
+        {
+            this.Slot = slot;
+            this.Tick = tick;
+            this.TargetNetworkId = targetNetworkId;
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets the slot.
+        /// </summary>
+        public SpellSlot Slot { get; private set; }
+
+        /// <summary>
+        ///     Gets the target network id.
+        /// </summary>
+        public int TargetNetworkId { get; private set; }
+
+        /// <summary>
+        ///     Gets the tick.
+        /// </summary>
+        public int Tick { get; private set; }
+
+        #endregion
+    }
+
+    /// <summary>
     ///     Extension for getting the last casted spell of an <see cref="Obj_AI_Hero" />
     /// </summary>
     public static class LastCastedSpell
@@ -122,7 +170,17 @@ namespace LeagueSharp.SDK.Core.Wrappers
         static LastCastedSpell()
         {
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
+            Spellbook.OnCastSpell += OnCastSpell;
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets the last cast packet sent.
+        /// </summary>
+        public static LastCastPacketSentEntry LastCastPacketSent { get; private set; }
 
         #endregion
 
@@ -165,6 +223,26 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 }
 
                 CastedSpells[sender.NetworkId] = entry;
+            }
+        }
+
+        /// <summary>
+        ///     OnCastSpell event.
+        /// </summary>
+        /// <param name="sender">
+        ///     The sender
+        /// </param>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        private static void OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
+        {
+            if (sender.Owner.IsMe)
+            {
+                LastCastPacketSent = new LastCastPacketSentEntry(
+                    args.Slot, 
+                    Variables.TickCount, 
+                    (args.Target is Obj_AI_Base) ? args.Target.NetworkId : 0);
             }
         }
 

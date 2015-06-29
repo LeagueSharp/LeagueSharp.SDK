@@ -25,9 +25,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System.Runtime.Serialization;
     using System.Security.Permissions;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins;
     using LeagueSharp.SDK.Core.Utils;
 
@@ -39,24 +36,37 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     [Serializable]
     public class MenuColor : MenuItem, ISerializable
     {
+        #region Fields
+
+        /// <summary>
+        ///     The original value.
+        /// </summary>
         private readonly ColorBGRA original;
+
+        #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuColor" /> class.
         /// </summary>
-        /// <param name="displayName">The display name of this component</param>
+        /// <param name="name">
+        ///     The internal name of this component
+        /// </param>
+        /// <param name="displayName">
+        ///     The display name of this component
+        /// </param>
         /// <param name="color">
         ///     The color
         /// </param>
-        /// <param name="name">The internal name of this component</param>
-        /// <param name="uniqueString">String used in saving settings</param>
+        /// <param name="uniqueString">
+        ///     String used in saving settings
+        /// </param>
         public MenuColor(string name, string displayName, ColorBGRA color, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
             this.Color = color;
-            original = color;
+            this.original = color;
         }
 
         /// <summary>
@@ -119,13 +129,21 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return Handler.Width();
+                return this.Handler.Width();
             }
         }
 
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        ///     Drawing callback.
+        /// </summary>
+        public override void Draw()
+        {
+            this.Handler.Draw();
+        }
 
         /// <summary>
         ///     Extracts the specified component.
@@ -137,11 +155,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         /// <summary>
-        ///     Drawing callback.
+        ///     Resets the MenuItem back to his default values.
         /// </summary>
-        public override void Draw()
+        public override void RestoreDefault()
         {
-            Handler.Draw();
+            this.Color = this.original;
         }
 
         /// <summary>
@@ -150,7 +168,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void WndProc(WindowsKeys args)
         {
-            Handler.OnWndProc(args);
+            this.Handler.OnWndProc(args);
         }
 
         #endregion
@@ -186,6 +204,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         #region Methods
 
         /// <summary>
+        ///     Builds an <see cref="ADrawable" /> for this component.
+        /// </summary>
+        /// <param name="theme">
+        ///     The theme.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="ADrawable" /> instance.
+        /// </returns>
+        protected override ADrawable BuildHandler(ITheme theme)
+        {
+            return theme.BuildColorHandler(this);
+        }
+
+        /// <summary>
         ///     Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with the data needed to serialize the
         ///     target object.
         /// </summary>
@@ -205,22 +237,5 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         #endregion
-
-        /// <summary>
-        /// Resets the MenuItem back to his default values.
-        /// </summary>
-        public override void RestoreDefault()
-        {
-            Color = original;
-        }
-
-        /// <summary>
-        /// Builds an <see cref="ADrawable"/> for this component.
-        /// </summary>
-        /// <returns></returns>
-        protected override ADrawable BuildHandler(ITheme theme)
-        {
-            return theme.BuildColorHandler(this);
-        }
     }
 }

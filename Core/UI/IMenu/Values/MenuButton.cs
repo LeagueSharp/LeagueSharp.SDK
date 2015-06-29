@@ -34,12 +34,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuButton" /> class, with a specified button text.
         /// </summary>
-        /// <param name="displayName">The display name of this component</param>
+        /// <param name="name">
+        ///     The internal name of this component
+        /// </param>
+        /// <param name="displayName">
+        ///     The display name of this component
+        /// </param>
         /// <param name="buttonText">
         ///     The button text
         /// </param>
-        /// <param name="name">The internal name of this component</param>
-        /// <param name="uniqueString">String used in saving settings</param>
+        /// <param name="uniqueString">
+        ///     String used in saving settings
+        /// </param>
         public MenuButton(string name, string displayName, string buttonText, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
@@ -81,13 +87,21 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return Handler.Width();
+                return this.Handler.Width();
             }
         }
 
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        ///     On Draw event.
+        /// </summary>
+        public override void Draw()
+        {
+            this.Handler.Draw();
+        }
 
         /// <summary>
         ///     Extracts the component.
@@ -101,11 +115,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         /// <summary>
-        ///     On Draw event.
+        ///     Resets the MenuItem back to his default values.
         /// </summary>
-        public override void Draw()
+        public override void RestoreDefault()
         {
-            Handler.Draw();
+            // Do nothing.
         }
 
         /// <summary>
@@ -116,26 +130,27 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </param>
         public override void WndProc(WindowsKeys args)
         {
-            Handler.OnWndProc(args);
+            this.Handler.OnWndProc(args);
         }
 
         #endregion
 
-        /// <summary>
-        /// Resets the MenuItem back to his default values.
-        /// </summary>
-        public override void RestoreDefault()
-        {
-            //do nothing
-        }
+        #region Methods
 
         /// <summary>
-        /// Builds an <see cref="ADrawable"/> for this component.
+        ///     Builds an <see cref="ADrawable" /> for this component.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="theme">
+        ///     The theme.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="ADrawable" /> instance.
+        /// </returns>
         protected override ADrawable BuildHandler(ITheme theme)
         {
             return theme.BuildButtonHandler(this);
         }
+
+        #endregion
     }
 }

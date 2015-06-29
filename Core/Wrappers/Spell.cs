@@ -28,7 +28,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Managers;
     using LeagueSharp.SDK.Core.Math.Prediction;
     using LeagueSharp.SDK.Core.Utils;
 
@@ -626,15 +625,13 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     Get Circular Farm Location
         /// </summary>
-        /// <param name="minionPositions">The Minions</param>
+        /// <param name="minions">The Minions</param>
         /// <param name="overrideWidth">Override Width</param>
-        /// <returns>Farm Location. <seealso cref="MinionManager.FarmLocation" /></returns>
-        public MinionManager.FarmLocation GetCircularFarmLocation(
-            List<Obj_AI_Base> minionPositions, 
-            float overrideWidth = -1)
+        /// <returns>Farm Location. <seealso cref="FarmLocation" /></returns>
+        public FarmLocation GetCircularFarmLocation(List<Obj_AI_Base> minions, float overrideWidth = -1)
         {
-            var positions = MinionManager.GetMinionsPredictedPositions(
-                minionPositions, 
+            var positions = Minion.GetMinionsPredictedPositions(
+                minions, 
                 this.Delay, 
                 this.Width, 
                 this.Speed, 
@@ -651,12 +648,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </summary>
         /// <param name="minionPositions">Minion Positions</param>
         /// <param name="overrideWidth">Override Width</param>
-        /// <returns>Farm Location. <seealso cref="MinionManager.FarmLocation" /></returns>
-        public MinionManager.FarmLocation GetCircularFarmLocation(
-            List<Vector2> minionPositions, 
+        /// <returns>Farm Location. <seealso cref="FarmLocation" /></returns>
+        public FarmLocation GetCircularFarmLocation(
+            IDictionary<Obj_AI_Base, Vector2> minionPositions, 
             float overrideWidth = -1)
         {
-            return MinionManager.GetBestCircularFarmLocation(
+            return Minion.GetBestCircularFarmLocation(
                 minionPositions, 
                 overrideWidth >= 0 ? overrideWidth : this.Width, 
                 this.Range);
@@ -678,17 +675,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
                         From = fromVector2.ToVector3(), Type = this.Type, Radius = this.Width, 
                         Delay = delayOverride > 0 ? delayOverride : this.Delay, Speed = this.Speed
                     });
-        }
-
-        /// <summary>
-        ///     Returns Spell Damage.
-        /// </summary>
-        /// <param name="target">The Target</param>
-        /// <param name="stage">The "stage" of the spell.</param>
-        /// <returns>The damage</returns>
-        public float GetDamage(Obj_AI_Base target, int stage = 0)
-        {
-            return (float)GameObjects.Player.GetSpellDamage(target, this.Slot, stage);
         }
 
         /// <summary>
@@ -717,12 +703,10 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </summary>
         /// <param name="minionPositions">The Minions</param>
         /// <param name="overrideWidth">Override Width</param>
-        /// <returns>Farm Location. <seealso cref="MinionManager.FarmLocation" /></returns>
-        public MinionManager.FarmLocation GetLineFarmLocation(
-            List<Obj_AI_Base> minionPositions, 
-            float overrideWidth = -1)
+        /// <returns>Farm Location. <seealso cref="FarmLocation" /></returns>
+        public FarmLocation GetLineFarmLocation(List<Obj_AI_Base> minionPositions, float overrideWidth = -1)
         {
-            var positions = MinionManager.GetMinionsPredictedPositions(
+            var positions = Minion.GetMinionsPredictedPositions(
                 minionPositions, 
                 this.Delay, 
                 this.Width, 
@@ -740,10 +724,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </summary>
         /// <param name="minionPositions">Minion Positions</param>
         /// <param name="overrideWidth">Override Width</param>
-        /// <returns>Farm Location. <seealso cref="MinionManager.FarmLocation" /></returns>
-        public MinionManager.FarmLocation GetLineFarmLocation(List<Vector2> minionPositions, float overrideWidth = -1)
+        /// <returns>Farm Location. <seealso cref="FarmLocation" /></returns>
+        public FarmLocation GetLineFarmLocation(
+            IDictionary<Obj_AI_Base, Vector2> minionPositions, 
+            float overrideWidth = -1)
         {
-            return MinionManager.GetBestLineFarmLocation(
+            return Minion.GetBestLineFarmLocation(
                 minionPositions, 
                 overrideWidth >= 0 ? overrideWidth : this.Width, 
                 this.Range);
@@ -868,24 +854,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
         {
             return this.RangeCheckFrom.ToVector2().DistanceSquared(point)
                    < (otherRange < 0 ? this.RangeSqr : otherRange * otherRange);
-        }
-
-        /// <summary>
-        ///     Gets the damage that the spell will deal to the target using the damage lib and returns if the target is
-        ///     killable or not.
-        /// </summary>
-        /// <param name="target">
-        ///     The Target
-        /// </param>
-        /// <param name="stage">
-        ///     Spell Stage
-        /// </param>
-        /// <returns>
-        ///     The <see cref="bool" />.
-        /// </returns>
-        public bool IsKillable(Obj_AI_Base target, int stage = 0)
-        {
-            return GameObjects.Player.GetSpellDamage(target, this.Slot) > target.Health;
         }
 
         /// <summary>

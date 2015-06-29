@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Spell.cs" company="LeagueSharp">
+// <copyright file="GameRuntime.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,17 +16,17 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   General Utils.
+//   The game runtime extensions.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.Utils
+namespace LeagueSharp.SDK.Core.Extensions
 {
-    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Wrappers;
 
     /// <summary>
-    ///     General Spell Utils.
+    ///     The game runtime extensions.
     /// </summary>
-    public static class SpellUtils
+    public static class GameRuntime
     {
         #region Public Methods and Operators
 
@@ -51,7 +51,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <param name="spell">The Spell</param>
         /// <param name="t">Time Left</param>
         /// <returns>Is Spell Ready to use</returns>
-        public static bool IsReady(this Wrappers.Spell spell, int t = 0)
+        public static bool IsReady(this Spell spell, int t = 0)
         {
             return IsReady(spell.Instance, t);
         }
@@ -66,16 +66,6 @@ namespace LeagueSharp.SDK.Core.Utils
         {
             var s = GameObjects.Player.Spellbook.GetSpell(slot);
             return s != null && IsReady(s, t);
-        }
-
-        /// <summary>
-        ///     Converts a spell cast state into a boolean.
-        /// </summary>
-        /// <param name="castState">Spell Cast State</param>
-        /// <returns>The <see cref="bool" /></returns>
-        public static bool ToBoolean(this CastStates castState)
-        {
-            return castState == CastStates.SuccessfullyCasted;
         }
 
         #endregion

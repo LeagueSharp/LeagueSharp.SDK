@@ -463,16 +463,11 @@ namespace LeagueSharp.SDK.Core.Math
             // Find a culling box.
             var cullingBox = GetMinMaxBox(points);
 
-            // Cull the points.
-            var results =
+            return
                 points.Where(
                     pt =>
                     pt.X <= cullingBox.Left || pt.X >= cullingBox.Right || pt.Y <= cullingBox.Top
                     || pt.Y >= cullingBox.Bottom).ToList();
-
-            NonCulledPoints = new Vector2[results.Count]; // For debugging.
-            results.CopyTo(NonCulledPoints); // For debugging.
-            return results;
         }
 
         #endregion

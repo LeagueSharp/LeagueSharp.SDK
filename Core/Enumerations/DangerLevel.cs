@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NotificationIconType.cs" company="LeagueSharp">
+// <copyright file="DangerLevel.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,39 +16,29 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   The notification icon type.
+//   The danger level of the spell.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.INotifications
+namespace LeagueSharp.SDK.Core.Enumerations
 {
     /// <summary>
-    ///     The notification icon type.
+    ///     The danger level of the spell.
     /// </summary>
-    public enum NotificationIconType
+    public enum DangerLevel
     {
         /// <summary>
-        ///     No Icon.
+        ///     Low danger level
         /// </summary>
-        None = 0, 
+        Low, 
 
         /// <summary>
-        ///     Error Icon.
+        ///     Medium danger level, should be interrupted
         /// </summary>
-        Error = 1, 
+        Medium, 
 
         /// <summary>
-        ///     Warning Icon.
+        ///     High danger level, definitely should be interrupted
         /// </summary>
-        Warning = 2, 
-
-        /// <summary>
-        ///     Check Icon.
-        /// </summary>
-        Check = 3, 
-
-        /// <summary>
-        ///     Select Icon.
-        /// </summary>
-        Select = 4
+        High
     }
 }
