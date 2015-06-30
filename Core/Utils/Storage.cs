@@ -26,15 +26,20 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Security.Permissions;
+    using System.Windows.Forms;
+
+    using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
     ///     The storage, main purpose is to save share-able settings between assemblies.
     /// </summary>
     [Serializable]
-    public class Storage : ISerializable
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
+    public class Storage : Attribute, ISerializable
     {
         #region Static Fields
 
@@ -52,6 +57,11 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         private readonly Hashtable contents = new Hashtable();
 
+        /// <summary>
+        ///     The storage name.
+        /// </summary>
+        private string storageName;
+
         #endregion
 
         #region Constructors and Destructors
@@ -62,7 +72,10 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <param name="storageName">
         ///     The storage name
         /// </param>
-        public Storage(string storageName = "Generic")
+        /// <param name="types">
+        ///     The types.
+        /// </param>
+        public Storage(string storageName = "Generic", List<Type> types = null)
         {
             if (Path.GetInvalidFileNameChars().Any(storageName.Contains))
             {
@@ -70,7 +83,33 @@ namespace LeagueSharp.SDK.Core.Utils
             }
 
             this.StorageName = storageName;
+            this.StorageTypes = types ?? new List<Type>();
+
             StorageList.Add(this);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Storage"/> class.
+        /// </summary>
+        /// <param name="storageName">
+        /// The storage name.
+        /// </param>
+        /// <param name="isAttribute">
+        /// Indicates whether the storage is placed as an attribute.
+        /// </param>
+        public Storage(string storageName, bool isAttribute)
+        {
+            if (Path.GetInvalidFileNameChars().Any(storageName.Contains))
+            {
+                throw new InvalidDataException("Storage name can't have invalid file name characters.");
+            }
+
+            this.StorageName = storageName;
+            if (!isAttribute)
+            {
+                this.StorageTypes = new List<Type>();
+                StorageList.Add(this);
+            }
         }
 
         /// <summary>
@@ -84,7 +123,11 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </param>
         protected Storage(SerializationInfo info, StreamingContext context)
         {
+            this.StorageName = (string)info.GetValue("name", typeof(string));
             this.contents = (Hashtable)info.GetValue("contents", typeof(Hashtable));
+            this.StorageTypes = (List<Type>)info.GetValue("types", typeof(List<Type>));
+
+            StorageList.Add(this);
         }
 
         /// <summary>
@@ -114,7 +157,26 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <summary>
         ///     Gets or sets the storage name.
         /// </summary>
-        public string StorageName { get; set; }
+        public string StorageName
+        {
+            get
+            {
+                return this.storageName;
+            }
+
+            set
+            {
+                if (!Path.GetInvalidFileNameChars().Any(value.Contains))
+                {
+                    this.storageName = value;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Gets or sets the storage types.
+        /// </summary>
+        public List<Type> StorageTypes { get; set; }
 
         #endregion
 
@@ -194,6 +256,50 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         public void Save()
         {
+            foreach (var type in this.StorageTypes)
+            {
+                foreach (var field in
+                    type.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static)
+                        .Where(f => f.IsDefined(typeof(Storage))))
+                {
+                    try
+                    {
+                        if (this.StorageName == ((Storage)field.GetCustomAttribute(typeof(Storage), false)).StorageName)
+                        {
+                            if (!this.Add(field.Name, field.GetValue(null)))
+                            {
+                                this.Update(field.Name, field.GetValue(null));
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logging.Write()(LogLevel.Error, "Unable to save field {0}\n{1}", field.Name, e);
+                    }
+                }
+
+                foreach (var property in
+                    type.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static)
+                        .Where(p => p.IsDefined(typeof(Storage))))
+                {
+                    try
+                    {
+                        if (this.StorageName
+                            == ((Storage)property.GetCustomAttribute(typeof(Storage), false)).StorageName)
+                        {
+                            if (!this.Add(property.Name, property.GetValue(null)))
+                            {
+                                this.Update(property.Name, property.GetValue(null));
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logging.Write()(LogLevel.Error, "Unable to save property {0}\n{1}", property.Name, e);
+                    }
+                }
+            }
+
             var path = Path.Combine(StoragePath, this.StorageName + ".storage");
             using (var stream = File.OpenWrite(path))
             {
@@ -226,6 +332,25 @@ namespace LeagueSharp.SDK.Core.Utils
         }
 
         /// <summary>
+        ///     Checks if a certain storage exists.
+        /// </summary>
+        /// <param name="storageName">
+        ///     The storage name.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
+        public static bool Exists(string storageName = "Generic")
+        {
+            if (Path.GetInvalidFileNameChars().Any(storageName.Contains))
+            {
+                throw new InvalidDataException("Storage name can't have invalid file name characters.");
+            }
+
+            return File.Exists(Path.Combine(StoragePath, storageName + ".storage"));
+        }
+
+        /// <summary>
         ///     Loads a saved storage.
         /// </summary>
         /// <param name="storageName">
@@ -246,8 +371,7 @@ namespace LeagueSharp.SDK.Core.Utils
             {
                 using (var stream = File.OpenRead(path))
                 {
-                    var binary = new BinaryFormatter();
-                    return (Storage)binary.Deserialize(stream);
+                    return (Storage)new BinaryFormatter().Deserialize(stream);
                 }
             }
 
@@ -269,7 +393,6 @@ namespace LeagueSharp.SDK.Core.Utils
         ///     The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext" />) for this
         ///     serialization.
         /// </param>
-        /// <exception cref="T:System.Security.SecurityException">The caller does not have the required permission. </exception>
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -279,6 +402,8 @@ namespace LeagueSharp.SDK.Core.Utils
             }
 
             info.AddValue("contents", this.contents, typeof(Hashtable));
+            info.AddValue("types", this.StorageTypes, typeof(List<Type>));
+            info.AddValue("name", this.StorageName, typeof(string));
         }
 
         #endregion
@@ -296,7 +421,6 @@ namespace LeagueSharp.SDK.Core.Utils
         ///     The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext" />) for this
         ///     serialization.
         /// </param>
-        /// <exception cref="T:System.Security.SecurityException">The caller does not have the required permission. </exception>
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -306,6 +430,8 @@ namespace LeagueSharp.SDK.Core.Utils
             }
 
             info.AddValue("contents", this.contents, typeof(Hashtable));
+            info.AddValue("types", this.StorageTypes, typeof(List<Type>));
+            info.AddValue("name", this.StorageName, typeof(string));
         }
 
         #endregion

@@ -132,7 +132,7 @@ namespace LeagueSharp.SDK.Core
                             > Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value;
 
                 return Movement && interruptableSpell
-                       && (canCancalAutoAttack
+                       && (!canCancalAutoAttack
                                ? tick + (Game.Ping / 2)
                                  >= lastAutoAttackTick + attackCastDelay
                                  + Menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value
@@ -298,8 +298,8 @@ namespace LeagueSharp.SDK.Core
                     > Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value)
                 {
                     var menuItem = Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>();
-                    var randomDistance = new Random(Variables.TickCount).Next(menuItem.MinValue, menuItem.Value + 1);
-                    position = GameObjects.Player.Position.Extend(position, randomDistance);
+                    var randomDistance = new Random(Variables.TickCount).Next(0, 50);
+                    position = GameObjects.Player.Position.Extend(position, menuItem.Value - randomDistance);
                 }
 
                 if (Menu["advanced"]["movementScramble"].GetValue<MenuBool>().Value)
@@ -352,7 +352,7 @@ namespace LeagueSharp.SDK.Core
 
                     if (eventArgs.Process && GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, gTarget))
                     {
-                        return;
+                        lastAutoAttackTick = Variables.TickCount - (Game.Ping / 2);
                     }
                 }
             }
@@ -539,18 +539,15 @@ namespace LeagueSharp.SDK.Core
                 var spellName = args.SData.Name;
                 var target = args.Target as AttackableUnit;
 
-                if (AutoAttack.IsAutoAttack(spellName))
-                {
-                    lastAutoAttackTick = Variables.TickCount - (Game.Ping / 2);
-                }
-
                 if (AutoAttack.IsAutoAttackReset(spellName))
                 {
                     DelayAction.Add(250, ResetAutoAttackTimer);
                 }
 
-                if (target != null && target.IsValid)
+                if (target != null && target.IsValid && AutoAttack.IsAutoAttack(spellName))
                 {
+                    lastAutoAttackTick = Variables.TickCount - (Game.Ping / 2);
+
                     if (!target.Compare(LastTarget))
                     {
                         InvokeAction(new OrbwalkerActionArgs { Target = target, Type = OrbwalkerType.TargetSwitch });
