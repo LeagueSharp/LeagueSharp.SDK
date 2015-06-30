@@ -541,7 +541,7 @@ namespace LeagueSharp.SDK.Core
 
                 if (AutoAttack.IsAutoAttackReset(spellName))
                 {
-                    DelayAction.Add(250, ResetAutoAttackTimer);
+                    ResetAutoAttackTimer();
                 }
 
                 if (target != null && target.IsValid && AutoAttack.IsAutoAttack(spellName))
