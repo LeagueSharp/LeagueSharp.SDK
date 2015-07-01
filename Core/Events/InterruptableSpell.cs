@@ -86,7 +86,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     Gets or sets the interrupt-able spells.
         /// </summary>
-        public static ConcurrentDictionary<string, List<InterruptableSpellData>> InterruptableSpells { get; set; }
+        public static ConcurrentDictionary<string, List<InterruptableSpellData>> InterruptableSpells { get; private set; }
 
         #endregion
 
