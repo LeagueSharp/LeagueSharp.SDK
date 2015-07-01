@@ -139,6 +139,7 @@
     <Compile Include="Core\UI\INotifications\NotificationIcons.cs" />
     <Compile Include="Core\Enumerations\NotificationIconType.cs" />
     <Compile Include="Core\UI\INotifications\Notifications.cs" />
+    <Compile Include="Core\Utils\BinarySerializer.cs" />
     <Compile Include="Core\Utils\DefaultValue.cs" />
     <Compile Include="Core\Wrappers\Items.cs" />
     <Compile Include="Core\Math\ConvexHull.cs" />

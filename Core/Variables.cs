@@ -21,7 +21,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core
 {
-    using LeagueSharp.SDK.Core.UI;
     using LeagueSharp.SDK.Core.UI.IMenu;
 
     /// <summary>

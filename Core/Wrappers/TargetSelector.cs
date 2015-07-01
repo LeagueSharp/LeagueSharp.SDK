@@ -161,6 +161,22 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
+        ///     Gets the selected target.
+        /// </summary>
+        /// <param name="range">
+        ///     The range.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Obj_AI_Hero" />.
+        /// </returns>
+        public static Obj_AI_Hero GetSelectedTarget(float range = -1f)
+        {
+            return SelectedTarget != null && SelectedTarget.IsValidTarget(range < 0 ? float.MaxValue : range)
+                       ? SelectedTarget
+                       : null;
+        }
+
+        /// <summary>
         ///     Gets the best candidate target.
         /// </summary>
         /// <param name="range">

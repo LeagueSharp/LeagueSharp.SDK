@@ -28,18 +28,15 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System.Security.Permissions;
-    using System.Windows.Forms;
 
     using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
     ///     The storage, main purpose is to save share-able settings between assemblies.
     /// </summary>
-    [Serializable]
+    [DataContract]
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-    public class Storage : Attribute, ISerializable
+    public class Storage : Attribute
     {
         #region Static Fields
 
@@ -55,11 +52,13 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <summary>
         ///     The storage contents.
         /// </summary>
+        [DataMember]
         private readonly Hashtable contents = new Hashtable();
 
         /// <summary>
         ///     The storage name.
         /// </summary>
+        [DataMember]
         private string storageName;
 
         #endregion
@@ -89,13 +88,13 @@ namespace LeagueSharp.SDK.Core.Utils
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Storage"/> class.
+        ///     Initializes a new instance of the <see cref="Storage" /> class.
         /// </summary>
         /// <param name="storageName">
-        /// The storage name.
+        ///     The storage name.
         /// </param>
         /// <param name="isAttribute">
-        /// Indicates whether the storage is placed as an attribute.
+        ///     Indicates whether the storage is placed as an attribute.
         /// </param>
         public Storage(string storageName, bool isAttribute)
         {
@@ -115,19 +114,24 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <summary>
         ///     Initializes a new instance of the <see cref="Storage" /> class.
         /// </summary>
-        /// <param name="info">
-        ///     The info
+        /// <param name="storageName">
+        ///     The storage name.
         /// </param>
-        /// <param name="context">
-        ///     The context
+        /// <param name="type">
+        ///     The parent type which is currently holding the field or property.
         /// </param>
-        protected Storage(SerializationInfo info, StreamingContext context)
+        public Storage(string storageName, Type type)
         {
-            this.StorageName = (string)info.GetValue("name", typeof(string));
-            this.contents = (Hashtable)info.GetValue("contents", typeof(Hashtable));
-            this.StorageTypes = (List<Type>)info.GetValue("types", typeof(List<Type>));
+            if (Path.GetInvalidFileNameChars().Any(storageName.Contains))
+            {
+                throw new InvalidDataException("Storage name can't have invalid file name characters.");
+            }
 
-            StorageList.Add(this);
+            this.StorageName = storageName;
+            foreach (var storage in StorageList.Where(storage => storage.StorageName == storageName))
+            {
+                storage.StorageTypes.Add(type);
+            }
         }
 
         /// <summary>
@@ -153,6 +157,17 @@ namespace LeagueSharp.SDK.Core.Utils
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        ///     Gets the contents.
+        /// </summary>
+        public IDictionary<string, object> Contents
+        {
+            get
+            {
+                return this.contents.Cast<DictionaryEntry>().ToDictionary(e => (string)e.Key, e => e.Value);
+            }
+        }
 
         /// <summary>
         ///     Gets or sets the storage name.
@@ -303,8 +318,8 @@ namespace LeagueSharp.SDK.Core.Utils
             var path = Path.Combine(StoragePath, this.StorageName + ".storage");
             using (var stream = File.OpenWrite(path))
             {
-                var binary = new BinaryFormatter();
-                binary.Serialize(stream, this);
+                var bytes = BinarySerializer.Serialize(this);
+                stream.Write(bytes, 0, bytes.Length);
             }
         }
 
@@ -356,10 +371,13 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <param name="storageName">
         ///     Storage name
         /// </param>
+        /// <param name="types">
+        ///     The types.
+        /// </param>
         /// <returns>
         ///     The storage instance.
         /// </returns>
-        public static Storage Load(string storageName = "Generic")
+        public static Storage Load(string storageName = "Generic", List<Type> types = null)
         {
             if (Path.GetInvalidFileNameChars().Any(storageName.Contains))
             {
@@ -371,67 +389,16 @@ namespace LeagueSharp.SDK.Core.Utils
             {
                 using (var stream = File.OpenRead(path))
                 {
-                    return (Storage)new BinaryFormatter().Deserialize(stream);
+                    var bytes = new byte[stream.Length];
+                    stream.Read(bytes, 0, bytes.Length);
+
+                    var storageInstance = BinarySerializer.Deserialize<Storage>(bytes);
+                    storageInstance.StorageTypes = types ?? new List<Type>();
+                    return storageInstance;
                 }
             }
 
             return null;
-        }
-
-        #endregion
-
-        #region Explicit Interface Methods
-
-        /// <summary>
-        ///     Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with the data needed to serialize the
-        ///     target object.
-        /// </summary>
-        /// <param name="info">
-        ///     The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> to populate with data.
-        /// </param>
-        /// <param name="context">
-        ///     The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext" />) for this
-        ///     serialization.
-        /// </param>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null)
-            {
-                throw new ArgumentNullException("info");
-            }
-
-            info.AddValue("contents", this.contents, typeof(Hashtable));
-            info.AddValue("types", this.StorageTypes, typeof(List<Type>));
-            info.AddValue("name", this.StorageName, typeof(string));
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        ///     Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with the data needed to serialize the
-        ///     target object.
-        /// </summary>
-        /// <param name="info">
-        ///     The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> to populate with data.
-        /// </param>
-        /// <param name="context">
-        ///     The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext" />) for this
-        ///     serialization.
-        /// </param>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null)
-            {
-                throw new ArgumentNullException("info");
-            }
-
-            info.AddValue("contents", this.contents, typeof(Hashtable));
-            info.AddValue("types", this.StorageTypes, typeof(List<Type>));
-            info.AddValue("name", this.StorageName, typeof(string));
         }
 
         #endregion
