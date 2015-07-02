@@ -69,11 +69,10 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static byte[] Serialize<T>(T obj)
         {
-            var serializer = new DataContractSerializer(typeof(T));
             var stream = new MemoryStream();
             using (var writer = XmlDictionaryWriter.CreateBinaryWriter(stream))
             {
-                serializer.WriteObject(writer, obj);
+                new DataContractSerializer(typeof(T)).WriteObject(writer, obj);
             }
 
             return stream.ToArray();

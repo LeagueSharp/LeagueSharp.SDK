@@ -298,8 +298,13 @@ namespace LeagueSharp.SDK.Core
                     > Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value)
                 {
                     var menuItem = Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>();
+
                     var randomDistance = new Random(Variables.TickCount).Next(0, 50);
-                    position = GameObjects.Player.Position.Extend(position, menuItem.Value - randomDistance);
+                    position = menuItem.Value - randomDistance < GameObjects.Player.BoundingRadius
+                                   ? GameObjects.Player.Position.Extend(
+                                       position,
+                                       GameObjects.Player.BoundingRadius + randomDistance)
+                                   : GameObjects.Player.Position.Extend(position, menuItem.Value - randomDistance);
                 }
 
                 if (Menu["advanced"]["movementScramble"].GetValue<MenuBool>().Value)

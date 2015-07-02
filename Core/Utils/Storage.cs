@@ -27,6 +27,7 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.Remoting.Channels;
     using System.Runtime.Serialization;
 
     using LeagueSharp.SDK.Core.Enumerations;
@@ -146,6 +147,14 @@ namespace LeagueSharp.SDK.Core.Utils
             }
 
             AppDomain.CurrentDomain.ProcessExit += (sender, args) =>
+                {
+                    foreach (var storage in StorageList)
+                    {
+                        storage.Save();
+                    }
+                };
+
+            AppDomain.CurrentDomain.DomainUnload += (sender, args) =>
                 {
                     foreach (var storage in StorageList)
                     {
@@ -394,6 +403,8 @@ namespace LeagueSharp.SDK.Core.Utils
 
                     var storageInstance = BinarySerializer.Deserialize<Storage>(bytes);
                     storageInstance.StorageTypes = types ?? new List<Type>();
+                    StorageList.Add(storageInstance);
+
                     return storageInstance;
                 }
             }
