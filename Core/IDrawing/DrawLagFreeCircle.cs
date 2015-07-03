@@ -87,12 +87,12 @@ namespace LeagueSharp.SDK.Core.IDrawing
 
             ListOfPoints.MoveNext();
 
-            Vector2 huehue = ListOfPoints.Current;
+            Vector2 previousPoint = ListOfPoints.Current;
 
             while (ListOfPoints.MoveNext())
             {
-                Drawing.DrawLine(huehue, ListOfPoints.Current, thickness, color);
-                huehue = ListOfPoints.Current;
+                Drawing.DrawLine(previousPoint, ListOfPoints.Current, thickness, color);
+                previousPoint = ListOfPoints.Current;
             }
         }
     }
