@@ -67,9 +67,9 @@ namespace LeagueSharp.SDK.Core.IDrawing
         /// </returns>
         private static IEnumerable<Vector2> DrawCircleNextLvl(float x, float y, float radius)
         {
-            var k = new Vector2(x, y);
+            var TargetVector = new Vector2(x, y);
 
-            return (from pt in DrawCircle2(k.X, k.Y, radius, 75)
+            return (from pt in DrawCircle2(TargetVector.X, TargetVector.Y, radius, 75)
                     select Drawing.WorldToScreen(new Vector3(pt.X, pt.Y, 0)));
         }
 
@@ -83,16 +83,16 @@ namespace LeagueSharp.SDK.Core.IDrawing
         /// <param name="color">The color.</param>
         public static void DrawCircle(float x, float y, float radius, float thickness, System.Drawing.Color color)
         {
-            var pts = DrawCircleNextLvl(x, y, radius).GetEnumerator();
+            var ListOfPoints = DrawCircleNextLvl(x, y, radius).GetEnumerator();
 
-            pts.MoveNext();
+            ListOfPoints.MoveNext();
 
-            Vector2 huehue = pts.Current;
+            Vector2 huehue = ListOfPoints.Current;
 
-            while (pts.MoveNext())
+            while (ListOfPoints.MoveNext())
             {
-                Drawing.DrawLine(huehue, pts.Current, thickness, color);
-                huehue = pts.Current;
+                Drawing.DrawLine(huehue, ListOfPoints.Current, thickness, color);
+                huehue = ListOfPoints.Current;
             }
         }
     }
