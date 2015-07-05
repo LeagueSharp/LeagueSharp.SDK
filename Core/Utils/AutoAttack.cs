@@ -121,7 +121,7 @@ namespace LeagueSharp.SDK.Core.Utils
         public static float GetRealAutoAttackRange(this AttackableUnit target)
         {
             var result = GameObjects.Player.AttackRange + GameObjects.Player.BoundingRadius;
-            if (target.IsValidTarget())
+            if (target.IsValidTarget() || target.IsMe)
             {
                 return result + target.BoundingRadius;
             }

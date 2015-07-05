@@ -300,7 +300,7 @@ namespace LeagueSharp.SDK.Core
                     var menuItem = Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>();
 
                     var randomDistance = new Random(Variables.TickCount).Next(0, 50);
-                    position = menuItem.Value - randomDistance < GameObjects.Player.BoundingRadius
+                    position = menuItem.Value - randomDistance <= GameObjects.Player.BoundingRadius
                                    ? GameObjects.Player.Position.Extend(
                                        position,
                                        GameObjects.Player.BoundingRadius + randomDistance)
@@ -357,7 +357,7 @@ namespace LeagueSharp.SDK.Core
 
                     if (eventArgs.Process && GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, gTarget))
                     {
-                        lastAutoAttackTick = Variables.TickCount - (Game.Ping / 2);
+                        lastAutoAttackTick = Variables.TickCount + Game.Ping;
                     }
                 }
             }

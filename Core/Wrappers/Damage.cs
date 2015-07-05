@@ -16,23 +16,48 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Damage wrapper class, contains functions to calculate estimated damage to a unit.
+//   Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.Wrappers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
 
     using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Events;
     using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Properties;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
-    ///     Damage wrapper class, contains functions to calculate estimated damage to a unit.
+    ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
     /// </summary>
     public static class Damage
     {
+        #region Static Fields
+
+        /// <summary>
+        ///     The damages dictionary.
+        /// </summary>
+        private static readonly IDictionary<string, IDictionary<SpellSlot, IDictionary<int, SpellDamage>>> DamagesDictionary = new Dictionary<string, IDictionary<SpellSlot, IDictionary<int, SpellDamage>>>();
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets the version.
+        /// </summary>
+        public static string Version { get; private set; }
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -178,9 +203,113 @@ namespace LeagueSharp.SDK.Core.Wrappers
             return source.CalculatePhysicalDamage(target, result) * k - reduction;
         }
 
+        /// <summary>
+        ///     Gets the spell damage instance.
+        /// </summary>
+        /// <param name="champion">
+        ///     The champion
+        /// </param>
+        /// <param name="spellSlot">
+        ///     The spell slot
+        /// </param>
+        /// <param name="stage">
+        ///     The stage
+        /// </param>
+        /// <returns>
+        ///     <see cref="SpellDamage" /> instance.
+        /// </returns>
+        public static SpellDamage GetSpellDamage(Obj_AI_Hero champion, SpellSlot spellSlot, int stage = 0)
+        {
+            return GetSpellDamage(champion.ChampionName, spellSlot, stage);
+        }
+
+        /// <summary>
+        ///     Gets the spell damage instance.
+        /// </summary>
+        /// <param name="champion">
+        ///     The champion name
+        /// </param>
+        /// <param name="spellSlot">
+        ///     The spell slot
+        /// </param>
+        /// <param name="stage">
+        ///     The stage
+        /// </param>
+        /// <returns>
+        ///     <see cref="SpellDamage" /> instance.
+        /// </returns>
+        public static SpellDamage GetSpellDamage(string champion, SpellSlot spellSlot, int stage = 0)
+        {
+            IDictionary<SpellSlot, IDictionary<int, SpellDamage>> championCollection;
+            IDictionary<int, SpellDamage> spellCollection;
+            SpellDamage spellDamage;
+            if (DamagesDictionary.TryGetValue(champion, out championCollection)
+                && championCollection.TryGetValue(spellSlot, out spellCollection)
+                && spellCollection.TryGetValue(stage, out spellDamage))
+            {
+                return spellDamage;
+            }
+
+            return null;
+        }
+
         #endregion
 
         #region Methods
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Damage" /> class.
+        /// </summary>
+        /// <param name="version">
+        ///     The client version.
+        /// </param>
+        internal static void Initialize(string version)
+        {
+            Load.OnLoad += (sender, args) =>
+                {
+                    var damageLibrary =
+                        (IDictionary<string, JToken>)JObject.Parse(Encoding.Default.GetString(Resources.damage_library));
+
+                    JToken value;
+                    if (damageLibrary.TryGetValue(version, out value))
+                    {
+                        Version = version;
+                        foreach (var champion in (IDictionary<string, JToken>)value)
+                        {
+                            CreateSpells(champion.Key, (IDictionary<string, JToken>)champion.Value);
+                        }
+                    }
+                    else
+                    {
+                        foreach (var dVersion in
+                            damageLibrary.Where(
+                                dVersion => dVersion.Key.ToString().Substring(0, 1).Equals(version.Substring(0, 1))))
+                        {
+                            Version = dVersion.Key;
+                            foreach (var champion in (IDictionary<string, JToken>)dVersion.Value)
+                            {
+                                CreateSpells(champion.Key, (IDictionary<string, JToken>)champion.Value);
+                            }
+
+                            return;
+                        }
+
+                        var firstVersion = damageLibrary.FirstOrDefault();
+                        if (!string.IsNullOrEmpty(firstVersion.Key))
+                        {
+                            Version = firstVersion.Key;
+                            foreach (var champion in (IDictionary<string, JToken>)firstVersion.Value)
+                            {
+                                CreateSpells(champion.Key, (IDictionary<string, JToken>)champion.Value);
+                            }
+                        }
+                        else
+                        {
+                            Logging.Write()(LogLevel.Fatal, "No suitable damage library found, unable to load damages.");
+                        }
+                    }
+                };
+        }
 
         /// <summary>
         ///     Calculates the magic damage the source would deal towards the target on a specific given amount, taking in
@@ -286,6 +415,72 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             // Take into account the percent passives.
             return source.PassivePercentMod(target, value) * amount + PassiveFlatMod(source, target);
+        }
+
+        /// <summary>
+        ///     Creates the given loaded spells for the selected champion given if the champion exists in game.
+        /// </summary>
+        /// <param name="champion">
+        ///     The champion name.
+        /// </param>
+        /// <param name="spells">
+        ///     The spells collection.
+        /// </param>
+        private static void CreateSpells(string champion, IDictionary<string, JToken> spells)
+        {
+            var gameChampionExists = GameObjects.Heroes.Any(h => h.ChampionName == champion);
+            if (!gameChampionExists)
+            {
+                return;
+            }
+
+            var spellDamages = new Dictionary<SpellSlot, IDictionary<int, SpellDamage>>();
+
+            foreach (var spell in spells)
+            {
+                SpellSlot spellSlot;
+                if (Enum.TryParse(spell.Key, out spellSlot))
+                {
+                    var spellData = (IDictionary<string, JToken>)spell.Value;
+                    if (!spellData.ContainsKey("Stages"))
+                    {
+                        Logging.Write()(
+                            LogLevel.Fatal, 
+                            "[{0}->{1}->{2}] Invalid configuration for spell.", 
+                            Version, 
+                            champion, 
+                            spellSlot);
+                        continue;
+                    }
+
+                    int stages;
+                    if (int.TryParse(spellData["Stages"].ToString(), out stages))
+                    {
+                        var stagesInfo = new Dictionary<int, SpellDamage>();
+
+                        for (var stage = 0; stage < stages; ++stage)
+                        {
+                            var stageData = spellData["Stage" + stage].ToString();
+                            stagesInfo.Add(
+                                stage, 
+                                new SpellDamage(JsonConvert.DeserializeObject<SpellDamageData>(stageData)));
+                        }
+
+                        spellDamages.Add(spellSlot, stagesInfo);
+                    }
+                    else
+                    {
+                        Logging.Write()(
+                            LogLevel.Fatal, 
+                            "[{0}->{1}->{2}] Invalid configuration for spell.", 
+                            Version, 
+                            champion, 
+                            spellSlot);
+                    }
+                }
+            }
+
+            DamagesDictionary.Add(champion, spellDamages);
         }
 
         /// <summary>
@@ -442,6 +637,144 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             return amount;
         }
+
+        #endregion
+    }
+
+    /// <summary>
+    ///     The spell damage information class container.
+    /// </summary>
+    public class SpellDamage
+    {
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="SpellDamage" /> class.
+        /// </summary>
+        /// <param name="sdata">
+        ///     The spell damage data.
+        /// </param>
+        internal SpellDamage(SpellDamageData sdata)
+        {
+            this.SData = sdata;
+            this.GetDamageFunc = (@base, aiBase) =>
+                {
+                    var spellLevel = @base.Spellbook.GetSpell(sdata.Slot).Level - 1;
+                    var damage = 0d;
+
+                    if (spellLevel >= 0)
+                    {
+                        damage += sdata.Base[Math.Min(spellLevel, sdata.Base.Length)];
+                    }
+
+                    if (sdata.Flags.HasFlag(DamageFlags.AbilityPower))
+                    {
+                        damage += @base.TotalMagicalDamage * sdata.AbilityPower;
+                    }
+
+                    if (sdata.Flags.HasFlag(DamageFlags.AttackDamage))
+                    {
+                        damage += @base.TotalAttackDamage * sdata.AttackDamage;
+                    }
+
+                    if (sdata.Flags.HasFlag(DamageFlags.BonusAttackDamage))
+                    {
+                        damage += @base.FlatPhysicalDamageMod * sdata.BonusAttackDamage;
+                    }
+
+                    return @base.CalculateDamage(aiBase, sdata.Type, damage);
+                };
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets the spell damage data.
+        /// </summary>
+        public SpellDamageData SData { get; private set; }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        ///     Gets or sets the damage calculation function.
+        /// </summary>
+        private Func<Obj_AI_Base, Obj_AI_Base, double> GetDamageFunc { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Gets the spell damage.
+        /// </summary>
+        /// <param name="source">
+        ///     The Source
+        /// </param>
+        /// <param name="target">
+        ///     The Target
+        /// </param>
+        /// <returns>
+        ///     The damage in <see cref="double" /> value.
+        /// </returns>
+        public double GetDamage(Obj_AI_Base source, Obj_AI_Base target)
+        {
+            return this.GetDamageFunc(source, target);
+        }
+
+        #endregion
+    }
+
+    /// <summary>
+    ///     The spell damage data.
+    /// </summary>
+    public class SpellDamageData
+    {
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets or sets the ability power.
+        /// </summary>
+        [JsonProperty("AP")]
+        public float AbilityPower { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the attack damage.
+        /// </summary>
+        [JsonProperty("AD")]
+        public float AttackDamage { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the base.
+        /// </summary>
+        [JsonProperty("base")]
+        public float[] Base { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the bonus attack damage.
+        /// </summary>
+        [JsonProperty("bonusAD")]
+        public float BonusAttackDamage { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the flags.
+        /// </summary>
+        [JsonProperty("flags")]
+        public DamageFlags Flags { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the slot.
+        /// </summary>
+        public SpellSlot Slot { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the type.
+        /// </summary>
+        [JsonProperty("type")]
+        public DamageType Type { get; set; }
 
         #endregion
     }

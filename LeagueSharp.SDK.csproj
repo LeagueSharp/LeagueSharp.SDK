@@ -76,6 +76,7 @@
     <Compile Include="Core\Enumerations\CastStates.cs" />
     <Compile Include="Core\Enumerations\CenteredFlags.cs" />
     <Compile Include="Core\Enumerations\CollisionableObjects.cs" />
+    <Compile Include="Core\Enumerations\DamageFlags.cs" />
     <Compile Include="Core\Enumerations\DangerLevel.cs" />
     <Compile Include="Core\Enumerations\GapcloserType.cs" />
     <Compile Include="Core\Enumerations\HealthPredictionType.cs" />
@@ -219,6 +220,7 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Resources\damage_library.json" />
     <None Include="Third_Party\Clipper\License.txt" />
   </ItemGroup>
   <ItemGroup>
