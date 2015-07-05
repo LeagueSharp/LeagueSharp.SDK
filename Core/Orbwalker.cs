@@ -28,7 +28,6 @@ namespace LeagueSharp.SDK.Core
     using System.Windows.Forms;
 
     using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Events;
     using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math.Prediction;
@@ -49,6 +48,16 @@ namespace LeagueSharp.SDK.Core
         #region Static Fields
 
         /// <summary>
+        ///     The last auto attack tick.
+        /// </summary>
+        private static int lastAutoAttackTick;
+
+        /// <summary>
+        ///     The last movement order tick.
+        /// </summary>
+        private static int lastMovementOrderTick;
+
+        /// <summary>
         ///     The attack time tracking list.
         /// </summary>
         private static readonly IDictionary<float, OrbwalkerActionArgs> AfterAttackTime =
@@ -58,16 +67,6 @@ namespace LeagueSharp.SDK.Core
         ///     The <c>orbwalker</c> menu.
         /// </summary>
         private static readonly Menu Menu = new Menu("orbwalker", "Orbwalker");
-
-        /// <summary>
-        ///     The last auto attack tick.
-        /// </summary>
-        private static int lastAutoAttackTick;
-
-        /// <summary>
-        ///     The last movement order tick.
-        /// </summary>
-        private static int lastMovementOrderTick;
 
         #endregion
 
@@ -124,19 +123,18 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                var interruptableSpell = !InterruptableSpell.IsCastingInterruptableSpell(GameObjects.Player, true);
-                var canCancalAutoAttack = GameObjects.Player.CanCancelAutoAttack();
                 var tick = Variables.TickCount;
-                var attackCastDelay = GameObjects.Player.AttackCastDelay * 1000;
-                var delay = tick - lastMovementOrderTick
-                            > Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value;
+                var flag = Movement
+                           && tick - lastMovementOrderTick
+                           > Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value;
+                if (GameObjects.Player.CanCancelAutoAttack())
+                {
+                    return tick - lastAutoAttackTick > 250 && flag;
+                }
 
-                return Movement && interruptableSpell
-                       && (!canCancalAutoAttack
-                               ? tick + (Game.Ping / 2)
-                                 >= lastAutoAttackTick + attackCastDelay
-                                 + Menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value
-                               : tick - lastAutoAttackTick > 250) && delay;
+                return tick + (Game.Ping / 2)
+                       >= lastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000
+                       + Menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value && flag;
             }
         }
 
@@ -302,7 +300,7 @@ namespace LeagueSharp.SDK.Core
                     var randomDistance = new Random(Variables.TickCount).Next(0, 50);
                     position = menuItem.Value - randomDistance <= GameObjects.Player.BoundingRadius
                                    ? GameObjects.Player.Position.Extend(
-                                       position,
+                                       position, 
                                        GameObjects.Player.BoundingRadius + randomDistance)
                                    : GameObjects.Player.Position.Extend(position, menuItem.Value - randomDistance);
                 }
@@ -357,7 +355,7 @@ namespace LeagueSharp.SDK.Core
 
                     if (eventArgs.Process && GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, gTarget))
                     {
-                        lastAutoAttackTick = Variables.TickCount + Game.Ping;
+                        lastAutoAttackTick = Variables.TickCount + (Game.Ping / 2);
                     }
                 }
             }
@@ -552,6 +550,8 @@ namespace LeagueSharp.SDK.Core
                 if (target != null && target.IsValid && AutoAttack.IsAutoAttack(spellName))
                 {
                     lastAutoAttackTick = Variables.TickCount - (Game.Ping / 2);
+                    lastMovementOrderTick =
+                        (int)(Variables.TickCount + GameObjects.Player.AttackCastDelay * 1000 - (Game.Ping / 2f));
 
                     if (!target.Compare(LastTarget))
                     {

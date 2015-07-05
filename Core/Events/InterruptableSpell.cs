@@ -28,7 +28,6 @@ namespace LeagueSharp.SDK.Core.Events
     using System.Reflection;
 
     using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Wrappers;
 
     /// <summary>
     ///     Provides events for interrupting spells.
@@ -46,8 +45,6 @@ namespace LeagueSharp.SDK.Core.Events
             CastingInterruptableSpell = new ConcurrentDictionary<int, InterruptableSpellData>();
 
             InitializeSpells();
-
-            GameObjects.Player.GetLastCastedSpell();
 
             Game.OnUpdate += Game_OnGameUpdate;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;

@@ -1,0 +1,112 @@
+{
+    "Aatrox": {
+        "Q": {
+            "Stages": "1",
+            "Stage0": {
+                "base": [ 70, 115, 160, 205, 250 ],
+                "bonusAD": "0.6",
+                "type": "Physical",
+                "flags": "1"
+            }
+        },
+        "E": {
+            "Stages": "1",
+            "Stage0": {
+                "base": [ 75, 110, 145, 180, 215 ],
+                "bonusAD": "0.6",
+                "AP": "0.6",
+                "type": "Magical",
+                "flags": "5"
+            }
+        },
+        "R": {
+            "Stages": "1",
+            "Stage0": {
+                "base": [ 200, 300, 400 ],
+                "AP": "1.0",
+                "type": "Magical",
+                "flags": "4"
+            }
+        }
+    },
+    "Ahri": {
+        "Q": {
+            "Stages": "2",
+            "Stage0": {
+                "base": [ 40, 65, 90, 115, 140 ],
+                "AP": "0.35",
+                "type": "Magical",
+                "flags": "4"
+            },
+            "Stage1": {
+                "base": [ 40, 65, 90, 115, 140 ],
+                "AP": "0.35",
+                "type": "True",
+                "flags": "4"
+            }
+        },
+        "W": {
+            "Stages": "1",
+            "Stage0": {
+                "base": [ 40, 65, 90, 115, 140 ],
+                "AP": "0.4",
+                "type": "Magical",
+                "flags": "4"
+            }
+        },
+        "E": {
+            "Stages": "1",
+            "Stage0": {
+                "base": [ 60, 95, 130, 165, 200 ],
+                "AP": "0.5",
+                "type": "Magical",
+                "flags": "4"
+            }
+        },
+        "R": {
+            "Stages": "1",
+            "Stage0": {
+                "base": [ 70, 110, 150 ],
+                "AP": "0.3",
+                "type": "Magical",
+                "flags": "4"
+            }
+        }
+    },
+    "Akali": {
+        "Q": {
+            "Stages": "2",
+            "Stage0": {
+                "base": [ 35, 55, 75, 95, 115 ],
+                "AP": "0.4",
+                "type": "Magical",
+                "flags": "4"
+            },
+            "Stage1": {
+                "base": [ 45, 70, 95, 120, 145 ],
+                "AP": "0.5",
+                "type": "Magical",
+                "flags": "4"
+            }
+        },
+        "E": {
+            "Stages": "1",
+            "Stage0": {
+                "base": [ 30, 55, 80, 105, 130 ],
+                "AP": "0.4",
+                "AD": "0.6",
+                "type": "Physical",
+                "flags": "6"
+            }
+        },
+        "R": {
+            "Stages": "1",
+            "Stage0": {
+                "base": [ 100, 175, 250 ],
+                "AP": "0.4",
+                "type": "Magical",
+                "flags": "4"
+            }
+        }
+    }
+}

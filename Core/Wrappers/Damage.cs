@@ -43,6 +43,14 @@ namespace LeagueSharp.SDK.Core.Wrappers
         #region Static Fields
 
         /// <summary>
+        ///     The damage version files.
+        /// </summary>
+        private static readonly IDictionary<string, byte[]> DamageFiles = new Dictionary<string, byte[]>
+                                                                              {
+                                                                                  { "5.12.0.341", Resources._5_12_0_341 }
+                                                                              };
+
+        /// <summary>
         ///     The damages dictionary.
         /// </summary>
         private static readonly IDictionary<string, IDictionary<SpellSlot, IDictionary<int, SpellDamage>>> DamagesDictionary = new Dictionary<string, IDictionary<SpellSlot, IDictionary<int, SpellDamage>>>();
@@ -158,11 +166,34 @@ namespace LeagueSharp.SDK.Core.Wrappers
             if (hero != null)
             {
                 // Spoils of War
-                if (hero.IsMelee() && target is Obj_AI_Minion && target.IsEnemy && target.Team != GameObjectTeam.Neutral
-                    && target.Health <= 200
+                var minionTarget = target as Obj_AI_Minion;
+                if (hero.IsMelee() && minionTarget != null && minionTarget.IsEnemy
+                    && minionTarget.Team != GameObjectTeam.Neutral
                     && hero.Buffs.Any(buff => buff.Name == "talentreaperdisplay" && buff.Count > 0))
                 {
-                    return 200d;
+                    if (
+                        GameObjects.Heroes.Any(
+                            h =>
+                            h.NetworkId != source.NetworkId && h.Team == source.Team
+                            && h.Distance(minionTarget.Position) < 1100))
+                    {
+                        var value = 0;
+
+                        if (Items.HasItem(3302, hero))
+                        {
+                            value = 200;
+                        }
+                        else if (Items.HasItem(3097, hero))
+                        {
+                            value = 240;
+                        }
+                        else if (Items.HasItem(3401, hero))
+                        {
+                            value = 400;
+                        }
+
+                        return value + hero.TotalAttackDamage;
+                    }
                 }
 
                 // BotRK
@@ -204,6 +235,33 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
+        ///     Get the spell damage value.
+        /// </summary>
+        /// <param name="source">
+        ///     The source
+        /// </param>
+        /// <param name="target">
+        ///     The target
+        /// </param>
+        /// <param name="spellSlot">
+        ///     The spell slot
+        /// </param>
+        /// <param name="stage">
+        ///     The stage
+        /// </param>
+        /// <returns>
+        ///     The <see cref="double" /> value of damage.
+        /// </returns>
+        public static double GetSpellDamage(
+            this Obj_AI_Hero source, 
+            Obj_AI_Base target, 
+            SpellSlot spellSlot, 
+            int stage = 0)
+        {
+            return source.GetSpellDamageInstance(spellSlot, stage).GetDamage(source, target);
+        }
+
+        /// <summary>
         ///     Gets the spell damage instance.
         /// </summary>
         /// <param name="champion">
@@ -218,9 +276,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <returns>
         ///     <see cref="SpellDamage" /> instance.
         /// </returns>
-        public static SpellDamage GetSpellDamage(Obj_AI_Hero champion, SpellSlot spellSlot, int stage = 0)
+        public static SpellDamage GetSpellDamageInstance(this Obj_AI_Hero champion, SpellSlot spellSlot, int stage = 0)
         {
-            return GetSpellDamage(champion.ChampionName, spellSlot, stage);
+            return GetSpellDamageInstance(champion.ChampionName, spellSlot, stage);
         }
 
         /// <summary>
@@ -238,7 +296,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <returns>
         ///     <see cref="SpellDamage" /> instance.
         /// </returns>
-        public static SpellDamage GetSpellDamage(string champion, SpellSlot spellSlot, int stage = 0)
+        public static SpellDamage GetSpellDamageInstance(string champion, SpellSlot spellSlot, int stage = 0)
         {
             IDictionary<SpellSlot, IDictionary<int, SpellDamage>> championCollection;
             IDictionary<int, SpellDamage> spellCollection;
@@ -267,46 +325,46 @@ namespace LeagueSharp.SDK.Core.Wrappers
         {
             Load.OnLoad += (sender, args) =>
                 {
-                    var damageLibrary =
-                        (IDictionary<string, JToken>)JObject.Parse(Encoding.Default.GetString(Resources.damage_library));
+                    IDictionary<string, JToken> damageFile = null;
 
-                    JToken value;
-                    if (damageLibrary.TryGetValue(version, out value))
+                    byte[] value;
+                    if (DamageFiles.TryGetValue(version, out value))
                     {
                         Version = version;
-                        foreach (var champion in (IDictionary<string, JToken>)value)
-                        {
-                            CreateSpells(champion.Key, (IDictionary<string, JToken>)champion.Value);
-                        }
+                        damageFile = JObject.Parse(Encoding.Default.GetString(value));
                     }
                     else
                     {
-                        foreach (var dVersion in
-                            damageLibrary.Where(
-                                dVersion => dVersion.Key.ToString().Substring(0, 1).Equals(version.Substring(0, 1))))
+                        foreach (var file in DamageFiles)
                         {
-                            Version = dVersion.Key;
-                            foreach (var champion in (IDictionary<string, JToken>)dVersion.Value)
+                            if (file.Key.Substring(0, 1).Equals(version.Substring(0, 1)))
                             {
-                                CreateSpells(champion.Key, (IDictionary<string, JToken>)champion.Value);
-                            }
-
-                            return;
-                        }
-
-                        var firstVersion = damageLibrary.FirstOrDefault();
-                        if (!string.IsNullOrEmpty(firstVersion.Key))
-                        {
-                            Version = firstVersion.Key;
-                            foreach (var champion in (IDictionary<string, JToken>)firstVersion.Value)
-                            {
-                                CreateSpells(champion.Key, (IDictionary<string, JToken>)champion.Value);
+                                Version = file.Key;
+                                damageFile = JObject.Parse(Encoding.Default.GetString(file.Value));
+                                break;
                             }
                         }
-                        else
+
+                        if (damageFile == null)
                         {
-                            Logging.Write()(LogLevel.Fatal, "No suitable damage library found, unable to load damages.");
+                            var pair = DamageFiles.FirstOrDefault();
+                            if (!string.IsNullOrEmpty(pair.Key))
+                            {
+                                Version = pair.Key;
+                                damageFile = JObject.Parse(Encoding.Default.GetString(pair.Value));
+                            }
                         }
+                    }
+
+                    if (damageFile == null)
+                    {
+                        Logging.Write()(LogLevel.Fatal, "No suitable damage library found, unable to load damages.");
+                        return;
+                    }
+
+                    foreach (var champion in damageFile)
+                    {
+                        CreateSpells(champion.Key, (IDictionary<string, JToken>)champion.Value);
                     }
                 };
         }
@@ -505,7 +563,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             // Offensive masteries:
 
             // Butcher
-            // - Basic attacks and single target abilities do 2 bonus damage to minions and monsters. 
+            // + Basic attacks and single target abilities do 2 bonus damage to minions and monsters. 
             if (hero != null && target is Obj_AI_Minion)
             {
                 if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
@@ -517,7 +575,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             // Defensive masteries:
 
             // Block
-            // - Reduces incoming damage from champion basic attacks by 1 / 2
+            // + Reduces incoming damage from champion basic attacks by 1 / 2
             if (hero != null && targetHero != null)
             {
                 var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 65);
@@ -528,7 +586,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             // Tough Skin
-            // - Reduces damage taken from neutral monsters by 1 / 2
+            // + Reduces damage taken from neutral monsters by 1 / 2
             if (source is Obj_AI_Minion && targetHero != null && source.Team == GameObjectTeam.Neutral)
             {
                 var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
@@ -539,8 +597,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             // Unyielding
-            // - Melee - Reduces all incoming damage from champions by 2
-            // - Ranged - Reduces all incoming damage from champions by 1
+            // + Melee - Reduces all incoming damage from champions by 2
+            // + Ranged - Reduces all incoming damage from champions by 1
             if (hero != null && targetHero != null)
             {
                 var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
@@ -590,35 +648,44 @@ namespace LeagueSharp.SDK.Core.Wrappers
             // Masteries:
             var hero = source as Obj_AI_Hero;
             var targetHero = target as Obj_AI_Hero;
-
-            // Offensive masteries:
             if (hero != null)
             {
+                // Offensive masteries:
+
                 // Double edge sword:
-                // - Melee champions: You deal 2% increase damage from all sources, but take 1% increase damage from all sources.
-                // - Ranged champions: You deal and take 1.5% increased damage from all sources. 
+                // + Melee champions: You deal 2% increase damage from all sources, but take 1% increase damage from all sources.
+                // + Ranged champions: You deal and take 1.5% increased damage from all sources. 
                 if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
                 {
                     amount *= hero.IsMelee() ? 1.02d : 1.015d;
                 }
 
                 // Havoc:
-                // - Increases damage by 3%.
+                // + Increases damage by 3%.
                 if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 146 && m.Points == 1))
                 {
                     amount *= 1.03d;
                 }
 
                 // Executioner
-                // - Increases damage dealt to champions below 20 / 35 / 50% by 5%. 
+                // + Increases damage dealt to champions below 20 / 35 / 50% by 5%. 
                 if (targetHero != null)
                 {
                     var mastery = hero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Offense && m.Id == 100);
                     if (mastery != null && mastery.Points >= 1
                         && target.Health / target.MaxHealth <= 0.05d + 0.15d * mastery.Points)
                     {
-                        amount *= 1.05;
+                        amount *= 1.05d;
                     }
+                }
+
+                // Summoners:
+
+                // Exhaust:
+                // + Exhausts target enemy champion, reducing their Movement Speed and Attack Speed by 30%, their Armor and Magic Resist by 10, and their damage dealt by 40% for 2.5 seconds.
+                if (hero.HasBuff("Exhaust"))
+                {
+                    amount /= 0.4d;
                 }
             }
 
@@ -632,6 +699,53 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 if (targetHero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
                 {
                     amount *= targetHero.IsMelee() ? 1.01d : 1.015d;
+                }
+
+                // Passives:
+
+                // Unbreakable Will
+                // + Alistar removes all crowd control effects from himself, then gains additional attack damage and takes 70% reduced physical and magic damage for 7 seconds.
+                if (targetHero.HasBuff("Ferocious Howl"))
+                {
+                    amount /= 0.7d;
+                }
+
+                // Courage
+                // + Garen gains a defensive shield for a few seconds, reducing incoming damage by 30% and granting 30% crowd control reduction for the duration.
+                if (targetHero.HasBuff("GarenW"))
+                {
+                    amount /= 0.3d;
+                }
+
+                // Meditate
+                // + Master Yi channels for up to 4 seconds, restoring health each second. This healing is increased by 1% for every 1% of his missing health. Meditate also resets the autoattack timer.
+                // + While channeling, Master Yi reduces incoming damage (halved against turrets).
+                if (targetHero.HasBuff("Meditate"))
+                {
+                    amount /=
+                        new[] { 0.5d, 0.55d, 0.6d, 0.65d, 0.7d }[targetHero.Spellbook.GetSpell(SpellSlot.W).Level - 1]
+                        / (source is Obj_AI_Turret ? 2 : 1);
+                }
+
+                // Shunpo
+                // + Katarina teleports to target unit and gains 15% damage reduction for 1.5 seconds. If the target is an enemy, the target takes magic damage.
+                if (targetHero.HasBuff("KatarinaEReduction"))
+                {
+                    amount /= 0.15d;
+                }
+
+                // Idol of Durand
+                // + Galio becomes a statue and channels for 2 seconds, Taunt icon taunting nearby foes and reducing incoming physical and magic damage by 50%.
+                if (targetHero.HasBuff("GalioIdolOfDurand"))
+                {
+                    amount /= 0.5d;
+                }
+
+                // Vengeful Maelstrom
+                // + Maokai creates a magical vortex around himself, protecting him and allied champions by reducing damage from non-turret sources by 20% for a maximum of 10 seconds.
+                if (targetHero.HasBuff("MaokaiDrainDefense"))
+                {
+                    amount /= 0.2d;
                 }
             }
 
