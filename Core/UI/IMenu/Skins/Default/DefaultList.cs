@@ -149,7 +149,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 (int)(position.X + this.Component.MenuWidth - this.dropDownButtonWidth + ArrowSpacing), 
                 (int)rectangleName.Y, 
                 MenuSettings.TextColor);
-            MenuSettings.ContainerSeparatorLine.Draw(
+            Line.Width = 1f;
+            Line.Begin();
+            Line.Draw(
                 new[]
                     {
                         new Vector2(position.X + this.Component.MenuWidth - this.dropDownButtonWidth - 1, position.Y + 1), 
@@ -158,6 +160,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                             position.Y + MenuSettings.ContainerHeight)
                     }, 
                 MenuSettings.ContainerSeparatorColor);
+            Line.End();
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 this.Component.SelectedValueAsObject.ToString(), 
@@ -165,7 +168,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 - this.Component.MaxStringWidth, 
                 (int)rectangleName.Y, 
                 MenuSettings.TextColor);
-            MenuSettings.ContainerSeparatorLine.Draw(
+            Line.Width = 1f;
+            Line.Begin();
+            Line.Draw(
                 new[]
                     {
                         new Vector2(
@@ -178,6 +183,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                             position.Y + MenuSettings.ContainerHeight)
                     }, 
                 MenuSettings.ContainerSeparatorColor);
+            Line.End();
 
             if (this.Component.Active)
             {
@@ -186,6 +192,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 MenuManager.Instance.DrawDelayed(
                     delegate
                         {
+                            var color = MenuSettings.RootContainerColor;
+                            var dropdownColor = new ColorBGRA(color.R, color.G, color.B, 255);
                             Line.Width = dropdownMenuWidth;
                             Line.Begin();
                             Line.Draw(
@@ -197,8 +205,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                         new Vector2(
                                             position.X + Component.MenuWidth - (Line.Width / 2), 
                                             position.Y + MenuSettings.ContainerHeight + dropdownMenuHeight)
-                                    }, 
-                                Color.Black);
+                                    }, dropdownColor);
                             Line.End();
 
                             var x =
@@ -228,7 +235,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                     Line.End();
                                 }
 
-                                MenuSettings.ContainerSeparatorLine.Draw(
+                                Line.Width = 1f;
+                                Line.Begin();
+                                Line.Draw(
                                     new[]
                                         {
                                             new Vector2(
@@ -239,6 +248,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                                 position.Y + (MenuSettings.ContainerHeight * (i + 1)))
                                         }, 
                                     MenuSettings.ContainerSeparatorColor);
+                                Line.End();
                                 y += MenuSettings.ContainerHeight;
                                 MenuSettings.Font.DrawText(
                                     MenuManager.Instance.Sprite, 
@@ -258,7 +268,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                 }
                             }
 
-                            MenuSettings.ContainerSeparatorLine.Draw(
+                             Line.Width = 1f;
+                             Line.Begin();
+                             Line.Draw(
                                 new[]
                                     {
                                         new Vector2(
@@ -275,6 +287,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                             position.Y + MenuSettings.ContainerHeight)
                                     }, 
                                 MenuSettings.ContainerSeparatorColor);
+                            Line.End();
                         });
             }
         }

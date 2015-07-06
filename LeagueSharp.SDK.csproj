@@ -105,6 +105,7 @@
     <Compile Include="Core\IDrawing\Render.cs" />
     <Compile Include="Core\UI\IMenu\Abstracts\AMenuComponent.cs" />
     <Compile Include="Core\UI\IMenu\Menu.cs" />
+    <Compile Include="Core\UI\IMenu\Customizer\MenuCustomizer.cs" />
     <Compile Include="Core\UI\IMenu\MenuItem.cs" />
     <Compile Include="Core\UI\IMenu\MenuManager.cs" />
     <Compile Include="Core\UI\IMenu\MenuValueChangedEventArgs.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultList.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultMenu.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultSeparator.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultTextures.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultUtilities.cs" />
     <Compile Include="Core\UI\IMenu\Skins\MenuSettings.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultSlider.cs" />

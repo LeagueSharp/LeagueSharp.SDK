@@ -21,11 +21,14 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
+    using System;
     using System.Drawing;
     using System.Linq;
 
     using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
+    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Properties;
 
@@ -41,11 +44,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     {
         #region Constants
 
-        /// <summary>
-        ///     The drag texture size.
-        /// </summary>
-        private const int DragTextureSize = 16;
-
         #endregion
 
         #region Static Fields
@@ -53,16 +51,39 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// <summary>
         ///     The line.
         /// </summary>
-        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { Width = 1f, GLLines = true };
+        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
 
         #endregion
 
         #region Fields
+        
+        /// <summary>
+        ///     Gets or sets a value indicating whether the user is dragging the menu.
+        /// </summary>
+        private bool dragging;
 
         /// <summary>
-        ///     The drag texture.
+        ///     Gets or sets a value indicating whether the user has moved the menu at least 1 pixel.
         /// </summary>
-        private readonly Texture dragTexture;
+        private bool hasDragged;
+
+        /// <summary>
+        ///     Gets a value indicating whether this <see cref="Menu" /> is hovering.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if hovering; otherwise, <c>false</c>.
+        /// </value>
+        private bool hovering;
+
+        /// <summary>
+        ///     The x-axis.
+        /// </summary>
+        private float xd;
+
+        /// <summary>
+        ///     The y-axis.
+        /// </summary>
+        private float yd;
 
         #endregion
 
@@ -77,19 +98,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         public DefaultMenu(Menu component)
             : base(component)
         {
-            var resized = new Bitmap(Resources.cursor_drag, DragTextureSize, DragTextureSize);
-            this.dragTexture = Texture.FromMemory(
-                Drawing.Direct3DDevice, 
-                (byte[])new ImageConverter().ConvertTo(resized, typeof(byte[])), 
-                resized.Width, 
-                resized.Height, 
-                0, 
-                Usage.None, 
-                Format.A1, 
-                Pool.Managed, 
-                Filter.Default, 
-                Filter.Default, 
-                0);
+            
         }
 
         #endregion
@@ -101,7 +110,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         public override void Dispose()
         {
-            this.dragTexture.Dispose();
         }
 
         /// <summary>
@@ -110,10 +118,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         public override void Draw()
         {
             var position = this.Component.Position;
-            if (this.Component.Hovering && !this.Component.Toggled && this.Component.Components.Count > 0)
+            if (this.hovering && !this.Component.Toggled && this.Component.Components.Count > 0)
             {
-                MenuSettings.HoverLine.Begin();
-                MenuSettings.HoverLine.Draw(
+                Line.Width = MenuSettings.ContainerHeight;
+                Line.Begin();
+                Line.Draw(
                     new[]
                         {
                             new Vector2(position.X, position.Y + MenuSettings.ContainerHeight / 2f), 
@@ -122,7 +131,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                 position.Y + MenuSettings.ContainerHeight / 2f)
                         }, 
                     MenuSettings.HoverColor);
-                MenuSettings.HoverLine.End();
+                Line.End();
             }
 
             var centerY =
@@ -149,9 +158,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 
             if (this.Component.Toggled)
             {
-                MenuSettings.ContainerLine.Width = this.Component.MenuWidth;
-                MenuSettings.ContainerLine.Begin();
-                MenuSettings.ContainerLine.Draw(
+                Line.Width = this.Component.MenuWidth;
+                Line.Begin();
+                Line.Draw(
                     new[]
                         {
                             new Vector2(position.X + this.Component.MenuWidth / 2f, position.Y), 
@@ -160,7 +169,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                 position.Y + MenuSettings.ContainerHeight)
                         }, 
                     MenuSettings.ContainerSelectedColor);
-                MenuSettings.ContainerLine.End();
+                Line.End();
 
                 float height = MenuSettings.ContainerHeight * this.Component.Components.Count;
                 var width = MenuSettings.ContainerWidth;
@@ -169,16 +178,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                     width = this.Component.Components.First().Value.MenuWidth;
                 }
 
-                MenuSettings.ContainerLine.Width = width;
-                MenuSettings.ContainerLine.Begin();
-                MenuSettings.ContainerLine.Draw(
+                Line.Width = width;
+                Line.Begin();
+                Line.Draw(
                     new[]
                         {
                             new Vector2((position.X + this.Component.MenuWidth) + width / 2, position.Y), 
                             new Vector2((position.X + this.Component.MenuWidth) + width / 2, position.Y + height)
                         }, 
                     MenuSettings.RootContainerColor);
-                MenuSettings.ContainerLine.End();
+                Line.End();
+
+                
 
                 for (var i = 0; i < this.Component.Components.Count; ++i)
                 {
@@ -191,8 +202,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 
                         if (i < this.Component.Components.Count - 1)
                         {
-                            MenuSettings.ContainerSeparatorLine.Begin();
-                            MenuSettings.ContainerSeparatorLine.Draw(
+                            Line.Width = 1f;
+                            Line.Begin();
+                            Line.Draw(
                                 new[]
                                     {
                                         new Vector2(childPos.X, childPos.Y + MenuSettings.ContainerHeight), 
@@ -201,63 +213,69 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                             childPos.Y + MenuSettings.ContainerHeight)
                                     }, 
                                 MenuSettings.ContainerSeparatorColor);
-                            MenuSettings.ContainerSeparatorLine.End();
+                            Line.End();
                         }
 
                         childComponent.OnDraw(childPos);
                     }
                 }
 
+                var contourColor = Color.Black;
+
+                Line.Width = 1f;
                 Line.Begin();
                 Line.Draw(
                     new[]
                         {
                             new Vector2(position.X + this.Component.MenuWidth, position.Y), 
                             new Vector2(position.X + this.Component.MenuWidth + width, position.Y)
-                        }, 
-                    Color.Black);
+                        },
+                    contourColor);
                 Line.Draw(
                     new[]
                         {
                             new Vector2(position.X + this.Component.MenuWidth, position.Y + height), 
                             new Vector2(position.X + this.Component.MenuWidth + width, position.Y + height)
-                        }, 
-                    Color.Black);
+                        },
+                    contourColor);
                 Line.Draw(
                     new[]
                         {
                             new Vector2(position.X + this.Component.MenuWidth, position.Y), 
                             new Vector2(position.X + this.Component.MenuWidth, position.Y + height)
-                        }, 
-                    Color.Black);
+                        },
+                    contourColor);
                 Line.Draw(
                     new[]
                         {
                             new Vector2(position.X + this.Component.MenuWidth + width, position.Y), 
                             new Vector2(position.X + this.Component.MenuWidth + width, position.Y + height)
-                        }, 
-                    Color.Black);
+                        },
+                    contourColor);
                 Line.End();
+                
             }
 
-            if (this.Component.HasDragged)
+            if (hasDragged && !MenuCustomizer.Instance.LockPosition.Value)
             {
                 var sprite = MenuManager.Instance.Sprite;
                 var oldMatrix = sprite.Transform;
                 var y =
                     (int)(MenuSettings.Position.Y + (MenuManager.Instance.Menus.Count * MenuSettings.ContainerHeight));
-                var x = MenuSettings.Position.X - DragTextureSize;
+                var dragTexture = DefaultTextures.Instance[DefaultTexture.Dragging];
+                var x = MenuSettings.Position.X - dragTexture.Width;
                 sprite.Transform = Matrix.Translation(x - 1, y + 2, 0);
-                sprite.Draw(this.dragTexture, Color.White);
+                sprite.Draw(dragTexture.Texture, Color.White);
                 sprite.Transform = oldMatrix;
 
+                Line.Width = 1f;
                 Line.Begin();
                 Line.Draw(
                     new[]
                         {
-                            new Vector2(x - 1, y + 1), new Vector2(x - 1 + DragTextureSize, y + 1), 
-                            new Vector2(x - 1 + DragTextureSize, y + DragTextureSize + 2), 
-                            new Vector2(x - 2, y + DragTextureSize + 2), new Vector2(x - 2, y), 
+                            new Vector2(x - 1, y + 1), new Vector2(x - 1 + dragTexture.Width, y + 1), 
+                            new Vector2(x - 1 + dragTexture.Width, y + dragTexture.Width + 2), 
+                            new Vector2(x - 2, y + dragTexture.Width + 2), new Vector2(x - 2, y), 
                         }, 
                     MenuSettings.ContainerSeparatorColor);
                 Line.End();
@@ -272,6 +290,45 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </param>
         public override void OnWndProc(WindowsKeys args)
         {
+            if (Component.Visible)
+            {
+                if (args.Msg == WindowsMessages.MOUSEMOVE && this.dragging && !MenuCustomizer.Instance.LockPosition.Value)
+                {
+                    MenuSettings.Position = new Vector2(args.Cursor.X - this.xd, args.Cursor.Y - this.yd);
+                    this.hasDragged = true;
+                }
+
+                if (args.Cursor.IsUnderRectangle(
+                    Component.Position.X,
+                    Component.Position.Y,
+                    Component.MenuWidth,
+                    MenuSettings.ContainerHeight))
+                {
+                    if (args.Msg == WindowsMessages.LBUTTONDOWN && Component.Root)
+                    {
+                        var pos = MenuSettings.Position;
+                        this.xd = args.Cursor.X - pos.X;
+                        this.yd = args.Cursor.Y - pos.Y;
+                        this.dragging = true;
+                    }
+
+                    this.hovering = true;
+                    if (args.Msg == WindowsMessages.LBUTTONUP && !hasDragged)
+                    {
+                        Component.Toggle();
+                    }
+                }
+                else
+                {
+                    this.hovering = false;
+                }
+            }
+
+            if (args.Msg == WindowsMessages.LBUTTONUP)
+            {
+                this.hasDragged = false;
+                this.dragging = false;
+            }
         }
 
         /// <summary>

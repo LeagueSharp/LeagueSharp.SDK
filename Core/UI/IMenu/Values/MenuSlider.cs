@@ -93,7 +93,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="context">The context.</param>
         protected MenuSlider(SerializationInfo info, StreamingContext context)
         {
-            this.Value = (int)info.GetValue("value", typeof(int));
+            this.value = (int)info.GetValue("value", typeof(int));
         }
 
         #endregion
@@ -174,7 +174,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="menuValue">The value.</param>
         public override void Extract(MenuItem menuValue)
         {
-            this.Value = ((MenuSlider)menuValue).Value;
+            this.Value = ((MenuSlider)menuValue).value;
         }
 
         /// <summary>

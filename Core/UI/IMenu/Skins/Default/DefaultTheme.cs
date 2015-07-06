@@ -138,16 +138,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 width = menuManager.Menus.First().MenuWidth;
             }
 
-            MenuSettings.ContainerLine.Width = width;
-            MenuSettings.ContainerLine.Begin();
-            MenuSettings.ContainerLine.Draw(
+            Line.Width = width;
+            Line.Begin();
+            Line.Draw(
                 new[]
                     {
                         new Vector2(position.X + (width / 2f), position.Y), 
                         new Vector2(position.X + (width / 2), position.Y + height)
                     }, 
                 MenuSettings.RootContainerColor);
-            MenuSettings.ContainerLine.End();
+            Line.End();
+
+            
 
             for (var i = 0; i < menuManager.Menus.Count; ++i)
             {
@@ -155,8 +157,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 
                 if (i < menuManager.Menus.Count - 1)
                 {
-                    MenuSettings.ContainerSeparatorLine.Begin();
-                    MenuSettings.ContainerSeparatorLine.Draw(
+                    Line.Width = 1f;
+                    Line.Begin();
+                    Line.Draw(
                         new[]
                             {
                                 new Vector2(childPos.X, childPos.Y + MenuSettings.ContainerHeight), 
@@ -165,12 +168,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                     childPos.Y + MenuSettings.ContainerHeight)
                             }, 
                         MenuSettings.ContainerSeparatorColor);
-                    MenuSettings.ContainerSeparatorLine.End();
+                    Line.End();
                 }
 
                 menuManager.Menus[i].OnDraw(childPos);
             }
 
+            Line.Width = 1f;
             Line.Begin();
             Line.Draw(
                 new[]
@@ -178,9 +182,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         new Vector2(position.X, position.Y), new Vector2(position.X + width, position.Y), 
                         new Vector2(position.X + width, position.Y + height), new Vector2(position.X, position.Y + height), 
                         new Vector2(position.X, position.Y)
-                    }, 
+                    },
                 Color.Black);
             Line.End();
+            
         }
 
         #endregion

@@ -21,6 +21,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
+    using System.Collections.Generic;
+    using System.ComponentModel;
+
+    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
+
     using SharpDX;
     using SharpDX.Direct3D9;
 
@@ -32,78 +37,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         #region Static Fields
 
         /// <summary>
-        ///     Local Global Container Height.
-        /// </summary>
-        private static int containerHeight = 30;
-
-        /// <summary>
-        ///     Local Single Container Line.
-        /// </summary>
-        private static Line containerLine = new Line(Drawing.Direct3DDevice)
-                                                {
-                                                   Antialias = false, GLLines = true, Width = 200f 
-                                                };
-
-        /// <summary>
-        ///     Local Global Container Selected Color.
-        /// </summary>
-        private static ColorBGRA containerSelectedColor = new ColorBGRA(255, 255, 255, 255 / 2);
-
-        /// <summary>
-        ///     Container Line Separator Color.
-        /// </summary>
-        private static ColorBGRA containerSeparatorColor = new ColorBGRA(255, 255, 255, 100);
-
-        /// <summary>
-        ///     Global Container Separator Line.
-        /// </summary>
-        private static Line containerSeparatorLine = new Line(Drawing.Direct3DDevice)
-                                                         {
-                                                            Antialias = false, GLLines = false, Width = 1f 
-                                                         };
-
-        /// <summary>
-        ///     Container Text Marking Offset.
-        /// </summary>
-        private static float containerTextMarkOffset = 8f;
-
-        /// <summary>
-        ///     Container Text Addition Offset.
-        /// </summary>
-        private static float containerTextOffset = 15f;
-
-        /// <summary>
-        ///     Local Container Width.
-        /// </summary>
-        private static float containerWidth;
-
-        /// <summary>
         ///     Local Font.
         /// </summary>
         private static Font font;
-
-        /// <summary>
-        ///     The color of an item when the user is hovering over it.
-        /// </summary>
-        private static ColorBGRA hoverColor = new ColorBGRA(255, 255, 255, 50);
-
-        /// <summary>
-        ///     Local hover line.
-        /// </summary>
-        private static Line hoverLine = new Line(Drawing.Direct3DDevice)
-                                            {
-                                               Antialias = false, GLLines = true, Width = ContainerHeight 
-                                            };
-
-        /// <summary>
-        ///     Root Container Color.
-        /// </summary>
-        private static ColorBGRA rootContainerColor = new ColorBGRA(0, 0, 0, (byte)(255 / 1.5f));
-
-        /// <summary>
-        ///     Local global text color.
-        /// </summary>
-        private static ColorBGRA textColor = Color.White;
+        
 
         #endregion
 
@@ -115,6 +52,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         /// </summary>
         static MenuSettings()
         {
+            ContainerHeight = 30;
+            ContainerSelectedColor = new ColorBGRA(255, 255, 255, 255 / 2);
+            ContainerSeparatorColor = new ColorBGRA(255, 255, 255, 100);
             Position = new Vector2(30, 30);
             ContainerWidth = 200f;
             Font = new Font(
@@ -125,10 +65,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
                 0, 
                 false, 
                 FontCharacterSet.Default, 
-                FontPrecision.Default, 
+                FontPrecision.Raster, 
                 FontQuality.Antialiased, 
                 FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative, 
                 "Tahoma");
+            ContainerTextMarkOffset = 8f;
+            ContainerTextOffset = 15f;
+            HoverColor = new ColorBGRA(255, 255, 255, 50);
+            RootContainerColor = new ColorBGRA(0, 0, 0, (byte)(255 / 1.5f));
+            TextColor = Color.White;
         }
 
         #endregion
@@ -138,98 +83,22 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         /// <summary>
         ///     Gets or sets the Global Container Height.
         /// </summary>
-        public static int ContainerHeight
-        {
-            get
-            {
-                return containerHeight;
-            }
-
-            set
-            {
-                containerHeight = value;
-            }
-        }
-
-        /// <summary>
-        ///     Gets or sets the Single Container Line.
-        /// </summary>
-        public static Line ContainerLine
-        {
-            get
-            {
-                return containerLine;
-            }
-
-            set
-            {
-                containerLine = value;
-            }
-        }
+        public static int ContainerHeight { get; set; }
 
         /// <summary>
         ///     Gets or sets the Global Container Selected Color.
         /// </summary>
-        public static ColorBGRA ContainerSelectedColor
-        {
-            get
-            {
-                return containerSelectedColor;
-            }
-
-            set
-            {
-                containerSelectedColor = value;
-            }
-        }
+        public static ColorBGRA ContainerSelectedColor { get; set; }
 
         /// <summary>
         ///     Gets or sets the Container Line Separator Color.
         /// </summary>
-        public static ColorBGRA ContainerSeparatorColor
-        {
-            get
-            {
-                return containerSeparatorColor;
-            }
-
-            set
-            {
-                containerSeparatorColor = value;
-            }
-        }
-
-        /// <summary>
-        ///     Gets or sets the Global Container Separator Line.
-        /// </summary>
-        public static Line ContainerSeparatorLine
-        {
-            get
-            {
-                return containerSeparatorLine;
-            }
-
-            set
-            {
-                containerSeparatorLine = value;
-            }
-        }
+        public static ColorBGRA ContainerSeparatorColor { get; set; }
 
         /// <summary>
         ///     Gets or sets the Container Text Marking Offset.
         /// </summary>
-        public static float ContainerTextMarkOffset
-        {
-            get
-            {
-                return containerTextMarkOffset;
-            }
-
-            set
-            {
-                containerTextMarkOffset = value;
-            }
-        }
+        public static float ContainerTextMarkOffset { get; set; }
 
         /// <summary>
         ///     Gets or sets the Global Container Text Mark Width.
@@ -239,38 +108,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         /// <summary>
         ///     Gets or sets the Container Text Addition Offset.
         /// </summary>
-        public static float ContainerTextOffset
-        {
-            get
-            {
-                return containerTextOffset;
-            }
-
-            set
-            {
-                containerTextOffset = value;
-            }
-        }
+        public static float ContainerTextOffset { get; set; }
 
         /// <summary>
         ///     Gets or sets the Global Container Width.
         /// </summary>
-        public static float ContainerWidth
-        {
-            get
-            {
-                return containerWidth;
-            }
-
-            set
-            {
-                containerWidth = value;
-                if (ContainerLine != null)
-                {
-                    ContainerLine.Width = value;
-                }
-            }
-        }
+        public static float ContainerWidth { get; set; }
 
         /// <summary>
         ///     Gets or sets the Global Font.
@@ -292,71 +135,43 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         /// <summary>
         ///     Gets or sets the color of an item when the user is hovering over it.
         /// </summary>
-        public static ColorBGRA HoverColor
-        {
-            get
-            {
-                return hoverColor;
-            }
+        public static ColorBGRA HoverColor { get; set; }
 
-            set
-            {
-                hoverColor = value;
-            }
-        }
-
-        /// <summary>
-        ///     Gets or sets the hover line
-        /// </summary>
-        public static Line HoverLine
-        {
-            get
-            {
-                return hoverLine;
-            }
-
-            set
-            {
-                hoverLine = value;
-            }
-        }
+        private static Vector2 position;
 
         /// <summary>
         ///     Gets or sets the default menu zero-position.
         /// </summary>
-        public static Vector2 Position { get; set; }
+        public static Vector2 Position {
+            get
+            {
+                return position;
+            }
+            set
+            {
+                
+                if (MenuCustomizer.Instance != null)
+                {
+                    position = value;
+                    MenuCustomizer.Instance.PositionX.Value = (int)position.X;
+                    MenuCustomizer.Instance.PositionY.Value = (int)position.Y;
+                }
+                else
+                {
+                    position = value;
+                }
+            }
+        }
 
         /// <summary>
         ///     Gets or sets the Root Container Color.
         /// </summary>
-        public static ColorBGRA RootContainerColor
-        {
-            get
-            {
-                return rootContainerColor;
-            }
-
-            set
-            {
-                rootContainerColor = value;
-            }
-        }
+        public static ColorBGRA RootContainerColor { get; set; }
 
         /// <summary>
         ///     Gets or sets the Global Text Color.
         /// </summary>
-        public static ColorBGRA TextColor
-        {
-            get
-            {
-                return textColor;
-            }
-
-            set
-            {
-                textColor = value;
-            }
-        }
+        public static ColorBGRA TextColor { get; set; }
 
         #endregion
     }

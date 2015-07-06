@@ -24,6 +24,7 @@ namespace LeagueSharp.SDK.Core
 {
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.UI.IMenu;
+    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
     using LeagueSharp.SDK.Core.UI.INotifications;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers;
@@ -49,6 +50,7 @@ namespace LeagueSharp.SDK.Core
 
             // Create L# menu
             Variables.LeagueSharpMenu = new Menu("LeagueSharp", "LeagueSharp", true).Attach();
+            MenuCustomizer.Initialize(Variables.LeagueSharpMenu);
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Created L# Menu.");
 
             // Load the Orbwalker

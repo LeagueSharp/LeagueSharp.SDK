@@ -64,16 +64,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private bool visible;
 
-        /// <summary>
-        ///     The x-axis.
-        /// </summary>
-        private float xd;
-
-        /// <summary>
-        ///     The y-axis.
-        /// </summary>
-        private float yd;
-
         #endregion
 
         #region Constructors and Destructors
@@ -112,24 +102,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #endregion
 
         #region Public Properties
-
-        /// <summary>
-        ///     Gets or sets a value indicating whether the user is dragging the menu.
-        /// </summary>
-        public bool Dragging { get; set; }
-
-        /// <summary>
-        ///     Gets or sets a value indicating whether the user has moved the menu at least 1 pixel.
-        /// </summary>
-        public bool HasDragged { get; set; }
-
-        /// <summary>
-        ///     Gets a value indicating whether this <see cref="Menu" /> is hovering.
-        /// </summary>
-        /// <value>
-        ///     <c>true</c> if hovering; otherwise, <c>false</c>.
-        /// </value>
-        public bool Hovering { get; private set; }
 
         /// <summary>
         ///     Gets the path.
@@ -392,68 +364,40 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public override void OnWndProc(WindowsKeys args)
         {
-            if (args.Msg == WindowsMessages.LBUTTONUP)
-            {
-                this.HasDragged = false;
-                this.Dragging = false;
-            }
-
-            if (this.Visible)
-            {
-                if (args.Msg == WindowsMessages.MOUSEMOVE && this.Dragging)
-                {
-                    MenuSettings.Position = new Vector2(args.Cursor.X - this.xd, args.Cursor.Y - this.yd);
-                    this.HasDragged = true;
-                }
-
-                if (args.Cursor.IsUnderRectangle(
-                    this.Position.X, 
-                    this.Position.Y, 
-                    this.MenuWidth, 
-                    MenuSettings.ContainerHeight))
-                {
-                    if (args.Msg == WindowsMessages.LBUTTONDOWN && this.Root)
-                    {
-                        var pos = MenuSettings.Position;
-                        this.xd = args.Cursor.X - pos.X;
-                        this.yd = args.Cursor.Y - pos.Y;
-                        this.Dragging = true;
-                    }
-
-                    this.Hovering = true;
-                    if (args.Msg == WindowsMessages.LBUTTONDOWN && this.Components.Count > 0)
-                    {
-                        this.Toggled = !this.Toggled;
-
-                        // Toggling siblings logic
-                        if (this.Parent == null)
-                        {
-                            foreach (var rootComponent in MenuManager.Instance.Menus.Where(c => !c.Equals(this)))
-                            {
-                                rootComponent.Toggled = false;
-                            }
-                        }
-                        else
-                        {
-                            foreach (var comp in this.Parent.Components.Where(comp => comp.Value.Name != this.Name))
-                            {
-                                comp.Value.Toggled = false;
-                            }
-                        }
-
-                        return;
-                    }
-                }
-                else
-                {
-                    this.Hovering = false;
-                }
-            }
+            this.Handler.OnWndProc(args);
+            
 
             // Pass OnWndProc on to children
             foreach (var item in this.Components)
             {
                 item.Value.OnWndProc(args);
+            }
+        }
+
+        /// <summary>
+        /// Toggles this menu component.
+        /// </summary>
+        public void Toggle()
+        {
+            if (this.Components.Count > 0)
+            {
+                this.Toggled = !this.Toggled;
+
+                // Toggling siblings logic
+                if (this.Parent == null)
+                {
+                    foreach (var rootComponent in MenuManager.Instance.Menus.Where(c => !c.Equals(this)))
+                    {
+                        rootComponent.Toggled = false;
+                    }
+                }
+                else
+                {
+                    foreach (var comp in this.Parent.Components.Where(comp => comp.Value.Name != this.Name))
+                    {
+                        comp.Value.Toggled = false;
+                    }
+                } 
             }
         }
 

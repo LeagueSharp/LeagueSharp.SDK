@@ -83,6 +83,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
             this.Key = key;
             this.Type = type;
             this.original = key;
+            Game.OnWndProc += Game_OnWndProc;
+        }
+
+        private void Game_OnWndProc(WndEventArgs args)
+        {
+            this.Handler.OnWndProc(new WindowsKeys(args));
         }
 
         /// <summary>
@@ -202,7 +208,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </param>
         public override void WndProc(WindowsKeys args)
         {
-            this.Handler.OnWndProc(args);
+            //do nothing, we use the fast OnWndProc for keybinds
         }
 
         #endregion

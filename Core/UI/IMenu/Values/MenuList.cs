@@ -112,9 +112,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
                 {
                     newValue = 0;
                 }
-                else if (value >= ValuesAsStrings.Count())
+                else if (value >= Count)
                 {
-                    newValue = ValuesAsStrings.Count() - 1;
+                    newValue = Count - 1;
                 }
                 else
                 {
@@ -200,7 +200,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         public MenuList(string name, string displayName, IEnumerable<T> objects, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
-            this.Values = objects.ToList();
+            this.Values = objects.ToArray();
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return this.Values.Count;
+                return this.Values.Length;
             }
         }
 
@@ -285,7 +285,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
             }
             set
             {
-                for (int i = 0; i < Values.Count; i++)
+                for (int i = 0; i < Values.Length; i++)
                 {
                     if (Values[i].Equals(value))
                     {
@@ -316,7 +316,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <value>
         ///     The values.
         /// </value>
-        public List<T> Values { get; private set; }
+        public T[] Values { get; private set; }
 
         /// <summary>
         ///     Gets the values as strings.
