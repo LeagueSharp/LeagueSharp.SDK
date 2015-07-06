@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Variables.cs" company="LeagueSharp">
+// <copyright file="DamageFlags.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,43 +16,37 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Class that contains helpful variables.
+//   The damage flags.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core
+namespace LeagueSharp.SDK.Core.Enumerations
 {
-    using LeagueSharp.SDK.Core.UI.IMenu;
+    using System;
 
     /// <summary>
-    ///     Class that contains helpful variables.
+    ///     The damage flags.
     /// </summary>
-    public class Variables
+    [Flags]
+    public enum DamageFlags
     {
-        #region Public Properties
+        /// <summary>
+        ///     Flag which indicates non damage, purpose to be an invalid flag and indicate a problem with settings of the flags.
+        /// </summary>
+        None = 0, 
 
         /// <summary>
-        ///     Gets the Safe TickCount.
+        ///     Flag which indicates the damage would include bonus attack damage.
         /// </summary>
-        public static int TickCount
-        {
-            get
-            {
-                return (int)(Game.ClockTime * 1000);
-            }
-        }
-
-        #endregion
-
-        #region Properties
+        BonusAttackDamage = 1 << 0, 
 
         /// <summary>
-        ///     Gets or sets the LeagueSharp menu.
+        ///     Flag which indicates the damage would include attack damage.
         /// </summary>
-        /// <value>
-        ///     The LeagueSharp menu.
-        /// </value>
-        internal static Menu LeagueSharpMenu { get; set; }
+        AttackDamage = 1 << 1, 
 
-        #endregion
+        /// <summary>
+        ///     Flag which indicates the damage would include ability power.
+        /// </summary>
+        AbilityPower = 1 << 2
     }
 }

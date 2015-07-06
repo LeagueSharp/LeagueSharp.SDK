@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Logging class for LeagueSharp.CommonEx, used to log output data into a file and the console.
+//   Logging class for LeagueSharp.SDK, used to log output data into a file and the console.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.Utils
@@ -28,7 +28,7 @@ namespace LeagueSharp.SDK.Core.Utils
     using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
-    ///     Logging class for LeagueSharp.CommonEx, used to log output data into a file and the console.
+    ///     Logging class for LeagueSharp.SDK, used to log output data into a file and the console.
     /// </summary>
     public class Logging
     {
@@ -151,12 +151,11 @@ namespace LeagueSharp.SDK.Core.Utils
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
                 {
-                    if (!(args.ExceptionObject is Exception))
+                    var exception = args.ExceptionObject as Exception;
+                    if (exception != null)
                     {
-                        return;
+                        Write(true, true, true)(LogLevel.Error, exception.Message);
                     }
-
-                    Write(true, true, true)(LogLevel.Error, ((Exception)args.ExceptionObject).Message);
                 };
         }
 
@@ -220,7 +219,7 @@ namespace LeagueSharp.SDK.Core.Utils
                     Directory.CreateDirectory(Constants.LogDirectory);
                 }
 
-                using (var writer = new StreamWriter(Constants.LogDirectory, true))
+                using (var writer = new StreamWriter(Path.Combine(Constants.LogDirectory, Constants.LogFileName), true))
                 {
                     writer.WriteLine(format);
                 }

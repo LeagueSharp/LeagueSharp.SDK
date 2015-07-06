@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Constant values of LeagueSharp.CommonEx
+//   Constant values of LeagueSharp.SDK
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core
@@ -29,7 +29,7 @@ namespace LeagueSharp.SDK.Core
     using SharpDX.Direct3D9;
 
     /// <summary>
-    ///     Constant values of LeagueSharp.CommonEx
+    ///     Constant values of LeagueSharp.SDK
     /// </summary>
     public static class Constants
     {
@@ -100,7 +100,7 @@ namespace LeagueSharp.SDK.Core
                 return
                     Cache.Instance.AddOrGetExisting(
                         "LogDirectory", 
-                        () => Path.Combine(LeagueSharpAppData, "Logs", "CommonEx")).ToString();
+                        () => Path.Combine(LeagueSharpAppData, "Logs", "SDK")).ToString();
             }
         }
 

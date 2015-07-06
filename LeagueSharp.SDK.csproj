@@ -67,13 +67,16 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Bootstrap.cs" />
     <Compile Include="Core\Enumerations\CastStates.cs" />
     <Compile Include="Core\Enumerations\CenteredFlags.cs" />
     <Compile Include="Core\Enumerations\CollisionableObjects.cs" />
+    <Compile Include="Core\Enumerations\DamageFlags.cs" />
     <Compile Include="Core\Enumerations\DangerLevel.cs" />
     <Compile Include="Core\Enumerations\GapcloserType.cs" />
     <Compile Include="Core\Enumerations\HealthPredictionType.cs" />
@@ -94,6 +97,7 @@
     <Compile Include="Core\Events\Teleport.cs" />
     <Compile Include="Core\Events\Turret.cs" />
     <Compile Include="Core\Extensions\GameRuntime.cs" />
+    <Compile Include="Core\Extensions\Runtime.cs" />
     <Compile Include="Core\GameObjects.cs" />
     <Compile Include="Core\IDrawing\DrawCircle.cs" />
     <Compile Include="Core\IDrawing\DrawLine.cs" />
@@ -138,6 +142,7 @@
     <Compile Include="Core\UI\INotifications\NotificationIcons.cs" />
     <Compile Include="Core\Enumerations\NotificationIconType.cs" />
     <Compile Include="Core\UI\INotifications\Notifications.cs" />
+    <Compile Include="Core\Utils\BinarySerializer.cs" />
     <Compile Include="Core\Utils\DefaultValue.cs" />
     <Compile Include="Core\Wrappers\Items.cs" />
     <Compile Include="Core\Math\ConvexHull.cs" />
@@ -217,6 +222,7 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Resources\Damage\5.12.0.341.json" />
     <None Include="Third_Party\Clipper\License.txt" />
   </ItemGroup>
   <ItemGroup>

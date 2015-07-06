@@ -161,6 +161,22 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
+        ///     Gets the selected target.
+        /// </summary>
+        /// <param name="range">
+        ///     The range.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Obj_AI_Hero" />.
+        /// </returns>
+        public static Obj_AI_Hero GetSelectedTarget(float range = -1f)
+        {
+            return SelectedTarget != null && SelectedTarget.IsValidTarget(range < 0 ? float.MaxValue : range)
+                       ? SelectedTarget
+                       : null;
+        }
+
+        /// <summary>
         ///     Gets the best candidate target.
         /// </summary>
         /// <param name="range">
@@ -364,10 +380,14 @@ namespace LeagueSharp.SDK.Core.Wrappers
                         menu.Add(new MenuSeparator("separatorOther", "Other Settings"));
                     }
 
-                    menu.Add(new MenuBool("focusTarget", "Focus Selected Target"));
+                    menu.Add(new MenuBool("focusTarget", "Focus Selected Target", true));
                     menu.Add(new MenuBool("drawTarget", "Draw Target", true));
                     menu.Add(new MenuSeparator("separatorMode", "Mode Selection"));
-                    menu.Add(new MenuList<TargetSelectorMode>("mode", "Mode") { SelectedValue = TargetSelectorMode.AutoPriority});
+                    menu.Add(
+                        new MenuList<TargetSelectorMode>("mode", "Mode")
+                            {
+                               SelectedValue = TargetSelectorMode.AutoPriority 
+                            });
 
                     rootMenu.Add(menu);
 

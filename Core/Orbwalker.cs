@@ -28,7 +28,6 @@ namespace LeagueSharp.SDK.Core
     using System.Windows.Forms;
 
     using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Events;
     using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math.Prediction;
@@ -49,6 +48,16 @@ namespace LeagueSharp.SDK.Core
         #region Static Fields
 
         /// <summary>
+        ///     The last auto attack tick.
+        /// </summary>
+        private static int lastAutoAttackTick;
+
+        /// <summary>
+        ///     The last movement order tick.
+        /// </summary>
+        private static int lastMovementOrderTick;
+
+        /// <summary>
         ///     The attack time tracking list.
         /// </summary>
         private static readonly IDictionary<float, OrbwalkerActionArgs> AfterAttackTime =
@@ -58,16 +67,6 @@ namespace LeagueSharp.SDK.Core
         ///     The <c>orbwalker</c> menu.
         /// </summary>
         private static readonly Menu Menu = new Menu("orbwalker", "Orbwalker");
-
-        /// <summary>
-        ///     The last auto attack tick.
-        /// </summary>
-        private static int lastAutoAttackTick;
-
-        /// <summary>
-        ///     The last movement order tick.
-        /// </summary>
-        private static int lastMovementOrderTick;
 
         #endregion
 
@@ -124,19 +123,18 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                var interruptableSpell = !InterruptableSpell.IsCastingInterruptableSpell(GameObjects.Player, true);
-                var canCancalAutoAttack = GameObjects.Player.CanCancelAutoAttack();
                 var tick = Variables.TickCount;
-                var attackCastDelay = GameObjects.Player.AttackCastDelay * 1000;
-                var delay = tick - lastMovementOrderTick
-                            > Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value;
+                var flag = Movement
+                           && tick - lastMovementOrderTick
+                           > Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value;
+                if (GameObjects.Player.CanCancelAutoAttack())
+                {
+                    return tick - lastAutoAttackTick > 250 && flag;
+                }
 
-                return Movement && interruptableSpell
-                       && (canCancalAutoAttack
-                               ? tick + (Game.Ping / 2)
-                                 >= lastAutoAttackTick + attackCastDelay
-                                 + Menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value
-                               : tick - lastAutoAttackTick > 250) && delay;
+                return tick + (Game.Ping / 2)
+                       >= lastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000
+                       + Menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value && flag;
             }
         }
 
@@ -298,8 +296,13 @@ namespace LeagueSharp.SDK.Core
                     > Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value)
                 {
                     var menuItem = Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>();
-                    var randomDistance = new Random(Variables.TickCount).Next(menuItem.MinValue, menuItem.Value + 1);
-                    position = GameObjects.Player.Position.Extend(position, randomDistance);
+
+                    var randomDistance = new Random(Variables.TickCount).Next(0, 50);
+                    position = menuItem.Value - randomDistance <= GameObjects.Player.BoundingRadius
+                                   ? GameObjects.Player.Position.Extend(
+                                       position, 
+                                       GameObjects.Player.BoundingRadius + randomDistance)
+                                   : GameObjects.Player.Position.Extend(position, menuItem.Value - randomDistance);
                 }
 
                 if (Menu["advanced"]["movementScramble"].GetValue<MenuBool>().Value)
@@ -308,7 +311,7 @@ namespace LeagueSharp.SDK.Core
                     var angle = 2D * System.Math.PI * random.NextDouble();
                     var radius = GameObjects.Player.Distance(Game.CursorPos) < 360
                                      ? 0F
-                                     : GameObjects.Player.BoundingRadius * 2F;
+                                     : GameObjects.Player.BoundingRadius / 2f;
                     var x = (float)(position.X + radius * System.Math.Cos(angle));
                     var y = (float)(position.Y + radius * System.Math.Sin(angle));
                     position = new Vector3(x, y, NavMesh.GetHeightForPosition(x, y));
@@ -352,7 +355,7 @@ namespace LeagueSharp.SDK.Core
 
                     if (eventArgs.Process && GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, gTarget))
                     {
-                        return;
+                        lastAutoAttackTick = Variables.TickCount + (Game.Ping / 2);
                     }
                 }
             }
@@ -361,6 +364,14 @@ namespace LeagueSharp.SDK.Core
             {
                 MoveOrder(position ?? Game.CursorPos);
             }
+        }
+
+        /// <summary>
+        ///     Resets the auto attack timer, <see cref="lastAutoAttackTick" />.
+        /// </summary>
+        public static void ResetAutoAttackTimer()
+        {
+            lastAutoAttackTick = 0;
         }
 
         #endregion
@@ -387,7 +398,7 @@ namespace LeagueSharp.SDK.Core
                 new MenuSlider(
                     "movementDelay", 
                     "Delay between Movement", 
-                    new Random(Variables.TickCount).Next(200, 301), 
+                    new Random(Variables.TickCount).Next(30, 101), 
                     0, 
                     2500));
             advanced.Add(new MenuBool("movementScramble", "Randomize movement location", true));
@@ -413,7 +424,7 @@ namespace LeagueSharp.SDK.Core
                                 Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value = new Random().Next(
                                     500, 
                                     1201);
-                                Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value = new Random().Next(200, 301);
+                                Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value = new Random().Next(30, 101);
                             }
                     });
             Menu.Add(advanced);
@@ -531,18 +542,17 @@ namespace LeagueSharp.SDK.Core
                 var spellName = args.SData.Name;
                 var target = args.Target as AttackableUnit;
 
-                if (AutoAttack.IsAutoAttack(spellName))
-                {
-                    lastAutoAttackTick = Variables.TickCount - (Game.Ping / 2);
-                }
-
                 if (AutoAttack.IsAutoAttackReset(spellName))
                 {
-                    DelayAction.Add(250, () => { lastAutoAttackTick = 0; });
+                    ResetAutoAttackTimer();
                 }
 
-                if (target != null && target.IsValid)
+                if (target != null && target.IsValid && AutoAttack.IsAutoAttack(spellName))
                 {
+                    lastAutoAttackTick = Variables.TickCount - (Game.Ping / 2);
+                    lastMovementOrderTick =
+                        (int)(Variables.TickCount + GameObjects.Player.AttackCastDelay * 1000 - (Game.Ping / 2f));
+
                     if (!target.Compare(LastTarget))
                     {
                         InvokeAction(new OrbwalkerActionArgs { Target = target, Type = OrbwalkerType.TargetSwitch });

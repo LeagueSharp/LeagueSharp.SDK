@@ -114,23 +114,6 @@ namespace LeagueSharp.SDK.Core.Utils
         #region Public Properties
 
         /// <summary>
-        ///     Gets the instance of Cache
-        /// </summary>
-        public static Cache Instance
-        {
-            get
-            {
-                if (instance != null)
-                {
-                    return instance;
-                }
-
-                instance = new Cache();
-                return instance;
-            }
-        }
-
-        /// <summary>
         ///     The capabilities of this implementation of ObjectCache.
         /// </summary>
         public override DefaultCacheCapabilities DefaultCacheCapabilities
@@ -150,7 +133,24 @@ namespace LeagueSharp.SDK.Core.Utils
         {
             get
             {
-                return "CommonEX Cache";
+                return "SDK Cache";
+            }
+        }
+
+        /// <summary>
+        ///     Gets the instance of Cache
+        /// </summary>
+        public static Cache Instance
+        {
+            get
+            {
+                if (instance != null)
+                {
+                    return instance;
+                }
+
+                instance = new Cache();
+                return instance;
             }
         }
 
