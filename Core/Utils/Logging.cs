@@ -38,34 +38,9 @@ namespace LeagueSharp.SDK.Core.Utils
         ///     Write Delegate, used to state the logging data.
         /// </summary>
         /// <param name="logLevel">Level of the log</param>
-        /// <param name="message">Message Format</param>
+        /// <param name="value">Value or Message Format</param>
         /// <param name="args">Message Format Arguments</param>
-        public delegate void WriteDelegate(LogLevel logLevel, string message, params object[] args);
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        ///     Gets or sets the cached message.
-        /// </summary>
-        public static string CachedMessage { get; set; }
-
-        /// <summary>
-        ///     Gets the cached message delay.
-        /// </summary>
-        public static int CachedMessageDelay
-        {
-            get
-            {
-                return 10000;
-            }
-        }
-
-        /// <summary>
-        ///     Gets or sets the cached message tick.
-        /// </summary>
-        public static int CachedMessageTick { get; set; }
+        public delegate void WriteDelegate(LogLevel logLevel, object value, params object[] args);
 
         #endregion
 
@@ -76,7 +51,6 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         /// <param name="logToFile">Write logging data to file. (Optional)</param>
         /// <param name="printColor">Print to Console with colors. (Optional)</param>
-        /// <param name="cacheMessage">Cache message to prevent duplication on console</param>
         /// <param name="memberName">Function name (Auto / Optional)</param>
         /// <see cref="WriteDelegate" />
         /// <example>Write()(LogLevel.Debug, "I am a debug, arguments: {0}, {1}.", "argument1", 123);</example>
@@ -84,17 +58,16 @@ namespace LeagueSharp.SDK.Core.Utils
         public static WriteDelegate Write(
             bool logToFile = false, 
             bool printColor = true, 
-            bool cacheMessage = false, 
             [CallerMemberName] string memberName = "")
         {
-            return (logLevel, message, args) =>
+            return (logLevel, value, args) =>
                 {
-                    var finalMessage = message;
+                    var finalMessage = value;
                     if (args.Length > 0)
                     {
                         try
                         {
-                            finalMessage = string.Format(message, args);
+                            finalMessage = string.Format(value.ToString(), args);
                         }
                         catch (Exception)
                         {
@@ -102,19 +75,7 @@ namespace LeagueSharp.SDK.Core.Utils
                         }
                     }
 
-                    if (cacheMessage)
-                    {
-                        if (CachedMessage == finalMessage
-                            && Variables.TickCount - CachedMessageTick < CachedMessageDelay)
-                        {
-                            return;
-                        }
-
-                        CachedMessage = finalMessage;
-                        CachedMessageTick = Variables.TickCount;
-                    }
-
-                    Write(logLevel, finalMessage, logToFile, printColor, memberName);
+                    Write(logLevel, finalMessage.ToString(), logToFile, printColor, memberName);
                 };
         }
 
@@ -122,7 +83,7 @@ namespace LeagueSharp.SDK.Core.Utils
         ///     Execute a logging write through the Write Delegate.
         /// </summary>
         /// <param name="logLevel">Level of the log</param>
-        /// <param name="message">Message Format</param>
+        /// <param name="value">Value or Message Format</param>
         /// <param name="args">Message Format Arguments</param>
         /// <param name="logToFile">Write logging data to file. (Optional)</param>
         /// <param name="printColor">Print to Console with colors. (Optional)</param>
@@ -131,13 +92,26 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <example>Write(LogLevel.Debug, "I am a debug, arguments: {0}, {1}.", new object[] { "argument1", 123 });</example>
         public static void Write(
             LogLevel logLevel, 
-            string message, 
+            object value, 
             object[] args, 
             bool logToFile = false, 
             bool printColor = true, 
             [CallerMemberName] string memberName = "")
         {
-            Write(logLevel, string.Format(message, args), logToFile, printColor, memberName);
+            var finalMessage = value;
+            if (args.Length > 0)
+            {
+                try
+                {
+                    finalMessage = string.Format(value.ToString(), args);
+                }
+                catch (Exception)
+                {
+                    // Ignored.
+                }
+            }
+
+            Write(logLevel, finalMessage.ToString(), logToFile, printColor, memberName);
         }
 
         #endregion
@@ -154,7 +128,7 @@ namespace LeagueSharp.SDK.Core.Utils
                     var exception = args.ExceptionObject as Exception;
                     if (exception != null)
                     {
-                        Write(true, true, true)(LogLevel.Error, exception.Message);
+                        Write(true)(LogLevel.Error, exception.Message);
                     }
                 };
         }

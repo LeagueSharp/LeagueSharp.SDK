@@ -53,7 +53,7 @@
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
+      <HintPath>packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
@@ -191,7 +191,6 @@
     <Compile Include="Core\Utils\Logging.cs" />
     <Compile Include="Core\Utils\Performance.cs" />
     <Compile Include="Core\Utils\TickOperation.cs" />
-    <Compile Include="Core\Utils\Version.cs" />
     <Compile Include="Core\Utils\WeightedRandom.cs" />
     <Compile Include="Core\Variables.cs" />
     <Compile Include="Core\Wrappers\Damage.cs" />

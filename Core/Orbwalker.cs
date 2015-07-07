@@ -48,16 +48,6 @@ namespace LeagueSharp.SDK.Core
         #region Static Fields
 
         /// <summary>
-        ///     The last auto attack tick.
-        /// </summary>
-        private static int lastAutoAttackTick;
-
-        /// <summary>
-        ///     The last movement order tick.
-        /// </summary>
-        private static int lastMovementOrderTick;
-
-        /// <summary>
         ///     The attack time tracking list.
         /// </summary>
         private static readonly IDictionary<float, OrbwalkerActionArgs> AfterAttackTime =
@@ -67,6 +57,16 @@ namespace LeagueSharp.SDK.Core
         ///     The <c>orbwalker</c> menu.
         /// </summary>
         private static readonly Menu Menu = new Menu("orbwalker", "Orbwalker");
+
+        /// <summary>
+        ///     The last auto attack tick.
+        /// </summary>
+        private static int lastAutoAttackTick;
+
+        /// <summary>
+        ///     The last movement order tick.
+        /// </summary>
+        private static int lastMovementOrderTick;
 
         #endregion
 
@@ -147,6 +147,16 @@ namespace LeagueSharp.SDK.Core
         ///     Gets or sets a value indicating whether movement.
         /// </summary>
         public static bool Movement { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the <c>orbwalk</c> position.
+        /// </summary>
+        public static Vector3 OrbwalkPosition { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the <c>orbwalk</c> target.
+        /// </summary>
+        public static AttackableUnit OrbwalkTarget { get; set; }
 
         #endregion
 
@@ -323,7 +333,7 @@ namespace LeagueSharp.SDK.Core
                                     };
                 InvokeAction(eventArgs);
 
-                if (eventArgs.Process && GameObjects.Player.IssueOrder(GameObjectOrder.MoveTo, position))
+                if (eventArgs.Process && GameObjects.Player.IssueOrder(GameObjectOrder.MoveTo, eventArgs.Position))
                 {
                     lastMovementOrderTick = Variables.TickCount;
                 }
@@ -339,7 +349,7 @@ namespace LeagueSharp.SDK.Core
         /// <param name="position">
         ///     The position of choice
         /// </param>
-        public static void Orbwalk(Obj_AI_Base target = null, Vector3? position = null)
+        public static void Orbwalk(AttackableUnit target = null, Vector3? position = null)
         {
             if (CanAttack)
             {
@@ -584,7 +594,7 @@ namespace LeagueSharp.SDK.Core
         {
             if (ActiveMode != OrbwalkerMode.None)
             {
-                Orbwalk();
+                Orbwalk(OrbwalkTarget, OrbwalkPosition);
             }
 
             foreach (var item in AfterAttackTime.ToArray().Where(item => Variables.TickCount - item.Key >= 0))

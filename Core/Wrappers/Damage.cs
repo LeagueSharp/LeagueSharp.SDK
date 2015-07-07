@@ -155,7 +155,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         {
             double result = source.TotalAttackDamage;
             var k = 1d;
-            var reduction = 2d;
+            var reduction = 0d;
 
             if (!includePassive)
             {
@@ -216,7 +216,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             var targetHero = target as Obj_AI_Hero;
-            if (target != null)
+            if (targetHero != null)
             {
                 // Ninja tabi
                 if (Items.HasItem(3047, targetHero))
@@ -229,9 +229,42 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 {
                     reduction += 8;
                 }
+
+                // Nimble Fighter
+                if (targetHero.ChampionName == "Fizz")
+                {
+                    int f;
+
+                    if (targetHero.Level >= 1 && targetHero.Level < 4)
+                    {
+                        f = 4;
+                    }
+                    else if (targetHero.Level >= 4 && targetHero.Level < 7)
+                    {
+                        f = 6;
+                    }
+                    else if (targetHero.Level >= 7 && targetHero.Level < 10)
+                    {
+                        f = 8;
+                    }
+                    else if (targetHero.Level >= 10 && targetHero.Level < 13)
+                    {
+                        f = 10;
+                    }
+                    else if (targetHero.Level >= 13 && targetHero.Level < 16)
+                    {
+                        f = 12;
+                    }
+                    else
+                    {
+                        f = 14;
+                    }
+
+                    reduction += f;
+                }
             }
 
-            return source.CalculatePhysicalDamage(target, result) * k - reduction;
+            return source.CalculatePhysicalDamage(target, result * k - reduction);
         }
 
         /// <summary>
@@ -335,9 +368,23 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     }
                     else
                     {
-                        foreach (var file in DamageFiles)
+                        var sysVersion = new Version(version);
+                        foreach (var file in from file in DamageFiles
+                                             let fileVersion = new Version(file.Key)
+                                             where
+                                                 sysVersion.Major == fileVersion.Major
+                                                 && sysVersion.Minor == fileVersion.Minor
+                                             select file)
                         {
-                            if (file.Key.Substring(0, 1).Equals(version.Substring(0, 1)))
+                            Version = file.Key;
+                            damageFile = JObject.Parse(Encoding.Default.GetString(file.Value));
+                            break;
+                        }
+
+                        if (damageFile == null)
+                        {
+                            foreach (
+                                var file in DamageFiles.Where(file => sysVersion.Major == new Version(file.Key).Major))
                             {
                                 Version = file.Key;
                                 damageFile = JObject.Parse(Encoding.Default.GetString(file.Value));
@@ -387,7 +434,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </returns>
         private static double CalculateMagicDamage(this Obj_AI_Base source, Obj_AI_Base target, double amount)
         {
-            double magicResist = target.SpellBlock;
+            var magicResist = Math.Round(target.SpellBlock);
 
             // Penetration can't reduce magic resist below 0.
             double value;
@@ -405,8 +452,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 value = 100 / (100 + (magicResist * source.PercentMagicPenetrationMod) - source.FlatMagicPenetrationMod);
             }
 
-            return PassivePercentMod(source, target, value) * (1 - target.PercentMagicReduction)
-                   * (1 + target.PercentMagicDamageMod) * amount;
+            return PassivePercentMod(source, target, value) * amount;
         }
 
         /// <summary>
@@ -444,18 +490,21 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 armorPenetrationFlat = 0d;
 
                 var tier = turret.GetTurretType();
-                if (tier == TurretType.TierOne || tier == TurretType.TierTwo)
+                switch (tier)
                 {
-                    armorPenetrationPercent = 0.3d;
-                }
-                else if (tier == TurretType.TierThree || tier == TurretType.TierFour)
-                {
-                    armorPenetrationPercent = 0.7d;
+                    case TurretType.TierOne:
+                    case TurretType.TierTwo:
+                        armorPenetrationPercent = 0.3d;
+                        break;
+                    case TurretType.TierThree:
+                    case TurretType.TierFour:
+                        armorPenetrationPercent = 0.7d;
+                        break;
                 }
             }
 
             // Penetration can't reduce armor below 0.
-            var armor = target.Armor;
+            var armor = Math.Round(target.Armor);
 
             double value;
             if (armor < 0)
@@ -471,8 +520,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 value = 100 / (100 + (armor * armorPenetrationPercent) - armorPenetrationFlat);
             }
 
-            // Take into account the percent passives.
-            return source.PassivePercentMod(target, value) * amount + PassiveFlatMod(source, target);
+            // Take into account the percent passives, flat passives and damage reduction.
+            return source.PassivePercentMod(target, value) * source.DamageReductionMod(target, amount)
+                   + PassiveFlatMod(source, target);
         }
 
         /// <summary>
@@ -539,6 +589,142 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             DamagesDictionary.Add(champion, spellDamages);
+        }
+
+        /// <summary>
+        ///     Apples damage reduction mod calculations towards the given amount of damage, a modifier onto the amount based on
+        ///     damage reduction passives.
+        /// </summary>
+        /// <param name="source">
+        ///     The source.
+        /// </param>
+        /// <param name="target">
+        ///     The target.
+        /// </param>
+        /// <param name="amount">
+        ///     The amount.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="double" />.
+        /// </returns>
+        private static double DamageReductionMod(this Obj_AI_Base source, Obj_AI_Base target, double amount)
+        {
+            if (source is Obj_AI_Hero)
+            {
+                // Summoners:
+
+                // Exhaust:
+                // + Exhausts target enemy champion, reducing their Movement Speed and Attack Speed by 30%, their Armor and Magic Resist by 10, and their damage dealt by 40% for 2.5 seconds.
+                if (source.HasBuff("Exhaust"))
+                {
+                    amount /= 0.4d;
+                }
+            }
+
+            if (target is Obj_AI_Hero)
+            {
+                // Passives:
+
+                // Unbreakable Will
+                // + Alistar removes all crowd control effects from himself, then gains additional attack damage and takes 70% reduced physical and magic damage for 7 seconds.
+                if (target.HasBuff("Ferocious Howl"))
+                {
+                    amount /= 0.7d;
+                }
+
+                // Tantrum
+                // + Amumu takes reduced physical damage from basic attacks and abilities.
+                if (target.HasBuff("Tantrum"))
+                {
+                    amount -= new[] { 2, 4, 6, 8, 10 }[target.Spellbook.GetSpell(SpellSlot.E).Level - 1];
+                }
+
+                // Unbreakable
+                // + Grants Braum 30% / 32.5% / 35% / 37.5% / 40% damage reduction from oncoming sources (excluding true damage and towers) for 3 / 3.25 / 3.5 / 3.75 / 4 seconds.
+                // + The damage reduction is increased to 100% for the first source of champion damage that would be reduced.
+                if (target.HasBuff("BraumShieldRaise"))
+                {
+                    amount /=
+                        new[] { 0.3d, 0.325d, 0.35d, 0.375d, 0.4d }[target.Spellbook.GetSpell(SpellSlot.E).Level - 1];
+                }
+
+                // Idol of Durand
+                // + Galio becomes a statue and channels for 2 seconds, Taunt icon taunting nearby foes and reducing incoming physical and magic damage by 50%.
+                if (target.HasBuff("GalioIdolOfDurand"))
+                {
+                    amount /= 0.5d;
+                }
+
+                // Courage
+                // + Garen gains a defensive shield for a few seconds, reducing incoming damage by 30% and granting 30% crowd control reduction for the duration.
+                if (target.HasBuff("GarenW"))
+                {
+                    amount /= 0.3d;
+                }
+
+                // Drunken Rage
+                // + Gragas takes a long swig from his barrel, disabling his ability to cast or attack for 1 second and then receives 10% / 12% / 14% / 16% / 18% reduced damage for 3 seconds.
+                if (target.HasBuff("GragasWSelf"))
+                {
+                    amount /=
+                        new[] { 0.1d, 0.12d, 0.14d, 0.16d, 0.18d }[target.Spellbook.GetSpell(SpellSlot.W).Level - 1];
+                }
+
+                // Void Stone
+                // + Kassadin reduces all magic damage taken by 15%.
+                if (target.HasBuff("VoidStone"))
+                {
+                    amount /= 0.15d;
+                }
+
+                // Shunpo
+                // + Katarina teleports to target unit and gains 15% damage reduction for 1.5 seconds. If the target is an enemy, the target takes magic damage.
+                if (target.HasBuff("KatarinaEReduction"))
+                {
+                    amount /= 0.15d;
+                }
+
+                // Vengeful Maelstrom
+                // + Maokai creates a magical vortex around himself, protecting him and allied champions by reducing damage from non-turret sources by 20% for a maximum of 10 seconds.
+                if (target.HasBuff("MaokaiDrainDefense") && !(source is Obj_AI_Turret))
+                {
+                    amount /= 0.2d;
+                }
+
+                // Meditate
+                // + Master Yi channels for up to 4 seconds, restoring health each second. This healing is increased by 1% for every 1% of his missing health. Meditate also resets the autoattack timer.
+                // + While channeling, Master Yi reduces incoming damage (halved against turrets).
+                if (target.HasBuff("Meditate"))
+                {
+                    amount /= new[] { 0.5d, 0.55d, 0.6d, 0.65d, 0.7d }[target.Spellbook.GetSpell(SpellSlot.W).Level - 1]
+                              / (source is Obj_AI_Turret ? 2 : 1);
+                }
+
+                // Valiant Fighter
+                // + Poppy reduces all damage that exceeds 10% of her current health by 50%.
+                if (target.HasBuff("PoppyValiantFighter") && !(source is Obj_AI_Turret) && amount / target.Health > 0.1d)
+                {
+                    amount /= 0.5d;
+                }
+
+                // Shadow Dash
+                // + Shen reduces all physical damage by 50% from taunted enemies.
+                if (target.HasBuff("Shen Shadow Dash") && source.HasBuff("Taunt"))
+                {
+                    amount /= 0.5d;
+                }
+
+                // Unholy Covenant
+                // + Yorick grants him 5% damage reduction for each ghoul currently summoned.
+                if (target.HasBuff("YorickUnholySymbiosis"))
+                {
+                    amount /=
+                        GameObjects.AttackableUnits.Count(
+                            g => g.Name.Equals("Clyde") || g.Name.Equals("Inky") || g.Name.Equals("Blinky")) * 0.05d;
+                }
+            }
+
+            return amount;
         }
 
         /// <summary>
@@ -652,7 +838,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             {
                 // Offensive masteries:
 
-                // Double edge sword:
+                // Double-Edged Sword:
                 // + Melee champions: You deal 2% increase damage from all sources, but take 1% increase damage from all sources.
                 // + Ranged champions: You deal and take 1.5% increased damage from all sources. 
                 if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
@@ -678,15 +864,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
                         amount *= 1.05d;
                     }
                 }
-
-                // Summoners:
-
-                // Exhaust:
-                // + Exhausts target enemy champion, reducing their Movement Speed and Attack Speed by 30%, their Armor and Magic Resist by 10, and their damage dealt by 40% for 2.5 seconds.
-                if (hero.HasBuff("Exhaust"))
-                {
-                    amount /= 0.4d;
-                }
             }
 
             if (targetHero != null)
@@ -699,53 +876,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 if (targetHero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
                 {
                     amount *= targetHero.IsMelee() ? 1.01d : 1.015d;
-                }
-
-                // Passives:
-
-                // Unbreakable Will
-                // + Alistar removes all crowd control effects from himself, then gains additional attack damage and takes 70% reduced physical and magic damage for 7 seconds.
-                if (targetHero.HasBuff("Ferocious Howl"))
-                {
-                    amount /= 0.7d;
-                }
-
-                // Courage
-                // + Garen gains a defensive shield for a few seconds, reducing incoming damage by 30% and granting 30% crowd control reduction for the duration.
-                if (targetHero.HasBuff("GarenW"))
-                {
-                    amount /= 0.3d;
-                }
-
-                // Meditate
-                // + Master Yi channels for up to 4 seconds, restoring health each second. This healing is increased by 1% for every 1% of his missing health. Meditate also resets the autoattack timer.
-                // + While channeling, Master Yi reduces incoming damage (halved against turrets).
-                if (targetHero.HasBuff("Meditate"))
-                {
-                    amount /=
-                        new[] { 0.5d, 0.55d, 0.6d, 0.65d, 0.7d }[targetHero.Spellbook.GetSpell(SpellSlot.W).Level - 1]
-                        / (source is Obj_AI_Turret ? 2 : 1);
-                }
-
-                // Shunpo
-                // + Katarina teleports to target unit and gains 15% damage reduction for 1.5 seconds. If the target is an enemy, the target takes magic damage.
-                if (targetHero.HasBuff("KatarinaEReduction"))
-                {
-                    amount /= 0.15d;
-                }
-
-                // Idol of Durand
-                // + Galio becomes a statue and channels for 2 seconds, Taunt icon taunting nearby foes and reducing incoming physical and magic damage by 50%.
-                if (targetHero.HasBuff("GalioIdolOfDurand"))
-                {
-                    amount /= 0.5d;
-                }
-
-                // Vengeful Maelstrom
-                // + Maokai creates a magical vortex around himself, protecting him and allied champions by reducing damage from non-turret sources by 20% for a maximum of 10 seconds.
-                if (targetHero.HasBuff("MaokaiDrainDefense"))
-                {
-                    amount /= 0.2d;
                 }
             }
 

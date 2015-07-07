@@ -21,6 +21,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core
 {
+    using System;
+
     using LeagueSharp.SDK.Core.UI.IMenu;
 
     /// <summary>
@@ -28,6 +30,20 @@ namespace LeagueSharp.SDK.Core
     /// </summary>
     public class Variables
     {
+        #region Static Fields
+
+        /// <summary>
+        ///     The kit version.
+        /// </summary>
+        public static readonly Version KitVersion = typeof(Bootstrap).Assembly.GetName().Version;
+
+        /// <summary>
+        ///     The league version.
+        /// </summary>
+        public static readonly Version LeagueVersion = new Version(Game.Version);
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
