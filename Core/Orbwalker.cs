@@ -372,7 +372,7 @@ namespace LeagueSharp.SDK.Core
 
             if (CanMove)
             {
-                MoveOrder(position ?? Game.CursorPos);
+                MoveOrder(position.HasValue && position.Value.IsValid() ? position.Value : Game.CursorPos);
             }
         }
 

@@ -181,15 +181,15 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
                         if (Items.HasItem(3302, hero))
                         {
-                            value = 200;
+                            value = 200; // Relic Shield
                         }
                         else if (Items.HasItem(3097, hero))
                         {
-                            value = 240;
+                            value = 240; // Targon's Brace
                         }
                         else if (Items.HasItem(3401, hero))
                         {
-                            value = 400;
+                            value = 400; // Face of the Mountain
                         }
 
                         return value + hero.TotalAttackDamage;
@@ -720,7 +720,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 {
                     amount /=
                         GameObjects.AttackableUnits.Count(
-                            g => g.Name.Equals("Clyde") || g.Name.Equals("Inky") || g.Name.Equals("Blinky")) * 0.05d;
+                            g =>
+                            g.IsEnemy && (g.Name.Equals("Clyde") || g.Name.Equals("Inky") || g.Name.Equals("Blinky")))
+                        * 0.05d;
                 }
             }
 
