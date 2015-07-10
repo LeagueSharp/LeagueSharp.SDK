@@ -47,7 +47,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </summary>
         private static readonly IDictionary<string, byte[]> DamageFiles = new Dictionary<string, byte[]>
                                                                               {
-                                                                                  { "5.12.0.341", Resources._5_12_0_341 }
+                                                                                  { "5.13.0.323", Resources._5_13_0_323 }
                                                                               };
 
         /// <summary>
@@ -405,13 +405,27 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
                     if (damageFile == null)
                     {
-                        Logging.Write()(LogLevel.Fatal, "No suitable damage library found, unable to load damages.");
+                        Logging.Write()(
+                            LogLevel.Fatal, 
+                            "[GameVersion:{0}] No suitable damage library found, unable to load damages.", 
+                            Variables.GameVersion);
                         return;
                     }
 
-                    foreach (var champion in damageFile)
+                    JToken damagesToken;
+                    if (damageFile.TryGetValue("Damages", out damagesToken))
                     {
-                        CreateSpells(champion.Key, (IDictionary<string, JToken>)champion.Value);
+                        foreach (var champion in (IDictionary<string, JToken>)damagesToken)
+                        {
+                            CreateSpells(champion.Key, (IDictionary<string, JToken>)champion.Value);
+                        }
+                    }
+                    else
+                    {
+                        Logging.Write()(
+                            LogLevel.Fatal, 
+                            "[{0}] No suitable damage category exists in damage library.", 
+                            Version);
                     }
                 };
         }
@@ -908,9 +922,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     var spellLevel = @base.Spellbook.GetSpell(sdata.Slot).Level - 1;
                     var damage = 0d;
 
-                    if (spellLevel >= 0)
+                    if (spellLevel >= 0 && sdata.Base.Length > 0)
                     {
-                        damage += sdata.Base[Math.Min(spellLevel, sdata.Base.Length)];
+                        damage += sdata.Base[Math.Min(spellLevel, sdata.Base.Length - 1)];
                     }
 
                     if (sdata.Flags.HasFlag(DamageFlags.AbilityPower))
@@ -926,6 +940,34 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     if (sdata.Flags.HasFlag(DamageFlags.BonusAttackDamage))
                     {
                         damage += @base.FlatPhysicalDamageMod * sdata.BonusAttackDamage;
+                    }
+
+                    if (sdata.Flags.HasFlag(DamageFlags.EnemyMaxHealth))
+                    {
+                        damage += aiBase.MaxHealth
+                                  * sdata.EnemyMaxHealthBase[Math.Min(spellLevel, sdata.EnemyMaxHealthBase.Length - 1)];
+                    }
+
+                    if (sdata.Flags.HasFlag(DamageFlags.AbilityPowerEnemyMaxHealth))
+                    {
+                        damage += @base.TotalMagicalDamage * sdata.AbilityPowerEnemyMaxHealth;
+                    }
+
+                    if (sdata.Flags.HasFlag(DamageFlags.BaseAttackDamagePercent))
+                    {
+                        damage += @base.TotalAttackDamage
+                                  * sdata.BaseAttackDamagePercent[
+                                      Math.Min(spellLevel, sdata.BaseAttackDamagePercent.Length - 1)];
+                    }
+
+                    if (sdata.Flags.HasFlag(DamageFlags.BaseChampionLevel))
+                    {
+                        damage += sdata.BaseChampionLevel[Math.Min(@base.Level, sdata.BaseChampionLevel.Length - 1)];
+                    }
+
+                    if (sdata.Flags.HasFlag(DamageFlags.MaxHealth))
+                    {
+                        damage += sdata.MaxHealth * @base.MaxHealth;
                     }
 
                     return @base.CalculateDamage(aiBase, sdata.Type, damage);
@@ -948,7 +990,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     Gets or sets the damage calculation function.
         /// </summary>
-        private Func<Obj_AI_Base, Obj_AI_Base, double> GetDamageFunc { get; set; }
+        private Func<Obj_AI_Hero, Obj_AI_Base, double> GetDamageFunc { get; set; }
 
         #endregion
 
@@ -966,7 +1008,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <returns>
         ///     The damage in <see cref="double" /> value.
         /// </returns>
-        public double GetDamage(Obj_AI_Base source, Obj_AI_Base target)
+        public double GetDamage(Obj_AI_Hero source, Obj_AI_Base target)
         {
             return this.GetDamageFunc(source, target);
         }
@@ -988,6 +1030,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public float AbilityPower { get; set; }
 
         /// <summary>
+        ///     Gets or sets the ability power enemy max health.
+        /// </summary>
+        [JsonProperty("enemyMaxHealthAP")]
+        public float AbilityPowerEnemyMaxHealth { get; set; }
+
+        /// <summary>
         ///     Gets or sets the attack damage.
         /// </summary>
         [JsonProperty("AD")]
@@ -1000,16 +1048,40 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public float[] Base { get; set; }
 
         /// <summary>
+        ///     Gets or sets the base attack damage percent.
+        /// </summary>
+        [JsonProperty("baseADPercent")]
+        public float[] BaseAttackDamagePercent { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the base champion level.
+        /// </summary>
+        [JsonProperty("baseChampLevel")]
+        public float[] BaseChampionLevel { get; set; }
+
+        /// <summary>
         ///     Gets or sets the bonus attack damage.
         /// </summary>
         [JsonProperty("bonusAD")]
         public float BonusAttackDamage { get; set; }
 
         /// <summary>
+        ///     Gets or sets the enemy max health base.
+        /// </summary>
+        [JsonProperty("enemyMaxHealthBase")]
+        public float[] EnemyMaxHealthBase { get; set; }
+
+        /// <summary>
         ///     Gets or sets the flags.
         /// </summary>
         [JsonProperty("flags")]
         public DamageFlags Flags { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the max health.
+        /// </summary>
+        [JsonProperty("maxHealth")]
+        public float MaxHealth { get; set; }
 
         /// <summary>
         ///     Gets or sets the slot.

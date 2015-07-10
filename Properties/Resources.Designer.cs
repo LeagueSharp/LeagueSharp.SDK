@@ -63,9 +63,9 @@ namespace LeagueSharp.SDK.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] _5_12_0_341 {
+        internal static byte[] _5_13_0_323 {
             get {
-                object obj = ResourceManager.GetObject("_5_12_0_341", resourceCulture);
+                object obj = ResourceManager.GetObject("_5_13_0_323", resourceCulture);
                 return ((byte[])(obj));
             }
         }

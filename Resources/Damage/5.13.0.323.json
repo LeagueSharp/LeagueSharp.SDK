@@ -1,0 +1,442 @@
+{
+    "Passives": {
+        "Braum": {
+        }
+    },
+    "Damages": {
+        "Aatrox": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 70, 115, 160, 205, 250 ],
+                    "bonusAD": "0.6",
+                    "type": "Physical",
+                    "flags": "1"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 75, 110, 145, 180, 215 ],
+                    "bonusAD": "0.6",
+                    "AP": "0.6",
+                    "type": "Magical",
+                    "flags": "5"
+                }
+            },
+            "R": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 200, 300, 400 ],
+                    "AP": "1.0",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "Ahri": {
+            "Q": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 40, 65, 90, 115, 140 ],
+                    "AP": "0.35",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage1": {
+                    "base": [ 40, 65, 90, 115, 140 ],
+                    "AP": "0.35",
+                    "type": "True",
+                    "flags": "4"
+                }
+            },
+            "W": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 40, 65, 90, 115, 140 ],
+                    "AP": "0.4",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 60, 95, 130, 165, 200 ],
+                    "AP": "0.5",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "R": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 70, 110, 150 ],
+                    "AP": "0.3",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "Akali": {
+            "Q": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 35, 55, 75, 95, 115 ],
+                    "AP": "0.4",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage1": {
+                    "base": [ 45, 70, 95, 120, 145 ],
+                    "AP": "0.5",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 30, 55, 80, 105, 130 ],
+                    "AP": "0.4",
+                    "AD": "0.6",
+                    "type": "Physical",
+                    "flags": "6"
+                }
+            },
+            "R": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 100, 175, 250 ],
+                    "AP": "0.4",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "Alistar": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 60, 105, 150, 195, 240 ],
+                    "AP": "0.5",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "W": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 55, 110, 165, 220, 275 ],
+                    "AP": "0.5",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "Amumu": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 80, 130, 180, 230, 280 ],
+                    "AP": "0.7",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "W": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 8, 12, 16, 20, 24 ],
+                    "enemyMaxHealthBase": [ 1, 1.5, 2, 2.5, 3 ],
+                    "enemyMaxHealthAP": "0.01",
+                    "type": "Magical",
+                    "flags": "24"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 75, 100, 125, 150, 175 ],
+                    "AP": "0.5",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "R": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 150, 250, 350 ],
+                    "AP": "0.8",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "Anivia": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 60, 90, 120, 150, 180 ],
+                    "AP": "0.5",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 55, 85, 115, 145, 175 ],
+                    "AP": "0.5",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "R": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 80, 120, 160 ],
+                    "AP": "0.25",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "Annie": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 80, 115, 150, 185, 220 ],
+                    "AP": "0.8",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "W": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 70, 115, 160, 205, 250 ],
+                    "AP": "0.85",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 20, 30, 40, 50, 60 ],
+                    "AP": "0.2",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "R": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 175, 300, 425 ],
+                    "AP": "0.8",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage1": { "base": [ 20, 30, 40 ], "AP": "0.2", "type": "Magical", "flags": "4" }
+            }
+        },
+        "Ashe": {
+            "Q": {
+                "Stages": "2",
+                "Stage0": {
+                    "baseADPercent": [ 1.15, 1.20, 1.25, 1.30, 1.35 ],
+                    "type": "Physical",
+                    "flags": "32"
+                },
+                "Stage1": {
+                    "baseADPercent": [ 0.23, 0.24, 0.25, 0.26, 0.27 ],
+                    "type": "Physical",
+                    "flags": "32"
+                }
+            },
+            "W": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 20, 35, 50, 65, 80 ],
+                    "AD": "1.0",
+                    "type": "Physical",
+                    "flags": "2"
+                }
+            },
+            "R": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 250, 425, 600 ],
+                    "AP": "1.0",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "Azir": {
+            "Q": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 65, 85, 105, 125, 145 ],
+                    "AP": "0.5",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage1": {
+                    "base": [ 16.25, 21.25, 62.25, 31.25, 36.25 ],
+                    "AP": "0.125",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "W": {
+                "Stages": "2",
+                "Stage0": {
+                    "baseChampLevel": [ 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 160, 170 ],
+                    "AP": "0.6",
+                    "type": "Magical",
+                    "flags": "68"
+                },
+                "Stage1": {
+                    "baseChampLevel": [ 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230 ],
+                    "AP": "0.4",
+                    "type": "Magical",
+                    "flags": "68"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 60, 90, 120, 150, 180 ],
+                    "AP": "0.4",
+                    "type": "Physical",
+                    "flags": "4"
+                }
+            },
+            "R": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 150, 225, 300 ],
+                    "AP": "0.6",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "Bard": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 80, 125, 170, 215, 260 ],
+                    "AP": "0.65",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "Blitzcrank": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 80, 135, 190, 245, 300 ],
+                    "AP": "1.0",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "AD": "2.0",
+                    "type": "Physical",
+                    "flags": "2"
+                }
+            },
+            "R": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 250, 375, 500 ],
+                    "AP": "1.0",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage1": {
+                    "base": [ 100, 200, 300 ],
+                    "AP": "0.2",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "Brand": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 80, 120, 160, 200, 240 ],
+                    "AP": "0.65",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "W": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 75, 120, 165, 210, 255 ],
+                    "AP": "0.6",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage1": {
+                    "base": [ 93.75, 150, 206.25, 262.50, 318.75 ],
+                    "AP": "0.75",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 70, 105, 140, 175, 210 ],
+                    "AP": "0.55",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "R": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 150, 250, 350 ],
+                    "AP": "0.5",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage1": {
+                    "base": [ 450, 750, 1050 ],
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "Braum": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 70, 115, 160, 205, 250 ],
+                    "maxHealth": "0.025",
+                    "type": "Magical",
+                    "flags": "128"
+                }
+            },
+            "R": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 150, 2050, 350 ],
+                    "AP": "0.6",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        }
+    }
+}

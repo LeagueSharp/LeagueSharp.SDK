@@ -574,7 +574,7 @@ namespace LeagueSharp.SDK.Core
                     if (!AfterAttackTime.ContainsKey(time))
                     {
                         AfterAttackTime.Add(
-                            time, 
+                            Variables.TickCount + time,
                             new OrbwalkerActionArgs { Target = target, Type = OrbwalkerType.AfterAttack });
                     }
 
