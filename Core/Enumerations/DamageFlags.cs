@@ -15,8 +15,10 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
+// <summary>
+//   The damage flags.
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace LeagueSharp.SDK.Core.Enumerations
 {
     using System;
@@ -28,8 +30,7 @@ namespace LeagueSharp.SDK.Core.Enumerations
     public enum DamageFlags
     {
         /// <summary>
-        ///     Flag which indicates non damage, purpose to be an invalid flag and indicate a problem with settings of the flags.
-        ///     (0)
+        ///     Flag which indicates no special damage flag, default flag for all. (0)
         /// </summary>
         None = 0, 
 
@@ -60,18 +61,46 @@ namespace LeagueSharp.SDK.Core.Enumerations
         AbilityPowerEnemyMaxHealth = 1 << 4, 
 
         /// <summary>
-        /// Flag which indicates the damage would include a base array damage of attack damage type treated as percentage of the attack damage. (32)
+        ///     Flag which indicates the damage would include a base array damage of attack damage type treated as percentage of
+        ///     the attack damage. (32)
         /// </summary>
-        BaseAttackDamagePercent = 1 << 5,
+        BaseAttackDamagePercent = 1 << 5, 
 
         /// <summary>
         ///     Flag which indicates the damage would include a base array based on the champion level. (64)
         /// </summary>
-        BaseChampionLevel = 1 << 6,
+        BaseChampionLevel = 1 << 6, 
 
         /// <summary>
         ///     Flag which indicates that damage would include a percentage of the champion's max health. (128)
         /// </summary>
-        MaxHealth = 1 << 7,
+        MaxHealth = 1 << 7, 
+
+        /// <summary>
+        ///     Flag which indicates that damage would be changed based on the distance of target from the source. (256)
+        /// </summary>
+        SpecialDistance = 1 << 8, 
+
+        /// <summary>
+        ///     Flag which indicates that damage would be based on target's current health. (512)
+        /// </summary>
+        TargetHealth = 1 << 9, 
+
+        /// <summary>
+        ///     Flag which indicates that damage would be based around a passive and the spell holds two possible forms. (1024)
+        /// </summary>
+        SpecialPassiveAlternative = 1 << 10, 
+
+        /// <summary>
+        ///     Flag which indicates the damage would include a base array damage of ability power type treated as percentage of
+        ///     the ability power. (2048)
+        /// </summary>
+        BaseAbilityPowerPercent = 1 << 11, 
+
+        /// <summary>
+        ///     Flag which indicates the damage would include a base array damage of bonus attack damage type treated as percentage
+        ///     of the bonus attack damage. (5012)
+        /// </summary>
+        BaseBonusAttackDamagePercent = 1 << 12
     }
 }
