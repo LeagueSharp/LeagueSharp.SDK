@@ -23,7 +23,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
 {
     using System;
     using System.Collections.Generic;
-    using System.Drawing.Design;
     using System.Linq;
     using System.Text;
 
@@ -35,6 +34,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+
+    using SharpDX;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -963,9 +964,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     if (sdata.Flags.HasFlag(DamageFlags.BonusAttackDamage))
                     {
                         var value = (!sdata.Flags.HasFlag(DamageFlags.SpecialDistance)
-                                   || @base.Distance(aiBase) <= sdata.DistanceOffset)
-                                      ? @base.FlatPhysicalDamageMod * sdata.BonusAttackDamage
-                                      : @base.FlatPhysicalDamageMod * sdata.DistanceBonusAttackDamage;
+                                     || @base.Distance(aiBase) <= sdata.DistanceOffset)
+                                        ? @base.FlatPhysicalDamageMod * sdata.BonusAttackDamage
+                                        : @base.FlatPhysicalDamageMod * sdata.DistanceBonusAttackDamage;
                         damage += value;
                         attackDamageAmount += value;
                     }
@@ -1053,9 +1054,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
                                     if (@base.TotalMagicalDamage / targetHealthBaseAbilityPowerScale[1] >= 1f)
                                     {
                                         value = aiBase.Health
-                                                      * ((@base.TotalMagicalDamage
-                                                          / targetHealthBaseAbilityPowerScale[1])
-                                                         * targetHealthBaseAbilityPowerScale[0]);
+                                                * ((@base.TotalMagicalDamage / targetHealthBaseAbilityPowerScale[1])
+                                                   * targetHealthBaseAbilityPowerScale[0]);
                                         flagDamage += value;
                                         abilityPowerDamageAmount += value;
                                     }
@@ -1124,9 +1124,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
                                     if (@base.TotalMagicalDamage / targetMissingHealthBaseAbilityPowerScale[1] >= 1f)
                                     {
                                         value = missingHealth
-                                                      * ((@base.TotalMagicalDamage
-                                                          / targetMissingHealthBaseAbilityPowerScale[1])
-                                                         * targetMissingHealthBaseAbilityPowerScale[0]);
+                                                * ((@base.TotalMagicalDamage
+                                                    / targetMissingHealthBaseAbilityPowerScale[1])
+                                                   * targetMissingHealthBaseAbilityPowerScale[0]);
                                         flagDamage += value;
                                         abilityPowerDamageAmount += value;
                                     }
@@ -1224,6 +1224,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public float AbilityPowerEnemyMaxHealth { get; set; }
 
         /// <summary>
+        ///     Gets or sets the ability power minion.
+        /// </summary>
+        [JsonProperty("APMinion")]
+        public float AbilityPowerMinion { get; set; }
+
+        /// <summary>
         ///     Gets or sets the alternative minion health base maximum damage.
         /// </summary>
         [JsonProperty("minionAlternativeHealthBaseMax")]
@@ -1272,22 +1278,10 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public float AttackDamage { get; set; }
 
         /// <summary>
-        /// Gets or sets the ability power minion.
-        /// </summary>
-        [JsonProperty("APMinion")]
-        public float AbilityPowerMinion { get; set; }
-
-        /// <summary>
         ///     Gets or sets the base.
         /// </summary>
         [JsonProperty("base")]
         public float[] Base { get; set; }
-
-        /// <summary>
-        /// Gets or sets the base minion.
-        /// </summary>
-        [JsonProperty("baseMinion")]
-        public float[] BaseMinion { get; set; }
 
         /// <summary>
         ///     Gets or sets the base ability power percent.
@@ -1336,6 +1330,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </summary>
         [JsonProperty("distanceBase")]
         public float[] BaseDistance { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the base minion.
+        /// </summary>
+        [JsonProperty("baseMinion")]
+        public float[] BaseMinion { get; set; }
 
         /// <summary>
         ///     Gets or sets the base target health.

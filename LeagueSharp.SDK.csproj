@@ -98,6 +98,7 @@
     <Compile Include="Core\Events\Turret.cs" />
     <Compile Include="Core\Extensions\GameRuntime.cs" />
     <Compile Include="Core\Extensions\Runtime.cs" />
+    <Compile Include="Core\Extensions\SharpDX\Generic.cs" />
     <Compile Include="Core\GameObjects.cs" />
     <Compile Include="Core\IDrawing\DrawCircle.cs" />
     <Compile Include="Core\IDrawing\DrawLine.cs" />

@@ -257,8 +257,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 this.Purchaseable = item.CanBeSold;
                 this.From = item.RecipeItem.Cast<int>().ToArray();
                 this.Stacks = item.MaxStack;
-                this.RequiredChampion = item.RequiredChampion;
-                this.InStore = item.InStore;
                 this.HideFromAll = !item.UsableInStore;
             }
 
@@ -285,11 +283,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
             ///     Gets the Id of the Item.
             /// </summary>
             public int Id { get; private set; }
-
-            /// <summary>
-            ///     Gets a value indicating whether in store.
-            /// </summary>
-            public bool InStore { get; private set; }
 
             /// <summary>
             ///     Gets a value indicating whether is ready.
@@ -333,11 +326,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
             ///     Gets the range squared.
             /// </summary>
             public float RangeSqr { get; private set; }
-
-            /// <summary>
-            ///     Gets the required champion.
-            /// </summary>
-            public string RequiredChampion { get; private set; }
 
             /// <summary>
             ///     Gets the sell price.
