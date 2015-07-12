@@ -19,6 +19,7 @@
 //   Target Selector, manageable utility to return the best candidate target based on chosen settings.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.Wrappers
 {
     using System;
@@ -26,15 +27,13 @@ namespace LeagueSharp.SDK.Core.Wrappers
     using System.Linq;
 
     using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Events;
     using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.IDrawing;
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
+
+    using Color = System.Drawing.Color;
 
     /// <summary>
     ///     Target Selector, manageable utility to return the best candidate target based on chosen settings.
@@ -43,76 +42,34 @@ namespace LeagueSharp.SDK.Core.Wrappers
     {
         #region Static Fields
 
-        /// <summary>
-        ///     Champions that should be prioritized first. (1)
-        /// </summary>
-        public static readonly string[] HighestPriority =
-            {
-                "Ahri", "Anivia", "Annie", "Ashe", "Brand", "Caitlyn", 
-                "Cassiopeia", "Corki", "Draven", "Ezreal", "Graves", "Jinx", 
-                "Kalista", "Karma", "Karthus", "Katarina", "Kennen", 
-                "KogMaw", "Leblanc", "Lucian", "Lux", "Malzahar", "MasterYi", 
-                "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", 
-                "Talon", "Teemo", "Tristana", "TwistedFate", "Twitch", 
-                "Varus", "Vayne", "Veigar", "VelKoz", "Viktor", "Xerath", 
-                "Zed", "Ziggs"
-            };
-
-        /// <summary>
-        ///     Champions that should be prioritized fourth(last). (4)
-        /// </summary>
-        public static readonly string[] LowestPriority =
-            {
-                "Alistar", "Amumu", "Blitzcrank", "Braum", "Cho'Gath", 
-                "Dr. Mundo", "Garen", "Gnar", "Hecarim", "Janna", "Jarvan IV", 
-                "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", 
-                "Nunu", "Olaf", "Rammus", "Renekton", "Sejuani", "Shen", 
-                "Shyvana", "Singed", "Sion", "Skarner", "Sona", "Soraka", 
-                "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", 
-                "Yorick", "Zac", "Zyra"
-            };
-
-        /// <summary>
-        ///     Champions that should be prioritized second. (2)
-        /// </summary>
-        public static readonly string[] MedHighPriority =
-            {
-                "Akali", "Diana", "Fiddlesticks", "Fiora", "Fizz", 
-                "Heimerdinger", "Jayce", "Kassadin", "Kayle", "Kha'Zix", 
-                "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco", 
-                "Vladimir", "Yasuo", "Zilean"
-            };
-
-        /// <summary>
-        ///     Champions that should be prioritized third (3)
-        /// </summary>
-        public static readonly string[] MedLowPriority =
-            {
-                "Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", 
-                "Gragas", "Irelia", "Jax", "Lee Sin", "Maokai", "Morgana", 
-                "Nocturne", "Pantheon", "Poppy", "Rengar", "Rumble", "Ryze", 
-                "Swain", "Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", 
-                "XinZhao", "RekSai"
-            };
-
-        /// <summary>
-        ///     The menu handle.
-        /// </summary>
-        private static Menu menu;
+        private static Obj_AI_Hero focusedHero;
 
         #endregion
 
         #region Public Properties
 
         /// <summary>
-        ///     Gets the mode.
+        ///     Menu showed when you hold SHIFT.
+        ///     You have to use it to get values setted on menu.
         /// </summary>
-        public static TargetSelectorMode Mode { get; private set; }
+        public static Menu Menu { get; private set; }
 
         /// <summary>
-        ///     Gets the selected target.
+        ///     The current mode of the TargetSelector
         /// </summary>
-        public static Obj_AI_Hero SelectedTarget
+        public static TargetSelectorMode Mode
+        {
+            get
+            {
+                return (TargetSelectorMode)Menu.GetValue<MenuList>("tsMode").SelectedValueAsObject;
+            }
+        }
+
+        #endregion
+
+        #region Properties
+
+        private static Obj_AI_Hero SelectedHero
         {
             get
             {
@@ -125,298 +82,669 @@ namespace LeagueSharp.SDK.Core.Wrappers
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Returns the priority of the hero
+        ///     Use this to get the selected champion.
+        ///     Range: Auto Attack
         /// </summary>
-        /// <param name="hero">
-        ///     The hero.
-        /// </param>
         /// <returns>
-        ///     The <see cref="float" />.
+        ///     Selected champion.
+        ///     It will return null if the champ isn't on range or can't be targetable.
         /// </returns>
-        public static float GetPriority(Obj_AI_Hero hero)
+        public static Obj_AI_Hero GetSelectedTarget()
         {
-            var p = 1;
-            try
-            {
-                p = menu["ts" + hero.ChampionName].GetValue<MenuSlider>().Value;
-            }
-            catch (Exception)
-            {
-                // Ignored.
-            }
+            CheckInitialized();
 
-            switch (p)
-            {
-                case 2:
-                    return 1.5f;
-                case 3:
-                    return 1.75f;
-                case 4:
-                    return 2f;
-                case 5:
-                    return 2.5f;
-                default:
-                    return 1f;
-            }
+            return GetSelectedTarget(GetPlayerAutoAttackRange());
         }
 
         /// <summary>
-        ///     Gets the selected target.
+        ///     Use this to get the selected champion.
+        ///     Range: Specified by the "range" parameter
         /// </summary>
         /// <param name="range">
-        ///     The range.
+        ///     The range that the selected target will be searched
         /// </param>
         /// <returns>
-        ///     The <see cref="Obj_AI_Hero" />.
+        ///     Selected champion.
+        ///     It will return null if the champ isn't on then specified range or can't be targetable.
         /// </returns>
-        public static Obj_AI_Hero GetSelectedTarget(float range = -1f)
+        public static Obj_AI_Hero GetSelectedTarget(float range)
         {
-            return SelectedTarget != null && SelectedTarget.IsValidTarget(range < 0 ? float.MaxValue : range)
-                       ? SelectedTarget
-                       : null;
+            CheckInitialized();
+
+            return GetSelectedTarget(GetPlayerPosition(), range);
         }
 
         /// <summary>
-        ///     Gets the best candidate target.
+        ///     Use this to get the selected champion.
+        ///     Range: Specified by the "range" parameter
         /// </summary>
-        /// <param name="range">
-        ///     The range.
-        /// </param>
-        /// <param name="damage">
-        ///     The damage type.
-        /// </param>
-        /// <param name="ignoredChamps">
-        ///     The ignored champions list.
-        /// </param>
         /// <param name="rangeCheckFrom">
-        ///     The range check from.
+        ///     From where it will searched.
+        ///     Use GetSelectedTarget(float range) if you wanna check from your own position.
+        /// </param>
+        /// <param name="range">
+        ///     The range that the selected target will be searched
         /// </param>
         /// <returns>
-        ///     The <see cref="Obj_AI_Hero" /> target.
+        ///     Selected champion.
+        ///     It will return null if the champ isn't on then specified range or can't be targetable.
         /// </returns>
-        public static Obj_AI_Hero GetTarget(
-            float range = -1f, 
-            DamageType damage = DamageType.Physical, 
-            IEnumerable<Obj_AI_Hero> ignoredChamps = null, 
-            Vector3? rangeCheckFrom = null)
+        public static Obj_AI_Hero GetSelectedTarget(Vector3 rangeCheckFrom, float range)
         {
-            if (menu["focusTarget"].GetValue<MenuBool>().Value && SelectedTarget != null
-                && SelectedTarget.IsValidTarget(range < 0 ? SelectedTarget.GetRealAutoAttackRange() : range))
-            {
-                return SelectedTarget;
-            }
+            CheckInitialized();
 
-            var targets =
-                GameObjects.EnemyHeroes.Where(t => t.IsValidTarget(range < 0 ? t.GetRealAutoAttackRange() : range))
-                    .ToArray();
-
-            if (!targets.Any())
+            if (SelectedHero == null || !SelectedHero.IsValid || !SelectedHero.IsVisible || !SelectedHero.IsTargetable
+                || SelectedHero.IsDead || SelectedHero.IsInvulnerable || SelectedHero.IsAlly)
             {
                 return null;
             }
 
-            if (ignoredChamps != null)
-            {
-                targets = targets.Where(t => ignoredChamps.All(i => t.NetworkId == i.NetworkId)).ToArray();
-            }
-
-            var excludedTargets = targets.Where(t => t.IsInvulnerable(damage));
-
-            return targets.Any()
-                       ? GetTarget(targets, damage, rangeCheckFrom)
-                       : GetTarget(excludedTargets, damage, rangeCheckFrom);
+            return SelectedHero.Distance(rangeCheckFrom) <= range ? SelectedHero : null;
         }
 
         /// <summary>
-        ///     Gets the best candidate target.
         /// </summary>
-        /// <param name="targets">
-        ///     The targets.
-        /// </param>
-        /// <param name="damageType">
-        ///     The damage Type.
-        /// </param>
-        /// <param name="rangeCheckFrom">
-        ///     The range check from.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="Obj_AI_Hero" /> target.
-        /// </returns>
+        /// <param name="range"></param>
+        /// <param name="damageType"></param>
+        /// <param name="ignoredChamps"></param>
+        /// <param name="rangeCheckFrom"></param>
+        /// <returns></returns>
+        [Obsolete("Use another overload of GetTarget")]
         public static Obj_AI_Hero GetTarget(
-            IEnumerable<Obj_AI_Hero> targets, 
-            DamageType damageType = DamageType.Physical, 
+            float? range,
+            DamageType damageType = DamageType.Physical,
+            IEnumerable<Obj_AI_Hero> ignoredChamps = null,
             Vector3? rangeCheckFrom = null)
         {
-            switch (Mode)
-            {
-                case TargetSelectorMode.LessAttacksToKill:
-                    return targets.MinOrDefault(
-                        t =>
-                            {
-                                var attackDamage = GameObjects.Player.GetAutoAttackDamage(t, true);
-                                var damage = t.Health / attackDamage > 0 ? attackDamage : 1;
-                                try
-                                {
-                                    return damage * menu["ts" + t.ChampionName].GetValue<MenuSlider>().Value;
-                                }
-                                catch (Exception)
-                                {
-                                    return damage;
-                                }
-                            });
-                case TargetSelectorMode.MostAbilityPower:
-                    return targets.MaxOrDefault(t => t.TotalMagicalDamage);
-                case TargetSelectorMode.MostAttackDamage:
-                    return targets.MaxOrDefault(t => t.TotalAttackDamage);
-                case TargetSelectorMode.Closest:
-                    return
-                        targets.MinOrDefault(
-                            hero => (rangeCheckFrom ?? GameObjects.Player.ServerPosition).DistanceSquared(hero.Position));
-                case TargetSelectorMode.NearMouse:
-                    return targets.Find(t => t.DistanceSquared(Game.CursorPos) < 22500);
-                case TargetSelectorMode.AutoPriority:
-                    return
-                        targets.MaxOrDefault(
-                            hero =>
-                            GameObjects.Player.CalculateDamage(hero, damageType, 100) / (1 + hero.Health)
-                            * GetPriority(hero));
-                case TargetSelectorMode.LeastHealth:
-                    return targets.MinOrDefault(t => t.Health);
-            }
+            CheckInitialized();
 
-            return null;
+            var checkRange = range ?? GetPlayerAutoAttackRange();
+            var from = rangeCheckFrom ?? GetPlayerPosition();
+
+            return GetSelectedTarget(from, checkRange) ?? GetTarget(from, checkRange, ignoredChamps);
         }
 
         /// <summary>
-        ///     Gets the best candidate target.
+        ///     Get the best target at you auto attack range.
+        /// </summary>
+        /// <returns>
+        ///     Best target to auto attack.
+        ///     It will be null if there is no champions on range or if they can't be targetable.
+        /// </returns>
+        public static Obj_AI_Hero GetTarget()
+        {
+            CheckInitialized();
+
+            return GetTarget(GetPlayerAutoAttackRange());
+        }
+
+        /// <summary>
+        ///     Get the best target at a specific range.
+        /// </summary>
+        /// <param name="range">
+        ///     The range that it will search for targets.
+        /// </param>
+        /// <returns>
+        ///     Best target on range.
+        ///     It will be null if there is no champions on range or if they can't be targetable.
+        /// </returns>
+        public static Obj_AI_Hero GetTarget(float range)
+        {
+            CheckInitialized();
+
+            return GetTarget(range, new List<Obj_AI_Hero>());
+        }
+
+        /// <summary>
+        ///     Get the best target to cast a spell.
         /// </summary>
         /// <param name="spell">
-        ///     The Spell instance
-        /// </param>
-        /// <param name="champsToIgnore">
-        ///     Champions to ignore.
-        /// </param>
-        /// <param name="rangeCheckFrom">
-        ///     The range Check From.
+        ///     The spell you wanna search for the best target.
         /// </param>
         /// <returns>
-        ///     The <see cref="Obj_AI_Hero" /> target.
+        ///     Best target to cast a spell.
+        ///     It will be null if there is no champions on range or if they can't be targetable.
         /// </returns>
-        public static Obj_AI_Hero GetTargetNoCollision(
-            Spell spell, 
-            IEnumerable<Obj_AI_Hero> champsToIgnore, 
-            Vector3? rangeCheckFrom = null)
+        public static Obj_AI_Hero GetTarget(Spell spell)
         {
-            var t = GetTarget(spell.Range, spell.DamageType, champsToIgnore, rangeCheckFrom);
+            CheckInitialized();
 
-            if (spell.Collision && spell.GetPrediction(t).Hitchance != HitChance.Collision)
-            {
-                return t;
-            }
-
-            return null;
+            return GetTarget(GetPlayerPosition(), spell);
         }
 
         /// <summary>
-        ///     Checks whether the target is invulnerable.
+        ///     Get the best target to auto attack into a specific range checked from another location,
+        ///     different of the current champion position.
         /// </summary>
-        /// <param name="target">
-        ///     The target
-        /// </param>
-        /// <param name="damageType">
-        ///     The damage type
-        /// </param>
-        /// <param name="ignoreShields">
-        ///     The ignore shields
+        /// <param name="rangeCheckFrom">
+        ///     From where it will searched.
+        ///     Use GetTarget() if you wanna check from your own position.
         /// </param>
         /// <returns>
-        ///     The <see cref="bool" />
+        ///     Best target on range.
+        ///     It will be null if there is no champions on range or if they can't be targetable.
         /// </returns>
-        public static bool IsInvulnerable(this Obj_AI_Base target, DamageType damageType, bool ignoreShields = true)
+        public static Obj_AI_Hero GetTarget(Vector3 rangeCheckFrom)
         {
-            // Tryndamere's Undying Rage (R)
-            if (!damageType.Equals(DamageType.True) && target.HasBuff("Undying Rage") && target.Health <= 2f)
+            CheckInitialized();
+
+            return GetTarget(rangeCheckFrom, GetPlayerAutoAttackRange());
+        }
+
+        /// <summary>
+        ///     Get the best target to cast a spell ignoring some champions
+        /// </summary>
+        /// The spell you wanna search the best target.
+        /// <param name="spell">
+        ///     The spell you wanna search for the best target.
+        /// </param>
+        /// <param name="ignoredChamps">
+        ///     List of champions you want ignore
+        /// </param>
+        /// <returns>
+        ///     Best target to cast a spell.
+        ///     It will be null if there is no available champions on range or if they can't be targetable.
+        /// </returns>
+        public static Obj_AI_Hero GetTarget(Spell spell, IEnumerable<Obj_AI_Hero> ignoredChamps)
+        {
+            CheckInitialized();
+
+            return GetTarget(GetPlayerPosition(), spell, ignoredChamps);
+        }
+
+        /// <summary>
+        ///     Get the best target to cast a spell checked from another location different of the current champion position.
+        /// </summary>
+        /// <param name="rangeCheckFrom">
+        ///     From where it will searched.
+        ///     Use GetTarget(Spell) if you wanna check from your own position.
+        /// </param>
+        /// <param name="spell">
+        ///     The spell you wanna search for the best target.
+        /// </param>
+        /// <returns>
+        ///     Best target to cast a spell.
+        ///     It will be null if there is no champions on range or if they can't be targetable.
+        /// </returns>
+        public static Obj_AI_Hero GetTarget(Vector3 rangeCheckFrom, Spell spell)
+        {
+            CheckInitialized();
+
+            return GetTarget(rangeCheckFrom, spell, new List<Obj_AI_Hero>());
+        }
+
+        /// <summary>
+        ///     Get the best target into a specific range checked from another location, different of the current champion
+        ///     position.
+        /// </summary>
+        /// <param name="rangeCheckFrom">
+        ///     From where it will searched.
+        ///     Use GetTarget(Spell) if you wanna check from your own position.
+        /// </param>
+        /// <param name="range">
+        ///     The range that it will search for targets.
+        /// </param>
+        /// <returns>
+        ///     Best target on range.
+        ///     It will be null if there is no champions on range or if they can't be targetable.
+        /// </returns>
+        public static Obj_AI_Hero GetTarget(Vector3 rangeCheckFrom, float range)
+        {
+            CheckInitialized();
+
+            return GetTarget(rangeCheckFrom, range, new List<Obj_AI_Hero>());
+        }
+
+        /// <summary>
+        ///     Get the best target into a specific range ignoring some champions
+        /// </summary>
+        /// <param name="range">
+        ///     The range that it will search for targets.
+        /// </param>
+        /// <param name="ignoredChamps">
+        ///     List of champions you want ignore
+        /// </param>
+        /// <returns>
+        ///     Best target on range.
+        ///     It will be null if there is no available champions on range or if they can't be targetable.
+        /// </returns>
+        public static Obj_AI_Hero GetTarget(float range, IEnumerable<Obj_AI_Hero> ignoredChamps)
+        {
+            CheckInitialized();
+
+            return GetTarget(GetPlayerPosition(), range, ignoredChamps);
+        }
+
+        /// <summary>
+        ///     Get the best target to cast a spell checking from a different position of your current and ignoring some champions.
+        /// </summary>
+        /// <param name="rangeCheckFrom">
+        ///     From where it will searched.
+        ///     Use GetTarget(Spell, IgnoredChamps) if you wanna check from your own position.
+        /// </param>
+        /// <param name="spell">
+        ///     The spell you wanna search for the best target.
+        /// </param>
+        /// <param name="ignoredChamps">
+        ///     List of champions you want ignore
+        /// </param>
+        /// <returns>
+        ///     The best target to cast a spell.
+        ///     It will be null if there is no available champions to cast or if they can't be targetable.
+        /// </returns>
+        public static Obj_AI_Hero GetTarget(Vector3 rangeCheckFrom, Spell spell, IEnumerable<Obj_AI_Hero> ignoredChamps)
+        {
+            CheckInitialized();
+
+            var selected = GetSelectedTarget(rangeCheckFrom, spell.Range);
+
+            if (selected != null)
             {
-                return true;
+                focusedHero = selected;
+                return selected;
             }
 
-            // Kayle's Intervention (R)
-            if (target.HasBuff("JudicatorIntervention"))
+            var possibleTargets = GetTargetsOnRange(rangeCheckFrom, spell.Range, ignoredChamps);
+
+            focusedHero = GetBestTarget(rangeCheckFrom, possibleTargets, spell);
+
+            return focusedHero;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="rangeCheckFrom">
+        ///     From where it will searched.
+        ///     Use GetTarget(Range, IgnoredChamps) if you wanna check from your own position.
+        /// </param>
+        /// <param name="range">
+        ///     The range that it will search for targets.
+        /// </param>
+        /// <param name="ignoredChamps">
+        ///     List of champions you want ignore
+        /// </param>
+        /// <returns>
+        ///     Best target on range.
+        ///     It will be null if there is no available champions on range or if they can't be targetable.
+        /// </returns>
+        public static Obj_AI_Hero GetTarget(Vector3 rangeCheckFrom, float range, IEnumerable<Obj_AI_Hero> ignoredChamps)
+        {
+            CheckInitialized();
+
+            var selected = GetSelectedTarget(rangeCheckFrom, range);
+
+            if (selected != null)
             {
-                return true;
+                focusedHero = selected;
+                return selected;
             }
 
-            return false;
+            var possibleTargets = GetTargetsOnRange(rangeCheckFrom, range, ignoredChamps);
+
+            focusedHero = GetBestTarget(rangeCheckFrom, possibleTargets);
+
+            return focusedHero;
+        }
+
+        /// <summary>
+        ///     Get the best target to cast a spell checking collision
+        /// </summary>
+        /// <param name="spell">
+        ///     The spell you wanna search for the best target.
+        /// </param>
+        /// <returns>
+        ///     Best target to spell.
+        ///     It will be null if there is no champions to spell or if they can't be targetable.
+        /// </returns>
+        public static Obj_AI_Hero GetTargetNoCollision(Spell spell)
+        {
+            CheckInitialized();
+
+            return GetTargetNoCollision(GetPlayerPosition(), spell);
+        }
+
+        /// <summary>
+        ///     Get the best target to cast a spell from another location different of your current and checking collision.
+        /// </summary>
+        /// <param name="rangeCheckFrom">
+        ///     From where it will searched.
+        ///     Use GetTargetNoCollision(Spell) if you wanna check from your own position.
+        /// </param>
+        /// <param name="spell">
+        ///     The spell you wanna search for the best target.
+        /// </param>
+        /// <returns>
+        ///     Best target to spell.
+        ///     It will be null if there is no champions to spell or if they can't be targetable.
+        /// </returns>
+        public static Obj_AI_Hero GetTargetNoCollision(Vector3 rangeCheckFrom, Spell spell)
+        {
+            CheckInitialized();
+
+            return GetTargetNoCollision(rangeCheckFrom, spell, new List<Obj_AI_Hero>());
+        }
+
+        /// <summary>
+        ///     Get the best target to cast a spell ignoring some champions.
+        /// </summary>
+        /// <param name="spell">
+        ///     The spell you wanna search for the best target.
+        /// </param>
+        /// <param name="ignoredChamps">
+        ///     List of champions you want ignore.
+        /// </param>
+        /// <returns>
+        ///     Best target to spell.
+        ///     It will be null if there is no champions to spell or if they can't be targetable.
+        /// </returns>
+        public static Obj_AI_Hero GetTargetNoCollision(Spell spell, IEnumerable<Obj_AI_Hero> ignoredChamps)
+        {
+            CheckInitialized();
+
+            return GetTargetNoCollision(GetPlayerPosition(), spell, ignoredChamps);
+        }
+
+        /// <summary>
+        ///     Get the best target to cast a spell checked from another location, different of your current position
+        ///     and ignoring some champions
+        /// </summary>
+        /// <param name="rangeCheckFrom">
+        ///     From where it will searched.
+        ///     Use GetTargetNoCollision(Spell, IgnoredChamps) if you wanna check from your own position.
+        /// </param>
+        /// <param name="spell">
+        ///     The spell you wanna search for the best target.
+        /// </param>
+        /// <param name="ignoredChamps">
+        ///     List of champions you want ignore.
+        /// </param>
+        /// <returns>
+        ///     Best target to spell.
+        ///     It will be null if there is no champions to spell or if they can't be targetable.
+        /// </returns>
+        public static Obj_AI_Hero GetTargetNoCollision(
+            Vector3 rangeCheckFrom,
+            Spell spell,
+            IEnumerable<Obj_AI_Hero> ignoredChamps)
+        {
+            CheckInitialized();
+
+            var possibleTargets =
+                GetTargetsOnRange(rangeCheckFrom, spell.Range, new List<Obj_AI_Hero>())
+                    .Where(target => spell.GetPrediction(target).Hitchance != HitChance.Collision);
+
+            focusedHero = GetBestTarget(rangeCheckFrom, possibleTargets, spell);
+
+            return focusedHero;
+        }
+
+        /// <summary>
+        ///     Put the target selector options on Menu
+        /// </summary>
+        /// <param name="mainMenu">
+        ///     Parent menu.
+        ///     if null the menu will shown as root menu.
+        /// </param>
+        public static Menu Initialize(Menu mainMenu = null)
+        {
+            if (Menu == null)
+            {
+                LoadMenu(mainMenu);
+
+                if (Menu["tsDraws"].GetValue<MenuBool>("tsDrawSelectedTarget").Value)
+                {
+                    Drawing.OnDraw += Drawing_OnDraw_SelectedTarget;
+                }
+
+                if (Menu["tsDraws"].GetValue<MenuBool>("tsDrawFocusedTarget").Value)
+                {
+                    Drawing.OnDraw += Drawing_OnDraw_FocusedTarget;
+                }
+            }
+
+            return Menu;
         }
 
         #endregion
 
         #region Methods
 
-        /// <summary>
-        ///     Initializes the <c>TargetSelector</c>, starting from the menu.
-        /// </summary>
-        /// <param name="rootMenu">
-        ///     The parent menu
-        /// </param>
-        internal static void Initialize(Menu rootMenu)
+        private static void CheckInitialized(string message = "")
         {
-            Load.OnLoad += (sender, args) =>
+            if (Menu == null)
+            {
+                var msg = message != ""
+                              ? message
+                              : "\n\n*********** You have to Initialize the TargetSelector before using. ***********\n";
+                throw new TargetSelectorNotInitializedException(msg);
+            }
+        }
+
+        private static void Drawing_OnDraw_FocusedTarget(EventArgs args)
+        {
+            if (focusedHero != null)
+            {
+                Drawing.DrawCircle(focusedHero.Position, 90f, Color.Chartreuse);
+            }
+        }
+
+        private static void Drawing_OnDraw_SelectedTarget(EventArgs args)
+        {
+            if (SelectedHero != null)
+            {
+                Drawing.DrawCircle(SelectedHero.Position, 150f, Color.DarkRed);
+            }
+        }
+
+        private static Obj_AI_Hero GetBestTarget(
+            Vector3 rangeCheckFrom,
+            IEnumerable<Obj_AI_Hero> possibleTargets,
+            Spell spell = null)
+        {
+            if (!possibleTargets.Any())
+            {
+                return null;
+            }
+
+            switch (Mode)
+            {
+                case TargetSelectorMode.LeastHealth:
+                    return GetLowLifeTarget(possibleTargets, spell);
+                case TargetSelectorMode.Closest:
+                    return GetClosestTarget(rangeCheckFrom, possibleTargets, spell);
+                case TargetSelectorMode.LessAttacksToKill:
+                    return GetLessAttackToKillTarget(possibleTargets, spell);
+                case TargetSelectorMode.MostAbilityPower:
+                    return GetMostAbilityPowerTarget(possibleTargets, spell);
+                case TargetSelectorMode.MostAttackDamage:
+                    return GetMostAttackDamageTarget(possibleTargets, spell);
+                case TargetSelectorMode.NearMouse:
+                    return GetNearMouseTarget(possibleTargets, spell);
+                default:
+                    return null;
+            }
+        }
+
+        private static Obj_AI_Hero GetClosestTarget(
+            Vector3 rangeCheckFrom,
+            IEnumerable<Obj_AI_Hero> possibleTargets,
+            Spell spell)
+        {
+            return
+                possibleTargets.OrderByDescending(champ => GetPriority(champ, spell))
+                    .ThenBy(champ => champ.Distance(rangeCheckFrom))
+                    .First();
+        }
+
+        private static Obj_AI_Hero GetLessAttackToKillTarget(IEnumerable<Obj_AI_Hero> possibleTargets, Spell spell)
+        {
+            return
+                possibleTargets.OrderByDescending(champ => GetPriority(champ, spell))
+                    .ThenBy(champ => champ.Health / ObjectManager.Player.GetAutoAttackDamage(champ))
+                    .First();
+        }
+
+        private static Obj_AI_Hero GetLowLifeTarget(IEnumerable<Obj_AI_Hero> possibleTargets, Spell spell)
+        {
+            return
+                possibleTargets.OrderByDescending(champ => GetPriority(champ, spell))
+                    .ThenBy(champ => champ.Health)
+                    .First();
+        }
+
+        private static Obj_AI_Hero GetMostAbilityPowerTarget(IEnumerable<Obj_AI_Hero> possibleTargets, Spell spell)
+        {
+            return
+                possibleTargets.OrderByDescending(champ => GetPriority(champ, spell))
+                    .ThenByDescending(champ => champ.TotalMagicalDamage)
+                    .ThenBy(champ => champ.Health / ObjectManager.Player.GetAutoAttackDamage(champ))
+                    .First();
+        }
+
+        private static Obj_AI_Hero GetMostAttackDamageTarget(IEnumerable<Obj_AI_Hero> possibleTargets, Spell spell)
+        {
+            return
+                possibleTargets.OrderByDescending(champ => GetPriority(champ, spell))
+                    .ThenByDescending(champ => champ.TotalAttackDamage)
+                    .ThenBy(champ => champ.Health / ObjectManager.Player.GetAutoAttackDamage(champ))
+                    .First();
+        }
+
+        private static Obj_AI_Hero GetNearMouseTarget(IEnumerable<Obj_AI_Hero> possibleTargets, Spell spell)
+        {
+            return
+                possibleTargets.OrderByDescending(champ => GetPriority(champ, spell))
+                    .ThenBy(champ => champ.Distance(Game.CursorPos))
+                    .First();
+        }
+
+        private static float GetPlayerAutoAttackRange()
+        {
+            return ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius;
+        }
+
+        private static Vector3 GetPlayerPosition()
+        {
+            return ObjectManager.Player.Position;
+        }
+
+        private static int GetPriority(Obj_AI_Hero champ, Spell spell)
+        {
+            var damageDealt = (spell == null)
+                                  ? ObjectManager.Player.GetAutoAttackDamage(champ)
+                                  : ObjectManager.Player.GetSpellDamage(champ, spell.Slot);
+
+            return GetPriority(champ, damageDealt);
+        }
+
+        private static byte GetPriority(Obj_AI_Hero champ, double damageDealt)
+        {
+            if (damageDealt > champ.Health)
+            {
+                return byte.MaxValue;
+            }
+            else if (
+                Menu["tsMaxPriorityMenu"].GetValue<MenuBool>(
+                    string.Format("tsPriority{0}", champ.ChampionName.ToLowerInvariant())).Value)
+            {
+                return byte.MaxValue - 1;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+
+        private static IEnumerable<Obj_AI_Hero> GetTargetsOnRange(
+            Vector3 rangeCheckFrom,
+            float range,
+            IEnumerable<Obj_AI_Hero> ignoredChamps)
+        {
+            return
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .Except(ignoredChamps)
+                    .Where(
+                        champ =>
+                        champ.IsEnemy && champ.Distance(rangeCheckFrom) <= range && champ.IsValid && champ.IsVisible
+                        && champ.IsTargetable && !champ.IsInvulnerable && !champ.IsDead)
+                    .OrderBy(champ => champ.Health / ObjectManager.Player.GetAutoAttackDamage(champ));
+        }
+
+        private static void LoadMenu(Menu mainMenu)
+        {
+            Menu = new Menu("tsmenu", "Target Selector", mainMenu == null);
+
+            Menu.Add(
+                new MenuList<TargetSelectorMode>("tsMode", "Mode")
+                    { SelectedValue = TargetSelectorMode.LessAttacksToKill });
+
+            var maxPriorityMenu = new Menu("tsMaxPriorityMenu", "Max priority");
+
+            foreach (
+                var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(champ => champ.IsEnemy).OrderBy(champ => champ.Name)
+                )
+            {
+                var menuName = string.Format("tsPriority{0}", enemy.ChampionName.ToLowerInvariant());
+                var menuDisplay = enemy.ChampionName;
+                maxPriorityMenu.Add(new MenuBool(menuName, menuDisplay, false));
+            }
+
+            Menu.Add(maxPriorityMenu);
+
+            Menu.Add(new MenuBool("tsFocusSelected", "Focus selected target", true));
+
+            var targetSelectorDrawMenu = new Menu("tsDraws", "Draws");
+
+            var tsDrawSelectedTargetMenuBool = new MenuBool("tsDrawSelectedTarget", "Selected target", true);
+            tsDrawSelectedTargetMenuBool.ValueChanged += delegate(object sender, EventArgs args)
                 {
-                    menu = new Menu("targetselector", "Target Selector");
-
-                    if (GameObjects.EnemyHeroes.Any())
+                    if (tsDrawSelectedTargetMenuBool.Value)
                     {
-                        foreach (var enemy in GameObjects.EnemyHeroes)
-                        {
-                            var priority = HighestPriority.Any(t => t == enemy.ChampionName)
-                                               ? 1
-                                               : MedHighPriority.Any(t => t == enemy.ChampionName)
-                                                     ? 2
-                                                     : MedLowPriority.Any(t => t == enemy.ChampionName) ? 3 : 4;
-                            menu.Add(new MenuSlider("ts" + enemy.ChampionName, enemy.ChampionName, priority, 0, 5));
-                        }
-
-                        menu.Add(new MenuSeparator("separatorOther", "Other Settings"));
+                        Drawing.OnDraw += Drawing_OnDraw_SelectedTarget;
                     }
-
-                    menu.Add(new MenuBool("focusTarget", "Focus Selected Target", true));
-                    menu.Add(new MenuBool("drawTarget", "Draw Target", true));
-                    menu.Add(new MenuSeparator("separatorMode", "Mode Selection"));
-                    menu.Add(
-                        new MenuList<TargetSelectorMode>("mode", "Mode")
-                            {
-                               SelectedValue = TargetSelectorMode.AutoPriority 
-                            });
-
-                    rootMenu.Add(menu);
-
-                    var circle = new DrawCircle(new Vector3(), 0f, Color.Red).Add();
-                    menu.MenuValueChanged += (objSender, objArgs) =>
-                        {
-                            var list = objSender as MenuList<TargetSelectorMode>;
-                            if (list != null)
-                            {
-                                Mode = list.SelectedValue;
-                            }
-
-                            var @bool = objSender as MenuBool;
-                            if (@bool != null)
-                            {
-                                circle.IsVisible = @bool.Value;
-                            }
-                        };
-
-                    Mode = menu["mode"].GetValue<MenuList<TargetSelectorMode>>().SelectedValue;
-
-                    Game.OnUpdate += eventArgs =>
-                        {
-                            var target = GetTarget();
-                            circle.GameObjectUnit = target;
-                            circle.Radius = target != null ? target.BoundingRadius : 0f;
-                            circle.IsVisible = target != null && menu["drawTarget"].GetValue<MenuBool>().Value;
-                        };
+                    else
+                    {
+                        Drawing.OnDraw -= Drawing_OnDraw_SelectedTarget;
+                    }
                 };
+            targetSelectorDrawMenu.Add(tsDrawSelectedTargetMenuBool);
+
+            var tsDrawFocusedTargetMenuBool = new MenuBool("tsDrawFocusedTarget", "FocusedTarget", true);
+            tsDrawFocusedTargetMenuBool.ValueChanged += delegate(object sender, EventArgs args)
+                {
+                    if (tsDrawSelectedTargetMenuBool.Value)
+                    {
+                        Drawing.OnDraw += Drawing_OnDraw_FocusedTarget;
+                    }
+                    else
+                    {
+                        Drawing.OnDraw -= Drawing_OnDraw_FocusedTarget;
+                    }
+                };
+            targetSelectorDrawMenu.Add(tsDrawFocusedTargetMenuBool);
+
+            Menu.Add(targetSelectorDrawMenu);
+
+            if (mainMenu != null)
+            {
+                mainMenu.Add(Menu);
+            }
+            else
+            {
+                Menu.Attach();
+            }
+        }
+
+        #endregion
+    }
+
+    internal class TargetSelectorNotInitializedException : Exception
+    {
+        #region Constructors and Destructors
+
+        internal TargetSelectorNotInitializedException(string message)
+            : base(message)
+        {
         }
 
         #endregion

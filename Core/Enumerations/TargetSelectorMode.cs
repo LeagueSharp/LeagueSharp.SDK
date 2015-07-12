@@ -52,11 +52,6 @@ namespace LeagueSharp.SDK.Core.Enumerations
         NearMouse,
 
         /// <summary>
-        ///     Focuses targets by their class.
-        /// </summary>
-        AutoPriority, 
-
-        /// <summary>
         ///     Focuses targets by their health.
         /// </summary>
         LeastHealth
