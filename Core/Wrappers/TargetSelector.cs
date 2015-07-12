@@ -336,12 +336,15 @@ namespace LeagueSharp.SDK.Core.Wrappers
         {
             CheckInitialized();
 
-            var selected = GetSelectedTarget(rangeCheckFrom, spell.Range);
-
-            if (selected != null)
+            if (Menu.GetValue<MenuBool>("tsFocusSelected").Value)
             {
-                focusedHero = selected;
-                return selected;
+                var selected = GetSelectedTarget(rangeCheckFrom, spell.Range);
+
+                if (selected != null)
+                {
+                    focusedHero = selected;
+                    return selected;
+                }
             }
 
             var possibleTargets = GetTargetsOnRange(rangeCheckFrom, spell.Range, ignoredChamps);
@@ -371,12 +374,15 @@ namespace LeagueSharp.SDK.Core.Wrappers
         {
             CheckInitialized();
 
-            var selected = GetSelectedTarget(rangeCheckFrom, range);
-
-            if (selected != null)
+            if (Menu.GetValue<MenuBool>("tsFocusSelected").Value)
             {
-                focusedHero = selected;
-                return selected;
+                var selected = GetSelectedTarget(rangeCheckFrom, range);
+
+                if (selected != null)
+                {
+                    focusedHero = selected;
+                    return selected;
+                }
             }
 
             var possibleTargets = GetTargetsOnRange(rangeCheckFrom, range, ignoredChamps);
@@ -485,7 +491,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         ///     Parent menu.
         ///     if null the menu will shown as root menu.
         /// </param>
-        public static Menu Initialize(Menu mainMenu = null)
+        internal static Menu Initialize(Menu mainMenu = null)
         {
             if (Menu == null)
             {
@@ -515,7 +521,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             {
                 var msg = message != ""
                               ? message
-                              : "\n\n*********** You have to Initialize the TargetSelector before using. ***********\n";
+                              : "\n\n>>>>> TargetSelector not initialized. Use Bootstrap.Init(string[] args) <<<<<\n";
                 throw new TargetSelectorNotInitializedException(msg);
             }
         }
