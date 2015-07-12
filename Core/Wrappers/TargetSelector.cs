@@ -134,7 +134,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             CheckInitialized();
 
             if (SelectedHero == null || !SelectedHero.IsValid || !SelectedHero.IsVisible || !SelectedHero.IsTargetable
-                || SelectedHero.IsDead || SelectedHero.IsInvulnerable || SelectedHero.IsAlly)
+                || SelectedHero.IsDead || SelectedHero.IsInvulnerable(DamageType.True) || SelectedHero.IsAlly)
             {
                 return null;
             }
@@ -672,7 +672,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     .Where(
                         champ =>
                         champ.IsEnemy && champ.Distance(rangeCheckFrom) <= range && champ.IsValid && champ.IsVisible
-                        && champ.IsTargetable && !champ.IsInvulnerable && !champ.IsDead)
+                        && champ.IsTargetable && !champ.IsInvulnerable(DamageType.True) && !champ.IsDead)
                     .OrderBy(champ => champ.Health / ObjectManager.Player.GetAutoAttackDamage(champ));
         }
 
