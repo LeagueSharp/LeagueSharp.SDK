@@ -70,7 +70,7 @@ namespace LeagueSharp.SDK.Core
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] GameObjects loaded.");
 
             // Load Damages.
-            // Damage.Initialize(Game.Version);
+            Damage.Initialize(Game.Version);
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Damage Library loaded.");
 
             // Final notification.

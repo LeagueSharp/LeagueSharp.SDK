@@ -802,7 +802,7 @@
                     "targetHealthBase": [ 0.08 ],
                     "targetHealthBaseAPScale": [ 0.03, 100 ],
                     "minionHealthBaseMax": [ 75, 100, 125, 150, 175 ],
-                    "baseAlternativePasiveIdentifier": "elisepassive",
+                    "baseAlternativePassiveIdentifier": [ "R", "2" ],
                     "baseAlternative": [ 60, 100, 140, 180, 220 ],
                     "targetAlternativeMissingHealthBase": [ 0.08 ],
                     "targetAlternativeMissingHealthBaseAPScale": [ 0.03, 100 ],
@@ -816,7 +816,7 @@
                 "Stage0": {
                     "base": [ 75, 125, 175, 225, 275 ],
                     "AP": "0.8",
-                    "baseAlternativePasiveIdentifier": "elisepassive",
+                    "baseAlternativePassiveIdentifier": [ "R", "2" ],
                     "type": "Magical",
                     "flags": "1028"
                 }

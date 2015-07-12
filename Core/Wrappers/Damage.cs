@@ -24,6 +24,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Permissions;
     using System.Text;
 
     using LeagueSharp.SDK.Core.Enumerations;
@@ -34,8 +35,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-
-    using SharpDX;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -94,17 +93,21 @@ namespace LeagueSharp.SDK.Core.Wrappers
             DamageType damageType, 
             double amount)
         {
+            var damage = 0d;
             switch (damageType)
             {
                 case DamageType.Magical:
-                    return source.CalculateMagicDamage(target, amount);
+                    damage = source.CalculateMagicDamage(target, amount);
+                    break;
                 case DamageType.Physical:
-                    return source.CalculatePhysicalDamage(target, amount);
+                    damage = source.CalculatePhysicalDamage(target, amount);
+                    break;
                 case DamageType.True:
-                    return amount;
-                default:
-                    return 0d;
+                    damage = amount;
+                    break;
             }
+
+            return Math.Max(damage, 0d);
         }
 
         /// <summary>
@@ -161,7 +164,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             if (!includePassive)
             {
-                return source.CalculatePhysicalDamage(target, result) * k - reduction;
+                return source.CalculatePhysicalDamage(target, result * k - reduction);
             }
 
             var hero = source as Obj_AI_Hero;
@@ -293,7 +296,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
             SpellSlot spellSlot, 
             int stage = 0)
         {
-            return source.GetSpellDamageInstance(spellSlot, stage).GetDamage(source, target);
+            var instance = source.GetSpellDamageInstance(spellSlot, stage);
+            return instance != null ? instance.GetDamage(source, target) : 0d;
         }
 
         /// <summary>
@@ -334,13 +338,17 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public static SpellDamage GetSpellDamageInstance(string champion, SpellSlot spellSlot, int stage = 0)
         {
             IDictionary<SpellSlot, IDictionary<int, SpellDamage>> championCollection;
-            IDictionary<int, SpellDamage> spellCollection;
-            SpellDamage spellDamage;
-            if (DamagesDictionary.TryGetValue(champion, out championCollection)
-                && championCollection.TryGetValue(spellSlot, out spellCollection)
-                && spellCollection.TryGetValue(stage, out spellDamage))
+            if (DamagesDictionary.TryGetValue(champion, out championCollection) && championCollection != null)
             {
-                return spellDamage;
+                IDictionary<int, SpellDamage> spellCollection;
+                if (championCollection.TryGetValue(spellSlot, out spellCollection) && spellCollection != null)
+                {
+                    SpellDamage spellDamage;
+                    if (spellCollection.TryGetValue(stage, out spellDamage) && spellDamage != null)
+                    {
+                        return spellDamage;
+                    }
+                }
             }
 
             return null;
@@ -468,7 +476,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 value = 100 / (100 + (magicResist * source.PercentMagicPenetrationMod) - source.FlatMagicPenetrationMod);
             }
 
-            return PassivePercentMod(source, target, value) * amount;
+            return Math.Round(PassivePercentMod(source, target, value) * amount);
         }
 
         /// <summary>
@@ -537,8 +545,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             // Take into account the percent passives, flat passives and damage reduction.
-            return source.PassivePercentMod(target, value) * source.DamageReductionMod(target, amount)
-                   + PassiveFlatMod(source, target);
+            return Math.Round(source.PassivePercentMod(target, value) * source.DamageReductionMod(target, amount)
+                   + PassiveFlatMod(source, target));
         }
 
         /// <summary>
@@ -550,6 +558,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="spells">
         ///     The spells collection.
         /// </param>
+        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
         private static void CreateSpells(string champion, IDictionary<string, JToken> spells)
         {
             var gameChampionExists = GameObjects.Heroes.Any(h => h.ChampionName == champion);
@@ -587,7 +596,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
                             var stageData = spellData["Stage" + stage].ToString();
                             stagesInfo.Add(
                                 stage, 
-                                new SpellDamage(JsonConvert.DeserializeObject<SpellDamageData>(stageData)));
+                                new SpellDamage(JsonConvert.DeserializeObject<SpellDamageData>(stageData))
+                                    {
+                                       SData = {
+                                                    Slot = spellSlot 
+                                                } 
+                                    });
                         }
 
                         spellDamages.Add(spellSlot, stagesInfo);
@@ -637,7 +651,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 }
             }
 
-            if (target is Obj_AI_Hero)
+            var targetHero = target as Obj_AI_Hero;
+            if (targetHero != null)
             {
                 // Passives:
 
@@ -921,28 +936,50 @@ namespace LeagueSharp.SDK.Core.Wrappers
             this.SData = sdata;
             this.GetDamageFunc = (@base, aiBase) =>
                 {
+                    if (@base.Spellbook.GetSpell(sdata.Slot).Level == 0)
+                    {
+                        return 0d;
+                    }
+
                     var spellLevel = @base.Spellbook.GetSpell(sdata.Slot).Level - 1;
                     var damage = 0d;
                     var abilityPowerDamageAmount = 0d;
                     var attackDamageAmount = 0d;
 
-                    if (spellLevel >= 0 && (sdata.Base.Length > 0 || sdata.BaseDistance.Length > 0))
+                    if (sdata.Base != null && sdata.Base.Length > 0)
                     {
-                        var baseArray = (!sdata.Flags.HasFlag(DamageFlags.SpecialPassiveAlternative)
-                                         || !@base.HasBuff(sdata.AlternativePassive))
-                                            ? sdata.Base
-                                            : sdata.BaseAlternative;
-
-                        if (sdata.BaseMinion.Length > 0 && aiBase is Obj_AI_Minion)
+                        if (sdata.Flags.HasFlag(DamageFlags.SpecialDistance)
+                            && @base.Distance(aiBase) > sdata.DistanceOffset)
                         {
-                            damage += sdata.BaseMinion[Math.Min(spellLevel, sdata.BaseMinion.Length - 1)];
+                            damage += sdata.BaseDistance[Math.Min(spellLevel, sdata.BaseDistance.Length - 1)];
                         }
                         else
                         {
-                            damage += (!sdata.Flags.HasFlag(DamageFlags.SpecialDistance)
-                                       || @base.Distance(aiBase) <= sdata.DistanceOffset)
-                                          ? baseArray[Math.Min(spellLevel, baseArray.Length - 1)]
-                                          : sdata.BaseDistance[Math.Min(spellLevel, sdata.BaseDistance.Length - 1)];
+                            if (sdata.BaseMinion != null && sdata.BaseMinion.Length > 0 && aiBase is Obj_AI_Minion)
+                            {
+                                damage += sdata.BaseMinion[Math.Min(spellLevel, sdata.BaseMinion.Length - 1)];
+                            }
+                            else
+                            {
+                                SpellSlot spellSlot;
+                                int intValue;
+                                if (sdata.Flags.HasFlag(DamageFlags.SpecialPassiveAlternative)
+                                    && ((sdata.AlternativePassive.Length == 1
+                                         && @base.HasBuff(sdata.AlternativePassive[0]))
+                                        || (sdata.AlternativePassive.Length == 2
+                                            && Enum.TryParse(sdata.AlternativePassive[0], out spellSlot)
+                                            && int.TryParse(sdata.AlternativePassive[1], out intValue)
+                                            && @base.Spellbook.GetSpell(spellSlot).ToggleState == intValue))
+                                    && sdata.BaseAlternative != null && sdata.BaseAlternative.Length > 0)
+                                {
+                                    damage +=
+                                        sdata.BaseAlternative[Math.Min(spellLevel, sdata.BaseAlternative.Length - 1)];
+                                }
+                                else
+                                {
+                                    damage += sdata.Base[Math.Min(spellLevel, sdata.Base.Length - 1)];
+                                }
+                            }
                         }
                     }
 
@@ -963,15 +1000,16 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
                     if (sdata.Flags.HasFlag(DamageFlags.BonusAttackDamage))
                     {
-                        var value = (!sdata.Flags.HasFlag(DamageFlags.SpecialDistance)
-                                     || @base.Distance(aiBase) <= sdata.DistanceOffset)
-                                        ? @base.FlatPhysicalDamageMod * sdata.BonusAttackDamage
-                                        : @base.FlatPhysicalDamageMod * sdata.DistanceBonusAttackDamage;
+                        var value = (sdata.Flags.HasFlag(DamageFlags.SpecialDistance)
+                                     && @base.Distance(aiBase) > sdata.DistanceOffset)
+                                        ? @base.FlatPhysicalDamageMod * sdata.DistanceBonusAttackDamage
+                                        : @base.FlatPhysicalDamageMod * sdata.BonusAttackDamage;
                         damage += value;
                         attackDamageAmount += value;
                     }
 
-                    if (sdata.Flags.HasFlag(DamageFlags.EnemyMaxHealth) && sdata.EnemyMaxHealthBase.Length > 0)
+                    if (sdata.Flags.HasFlag(DamageFlags.EnemyMaxHealth) && sdata.EnemyMaxHealthBase != null
+                        && sdata.EnemyMaxHealthBase.Length > 0)
                     {
                         damage += aiBase.MaxHealth
                                   * sdata.EnemyMaxHealthBase[Math.Min(spellLevel, sdata.EnemyMaxHealthBase.Length - 1)];
@@ -983,7 +1021,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     }
 
                     if (sdata.Flags.HasFlag(DamageFlags.BaseAttackDamagePercent)
-                        && sdata.BaseAttackDamagePercent.Length > 0)
+                        && sdata.BaseAttackDamagePercent != null && sdata.BaseAttackDamagePercent.Length > 0)
                     {
                         damage += @base.TotalAttackDamage
                                   * sdata.BaseAttackDamagePercent[
@@ -991,7 +1029,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     }
 
                     if (sdata.Flags.HasFlag(DamageFlags.BaseAbilityPowerPercent)
-                        && sdata.BaseAttackDamagePercent.Length > 0)
+                        && sdata.BaseAbilityPowerPercent != null && sdata.BaseAbilityPowerPercent.Length > 0)
                     {
                         damage += @base.TotalAttackDamage
                                   * sdata.BaseAbilityPowerPercent[
@@ -999,14 +1037,15 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     }
 
                     if (sdata.Flags.HasFlag(DamageFlags.BaseBonusAttackDamagePercent)
-                        && sdata.BaseAttackDamagePercent.Length > 0)
+                        && sdata.BaseAttackDamagePercent != null && sdata.BaseAttackDamagePercent.Length > 0)
                     {
                         damage += @base.TotalAttackDamage
                                   * sdata.BaseBonusAttackDamagePercent[
                                       Math.Min(spellLevel, sdata.BaseBonusAttackDamagePercent.Length - 1)];
                     }
 
-                    if (sdata.Flags.HasFlag(DamageFlags.BaseChampionLevel) && sdata.BaseChampionLevel.Length > 0)
+                    if (sdata.Flags.HasFlag(DamageFlags.BaseChampionLevel) && sdata.BaseChampionLevel != null
+                        && sdata.BaseChampionLevel.Length > 0)
                     {
                         damage += sdata.BaseChampionLevel[Math.Min(@base.Level, sdata.BaseChampionLevel.Length - 1)];
                     }
@@ -1018,8 +1057,15 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
                     if (sdata.Flags.HasFlag(DamageFlags.TargetHealth))
                     {
+                        SpellSlot spellSlot;
+                        int intValue;
                         var flag = !sdata.Flags.HasFlag(DamageFlags.SpecialPassiveAlternative)
-                                   || !@base.HasBuff(sdata.AlternativePassive);
+                                   || !((sdata.AlternativePassive.Length == 1
+                                         && @base.HasBuff(sdata.AlternativePassive[0]))
+                                        || (sdata.AlternativePassive.Length == 2
+                                            && Enum.TryParse(sdata.AlternativePassive[0], out spellSlot)
+                                            && int.TryParse(sdata.AlternativePassive[1], out intValue)
+                                            && @base.Spellbook.GetSpell(spellSlot).ToggleState == intValue));
 
                         var baseTargetHealth = flag ? sdata.BaseTargetHealth : sdata.BaseAlternativeTargetHealth;
                         var targetHealthBaseAbilityPowerScale = flag
@@ -1034,13 +1080,13 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
                         var flagDamage = 0f;
 
-                        if (baseTargetHealth.Length > 0)
+                        if (baseTargetHealth != null && baseTargetHealth.Length > 0)
                         {
                             flagDamage += aiBase.Health
                                           * baseTargetHealth[Math.Min(spellLevel, baseTargetHealth.Length - 1)];
                         }
 
-                        if (targetHealthBaseAbilityPowerScale.Length > 0)
+                        if (targetHealthBaseAbilityPowerScale != null && targetHealthBaseAbilityPowerScale.Length > 0)
                         {
                             float value;
                             switch (targetHealthBaseAbilityPowerScale.Length)
@@ -1064,7 +1110,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                             }
                         }
 
-                        if (targetHealthBaseMinimumDamage.Length > 0)
+                        if (targetHealthBaseMinimumDamage != null && targetHealthBaseMinimumDamage.Length > 0)
                         {
                             flagDamage =
                                 Math.Max(
@@ -1073,7 +1119,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
                                     flagDamage);
                         }
 
-                        if (minionHealthBaseMaximumDamage.Length > 0 && aiBase is Obj_AI_Minion)
+                        if (minionHealthBaseMaximumDamage != null && minionHealthBaseMaximumDamage.Length > 0
+                            && aiBase is Obj_AI_Minion)
                         {
                             flagDamage =
                                 Math.Min(
@@ -1103,14 +1150,15 @@ namespace LeagueSharp.SDK.Core.Wrappers
                                                                              .AlternativeMinionMissingHealthBaseMaximumDamage;
                         var missingHealth = aiBase.MaxHealth - aiBase.Health;
 
-                        if (baseTargetMissingHealth.Length > 0)
+                        if (baseTargetMissingHealth != null && baseTargetMissingHealth.Length > 0)
                         {
                             flagDamage += missingHealth
                                           * baseTargetMissingHealth[
                                               Math.Min(spellLevel, baseTargetMissingHealth.Length - 1)];
                         }
 
-                        if (targetMissingHealthBaseAbilityPowerScale.Length > 0)
+                        if (targetMissingHealthBaseAbilityPowerScale != null
+                            && targetMissingHealthBaseAbilityPowerScale.Length > 0)
                         {
                             float value;
                             switch (targetMissingHealthBaseAbilityPowerScale.Length)
@@ -1135,7 +1183,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
                             }
                         }
 
-                        if (targetMissingHealthBaseMinimumDamage.Length > 0)
+                        if (targetMissingHealthBaseMinimumDamage != null
+                            && targetMissingHealthBaseMinimumDamage.Length > 0)
                         {
                             flagDamage =
                                 Math.Max(
@@ -1144,7 +1193,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
                                     flagDamage);
                         }
 
-                        if (minionMissingHealthBaseMaximumDamage.Length > 0 && aiBase is Obj_AI_Minion)
+                        if (minionMissingHealthBaseMaximumDamage != null
+                            && minionMissingHealthBaseMaximumDamage.Length > 0 && aiBase is Obj_AI_Minion)
                         {
                             flagDamage =
                                 Math.Min(
@@ -1155,6 +1205,10 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
                         damage += flagDamage;
                     }
+
+                    damage = Math.Round(damage);
+                    attackDamageAmount = Math.Round(attackDamageAmount);
+                    abilityPowerDamageAmount = Math.Round(abilityPowerDamageAmount);
 
                     return sdata.Type == DamageType.Mixed
                                ? @base.CalculateMixedDamage(aiBase, attackDamageAmount, abilityPowerDamageAmount)
@@ -1198,7 +1252,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </returns>
         public double GetDamage(Obj_AI_Hero source, Obj_AI_Base target)
         {
-            return this.GetDamageFunc(source, target);
+            return (target == null || !target.IsValid) ? 0d : this.GetDamageFunc(source, target);
         }
 
         #endregion
@@ -1212,225 +1266,225 @@ namespace LeagueSharp.SDK.Core.Wrappers
         #region Public Properties
 
         /// <summary>
-        ///     Gets or sets the ability power.
+        ///     Gets the ability power.
         /// </summary>
         [JsonProperty("AP")]
-        public float AbilityPower { get; set; }
+        public float AbilityPower { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the ability power enemy max health.
+        ///     Gets the ability power enemy max health.
         /// </summary>
         [JsonProperty("enemyMaxHealthAP")]
-        public float AbilityPowerEnemyMaxHealth { get; set; }
+        public float AbilityPowerEnemyMaxHealth { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the ability power minion.
+        ///     Gets the ability power minion.
         /// </summary>
         [JsonProperty("APMinion")]
-        public float AbilityPowerMinion { get; set; }
+        public float AbilityPowerMinion { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the alternative minion health base maximum damage.
+        ///     Gets the alternative minion health base maximum damage.
         /// </summary>
         [JsonProperty("minionAlternativeHealthBaseMax")]
-        public float[] AlternativeMinionHealthBaseMaximumDamage { get; set; }
+        public float[] AlternativeMinionHealthBaseMaximumDamage { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the alternative minion missing health base maximum damage.
+        ///     Gets the alternative minion missing health base maximum damage.
         /// </summary>
         [JsonProperty("minionAlternativeMissingHealthBaseMax")]
-        public float[] AlternativeMinionMissingHealthBaseMaximumDamage { get; set; }
+        public float[] AlternativeMinionMissingHealthBaseMaximumDamage { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the alternative passive.
+        ///     Gets the alternative passive.
         /// </summary>
-        [JsonProperty("baseAlternativePasiveIdentifier")]
-        public string AlternativePassive { get; set; }
+        [JsonProperty("baseAlternativePassiveIdentifier")]
+        public string[] AlternativePassive { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the alternative target health base ability power scale.
+        ///     Gets the alternative target health base ability power scale.
         /// </summary>
         [JsonProperty("targetAlternativeHealthBaseAPScale")]
-        public float[] AlternativeTargetHealthBaseAbilityPowerScale { get; set; }
+        public float[] AlternativeTargetHealthBaseAbilityPowerScale { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the alternative target health base minimum damage.
+        ///     Gets the alternative target health base minimum damage.
         /// </summary>
         [JsonProperty("targetAlternativeHealthBaseMin")]
-        public float[] AlternativeTargetHealthBaseMinimumDamage { get; set; }
+        public float[] AlternativeTargetHealthBaseMinimumDamage { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the alternative target missing health base ability power scale.
+        ///     Gets the alternative target missing health base ability power scale.
         /// </summary>
         [JsonProperty("targetAlternativeMissingHealthBaseAPScale")]
-        public float[] AlternativeTargetMissingHealthBaseAbilityPowerScale { get; set; }
+        public float[] AlternativeTargetMissingHealthBaseAbilityPowerScale { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the alternative target missing health base minimum damage.
+        ///     Gets the alternative target missing health base minimum damage.
         /// </summary>
         [JsonProperty("targetAlternativeMissingHealthBaseMin")]
-        public float[] AlternativeTargetMissingHealthBaseMinimumDamage { get; set; }
+        public float[] AlternativeTargetMissingHealthBaseMinimumDamage { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the attack damage.
+        ///     Gets the attack damage.
         /// </summary>
         [JsonProperty("AD")]
-        public float AttackDamage { get; set; }
+        public float AttackDamage { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the base.
+        ///     Gets the base.
         /// </summary>
         [JsonProperty("base")]
-        public float[] Base { get; set; }
+        public float[] Base { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the base ability power percent.
+        ///     Gets the base ability power percent.
         /// </summary>
         [JsonProperty("baseAPPercent")]
-        public float[] BaseAbilityPowerPercent { get; set; }
+        public float[] BaseAbilityPowerPercent { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the base alternative.
+        ///     Gets the base alternative.
         /// </summary>
         [JsonProperty("baseAlternative")]
-        public float[] BaseAlternative { get; set; }
+        public float[] BaseAlternative { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the base target health.
+        ///     Gets the base target health.
         /// </summary>
         [JsonProperty("targetAlternativeHealthBase")]
-        public float[] BaseAlternativeTargetHealth { get; set; }
+        public float[] BaseAlternativeTargetHealth { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the base target health.
+        ///     Gets the base target health.
         /// </summary>
         [JsonProperty("targetAlternativeMissingHealthBase")]
-        public float[] BaseAlternativeTargetMissingHealth { get; set; }
+        public float[] BaseAlternativeTargetMissingHealth { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the base attack damage percent.
+        ///     Gets the base attack damage percent.
         /// </summary>
         [JsonProperty("baseADPercent")]
-        public float[] BaseAttackDamagePercent { get; set; }
+        public float[] BaseAttackDamagePercent { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the base bonus attack damage percent.
+        ///     Gets the base bonus attack damage percent.
         /// </summary>
         [JsonProperty("baseBonusADPercent")]
-        public float[] BaseBonusAttackDamagePercent { get; set; }
+        public float[] BaseBonusAttackDamagePercent { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the base champion level.
+        ///     Gets the base champion level.
         /// </summary>
         [JsonProperty("baseChampLevel")]
-        public float[] BaseChampionLevel { get; set; }
+        public float[] BaseChampionLevel { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the base distance.
+        ///     Gets the base distance.
         /// </summary>
         [JsonProperty("distanceBase")]
-        public float[] BaseDistance { get; set; }
+        public float[] BaseDistance { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the base minion.
+        ///     Gets the base minion.
         /// </summary>
         [JsonProperty("baseMinion")]
-        public float[] BaseMinion { get; set; }
+        public float[] BaseMinion { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the base target health.
+        ///     Gets the base target health.
         /// </summary>
         [JsonProperty("targetHealthBase")]
-        public float[] BaseTargetHealth { get; set; }
+        public float[] BaseTargetHealth { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the base target health.
+        ///     Gets the base target health.
         /// </summary>
         [JsonProperty("targetMissingHealthBase")]
-        public float[] BaseTargetMissingHealth { get; set; }
+        public float[] BaseTargetMissingHealth { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the bonus attack damage.
+        ///     Gets the bonus attack damage.
         /// </summary>
         [JsonProperty("bonusAD")]
-        public float BonusAttackDamage { get; set; }
+        public float BonusAttackDamage { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the distance bonus attack damage.
+        ///     Gets the distance bonus attack damage.
         /// </summary>
         [JsonProperty("distanceBonusAD")]
-        public float DistanceBonusAttackDamage { get; set; }
+        public float DistanceBonusAttackDamage { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the distance offset.
+        ///     Gets the distance offset.
         /// </summary>
         [JsonProperty("distanceOffset")]
-        public float DistanceOffset { get; set; }
+        public float DistanceOffset { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the enemy max health base.
+        ///     Gets the enemy max health base.
         /// </summary>
         [JsonProperty("enemyMaxHealthBase")]
-        public float[] EnemyMaxHealthBase { get; set; }
+        public float[] EnemyMaxHealthBase { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the flags.
+        ///     Gets the flags.
         /// </summary>
         [JsonProperty("flags")]
-        public DamageFlags Flags { get; set; }
+        public DamageFlags Flags { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the max health.
+        ///     Gets the max health.
         /// </summary>
         [JsonProperty("maxHealth")]
-        public float MaxHealth { get; set; }
+        public float MaxHealth { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the minion health base maximum damage.
+        ///     Gets the minion health base maximum damage.
         /// </summary>
         [JsonProperty("minionHealthBaseMax")]
-        public float[] MinionHealthBaseMaximumDamage { get; set; }
+        public float[] MinionHealthBaseMaximumDamage { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the minion missing health base maximum damage.
+        ///     Gets the minion missing health base maximum damage.
         /// </summary>
         [JsonProperty("minionMissingHealthBaseMax")]
-        public float[] MinionMissingHealthBaseMaximumDamage { get; set; }
+        public float[] MinionMissingHealthBaseMaximumDamage { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the slot.
+        ///     Gets the slot.
         /// </summary>
-        public SpellSlot Slot { get; set; }
+        public SpellSlot Slot { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the target health base ability power scale.
+        ///     Gets the target health base ability power scale.
         /// </summary>
         [JsonProperty("targetHealthBaseAPScale")]
-        public float[] TargetHealthBaseAbilityPowerScale { get; set; }
+        public float[] TargetHealthBaseAbilityPowerScale { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the target health base minimum damage.
+        ///     Gets the target health base minimum damage.
         /// </summary>
         [JsonProperty("targetHealthBaseMin")]
-        public float[] TargetHealthBaseMinimumDamage { get; set; }
+        public float[] TargetHealthBaseMinimumDamage { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the target missing health base ability power scale.
+        ///     Gets the target missing health base ability power scale.
         /// </summary>
         [JsonProperty("targetMissingHealthBaseAPScale")]
-        public float[] TargetMissingHealthBaseAbilityPowerScale { get; set; }
+        public float[] TargetMissingHealthBaseAbilityPowerScale { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the target missing health base minimum damage.
+        ///     Gets the target missing health base minimum damage.
         /// </summary>
         [JsonProperty("targetMissingHealthBaseMin")]
-        public float[] TargetMissingHealthBaseMinimumDamage { get; set; }
+        public float[] TargetMissingHealthBaseMinimumDamage { get; internal set; }
 
         /// <summary>
-        ///     Gets or sets the type.
+        ///     Gets the type.
         /// </summary>
         [JsonProperty("type")]
-        public DamageType Type { get; set; }
+        public DamageType Type { get; internal set; }
 
         #endregion
     }
