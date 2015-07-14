@@ -261,7 +261,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
                     reduction += f;
                 }
-                
+
                 // Block
                 // + Reduces incoming damage from champion basic attacks by 1 / 2
                 if (hero != null)
@@ -274,7 +274,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 }
             }
 
-            return source.CalculatePhysicalDamage(target, result * k - reduction);
+            return source.CalculatePhysicalDamage(target, (result - reduction) * k);
         }
 
         /// <summary>
@@ -482,18 +482,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             var damage = source.DamageReductionMod(
-                target,
-                PassivePercentMod(source, target, value) * amount,
+                target, 
+                Math.Round((float)(PassivePercentMod(source, target, value) * amount)), 
                 DamageType.Magical) + PassiveFlatMod(source, target);
-
-            if (Math.Round(damage) - damage < 0.07)
-            {
-                damage -= Math.Abs((Math.Round(damage) - damage) * 2);
-            }
-            else if (damage + 0.15 > (int)damage + 1)
-            {
-                damage += 0.3f;
-            }
 
             return damage;
         }
@@ -564,17 +555,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             var damage = source.DamageReductionMod(
-                target,
-                source.PassivePercentMod(target, value) * amount,
+                target, 
+                Math.Round((float)(source.PassivePercentMod(target, value) * amount - 0.2)), 
                 DamageType.Physical) + PassiveFlatMod(source, target);
-            if (Math.Round(damage) - damage < 0.07)
-            {
-                damage -= Math.Abs((Math.Round(damage) - damage) * 2);
-            }
-            else if (damage + 0.15 > (int)damage + 1)
-            {
-                damage += 0.3f;
-            }
 
             // Take into account the percent passives, flat passives and damage reduction.
             return damage;
@@ -653,25 +636,29 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
-        /// Apples damage reduction mod calculations towards the given amount of damage, a modifier onto the amount based on
+        ///     Apples damage reduction mod calculations towards the given amount of damage, a modifier onto the amount based on
         ///     damage reduction passives.
         /// </summary>
         /// <param name="source">
-        /// The source.
+        ///     The source.
         /// </param>
         /// <param name="target">
-        /// The target.
+        ///     The target.
         /// </param>
         /// <param name="amount">
-        /// The amount.
+        ///     The amount.
         /// </param>
         /// <param name="damageType">
-        /// The damage Type.
+        ///     The damage Type.
         /// </param>
         /// <returns>
-        /// The <see cref="double"/>.
+        ///     The <see cref="double" />.
         /// </returns>
-        private static double DamageReductionMod(this Obj_AI_Base source, Obj_AI_Base target, double amount, DamageType damageType)
+        private static double DamageReductionMod(
+            this Obj_AI_Base source, 
+            Obj_AI_Base target, 
+            double amount, 
+            DamageType damageType)
         {
             if (source is Obj_AI_Hero)
             {
