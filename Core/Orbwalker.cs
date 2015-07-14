@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Orbwalker.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
@@ -205,7 +205,7 @@ namespace LeagueSharp.SDK.Core
                         InvokeAction(
                             new OrbwalkerActionArgs
                                 {
-                                    Position = minion.Position, Target = minion, Process = true, 
+                                    Position = minion.Position, Target = minion, Process = true,
                                     Type = OrbwalkerType.NonKillableMinion
                                 });
                     }
@@ -231,7 +231,8 @@ namespace LeagueSharp.SDK.Core
                     return inhibitor;
                 }
 
-                if (GameObjects.EnemyNexus.IsValidTarget(GameObjects.EnemyNexus.GetRealAutoAttackRange()))
+                if (GameObjects.EnemyNexus != null
+                    && GameObjects.EnemyNexus.IsValidTarget(GameObjects.EnemyNexus.GetRealAutoAttackRange()))
                 {
                     return GameObjects.EnemyNexus;
                 }
@@ -310,7 +311,7 @@ namespace LeagueSharp.SDK.Core
                     var randomDistance = new Random(Variables.TickCount).Next(0, 50);
                     position = menuItem.Value - randomDistance <= GameObjects.Player.BoundingRadius
                                    ? GameObjects.Player.Position.Extend(
-                                       position, 
+                                       position,
                                        GameObjects.Player.BoundingRadius + randomDistance)
                                    : GameObjects.Player.Position.Extend(position, menuItem.Value - randomDistance);
                 }
@@ -328,9 +329,7 @@ namespace LeagueSharp.SDK.Core
                 }
 
                 var eventArgs = new OrbwalkerActionArgs
-                                    {
-                                       Position = position, Process = true, Type = OrbwalkerType.Movement 
-                                    };
+                                    { Position = position, Process = true, Type = OrbwalkerType.Movement };
                 InvokeAction(eventArgs);
 
                 if (eventArgs.Process && GameObjects.Player.IssueOrder(GameObjectOrder.MoveTo, eventArgs.Position))
@@ -358,7 +357,7 @@ namespace LeagueSharp.SDK.Core
                 {
                     var eventArgs = new OrbwalkerActionArgs
                                         {
-                                            Target = gTarget, Position = gTarget.Position, Process = true, 
+                                            Target = gTarget, Position = gTarget.Position, Process = true,
                                             Type = OrbwalkerType.BeforeAttack
                                         };
                     InvokeAction(eventArgs);
@@ -406,19 +405,19 @@ namespace LeagueSharp.SDK.Core
             advanced.Add(new MenuSeparator("separatorMovement", "Movement"));
             advanced.Add(
                 new MenuSlider(
-                    "movementDelay", 
-                    "Delay between Movement", 
-                    new Random(Variables.TickCount).Next(30, 101), 
-                    0, 
+                    "movementDelay",
+                    "Delay between Movement",
+                    new Random(Variables.TickCount).Next(30, 101),
+                    0,
                     2500));
             advanced.Add(new MenuBool("movementScramble", "Randomize movement location", true));
             advanced.Add(new MenuSlider("movementExtraHold", "Extra Hold Position", 25, 0, 250));
             advanced.Add(
                 new MenuSlider(
-                    "movementMaximumDistance", 
-                    "Maximum Movement Distance", 
-                    new Random().Next(500, 1201), 
-                    350, 
+                    "movementMaximumDistance",
+                    "Maximum Movement Distance",
+                    new Random().Next(500, 1201),
+                    350,
                     1200));
             advanced.Add(new MenuSeparator("separatorMisc", "Miscellaneous"));
             advanced.Add(new MenuSlider("miscExtraWindup", "Extra Windup", 80, 0, 200));
@@ -432,7 +431,7 @@ namespace LeagueSharp.SDK.Core
                             {
                                 Menu.RestoreDefault();
                                 Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value = new Random().Next(
-                                    500, 
+                                    500,
                                     1201);
                                 Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value = new Random().Next(30, 101);
                             }
@@ -498,8 +497,8 @@ namespace LeagueSharp.SDK.Core
                 if (GameObjects.Player.Position.IsValid())
                 {
                     Drawing.DrawCircle(
-                        GameObjects.Player.Position, 
-                        GameObjects.Player.GetRealAutoAttackRange(), 
+                        GameObjects.Player.Position,
+                        GameObjects.Player.GetRealAutoAttackRange(),
                         Color.Blue);
                 }
             }
@@ -518,8 +517,8 @@ namespace LeagueSharp.SDK.Core
                         value = value > 255 ? 255 : value < 0 ? 0 : value;
 
                         Drawing.DrawCircle(
-                            minion.Position, 
-                            minion.BoundingRadius * 2f, 
+                            minion.Position,
+                            minion.BoundingRadius * 2f,
                             Color.FromArgb(255, 0, 255, (byte)(255 - value)));
                     }
                 }
