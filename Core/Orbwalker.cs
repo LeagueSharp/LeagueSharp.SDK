@@ -570,11 +570,11 @@ namespace LeagueSharp.SDK.Core
                         LastTarget = target;
                     }
 
-                    var time = sender.AttackCastDelay * 1000 + 40;
+                    var time = Variables.TickCount + sender.AttackCastDelay * 1000 + 40;
                     if (!AfterAttackTime.ContainsKey(time))
                     {
                         AfterAttackTime.Add(
-                            Variables.TickCount + time,
+                            time,
                             new OrbwalkerActionArgs { Target = target, Type = OrbwalkerType.AfterAttack });
                     }
 

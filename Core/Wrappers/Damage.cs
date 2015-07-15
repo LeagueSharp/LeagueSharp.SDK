@@ -159,13 +159,14 @@ namespace LeagueSharp.SDK.Core.Wrappers
             bool includePassive = false)
         {
             double result = source.TotalAttackDamage;
-            var k = 1d;
-            var reduction = 0d;
 
             if (!includePassive)
             {
-                return source.CalculatePhysicalDamage(target, result * k - reduction);
+                return source.CalculatePhysicalDamage(target, result);
             }
+
+            var k = 1d;
+            var reduction = 0d;
 
             var hero = source as Obj_AI_Hero;
             if (hero != null)
@@ -482,9 +483,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             var damage = source.DamageReductionMod(
-                target, 
-                PassivePercentMod(source, target, value) * amount, 
-                DamageType.Magical) + PassiveFlatMod(source, target);
+                target,
+                source.PassivePercentMod(target, value) * amount,
+                DamageType.Magical) + source.PassiveFlatMod(target);
 
             return damage;
         }
@@ -555,9 +556,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             var damage = source.DamageReductionMod(
-                target, 
-                source.PassivePercentMod(target, value) * amount, 
-                DamageType.Physical) + PassiveFlatMod(source, target);
+                target,
+                source.PassivePercentMod(target, value) * amount,
+                DamageType.Physical) + source.PassiveFlatMod(target);
 
             // Take into account the percent passives, flat passives and damage reduction.
             return damage;
