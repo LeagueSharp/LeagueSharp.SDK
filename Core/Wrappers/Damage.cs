@@ -463,7 +463,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </returns>
         private static double CalculateMagicDamage(this Obj_AI_Base source, Obj_AI_Base target, double amount)
         {
-            var magicResist = Math.Round(target.SpellBlock);
+            var magicResist = target.SpellBlock;
 
             // Penetration can't reduce magic resist below 0.
             double value;
@@ -483,7 +483,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             var damage = source.DamageReductionMod(
                 target, 
-                Math.Round((float)(PassivePercentMod(source, target, value) * amount)), 
+                PassivePercentMod(source, target, value) * amount, 
                 DamageType.Magical) + PassiveFlatMod(source, target);
 
             return damage;
@@ -538,7 +538,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             // Penetration can't reduce armor below 0.
-            var armor = Math.Round(target.Armor);
+            var armor = target.Armor;
 
             double value;
             if (armor < 0)
@@ -556,7 +556,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             var damage = source.DamageReductionMod(
                 target, 
-                Math.Round((float)(source.PassivePercentMod(target, value) * amount - 0.2)), 
+                source.PassivePercentMod(target, value) * amount, 
                 DamageType.Physical) + PassiveFlatMod(source, target);
 
             // Take into account the percent passives, flat passives and damage reduction.
@@ -636,7 +636,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         }
 
         /// <summary>
-        ///     Apples damage reduction mod calculations towards the given amount of damage, a modifier onto the amount based on
+        ///     Applies damage reduction mod calculations towards the given amount of damage, a modifier onto the amount based on
         ///     damage reduction passives.
         /// </summary>
         /// <param name="source">
@@ -1230,10 +1230,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
                         damage += flagDamage;
                     }
-
-                    damage = Math.Round(damage);
-                    attackDamageAmount = Math.Round(attackDamageAmount);
-                    abilityPowerDamageAmount = Math.Round(abilityPowerDamageAmount);
 
                     return sdata.Type == DamageType.Mixed
                                ? @base.CalculateMixedDamage(aiBase, attackDamageAmount, abilityPowerDamageAmount)
