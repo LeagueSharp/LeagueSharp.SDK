@@ -107,7 +107,6 @@ namespace LeagueSharp.SDK.Core.Events
         ///     Initializes static members of the <see cref="Gapcloser" /> class.
         ///     Static Constructor
         /// </summary>
-        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
         internal static void Initialize()
         {
             Load.OnLoad += (sender, args) =>
@@ -120,35 +119,9 @@ namespace LeagueSharp.SDK.Core.Events
                         LoadGapcloser(entry.Key, entry.Value.ToString());
                     }
 
-                    Game.OnUpdate += Game_OnUpdate;
-                    Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+                    Game.OnUpdate += OnUpdate;
+                    Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
                 };
-        }
-
-        /// <summary>
-        ///     On game tick update subscribed event function.
-        /// </summary>
-        /// <param name="args">
-        ///     <see cref="System.EventArgs" /> containing event data
-        /// </param>
-        private static void Game_OnUpdate(EventArgs args)
-        {
-            ActiveSpellsList.RemoveAll(entry => Variables.TickCount > entry.TickCount + 900);
-            if (OnGapCloser == null)
-            {
-                return;
-            }
-
-            foreach (var gapcloser in
-                ActiveSpellsList.Where(gapcloser => gapcloser.Sender.IsValidTarget())
-                    .Where(
-                        gapcloser =>
-                        gapcloser.SkillType == GapcloserType.Targeted
-                        || (gapcloser.SkillType == GapcloserType.Skillshot
-                            && GameObjects.Player.DistanceSquared(gapcloser.Sender) < 250000)))
-            {
-                OnGapCloser(gapcloser.Sender, gapcloser);
-            }
         }
 
         /// <summary>
@@ -174,25 +147,57 @@ namespace LeagueSharp.SDK.Core.Events
         /// </summary>
         /// <param name="sender"><see cref="Obj_AI_Base" /> sender</param>
         /// <param name="args">Process Spell Cast Data</param>
-        private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (SpellsList.All(spell => spell.SpellName != args.SData.Name.ToLower()))
             {
                 return;
             }
 
-            ActiveSpellsList.Add(
-                new GapCloserEventArgs
-                    {
-                        Start = args.Start, End = args.End, Sender = (Obj_AI_Hero)sender, TickCount = Variables.TickCount, 
-                        SkillType =
-                            (args.Target != null && args.Target.IsMe) ? GapcloserType.Targeted : GapcloserType.Skillshot, 
-                        Slot = ((Obj_AI_Hero)sender).GetSpellSlot(args.SData.Name), 
-                        IsDirectedToPlayer =
-                            GameObjects.Player.Distance(args.End) < GameObjects.Player.Distance(args.Start)
-                            || sender.IsFacing(GameObjects.Player), 
-                        SpellName = args.SData.Name
-                    });
+            var hero = sender as Obj_AI_Hero;
+            var player = GameObjects.Player;
+            if (hero != null)
+            {
+                ActiveSpellsList.Add(
+                    new GapCloserEventArgs
+                        {
+                            Start = args.Start, End = args.End, Sender = hero, TickCount = Variables.TickCount, 
+                            SkillType =
+                                (args.Target != null && args.Target.IsValid)
+                                    ? GapcloserType.Targeted
+                                    : GapcloserType.Skillshot, 
+                            Slot = hero.GetSpellSlot(args.SData.Name), 
+                            IsDirectedToPlayer =
+                                player.Distance(args.End) < player.Distance(args.Start) || sender.IsFacing(player), 
+                            SpellName = args.SData.Name
+                        });
+            }
+        }
+
+        /// <summary>
+        ///     On game tick update subscribed event function.
+        /// </summary>
+        /// <param name="args">
+        ///     <see cref="System.EventArgs" /> containing event data
+        /// </param>
+        private static void OnUpdate(EventArgs args)
+        {
+            ActiveSpellsList.RemoveAll(entry => Variables.TickCount > entry.TickCount + 900);
+            if (OnGapCloser == null)
+            {
+                return;
+            }
+
+            foreach (var gapcloser in
+                ActiveSpellsList.Where(gapcloser => gapcloser.Sender.IsValidTarget())
+                    .Where(
+                        gapcloser =>
+                        gapcloser.SkillType == GapcloserType.Targeted
+                        || (gapcloser.SkillType == GapcloserType.Skillshot
+                            && GameObjects.Player.DistanceSquared(gapcloser.Sender) < 250000)))
+            {
+                OnGapCloser(gapcloser.Sender, gapcloser);
+            }
         }
 
         #endregion

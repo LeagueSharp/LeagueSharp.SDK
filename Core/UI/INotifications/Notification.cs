@@ -310,7 +310,7 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
                 if (HeaderFont.MeasureText(Sprite, value, 0).Width > MaximumHeaderLineLength)
                 {
                     string final = null;
-                    for (var i = value.Length; i > 0; ++i)
+                    for (var i = value.Length; i > 0; --i)
                     {
                         if (HeaderFont.MeasureText(Sprite, value.Substring(0, i) + "...", 0).Width
                             <= MaximumHeaderLineLength)
