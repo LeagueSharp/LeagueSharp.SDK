@@ -23,6 +23,7 @@
 namespace LeagueSharp.SDK.Core
 {
     using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Events;
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
     using LeagueSharp.SDK.Core.UI.INotifications;
@@ -38,10 +39,10 @@ namespace LeagueSharp.SDK.Core
         #region Public Methods and Operators
 
         /// <summary>
-        ///     External attachment handle for the AppDomainManager
+        ///     External attachment handle for the Sandbox to load in the SDK library.
         /// </summary>
         /// <param name="args">
-        ///     The args.
+        ///     The additional arguments the loader passes.
         /// </param>
         public static void Init(string[] args)
         {
@@ -72,6 +73,10 @@ namespace LeagueSharp.SDK.Core
             // Load Damages.
             Damage.Initialize(Game.Version);
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Damage Library loaded.");
+
+            // Load Gapcloser.
+            Gapcloser.Initialize();
+            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Gapcloser Library loaded.");
 
             // Final notification.
             Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");

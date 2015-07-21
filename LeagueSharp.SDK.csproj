@@ -219,32 +219,20 @@
     </EmbeddedResource>
     <None Include="LeagueSharp.SDK.snk" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\Images\cursor_drag.png" />
+    <Content Include="Resources\Images\notifications_arrow.png" />
+    <Content Include="Resources\Images\notifications_check.png" />
+    <Content Include="Resources\Images\notifications_error.png" />
+    <Content Include="Resources\Images\notifications_select.png" />
+    <Content Include="Resources\Images\notifications_star.png" />
+    <Content Include="Resources\Images\notifications_warning.png" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Resources\Damage\5.13.0.323.json" />
+    <None Include="Resources\Data\Gapclosers.json" />
     <None Include="Third_Party\Clipper\License.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\notifications_check.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\notifications_error.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\notifications_warning.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\notifications_select.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\notifications_star.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\notifications_arrow.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\cursor_drag.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

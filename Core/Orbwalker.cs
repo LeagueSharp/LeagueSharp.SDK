@@ -382,6 +382,7 @@ namespace LeagueSharp.SDK.Core
         public static void ResetAutoAttackTimer()
         {
             lastAutoAttackTick = 0;
+            lastMovementOrderTick = Variables.TickCount - 250;
         }
 
         #endregion
@@ -452,7 +453,20 @@ namespace LeagueSharp.SDK.Core
                         var modeName = keyBind.Name.Substring(0, keyBind.Name.IndexOf("Key", StringComparison.Ordinal));
                         OrbwalkerMode mode;
                         ActiveMode = Enum.TryParse(modeName, true, out mode)
-                                         ? keyBind.Active ? mode : mode == ActiveMode ? OrbwalkerMode.None : ActiveMode
+                                         ? keyBind.Active
+                                               ? mode
+                                               : mode == ActiveMode
+                                                     ? Menu["lasthitKey"].GetValue<MenuKeyBind>().Active
+                                                           ? OrbwalkerMode.LastHit
+                                                           : Menu["laneclearKey"].GetValue<MenuKeyBind>().Active
+                                                                 ? OrbwalkerMode.LaneClear
+                                                                 : Menu["hybridKey"].GetValue<MenuKeyBind>().Active
+                                                                       ? OrbwalkerMode.Hybrid
+                                                                       : Menu["orbwalkKey"].GetValue<MenuKeyBind>()
+                                                                             .Active
+                                                                             ? OrbwalkerMode.Orbwalk
+                                                                             : OrbwalkerMode.None
+                                                     : ActiveMode
                                          : ActiveMode;
                     }
                 };

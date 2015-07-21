@@ -25,7 +25,6 @@ namespace LeagueSharp.SDK.Core.Events
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
 
     using LeagueSharp.SDK.Core.Enumerations;
 
@@ -98,7 +97,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// </returns>
         public static InterruptableTargetEventArgs GetInterruptableTargetData(Obj_AI_Hero target)
         {
-            if (!target.IsValid)
+            if (target == null || !target.IsValid)
             {
                 return null;
             }
@@ -156,7 +155,7 @@ namespace LeagueSharp.SDK.Core.Events
             foreach (var newArgs in
                 GameObjects.EnemyHeroes.Select(GetInterruptableTargetData).Where(newArgs => newArgs != null))
             {
-                OnInterruptableTarget(MethodBase.GetCurrentMethod().DeclaringType, newArgs);
+                OnInterruptableTarget(newArgs.Sender, newArgs);
             }
         }
 
