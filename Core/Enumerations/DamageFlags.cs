@@ -99,8 +99,18 @@ namespace LeagueSharp.SDK.Core.Enumerations
 
         /// <summary>
         ///     Flag which indicates the damage would include a base array damage of bonus attack damage type treated as percentage
-        ///     of the bonus attack damage. (5012)
+        ///     of the bonus attack damage. (4098)
         /// </summary>
-        BaseBonusAttackDamagePercent = 1 << 12
+        BaseBonusAttackDamagePercent = 1 << 12, 
+
+        /// <summary>
+        ///     Flag which indicates the damage arrays would scale with a different spell slot. (8196)
+        /// </summary>
+        LevelScale = 1 << 13, 
+
+        /// <summary>
+        ///     Flag which indicates the damage would be based off a passive that the target contains. (16384)
+        /// </summary>
+        SpecialTargetPassive = 1 << 14
     }
 }

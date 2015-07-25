@@ -830,7 +830,7 @@
                     "baseAPPercent": [ 0.35, 0.4, 0.45, 0.5, 0.55 ],
                     "baseBonusADPercent": [ 0.5, 0.55, 0.6, 0.65, 0.7 ],
                     "type": "Magical",
-                    "flags": "7060"
+                    "flags": "6146"
                 }
             },
             "E": {
@@ -1043,6 +1043,536 @@
                     "AP": "1.0",
                     "type": "Magical",
                     "flags": "4"
+                }
+            }
+        },
+        "Galio": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 80, 135, 190, 245, 300 ],
+                    "AP": "0.6",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 60, 105, 150, 195, 240 ],
+                    "AP": "0.5",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "R": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 200, 300, 400 ],
+                    "AP": "0.5",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage1": {
+                    "base": [ 360, 540, 720 ],
+                    "AP": "1.08",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "Gangplank": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 20, 45, 70, 95, 120 ],
+                    "AD": "1.0",
+                    "type": "Physical",
+                    "flags": "2"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "targetBase": [ 80, 110, 140, 170, 200 ],
+                    "targetArmorIgnore": "0.6",
+                    "AD": "1.0",
+                    "type": "Physical",
+                    "flags": "2"
+                }
+            },
+            "R": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 150, 210, 270 ],
+                    "AP": "0.3",
+                    "baseAlternativePassiveIdentifier": [ "GangplankRUpgrade2" ],
+                    "AlternativeTrueDamage": "3.0",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage1": {
+                    "base": [ 600, 840, 1080 ],
+                    "AP": "1.2",
+                    "baseAlternativePassiveIdentifier": [ "GangplankRUpgrade1" ],
+                    "baseAlternative": [ 1050, 1470, 1890 ],
+                    "AlternativeAP": "2.1",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "Garen": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 30, 55, 80, 105, 130 ],
+                    "AD": "1.4",
+                    "type": "Physical",
+                    "flags": "2"
+                }
+            },
+            "E": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 20, 45, 70, 95, 120 ],
+                    "baseADPercent": [ 0.7, 0.8, 0.9, 1.0, 1.1 ],
+                    "baseMinion": [ 15, 33.75, 52.5, 71.25, 90 ],
+                    "baseADPercentMinion": [ 0.525, 0.6, 0.675, 0.75, 0.825 ],
+                    "type": "Physical",
+                    "flags": "32"
+                },
+                "Stage1": {
+                    "base": [ 60, 135, 210, 285, 360 ],
+                    "baseADPercent": [ 2.1, 2.4, 2.7, 3.0, 3.3 ],
+                    "baseMinion": [ 45, 101.25, 157.5, 213.75, 270 ],
+                    "baseADPercentMinion": [ 1.575, 1.8, 2.025, 2.25, 2.475 ],
+                    "type": "Physical",
+                    "flags": "32"
+                }
+            },
+            "R": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 175, 350, 525 ],
+                    "targetMissingHealthBase": [ 0.2857, 0.3333, 0.4 ],
+                    "type": "Magical",
+                    "flags": "512"
+                }
+            }
+        },
+        "Gnar": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 5, 35, 65, 95, 125 ],
+                    "AD": "1.15",
+                    "baseAlternativePassiveIdentifier": [ "gnartransform" ],
+                    "baseAlternative": [ 5, 45, 85, 125, 165 ],
+                    "AlternativeAD": "1.2",
+                    "type": "Physical",
+                    "flags": "1026"
+                }
+            },
+            "W": {
+                "Stages": "1",
+                "Stage0": {
+                    "baseAlternativePassiveIdentifier": [ "gnartransform" ],
+                    "baseAlternative": [ 25, 45, 65, 85, 105 ],
+                    "AlternativeAD": "1.0",
+                    "type": "Physical",
+                    "flags": "1026"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 20, 60, 100, 140, 180 ],
+                    "maxHealth": "0.06",
+                    "type": "Physical",
+                    "flags": "128"
+                }
+            },
+            "R": {
+                "Stages": "1",
+                "Stage0": {
+                    "baseAlternativePassiveIdentifier": [ "gnartransform" ],
+                    "baseAlternative": [ 200, 300, 400 ],
+                    "AlternativeBonusAD": "0.2",
+                    "AlternativeAP": "0.5",
+                    "type": "Physical",
+                    "flags": "1029"
+                }
+            }
+        },
+        "Gragas": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 80, 120, 160, 200, 240 ],
+                    "AP": "0.6",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 80, 130, 180, 230, 280 ],
+                    "AP": "0.6",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "R": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 200, 300, 400 ],
+                    "AP": "0.7",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "Graves": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 60, 90, 120, 150, 180 ],
+                    "bonusAD": "0.8",
+                    "type": "Physical",
+                    "flags": "1"
+                }
+            },
+            "W": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 60, 110, 160, 210, 260 ],
+                    "AP": "0.6",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "R": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 250, 400, 550 ],
+                    "bonusAD": "1.5",
+                    "type": "Physical",
+                    "flags": "1"
+                },
+                "Stage1": {
+                    "base": [ 200, 320, 440 ],
+                    "bonusAD": "1.2",
+                    "type": "Physical",
+                    "flags": "1"
+                }
+            }
+        },
+        "Hecarim": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 60, 95, 130, 165, 200 ],
+                    "bonusAD": "0.6",
+                    "type": "Physical",
+                    "flags": "1"
+                }
+            },
+            "W": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 80, 120, 160, 200, 240 ],
+                    "AP": "0.8",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "E": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 40, 75, 110, 145, 180 ],
+                    "bonusAD": "0.5",
+                    "type": "Physical",
+                    "flags": "1"
+                },
+                "Stage1": {
+                    "base": [ 80, 150, 220, 290, 360 ],
+                    "bonusAD": "1.0",
+                    "type": "Physical",
+                    "flags": "1"
+                }
+            },
+            "R": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 150, 250, 350 ],
+                    "AP": "1.0",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "Heimerdinger": {
+            "Q": {
+                "Stages": "4",
+                "Stage0": {
+                    "base": [ 12, 18, 23, 29, 34 ],
+                    "AP": "0.15",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage1": {
+                    "base": [ 40, 60, 80, 105, 130 ],
+                    "AP": "0.55",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage2": {
+                    "base": [ 70, 90, 110 ],
+                    "AP": "0.3",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage3": {
+                    "base": [ 180, 240, 300 ],
+                    "AP": "0.7",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "W": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 60, 90, 120, 150, 180 ],
+                    "AP": "0.45",
+                    "targetBase": [ 12, 18, 24, 30, 36 ],
+                    "targetAP": "0.09",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage1": {
+                    "base": [ 135, 180, 225 ],
+                    "AP": "0.45",
+                    "targetBase": [ 27, 36, 45 ],
+                    "targetAP": "0.09",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "E": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 60, 100, 140, 180, 220 ],
+                    "AP": "0.6",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage1": {
+                    "base": [ 150, 200, 250 ],
+                    "baseLevelScale": "R",
+                    "AP": "0.6",
+                    "type": "Magical",
+                    "flags": "8200"
+                }
+            }
+        },
+        "Irelia": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 20, 50, 80, 110, 140 ],
+                    "AD": "1.0",
+                    "type": "Physical",
+                    "flags": "2"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 80, 120, 160, 200, 240 ],
+                    "AP": "0.5",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "R": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 80, 120, 160 ],
+                    "AD": "0.6",
+                    "AP": "0.5",
+                    "type": "Physical",
+                    "flags": "6"
+                }
+            }
+        },
+        "Janna": {
+            "Q": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 60, 85, 110, 135, 160 ],
+                    "AP": "0.35",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage1": {
+                    "base": [ 105, 145, 185, 225, 265 ],
+                    "AP": "0.65",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "W": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 60, 115, 170, 225, 280 ],
+                    "AP": "0.5",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            }
+        },
+        "JarvanIV": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 70, 115, 160, 205, 250 ],
+                    "bonusAD": "1.1",
+                    "type": "Physical",
+                    "flags": "1"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 60, 105, 150, 195, 240 ],
+                    "AP": "0.8",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "R": {
+                "base": [ 200, 325, 450 ],
+                "bonusAD": "1.5",
+                "type": "Physical",
+                "flags": "1"
+            }
+        },
+        "Jax": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 70, 110, 150, 190, 230 ],
+                    "bonusAD": "1.0",
+                    "AP": "0.6",
+                    "type": "Physical",
+                    "flags": "5"
+                }
+            }
+        },
+        "Jayce": {
+            "Q": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 30, 70, 110, 150, 190, 230 ],
+                    "bonusAD": "1.0",
+                    "baseAlternativePassiveIdentifier": [ "JaycePassiveRangedAttack" ],
+                    "baseAlternative": [ 70, 120, 170, 220, 270, 320 ],
+                    "AlternativeBonusAD": "1.2",
+                    "type": "Physical",
+                    "flags": "1"
+                },
+                "Stage1": {
+                    "base": [ 98, 168, 238, 308, 378, 448 ],
+                    "bonusAD": "1.68",
+                    "type": "Physical",
+                    "flags": "1"
+                }
+            },
+            "W": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 25, 40, 55, 70, 85, 100 ],
+                    "AP": "0.25",
+                    "type": "Magical",
+                    "flags": "4"
+                },
+                "Stage1": {
+                    "base": [ 100, 160, 220, 280, 340, 400 ],
+                    "AP": "1.0",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "targetHealthBase": [ 0.08, 0.104, 0.128, 0.152, 0.176, 0.2 ],
+                    "bonusAD": "1.0",
+                    "minionHealthBaseMax": [ 200, 300, 400, 500, 600, 700 ],
+                    "type": "Magical",
+                    "flags": "513"
+                }
+            }
+        },
+        "Jinx": {
+            "W": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 10, 60, 110, 160, 210 ],
+                    "AD": "1.4",
+                    "type": "Physical",
+                    "flags": "2"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 80, 135, 190, 245, 300 ],
+                    "AP": "1.0",
+                    "type": "Magical",
+                    "flags": "4"
+                }
+            },
+            "R": {
+                "Stages": "2",
+                "Stage0": {
+                    "base": [ 25, 35, 45 ],
+                    "bonusAD": "0.1",
+                    "targetMissingHealthBase": [ 0.25, 0.3, 0.35 ],
+                    "type": "Physical",
+                    "flags": "1"
+                },
+                "Stage1": {
+                    "base": [ 250, 350, 450 ],
+                    "bonusAD": "1.0",
+                    "targetMissingHealthBase": [ 0.25, 0.3, 0.35 ],
+                    "type": "Physical",
+                    "flags": "1"
+                }
+            }
+        },
+        "Kalista": {
+            "Q": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 10, 70, 130, 190, 250 ],
+                    "AD": "1.0",
+                    "type": "Physical",
+                    "flags": "2"
+                }
+            },
+            "E": {
+                "Stages": "1",
+                "Stage0": {
+                    "base": [ 20, 30, 40, 50, 60 ],
+                    "AD": "0.6",
+                    "targetPassiveIdentifier": [ "kalistaexpungemarker", "1" ],
+                    "targetPassiveBase": [ 10, 14, 19, 25, 32 ],
+                    "targetPassiveADBase": [ 0.2, 0.225, 0.25, 0.275, 0.3 ],
+                    "type": "Physical",
+                    "flags": "16386"
                 }
             }
         }

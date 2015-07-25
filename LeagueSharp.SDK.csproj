@@ -155,7 +155,6 @@
     <Compile Include="Core\Utils\Jungle.cs" />
     <Compile Include="Core\Utils\Minion.cs" />
     <Compile Include="Core\Utils\AutoAttack.cs" />
-    <Compile Include="Core\Utils\AutoPinner.cs" />
     <Compile Include="Core\Utils\CallbackPerformance.cs" />
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\Enumerations\HitChance.cs" />
@@ -230,7 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\Damage\5.13.0.323.json" />
+    <None Include="Resources\Damage\5.14.0.334.json" />
     <None Include="Resources\Data\Gapclosers.json" />
     <None Include="Third_Party\Clipper\License.txt" />
   </ItemGroup>

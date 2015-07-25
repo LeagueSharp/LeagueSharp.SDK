@@ -23,6 +23,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Security.Permissions;
     using System.Text;
@@ -48,7 +49,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </summary>
         private static readonly IDictionary<string, byte[]> DamageFiles = new Dictionary<string, byte[]>
                                                                               {
-                                                                                  { "5.13.0.323", Resources._5_13_0_323 }
+                                                                                  { "5.13.0.323", Resources._5_14_0_334 }
                                                                               };
 
         /// <summary>
@@ -84,6 +85,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="amount">
         ///     The amount
         /// </param>
+        /// <param name="forceDamageModifier">
+        ///     The forced damage modifier
+        /// </param>
         /// <returns>
         ///     The estimated damage from calculations.
         /// </returns>
@@ -91,16 +95,17 @@ namespace LeagueSharp.SDK.Core.Wrappers
             this Obj_AI_Base source, 
             Obj_AI_Base target, 
             DamageType damageType, 
-            double amount)
+            double amount, 
+            double forceDamageModifier = 0d)
         {
             var damage = 0d;
             switch (damageType)
             {
                 case DamageType.Magical:
-                    damage = source.CalculateMagicDamage(target, amount);
+                    damage = source.CalculateMagicDamage(target, amount, forceDamageModifier);
                     break;
                 case DamageType.Physical:
-                    damage = source.CalculatePhysicalDamage(target, amount);
+                    damage = source.CalculatePhysicalDamage(target, amount, forceDamageModifier);
                     break;
                 case DamageType.True:
                     damage = amount;
@@ -459,10 +464,17 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="amount">
         ///     The amount
         /// </param>
+        /// <param name="forceDamageModifier">
+        ///     The forced damage modifier
+        /// </param>
         /// <returns>
         ///     The amount of estimated damage dealt to target from source.
         /// </returns>
-        private static double CalculateMagicDamage(this Obj_AI_Base source, Obj_AI_Base target, double amount)
+        private static double CalculateMagicDamage(
+            this Obj_AI_Base source, 
+            Obj_AI_Base target, 
+            double amount, 
+            double forceDamageModifier = 0d)
         {
             var magicResist = target.SpellBlock;
 
@@ -483,9 +495,10 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             var damage = source.DamageReductionMod(
-                target,
-                source.PassivePercentMod(target, value) * amount,
-                DamageType.Magical) + source.PassiveFlatMod(target);
+                target, 
+                source.PassivePercentMod(target, value) * amount, 
+                DamageType.Magical, 
+                forceDamageModifier) + source.PassiveFlatMod(target);
 
             return damage;
         }
@@ -503,10 +516,17 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="amount">
         ///     The amount of damage
         /// </param>
+        /// <param name="forceDamageModifier">
+        ///     The forced damage modifier
+        /// </param>
         /// <returns>
         ///     The amount of estimated damage dealt to target from source.
         /// </returns>
-        private static double CalculatePhysicalDamage(this Obj_AI_Base source, Obj_AI_Base target, double amount)
+        private static double CalculatePhysicalDamage(
+            this Obj_AI_Base source, 
+            Obj_AI_Base target, 
+            double amount, 
+            double forceDamageModifier = 0d)
         {
             double armorPenetrationPercent = source.PercentArmorPenetrationMod;
             double armorPenetrationFlat = source.FlatArmorPenetrationMod;
@@ -556,9 +576,10 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             var damage = source.DamageReductionMod(
-                target,
-                source.PassivePercentMod(target, value) * amount,
-                DamageType.Physical) + source.PassiveFlatMod(target);
+                target, 
+                source.PassivePercentMod(target, value) * amount, 
+                DamageType.Physical, 
+                forceDamageModifier) + source.PassiveFlatMod(target);
 
             // Take into account the percent passives, flat passives and damage reduction.
             return damage;
@@ -652,6 +673,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="damageType">
         ///     The damage Type.
         /// </param>
+        /// <param name="forceReduction">
+        ///     The forced reduction modifier.
+        /// </param>
         /// <returns>
         ///     The <see cref="double" />.
         /// </returns>
@@ -659,7 +683,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
             this Obj_AI_Base source, 
             Obj_AI_Base target, 
             double amount, 
-            DamageType damageType)
+            DamageType damageType, 
+            double forceReduction = 0d)
         {
             if (source is Obj_AI_Hero)
             {
@@ -691,9 +716,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 // + Alistar removes all crowd control effects from himself, then gains additional attack damage and takes 70% reduced physical and magic damage for 7 seconds.
                 if (target.HasBuff("Ferocious Howl"))
                 {
-                    Console.WriteLine(amount);
                     amount *= 0.3d;
-                    Console.WriteLine(amount);
                 }
 
                 // Tantrum
@@ -793,6 +816,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
                               * 0.05d;
                 }
             }
+
+            amount *= 1.0d - forceReduction;
 
             return amount;
         }
@@ -957,6 +982,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="sdata">
         ///     The spell damage data.
         /// </param>
+        [SuppressMessage("ReSharper", "FunctionComplexityOverflow", 
+            Justification = "Reviewed. Suppression is OK here and does not hurt function nor performance.")]
         internal SpellDamage(SpellDamageData sdata)
         {
             this.SData = sdata;
@@ -967,10 +994,23 @@ namespace LeagueSharp.SDK.Core.Wrappers
                         return 0d;
                     }
 
-                    var spellLevel = @base.Spellbook.GetSpell(sdata.Slot).Level - 1;
+                    var spellLevel = sdata.Flags.HasFlag(DamageFlags.LevelScale)
+                                         ? @base.Spellbook.GetSpell(sdata.LevelScale).Level - 1
+                                         : @base.Spellbook.GetSpell(sdata.Slot).Level - 1;
+
                     var damage = 0d;
                     var abilityPowerDamageAmount = 0d;
                     var attackDamageAmount = 0d;
+
+                    SpellSlot spellSlot;
+                    int intValue;
+                    var alternativePassive = sdata.Flags.HasFlag(DamageFlags.SpecialPassiveAlternative)
+                                             && ((sdata.AlternativePassive.Length == 1
+                                                  && @base.HasBuff(sdata.AlternativePassive[0]))
+                                                 || (sdata.AlternativePassive.Length == 2
+                                                     && Enum.TryParse(sdata.AlternativePassive[0], out spellSlot)
+                                                     && int.TryParse(sdata.AlternativePassive[1], out intValue)
+                                                     && @base.Spellbook.GetSpell(spellSlot).ToggleState == intValue));
 
                     if (sdata.Base != null && sdata.Base.Length > 0)
                     {
@@ -987,16 +1027,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                             }
                             else
                             {
-                                SpellSlot spellSlot;
-                                int intValue;
-                                if (sdata.Flags.HasFlag(DamageFlags.SpecialPassiveAlternative)
-                                    && ((sdata.AlternativePassive.Length == 1
-                                         && @base.HasBuff(sdata.AlternativePassive[0]))
-                                        || (sdata.AlternativePassive.Length == 2
-                                            && Enum.TryParse(sdata.AlternativePassive[0], out spellSlot)
-                                            && int.TryParse(sdata.AlternativePassive[1], out intValue)
-                                            && @base.Spellbook.GetSpell(spellSlot).ToggleState == intValue))
-                                    && sdata.BaseAlternative != null && sdata.BaseAlternative.Length > 0)
+                                if (alternativePassive)
                                 {
                                     damage +=
                                         sdata.BaseAlternative[Math.Min(spellLevel, sdata.BaseAlternative.Length - 1)];
@@ -1009,17 +1040,39 @@ namespace LeagueSharp.SDK.Core.Wrappers
                         }
                     }
 
+                    if (sdata.TargetBase != null && sdata.TargetBase.Length > 0 && aiBase is Obj_AI_Hero)
+                    {
+                        damage += sdata.TargetBase[Math.Min(spellLevel, sdata.TargetBase.Length - 1)];
+                    }
+
                     if (sdata.Flags.HasFlag(DamageFlags.AbilityPower))
                     {
-                        var value = @base.TotalMagicalDamage * sdata.AbilityPower
-                                    + @base.TotalMagicalDamage * sdata.AbilityPowerMinion;
+                        var value = @base.TotalMagicalDamage
+                                    * (aiBase is Obj_AI_Minion && sdata.AbilityPowerMinion > float.Epsilon
+                                           ? sdata.AbilityPowerMinion
+                                           : sdata.AbilityPower);
+
+                        if (alternativePassive)
+                        {
+                            value = @base.TotalMagicalDamage * sdata.AlternativeAbilityPower;
+                        }
+
                         damage += value;
                         abilityPowerDamageAmount += value;
                     }
 
                     if (sdata.Flags.HasFlag(DamageFlags.AttackDamage))
                     {
-                        var value = @base.TotalAttackDamage * sdata.AttackDamage;
+                        var value = @base.TotalAttackDamage
+                                    * (aiBase is Obj_AI_Minion && sdata.AttackDamageMinion > float.Epsilon
+                                           ? sdata.AttackDamageMinion
+                                           : sdata.AttackDamage);
+
+                        if (alternativePassive)
+                        {
+                            value = @base.TotalAttackDamage * sdata.AlternativeAttackDamage;
+                        }
+
                         damage += value;
                         attackDamageAmount += value;
                     }
@@ -1030,6 +1083,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
                                      && @base.Distance(aiBase) > sdata.DistanceOffset)
                                         ? @base.FlatPhysicalDamageMod * sdata.DistanceBonusAttackDamage
                                         : @base.FlatPhysicalDamageMod * sdata.BonusAttackDamage;
+
+                        if (alternativePassive)
+                        {
+                            value = @base.FlatPhysicalDamageMod * sdata.AlternativeBonusAttackDamage;
+                        }
+
                         damage += value;
                         attackDamageAmount += value;
                     }
@@ -1047,27 +1106,39 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     }
 
                     if (sdata.Flags.HasFlag(DamageFlags.BaseAttackDamagePercent)
-                        && sdata.BaseAttackDamagePercent != null && sdata.BaseAttackDamagePercent.Length > 0)
+                        && ((sdata.BaseAttackDamagePercent != null && sdata.BaseAttackDamagePercent.Length > 0)
+                            || (sdata.BaseMinionAttackDamagePercent != null
+                                && sdata.BaseMinionAttackDamagePercent.Length > 0)))
                     {
-                        damage += @base.TotalAttackDamage
-                                  * sdata.BaseAttackDamagePercent[
-                                      Math.Min(spellLevel, sdata.BaseAttackDamagePercent.Length - 1)];
+                        var value = @base.TotalAttackDamage
+                                    * (aiBase is Obj_AI_Minion && sdata.BaseMinionAttackDamagePercent != null
+                                       && sdata.BaseMinionAttackDamagePercent.Length > 0
+                                           ? sdata.BaseMinionAttackDamagePercent[
+                                               Math.Min(spellLevel, sdata.BaseMinionAttackDamagePercent.Length - 1)]
+                                           : sdata.BaseAttackDamagePercent[
+                                               Math.Min(spellLevel, sdata.BaseAttackDamagePercent.Length - 1)]);
+                        damage += value;
+                        attackDamageAmount += value;
                     }
 
                     if (sdata.Flags.HasFlag(DamageFlags.BaseAbilityPowerPercent)
                         && sdata.BaseAbilityPowerPercent != null && sdata.BaseAbilityPowerPercent.Length > 0)
                     {
-                        damage += @base.TotalAttackDamage
-                                  * sdata.BaseAbilityPowerPercent[
-                                      Math.Min(spellLevel, sdata.BaseAbilityPowerPercent.Length - 1)];
+                        var value = @base.TotalMagicalDamage
+                                    * sdata.BaseAbilityPowerPercent[
+                                        Math.Min(spellLevel, sdata.BaseAbilityPowerPercent.Length - 1)];
+                        damage += value;
+                        abilityPowerDamageAmount += value;
                     }
 
                     if (sdata.Flags.HasFlag(DamageFlags.BaseBonusAttackDamagePercent)
-                        && sdata.BaseAttackDamagePercent != null && sdata.BaseAttackDamagePercent.Length > 0)
+                        && sdata.BaseBonusAttackDamagePercent != null && sdata.BaseBonusAttackDamagePercent.Length > 0)
                     {
-                        damage += @base.TotalAttackDamage
-                                  * sdata.BaseBonusAttackDamagePercent[
-                                      Math.Min(spellLevel, sdata.BaseBonusAttackDamagePercent.Length - 1)];
+                        var value = @base.TotalAttackDamage
+                                    * sdata.BaseBonusAttackDamagePercent[
+                                        Math.Min(spellLevel, sdata.BaseBonusAttackDamagePercent.Length - 1)];
+                        damage += value;
+                        attackDamageAmount += value;
                     }
 
                     if (sdata.Flags.HasFlag(DamageFlags.BaseChampionLevel) && sdata.BaseChampionLevel != null
@@ -1083,24 +1154,16 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
                     if (sdata.Flags.HasFlag(DamageFlags.TargetHealth))
                     {
-                        SpellSlot spellSlot;
-                        int intValue;
-                        var flag = !sdata.Flags.HasFlag(DamageFlags.SpecialPassiveAlternative)
-                                   || !((sdata.AlternativePassive.Length == 1
-                                         && @base.HasBuff(sdata.AlternativePassive[0]))
-                                        || (sdata.AlternativePassive.Length == 2
-                                            && Enum.TryParse(sdata.AlternativePassive[0], out spellSlot)
-                                            && int.TryParse(sdata.AlternativePassive[1], out intValue)
-                                            && @base.Spellbook.GetSpell(spellSlot).ToggleState == intValue));
-
-                        var baseTargetHealth = flag ? sdata.BaseTargetHealth : sdata.BaseAlternativeTargetHealth;
-                        var targetHealthBaseAbilityPowerScale = flag
+                        var baseTargetHealth = alternativePassive
+                                                   ? sdata.BaseTargetHealth
+                                                   : sdata.BaseAlternativeTargetHealth;
+                        var targetHealthBaseAbilityPowerScale = alternativePassive
                                                                     ? sdata.TargetHealthBaseAbilityPowerScale
                                                                     : sdata.AlternativeTargetHealthBaseAbilityPowerScale;
-                        var targetHealthBaseMinimumDamage = flag
+                        var targetHealthBaseMinimumDamage = alternativePassive
                                                                 ? sdata.TargetHealthBaseMinimumDamage
                                                                 : sdata.AlternativeTargetHealthBaseMinimumDamage;
-                        var minionHealthBaseMaximumDamage = flag
+                        var minionHealthBaseMaximumDamage = alternativePassive
                                                                 ? sdata.MinionHealthBaseMaximumDamage
                                                                 : sdata.AlternativeMinionHealthBaseMaximumDamage;
 
@@ -1158,19 +1221,19 @@ namespace LeagueSharp.SDK.Core.Wrappers
                         damage += flagDamage;
 
                         flagDamage = 0f;
-                        var baseTargetMissingHealth = flag
+                        var baseTargetMissingHealth = alternativePassive
                                                           ? sdata.BaseTargetMissingHealth
                                                           : sdata.BaseAlternativeTargetMissingHealth;
-                        var targetMissingHealthBaseAbilityPowerScale = flag
+                        var targetMissingHealthBaseAbilityPowerScale = alternativePassive
                                                                            ? sdata
                                                                                  .TargetMissingHealthBaseAbilityPowerScale
                                                                            : sdata
                                                                                  .AlternativeTargetMissingHealthBaseAbilityPowerScale;
-                        var targetMissingHealthBaseMinimumDamage = flag
+                        var targetMissingHealthBaseMinimumDamage = alternativePassive
                                                                        ? sdata.TargetMissingHealthBaseMinimumDamage
                                                                        : sdata
                                                                              .AlternativeTargetMissingHealthBaseMinimumDamage;
-                        var minionMissingHealthBaseMaximumDamage = flag
+                        var minionMissingHealthBaseMaximumDamage = alternativePassive
                                                                        ? sdata.MinionMissingHealthBaseMaximumDamage
                                                                        : sdata
                                                                              .AlternativeMinionMissingHealthBaseMaximumDamage;
@@ -1232,9 +1295,50 @@ namespace LeagueSharp.SDK.Core.Wrappers
                         damage += flagDamage;
                     }
 
-                    return sdata.Type == DamageType.Mixed
-                               ? @base.CalculateMixedDamage(aiBase, attackDamageAmount, abilityPowerDamageAmount)
-                               : @base.CalculateDamage(aiBase, sdata.Type, damage);
+                    if (sdata.Flags.HasFlag(DamageFlags.SpecialTargetPassive))
+                    {
+                        if (sdata.TargetPassiveIdentifier != null && sdata.TargetPassiveIdentifier.Length > 0)
+                        {
+                            var passiveName = sdata.TargetPassiveIdentifier[0];
+                            int rawTempValue;
+                            var passiveCountPrefix = sdata.TargetPassiveIdentifier.Length > 1
+                                                     && int.TryParse(sdata.TargetPassiveIdentifier[1], out rawTempValue)
+                                                         ? rawTempValue
+                                                         : 0;
+
+                            var enemyPassiveCount = aiBase.GetBuffCount(passiveName) - passiveCountPrefix;
+                            if (enemyPassiveCount > 0)
+                            {
+                                if (sdata.BaseTargetPassive != null && sdata.BaseTargetPassive.Length > 0)
+                                {
+                                    damage += enemyPassiveCount
+                                              * sdata.BaseTargetPassive[
+                                                  Math.Min(spellLevel, sdata.BaseTargetPassive.Length - 1)];
+                                }
+
+                                if (sdata.BaseTargetPassiveAttackDamage != null
+                                    && sdata.BaseTargetPassiveAttackDamage.Length > 0)
+                                {
+                                    damage += enemyPassiveCount
+                                              * sdata.BaseTargetPassiveAttackDamage[
+                                                  Math.Min(spellLevel, sdata.BaseTargetPassiveAttackDamage.Length - 1)]
+                                              * @base.TotalAttackDamage;
+                                }
+                            }
+                        }
+                    }
+
+                    var trueDamage = 0d;
+                    if (alternativePassive)
+                    {
+                        trueDamage += damage * sdata.AlternativeTrueDamage;
+                    }
+
+                    var forceIgnoreArmor = -sdata.TargetArmorIgnore;
+
+                    return (sdata.Type == DamageType.Mixed
+                                ? @base.CalculateMixedDamage(aiBase, attackDamageAmount, abilityPowerDamageAmount)
+                                : @base.CalculateDamage(aiBase, sdata.Type, damage, forceIgnoreArmor)) + trueDamage;
                 };
         }
 
@@ -1306,6 +1410,24 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public float AbilityPowerMinion { get; internal set; }
 
         /// <summary>
+        ///     Gets the alternative ability power.
+        /// </summary>
+        [JsonProperty("AlternativeAP")]
+        public float AlternativeAbilityPower { get; internal set; }
+
+        /// <summary>
+        ///     Gets the alternative attack damage.
+        /// </summary>
+        [JsonProperty("AlternativeAD")]
+        public float AlternativeAttackDamage { get; internal set; }
+
+        /// <summary>
+        ///     Gets the alternative bonus attack damage.
+        /// </summary>
+        [JsonProperty("AlternativeBonusAD")]
+        public float AlternativeBonusAttackDamage { get; internal set; }
+
+        /// <summary>
         ///     Gets the alternative minion health base maximum damage.
         /// </summary>
         [JsonProperty("minionAlternativeHealthBaseMax")]
@@ -1348,10 +1470,22 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public float[] AlternativeTargetMissingHealthBaseMinimumDamage { get; internal set; }
 
         /// <summary>
+        ///     Gets the alternative true damage.
+        /// </summary>
+        [JsonProperty("AlternativeTrueDamage")]
+        public float AlternativeTrueDamage { get; internal set; }
+
+        /// <summary>
         ///     Gets the attack damage.
         /// </summary>
         [JsonProperty("AD")]
         public float AttackDamage { get; internal set; }
+
+        /// <summary>
+        ///     Gets the ability power minion.
+        /// </summary>
+        [JsonProperty("ADMinion")]
+        public float AttackDamageMinion { get; internal set; }
 
         /// <summary>
         ///     Gets the base.
@@ -1414,6 +1548,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public float[] BaseMinion { get; internal set; }
 
         /// <summary>
+        ///     Gets the base minion attack damage percent.
+        /// </summary>
+        [JsonProperty("baseADPercentMinion")]
+        public float[] BaseMinionAttackDamagePercent { get; internal set; }
+
+        /// <summary>
         ///     Gets the base target health.
         /// </summary>
         [JsonProperty("targetHealthBase")]
@@ -1424,6 +1564,18 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </summary>
         [JsonProperty("targetMissingHealthBase")]
         public float[] BaseTargetMissingHealth { get; internal set; }
+
+        /// <summary>
+        ///     Gets the base target passive.
+        /// </summary>
+        [JsonProperty("targetPassiveBase")]
+        public float[] BaseTargetPassive { get; internal set; }
+
+        /// <summary>
+        ///     Gets the base target passive attack damage.
+        /// </summary>
+        [JsonProperty("targetPassiveADBase")]
+        public float[] BaseTargetPassiveAttackDamage { get; internal set; }
 
         /// <summary>
         ///     Gets the bonus attack damage.
@@ -1456,6 +1608,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public DamageFlags Flags { get; internal set; }
 
         /// <summary>
+        ///     Gets the level scale.
+        /// </summary>
+        [JsonProperty("baseLevelScale")]
+        public SpellSlot LevelScale { get; internal set; }
+
+        /// <summary>
         ///     Gets the max health.
         /// </summary>
         [JsonProperty("maxHealth")]
@@ -1477,6 +1635,18 @@ namespace LeagueSharp.SDK.Core.Wrappers
         ///     Gets the slot.
         /// </summary>
         public SpellSlot Slot { get; internal set; }
+
+        /// <summary>
+        ///     Gets or sets the target armor ignore.
+        /// </summary>
+        [JsonProperty("targetArmorIgnore")]
+        public float TargetArmorIgnore { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the target base.
+        /// </summary>
+        [JsonProperty("targetBase")]
+        public float[] TargetBase { get; set; }
 
         /// <summary>
         ///     Gets the target health base ability power scale.
@@ -1501,6 +1671,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </summary>
         [JsonProperty("targetMissingHealthBaseMin")]
         public float[] TargetMissingHealthBaseMinimumDamage { get; internal set; }
+
+        /// <summary>
+        ///     Gets the target passive identifier.
+        /// </summary>
+        [JsonProperty("targetPassiveIdentifier")]
+        public string[] TargetPassiveIdentifier { get; internal set; }
 
         /// <summary>
         ///     Gets the type.

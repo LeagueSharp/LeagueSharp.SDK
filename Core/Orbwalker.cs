@@ -377,12 +377,12 @@ namespace LeagueSharp.SDK.Core
         }
 
         /// <summary>
-        ///     Resets the auto attack timer, <see cref="lastAutoAttackTick" />.
+        ///     Resets the auto attack timer, <see cref="lastAutoAttackTick" /> and <see cref="lastMovementOrderTick" />.
         /// </summary>
         public static void ResetAutoAttackTimer()
         {
             lastAutoAttackTick = 0;
-            lastMovementOrderTick = Variables.TickCount - 250;
+            lastMovementOrderTick = 0;
         }
 
         #endregion
@@ -566,11 +566,6 @@ namespace LeagueSharp.SDK.Core
                 var spellName = args.SData.Name;
                 var target = args.Target as AttackableUnit;
 
-                if (AutoAttack.IsAutoAttackReset(spellName))
-                {
-                    ResetAutoAttackTimer();
-                }
-
                 if (target != null && target.IsValid && AutoAttack.IsAutoAttack(spellName))
                 {
                     lastAutoAttackTick = Variables.TickCount - (Game.Ping / 2);
@@ -588,12 +583,17 @@ namespace LeagueSharp.SDK.Core
                     if (!AfterAttackTime.ContainsKey(time))
                     {
                         AfterAttackTime.Add(
-                            time,
+                            time, 
                             new OrbwalkerActionArgs { Target = target, Type = OrbwalkerType.AfterAttack });
                     }
 
                     InvokeAction(
                         new OrbwalkerActionArgs { Target = target, Sender = sender, Type = OrbwalkerType.OnAttack });
+                }
+
+                if (AutoAttack.IsAutoAttackReset(spellName))
+                {
+                    ResetAutoAttackTimer();
                 }
             }
         }

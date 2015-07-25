@@ -37,6 +37,11 @@ namespace LeagueSharp.SDK.Core
         #region Static Fields
 
         /// <summary>
+        ///     Indicates whether the <see cref="GameObjects" /> stack was initialized and saved required instances.
+        /// </summary>
+        private static bool initialized;
+
+        /// <summary>
         ///     The ally heroes list.
         /// </summary>
         private static readonly List<Obj_AI_Hero> AllyHeroesList = new List<Obj_AI_Hero>();
@@ -186,11 +191,6 @@ namespace LeagueSharp.SDK.Core
         /// </summary>
         private static readonly List<Obj_AI_Minion> WardsList = new List<Obj_AI_Minion>();
 
-        /// <summary>
-        ///     Indicates whether the <see cref="GameObjects" /> stack was initialized and saved required instances.
-        /// </summary>
-        private static bool initialized;
-
         #endregion
 
         #region Constructors and Destructors
@@ -200,10 +200,7 @@ namespace LeagueSharp.SDK.Core
         /// </summary>
         static GameObjects()
         {
-            if (!initialized)
-            {
-                Initialize();
-            }
+            Initialize();
         }
 
         #endregion
