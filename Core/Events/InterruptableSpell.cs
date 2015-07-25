@@ -82,7 +82,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     Gets or sets the interrupt-able spells.
         /// </summary>
-        private static ConcurrentDictionary<string, List<InterruptableSpellData>> InterruptableSpells { get; set; }
+        public static ConcurrentDictionary<string, List<InterruptableSpellData>> InterruptableSpells { get; private set; }
 
         #endregion
 
@@ -323,7 +323,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     Interrupt-able Spell Data
         /// </summary>
-        private class InterruptableSpellData
+        public class InterruptableSpellData
         {
             #region Constructors and Destructors
 
