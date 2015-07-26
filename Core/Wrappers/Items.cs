@@ -260,6 +260,33 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 this.HideFromAll = !item.UsableInStore;
             }
 
+            /// <summary>
+            ///     Initializes a new instance of the <see cref="Item" /> class.
+            /// </summary>
+            /// <param name="id">The item identifier.</param>
+            /// <param name="range">The range.</param>
+            /// <exception cref="MissingMemberException">Thrown when we were unable to find the item with same id.</exception>
+            public Item(ItemId id, float range)
+            {
+                var item = ItemData.Entries.FirstOrDefault(x => x.Id == id);
+                if (item == null)
+                {
+                    throw new MissingMemberException(string.Format("Unable to find item with the id {0}", id));
+                }
+
+                this.Id = (int)item.Id;
+                this.Name = item.DisplayName;
+                this.Range = range;
+                this.BasePrice = item.Price;
+                this.SellPrice = (int)(item.Price * item.SellBackModifier);
+                this.TotalPrice = item.Price
+                                  + ItemData.Entries.Where(i => item.RecipeItem.Any(j => j == i.Id)).Sum(i => i.Price);
+                this.Purchaseable = item.CanBeSold;
+                this.From = item.RecipeItem.Cast<int>().ToArray();
+                this.Stacks = item.MaxStack;
+                this.HideFromAll = !item.UsableInStore;
+            }
+
             #endregion
 
             #region Public Properties
