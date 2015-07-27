@@ -400,6 +400,27 @@ namespace LeagueSharp.SDK.Core.Extensions
                        : GameObjects.Player.ServerPosition.DistanceSquared(unitPosition) < range * range;
         }
 
+        /// <summary>
+        ///     Checks whether the target is invulnerable.
+        /// </summary>
+        /// <param name="target">
+        ///     The target
+        /// </param>
+        /// <param name="damageType">
+        ///     The damage type
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />
+        /// </returns>
+        public static bool IsInvulnerable(this Obj_AI_Base target, DamageType damageType = DamageType.Physical)
+        {
+            return
+                // Tryndamere's Undying Rage (R)
+                (!damageType.Equals(DamageType.True) && target.HasBuff("Undying Rage") && target.Health <= 2f)
+                // Kayle's Intervention (R)
+                || (target.HasBuff("JudicatorIntervention"));           
+        }
+
         #endregion
     }
 }
