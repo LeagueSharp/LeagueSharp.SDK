@@ -49,7 +49,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </summary>
         private static readonly IDictionary<string, byte[]> DamageFiles = new Dictionary<string, byte[]>
                                                                               {
-                                                                                  { "5.14.0.334", Resources._5_14_0_334 }
+                                                                                  { "5.13.0.323", Resources._5_14_0_334 }
                                                                               };
 
         /// <summary>
@@ -494,11 +494,13 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 value = 100 / (100 + (magicResist * source.PercentMagicPenetrationMod) - source.FlatMagicPenetrationMod);
             }
 
-            return source.DamageReductionMod(
-                target,
-                source.PassivePercentMod(target, value) * amount,
-                DamageType.Magical,
+            var damage = source.DamageReductionMod(
+                target, 
+                source.PassivePercentMod(target, value) * amount, 
+                DamageType.Magical, 
                 forceDamageModifier) + source.PassiveFlatMod(target);
+
+            return damage;
         }
 
         /// <summary>
@@ -573,12 +575,14 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 value = 100 / (100 + (armor * armorPenetrationPercent) - armorPenetrationFlat);
             }
 
-            // Take into account the percent passives, flat passives and damage reduction.
-            return source.DamageReductionMod(
-                target,
-                source.PassivePercentMod(target, value) * amount,
-                DamageType.Physical,
+            var damage = source.DamageReductionMod(
+                target, 
+                source.PassivePercentMod(target, value) * amount, 
+                DamageType.Physical, 
                 forceDamageModifier) + source.PassiveFlatMod(target);
+
+            // Take into account the percent passives, flat passives and damage reduction.
+            return damage;
         }
 
         /// <summary>
