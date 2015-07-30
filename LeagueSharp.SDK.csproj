@@ -100,14 +100,7 @@
     <Compile Include="Core\Extensions\Runtime.cs" />
     <Compile Include="Core\Extensions\SharpDX\Generic.cs" />
     <Compile Include="Core\GameObjects.cs" />
-    <Compile Include="Core\IDrawing\DrawCircle.cs" />
-    <Compile Include="Core\IDrawing\DrawLine.cs" />
-    <Compile Include="Core\IDrawing\DrawObject.cs" />
-    <Compile Include="Core\IDrawing\DrawRectangle.cs" />
-    <Compile Include="Core\IDrawing\DrawText.cs" />
-    <Compile Include="Core\IDrawing\DrawTexture.cs" />
     <Compile Include="Core\Enumerations\DrawType.cs" />
-    <Compile Include="Core\IDrawing\Render.cs" />
     <Compile Include="Core\UI\IMenu\Abstracts\AMenuComponent.cs" />
     <Compile Include="Core\UI\IMenu\Menu.cs" />
     <Compile Include="Core\UI\IMenu\Customizer\MenuCustomizer.cs" />
