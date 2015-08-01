@@ -88,6 +88,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             : base(name, displayName, uniqueString)
         {
             this.Root = root;
+            this.AssemblyName = Assembly.GetCallingAssembly().GetName().Name;
         }
 
         #endregion
@@ -284,7 +285,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         {
             if (this.Parent == null && this.Root)
             {
-                this.AssemblyName = Assembly.GetCallingAssembly().GetName().Name;
                 MenuManager.Instance.Add(this);
             }
             else
