@@ -109,8 +109,13 @@ namespace LeagueSharp.SDK.Core.Enumerations
         LevelScale = 1 << 13, 
 
         /// <summary>
-        ///     Flag which indicates the damage would be based off a passive that the target contains. (16384)
+        ///     Flag which indicates the damage would be based off a passive. (16384)
         /// </summary>
-        SpecialTargetPassive = 1 << 14
+        SpecialPassive = 1 << 14, 
+
+        /// <summary>
+        ///     Flag which indicates the damage would be based off the source's max <c>mana</c>. (32768)
+        /// </summary>
+        MaxMana = 1 << 15
     }
 }

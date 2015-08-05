@@ -37,11 +37,6 @@ namespace LeagueSharp.SDK.Core
         #region Static Fields
 
         /// <summary>
-        ///     Indicates whether the <see cref="GameObjects" /> stack was initialized and saved required instances.
-        /// </summary>
-        private static bool initialized;
-
-        /// <summary>
         ///     The ally heroes list.
         /// </summary>
         private static readonly List<Obj_AI_Hero> AllyHeroesList = new List<Obj_AI_Hero>();
@@ -190,6 +185,11 @@ namespace LeagueSharp.SDK.Core
         ///     The wards list.
         /// </summary>
         private static readonly List<Obj_AI_Minion> WardsList = new List<Obj_AI_Minion>();
+
+        /// <summary>
+        ///     Indicates whether the <see cref="GameObjects" /> stack was initialized and saved required instances.
+        /// </summary>
+        private static bool initialized;
 
         #endregion
 
@@ -622,7 +622,7 @@ namespace LeagueSharp.SDK.Core
                             .Where(
                                 o =>
                                 o.Team != GameObjectTeam.Neutral && !o.Name.Contains("ward")
-                                && !o.Name.Contains("trinket")));
+                                && !o.Name.Contains("trinket") && !o.CharData.BaseSkinName.Equals("gangplankbarrel")));
                     TurretsList.AddRange(ObjectManager.Get<Obj_AI_Turret>());
                     InhibitorsList.AddRange(ObjectManager.Get<Obj_BarracksDampener>());
                     JungleList.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(o => o.Team == GameObjectTeam.Neutral));

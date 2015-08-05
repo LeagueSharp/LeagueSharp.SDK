@@ -71,8 +71,8 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <summary>
         ///     Returns the point where, when casted, the circular spell with hit the maximum amount of minions.
         /// </summary>
-        /// <param name="minions">
-        ///     List of minions
+        /// <param name="minionPositions">
+        ///     List of minion positions
         /// </param>
         /// <param name="width">
         ///     Width of the circle
@@ -87,22 +87,20 @@ namespace LeagueSharp.SDK.Core.Utils
         ///     The best <see cref="FarmLocation" />
         /// </returns>
         public static FarmLocation GetBestCircularFarmLocation(
-            IDictionary<Obj_AI_Base, Vector2> minions, 
+            List<Vector2> minionPositions, 
             float width, 
             float range, 
             int useMecMax = 9)
         {
             var result = new Vector2();
             var minionCount = 0;
-            var startPos = GameObjects.Player.ServerPosition.ToVector2();
-            var minionPositions = minions.Select(m => m.Value).ToList();
-            var hitMinions = new List<Obj_AI_Base>();
+            var startPos = ObjectManager.Player.ServerPosition.ToVector2();
 
             range = range * range;
 
             if (minionPositions.Count == 0)
             {
-                return new FarmLocation(result, minionCount, new List<Obj_AI_Base>());
+                return new FarmLocation(result, minionCount);
             }
 
             /* Use MEC to get the best positions only when there are less than 9 positions because it causes lag with more. */
@@ -111,56 +109,36 @@ namespace LeagueSharp.SDK.Core.Utils
                 var subGroups = minionPositions.GetCombinations();
                 foreach (var subGroup in subGroups)
                 {
-                    if (subGroup.Count <= 0)
+                    if (subGroup.Count > 0)
                     {
-                        continue;
+                        var circle = ConvexHull.GetMec(subGroup);
+
+                        if (circle.Radius <= width && circle.Center.DistanceSquared(startPos) <= range)
+                        {
+                            minionCount = subGroup.Count;
+                            return new FarmLocation(circle.Center, minionCount);
+                        }
                     }
-
-                    var circle = ConvexHull.GetMec(subGroup);
-
-                    if (!(circle.Radius <= width) || !(circle.Center.DistanceSquared(startPos) <= range))
-                    {
-                        continue;
-                    }
-
-                    minionCount = subGroup.Count;
-                    return new FarmLocation(
-                        circle.Center, 
-                        minionCount, 
-                        minions.Where(
-                            m => m.Value.Distance(circle.Center) <= width || m.Value.Distance(circle.Center) <= range)
-                            .Select(m => m.Key)
-                            .ToList());
                 }
             }
             else
             {
                 foreach (var pos in minionPositions)
                 {
-                    if (!(pos.DistanceSquared(startPos) <= range))
+                    if (pos.DistanceSquared(startPos) <= range)
                     {
-                        continue;
+                        var count = minionPositions.Count(pos2 => pos.DistanceSquared(pos2) <= width * width);
+
+                        if (count >= minionCount)
+                        {
+                            result = pos;
+                            minionCount = count;
+                        }
                     }
-
-                    var count = minionPositions.Count(pos2 => pos.DistanceSquared(pos2) <= width * width);
-
-                    if (count < minionCount)
-                    {
-                        continue;
-                    }
-
-                    var pos1 = pos;
-                    hitMinions =
-                        minions.Where(m => pos1.DistanceSquared(m.Key.Position) <= width * width)
-                            .Select(m => m.Key)
-                            .ToList();
-
-                    result = pos;
-                    minionCount = count;
                 }
             }
 
-            return new FarmLocation(result, minionCount, hitMinions);
+            return new FarmLocation(result, minionCount);
         }
 
         /// <summary>
@@ -178,111 +156,44 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>
         ///     Best <see cref="FarmLocation" />.
         /// </returns>
-        public static FarmLocation GetBestLineFarmLocation(List<Obj_AI_Base> minions, float width, float range)
+        public static FarmLocation GetBestLineFarmLocation(List<Vector2> minions, float width, float range)
         {
             var result = new Vector2();
             var minionCount = 0;
-            var startPos = GameObjects.Player.ServerPosition.ToVector2();
-            var minionPositions = minions.ToDictionary(minion => minion, minion => minion.Position.ToVector2());
-            var minionsHit = new List<Obj_AI_Base>();
+            var startPos = ObjectManager.Player.ServerPosition.ToVector2();
+
+            var posiblePositions = new List<Vector2>();
+            posiblePositions.AddRange(minions);
 
             var max = minions.Count;
             for (var i = 0; i < max; i++)
             {
                 for (var j = 0; j < max; j++)
                 {
-                    if (minions[j].Position != minions[i].Position)
+                    if (minions[j] != minions[i])
                     {
-                        minionPositions.Add(minions[j], ((minions[j].Position + minions[i].Position) / 2).ToVector2());
+                        posiblePositions.Add((minions[j] + minions[i]) / 2);
                     }
                 }
             }
 
-            foreach (var pos in minionPositions)
+            foreach (var pos in posiblePositions)
             {
-                if (!(pos.Value.DistanceSquared(startPos) <= range * range))
+                if (pos.DistanceSquared(startPos) <= range * range)
                 {
-                    continue;
-                }
+                    var endPos = startPos + range * (pos - startPos).Normalized();
 
-                var endPos = startPos + range * (pos.Value - startPos).Normalized();
-                var count = minionPositions.Count(pos2 => pos2.Value.Distance(startPos + endPos) <= width * width);
+                    var count = minions.Count(pos2 => pos2.DistanceSquared(startPos, endPos, true) <= width * width);
 
-                if (count < minionCount)
-                {
-                    continue;
-                }
-
-                result = endPos;
-                minionCount = count;
-                minionsHit =
-                    minionPositions.Where(p => p.Value.Distance(startPos + endPos) <= width * width)
-                        .Select(k => k.Key)
-                        .ToList();
-            }
-
-            return new FarmLocation(result, minionCount, minionsHit);
-        }
-
-        /// <summary>
-        ///     Returns the point where, when casted, the lineal spell with hit the maximum amount of minions.
-        /// </summary>
-        /// <param name="minions">
-        ///     The Minions
-        /// </param>
-        /// <param name="width">
-        ///     Width of the line
-        /// </param>
-        /// <param name="range">
-        ///     Range of the line
-        /// </param>
-        /// <returns>
-        ///     Best <see cref="FarmLocation" />.
-        /// </returns>
-        public static FarmLocation GetBestLineFarmLocation(
-            IDictionary<Obj_AI_Base, Vector2> minions, 
-            float width, 
-            float range)
-        {
-            var result = new Vector2();
-            var minionCount = 0;
-            var startPos = GameObjects.Player.ServerPosition.ToVector2();
-            var minionPositions = minions.ToDictionary(minion => minion.Key, minion => minion.Value);
-            var minionsHit = new List<Obj_AI_Base>();
-
-            foreach (var pair in minions)
-            {
-                var pair1 = pair;
-                foreach (var secondPair in minions.Where(secondPair => pair1.Value != secondPair.Value))
-                {
-                    minionPositions.Add(pair.Key, (pair.Value + secondPair.Value) / 2);
+                    if (count >= minionCount)
+                    {
+                        result = endPos;
+                        minionCount = count;
+                    }
                 }
             }
 
-            foreach (var pos in minionPositions)
-            {
-                if (!(pos.Value.DistanceSquared(startPos) <= range * range))
-                {
-                    continue;
-                }
-
-                var endPos = startPos + range * (pos.Value - startPos).Normalized();
-                var count = minionPositions.Count(pos2 => pos2.Value.Distance(startPos + endPos) <= width * width);
-
-                if (count < minionCount)
-                {
-                    continue;
-                }
-
-                result = endPos;
-                minionCount = count;
-                minionsHit =
-                    minionPositions.Where(p => p.Value.Distance(startPos + endPos) <= width * width)
-                        .Select(k => k.Key)
-                        .ToList();
-            }
-
-            return new FarmLocation(result, minionCount, minionsHit);
+            return new FarmLocation(result, minionCount);
         }
 
         /// <summary>
@@ -318,7 +229,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>
         ///     List of Points in <see cref="Vector2" /> type
         /// </returns>
-        public static IDictionary<Obj_AI_Base, Vector2> GetMinionsPredictedPositions(
+        public static List<Vector2> GetMinionsPredictedPositions(
             List<Obj_AI_Base> minions, 
             float delay, 
             float width, 
@@ -329,25 +240,19 @@ namespace LeagueSharp.SDK.Core.Utils
             SkillshotType stype, 
             Vector3 rangeCheckFrom = new Vector3())
         {
-            from = from.ToVector2().IsValid() ? from : GameObjects.Player.ServerPosition;
+            from = from.ToVector2().IsValid() ? from : ObjectManager.Player.ServerPosition;
 
-            var value = new Dictionary<Obj_AI_Base, Vector2>();
-            foreach (var minion in minions)
-            {
-                var position =
-                    Movement.GetPrediction(
-                        new PredictionInput
-                            {
-                                Unit = minion, Delay = delay, Radius = width, Speed = speed, From = @from, Range = range, 
-                                Collision = collision, Type = stype, RangeCheckFrom = rangeCheckFrom
-                            });
-                if (position.Hitchance >= HitChance.High)
-                {
-                    value.Add(minion, position.UnitPosition.ToVector2());
-                }
-            }
-
-            return value;
+            return (from minion in minions
+                    select
+                        Movement.GetPrediction(
+                            new PredictionInput
+                                {
+                                    Unit = minion, Delay = delay, Radius = width, Speed = speed, From = @from, 
+                                    Range = range, Collision = collision, Type = stype, RangeCheckFrom = rangeCheckFrom
+                                })
+                    into pos
+                    where pos.Hitchance >= HitChance.High
+                    select pos.UnitPosition.ToVector2()).ToList();
         }
 
         /// <summary>
@@ -403,24 +308,19 @@ namespace LeagueSharp.SDK.Core.Utils
     }
 
     /// <summary>
-    ///     Struct with the best farm data
+    ///     TODO The farm location.
     /// </summary>
     public struct FarmLocation
     {
         #region Fields
 
         /// <summary>
-        ///     The hit collection list.
-        /// </summary>
-        public List<Obj_AI_Base> Hits;
-
-        /// <summary>
-        ///     The number of minions in the AOE.
+        ///     The minions hit.
         /// </summary>
         public int MinionsHit;
 
         /// <summary>
-        ///     Best farm location position.
+        ///     The position.
         /// </summary>
         public Vector2 Position;
 
@@ -432,19 +332,15 @@ namespace LeagueSharp.SDK.Core.Utils
         ///     Initializes a new instance of the <see cref="FarmLocation" /> struct.
         /// </summary>
         /// <param name="position">
-        ///     The position
+        ///     The position.
         /// </param>
         /// <param name="minionsHit">
-        ///     The minions hit
+        ///     The minions hit.
         /// </param>
-        /// <param name="hits">
-        ///     The hits.
-        /// </param>
-        internal FarmLocation(Vector2 position, int minionsHit, List<Obj_AI_Base> hits)
+        public FarmLocation(Vector2 position, int minionsHit)
         {
             this.Position = position;
             this.MinionsHit = minionsHit;
-            this.Hits = hits;
         }
 
         #endregion

@@ -649,9 +649,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="minionPositions">Minion Positions</param>
         /// <param name="overrideWidth">Override Width</param>
         /// <returns>Farm Location. <seealso cref="FarmLocation" /></returns>
-        public FarmLocation GetCircularFarmLocation(
-            IDictionary<Obj_AI_Base, Vector2> minionPositions, 
-            float overrideWidth = -1)
+        public FarmLocation GetCircularFarmLocation(List<Vector2> minionPositions, float overrideWidth = -1)
         {
             return Minion.GetBestCircularFarmLocation(
                 minionPositions, 
@@ -725,9 +723,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="minionPositions">Minion Positions</param>
         /// <param name="overrideWidth">Override Width</param>
         /// <returns>Farm Location. <seealso cref="FarmLocation" /></returns>
-        public FarmLocation GetLineFarmLocation(
-            IDictionary<Obj_AI_Base, Vector2> minionPositions, 
-            float overrideWidth = -1)
+        public FarmLocation GetLineFarmLocation(List<Vector2> minionPositions, float overrideWidth = -1)
         {
             return Minion.GetBestLineFarmLocation(
                 minionPositions, 
@@ -1140,6 +1136,18 @@ namespace LeagueSharp.SDK.Core.Wrappers
         #region Methods
 
         /// <summary>
+        ///     Shoot Charged Spell
+        /// </summary>
+        /// <param name="slot">The SpellSlot</param>
+        /// <param name="position">Vector3 Position</param>
+        /// <param name="releaseCast">Release Cast</param>
+        private static void ShootChargedSpell(SpellSlot slot, Vector3 position, bool releaseCast = true)
+        {
+            GameObjects.Player.Spellbook.CastSpell(slot, position, false);
+            GameObjects.Player.Spellbook.UpdateChargedSpell(slot, position, releaseCast, false);
+        }
+
+        /// <summary>
         ///     On Process Spell Cast event catch.
         /// </summary>
         /// <param name="sender"><see cref="Obj_AI_Base" /> sender</param>
@@ -1184,18 +1192,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     this.Cast(new Vector2(args.EndPosition.X, args.EndPosition.Y));
                 }
             }
-        }
-
-        /// <summary>
-        ///     Shoot Charged Spell
-        /// </summary>
-        /// <param name="slot">The SpellSlot</param>
-        /// <param name="position">Vector3 Position</param>
-        /// <param name="releaseCast">Release Cast</param>
-        private static void ShootChargedSpell(SpellSlot slot, Vector3 position, bool releaseCast = true)
-        {
-            GameObjects.Player.Spellbook.CastSpell(slot, position, false);
-            GameObjects.Player.Spellbook.UpdateChargedSpell(slot, position, releaseCast, false);
         }
 
         #endregion

@@ -272,7 +272,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 // + Reduces incoming damage from champion basic attacks by 1 / 2
                 if (hero != null)
                 {
-                    var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 65);
+                    var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
                     if (mastery != null && mastery.Points >= 1)
                     {
                         reduction += 1 * mastery.Points;
@@ -495,9 +495,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             return source.DamageReductionMod(
-                target,
-                source.PassivePercentMod(target, value) * amount,
-                DamageType.Magical,
+                target, 
+                source.PassivePercentMod(target, value) * amount, 
+                DamageType.Magical, 
                 forceDamageModifier) + source.PassiveFlatMod(target);
         }
 
@@ -575,9 +575,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             // Take into account the percent passives, flat passives and damage reduction.
             return source.DamageReductionMod(
-                target,
-                source.PassivePercentMod(target, value) * amount,
-                DamageType.Physical,
+                target, 
+                source.PassivePercentMod(target, value) * amount, 
+                DamageType.Physical, 
                 forceDamageModifier) + source.PassiveFlatMod(target);
         }
 
@@ -1291,7 +1291,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                         damage += flagDamage;
                     }
 
-                    if (sdata.Flags.HasFlag(DamageFlags.SpecialTargetPassive))
+                    if (sdata.Flags.HasFlag(DamageFlags.SpecialPassive))
                     {
                         if (sdata.TargetPassiveIdentifier != null && sdata.TargetPassiveIdentifier.Length > 0)
                         {
@@ -1322,12 +1322,32 @@ namespace LeagueSharp.SDK.Core.Wrappers
                                 }
                             }
                         }
+
+                        if (sdata.PassiveIdentifier != null && sdata.PassiveIdentifier.Length > 0)
+                        {
+                            var passiveName = sdata.PassiveIdentifier[0];
+                            int rawTempValue;
+                            var passiveCountPrefix = sdata.PassiveIdentifier.Length > 1
+                                                     && int.TryParse(sdata.PassiveIdentifier[1], out rawTempValue)
+                                                         ? rawTempValue
+                                                         : 0;
+
+                            var passiveCount = @base.GetBuffCount(passiveName) - passiveCountPrefix;
+                            var maxMana = sdata.PassiveIdentifierMaxMana + @base.MaxMana;
+
+                            damage += passiveCount * maxMana;
+                        }
                     }
 
                     var trueDamage = 0d;
                     if (alternativePassive)
                     {
                         trueDamage += damage * sdata.AlternativeTrueDamage;
+                    }
+
+                    if (sdata.Flags.HasFlag(DamageFlags.MaxMana))
+                    {
+                        damage += @base.MaxMana * sdata.MaxMana;
                     }
 
                     var forceIgnoreArmor = -sdata.TargetArmorIgnore;
@@ -1616,6 +1636,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public float MaxHealth { get; internal set; }
 
         /// <summary>
+        /// Gets the max mana.
+        /// </summary>
+        [JsonProperty("maxMana")]
+        public float MaxMana { get; internal set; }
+
+        /// <summary>
         ///     Gets the minion health base maximum damage.
         /// </summary>
         [JsonProperty("minionHealthBaseMax")]
@@ -1626,6 +1652,18 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </summary>
         [JsonProperty("minionMissingHealthBaseMax")]
         public float[] MinionMissingHealthBaseMaximumDamage { get; internal set; }
+
+        /// <summary>
+        /// Gets the passive identifier.
+        /// </summary>
+        [JsonProperty("passiveIdentifier")]
+        public string[] PassiveIdentifier { get; internal set; }
+
+        /// <summary>
+        /// Gets the passive identifier max mana.
+        /// </summary>
+        [JsonProperty("passiveIdentifierMaxMana")]
+        public float PassiveIdentifierMaxMana { get; internal set; }
 
         /// <summary>
         ///     Gets the slot.

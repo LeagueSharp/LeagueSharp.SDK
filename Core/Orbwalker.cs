@@ -58,16 +58,6 @@ namespace LeagueSharp.SDK.Core
         /// </summary>
         private static readonly Menu Menu = new Menu("orbwalker", "Orbwalker");
 
-        /// <summary>
-        ///     The last auto attack tick.
-        /// </summary>
-        private static int lastAutoAttackTick;
-
-        /// <summary>
-        ///     The last movement order tick.
-        /// </summary>
-        private static int lastMovementOrderTick;
-
         #endregion
 
         #region Delegates
@@ -109,10 +99,8 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                return Attack
-                       && Variables.TickCount + (Game.Ping / 2)
-                       >= lastAutoAttackTick + (GameObjects.Player.AttackDelay * 1000)
-                       + Menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value;
+                return Variables.TickCount + Game.Ping / 2 + 25
+                       >= LastAutoAttackTick + GameObjects.Player.AttackDelay * 1000 && Attack;
             }
         }
 
@@ -123,20 +111,37 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                var tick = Variables.TickCount;
-                var flag = Movement
-                           && tick - lastMovementOrderTick
-                           > Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value;
-                if (GameObjects.Player.CanCancelAutoAttack())
+                if (!Movement)
                 {
-                    return tick - lastAutoAttackTick > 250 && flag;
+                    return false;
                 }
 
-                return tick + (Game.Ping / 2)
-                       >= lastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000
-                       + Menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value && flag;
+                if (MissileLaunched && Menu["advanced"]["miscMissile"].GetValue<MenuBool>().Value)
+                {
+                    return true;
+                }
+
+                return !GameObjects.Player.CanCancelAutoAttack()
+                       || (Variables.TickCount + Game.Ping / 2
+                           >= LastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000
+                           + Menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value);
             }
         }
+
+        /// <summary>
+        ///     Gets the last auto attack tick.
+        /// </summary>
+        public static int LastAutoAttackTick { get; private set; }
+
+        /// <summary>
+        ///     Gets the last minion.
+        /// </summary>
+        public static Obj_AI_Minion LastMinion { get; private set; }
+
+        /// <summary>
+        ///     Gets the last movement order tick.
+        /// </summary>
+        public static int LastMovementOrderTick { get; internal set; }
 
         /// <summary>
         ///     Gets the last target.
@@ -157,6 +162,15 @@ namespace LeagueSharp.SDK.Core
         ///     Gets or sets the <c>orbwalk</c> target.
         /// </summary>
         public static AttackableUnit OrbwalkTarget { get; set; }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether missile launched.
+        /// </summary>
+        private static bool MissileLaunched { get; set; }
 
         #endregion
 
@@ -269,6 +283,19 @@ namespace LeagueSharp.SDK.Core
                         return mob;
                     }
 
+                    if (LastMinion.IsValidTarget(LastMinion.GetRealAutoAttackRange()))
+                    {
+                        var predHealth = Health.GetPrediction(
+                            LastMinion, 
+                            (int)((GameObjects.Player.AttackDelay * 1000) * 2f), 
+                            100);
+                        if (predHealth >= 2 * GameObjects.Player.GetAutoAttackDamage(LastMinion, true)
+                            || System.Math.Abs(predHealth - LastMinion.Health) < float.Epsilon)
+                        {
+                            return LastMinion;
+                        }
+                    }
+
                     var minion = (from m in
                                       GameObjects.EnemyMinions.Where(m => m.IsValidTarget(m.GetRealAutoAttackRange()))
                                   let predictedHealth =
@@ -279,12 +306,10 @@ namespace LeagueSharp.SDK.Core
                                   select m).MaxOrDefault(m => m.Health);
                     if (minion != null)
                     {
-                        return minion;
+                        return LastMinion = minion;
                     }
 
-                    return
-                        GameObjects.AttackableUnits.OrderBy(a => a.MaxHealth)
-                            .FirstOrDefault(a => a.IsValidTarget(a.GetRealAutoAttackRange()));
+                    // TODO: Add special minions (zyra plants, donger turrets, etc).
                 }
             }
 
@@ -297,8 +322,19 @@ namespace LeagueSharp.SDK.Core
         /// <param name="position">
         ///     The position to <c>orbwalk</c> to
         /// </param>
-        public static void MoveOrder(Vector3 position)
+        /// <param name="overrideTimer">
+        ///     Indicates whether to override the timer.
+        /// </param>
+        public static void MoveOrder(Vector3 position, bool overrideTimer = false)
         {
+            if (Variables.TickCount - LastMovementOrderTick
+                < Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value && !overrideTimer)
+            {
+                return;
+            }
+
+            LastMovementOrderTick = Variables.TickCount;
+
             if (position.Distance(GameObjects.Player.Position)
                 > GameObjects.Player.BoundingRadius + Menu["advanced"]["movementExtraHold"].GetValue<MenuSlider>().Value)
             {
@@ -333,9 +369,9 @@ namespace LeagueSharp.SDK.Core
                                     };
                 InvokeAction(eventArgs);
 
-                if (eventArgs.Process && GameObjects.Player.IssueOrder(GameObjectOrder.MoveTo, eventArgs.Position))
+                if (eventArgs.Process)
                 {
-                    lastMovementOrderTick = Variables.TickCount;
+                    GameObjects.Player.IssueOrder(GameObjectOrder.MoveTo, eventArgs.Position);
                 }
             }
         }
@@ -354,7 +390,7 @@ namespace LeagueSharp.SDK.Core
             if (CanAttack)
             {
                 var gTarget = target ?? GetTarget(ActiveMode);
-                if (gTarget != null && gTarget.IsValid)
+                if (gTarget.IsValidTarget())
                 {
                     var eventArgs = new OrbwalkerActionArgs
                                         {
@@ -363,9 +399,18 @@ namespace LeagueSharp.SDK.Core
                                         };
                     InvokeAction(eventArgs);
 
-                    if (eventArgs.Process && GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, gTarget))
+                    if (eventArgs.Process)
                     {
-                        lastAutoAttackTick = Variables.TickCount + (Game.Ping / 2);
+                        if (GameObjects.Player.CanCancelAutoAttack())
+                        {
+                            LastAutoAttackTick = Variables.TickCount + Game.Ping + 250
+                                                 - (int)(GameObjects.Player.AttackCastDelay * 1000);
+                            MissileLaunched = false;
+                        }
+
+                        GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, gTarget);
+                        LastTarget = gTarget;
+                        return;
                     }
                 }
             }
@@ -377,12 +422,11 @@ namespace LeagueSharp.SDK.Core
         }
 
         /// <summary>
-        ///     Resets the auto attack timer, <see cref="lastAutoAttackTick" /> and <see cref="lastMovementOrderTick" />.
+        ///     Resets the auto attack timer, <see cref="LastAutoAttackTick" />.
         /// </summary>
         public static void ResetAutoAttackTimer()
         {
-            lastAutoAttackTick = 0;
-            lastMovementOrderTick = 0;
+            LastAutoAttackTick = 0;
         }
 
         #endregion
@@ -425,6 +469,7 @@ namespace LeagueSharp.SDK.Core
             advanced.Add(new MenuSlider("miscExtraWindup", "Extra Windup", 80, 0, 200));
             advanced.Add(new MenuSlider("miscFarmDelay", "Farm Delay", 0, 0, 200));
             advanced.Add(new MenuBool("miscPriorizeFarm", "Priorize farm over harass", true));
+            advanced.Add(new MenuBool("miscMissile", "Use Missile Checks", true));
             advanced.Add(new MenuSeparator("separatorOther", "Other"));
             advanced.Add(
                 new MenuButton("resetAll", "Settings", "Reset All Settings")
@@ -478,6 +523,7 @@ namespace LeagueSharp.SDK.Core
             Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
             Drawing.OnDraw += OnDraw;
+            GameObject.OnCreate += OnCreate;
         }
 
         /// <summary>
@@ -491,6 +537,24 @@ namespace LeagueSharp.SDK.Core
             if (OnAction != null)
             {
                 OnAction(MethodBase.GetCurrentMethod().DeclaringType, e);
+            }
+        }
+
+        /// <summary>
+        ///     OnCreate event.
+        /// </summary>
+        /// <param name="sender">
+        ///     The sender.
+        /// </param>
+        /// <param name="args">
+        ///     The event data.
+        /// </param>
+        private static void OnCreate(GameObject sender, EventArgs args)
+        {
+            var missile = sender as MissileClient;
+            if (missile != null && missile.SpellCaster.IsMe && AutoAttack.IsAutoAttack(missile.SData.Name))
+            {
+                MissileLaunched = true;
             }
         }
 
@@ -568,9 +632,8 @@ namespace LeagueSharp.SDK.Core
 
                 if (target != null && target.IsValid && AutoAttack.IsAutoAttack(spellName))
                 {
-                    lastAutoAttackTick = Variables.TickCount - (Game.Ping / 2);
-                    lastMovementOrderTick =
-                        (int)(Variables.TickCount + GameObjects.Player.AttackCastDelay * 1000 - (Game.Ping / 2f));
+                    LastAutoAttackTick = Variables.TickCount - Game.Ping / 2;
+                    MissileLaunched = false;
 
                     if (!target.Compare(LastTarget))
                     {
