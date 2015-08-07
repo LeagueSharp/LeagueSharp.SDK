@@ -843,7 +843,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             // + Basic attacks and single target abilities do 2 bonus damage to minions and monsters. 
             if (hero != null && target is Obj_AI_Minion)
             {
-                if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
+                if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 68 && m.Points == 1))
                 {
                     value += 2d;
                 }
