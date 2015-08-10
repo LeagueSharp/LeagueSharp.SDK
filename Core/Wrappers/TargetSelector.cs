@@ -336,7 +336,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public static bool IsInvulnerable(this Obj_AI_Base target, DamageType damageType, bool ignoreShields = true)
         {
             // Tryndamere's Undying Rage (R)
-            if (!damageType.Equals(DamageType.True) && target.HasBuff("Undying Rage") && target.Health <= 2f)
+            if (target.HasBuff("Undying Rage") && target.Health <= target.MaxHealth * 0.10f)
             {
                 return true;
             }

@@ -93,6 +93,11 @@ namespace LeagueSharp.SDK.Core
         public static bool Attack { get; set; }
 
         /// <summary>
+        ///     Gets or sets a value indicating whether the <see cref="Orbwalker"/> is enabled.
+        /// </summary>
+        public static bool Enabled { get; set; }
+
+        /// <summary>
         ///     Gets a value indicating whether can attack.
         /// </summary>
         public static bool CanAttack
@@ -485,6 +490,7 @@ namespace LeagueSharp.SDK.Core
                     });
             Menu.Add(advanced);
             Menu.Add(new MenuSeparator("separatorKeys", "Key Bindings"));
+            Menu.Add(new MenuBool("enableOption", "Enable Orbwalker", true));
             Menu.Add(new MenuKeyBind("lasthitKey", "Farm", Keys.X, KeyBindType.Press));
             Menu.Add(new MenuKeyBind("laneclearKey", "Lane Clear", Keys.V, KeyBindType.Press));
             Menu.Add(new MenuKeyBind("hybridKey", "Hybrid", Keys.C, KeyBindType.Press));
@@ -514,11 +520,21 @@ namespace LeagueSharp.SDK.Core
                                                      : ActiveMode
                                          : ActiveMode;
                     }
+
+                    var boolean = sender as MenuBool;
+                    if (boolean != null)
+                    {
+                        if (boolean.Name.Equals("enableOption"))
+                        {
+                            Enabled = boolean.Value;
+                        }
+                    }
                 };
 
             menu.Add(Menu);
 
             Movement = Attack = true;
+            Enabled = Menu["enableOption"].GetValue<MenuBool>().Value;
 
             Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
@@ -551,6 +567,11 @@ namespace LeagueSharp.SDK.Core
         /// </param>
         private static void OnCreate(GameObject sender, EventArgs args)
         {
+            if (!Enabled)
+            {
+                return;
+            }
+
             var missile = sender as MissileClient;
             if (missile != null && missile.SpellCaster.IsMe && AutoAttack.IsAutoAttack(missile.SData.Name))
             {
@@ -566,7 +587,7 @@ namespace LeagueSharp.SDK.Core
         /// </param>
         private static void OnDraw(EventArgs args)
         {
-            if (GameObjects.Player == null || !GameObjects.Player.IsValid)
+            if (GameObjects.Player == null || !GameObjects.Player.IsValid || !Enabled)
             {
                 return;
             }
@@ -625,6 +646,11 @@ namespace LeagueSharp.SDK.Core
         /// </param>
         private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
+            if (!Enabled)
+            {
+                return;
+            }
+
             if (sender.IsMe)
             {
                 var spellName = args.SData.Name;
@@ -669,6 +695,11 @@ namespace LeagueSharp.SDK.Core
         /// </param>
         private static void OnUpdate(EventArgs args)
         {
+            if (!Enabled)
+            {
+                return;
+            }
+
             if (ActiveMode != OrbwalkerMode.None)
             {
                 Orbwalk(OrbwalkTarget, OrbwalkPosition);

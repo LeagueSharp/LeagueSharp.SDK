@@ -222,7 +222,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\Damage\5.14.0.334.json" />
+    <None Include="Resources\Damage\5.15.0.333.json" />
     <None Include="Resources\Data\Gapclosers.json" />
     <None Include="Third_Party\Clipper\License.txt" />
   </ItemGroup>

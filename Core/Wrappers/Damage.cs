@@ -49,7 +49,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </summary>
         private static readonly IDictionary<string, byte[]> DamageFiles = new Dictionary<string, byte[]>
                                                                               {
-                                                                                  { "5.14.0.334", Resources._5_14_0_334 }
+                                                                                  { "5.15.0.333", Resources._5_15_0_333 }
                                                                               };
 
         /// <summary>
@@ -843,7 +843,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             // + Basic attacks and single target abilities do 2 bonus damage to minions and monsters. 
             if (hero != null && target is Obj_AI_Minion)
             {
-                if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
+                if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 68 && m.Points == 1))
                 {
                     value += 2d;
                 }
@@ -1636,7 +1636,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public float MaxHealth { get; internal set; }
 
         /// <summary>
-        /// Gets the max mana.
+        ///     Gets the max <c>mana</c>.
         /// </summary>
         [JsonProperty("maxMana")]
         public float MaxMana { get; internal set; }
@@ -1654,13 +1654,13 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public float[] MinionMissingHealthBaseMaximumDamage { get; internal set; }
 
         /// <summary>
-        /// Gets the passive identifier.
+        ///     Gets the passive identifier.
         /// </summary>
         [JsonProperty("passiveIdentifier")]
         public string[] PassiveIdentifier { get; internal set; }
 
         /// <summary>
-        /// Gets the passive identifier max mana.
+        ///     Gets the passive identifier max <c>mana</c>.
         /// </summary>
         [JsonProperty("passiveIdentifierMaxMana")]
         public float PassiveIdentifierMaxMana { get; internal set; }
