@@ -58,6 +58,11 @@ namespace LeagueSharp.SDK.Core
         /// </summary>
         private static readonly Menu Menu = new Menu("orbwalker", "Orbwalker");
 
+        /// <summary>
+        ///     Value indicating whether the <see cref="Orbwalker" /> is enabled.
+        /// </summary>
+        private static bool enabled;
+
         #endregion
 
         #region Delegates
@@ -93,11 +98,6 @@ namespace LeagueSharp.SDK.Core
         public static bool Attack { get; set; }
 
         /// <summary>
-        ///     Gets or sets a value indicating whether the <see cref="Orbwalker"/> is enabled.
-        /// </summary>
-        public static bool Enabled { get; set; }
-
-        /// <summary>
         ///     Gets a value indicating whether can attack.
         /// </summary>
         public static bool CanAttack
@@ -130,6 +130,26 @@ namespace LeagueSharp.SDK.Core
                        || (Variables.TickCount + Game.Ping / 2
                            >= LastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000
                            + Menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value);
+            }
+        }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether the <see cref="Orbwalker" /> is enabled.
+        /// </summary>
+        public static bool Enabled
+        {
+            get
+            {
+                return enabled;
+            }
+
+            set
+            {
+                enabled = value;
+                if (Menu != null)
+                {
+                    Menu["enableOption"].GetValue<MenuBool>().Value = value;
+                }
             }
         }
 
@@ -526,7 +546,7 @@ namespace LeagueSharp.SDK.Core
                     {
                         if (boolean.Name.Equals("enableOption"))
                         {
-                            Enabled = boolean.Value;
+                            enabled = boolean.Value;
                         }
                     }
                 };
@@ -534,7 +554,7 @@ namespace LeagueSharp.SDK.Core
             menu.Add(Menu);
 
             Movement = Attack = true;
-            Enabled = Menu["enableOption"].GetValue<MenuBool>().Value;
+            enabled = Menu["enableOption"].GetValue<MenuBool>().Value;
 
             Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
