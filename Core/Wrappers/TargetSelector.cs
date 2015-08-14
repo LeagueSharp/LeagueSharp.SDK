@@ -35,8 +35,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
     using SharpDX;
 
-    using Color = System.Drawing.Color;
-
     /// <summary>
     ///     Target Selector, manageable utility to return the best candidate target based on chosen settings.
     /// </summary>
@@ -111,15 +109,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public static TargetSelectorMode Mode { get; private set; }
 
         /// <summary>
-        ///     Gets the selected target.
+        ///     Gets or sets the selected target.
         /// </summary>
-        public static Obj_AI_Hero SelectedTarget
-        {
-            get
-            {
-                return Hud.SelectedUnit as Obj_AI_Hero;
-            }
-        }
+        public static Obj_AI_Hero SelectedTarget { get; set; }
 
         #endregion
 
@@ -383,7 +375,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
                     menu.Add(new MenuBool("focusTarget", "Focus Selected Target", true));
                     menu.Add(new MenuBool("drawTarget", "Draw Target", true));
-                    menu.Add(new MenuColor("drawTargetColor", "Draw Target Color", SharpDX.Color.Red));
+                    menu.Add(new MenuColor("drawTargetColor", "Draw Target Color", Color.Red));
                     menu.Add(new MenuSeparator("separatorMode", "Mode Selection"));
                     menu.Add(
                         new MenuList<TargetSelectorMode>("mode", "Mode")
@@ -393,7 +385,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
                     rootMenu.Add(menu);
 
-                    var circleVisible = menu["drawTarget"].GetValue<MenuBool>().Value;
                     menu.MenuValueChanged += (objSender, objArgs) =>
                         {
                             var list = objSender as MenuList<TargetSelectorMode>;
@@ -401,24 +392,29 @@ namespace LeagueSharp.SDK.Core.Wrappers
                             {
                                 Mode = list.SelectedValue;
                             }
-
-                            var @bool = objSender as MenuBool;
-                            if (@bool != null)
-                            {
-                                circleVisible = @bool.Value;
-                            }
                         };
 
                     Drawing.OnDraw += eventArgs =>
                         {
-                            var target = GetTarget();
-                            if (circleVisible && target.IsValidTarget(1200f))
+                            if (menu["drawTarget"].GetValue<MenuBool>().Value && SelectedTarget.IsValidTarget())
                             {
                                 var color = menu["drawTargetColor"].GetValue<MenuColor>().Color;
                                 Drawing.DrawCircle(
-                                    target.Position,
-                                    target.BoundingRadius,
-                                    Color.FromArgb(color.A, color.R, color.G, color.B));
+                                    SelectedTarget.Position, 
+                                    150f, 
+                                    System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B));
+                            }
+                        };
+
+                    Game.OnWndProc += eventArgs =>
+                        {
+                            if (eventArgs.Msg == (uint)WindowsMessages.LBUTTONDOWN)
+                            {
+                                SelectedTarget =
+                                    GameObjects.EnemyHeroes.Where(
+                                        hero => hero.IsValidTarget() && hero.DistanceSquared(Game.CursorPos) < 40000)
+                                        .OrderBy(h => h.DistanceSquared(Game.CursorPos))
+                                        .FirstOrDefault();
                             }
                         };
 

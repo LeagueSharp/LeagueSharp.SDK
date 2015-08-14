@@ -49,10 +49,14 @@ namespace LeagueSharp.SDK.Core
             // Initial notification.
             Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");
 
+            // Load GameObjects.
+            GameObjects.Initialize();
+            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] GameObjects Initialized.");
+
             // Create L# menu
             Variables.LeagueSharpMenu = new Menu("LeagueSharp", "LeagueSharp", true).Attach();
             MenuCustomizer.Initialize(Variables.LeagueSharpMenu);
-            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Created L# Menu.");
+            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] LeagueSharp Menu Created.");
 
             // Load the Orbwalker
             Orbwalker.Initialize(Variables.LeagueSharpMenu);
@@ -66,17 +70,13 @@ namespace LeagueSharp.SDK.Core
             Notifications.Initialize(Variables.LeagueSharpMenu);
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Notifications Initialized.");
 
-            // Load GameObjects.
-            GameObjects.Initialize();
-            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] GameObjects loaded.");
-
             // Load Damages.
             Damage.Initialize(Game.Version);
-            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Damage Library loaded.");
+            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Damage Library Initialized.");
 
             // Load Gapcloser.
             Gapcloser.Initialize();
-            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Gapcloser Library loaded.");
+            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Gapcloser Library Initialized.");
 
             // Final notification.
             Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");

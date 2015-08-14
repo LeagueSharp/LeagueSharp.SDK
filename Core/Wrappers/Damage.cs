@@ -547,11 +547,11 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 {
                     case TurretType.TierOne:
                     case TurretType.TierTwo:
-                        armorPenetrationPercent = 0.3d;
+                        armorPenetrationPercent = 0.7d;
                         break;
                     case TurretType.TierThree:
                     case TurretType.TierFour:
-                        armorPenetrationPercent = 0.7d;
+                        armorPenetrationPercent = 0.3d;
                         break;
                 }
             }
