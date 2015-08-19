@@ -43,7 +43,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         #region Static Fields
 
         /// <summary>
-        ///     Champions that should be prioritized first. (1)
+        ///     Champions that should be prioritized first. (4)
         /// </summary>
         public static readonly string[] HighestPriority =
             {
@@ -58,7 +58,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             };
 
         /// <summary>
-        ///     Champions that should be prioritized fourth(last). (4)
+        ///     Champions that should be prioritized fourth(last). (1)
         /// </summary>
         public static readonly string[] LowestPriority =
             {
@@ -72,7 +72,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             };
 
         /// <summary>
-        ///     Champions that should be prioritized second. (2)
+        ///     Champions that should be prioritized second. (3)
         /// </summary>
         public static readonly string[] MedHighPriority =
             {
@@ -83,7 +83,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             };
 
         /// <summary>
-        ///     Champions that should be prioritized third (3)
+        ///     Champions that should be prioritized third (2)
         /// </summary>
         public static readonly string[] MedLowPriority =
             {
@@ -363,10 +363,10 @@ namespace LeagueSharp.SDK.Core.Wrappers
                         foreach (var enemy in GameObjects.EnemyHeroes)
                         {
                             var priority = HighestPriority.Any(t => t == enemy.ChampionName)
-                                               ? 1
+                                               ? 4
                                                : MedHighPriority.Any(t => t == enemy.ChampionName)
-                                                     ? 2
-                                                     : MedLowPriority.Any(t => t == enemy.ChampionName) ? 3 : 4;
+                                                     ? 3
+                                                     : MedLowPriority.Any(t => t == enemy.ChampionName) ? 2 : 1;
                             menu.Add(new MenuSlider("ts" + enemy.ChampionName, enemy.ChampionName, priority, 0, 5));
                         }
 
