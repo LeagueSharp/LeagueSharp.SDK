@@ -38,6 +38,8 @@ namespace LeagueSharp.SDK.Core
     {
         #region Public Methods and Operators
 
+        private static bool initialized = false;
+
         /// <summary>
         ///     External attachment handle for the Sandbox to load in the SDK library.
         /// </summary>
@@ -46,6 +48,13 @@ namespace LeagueSharp.SDK.Core
         /// </param>
         public static void Init(string[] args)
         {
+            if (initialized)
+            {
+                return;
+            }
+
+            initialized = true;
+
             // Initial notification.
             Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");
 
