@@ -82,6 +82,7 @@
     <Compile Include="Core\Enumerations\HealthPredictionType.cs" />
     <Compile Include="Core\Enumerations\JungleType.cs" />
     <Compile Include="Core\Enumerations\KeyBindType.cs" />
+    <Compile Include="Core\Enumerations\KeyCodes.cs" />
     <Compile Include="Core\Enumerations\LogLevel.cs" />
     <Compile Include="Core\Enumerations\MapType.cs" />
     <Compile Include="Core\Enumerations\MinionTypes.cs" />
