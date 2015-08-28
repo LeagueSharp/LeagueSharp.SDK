@@ -61,6 +61,7 @@
 //   #define use_deprecated
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Clipper
 {
 #if use_int32
@@ -70,6 +71,7 @@ namespace LeagueSharp.SDK.Clipper
 
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using cInt = System.Int64;
@@ -206,7 +208,9 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Gets the first.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        ///     The first <see cref="PolyNode" />.
+        /// </returns>
         public PolyNode GetFirst()
         {
             return this.MChilds.Count > 0 ? this.MChilds[0] : null;
@@ -228,27 +232,27 @@ namespace LeagueSharp.SDK.Clipper
         internal List<PolyNode> MChilds = new List<PolyNode>();
 
         /// <summary>
-        ///     TODO The m endtype.
+        ///     The endtype.
         /// </summary>
         internal EndType MEndtype;
 
         /// <summary>
-        ///     TODO The m index.
+        ///     The index.
         /// </summary>
         internal int MIndex;
 
         /// <summary>
-        ///     TODO The m jointype.
+        ///     The jointype.
         /// </summary>
         internal JoinType MJointype;
 
         /// <summary>
-        ///     TODO The m parent.
+        ///     The parent.
         /// </summary>
         internal PolyNode MParent;
 
         /// <summary>
-        ///     TODO The m polygon.
+        ///     The polygon.
         /// </summary>
         internal Path MPolygon = new Path();
 
@@ -341,7 +345,9 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Gets the next.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        ///     The next <see cref="PolyNode" />.
+        /// </returns>
         public PolyNode GetNext()
         {
             return this.MChilds.Count > 0 ? this.MChilds[0] : this.GetNextSiblingUp();
@@ -352,10 +358,10 @@ namespace LeagueSharp.SDK.Clipper
         #region Methods
 
         /// <summary>
-        ///     TODO The add child.
+        ///     The add child.
         /// </summary>
         /// <param name="child">
-        ///     TODO The child.
+        ///     The child.
         /// </param>
         internal void AddChild(PolyNode child)
         {
@@ -366,9 +372,10 @@ namespace LeagueSharp.SDK.Clipper
         }
 
         /// <summary>
-        ///     TODO The get next sibling up.
+        ///     The get next sibling up.
         /// </summary>
         /// <returns>
+        ///     The next <see cref="PolyNode" /> sibling.
         /// </returns>
         internal PolyNode GetNextSiblingUp()
         {
@@ -383,9 +390,10 @@ namespace LeagueSharp.SDK.Clipper
         }
 
         /// <summary>
-        ///     TODO The is hole node.
+        ///     Indiciates whether the node is hole.
         /// </summary>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         private bool IsHoleNode()
         {
@@ -412,19 +420,19 @@ namespace LeagueSharp.SDK.Clipper
     // ------------------------------------------------------------------------------
 
     /// <summary>
-    ///     TODO The int 128.
+    ///     The int 128.
     /// </summary>
     internal struct Int128
     {
         #region Fields
 
         /// <summary>
-        ///     TODO The _hi.
+        ///     The _hi.
         /// </summary>
         private long hi;
 
         /// <summary>
-        ///     TODO The _lo.
+        ///     The _lo.
         /// </summary>
         private ulong lo;
 
@@ -436,7 +444,7 @@ namespace LeagueSharp.SDK.Clipper
         ///     Initializes a new instance of the <see cref="Int128" /> struct.
         /// </summary>
         /// <param name="lo">
-        ///     TODO The lo.
+        ///     The lo.
         /// </param>
         public Int128(long lo)
         {
@@ -455,10 +463,10 @@ namespace LeagueSharp.SDK.Clipper
         ///     Initializes a new instance of the <see cref="Int128" /> struct.
         /// </summary>
         /// <param name="hi">
-        ///     TODO The hi.
+        ///     The hi.
         /// </param>
         /// <param name="lo">
-        ///     TODO The lo.
+        ///     The lo.
         /// </param>
         public Int128(long hi, ulong lo)
         {
@@ -470,7 +478,7 @@ namespace LeagueSharp.SDK.Clipper
         ///     Initializes a new instance of the <see cref="Int128" /> struct.
         /// </summary>
         /// <param name="val">
-        ///     TODO The val.
+        ///     The val.
         /// </param>
         public Int128(Int128 val)
         {
@@ -487,15 +495,16 @@ namespace LeagueSharp.SDK.Clipper
         // code runs significantly faster than if we'd used the * operator.
 
         /// <summary>
-        ///     TODO The int 128 mul.
+        ///     The int 128 mul.
         /// </summary>
         /// <param name="lhs">
-        ///     TODO The lhs.
+        ///     The lhs.
         /// </param>
         /// <param name="rhs">
-        ///     TODO The rhs.
+        ///     The rhs.
         /// </param>
         /// <returns>
+        ///     The <see cref="Int128" />.
         /// </returns>
         public static Int128 Int128Mul(long lhs, long rhs)
         {
@@ -538,15 +547,16 @@ namespace LeagueSharp.SDK.Clipper
         }
 
         /// <summary>
-        ///     TODO The +.
+        ///     The +.
         /// </summary>
         /// <param name="lhs">
-        ///     TODO The lhs.
+        ///     The lhs.
         /// </param>
         /// <param name="rhs">
-        ///     TODO The rhs.
+        ///     The rhs.
         /// </param>
         /// <returns>
+        ///     The <see cref="Int128" />.
         /// </returns>
         public static Int128 operator +(Int128 lhs, Int128 rhs)
         {
@@ -561,15 +571,16 @@ namespace LeagueSharp.SDK.Clipper
         }
 
         /// <summary>
-        ///     TODO The ==.
+        ///     The ==.
         /// </summary>
         /// <param name="val1">
-        ///     TODO The val 1.
+        ///     The val 1.
         /// </param>
         /// <param name="val2">
-        ///     TODO The val 2.
+        ///     The val 2.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool operator ==(Int128 val1, Int128 val2)
         {
@@ -577,12 +588,13 @@ namespace LeagueSharp.SDK.Clipper
         }
 
         /// <summary>
-        ///     TODO The op_ explicit.
+        ///     The op_ explicit.
         /// </summary>
         /// <param name="val">
-        ///     TODO The val.
+        ///     The val.
         /// </param>
         /// <returns>
+        ///     The <see cref="double" />.
         /// </returns>
         public static explicit operator double(Int128 val)
         {
@@ -593,15 +605,16 @@ namespace LeagueSharp.SDK.Clipper
         }
 
         /// <summary>
-        ///     TODO The &gt;.
+        ///     The &gt;.
         /// </summary>
         /// <param name="val1">
-        ///     TODO The val 1.
+        ///     The val 1.
         /// </param>
         /// <param name="val2">
-        ///     TODO The val 2.
+        ///     The val 2.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool operator >(Int128 val1, Int128 val2)
         {
@@ -614,15 +627,16 @@ namespace LeagueSharp.SDK.Clipper
         }
 
         /// <summary>
-        ///     TODO The !=.
+        ///     The !=.
         /// </summary>
         /// <param name="val1">
-        ///     TODO The val 1.
+        ///     The val 1.
         /// </param>
         /// <param name="val2">
-        ///     TODO The val 2.
+        ///     The val 2.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool operator !=(Int128 val1, Int128 val2)
         {
@@ -630,15 +644,16 @@ namespace LeagueSharp.SDK.Clipper
         }
 
         /// <summary>
-        ///     TODO The &lt;.
+        ///     The &lt;.
         /// </summary>
         /// <param name="val1">
-        ///     TODO The val 1.
+        ///     The val 1.
         /// </param>
         /// <param name="val2">
-        ///     TODO The val 2.
+        ///     The val 2.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool operator <(Int128 val1, Int128 val2)
         {
@@ -646,15 +661,16 @@ namespace LeagueSharp.SDK.Clipper
         }
 
         /// <summary>
-        ///     TODO The -.
+        ///     The -.
         /// </summary>
         /// <param name="lhs">
-        ///     TODO The lhs.
+        ///     The lhs.
         /// </param>
         /// <param name="rhs">
-        ///     TODO The rhs.
+        ///     The rhs.
         /// </param>
         /// <returns>
+        ///     The <see cref="Int128" />.
         /// </returns>
         public static Int128 operator -(Int128 lhs, Int128 rhs)
         {
@@ -662,12 +678,13 @@ namespace LeagueSharp.SDK.Clipper
         }
 
         /// <summary>
-        ///     TODO The -.
+        ///     The -.
         /// </summary>
         /// <param name="val">
-        ///     TODO The val.
+        ///     The val.
         /// </param>
         /// <returns>
+        ///     The <see cref="Int128" />.
         /// </returns>
         public static Int128 operator -(Int128 val)
         {
@@ -675,12 +692,13 @@ namespace LeagueSharp.SDK.Clipper
         }
 
         /// <summary>
-        ///     TODO The equals.
+        ///     The equals.
         /// </summary>
         /// <param name="obj">
-        ///     TODO The obj.
+        ///     The obj.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         public override bool Equals(object obj)
         {
@@ -694,19 +712,23 @@ namespace LeagueSharp.SDK.Clipper
         }
 
         /// <summary>
-        ///     TODO The get hash code.
+        ///     The get hash code.
         /// </summary>
         /// <returns>
+        ///     The <see cref="int" />.
         /// </returns>
+        [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode",
+            Justification = "Hashcode is dynamic on clipper.")]
         public override int GetHashCode()
         {
             return this.hi.GetHashCode() ^ this.lo.GetHashCode();
         }
 
         /// <summary>
-        ///     TODO The is negative.
+        ///     The is negative.
         /// </summary>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         public bool IsNegative()
         {
@@ -781,7 +803,8 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Initializes a new instance of the <see cref="IntPoint"/> struct.
         /// </summary>
-        /// <param name="pt">The pt.</param>
+        /// <param name="pt">The point.
+        /// </param>
         public IntPoint(IntPoint pt)
         {
             X = pt.X;
@@ -815,7 +838,9 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Initializes a new instance of the <see cref="IntPoint" /> struct.
         /// </summary>
-        /// <param name="pt">The pt.</param>
+        /// <param name="pt">
+        ///     The point.
+        /// </param>
         public IntPoint(IntPoint pt)
         {
             this.X = pt.X;
@@ -950,17 +975,17 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Create regions where both subject and clip polygons are filled.
         /// </summary>
-        CtIntersection, 
+        CtIntersection,
 
         /// <summary>
         ///     Create regions where either subject or clip polygons (or both) are filled.
         /// </summary>
-        CtUnion, 
+        CtUnion,
 
         /// <summary>
         ///     Create regions where subject polygons are filled except where clip polygons are filled
         /// </summary>
-        CtDifference, 
+        CtDifference,
 
         /// <summary>
         ///     Create regions where either subject or clip polygons are filled but not where both are filled
@@ -976,7 +1001,7 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Subject
         /// </summary>
-        PtSubject, 
+        PtSubject,
 
         /// <summary>
         ///     Clip
@@ -997,17 +1022,17 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Also known as Alternate Filling. Odd numbered sub-regions are filled, while even numbered sub-regions are not.
         /// </summary>
-        PftEvenOdd, 
+        PftEvenOdd,
 
         /// <summary>
         ///     All non-zero sub-regions are filled.
         /// </summary>
-        PftNonZero, 
+        PftNonZero,
 
         /// <summary>
         ///     All sub-regions with winding counts > 0 are filled.
         /// </summary>
-        PftPositive, 
+        PftPositive,
 
         /// <summary>
         ///     All sub-regions with winding counts &lt; 0 are filled
@@ -1023,13 +1048,13 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Squaring is applied uniformally at all convex edge joins at 1 x delta.
         /// </summary>
-        JtSquare, 
+        JtSquare,
 
         /// <summary>
         ///     While flattened paths can never perfectly trace an arc, they are approximated by a series of arc chords.
         ///     <see cref="ClipperOffset.ArcTolerance" />
         /// </summary>
-        JtRound, 
+        JtRound,
 
         /// <summary>
         ///     There's a necessary limit to mitered joins since offsetting edges that join at very acute angles will produce
@@ -1049,22 +1074,22 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Ends are joined using the JoinType value and the path filled as a polygon.
         /// </summary>
-        EtClosedPolygon, 
+        EtClosedPolygon,
 
         /// <summary>
         ///     Ends are joined using the JoinType value and the path filled as a polyline.
         /// </summary>
-        EtClosedLine, 
+        EtClosedLine,
 
         /// <summary>
         ///     Ends are squared off with no extension.
         /// </summary>
-        EtOpenButt, 
+        EtOpenButt,
 
         /// <summary>
         ///     Ends are squared off and extended delta units.
         /// </summary>
-        EtOpenSquare, 
+        EtOpenSquare,
 
         /// <summary>
         ///     Ends are rounded off and extended delta units.
@@ -1073,131 +1098,131 @@ namespace LeagueSharp.SDK.Clipper
     }
 
     /// <summary>
-    ///     TODO The edge side.
+    ///     The edge side.
     /// </summary>
     internal enum EdgeSide
     {
         /// <summary>
-        ///     TODO The es left.
+        ///     The es left.
         /// </summary>
-        EsLeft, 
+        EsLeft,
 
         /// <summary>
-        ///     TODO The es right.
+        ///     The es right.
         /// </summary>
         EsRight
     }
 
     /// <summary>
-    ///     TODO The direction.
+    ///     The direction.
     /// </summary>
     internal enum Direction
     {
         /// <summary>
-        ///     TODO The d right to left.
+        ///     The d right to left.
         /// </summary>
-        DRightToLeft, 
+        DRightToLeft,
 
         /// <summary>
-        ///     TODO The d left to right.
+        ///     The d left to right.
         /// </summary>
         DLeftToRight
     }
 
     /// <summary>
-    ///     TODO The edge.
+    ///     The edge.
     /// </summary>
     internal class Edge
     {
         #region Fields
 
         /// <summary>
-        ///     TODO The bot.
+        ///     The bot.
         /// </summary>
         internal IntPoint Bot;
 
         /// <summary>
-        ///     TODO The curr.
+        ///     The curr.
         /// </summary>
         internal IntPoint Curr;
 
         /// <summary>
-        ///     TODO The delta.
+        ///     The delta.
         /// </summary>
         internal IntPoint Delta;
 
         /// <summary>
-        ///     TODO The dx.
+        ///     The dx.
         /// </summary>
         internal double Dx;
 
         /// <summary>
-        ///     TODO The next.
+        ///     The next.
         /// </summary>
         internal Edge Next;
 
         /// <summary>
-        ///     TODO The next in ael.
+        ///     The next in ael.
         /// </summary>
         internal Edge NextInAel;
 
         /// <summary>
-        ///     TODO The next in lml.
+        ///     The next in lml.
         /// </summary>
         internal Edge NextInLml;
 
         /// <summary>
-        ///     TODO The next in sel.
+        ///     The next in sel.
         /// </summary>
         internal Edge NextInSel;
 
         /// <summary>
-        ///     TODO The out idx.
+        ///     The out idx.
         /// </summary>
         internal int OutIdx;
 
         /// <summary>
-        ///     TODO The poly typ.
+        ///     The poly typ.
         /// </summary>
         internal PolyType PolyTyp;
 
         /// <summary>
-        ///     TODO The prev.
+        ///     The prev.
         /// </summary>
         internal Edge Prev;
 
         /// <summary>
-        ///     TODO The prev in ael.
+        ///     The prev in ael.
         /// </summary>
         internal Edge PrevInAel;
 
         /// <summary>
-        ///     TODO The prev in sel.
+        ///     The prev in sel.
         /// </summary>
         internal Edge PrevInSel;
 
         /// <summary>
-        ///     TODO The side.
+        ///     The side.
         /// </summary>
         internal EdgeSide Side;
 
         /// <summary>
-        ///     TODO The top.
+        ///     The top.
         /// </summary>
         internal IntPoint Top;
 
         /// <summary>
-        ///     TODO The wind cnt.
+        ///     The wind cnt.
         /// </summary>
         internal int WindCnt;
 
         /// <summary>
-        ///     TODO The wind cnt 2.
+        ///     The wind cnt 2.
         /// </summary>
         internal int WindCnt2; // winding count of the opposite polytype
 
         /// <summary>
-        ///     TODO The wind delta.
+        ///     The wind delta.
         /// </summary>
         internal int WindDelta; // 1 or -1 depending on winding direction
 
@@ -1212,17 +1237,17 @@ namespace LeagueSharp.SDK.Clipper
         #region Fields
 
         /// <summary>
-        ///     TODO The edge 1.
+        ///     The edge 1.
         /// </summary>
         internal Edge Edge1;
 
         /// <summary>
-        ///     TODO The edge 2.
+        ///     The edge 2.
         /// </summary>
         internal Edge Edge2;
 
         /// <summary>
-        ///     TODO The pt.
+        ///     The point.
         /// </summary>
         internal IntPoint Pt;
 
@@ -1239,9 +1264,15 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Compares the specified nodes.
         /// </summary>
-        /// <param name="node1">The node1.</param>
-        /// <param name="node2">The node2.</param>
-        /// <returns></returns>
+        /// <param name="node1">
+        ///     The node1.
+        /// </param>
+        /// <param name="node2">
+        ///     The node2.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="int" />.
+        /// </returns>
         public int Compare(IntersectNode node1, IntersectNode node2)
         {
             var i = node2.Pt.Y - node1.Pt.Y;
@@ -1262,29 +1293,29 @@ namespace LeagueSharp.SDK.Clipper
     }
 
     /// <summary>
-    ///     TODO The local minima.
+    ///     The local minima.
     /// </summary>
     internal class LocalMinima
     {
         #region Fields
 
         /// <summary>
-        ///     TODO The left bound.
+        ///     The left bound.
         /// </summary>
         internal Edge LeftBound;
 
         /// <summary>
-        ///     TODO The next.
+        ///     The next.
         /// </summary>
         internal LocalMinima Next;
 
         /// <summary>
-        ///     TODO The right bound.
+        ///     The right bound.
         /// </summary>
         internal Edge RightBound;
 
         /// <summary>
-        ///     TODO The y.
+        ///     The y.
         /// </summary>
         internal long Y;
 
@@ -1292,19 +1323,19 @@ namespace LeagueSharp.SDK.Clipper
     }
 
     /// <summary>
-    ///     TODO The scanbeam.
+    ///     The scanbeam.
     /// </summary>
     internal class Scanbeam
     {
         #region Fields
 
         /// <summary>
-        ///     TODO The next.
+        ///     The next.
         /// </summary>
         internal Scanbeam Next;
 
         /// <summary>
-        ///     TODO The y.
+        ///     The y.
         /// </summary>
         internal long Y;
 
@@ -1312,44 +1343,44 @@ namespace LeagueSharp.SDK.Clipper
     }
 
     /// <summary>
-    ///     TODO The out rec.
+    ///     The out rec.
     /// </summary>
     internal class OutRec
     {
         #region Fields
 
         /// <summary>
-        ///     TODO The bottom pt.
+        ///     The bottom pt.
         /// </summary>
         internal OutPt BottomPt;
 
         /// <summary>
-        ///     TODO The first left.
+        ///     The first left.
         /// </summary>
         internal OutRec FirstLeft; // see comments in clipper.pas
 
         /// <summary>
-        ///     TODO The idx.
+        ///     The idx.
         /// </summary>
         internal int Idx;
 
         /// <summary>
-        ///     TODO The is hole.
+        ///     The is hole.
         /// </summary>
         internal bool IsHole;
 
         /// <summary>
-        ///     TODO The is open.
+        ///     The is open.
         /// </summary>
         internal bool IsOpen;
 
         /// <summary>
-        ///     TODO The poly node.
+        ///     The poly node.
         /// </summary>
         internal PolyNode PolyNode;
 
         /// <summary>
-        ///     TODO The pts.
+        ///     The pts.
         /// </summary>
         internal OutPt Pts;
 
@@ -1357,29 +1388,29 @@ namespace LeagueSharp.SDK.Clipper
     }
 
     /// <summary>
-    ///     TODO The out pt.
+    ///     The out pt.
     /// </summary>
     internal class OutPt
     {
         #region Fields
 
         /// <summary>
-        ///     TODO The idx.
+        ///     The idx.
         /// </summary>
         internal int Idx;
 
         /// <summary>
-        ///     TODO The next.
+        ///     The next.
         /// </summary>
         internal OutPt Next;
 
         /// <summary>
-        ///     TODO The prev.
+        ///     The prev.
         /// </summary>
         internal OutPt Prev;
 
         /// <summary>
-        ///     TODO The pt.
+        ///     The point.
         /// </summary>
         internal IntPoint Pt;
 
@@ -1387,24 +1418,24 @@ namespace LeagueSharp.SDK.Clipper
     }
 
     /// <summary>
-    ///     TODO The join.
+    ///     The join.
     /// </summary>
     internal class Join
     {
         #region Fields
 
         /// <summary>
-        ///     TODO The off pt.
+        ///     The off pt.
         /// </summary>
         internal IntPoint OffPt;
 
         /// <summary>
-        ///     TODO The out pt 1.
+        ///     The out first point.
         /// </summary>
         internal OutPt OutPt1;
 
         /// <summary>
-        ///     TODO The out pt 2.
+        ///     The out second point.
         /// </summary>
         internal OutPt OutPt2;
 
@@ -1437,12 +1468,13 @@ namespace LeagueSharp.SDK.Clipper
         protected const double Tolerance = 1.0E-20;
 
         /// <summary>
-        ///     TODO The near zero.
+        ///     The near zero.
         /// </summary>
         /// <param name="val">
-        ///     TODO The val.
+        ///     The val.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         internal static bool NearZero(double val)
         {
@@ -1474,27 +1506,27 @@ namespace LeagueSharp.SDK.Clipper
 #endif
 
         /// <summary>
-        ///     TODO The m minima list.
+        ///     The minima list.
         /// </summary>
         internal LocalMinima MMinimaList;
 
         /// <summary>
-        ///     TODO The m current lm.
+        ///     The current lm.
         /// </summary>
         internal LocalMinima MCurrentLm;
 
         /// <summary>
-        ///     TODO The m edges.
+        ///     The edges.
         /// </summary>
         internal List<List<Edge>> MEdges = new List<List<Edge>>();
 
         /// <summary>
-        ///     TODO The m use full range.
+        ///     The use full range.
         /// </summary>
         internal bool MUseFullRange;
 
         /// <summary>
-        ///     TODO The m has open paths.
+        ///     The has open paths.
         /// </summary>
         internal bool MHasOpenPaths;
 
@@ -1525,12 +1557,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The is horizontal.
+        ///     The is horizontal.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         internal static bool IsHorizontal(Edge e)
         {
@@ -1540,15 +1573,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The point is vertex.
+        ///     The point is vertex.
         /// </summary>
         /// <param name="pt">
-        ///     TODO The pt.
+        ///     The point.
         /// </param>
         /// <param name="pp">
-        ///     TODO The pp.
+        ///     The pp.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         internal bool PointIsVertex(IntPoint pt, OutPt pp)
         {
@@ -1569,21 +1603,22 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The point on line segment.
+        ///     The point on line segment.
         /// </summary>
         /// <param name="pt">
-        ///     TODO The pt.
+        ///     The point.
         /// </param>
         /// <param name="linePt1">
-        ///     TODO The line pt 1.
+        ///     The line first point.
         /// </param>
         /// <param name="linePt2">
-        ///     TODO The line pt 2.
+        ///     The line second point.
         /// </param>
         /// <param name="useFullRange">
-        ///     TODO The use full range.
+        ///     The use full range.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         internal bool PointOnLineSegment(IntPoint pt, IntPoint linePt1, IntPoint linePt2, bool useFullRange)
         {
@@ -1603,18 +1638,19 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The point on polygon.
+        ///     The point on polygon.
         /// </summary>
         /// <param name="pt">
-        ///     TODO The pt.
+        ///     The point.
         /// </param>
         /// <param name="pp">
-        ///     TODO The pp.
+        ///     The pp.
         /// </param>
         /// <param name="useFullRange">
-        ///     TODO The use full range.
+        ///     The use full range.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         internal bool PointOnPolygon(IntPoint pt, OutPt pp, bool useFullRange)
         {
@@ -1639,18 +1675,19 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The slopes equal.
+        ///     The slopes equal.
         /// </summary>
         /// <param name="e1">
-        ///     TODO The e 1.
+        ///     The e 1.
         /// </param>
         /// <param name="e2">
-        ///     TODO The e 2.
+        ///     The e 2.
         /// </param>
         /// <param name="useFullRange">
-        ///     TODO The use full range.
+        ///     The use full range.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         internal static bool SlopesEqual(Edge e1, Edge e2, bool useFullRange)
         {
@@ -1667,11 +1704,21 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Checks if the slope is equal.
         /// </summary>
-        /// <param name="pt1">The PT1.</param>
-        /// <param name="pt2">The PT2.</param>
-        /// <param name="pt3">The PT3.</param>
-        /// <param name="useFullRange">if set to <c>true</c>, will use the full range.</param>
-        /// <returns></returns>
+        /// <param name="pt1">
+        ///     The PT1.
+        /// </param>
+        /// <param name="pt2">
+        ///     The PT2.
+        /// </param>
+        /// <param name="pt3">
+        ///     The PT3.
+        /// </param>
+        /// <param name="useFullRange">
+        ///     if set to <c>true</c>, will use the full range.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
         protected static bool SlopesEqual(IntPoint pt1, IntPoint pt2, IntPoint pt3, bool useFullRange)
         {
             if (useFullRange)
@@ -1687,12 +1734,24 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Checks if the slopes are equaal.
         /// </summary>
-        /// <param name="pt1">The PT1.</param>
-        /// <param name="pt2">The PT2.</param>
-        /// <param name="pt3">The PT3.</param>
-        /// <param name="pt4">The PT4.</param>
-        /// <param name="useFullRange">if set to <c>true</c>, will use full range.</param>
-        /// <returns></returns>
+        /// <param name="pt1">
+        ///     The PT1.
+        /// </param>
+        /// <param name="pt2">
+        ///     The PT2.
+        /// </param>
+        /// <param name="pt3">
+        ///     The PT3.
+        /// </param>
+        /// <param name="pt4">
+        ///     The PT4.
+        /// </param>
+        /// <param name="useFullRange">
+        ///     if set to <c>true</c>, will use full range.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
         protected static bool SlopesEqual(IntPoint pt1, IntPoint pt2, IntPoint pt3, IntPoint pt4, bool useFullRange)
         {
             if (useFullRange)
@@ -1743,7 +1802,7 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The dispose local minima list.
+        ///     The dispose local minima list.
         /// </summary>
         private void DisposeLocalMinimaList()
         {
@@ -1760,13 +1819,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The range test.
+        ///     The range test.
         /// </summary>
         /// <param name="pt">
-        ///     TODO The pt.
+        ///     The point.
         /// </param>
         /// <param name="useFullRange">
-        ///     TODO The use full range.
+        ///     The use full range.
         /// </param>
         /// <exception cref="ClipperException">
         /// </exception>
@@ -1789,19 +1848,19 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The init edge.
+        ///     The init edge.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge.
         /// </param>
         /// <param name="eNext">
-        ///     TODO The e next.
+        ///     The e next.
         /// </param>
         /// <param name="ePrev">
-        ///     TODO The e prev.
+        ///     The e prev.
         /// </param>
         /// <param name="pt">
-        ///     TODO The pt.
+        ///     The point.
         /// </param>
         private void InitEdge(Edge e, Edge eNext, Edge ePrev, IntPoint pt)
         {
@@ -1814,13 +1873,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The init edge 2.
+        ///     The init edge 2.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge.
         /// </param>
         /// <param name="polyType">
-        ///     TODO The poly type.
+        ///     The poly type.
         /// </param>
         private void InitEdge2(Edge e, PolyType polyType)
         {
@@ -1835,19 +1894,20 @@ namespace LeagueSharp.SDK.Clipper
                 e.Bot = e.Next.Curr;
             }
 
-            this.SetDx(e);
+            SetDx(e);
             e.PolyTyp = polyType;
         }
 
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The find next loc min.
+        ///     The find next loc min.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge.
         /// </param>
         /// <returns>
+        ///     The <see cref="Edge" />.
         /// </returns>
         private static Edge FindNextLocMin(Edge e)
         {
@@ -1893,15 +1953,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The process bound.
+        ///     The process bound.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge.
         /// </param>
         /// <param name="leftBoundIsForward">
-        ///     TODO The left bound is forward.
+        ///     The left bound is forward.
         /// </param>
         /// <returns>
+        ///     The <see cref="Edge" />.
         /// </returns>
         private Edge ProcessBound(Edge e, bool leftBoundIsForward)
         {
@@ -2073,11 +2134,21 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Adds the path.
         /// </summary>
-        /// <param name="pg">The path.</param>
-        /// <param name="polyType">Type of the polygpm.</param>
-        /// <param name="closed">Gets of the path is closed or not.</param>
-        /// <returns></returns>
-        /// <exception cref="ClipperException">Open paths have been disabled.</exception>
+        /// <param name="pg">
+        ///     The path.
+        /// </param>
+        /// <param name="polyType">
+        ///     Type of the polygpm.
+        /// </param>
+        /// <param name="closed">
+        ///     Gets of the path is closed or not.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
+        /// <exception cref="ClipperException">
+        ///     Open paths have been disabled.
+        /// </exception>
         public bool AddPath(Path pg, PolyType polyType, bool closed)
         {
 #if use_lines
@@ -2147,7 +2218,7 @@ namespace LeagueSharp.SDK.Clipper
                         eStart = e.Next;
                     }
 
-                    e = this.RemoveEdge(e);
+                    e = RemoveEdge(e);
                     eLoopStop = e;
                     continue;
                 }
@@ -2169,7 +2240,7 @@ namespace LeagueSharp.SDK.Clipper
                         eStart = e.Next;
                     }
 
-                    e = this.RemoveEdge(e);
+                    e = RemoveEdge(e);
                     e = e.Prev;
                     eLoopStop = e;
                     continue;
@@ -2299,10 +2370,18 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Adds the paths.
         /// </summary>
-        /// <param name="ppg">The paths.</param>
-        /// <param name="polyType">Type of the poly.</param>
-        /// <param name="closed">if set to <c>true</c>, closes the path.</param>
-        /// <returns></returns>
+        /// <param name="ppg">
+        ///     The paths.
+        /// </param>
+        /// <param name="polyType">
+        ///     Type of the poly.
+        /// </param>
+        /// <param name="closed">
+        ///     if set to <c>true</c>, closes the path.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
         public bool AddPaths(Paths ppg, PolyType polyType, bool closed)
         {
             return ppg.Any(t => this.AddPath(t, polyType, closed));
@@ -2311,18 +2390,19 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The pt 2 is between pt 1 and pt 3.
+        ///     The second point is between first point and third point.
         /// </summary>
         /// <param name="pt1">
-        ///     TODO The pt 1.
+        ///     The first point.
         /// </param>
         /// <param name="pt2">
-        ///     TODO The pt 2.
+        ///     The second point.
         /// </param>
         /// <param name="pt3">
-        ///     TODO The pt 3.
+        ///     The third point.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         internal bool Pt2IsBetweenPt1AndPt3(IntPoint pt1, IntPoint pt2, IntPoint pt3)
         {
@@ -2344,9 +2424,13 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Removes an edge.
         /// </summary>
-        /// <param name="e">The edge.</param>
-        /// <returns></returns>
-        private Edge RemoveEdge(Edge e)
+        /// <param name="e">
+        ///     The edge.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Edge" />.
+        /// </returns>
+        private static Edge RemoveEdge(Edge e)
         {
             // removes e from double_linked_list (but without removing from memory)
             e.Prev.Next = e.Next;
@@ -2361,8 +2445,10 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Sets the delta x.
         /// </summary>
-        /// <param name="e">The edge.</param>
-        private void SetDx(Edge e)
+        /// <param name="e">
+        ///     The edge.
+        /// </param>
+        private static void SetDx(Edge e)
         {
             e.Delta.X = e.Top.X - e.Bot.X;
             e.Delta.Y = e.Top.Y - e.Bot.Y;
@@ -2379,10 +2465,10 @@ namespace LeagueSharp.SDK.Clipper
         // ---------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The insert local minima.
+        ///     The insert local minima.
         /// </summary>
         /// <param name="newLm">
-        ///     TODO The new lm.
+        ///     The new lm.
         /// </param>
         private void InsertLocalMinima(LocalMinima newLm)
         {
@@ -2484,8 +2570,12 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Gets the bounds.
         /// </summary>
-        /// <param name="paths">The paths.</param>
-        /// <returns></returns>
+        /// <param name="paths">
+        ///     The paths.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="IntRect" />.
+        /// </returns>
         public static IntRect GetBounds(Paths paths)
         {
             int i = 0, cnt = paths.Count;
@@ -2553,67 +2643,67 @@ namespace LeagueSharp.SDK.Clipper
         public const int IoPreserveCollinear = 4;
 
         /// <summary>
-        ///     TODO The _m poly outs.
+        ///     The _m poly outs.
         /// </summary>
         private readonly List<OutRec> mPolyOuts;
 
         /// <summary>
-        ///     TODO The _m clip type.
+        ///     The _m clip type.
         /// </summary>
         private ClipType mClipType;
 
         /// <summary>
-        ///     TODO The _m scanbeam.
+        ///     The _m scanbeam.
         /// </summary>
         private Scanbeam mScanbeam;
 
         /// <summary>
-        ///     TODO The _m active edges.
+        ///     The _m active edges.
         /// </summary>
         private Edge mActiveEdges;
 
         /// <summary>
-        ///     TODO The _m sorted edges.
+        ///     The _m sorted edges.
         /// </summary>
         private Edge mSortedEdges;
 
         /// <summary>
-        ///     TODO The _m intersect list.
+        ///     The _m intersect list.
         /// </summary>
         private readonly List<IntersectNode> mIntersectList;
 
         /// <summary>
-        ///     TODO The _m intersect node comparer.
+        ///     The _m intersect node comparer.
         /// </summary>
         private readonly IComparer<IntersectNode> mIntersectNodeComparer;
 
         /// <summary>
-        ///     TODO The _m execute locked.
+        ///     The _m execute locked.
         /// </summary>
         private bool mExecuteLocked;
 
         /// <summary>
-        ///     TODO The _m clip fill type.
+        ///     The _m clip fill type.
         /// </summary>
         private PolyFillType mClipFillType;
 
         /// <summary>
-        ///     TODO The _m subj fill type.
+        ///     The _m subj fill type.
         /// </summary>
         private PolyFillType mSubjFillType;
 
         /// <summary>
-        ///     TODO The _m joins.
+        ///     The _m joins.
         /// </summary>
         private readonly List<Join> mJoins;
 
         /// <summary>
-        ///     TODO The _m ghost joins.
+        ///     The _m ghost joins.
         /// </summary>
         private readonly List<Join> mGhostJoins;
 
         /// <summary>
-        ///     TODO The _m using poly tree.
+        ///     The _m using poly tree.
         /// </summary>
         private bool mUsingPolyTree;
 
@@ -2702,10 +2792,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The insert scanbeam.
+        ///     The insert scanbeam.
         /// </summary>
         /// <param name="y">
-        ///     TODO The y.
+        ///     The y.
         /// </param>
         private void InsertScanbeam(long y)
         {
@@ -2741,12 +2831,24 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Executes the specified clipping.
         /// </summary>
-        /// <param name="clipType">Type of the clip.</param>
-        /// <param name="solution">The solution.</param>
-        /// <param name="subjFillType">Type of the subject fill.</param>
-        /// <param name="clipFillType">Type of the clip fill.</param>
-        /// <returns></returns>
-        /// <exception cref="ClipperException">Error: PolyTree struct is need for open path clipping.</exception>
+        /// <param name="clipType">
+        ///     Type of the clip.
+        /// </param>
+        /// <param name="solution">
+        ///     The solution.
+        /// </param>
+        /// <param name="subjFillType">
+        ///     Type of the subject fill.
+        /// </param>
+        /// <param name="clipFillType">
+        ///     Type of the clip fill.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
+        /// <exception cref="ClipperException">
+        ///     Error: PolyTree struct is need for open path clipping.
+        /// </exception>
         public bool Execute(ClipType clipType, Paths solution, PolyFillType subjFillType, PolyFillType clipFillType)
         {
             if (this.mExecuteLocked)
@@ -2790,11 +2892,21 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Executes the specified clipping.
         /// </summary>
-        /// <param name="clipType">Type of the clip.</param>
-        /// <param name="polytree">The polytree.</param>
-        /// <param name="subjFillType">Type of the subject fill.</param>
-        /// <param name="clipFillType">Type of the clip fill.</param>
-        /// <returns></returns>
+        /// <param name="clipType">
+        ///     Type of the clip.
+        /// </param>
+        /// <param name="polytree">
+        ///     The polytree.
+        /// </param>
+        /// <param name="subjFillType">
+        ///     Type of the subject fill.
+        /// </param>
+        /// <param name="clipFillType">
+        ///     Type of the clip fill.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
         public bool Execute(ClipType clipType, PolyTree polytree, PolyFillType subjFillType, PolyFillType clipFillType)
         {
             if (this.mExecuteLocked)
@@ -2832,9 +2944,15 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Executes the specified clip type.
         /// </summary>
-        /// <param name="clipType">Type of the clip.</param>
-        /// <param name="solution">The solution.</param>
-        /// <returns></returns>
+        /// <param name="clipType">
+        ///     Type of the clip.
+        /// </param>
+        /// <param name="solution">
+        ///     The solution.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
         public bool Execute(ClipType clipType, Paths solution)
         {
             return this.Execute(clipType, solution, PolyFillType.PftEvenOdd, PolyFillType.PftEvenOdd);
@@ -2845,9 +2963,15 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Executes the specified clip type.
         /// </summary>
-        /// <param name="clipType">Type of the clip.</param>
-        /// <param name="polytree">The polytree.</param>
-        /// <returns></returns>
+        /// <param name="clipType">
+        ///     Type of the clip.
+        /// </param>
+        /// <param name="polytree">
+        ///     The polytree.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
         public bool Execute(ClipType clipType, PolyTree polytree)
         {
             return this.Execute(clipType, polytree, PolyFillType.PftEvenOdd, PolyFillType.PftEvenOdd);
@@ -2856,10 +2980,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The fix hole linkage.
+        ///     The fix hole linkage.
         /// </summary>
         /// <param name="outRec">
-        ///     TODO The out rec.
+        ///     The out rec.
         /// </param>
         internal void FixHoleLinkage(OutRec outRec)
         {
@@ -2882,9 +3006,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The execute internal.
+        ///     The execute internal.
         /// </summary>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         private bool ExecuteInternal()
         {
@@ -2952,9 +3077,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The pop scanbeam.
+        ///     The pop scanbeam.
         /// </summary>
         /// <returns>
+        ///     The <see cref="long" />.
         /// </returns>
         private long PopScanbeam()
         {
@@ -2966,7 +3092,7 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The dispose all poly pts.
+        ///     The dispose all poly pts.
         /// </summary>
         private void DisposeAllPolyPts()
         {
@@ -2981,10 +3107,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The dispose out rec.
+        ///     The dispose out rec.
         /// </summary>
         /// <param name="index">
-        ///     TODO The index.
+        ///     The index.
         /// </param>
         private void DisposeOutRec(int index)
         {
@@ -2996,16 +3122,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The add join.
+        ///     The add join.
         /// </summary>
         /// <param name="op1">
-        ///     TODO The op 1.
+        ///     The op 1.
         /// </param>
         /// <param name="op2">
-        ///     TODO The op 2.
+        ///     The op 2.
         /// </param>
         /// <param name="offPt">
-        ///     TODO The off pt.
+        ///     The off pt.
         /// </param>
         private void AddJoin(OutPt op1, OutPt op2, IntPoint offPt)
         {
@@ -3016,13 +3142,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The add ghost join.
+        ///     The add ghost join.
         /// </summary>
         /// <param name="op">
-        ///     TODO The op.
+        ///     The op.
         /// </param>
         /// <param name="offPt">
-        ///     TODO The off pt.
+        ///     The off pt.
         /// </param>
         private void AddGhostJoin(OutPt op, IntPoint offPt)
         {
@@ -3046,10 +3172,10 @@ namespace LeagueSharp.SDK.Clipper
 #endif
 
         /// <summary>
-        ///     TODO The insert local minima into ael.
+        ///     The insert local minima into ael.
         /// </summary>
         /// <param name="botY">
-        ///     TODO The bot y.
+        ///     The bot y.
         /// </param>
         private void InsertLocalMinimaIntoAel(long botY)
         {
@@ -3158,13 +3284,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The insert edge into ael.
+        ///     The insert edge into ael.
         /// </summary>
         /// <param name="edge">
-        ///     TODO The edge.
+        ///     The edge.
         /// </param>
         /// <param name="startEdge">
-        ///     TODO The start edge.
+        ///     The start edge.
         /// </param>
         private void InsertEdgeIntoAel(Edge edge, Edge startEdge)
         {
@@ -3174,7 +3300,7 @@ namespace LeagueSharp.SDK.Clipper
                 edge.NextInAel = null;
                 this.mActiveEdges = edge;
             }
-            else if (startEdge == null && this.E2InsertsBeforeE1(this.mActiveEdges, edge))
+            else if (startEdge == null && E2InsertsBeforeE1(this.mActiveEdges, edge))
             {
                 edge.PrevInAel = null;
                 edge.NextInAel = this.mActiveEdges;
@@ -3188,7 +3314,7 @@ namespace LeagueSharp.SDK.Clipper
                     startEdge = this.mActiveEdges;
                 }
 
-                while (startEdge.NextInAel != null && !this.E2InsertsBeforeE1(startEdge.NextInAel, edge))
+                while (startEdge.NextInAel != null && !E2InsertsBeforeE1(startEdge.NextInAel, edge))
                 {
                     startEdge = startEdge.NextInAel;
                 }
@@ -3207,17 +3333,18 @@ namespace LeagueSharp.SDK.Clipper
         // ----------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The e 2 inserts before e 1.
+        ///     Inserts the second edge before the first edge.
         /// </summary>
         /// <param name="e1">
-        ///     TODO The e 1.
+        ///     The first edge.
         /// </param>
         /// <param name="e2">
-        ///     TODO The e 2.
+        ///     The second edge.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
-        private bool E2InsertsBeforeE1(Edge e1, Edge e2)
+        private static bool E2InsertsBeforeE1(Edge e1, Edge e2)
         {
             if (e2.Curr.X == e1.Curr.X)
             {
@@ -3235,12 +3362,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The is even odd fill type.
+        ///     The is even odd fill type.
         /// </summary>
         /// <param name="edge">
-        ///     TODO The edge.
+        ///     The edge.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         private bool IsEvenOddFillType(Edge edge)
         {
@@ -3255,12 +3383,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The is even odd alt fill type.
+        ///     The is even odd alt fill type.
         /// </summary>
         /// <param name="edge">
-        ///     TODO The edge.
+        ///     The edge.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         private bool IsEvenOddAltFillType(Edge edge)
         {
@@ -3275,12 +3404,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The is contributing.
+        ///     The is contributing.
         /// </summary>
         /// <param name="edge">
-        ///     TODO The edge.
+        ///     The edge.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         private bool IsContributing(Edge edge)
         {
@@ -3407,10 +3537,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The set winding count.
+        ///     The set winding count.
         /// </summary>
         /// <param name="edge">
-        ///     TODO The edge.
+        ///     The edge.
         /// </param>
         private void SetWindingCount(Edge edge)
         {
@@ -3544,10 +3674,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The add edge to sel.
+        ///     The add edge to sel.
         /// </summary>
         /// <param name="edge">
-        ///     TODO The edge.
+        ///     The edge.
         /// </param>
         private void AddEdgeToSel(Edge edge)
         {
@@ -3571,7 +3701,7 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The copy aelto sel.
+        ///     The copy aelto sel.
         /// </summary>
         private void CopyAeltoSel()
         {
@@ -3588,13 +3718,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The swap positions in ael.
+        ///     The swap positions in ael.
         /// </summary>
         /// <param name="edge1">
-        ///     TODO The edge 1.
+        ///     The edge 1.
         /// </param>
         /// <param name="edge2">
-        ///     TODO The edge 2.
+        ///     The edge 2.
         /// </param>
         private void SwapPositionsInAel(Edge edge1, Edge edge2)
         {
@@ -3684,13 +3814,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The swap positions in sel.
+        ///     The swap positions in sel.
         /// </summary>
         /// <param name="edge1">
-        ///     TODO The edge 1.
+        ///     The edge 1.
         /// </param>
         /// <param name="edge2">
-        ///     TODO The edge 2.
+        ///     The edge 2.
         /// </param>
         private void SwapPositionsInSel(Edge edge1, Edge edge2)
         {
@@ -3784,16 +3914,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The add local max poly.
+        ///     The add local max poly.
         /// </summary>
         /// <param name="e1">
-        ///     TODO The e 1.
+        ///     The e 1.
         /// </param>
         /// <param name="e2">
-        ///     TODO The e 2.
+        ///     The e 2.
         /// </param>
         /// <param name="pt">
-        ///     TODO The pt.
+        ///     The point.
         /// </param>
         private void AddLocalMaxPoly(Edge e1, Edge e2, IntPoint pt)
         {
@@ -3821,18 +3951,19 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The add local min poly.
+        ///     The add local min poly.
         /// </summary>
         /// <param name="e1">
-        ///     TODO The e 1.
+        ///     The first edge.
         /// </param>
         /// <param name="e2">
-        ///     TODO The e 2.
+        ///     The second edge.
         /// </param>
         /// <param name="pt">
-        ///     TODO The pt.
+        ///     The point.
         /// </param>
         /// <returns>
+        ///     The <see cref="OutPt" />.
         /// </returns>
         private OutPt AddLocalMinPoly(Edge e1, Edge e2, IntPoint pt)
         {
@@ -3870,15 +4001,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The create out rec.
+        ///     The create out rec.
         /// </summary>
         /// <returns>
+        ///     The <see cref="OutRec" />.
         /// </returns>
         private OutRec CreateOutRec()
         {
             var result = new OutRec
                              {
-                                 Idx = Unassigned, IsHole = false, IsOpen = false, FirstLeft = null, Pts = null, 
+                                 Idx = Unassigned, IsHole = false, IsOpen = false, FirstLeft = null, Pts = null,
                                  BottomPt = null, PolyNode = null
                              };
             this.mPolyOuts.Add(result);
@@ -3889,15 +4021,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The add out pt.
+        ///     The add out pt.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge.
         /// </param>
         /// <param name="pt">
-        ///     TODO The pt.
+        ///     The point.
         /// </param>
         /// <returns>
+        ///     The <see cref="OutPt" />.
         /// </returns>
         private OutPt AddOutPt(Edge e, IntPoint pt)
         {
@@ -3951,13 +4084,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The swap points.
+        ///     The swap points.
         /// </summary>
         /// <param name="pt1">
-        ///     TODO The pt 1.
+        ///     The first point.
         /// </param>
         /// <param name="pt2">
-        ///     TODO The pt 2.
+        ///     The second point.
         /// </param>
         internal void SwapPoints(ref IntPoint pt1, ref IntPoint pt2)
         {
@@ -3969,21 +4102,22 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The horz segments overlap.
+        ///     The horz segments overlap.
         /// </summary>
         /// <param name="seg1A">
-        ///     TODO The seg 1 a.
+        ///     The A of the first segment.
         /// </param>
         /// <param name="seg1B">
-        ///     TODO The seg 1 b.
+        ///     The B of the first segment.
         /// </param>
         /// <param name="seg2A">
-        ///     TODO The seg 2 a.
+        ///     The A of the second segment.
         /// </param>
         /// <param name="seg2B">
-        ///     TODO The seg 2 b.
+        ///     The B of the second segment.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         private bool HorzSegmentsOverlap(long seg1A, long seg1B, long seg2A, long seg2B)
         {
@@ -4003,13 +4137,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The set hole state.
+        ///     The set hole state.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge.
         /// </param>
         /// <param name="outRec">
-        ///     TODO The out rec.
+        ///     The out rec.
         /// </param>
         private void SetHoleState(Edge e, OutRec outRec)
         {
@@ -4038,17 +4172,18 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The get dx.
+        ///     The get dx.
         /// </summary>
         /// <param name="pt1">
-        ///     TODO The pt 1.
+        ///     The first point.
         /// </param>
         /// <param name="pt2">
-        ///     TODO The pt 2.
+        ///     The second point.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
-        private double GetDx(IntPoint pt1, IntPoint pt2)
+        private static double GetDx(IntPoint pt1, IntPoint pt2)
         {
             if (pt1.Y == pt2.Y)
             {
@@ -4061,17 +4196,18 @@ namespace LeagueSharp.SDK.Clipper
         // ---------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The first is bottom pt.
+        ///     The first is bottom pt.
         /// </summary>
         /// <param name="btmPt1">
-        ///     TODO The btm pt 1.
+        ///     The btm first point.
         /// </param>
         /// <param name="btmPt2">
-        ///     TODO The btm pt 2.
+        ///     The btm second point.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
-        private bool FirstIsBottomPt(OutPt btmPt1, OutPt btmPt2)
+        private static bool FirstIsBottomPt(OutPt btmPt1, OutPt btmPt2)
         {
             var p = btmPt1.Prev;
             while ((p.Pt == btmPt1.Pt) && (p != btmPt1))
@@ -4079,14 +4215,14 @@ namespace LeagueSharp.SDK.Clipper
                 p = p.Prev;
             }
 
-            var dx1P = Math.Abs(this.GetDx(btmPt1.Pt, p.Pt));
+            var dx1P = Math.Abs(GetDx(btmPt1.Pt, p.Pt));
             p = btmPt1.Next;
             while ((p.Pt == btmPt1.Pt) && (p != btmPt1))
             {
                 p = p.Next;
             }
 
-            var dx1N = Math.Abs(this.GetDx(btmPt1.Pt, p.Pt));
+            var dx1N = Math.Abs(GetDx(btmPt1.Pt, p.Pt));
 
             p = btmPt2.Prev;
             while ((p.Pt == btmPt2.Pt) && (p != btmPt2))
@@ -4094,26 +4230,27 @@ namespace LeagueSharp.SDK.Clipper
                 p = p.Prev;
             }
 
-            var dx2P = Math.Abs(this.GetDx(btmPt2.Pt, p.Pt));
+            var dx2P = Math.Abs(GetDx(btmPt2.Pt, p.Pt));
             p = btmPt2.Next;
             while ((p.Pt == btmPt2.Pt) && (p != btmPt2))
             {
                 p = p.Next;
             }
 
-            var dx2N = Math.Abs(this.GetDx(btmPt2.Pt, p.Pt));
+            var dx2N = Math.Abs(GetDx(btmPt2.Pt, p.Pt));
             return (dx1P >= dx2P && dx1P >= dx2N) || (dx1N >= dx2P && dx1N >= dx2N);
         }
 
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The get bottom pt.
+        ///     The get bottom pt.
         /// </summary>
         /// <param name="pp">
-        ///     TODO The pp.
+        ///     The pp.
         /// </param>
         /// <returns>
+        ///     The <see cref="OutPt" />.
         /// </returns>
         private OutPt GetBottomPt(OutPt pp)
         {
@@ -4150,7 +4287,7 @@ namespace LeagueSharp.SDK.Clipper
                 // there appears to be at least 2 vertices at bottomPt so ...
                 while (dups != p)
                 {
-                    if (!this.FirstIsBottomPt(p, dups))
+                    if (!FirstIsBottomPt(p, dups))
                     {
                         pp = dups;
                     }
@@ -4169,15 +4306,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The get lowermost rec.
+        ///     The get lowermost rec.
         /// </summary>
         /// <param name="outRec1">
-        ///     TODO The out rec 1.
+        ///     The out rec 1.
         /// </param>
         /// <param name="outRec2">
-        ///     TODO The out rec 2.
+        ///     The out rec 2.
         /// </param>
         /// <returns>
+        ///     The <see cref="OutRec" />.
         /// </returns>
         private OutRec GetLowermostRec(OutRec outRec1, OutRec outRec2)
         {
@@ -4224,7 +4362,7 @@ namespace LeagueSharp.SDK.Clipper
                 return outRec1;
             }
 
-            if (this.FirstIsBottomPt(bPt1, bPt2))
+            if (FirstIsBottomPt(bPt1, bPt2))
             {
                 return outRec1;
             }
@@ -4235,17 +4373,18 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The param 1 right of param 2.
+        ///     The param 1 right of param 2.
         /// </summary>
         /// <param name="outRec1">
-        ///     TODO The out rec 1.
+        ///     The out rec 1.
         /// </param>
         /// <param name="outRec2">
-        ///     TODO The out rec 2.
+        ///     The out rec 2.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
-        private bool Param1RightOfParam2(OutRec outRec1, OutRec outRec2)
+        private static bool Param1RightOfParam2(OutRec outRec1, OutRec outRec2)
         {
             do
             {
@@ -4262,12 +4401,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The get out rec.
+        ///     The get out rec.
         /// </summary>
         /// <param name="idx">
-        ///     TODO The idx.
+        ///     The idx.
         /// </param>
         /// <returns>
+        ///     The <see cref="OutRec" />.
         /// </returns>
         private OutRec GetOutRec(int idx)
         {
@@ -4283,13 +4423,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The append polygon.
+        ///     The append polygon.
         /// </summary>
         /// <param name="e1">
-        ///     TODO The e 1.
+        ///     The e 1.
         /// </param>
         /// <param name="e2">
-        ///     TODO The e 2.
+        ///     The e 2.
         /// </param>
         private void AppendPolygon(Edge e1, Edge e2)
         {
@@ -4298,11 +4438,11 @@ namespace LeagueSharp.SDK.Clipper
             var outRec2 = this.mPolyOuts[e2.OutIdx];
 
             OutRec holeStateRec;
-            if (this.Param1RightOfParam2(outRec1, outRec2))
+            if (Param1RightOfParam2(outRec1, outRec2))
             {
                 holeStateRec = outRec2;
             }
-            else if (this.Param1RightOfParam2(outRec2, outRec1))
+            else if (Param1RightOfParam2(outRec2, outRec1))
             {
                 holeStateRec = outRec1;
             }
@@ -4407,10 +4547,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The reverse poly pt links.
+        ///     The reverse poly pt links.
         /// </summary>
         /// <param name="pp">
-        ///     TODO The pp.
+        ///     The pp.
         /// </param>
         private void ReversePolyPtLinks(OutPt pp)
         {
@@ -4433,13 +4573,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The swap sides.
+        ///     The swap sides.
         /// </summary>
         /// <param name="edge1">
-        ///     TODO The edge 1.
+        ///     The edge 1.
         /// </param>
         /// <param name="edge2">
-        ///     TODO The edge 2.
+        ///     The edge 2.
         /// </param>
         private static void SwapSides(Edge edge1, Edge edge2)
         {
@@ -4451,13 +4591,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The swap poly indexes.
+        ///     The swap poly indexes.
         /// </summary>
         /// <param name="edge1">
-        ///     TODO The edge 1.
+        ///     The edge 1.
         /// </param>
         /// <param name="edge2">
-        ///     TODO The edge 2.
+        ///     The edge 2.
         /// </param>
         private static void SwapPolyIndexes(Edge edge1, Edge edge2)
         {
@@ -4469,16 +4609,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The intersect edges.
+        ///     The intersect edges.
         /// </summary>
         /// <param name="e1">
-        ///     TODO The e 1.
+        ///     The e 1.
         /// </param>
         /// <param name="e2">
-        ///     TODO The e 2.
+        ///     The e 2.
         /// </param>
         /// <param name="pt">
-        ///     TODO The pt.
+        ///     The point.
         /// </param>
         private void IntersectEdges(Edge e1, Edge e2, IntPoint pt)
         {
@@ -4751,10 +4891,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The delete from ael.
+        ///     The delete from ael.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge.
         /// </param>
         private void DeleteFromAel(Edge e)
         {
@@ -4786,10 +4926,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The delete from sel.
+        ///     The delete from sel.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge.
         /// </param>
         private void DeleteFromSel(Edge e)
         {
@@ -4821,10 +4961,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The update edge into ael.
+        ///     The update edge into ael.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge.
         /// </param>
         /// <exception cref="ClipperException">
         /// </exception>
@@ -4869,10 +5009,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The process horizontals.
+        ///     The process horizontals.
         /// </summary>
         /// <param name="isTopOfScanbeam">
-        ///     TODO The is top of scanbeam.
+        ///     The is top of scanbeam.
         /// </param>
         private void ProcessHorizontals(bool isTopOfScanbeam)
         {
@@ -4888,19 +5028,19 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The get horz direction.
+        ///     The get horz direction.
         /// </summary>
         /// <param name="horzEdge">
-        ///     TODO The horz edge.
+        ///     The horz edge.
         /// </param>
         /// <param name="dir">
-        ///     TODO The dir.
+        ///     The dir.
         /// </param>
         /// <param name="left">
-        ///     TODO The left.
+        ///     The left.
         /// </param>
         /// <param name="right">
-        ///     TODO The right.
+        ///     The right.
         /// </param>
         private void GetHorzDirection(Edge horzEdge, out Direction dir, out long left, out long right)
         {
@@ -4921,13 +5061,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The process horizontal.
+        ///     The process horizontal.
         /// </summary>
         /// <param name="horzEdge">
-        ///     TODO The horz edge.
+        ///     The horz edge.
         /// </param>
         /// <param name="isTopOfScanbeam">
-        ///     TODO The is top of scanbeam.
+        ///     The is top of scanbeam.
         /// </param>
         private void ProcessHorizontal(Edge horzEdge, bool isTopOfScanbeam)
         {
@@ -4977,9 +5117,9 @@ namespace LeagueSharp.SDK.Clipper
                                 {
                                     if (eNextHorz.OutIdx >= 0
                                         && this.HorzSegmentsOverlap(
-                                            horzEdge.Bot.X, 
-                                            horzEdge.Top.X, 
-                                            eNextHorz.Bot.X, 
+                                            horzEdge.Bot.X,
+                                            horzEdge.Top.X,
+                                            eNextHorz.Bot.X,
                                             eNextHorz.Top.X))
                                     {
                                         var op2 = this.AddOutPt(eNextHorz, eNextHorz.Bot);
@@ -5092,15 +5232,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The get next in ael.
+        ///     The get next in ael.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge.
         /// </param>
         /// <param name="direction">
-        ///     TODO The direction.
+        ///     The direction.
         /// </param>
         /// <returns>
+        ///     The <see cref="Edge" />.
         /// </returns>
         private static Edge GetNextInAel(Edge e, Direction direction)
         {
@@ -5110,15 +5251,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The is maxima.
+        ///     The is maxima.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge.
         /// </param>
         /// <param name="y">
-        ///     TODO The y.
+        ///     The y.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         private static bool IsMaxima(Edge e, double y)
         {
@@ -5128,15 +5270,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The is intermediate.
+        ///     The is intermediate.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge.
         /// </param>
         /// <param name="y">
-        ///     TODO The y.
+        ///     The y.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         private static bool IsIntermediate(Edge e, double y)
         {
@@ -5146,12 +5289,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The get maxima pair.
+        ///     The get maxima pair.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge.
         /// </param>
         /// <returns>
+        ///     The <see cref="Edge" />.
         /// </returns>
         private static Edge GetMaximaPair(Edge e)
         {
@@ -5177,14 +5321,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The process intersections.
+        ///     The process intersections.
         /// </summary>
         /// <param name="topY">
-        ///     TODO The top y.
+        ///     The top y.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         /// <exception cref="ClipperException">
+        ///     Thrown if the clipper was unable to process the intersections.
         /// </exception>
         private bool ProcessIntersections(long topY)
         {
@@ -5224,10 +5370,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The build intersect list.
+        ///     The build intersect list.
         /// </summary>
         /// <param name="topY">
-        ///     TODO The top y.
+        ///     The top y.
         /// </param>
         private void BuildIntersectList(long topY)
         {
@@ -5259,7 +5405,7 @@ namespace LeagueSharp.SDK.Clipper
                     if (e.Curr.X > eNext.Curr.X)
                     {
                         IntPoint pt;
-                        this.IntersectPoint(e, eNext, out pt);
+                        IntersectPoint(e, eNext, out pt);
                         var newNode = new IntersectNode { Edge1 = e, Edge2 = eNext, Pt = pt };
                         this.mIntersectList.Add(newNode);
 
@@ -5288,12 +5434,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The edges adjacent.
+        ///     The edges adjacent.
         /// </summary>
         /// <param name="inode">
-        ///     TODO The inode.
+        ///     The inode.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         private static bool EdgesAdjacent(IntersectNode inode)
         {
@@ -5303,9 +5450,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The fixup intersection order.
+        ///     The fixup intersection order.
         /// </summary>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         private bool FixupIntersectionOrder()
         {
@@ -5345,7 +5493,7 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The process intersect list.
+        ///     The process intersect list.
         /// </summary>
         private void ProcessIntersectList()
         {
@@ -5363,12 +5511,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The round.
+        ///     The round.
         /// </summary>
         /// <param name="value">
-        ///     TODO The value.
+        ///     The value.
         /// </param>
         /// <returns>
+        ///     The <see cref="long" />.
         /// </returns>
         internal static long Round(double value)
         {
@@ -5378,15 +5527,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The top x.
+        ///     The top x.
         /// </summary>
         /// <param name="edge">
-        ///     TODO The edge.
+        ///     The edge.
         /// </param>
         /// <param name="currentY">
-        ///     TODO The current y.
+        ///     The current y.
         /// </param>
         /// <returns>
+        ///     The <see cref="long" />.
         /// </returns>
         private static long TopX(Edge edge, long currentY)
         {
@@ -5401,18 +5551,18 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The intersect point.
+        ///     The intersect point.
         /// </summary>
         /// <param name="edge1">
-        ///     TODO The edge 1.
+        ///     The edge 1.
         /// </param>
         /// <param name="edge2">
-        ///     TODO The edge 2.
+        ///     The edge 2.
         /// </param>
         /// <param name="ip">
-        ///     TODO The ip.
+        ///     The ip.
         /// </param>
-        private void IntersectPoint(Edge edge1, Edge edge2, out IntPoint ip)
+        private static void IntersectPoint(Edge edge1, Edge edge2, out IntPoint ip)
         {
             ip = new IntPoint();
             double b1, b2;
@@ -5480,10 +5630,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The process edges at top of scanbeam.
+        ///     The process edges at top of scanbeam.
         /// </summary>
         /// <param name="topY">
-        ///     TODO The top y.
+        ///     The top y.
         /// </param>
         private void ProcessEdgesAtTopOfScanbeam(long topY)
         {
@@ -5588,12 +5738,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The do maxima.
+        ///     The do maxima.
         /// </summary>
         /// <param name="e">
-        ///     TODO The e.
+        ///     The edge.
         /// </param>
         /// <exception cref="ClipperException">
+        ///     Thrown if the clipper is unable to process the maximum of the edge.
         /// </exception>
         private void DoMaxima(Edge e)
         {
@@ -5677,7 +5828,9 @@ namespace LeagueSharp.SDK.Clipper
         ///     Orientates the specified path.
         /// </summary>
         /// <param name="poly">The path.</param>
-        /// <returns></returns>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
         public static bool Orientation(Path poly)
         {
             return Area(poly) >= 0;
@@ -5686,14 +5839,15 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The point count.
+        ///     The point count.
         /// </summary>
         /// <param name="pts">
-        ///     TODO The pts.
+        ///     The pts.
         /// </param>
         /// <returns>
+        ///     The <see cref="int" />.
         /// </returns>
-        private int PointCount(OutPt pts)
+        private static int PointCount(OutPt pts)
         {
             if (pts == null)
             {
@@ -5714,10 +5868,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The build result.
+        ///     The build result.
         /// </summary>
         /// <param name="polyg">
-        ///     TODO The polyg.
+        ///     The polyg.
         /// </param>
         private void BuildResult(Paths polyg)
         {
@@ -5731,7 +5885,7 @@ namespace LeagueSharp.SDK.Clipper
                 }
 
                 var p = outRec.Pts.Prev;
-                var cnt = this.PointCount(p);
+                var cnt = PointCount(p);
                 if (cnt < 2)
                 {
                     continue;
@@ -5751,10 +5905,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The build result 2.
+        ///     The build result 2.
         /// </summary>
         /// <param name="polytree">
-        ///     TODO The polytree.
+        ///     The polytree.
         /// </param>
         private void BuildResult2(PolyTree polytree)
         {
@@ -5764,7 +5918,7 @@ namespace LeagueSharp.SDK.Clipper
             polytree.MAllPolys.Capacity = this.mPolyOuts.Count;
             foreach (var outRec in this.mPolyOuts)
             {
-                var cnt = this.PointCount(outRec.Pts);
+                var cnt = PointCount(outRec.Pts);
                 if ((outRec.IsOpen && cnt < 2) || (!outRec.IsOpen && cnt < 3))
                 {
                     continue;
@@ -5806,10 +5960,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The fixup out polygon.
+        ///     The fixup out polygon.
         /// </summary>
         /// <param name="outRec">
-        ///     TODO The out rec.
+        ///     The out rec.
         /// </param>
         private void FixupOutPolygon(OutRec outRec)
         {
@@ -5857,15 +6011,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The dup out pt.
+        ///     The dup out pt.
         /// </summary>
         /// <param name="outPt">
-        ///     TODO The out pt.
+        ///     The out pt.
         /// </param>
         /// <param name="insertAfter">
-        ///     TODO The insert after.
+        ///     The insert after.
         /// </param>
         /// <returns>
+        ///     The <see cref="OutPt" />.
         /// </returns>
         private static OutPt DupOutPt(OutPt outPt, bool insertAfter)
         {
@@ -5891,29 +6046,30 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The get overlap.
+        ///     The get overlap.
         /// </summary>
         /// <param name="a1">
-        ///     TODO The a 1.
+        ///     The a 1.
         /// </param>
         /// <param name="a2">
-        ///     TODO The a 2.
+        ///     The a 2.
         /// </param>
         /// <param name="b1">
-        ///     TODO The b 1.
+        ///     The b 1.
         /// </param>
         /// <param name="b2">
-        ///     TODO The b 2.
+        ///     The b 2.
         /// </param>
         /// <param name="left">
-        ///     TODO The left.
+        ///     The left.
         /// </param>
         /// <param name="right">
-        ///     TODO The right.
+        ///     The right.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
-        private bool GetOverlap(long a1, long a2, long b1, long b2, out long left, out long right)
+        private static bool GetOverlap(long a1, long a2, long b1, long b2, out long left, out long right)
         {
             if (a1 < a2)
             {
@@ -5948,29 +6104,30 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The join horz.
+        ///     The join horz.
         /// </summary>
         /// <param name="op1">
-        ///     TODO The op 1.
+        ///     The op 1.
         /// </param>
         /// <param name="op1B">
-        ///     TODO The op 1 b.
+        ///     The op 1 b.
         /// </param>
         /// <param name="op2">
-        ///     TODO The op 2.
+        ///     The op 2.
         /// </param>
         /// <param name="op2B">
-        ///     TODO The op 2 b.
+        ///     The op 2 b.
         /// </param>
         /// <param name="pt">
-        ///     TODO The pt.
+        ///     The point.
         /// </param>
         /// <param name="discardLeft">
-        ///     TODO The discard left.
+        ///     The discard left.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
-        private bool JoinHorz(OutPt op1, OutPt op1B, OutPt op2, OutPt op2B, IntPoint pt, bool discardLeft)
+        private static bool JoinHorz(OutPt op1, OutPt op1B, OutPt op2, OutPt op2B, IntPoint pt, bool discardLeft)
         {
             var dir1 = op1.Pt.X > op1B.Pt.X ? Direction.DRightToLeft : Direction.DLeftToRight;
             var dir2 = op2.Pt.X > op2B.Pt.X ? Direction.DRightToLeft : Direction.DLeftToRight;
@@ -6087,18 +6244,19 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The join points.
+        ///     The join points.
         /// </summary>
         /// <param name="j">
-        ///     TODO The j.
+        ///     The j.
         /// </param>
         /// <param name="outRec1">
-        ///     TODO The out rec 1.
+        ///     The out rec 1.
         /// </param>
         /// <param name="outRec2">
-        ///     TODO The out rec 2.
+        ///     The out rec 2.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         private bool JoinPoints(Join j, OutRec outRec1, OutRec outRec2)
         {
@@ -6207,7 +6365,7 @@ namespace LeagueSharp.SDK.Clipper
                 long left, right;
 
                 // Op1 -. Op1b & Op2 -. Op2b are the extremites of the horizontal edges
-                if (!this.GetOverlap(op1.Pt.X, op1B.Pt.X, op2.Pt.X, op2B.Pt.X, out left, out right))
+                if (!GetOverlap(op1.Pt.X, op1B.Pt.X, op2.Pt.X, op2B.Pt.X, out left, out right))
                 {
                     return false;
                 }
@@ -6240,7 +6398,7 @@ namespace LeagueSharp.SDK.Clipper
 
                 j.OutPt1 = op1;
                 j.OutPt2 = op2;
-                return this.JoinHorz(op1, op1B, op2, op2B, pt, discardLeftSide);
+                return JoinHorz(op1, op1B, op2, op2B, pt, discardLeftSide);
             }
 
             // nb: For non-horizontal joins ...
@@ -6324,9 +6482,15 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Checks if a point is in the polygon.
         /// </summary>
-        /// <param name="pt">The point.</param>
-        /// <param name="path">The path.</param>
-        /// <returns></returns>
+        /// <param name="pt">
+        ///     The point.
+        /// </param>
+        /// <param name="path">
+        ///     The path.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="int" />.
+        /// </returns>
         public static int PointInPolygon(IntPoint pt, Path path)
         {
             // returns 0 if false, +1 if true, -1 if pt ON polygon boundary
@@ -6401,15 +6565,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The point in polygon.
+        ///     The point in polygon.
         /// </summary>
         /// <param name="pt">
-        ///     TODO The pt.
+        ///     The point.
         /// </param>
         /// <param name="op">
-        ///     TODO The op.
+        ///     The op.
         /// </param>
         /// <returns>
+        ///     The <see cref="int" />.
         /// </returns>
         private static int PointInPolygon(IntPoint pt, OutPt op)
         {
@@ -6483,15 +6648,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The poly 2 contains poly 1.
+        ///     The poly 2 contains poly 1.
         /// </summary>
         /// <param name="outPt1">
-        ///     TODO The out pt 1.
+        ///     The out first point.
         /// </param>
         /// <param name="outPt2">
-        ///     TODO The out pt 2.
+        ///     The out second point.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         private static bool Poly2ContainsPoly1(OutPt outPt1, OutPt outPt2)
         {
@@ -6514,13 +6680,13 @@ namespace LeagueSharp.SDK.Clipper
         // ----------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The fixup first lefts 1.
+        ///     The fixup first lefts 1.
         /// </summary>
         /// <param name="oldOutRec">
-        ///     TODO The old out rec.
+        ///     The old out rec.
         /// </param>
         /// <param name="newOutRec">
-        ///     TODO The new out rec.
+        ///     The new out rec.
         /// </param>
         private void FixupFirstLefts1(OutRec oldOutRec, OutRec newOutRec)
         {
@@ -6538,13 +6704,13 @@ namespace LeagueSharp.SDK.Clipper
         // ----------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The fixup first lefts 2.
+        ///     The fixup first lefts 2.
         /// </summary>
         /// <param name="oldOutRec">
-        ///     TODO The old out rec.
+        ///     The old out rec.
         /// </param>
         /// <param name="newOutRec">
-        ///     TODO The new out rec.
+        ///     The new out rec.
         /// </param>
         private void FixupFirstLefts2(OutRec oldOutRec, OutRec newOutRec)
         {
@@ -6557,12 +6723,13 @@ namespace LeagueSharp.SDK.Clipper
         // ----------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The parse first left.
+        ///     The parse first left.
         /// </summary>
         /// <param name="firstLeft">
-        ///     TODO The first left.
+        ///     The first left.
         /// </param>
         /// <returns>
+        ///     The <see cref="OutRec" />.
         /// </returns>
         private static OutRec ParseFirstLeft(OutRec firstLeft)
         {
@@ -6577,7 +6744,7 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The join common edges.
+        ///     The join common edges.
         /// </summary>
         private void JoinCommonEdges()
         {
@@ -6598,11 +6765,11 @@ namespace LeagueSharp.SDK.Clipper
                 {
                     holeStateRec = outRec1;
                 }
-                else if (this.Param1RightOfParam2(outRec1, outRec2))
+                else if (Param1RightOfParam2(outRec1, outRec2))
                 {
                     holeStateRec = outRec2;
                 }
-                else if (this.Param1RightOfParam2(outRec2, outRec1))
+                else if (Param1RightOfParam2(outRec2, outRec1))
                 {
                     holeStateRec = outRec1;
                 }
@@ -6724,10 +6891,10 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The update out pt idxs.
+        ///     The update out pt idxs.
         /// </summary>
         /// <param name="outrec">
-        ///     TODO The outrec.
+        ///     The outrec.
         /// </param>
         private static void UpdateOutPtIdxs(OutRec outrec)
         {
@@ -6743,7 +6910,7 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The do simple polygons.
+        ///     The do simple polygons.
         /// </summary>
         private void DoSimplePolygons()
         {
@@ -6826,8 +6993,12 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Gets the area of the specified polygon.
         /// </summary>
-        /// <param name="poly">The polygon.</param>
-        /// <returns></returns>
+        /// <param name="poly">
+        ///     The polygon.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="double" />.
+        /// </returns>
         public static double Area(Path poly)
         {
             var cnt = poly.Count;
@@ -6849,12 +7020,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The area.
+        ///     The area.
         /// </summary>
         /// <param name="outRec">
-        ///     TODO The out rec.
+        ///     The out rec.
         /// </param>
         /// <returns>
+        ///     The <see cref="double" />.
         /// </returns>
         private static double Area(OutRec outRec)
         {
@@ -6882,9 +7054,15 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Simplifies the polygon.
         /// </summary>
-        /// <param name="poly">The polygon.</param>
-        /// <param name="fillType">Type of the fill.</param>
-        /// <returns></returns>
+        /// <param name="poly">
+        ///     The polygon.
+        /// </param>
+        /// <param name="fillType">
+        ///     Type of the fill.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Paths" />.
+        /// </returns>
         public static Paths SimplifyPolygon(Path poly, PolyFillType fillType = PolyFillType.PftEvenOdd)
         {
             var result = new Paths();
@@ -6899,9 +7077,15 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Simplifies the polygons.
         /// </summary>
-        /// <param name="polys">The polygon.</param>
-        /// <param name="fillType">Type of the fill.</param>
-        /// <returns></returns>
+        /// <param name="polys">
+        ///     The polygon.
+        /// </param>
+        /// <param name="fillType">
+        ///     Type of the fill.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Paths" />.
+        /// </returns>
         public static Paths SimplifyPolygons(Paths polys, PolyFillType fillType = PolyFillType.PftEvenOdd)
         {
             var result = new Paths();
@@ -6914,18 +7098,19 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The distance from line sqrd.
+        ///     The distance from line sqrd.
         /// </summary>
         /// <param name="pt">
-        ///     TODO The pt.
+        ///     The point.
         /// </param>
         /// <param name="ln1">
-        ///     TODO The ln 1.
+        ///     The ln 1.
         /// </param>
         /// <param name="ln2">
-        ///     TODO The ln 2.
+        ///     The ln 2.
         /// </param>
         /// <returns>
+        ///     The <see cref="double" />.
         /// </returns>
         private static double DistanceFromLineSqrd(IntPoint pt, IntPoint ln1, IntPoint ln2)
         {
@@ -6945,21 +7130,22 @@ namespace LeagueSharp.SDK.Clipper
         // ---------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The slopes near collinear.
+        ///     The slopes near collinear.
         /// </summary>
         /// <param name="pt1">
-        ///     TODO The pt 1.
+        ///     The first point.
         /// </param>
         /// <param name="pt2">
-        ///     TODO The pt 2.
+        ///     The second point.
         /// </param>
         /// <param name="pt3">
-        ///     TODO The pt 3.
+        ///     The third point.
         /// </param>
         /// <param name="distSqrd">
-        ///     TODO The dist sqrd.
+        ///     The dist sqrd.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         private static bool SlopesNearCollinear(IntPoint pt1, IntPoint pt2, IntPoint pt3, double distSqrd)
         {
@@ -6997,18 +7183,19 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The points are close.
+        ///     The points are close.
         /// </summary>
         /// <param name="pt1">
-        ///     TODO The pt 1.
+        ///     The first point.
         /// </param>
         /// <param name="pt2">
-        ///     TODO The pt 2.
+        ///     The second point.
         /// </param>
         /// <param name="distSqrd">
-        ///     TODO The dist sqrd.
+        ///     The dist sqrd.
         /// </param>
         /// <returns>
+        ///     The <see cref="bool" />.
         /// </returns>
         private static bool PointsAreClose(IntPoint pt1, IntPoint pt2, double distSqrd)
         {
@@ -7020,12 +7207,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The exclude op.
+        ///     The exclude op.
         /// </summary>
         /// <param name="op">
-        ///     TODO The op.
+        ///     The op.
         /// </param>
         /// <returns>
+        ///     The <see cref="OutPt" />.
         /// </returns>
         private static OutPt ExcludeOp(OutPt op)
         {
@@ -7041,9 +7229,15 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Cleans the polygon.
         /// </summary>
-        /// <param name="path">The path.</param>
-        /// <param name="distance">The distance.</param>
-        /// <returns></returns>
+        /// <param name="path">
+        ///     The path.
+        /// </param>
+        /// <param name="distance">
+        ///     The distance.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Path" />.
+        /// </returns>
         public static Path CleanPolygon(Path path, double distance = 1.415)
         {
             // distance = proximity in units/pixels below which vertices will be stripped. 
@@ -7117,9 +7311,15 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Cleans the polygons.
         /// </summary>
-        /// <param name="polys">The polygon.</param>
-        /// <param name="distance">The distance.</param>
-        /// <returns></returns>
+        /// <param name="polys">
+        ///     The polygon.
+        /// </param>
+        /// <param name="distance">
+        ///     The distance.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Paths" />.
+        /// </returns>
         public static Paths CleanPolygons(Paths polys, double distance = 1.415)
         {
             var result = new Paths(polys.Count);
@@ -7130,21 +7330,22 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The minkowski.
+        ///     The minkowski.
         /// </summary>
         /// <param name="pattern">
-        ///     TODO The pattern.
+        ///     The pattern.
         /// </param>
         /// <param name="path">
-        ///     TODO The path.
+        ///     The path.
         /// </param>
         /// <param name="isSum">
-        ///     TODO The is sum.
+        ///     Indicates whether is the sum.
         /// </param>
         /// <param name="isClosed">
-        ///     TODO The is closed.
+        ///     Indiciates whether is closed.
         /// </param>
         /// <returns>
+        ///     The <see cref="Paths" />.
         /// </returns>
         internal static Paths Minkowski(Path pattern, Path path, bool isSum, bool isClosed)
         {
@@ -7178,8 +7379,8 @@ namespace LeagueSharp.SDK.Clipper
                 {
                     var quad = new Path(4)
                                    {
-                                       result[i % pathCnt][j % polyCnt], result[(i + 1) % pathCnt][j % polyCnt], 
-                                       result[(i + 1) % pathCnt][(j + 1) % polyCnt], 
+                                       result[i % pathCnt][j % polyCnt], result[(i + 1) % pathCnt][j % polyCnt],
+                                       result[(i + 1) % pathCnt][(j + 1) % polyCnt],
                                        result[i % pathCnt][(j + 1) % polyCnt]
                                    };
                     if (!Orientation(quad))
@@ -7199,10 +7400,18 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Gets the Minkowskis sum.
         /// </summary>
-        /// <param name="pattern">The pattern.</param>
-        /// <param name="path">The path.</param>
-        /// <param name="pathIsClosed">Whether the path is closed or not.</param>
-        /// <returns></returns>
+        /// <param name="pattern">
+        ///     The pattern.
+        /// </param>
+        /// <param name="path">
+        ///     The path.
+        /// </param>
+        /// <param name="pathIsClosed">
+        ///     Whether the path is closed or not.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Paths" />.
+        /// </returns>
         public static Paths MinkowskiSum(Path pattern, Path path, bool pathIsClosed)
         {
             var paths = Minkowski(pattern, path, true, pathIsClosed);
@@ -7215,15 +7424,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The translate path.
+        ///     The translate path.
         /// </summary>
         /// <param name="path">
-        ///     TODO The path.
+        ///     The path.
         /// </param>
         /// <param name="delta">
-        ///     TODO The delta.
+        ///     The delta.
         /// </param>
         /// <returns>
+        ///     The <see cref="Path" />.
         /// </returns>
         private static Path TranslatePath(IReadOnlyList<IntPoint> path, IntPoint delta)
         {
@@ -7241,10 +7451,18 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Gets the Minkowskis sum.
         /// </summary>
-        /// <param name="pattern">The pattern.</param>
-        /// <param name="paths">The paths.</param>
-        /// <param name="pathIsClosed">Whether the path is closed or not.</param>
-        /// <returns></returns>
+        /// <param name="pattern">
+        ///     The pattern.
+        /// </param>
+        /// <param name="paths">
+        ///     The paths.
+        /// </param>
+        /// <param name="pathIsClosed">
+        ///     Whether the path is closed or not.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Paths" />.
+        /// </returns>
         public static Paths MinkowskiSum(Path pattern, Paths paths, bool pathIsClosed)
         {
             var solution = new Paths();
@@ -7269,9 +7487,15 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Gets the Minkowskis difference.
         /// </summary>
-        /// <param name="poly1">Polygon 1.</param>
-        /// <param name="poly2">Polygon 2.</param>
-        /// <returns></returns>
+        /// <param name="poly1">
+        ///     Polygon 1.
+        /// </param>
+        /// <param name="poly2">
+        ///     Polygon 2.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Paths" />.
+        /// </returns>
         public static Paths MinkowskiDiff(Path poly1, Path poly2)
         {
             var paths = Minkowski(poly1, poly2, false, true);
@@ -7284,22 +7508,22 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The node type.
+        ///     The node type.
         /// </summary>
         internal enum NodeType
         {
             /// <summary>
-            ///     TODO The nt any.
+            ///     The nt any.
             /// </summary>
-            NtAny, 
+            NtAny,
 
             /// <summary>
-            ///     TODO The nt open.
+            ///     The nt open.
             /// </summary>
-            NtOpen, 
+            NtOpen,
 
             /// <summary>
-            ///     TODO The nt closed.
+            ///     The nt closed.
             /// </summary>
             NtClosed
         };
@@ -7307,8 +7531,12 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Converts a <see cref="PolyTree" /> to a <see cref="Paths" />.
         /// </summary>
-        /// <param name="polytree">The polytree.</param>
-        /// <returns></returns>
+        /// <param name="polytree">
+        ///     The polytree.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Paths" />.
+        /// </returns>
         public static Paths PolyTreeToPaths(PolyTree polytree)
         {
             var result = new Paths { Capacity = polytree.Total };
@@ -7319,16 +7547,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The add poly node to paths.
+        ///     The add poly node to paths.
         /// </summary>
         /// <param name="polynode">
-        ///     TODO The polynode.
+        ///     The polynode.
         /// </param>
         /// <param name="nt">
-        ///     TODO The nt.
+        ///     The nt.
         /// </param>
         /// <param name="paths">
-        ///     TODO The paths.
+        ///     The paths.
         /// </param>
         internal static void AddPolyNodeToPaths(PolyNode polynode, NodeType nt, Paths paths)
         {
@@ -7359,7 +7587,9 @@ namespace LeagueSharp.SDK.Clipper
         ///     Opens the paths from poly tree.
         /// </summary>
         /// <param name="polytree">The polytree.</param>
-        /// <returns></returns>
+        /// <returns>
+        ///     The <see cref="Paths" />.
+        /// </returns>
         public static Paths OpenPathsFromPolyTree(PolyTree polytree)
         {
             var result = new Paths { Capacity = polytree.ChildCount };
@@ -7379,8 +7609,12 @@ namespace LeagueSharp.SDK.Clipper
         /// <summary>
         ///     Gets the closed the paths from poly tree.
         /// </summary>
-        /// <param name="polytree">The <c>polytree</c>.</param>
-        /// <returns><see cref="Paths"/> instance</returns>
+        /// <param name="polytree">
+        ///     The <c>polytree</c>.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Paths" />.
+        /// </returns>
         public static Paths ClosedPathsFromPolyTree(PolyTree polytree)
         {
             var result = new Paths { Capacity = polytree.Total };
@@ -7399,12 +7633,12 @@ namespace LeagueSharp.SDK.Clipper
         #region Constants
 
         /// <summary>
-        ///     TODO The def arc tolerance.
+        ///     The def arc tolerance.
         /// </summary>
         private const double DefArcTolerance = 0.25;
 
         /// <summary>
-        ///     TODO The two pi.
+        ///     The two pi.
         /// </summary>
         private const double TwoPi = Math.PI * 2;
 
@@ -7413,62 +7647,62 @@ namespace LeagueSharp.SDK.Clipper
         #region Fields
 
         /// <summary>
-        ///     TODO The _m normals.
+        ///     The _m normals.
         /// </summary>
         private readonly List<DoublePoint> mNormals = new List<DoublePoint>();
 
         /// <summary>
-        ///     TODO The _m poly nodes.
+        ///     The _m poly nodes.
         /// </summary>
         private readonly PolyNode mPolyNodes = new PolyNode();
 
         /// <summary>
-        ///     TODO The _m cos.
+        ///     The _m cos.
         /// </summary>
         private double mCos;
 
         /// <summary>
-        ///     TODO The _m delta.
+        ///     The _m delta.
         /// </summary>
         private double mDelta;
 
         /// <summary>
-        ///     TODO The _m dest poly.
+        ///     The _m dest poly.
         /// </summary>
         private Path mDestPoly;
 
         /// <summary>
-        ///     TODO The _m dest polys.
+        ///     The _m dest polys.
         /// </summary>
         private Paths mDestPolys;
 
         /// <summary>
-        ///     TODO The _m lowest.
+        ///     The _m lowest.
         /// </summary>
         private IntPoint mLowest;
 
         /// <summary>
-        ///     TODO The _m miter lim.
+        ///     The _m miter lim.
         /// </summary>
         private double mMiterLim;
 
         /// <summary>
-        ///     TODO The _m sin.
+        ///     The _m sin.
         /// </summary>
         private double mSin;
 
         /// <summary>
-        ///     TODO The _m sin a.
+        ///     The _m sin a.
         /// </summary>
         private double mSinA;
 
         /// <summary>
-        ///     TODO The _m src poly.
+        ///     The _m src poly.
         /// </summary>
         private Path mSrcPoly;
 
         /// <summary>
-        ///     TODO The _m steps per rad.
+        ///     The _m steps per rad.
         /// </summary>
         private double mStepsPerRad;
 
@@ -7639,7 +7873,7 @@ namespace LeagueSharp.SDK.Clipper
                 var r = ClipperBase.GetBounds(this.mDestPolys);
                 var outer = new Path(4)
                                 {
-                                    new IntPoint(r.Left - 10, r.Bottom + 10), new IntPoint(r.Right + 10, r.Bottom + 10), 
+                                    new IntPoint(r.Left - 10, r.Bottom + 10), new IntPoint(r.Right + 10, r.Bottom + 10),
                                     new IntPoint(r.Right + 10, r.Top - 10), new IntPoint(r.Left - 10, r.Top - 10)
                                 };
 
@@ -7678,7 +7912,7 @@ namespace LeagueSharp.SDK.Clipper
                 var r = ClipperBase.GetBounds(this.mDestPolys);
                 var outer = new Path(4)
                                 {
-                                    new IntPoint(r.Left - 10, r.Bottom + 10), new IntPoint(r.Right + 10, r.Bottom + 10), 
+                                    new IntPoint(r.Left - 10, r.Bottom + 10), new IntPoint(r.Right + 10, r.Bottom + 10),
                                     new IntPoint(r.Right + 10, r.Top - 10), new IntPoint(r.Left - 10, r.Top - 10)
                                 };
 
@@ -7712,15 +7946,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The get unit normal.
+        ///     The get unit normal.
         /// </summary>
         /// <param name="pt1">
-        ///     TODO The pt 1.
+        ///     The first point.
         /// </param>
         /// <param name="pt2">
-        ///     TODO The pt 2.
+        ///     The second point.
         /// </param>
         /// <returns>
+        ///     The <see cref="DoublePoint" />.
         /// </returns>
         internal static DoublePoint GetUnitNormal(IntPoint pt1, IntPoint pt2)
         {
@@ -7741,12 +7976,13 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The round.
+        ///     The round.
         /// </summary>
         /// <param name="value">
-        ///     TODO The value.
+        ///     The value.
         /// </param>
         /// <returns>
+        ///     The <see cref="long" />.
         /// </returns>
         internal static long Round(double value)
         {
@@ -7756,41 +7992,41 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The do miter.
+        ///     The do miter.
         /// </summary>
         /// <param name="j">
-        ///     TODO The j.
+        ///     The j.
         /// </param>
         /// <param name="k">
-        ///     TODO The k.
+        ///     The k.
         /// </param>
         /// <param name="r">
-        ///     TODO The r.
+        ///     The r.
         /// </param>
         internal void DoMiter(int j, int k, double r)
         {
             var q = this.mDelta / r;
             this.mDestPoly.Add(
                 new IntPoint(
-                    Round(this.mSrcPoly[j].X + (this.mNormals[k].X + this.mNormals[j].X) * q), 
+                    Round(this.mSrcPoly[j].X + (this.mNormals[k].X + this.mNormals[j].X) * q),
                     Round(this.mSrcPoly[j].Y + (this.mNormals[k].Y + this.mNormals[j].Y) * q)));
         }
 
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The do round.
+        ///     The do round.
         /// </summary>
         /// <param name="j">
-        ///     TODO The j.
+        ///     The j.
         /// </param>
         /// <param name="k">
-        ///     TODO The k.
+        ///     The k.
         /// </param>
         internal void DoRound(int j, int k)
         {
             var a = Math.Atan2(
-                this.mSinA, 
+                this.mSinA,
                 this.mNormals[k].X * this.mNormals[j].X + this.mNormals[k].Y * this.mNormals[j].Y);
             var steps = Math.Max(Round(this.mStepsPerRad * Math.Abs(a)), 1);
 
@@ -7799,7 +8035,7 @@ namespace LeagueSharp.SDK.Clipper
             {
                 this.mDestPoly.Add(
                     new IntPoint(
-                        Round(this.mSrcPoly[j].X + x * this.mDelta), 
+                        Round(this.mSrcPoly[j].X + x * this.mDelta),
                         Round(this.mSrcPoly[j].Y + y * this.mDelta)));
                 var x2 = x;
                 x = x * this.mCos - this.mSin * y;
@@ -7808,45 +8044,45 @@ namespace LeagueSharp.SDK.Clipper
 
             this.mDestPoly.Add(
                 new IntPoint(
-                    Round(this.mSrcPoly[j].X + this.mNormals[j].X * this.mDelta), 
+                    Round(this.mSrcPoly[j].X + this.mNormals[j].X * this.mDelta),
                     Round(this.mSrcPoly[j].Y + this.mNormals[j].Y * this.mDelta)));
         }
 
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The do square.
+        ///     The do square.
         /// </summary>
         /// <param name="j">
-        ///     TODO The j.
+        ///     The j.
         /// </param>
         /// <param name="k">
-        ///     TODO The k.
+        ///     The k.
         /// </param>
         internal void DoSquare(int j, int k)
         {
             var dx =
                 Math.Tan(
                     Math.Atan2(
-                        this.mSinA, 
+                        this.mSinA,
                         this.mNormals[k].X * this.mNormals[j].X + this.mNormals[k].Y * this.mNormals[j].Y) / 4);
             this.mDestPoly.Add(
                 new IntPoint(
-                    Round(this.mSrcPoly[j].X + this.mDelta * (this.mNormals[k].X - this.mNormals[k].Y * dx)), 
+                    Round(this.mSrcPoly[j].X + this.mDelta * (this.mNormals[k].X - this.mNormals[k].Y * dx)),
                     Round(this.mSrcPoly[j].Y + this.mDelta * (this.mNormals[k].Y + this.mNormals[k].X * dx))));
             this.mDestPoly.Add(
                 new IntPoint(
-                    Round(this.mSrcPoly[j].X + this.mDelta * (this.mNormals[j].X + this.mNormals[j].Y * dx)), 
+                    Round(this.mSrcPoly[j].X + this.mDelta * (this.mNormals[j].X + this.mNormals[j].Y * dx)),
                     Round(this.mSrcPoly[j].Y + this.mDelta * (this.mNormals[j].Y - this.mNormals[j].X * dx))));
         }
 
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The do offset.
+        ///     The do offset.
         /// </summary>
         /// <param name="delta">
-        ///     TODO The delta.
+        ///     The delta.
         /// </param>
         private void DoOffset(double delta)
         {
@@ -7928,7 +8164,7 @@ namespace LeagueSharp.SDK.Clipper
                         {
                             this.mDestPoly.Add(
                                 new IntPoint(
-                                    Round(this.mSrcPoly[0].X + x * delta), 
+                                    Round(this.mSrcPoly[0].X + x * delta),
                                     Round(this.mSrcPoly[0].Y + y * delta)));
                             var x2 = x;
                             x = x * this.mCos - this.mSin * y;
@@ -7943,7 +8179,7 @@ namespace LeagueSharp.SDK.Clipper
                         {
                             this.mDestPoly.Add(
                                 new IntPoint(
-                                    Round(this.mSrcPoly[0].X + x * delta), 
+                                    Round(this.mSrcPoly[0].X + x * delta),
                                     Round(this.mSrcPoly[0].Y + y * delta)));
                             if (x < 0)
                             {
@@ -8031,11 +8267,11 @@ namespace LeagueSharp.SDK.Clipper
                     {
                         var j = len - 1;
                         pt1 = new IntPoint(
-                            Round(this.mSrcPoly[j].X + this.mNormals[j].X * delta), 
+                            Round(this.mSrcPoly[j].X + this.mNormals[j].X * delta),
                             Round(this.mSrcPoly[j].Y + this.mNormals[j].Y * delta));
                         this.mDestPoly.Add(pt1);
                         pt1 = new IntPoint(
-                            Round(this.mSrcPoly[j].X - this.mNormals[j].X * delta), 
+                            Round(this.mSrcPoly[j].X - this.mNormals[j].X * delta),
                             Round(this.mSrcPoly[j].Y - this.mNormals[j].Y * delta));
                         this.mDestPoly.Add(pt1);
                     }
@@ -8072,11 +8308,11 @@ namespace LeagueSharp.SDK.Clipper
                     if (node.MEndtype == EndType.EtOpenButt)
                     {
                         pt1 = new IntPoint(
-                            Round(this.mSrcPoly[0].X - this.mNormals[0].X * delta), 
+                            Round(this.mSrcPoly[0].X - this.mNormals[0].X * delta),
                             Round(this.mSrcPoly[0].Y - this.mNormals[0].Y * delta));
                         this.mDestPoly.Add(pt1);
                         pt1 = new IntPoint(
-                            Round(this.mSrcPoly[0].X + this.mNormals[0].X * delta), 
+                            Round(this.mSrcPoly[0].X + this.mNormals[0].X * delta),
                             Round(this.mSrcPoly[0].Y + this.mNormals[0].Y * delta));
                         this.mDestPoly.Add(pt1);
                     }
@@ -8101,7 +8337,7 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The fix orientations.
+        ///     The fix orientations.
         /// </summary>
         private void FixOrientations()
         {
@@ -8139,16 +8375,16 @@ namespace LeagueSharp.SDK.Clipper
         // ------------------------------------------------------------------------------
 
         /// <summary>
-        ///     TODO The offset point.
+        ///     The offset point.
         /// </summary>
         /// <param name="j">
-        ///     TODO The j.
+        ///     The j.
         /// </param>
         /// <param name="k">
-        ///     TODO The k.
+        ///     The k.
         /// </param>
         /// <param name="jointype">
-        ///     TODO The jointype.
+        ///     The jointype.
         /// </param>
         private void OffsetPoint(int j, ref int k, JoinType jointype)
         {
@@ -8164,7 +8400,7 @@ namespace LeagueSharp.SDK.Clipper
                     // angle ==> 0 degrees
                     this.mDestPoly.Add(
                         new IntPoint(
-                            Round(this.mSrcPoly[j].X + this.mNormals[k].X * this.mDelta), 
+                            Round(this.mSrcPoly[j].X + this.mNormals[k].X * this.mDelta),
                             Round(this.mSrcPoly[j].Y + this.mNormals[k].Y * this.mDelta)));
                     return;
                 }
@@ -8184,12 +8420,12 @@ namespace LeagueSharp.SDK.Clipper
             {
                 this.mDestPoly.Add(
                     new IntPoint(
-                        Round(this.mSrcPoly[j].X + this.mNormals[k].X * this.mDelta), 
+                        Round(this.mSrcPoly[j].X + this.mNormals[k].X * this.mDelta),
                         Round(this.mSrcPoly[j].Y + this.mNormals[k].Y * this.mDelta)));
                 this.mDestPoly.Add(this.mSrcPoly[j]);
                 this.mDestPoly.Add(
                     new IntPoint(
-                        Round(this.mSrcPoly[j].X + this.mNormals[j].X * this.mDelta), 
+                        Round(this.mSrcPoly[j].X + this.mNormals[j].X * this.mDelta),
                         Round(this.mSrcPoly[j].Y + this.mNormals[j].Y * this.mDelta)));
             }
             else
@@ -8199,8 +8435,7 @@ namespace LeagueSharp.SDK.Clipper
                     case JoinType.JtMiter:
                         {
                             var r = 1
-                                    + (this.mNormals[j].X * this.mNormals[k].X
-                                       + this.mNormals[j].Y * this.mNormals[k].Y);
+                                    + (this.mNormals[j].X * this.mNormals[k].X + this.mNormals[j].Y * this.mNormals[k].Y);
                             if (r >= this.mMiterLim)
                             {
                                 this.DoMiter(j, k, r);

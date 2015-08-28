@@ -19,14 +19,15 @@
 //   Abstract build of a menu component.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
 {
     using System;
     using System.Dynamic;
     using System.Linq;
-    using System.Reflection;
 
     using LeagueSharp.SDK.Core.UI.IMenu.Skins;
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
@@ -244,6 +245,63 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        ///     AMenuComponent conversion operator to a <see cref="bool" />.
+        /// </summary>
+        /// <param name="component">
+        ///     The component
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
+        public static implicit operator bool(AMenuComponent component)
+        {
+            return component.GetValue<MenuBool>().Value;
+        }
+
+        /// <summary>
+        ///     AMenuComponent conversion operator to a <see cref="ColorBGRA" />.
+        /// </summary>
+        /// <param name="component">
+        ///     The component
+        /// </param>
+        /// <returns>
+        ///     The <see cref="ColorBGRA" />.
+        /// </returns>
+        public static implicit operator ColorBGRA(AMenuComponent component)
+        {
+            return component.GetValue<MenuColor>().Color;
+        }
+
+        /// <summary>
+        ///     AMenuComponent conversion operator to a <see cref="Color" />.
+        /// </summary>
+        /// <param name="component">
+        ///     The component
+        /// </param>
+        /// <returns>
+        ///     The <see cref="System.Drawing.Color" />.
+        /// </returns>
+        public static implicit operator System.Drawing.Color(AMenuComponent component)
+        {
+            var color = component.GetValue<MenuColor>().Color;
+            return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
+        /// <summary>
+        ///     AMenuComponent conversion operator to a <see cref="int" />.
+        /// </summary>
+        /// <param name="component">
+        ///     The component
+        /// </param>
+        /// <returns>
+        ///     The <see cref="int" />.
+        /// </returns>
+        public static implicit operator int(AMenuComponent component)
+        {
+            return component.GetValue<MenuSlider>().Value;
+        }
 
         /// <summary>
         ///     Get the value of a child with a certain name.

@@ -19,6 +19,7 @@
 //   A list of values.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Values
 {
     using System;
@@ -41,7 +42,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     The index.
         /// </summary>
-        protected int index;
+        protected int ListIndex;
 
         #endregion
 
@@ -102,7 +103,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             get
             {
-                return this.index;
+                return this.ListIndex;
             }
 
             set
@@ -112,17 +113,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
                 {
                     newValue = 0;
                 }
-                else if (value >= Count)
+                else if (value >= this.Count)
                 {
-                    newValue = Count - 1;
+                    newValue = this.Count - 1;
                 }
                 else
                 {
                     newValue = value;
                 }
-                if (newValue != this.index)
+                if (newValue != this.ListIndex)
                 {
-                    this.index = newValue;
+                    this.ListIndex = newValue;
                     this.FireEvent();
                 }
             }
@@ -173,7 +174,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     /// <summary>
     ///     A list of values with a specific type.
     /// </summary>
-    /// <typeparam name="T">Type of object in the list</typeparam>
+    /// <typeparam name="T">
+    ///     Type of object in the list
+    /// </typeparam>
     [Serializable]
     public class MenuList<T> : MenuList, ISerializable
     {
@@ -194,9 +197,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="name">
         ///     The internal name of this component
         /// </param>
-        /// <param name="displayName">The display name of this component</param>
-        /// <param name="objects">The objects.</param>
-        /// <param name="uniqueString">String used in saving settings</param>
+        /// <param name="displayName">
+        ///     The display name of this component
+        /// </param>
+        /// <param name="objects">
+        ///     The objects.
+        /// </param>
+        /// <param name="uniqueString">
+        ///     String used in saving settings
+        /// </param>
         public MenuList(string name, string displayName, IEnumerable<T> objects, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
@@ -226,10 +235,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="info">
         ///     The information.
         /// </param>
-        /// <param name="context">The context.</param>
+        /// <param name="context">
+        ///     The context.
+        /// </param>
         protected MenuList(SerializationInfo info, StreamingContext context)
         {
-            this.index = (int)info.GetValue("index", typeof(int));
+            this.ListIndex = (int)info.GetValue("index", typeof(int));
         }
 
         #endregion
@@ -285,11 +296,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
             }
             set
             {
-                for (int i = 0; i < Values.Length; i++)
+                for (var i = 0; i < this.Values.Length; i++)
                 {
-                    if (Values[i].Equals(value))
+                    if (this.Values[i].Equals(value))
                     {
-                        Index = i;
+                        this.Index = i;
                         return;
                     }
                 }
@@ -374,7 +385,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Windows Process Messages callback.
         /// </summary>
-        /// <param name="args"><see cref="WindowsKeys" /> data</param>
+        /// <param name="args">
+        ///     <see cref="WindowsKeys" /> data
+        /// </param>
         public override void WndProc(WindowsKeys args)
         {
             this.Handler.OnWndProc(args);
@@ -395,7 +408,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext" />) for this
         ///     serialization.
         /// </param>
-        /// <exception cref="T:System.Security.SecurityException">The caller does not have the required permission. </exception>
+        /// <exception cref="T:System.Security.SecurityException">
+        ///     The caller does not have the required permission. =
+        /// </exception>
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -422,7 +437,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext" />) for this
         ///     serialization.
         /// </param>
-        /// <exception cref="T:System.Security.SecurityException">The caller does not have the required permission. </exception>
+        /// <exception cref="T:System.Security.SecurityException">
+        ///     The caller does not have the required permission. =
+        /// </exception>
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
