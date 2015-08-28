@@ -19,6 +19,7 @@
 //   Menu Interface class, used to control the menu.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu
 {
     using System;
@@ -46,8 +47,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         public static readonly DirectoryInfo ConfigFolder =
             Directory.CreateDirectory(
                 Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
-                    "LS" + Environment.UserName.GetHashCode().ToString("X"), 
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "LS" + Environment.UserName.GetHashCode().ToString("X"),
                     "MenuConfigSDK"));
 
         /// <summary>
@@ -269,6 +270,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
+        ///     OnUpdate event.
+        /// </summary>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        private static void Game_OnUpdate(EventArgs args)
+        {
+            // Do nothing.
+        }
+
+        /// <summary>
         ///     On Draw event.
         /// </summary>
         /// <param name="args">
@@ -326,10 +338,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             var keys = new WindowsKeys(args);
             if (!this.ForcedOpen)
             {
-                if (keys.SingleKey == Keys.ShiftKey)
+                if (keys.SingleKey == Keys.ShiftKey || keys.Key == (Keys.Return | Keys.Shift))
                 {
                     var keyDown = keys.Msg == WindowsMessages.KEYDOWN;
-                    var keyUp = keys.Msg == WindowsMessages.KEYUP;
+                    var keyUp = keys.Msg == WindowsMessages.KEYUP || keys.Msg == WindowsMessages.CHAR;
 
                     if (keyDown)
                     {
@@ -384,17 +396,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                     Console.WriteLine(e.ToString());
                 }
             }
-        }
-
-        /// <summary>
-        ///     OnUpdate event.
-        /// </summary>
-        /// <param name="args">
-        ///     The event data
-        /// </param>
-        private static void Game_OnUpdate(EventArgs args)
-        {
-            // Do nothing.
         }
 
         #endregion
