@@ -22,6 +22,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core
 {
+    using System;
+
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Events;
     using LeagueSharp.SDK.Core.UI.IMenu;
@@ -80,7 +82,7 @@ namespace LeagueSharp.SDK.Core
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Notifications Initialized.");
 
             // Load Damages.
-            Damage.Initialize(Game.Version);
+            Damage.Initialize(Variables.GameVersion);
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Damage Library Initialized.");
 
             // Load Gapcloser.

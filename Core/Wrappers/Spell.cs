@@ -76,7 +76,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Spell" /> class.
-        ///     Instances a new Spell
         /// </summary>
         /// <param name="spellDataWrapper">
         ///     SpellSlot Wrapper

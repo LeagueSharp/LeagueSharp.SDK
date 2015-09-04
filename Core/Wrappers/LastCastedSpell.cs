@@ -19,6 +19,7 @@
 //   Holds information about the last casted spell a unit did.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.Wrappers
 {
     using System.Collections.Generic;
@@ -32,7 +33,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="LastCastedSpellEntry" /> class.
-        ///     Internal Constructor for Last Casted Spell Entry.
         /// </summary>
         /// <param name="args">
         ///     Processed Casted Spell Data
@@ -240,8 +240,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
             if (sender.Owner.IsMe)
             {
                 LastCastPacketSent = new LastCastPacketSentEntry(
-                    args.Slot, 
-                    Variables.TickCount, 
+                    args.Slot,
+                    Variables.TickCount,
                     (args.Target is Obj_AI_Base) ? args.Target.NetworkId : 0);
             }
         }

@@ -52,6 +52,12 @@
     <Reference Include="LeagueSharp">
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CodeAnalysis">
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp">
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -62,6 +68,10 @@
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Net.Http" />
@@ -223,6 +233,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Resources\Damage\5.15.0.333.json" />
+    <None Include="Resources\Damage\5.17.json" />
     <None Include="Resources\Data\Gapclosers.json" />
     <None Include="Third_Party\Clipper\License.txt" />
   </ItemGroup>

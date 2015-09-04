@@ -1,0 +1,414 @@
+{
+    "Aatrox": {
+        "Vars": {
+            "PassiveBase": [ 60, 95, 130, 165, 200 ],
+            "PassiveBonusAd": 1,
+            "QBase": [ 70, 115, 160, 205, 250 ],
+            "QBonusAd": 0.6,
+            "EBase": [ 75, 110, 145, 180, 215 ],
+            "EAP": 0.6,
+            "EBonusAD": 0.6,
+            "RBase": [ 200, 300, 400 ],
+            "RAP": 1
+        },
+        "Passives": {
+            "Blood Price": [
+                "var condition = source.HasBuff(\"AatroxWPower\") && source.HasBuff(\"AatroxWONHPowerBuff\");",
+                "return condition ? PassiveBase[source.Spellbook.GetSpell(SpellSlot.W).Level - 1] + PassiveBonusAd * source.FlatPhysicalDamageMod : 0d;"
+            ]
+        },
+        "Q": {
+            "Stages": 1,
+            "Stage0": [
+                "return Damage.CalculateDamage(source, target, DamageType.Physical, QBase[source.Spellbook.GetSpell(SpellSlot.Q).Level - 1] + QBonusAd * source.FlatPhysicalDamageMod);"
+            ]
+        },
+        "E": {
+            "Stages": 1,
+            "Stage0": [
+                "return Damage.CalculateDamage(source, target, DamageType.Magical, EBase[source.Spellbook.GetSpell(SpellSlot.Q).Level - 1] + EAP * source.TotalMagicalDamage + EBonusAD * source.FlatPhysicalDamageMod);"
+            ]
+        },
+        "R": {
+            "Stages": 1,
+            "Stage0": [
+                "return Damage.CalculateDamage(source, target, DamageType.Magical, RBase[source.Spellbook.GetSpell(SpellSlot.Q).Level - 1] + RAP * source.TotalMagicalDamage);"
+            ]
+        }
+    },
+	"Ahri":{
+		
+	},
+	"Akali":{
+		
+	},
+	"Alistar":{
+		
+	},
+	"Amumu":{
+		
+	},
+	"Anivia":{
+		
+	},
+	"Annie":{
+		
+	},
+	"Ashe":{
+		
+	},
+	"Azir":{
+		
+	},
+	"Bard":{
+		
+	},
+	"Blitzcrank":{
+		
+	},
+	"Brand":{
+		
+	},
+	"Braum":{
+		
+	},
+	"Caitlyn":{
+		
+	},
+	"Cassiopeia":{
+		
+	},
+	"ChoGath":{
+		
+	},
+	"Corki":{
+		
+	},
+	"Darius":{
+		
+	},
+	"Diana":{
+		
+	},
+	"DrMundo":{
+		
+	},
+	"Draven":{
+		
+	},
+	"Ekko":{
+		
+	},
+	"Elise":{
+		
+	},
+	"Evelynn":{
+		
+	},
+	"Ezreal":{
+		
+	},
+	"Fiddlesticks":{
+		
+	},
+	"Fiora":{
+		
+	},
+	"Fizz":{
+		
+	},
+	"Galio":{
+		
+	},
+	"Gangplank":{
+		
+	},
+	"Garen":{
+		
+	},
+	"Gnar":{
+		
+	},
+	"Gragas":{
+		
+	},
+	"Graves":{
+		
+	},
+	"Hecarim":{
+		
+	},
+	"Heimerdinger":{
+		
+	},
+	"Irelia":{
+		
+	},
+	"Janna":{
+		
+	},
+	"JarvanIV":{
+		
+	},
+	"Jax":{
+		
+	},
+	"Jayce":{
+		
+	},
+	"Jinx":{
+		
+	},
+	"Kalista":{
+		
+	},
+	"Karma":{
+		
+	},
+	"Karthus":{
+		
+	},
+	"Kassadin":{
+		
+	},
+	"Katarina":{
+		
+	},
+	"Kayle":{
+		
+	},
+	"Kennen":{
+		
+	},
+	"KhaZix":{
+		
+	},
+	"KogMaw":{
+		
+	},
+	"LeBlanc":{
+		
+	},
+	"LeeSin":{
+		
+	},
+	"Leona":{
+		
+	},
+	"Lissandra":{
+		
+	},
+	"Lucian":{
+		
+	},
+	"Lulu":{
+		
+	},
+	"Lux":{
+		
+	},
+	"Malphite":{
+		
+	},
+	"Malzahar":{
+		
+	},
+	"Maokai":{
+		
+	},
+	"MasterYi":{
+		
+	},
+	"MissFortune":{
+		
+	},
+	"Mordekaiser":{
+		
+	},
+	"Morgana":{
+		
+	},
+	"Nami":{
+		
+	},
+	"Nasus":{
+		
+	},
+	"Nautilus":{
+		
+	},
+	"Nidalee":{
+		
+	},
+	"Nocturne":{
+		
+	},
+	"Nunu":{
+		
+	},
+	"Olaf":{
+		
+	},
+	"Orianna":{
+		
+	},
+	"Pantheon":{
+		
+	},
+	"Poppy":{
+		
+	},
+	"Quinn":{
+		
+	},
+	"Rammus":{
+		
+	},
+	"RekSai":{
+		
+	},
+	"Renekton":{
+		
+	},
+	"Rengar":{
+		
+	},
+	"Riven":{
+		
+	},
+	"Rumble":{
+		
+	},
+	"Ryze":{
+		
+	},
+	"Sejuani":{
+		
+	},
+	"Shaco":{
+		
+	},
+	"Shen":{
+		
+	},
+	"Shyvana":{
+		
+	},
+	"Singed":{
+		
+	},
+	"Sion":{
+		
+	},
+	"Sivir":{
+		
+	},
+	"Skarner":{
+		
+	},
+	"Sona":{
+		
+	},
+	"Soraka":{
+		
+	},
+	"Swain":{
+		
+	},
+	"Syndra":{
+		
+	},
+	"TahmKench":{
+		
+	},
+	"Talon":{
+		
+	},
+	"Taric":{
+		
+	},
+	"Teemo":{
+		
+	},
+	"Thresh":{
+		
+	},
+	"Tristana":{
+		
+	},
+	"Trundle":{
+		
+	},
+	"Tryndamere":{
+		
+	},
+	"TwistedFate":{
+		
+	},
+	"Twitch":{
+		
+	},
+	"Udyr":{
+		
+	},
+	"Urgot":{
+		
+	},
+	"Varus":{
+		
+	},
+	"Vayne":{
+		
+	},
+	"Veigar":{
+		
+	},
+	"VelKoz":{
+		
+	},
+	"Vi":{
+		
+	},
+	"Viktor":{
+		
+	},
+	"Vladimir":{
+		
+	},
+	"Volibear":{
+		
+	},
+	"Warwick":{
+		
+	},
+	"Wukong":{
+		
+	},
+	"Xerath":{
+		
+	},
+	"XinZhao":{
+		
+	},
+	"Yasuo":{
+		
+	},
+	"Yorick":{
+		
+	},
+	"Zac":{
+		
+	},
+	"Zed":{
+		
+	},
+	"Ziggs":{
+		
+	},
+	"Zilean":{
+		
+	},
+	"Zyra":{
+		
+	}
+}
