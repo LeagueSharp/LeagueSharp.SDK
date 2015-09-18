@@ -1,4 +1,4 @@
-﻿// <copyright file="PerformanceType.cs" company="LeagueSharp">
+﻿// <copyright file="GlobalSuppressions.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
 // 
 //    This program is free software: you can redistribute it and/or modify
@@ -15,26 +15,8 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Enumerations
-{
-    /// <summary>
-    ///     Performance Type to log.
-    /// </summary>
-    public enum PerformanceType
-    {
-        /// <summary>
-        ///     Logs the Tick Count(CPU Ticks).
-        /// </summary>
-        TickCount, 
+using System.Diagnostics.CodeAnalysis;
 
-        /// <summary>
-        ///     Logs the number of milliseconds.
-        /// </summary>
-        Milliseconds, 
-
-        /// <summary>
-        ///     Logs the time spanned in TimeSpam format.
-        /// </summary>
-        TimeSpan
-    }
-}
+[assembly:
+    SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1633:File must have header",
+        Justification = "Third Party Library", Scope = "namespace", Target = "~N:LeagueSharp.SDK.Clipper")]

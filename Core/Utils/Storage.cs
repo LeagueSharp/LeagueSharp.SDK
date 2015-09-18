@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Storage.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="Storage.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   The storage, main purpose is to save share-able settings between assemblies.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.Utils
 {
     using System;
@@ -27,7 +23,6 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Runtime.Remoting.Channels;
     using System.Runtime.Serialization;
 
     using LeagueSharp.SDK.Core.Enumerations;
@@ -65,6 +60,34 @@ namespace LeagueSharp.SDK.Core.Utils
         #endregion
 
         #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes static members of the <see cref="Storage" /> class.
+        /// </summary>
+        static Storage()
+        {
+            StoragePath = Path.Combine(Constants.LeagueSharpAppData, "Storage");
+            if (!Directory.Exists(StoragePath))
+            {
+                Directory.CreateDirectory(StoragePath);
+            }
+
+            AppDomain.CurrentDomain.ProcessExit += (sender, args) =>
+                {
+                    foreach (var storage in StorageList)
+                    {
+                        storage.Save();
+                    }
+                };
+
+            AppDomain.CurrentDomain.DomainUnload += (sender, args) =>
+                {
+                    foreach (var storage in StorageList)
+                    {
+                        storage.Save();
+                    }
+                };
+        }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Storage" /> class.
@@ -135,34 +158,6 @@ namespace LeagueSharp.SDK.Core.Utils
             }
         }
 
-        /// <summary>
-        ///     Initializes static members of the <see cref="Storage" /> class.
-        /// </summary>
-        static Storage()
-        {
-            StoragePath = Path.Combine(Constants.LeagueSharpAppData, "Storage");
-            if (!Directory.Exists(StoragePath))
-            {
-                Directory.CreateDirectory(StoragePath);
-            }
-
-            AppDomain.CurrentDomain.ProcessExit += (sender, args) =>
-                {
-                    foreach (var storage in StorageList)
-                    {
-                        storage.Save();
-                    }
-                };
-
-            AppDomain.CurrentDomain.DomainUnload += (sender, args) =>
-                {
-                    foreach (var storage in StorageList)
-                    {
-                        storage.Save();
-                    }
-                };
-        }
-
         #endregion
 
         #region Public Properties
@@ -209,11 +204,68 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <summary>
         ///     Gets or sets the storage path.
         /// </summary>
-        private static string StoragePath { get; set; }
+        private static string StoragePath { get; }
 
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        ///     Checks if a certain storage exists.
+        /// </summary>
+        /// <param name="storageName">
+        ///     The storage name.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
+        public static bool Exists(string storageName = "Generic")
+        {
+            if (Path.GetInvalidFileNameChars().Any(storageName.Contains))
+            {
+                throw new InvalidDataException("Storage name can't have invalid file name characters.");
+            }
+
+            return File.Exists(Path.Combine(StoragePath, storageName + ".storage"));
+        }
+
+        /// <summary>
+        ///     Loads a saved storage.
+        /// </summary>
+        /// <param name="storageName">
+        ///     Storage name
+        /// </param>
+        /// <param name="types">
+        ///     The types.
+        /// </param>
+        /// <returns>
+        ///     The storage instance.
+        /// </returns>
+        public static Storage Load(string storageName = "Generic", List<Type> types = null)
+        {
+            if (Path.GetInvalidFileNameChars().Any(storageName.Contains))
+            {
+                throw new InvalidDataException("Storage name can't have invalid file name characters.");
+            }
+
+            var path = Path.Combine(StoragePath, storageName + ".storage");
+            if (File.Exists(path))
+            {
+                using (var stream = File.OpenRead(path))
+                {
+                    var bytes = new byte[stream.Length];
+                    stream.Read(bytes, 0, bytes.Length);
+
+                    var storageInstance = BinarySerializer.Deserialize<Storage>(bytes);
+                    storageInstance.StorageTypes = types ?? new List<Type>();
+                    StorageList.Add(storageInstance);
+
+                    return storageInstance;
+                }
+            }
+
+            return null;
+        }
 
         /// <summary>
         ///     Add a content to the storage.
@@ -353,63 +405,6 @@ namespace LeagueSharp.SDK.Core.Utils
             }
 
             return false;
-        }
-
-        /// <summary>
-        ///     Checks if a certain storage exists.
-        /// </summary>
-        /// <param name="storageName">
-        ///     The storage name.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="bool" />.
-        /// </returns>
-        public static bool Exists(string storageName = "Generic")
-        {
-            if (Path.GetInvalidFileNameChars().Any(storageName.Contains))
-            {
-                throw new InvalidDataException("Storage name can't have invalid file name characters.");
-            }
-
-            return File.Exists(Path.Combine(StoragePath, storageName + ".storage"));
-        }
-
-        /// <summary>
-        ///     Loads a saved storage.
-        /// </summary>
-        /// <param name="storageName">
-        ///     Storage name
-        /// </param>
-        /// <param name="types">
-        ///     The types.
-        /// </param>
-        /// <returns>
-        ///     The storage instance.
-        /// </returns>
-        public static Storage Load(string storageName = "Generic", List<Type> types = null)
-        {
-            if (Path.GetInvalidFileNameChars().Any(storageName.Contains))
-            {
-                throw new InvalidDataException("Storage name can't have invalid file name characters.");
-            }
-
-            var path = Path.Combine(StoragePath, storageName + ".storage");
-            if (File.Exists(path))
-            {
-                using (var stream = File.OpenRead(path))
-                {
-                    var bytes = new byte[stream.Length];
-                    stream.Read(bytes, 0, bytes.Length);
-
-                    var storageInstance = BinarySerializer.Deserialize<Storage>(bytes);
-                    storageInstance.StorageTypes = types ?? new List<Type>();
-                    StorageList.Add(storageInstance);
-
-                    return storageInstance;
-                }
-            }
-
-            return null;
         }
 
         #endregion

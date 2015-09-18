@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Vector3Extensions.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="Vector3Extensions.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   SharpDX/Vector3 Extensions
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.Extensions.SharpDX
 {
     using System;
@@ -220,7 +216,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Extended Vector3</returns>
         public static Vector3 Extend(this Vector3 vector3, Vector3 toVector3, float distance)
         {
-            return vector3 + distance * (toVector3 - vector3).Normalized();
+            return vector3 + (distance * (toVector3 - vector3).Normalized());
         }
 
         /// <summary>
@@ -232,7 +228,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Extended Vector3</returns>
         public static Vector3 Extend(this Vector3 vector3, Vector2 toVector2, float distance)
         {
-            return vector3 + distance * (toVector2.ToVector3(vector3.Z) - vector3).Normalized();
+            return vector3 + (distance * (toVector2.ToVector3(vector3.Z) - vector3).Normalized());
         }
 
         /// <summary>
@@ -244,7 +240,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Extended Vector3</returns>
         public static Vector3 Extend(this Vector3 vector3, Vector4 toVector4, float distance)
         {
-            return vector3 + distance * (toVector4.ToVector3() - vector3).Normalized();
+            return vector3 + (distance * (toVector4.ToVector3() - vector3).Normalized());
         }
 
         /// <summary>
@@ -447,8 +443,8 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
             var sin = Math.Sin(angle);
 
             return new Vector3(
-                (float)(vector3.X * cos - vector3.Y * sin), 
-                (float)(vector3.Y * cos + vector3.X * sin), 
+                (float)((vector3.X * cos) - (vector3.Y * sin)), 
+                (float)((vector3.Y * cos) + (vector3.X * sin)), 
                 vector3.Z);
         }
 

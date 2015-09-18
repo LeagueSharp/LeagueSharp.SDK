@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConvexHull.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="ConvexHull.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   Provides methods for finding the minimum enclosing circles.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.Math
 {
     using System;
@@ -77,7 +73,7 @@ namespace LeagueSharp.SDK.Core.Math
                     var testCenter = new Vector2((hull[i].X + hull[j].X) / 2f, (hull[i].Y + hull[j].Y) / 2f);
                     var dx = testCenter.X - hull[i].X;
                     var dy = testCenter.Y - hull[i].Y;
-                    var testRadius2 = dx * dx + dy * dy;
+                    var testRadius2 = (dx * dx) + (dy * dy);
 
                     // See if this circle would be an improvement.
                     if (!(testRadius2 < bestRadius2))
@@ -192,7 +188,7 @@ namespace LeagueSharp.SDK.Core.Math
 
             // Start wrapping up the other points.
             float sweepAngle = 0;
-            for (;;)
+            for (; ;)
             {
                 // If all of the points are on the hull, we're done.
                 if (points.Count == 0)
@@ -312,7 +308,7 @@ namespace LeagueSharp.SDK.Core.Math
             return (from point in points.Where((t, i) => (i != skip1) && (i != skip2) && (i != skip3))
                     let dx = center.X - point.X
                     let dy = center.Y - point.Y
-                    select dx * dx + dy * dy).All(testRadius2 => !(testRadius2 > radius2));
+                    select (dx * dx) + (dy * dy)).All(testRadius2 => !(testRadius2 > radius2));
         }
 
         /// <summary>
@@ -338,13 +334,13 @@ namespace LeagueSharp.SDK.Core.Math
             var dx2 = -(c.Y - b.Y);
 
             // See where the lines intersect.
-            var cx = (y1 * dx1 * dx2 + x2 * dx1 * dy2 - x1 * dy1 * dx2 - y2 * dx1 * dx2) / (dx1 * dy2 - dy1 * dx2);
-            var cy = (cx - x1) * dy1 / dx1 + y1;
+            var cx = ((y1 * dx1 * dx2) + (x2 * dx1 * dy2) - (x1 * dy1 * dx2) - (y2 * dx1 * dx2)) / ((dx1 * dy2) - (dy1 * dx2));
+            var cy = ((cx - x1) * dy1 / dx1) + y1;
             center = new Vector2(cx, cy);
 
             var dx = cx - a.X;
             var dy = cy - a.Y;
-            radius2 = dx * dx + dy * dy;
+            radius2 = (dx * dx) + (dy * dy);
         }
 
         /// <summary>

@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Menu.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="Menu.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   Menu Value Changed delegate
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu
 {
     using System;
@@ -27,8 +23,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     using System.Linq;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins;
     using LeagueSharp.SDK.Core.Utils;
@@ -196,13 +190,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <value>
         ///     The width.
         /// </value>
-        public override int Width
-        {
-            get
-            {
-                return this.Handler.Width();
-            }
-        }
+        public override int Width => this.Handler.Width();
 
         #endregion
 
@@ -236,7 +224,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         ///     <see cref="AMenuComponent" /> component
         /// </param>
         /// <returns>
-        ///     The <see cref="AMenuComponent"/> instance.
+        ///     The <see cref="AMenuComponent" /> instance.
         /// </returns>
         public virtual T Add<T>(T component) where T : AMenuComponent
         {
@@ -365,39 +353,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         public override void OnWndProc(WindowsKeys args)
         {
             this.Handler.OnWndProc(args);
-            
 
             // Pass OnWndProc on to children
             foreach (var item in this.Components)
             {
                 item.Value.OnWndProc(args);
-            }
-        }
-
-        /// <summary>
-        /// Toggles this menu component.
-        /// </summary>
-        public void Toggle()
-        {
-            if (this.Components.Count > 0)
-            {
-                this.Toggled = !this.Toggled;
-
-                // Toggling siblings logic
-                if (this.Parent == null)
-                {
-                    foreach (var rootComponent in MenuManager.Instance.Menus.Where(c => !c.Equals(this)))
-                    {
-                        rootComponent.Toggled = false;
-                    }
-                }
-                else
-                {
-                    foreach (var comp in this.Parent.Components.Where(comp => comp.Value.Name != this.Name))
-                    {
-                        comp.Value.Toggled = false;
-                    }
-                } 
             }
         }
 
@@ -456,6 +416,33 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
+        /// <summary>
+        ///     Toggles this menu component.
+        /// </summary>
+        public void Toggle()
+        {
+            if (this.Components.Count > 0)
+            {
+                this.Toggled = !this.Toggled;
+
+                // Toggling siblings logic
+                if (this.Parent == null)
+                {
+                    foreach (var rootComponent in MenuManager.Instance.Menus.Where(c => !c.Equals(this)))
+                    {
+                        rootComponent.Toggled = false;
+                    }
+                }
+                else
+                {
+                    foreach (var comp in this.Parent.Components.Where(comp => comp.Value.Name != this.Name))
+                    {
+                        comp.Value.Toggled = false;
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -468,10 +455,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </param>
         internal void FireEvent(MenuItem sender)
         {
-            if (this.MenuValueChanged != null)
-            {
-                this.MenuValueChanged(sender, new MenuValueChangedEventArgs(this, sender));
-            }
+            this.MenuValueChanged?.Invoke(sender, new MenuValueChangedEventArgs(this, sender));
         }
 
         /// <summary>

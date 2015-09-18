@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Polygon.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="Polygon.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   Base class representing a polygon.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.Math.Polygons
 {
     using System.Collections.Generic;
@@ -36,32 +32,12 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
     /// </summary>
     public class Polygon
     {
-        #region Fields
-
-        /// <summary>
-        ///     Local list of all points in the polygon.
-        /// </summary>
-        private List<Vector2> points = new List<Vector2>();
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the list of all points in the polygon.
+        ///     Gets or sets the list of all points in the polygon.
         /// </summary>
-        public List<Vector2> Points
-        {
-            get
-            {
-                return this.points;
-            }
-
-            set
-            {
-                this.points = value;
-            }
-        }
+        public List<Vector2> Points { get; set; } = new List<Vector2>();
 
         #endregion
 
@@ -107,8 +83,13 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
             for (var i = 0; i <= this.Points.Count - 1; i++)
             {
                 var nextIndex = (this.Points.Count - 1 == i) ? 0 : (i + 1);
-                var from = Drawing.WorldToScreen(this.Points[i].ToVector3(NavMesh.GetHeightForPosition(this.Points[i].X, this.Points[i].Y)));
-                var to = Drawing.WorldToScreen(this.Points[nextIndex].ToVector3(NavMesh.GetHeightForPosition(this.Points[i].X, this.Points[i].Y)));
+                var from =
+                    Drawing.WorldToScreen(
+                        this.Points[i].ToVector3(NavMesh.GetHeightForPosition(this.Points[i].X, this.Points[i].Y)));
+                var to =
+                    Drawing.WorldToScreen(
+                        this.Points[nextIndex].ToVector3(
+                            NavMesh.GetHeightForPosition(this.Points[i].X, this.Points[i].Y)));
 
                 Drawing.DrawLine(from[0], from[1], to[0], to[1], width, color);
             }

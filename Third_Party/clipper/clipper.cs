@@ -1,19 +1,18 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Clipper.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="Clipper.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 // <summary>
 //   Author    :  Angus Johnson
@@ -60,7 +59,6 @@
 //   use_deprecated: Enables temporary support for the obsolete functions
 //   #define use_deprecated
 // </summary>
-// --------------------------------------------------------------------------------------------------------------------
 
 namespace LeagueSharp.SDK.Clipper
 {
@@ -266,13 +264,7 @@ namespace LeagueSharp.SDK.Clipper
         /// <value>
         ///     The child count.
         /// </value>
-        public int ChildCount
-        {
-            get
-            {
-                return this.MChilds.Count;
-            }
-        }
+        public int ChildCount => this.MChilds.Count;
 
         /// <summary>
         ///     Gets the childs.
@@ -280,13 +272,7 @@ namespace LeagueSharp.SDK.Clipper
         /// <value>
         ///     The childs.
         /// </value>
-        public List<PolyNode> Childs
-        {
-            get
-            {
-                return this.MChilds;
-            }
-        }
+        public List<PolyNode> Childs => this.MChilds;
 
         /// <summary>
         ///     Gets the contour.
@@ -294,13 +280,7 @@ namespace LeagueSharp.SDK.Clipper
         /// <value>
         ///     The contour.
         /// </value>
-        public Path Contour
-        {
-            get
-            {
-                return this.MPolygon;
-            }
-        }
+        public Path Contour => this.MPolygon;
 
         /// <summary>
         ///     Gets a value indicating whether this instance is hole.
@@ -308,13 +288,7 @@ namespace LeagueSharp.SDK.Clipper
         /// <value>
         ///     <c>true</c> if this instance is hole; otherwise, <c>false</c>.
         /// </value>
-        public bool IsHole
-        {
-            get
-            {
-                return this.IsHoleNode();
-            }
-        }
+        public bool IsHole => this.IsHoleNode();
 
         /// <summary>
         ///     Gets or sets a value indicating whether this instance is open.
@@ -330,13 +304,7 @@ namespace LeagueSharp.SDK.Clipper
         /// <value>
         ///     The parent.
         /// </value>
-        public PolyNode Parent
-        {
-            get
-            {
-                return this.MParent;
-            }
-        }
+        public PolyNode Parent => this.MParent;
 
         #endregion
 
@@ -527,7 +495,7 @@ namespace LeagueSharp.SDK.Clipper
             // nb: see comments in clipper.pas
             var a = int1Hi * int2Hi;
             var b = int1Lo * int2Lo;
-            var c = int1Hi * int2Lo + int1Lo * int2Hi;
+            var c = (int1Hi * int2Lo) + (int1Lo * int2Hi);
 
             ulong lo;
             var hi = (long)(a + (c >> 32));
@@ -584,7 +552,7 @@ namespace LeagueSharp.SDK.Clipper
         /// </returns>
         public static bool operator ==(Int128 val1, Int128 val2)
         {
-            return (object)val1 == (object)val2 || val1.hi == val2.hi && val1.lo == val2.lo;
+            return (object)val1 == (object)val2 || (val1.hi == val2.hi && val1.lo == val2.lo);
         }
 
         /// <summary>
@@ -600,8 +568,8 @@ namespace LeagueSharp.SDK.Clipper
         {
             const double Shift64 = 18446744073709551616.0; // 2^64
             return val.hi < 0
-                       ? (val.lo == 0 ? val.hi * Shift64 : -(~val.lo + ~val.hi * Shift64))
-                       : val.lo + val.hi * Shift64;
+                       ? (val.lo == 0 ? val.hi * Shift64 : -(~val.lo + (~val.hi * Shift64)))
+                       : val.lo + (val.hi * Shift64);
         }
 
         /// <summary>
@@ -736,7 +704,7 @@ namespace LeagueSharp.SDK.Clipper
         }
 
         #endregion
-    };
+    }
 
     // ------------------------------------------------------------------------------
     // ------------------------------------------------------------------------------
@@ -769,6 +737,8 @@ namespace LeagueSharp.SDK.Clipper
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
         /// <param name="z">The z.</param>
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias",
+            Justification = "Can be changed by a pre-processor definition.")]
         public IntPoint(cInt x, cInt y, cInt z = 0)
         {
             X = x;
@@ -782,6 +752,8 @@ namespace LeagueSharp.SDK.Clipper
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
         /// <param name="z">The z.</param>
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias",
+            Justification = "Can be changed by a pre-processor definition.")]
         public IntPoint(double x, double y, double z = 0)
         {
             X = (cInt) x;
@@ -793,6 +765,8 @@ namespace LeagueSharp.SDK.Clipper
         ///     Initializes a new instance of the <see cref="IntPoint"/> struct.
         /// </summary>
         /// <param name="dp">The dp.</param>
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias",
+            Justification = "Can be changed by a pre-processor definition.")]
         public IntPoint(DoublePoint dp)
         {
             X = (cInt) dp.X;
@@ -829,6 +803,8 @@ namespace LeagueSharp.SDK.Clipper
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias",
+            Justification = "Can be changed by a pre-processor definition.")]
         public IntPoint(double x, double y)
         {
             this.X = (cInt)x;
@@ -876,11 +852,11 @@ namespace LeagueSharp.SDK.Clipper
         }
 
         /// <summary>
-        ///     Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        ///     Determines whether the specified <see cref="object" />, is equal to this instance.
         /// </summary>
-        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
         /// <returns>
-        ///     <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        ///     <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {
@@ -1726,7 +1702,7 @@ namespace LeagueSharp.SDK.Clipper
                 return Int128.Int128Mul(pt1.Y - pt2.Y, pt2.X - pt3.X) == Int128.Int128Mul(pt1.X - pt2.X, pt2.Y - pt3.Y);
             }
 
-            return (pt1.Y - pt2.Y) * (pt2.X - pt3.X) - (pt1.X - pt2.X) * (pt2.Y - pt3.Y) == 0;
+            return ((pt1.Y - pt2.Y) * (pt2.X - pt3.X)) - ((pt1.X - pt2.X) * (pt2.Y - pt3.Y)) == 0;
         }
 
         // ------------------------------------------------------------------------------
@@ -1759,7 +1735,7 @@ namespace LeagueSharp.SDK.Clipper
                 return Int128.Int128Mul(pt1.Y - pt2.Y, pt3.X - pt4.X) == Int128.Int128Mul(pt1.X - pt2.X, pt3.Y - pt4.Y);
             }
 
-            return (pt1.Y - pt2.Y) * (pt3.X - pt4.X) - (pt1.X - pt2.X) * (pt3.Y - pt4.Y) == 0;
+            return ((pt1.Y - pt2.Y) * (pt3.X - pt4.X)) - ((pt1.X - pt2.X) * (pt3.Y - pt4.Y)) == 0;
         }
 
         // ------------------------------------------------------------------------------
@@ -1911,7 +1887,7 @@ namespace LeagueSharp.SDK.Clipper
         /// </returns>
         private static Edge FindNextLocMin(Edge e)
         {
-            for (;;)
+            for (; ;)
             {
                 while (e.Bot != e.Prev.Bot || e.Curr == e.Top)
                 {
@@ -2203,7 +2179,7 @@ namespace LeagueSharp.SDK.Clipper
 
             // 2. Remove duplicate vertices, and (when closed) collinear edges ...
             Edge e = eStart, eLoopStop = eStart;
-            for (;;)
+            for (; ;)
             {
                 // nb: allows matching start and end points when not Closed ...
                 if (e.Curr == e.Next.Curr)
@@ -2290,7 +2266,7 @@ namespace LeagueSharp.SDK.Clipper
                 e = e.Next;
             }
 
-            for (;;)
+            for (; ;)
             {
                 e = FindNextLocMin(e);
                 if (e == eMin)
@@ -2627,6 +2603,7 @@ namespace LeagueSharp.SDK.Clipper
     public class Clipper : ClipperBase
     {
         // InitOptions that can be passed to the constructor ...
+
         /// <summary>
         ///     Reverses the solution
         /// </summary>
@@ -5087,7 +5064,7 @@ namespace LeagueSharp.SDK.Clipper
                 eMaxPair = GetMaximaPair(eLastHorz);
             }
 
-            for (;;)
+            for (; ;)
             {
                 var isLastHorz = horzEdge == eLastHorz;
                 var e = GetNextInAel(horzEdge, dir);
@@ -5519,6 +5496,8 @@ namespace LeagueSharp.SDK.Clipper
         /// <returns>
         ///     The <see cref="long" />.
         /// </returns>
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias",
+            Justification = "Can be changed by a pre-processor definition.")]
         internal static long Round(double value)
         {
             return value < 0 ? (cInt)(value - 0.5) : (cInt)(value + 0.5);
@@ -5586,7 +5565,7 @@ namespace LeagueSharp.SDK.Clipper
                 else
                 {
                     b2 = edge2.Bot.Y - (edge2.Bot.X / edge2.Dx);
-                    ip.Y = Round(ip.X / edge2.Dx + b2);
+                    ip.Y = Round((ip.X / edge2.Dx) + b2);
                 }
             }
             else if (edge2.Delta.X == 0)
@@ -5599,16 +5578,16 @@ namespace LeagueSharp.SDK.Clipper
                 else
                 {
                     b1 = edge1.Bot.Y - (edge1.Bot.X / edge1.Dx);
-                    ip.Y = Round(ip.X / edge1.Dx + b1);
+                    ip.Y = Round((ip.X / edge1.Dx) + b1);
                 }
             }
             else
             {
-                b1 = edge1.Bot.X - edge1.Bot.Y * edge1.Dx;
-                b2 = edge2.Bot.X - edge2.Bot.Y * edge2.Dx;
+                b1 = edge1.Bot.X - (edge1.Bot.Y * edge1.Dx);
+                b2 = edge2.Bot.X - (edge2.Bot.Y * edge2.Dx);
                 var q = (b2 - b1) / (edge1.Dx - edge2.Dx);
                 ip.Y = Round(q);
-                ip.X = Math.Abs(edge1.Dx) < Math.Abs(edge2.Dx) ? Round(edge1.Dx * q + b1) : Round(edge2.Dx * q + b2);
+                ip.X = Math.Abs(edge1.Dx) < Math.Abs(edge2.Dx) ? Round((edge1.Dx * q) + b1) : Round((edge2.Dx * q) + b2);
             }
 
             if (ip.Y < edge1.Top.Y || ip.Y < edge2.Top.Y)
@@ -5946,7 +5925,7 @@ namespace LeagueSharp.SDK.Clipper
                     outRec.PolyNode.IsOpen = true;
                     polytree.AddChild(outRec.PolyNode);
                 }
-                else if (outRec.FirstLeft != null && outRec.FirstLeft.PolyNode != null)
+                else if (outRec.FirstLeft?.PolyNode != null)
                 {
                     outRec.FirstLeft.PolyNode.AddChild(outRec.PolyNode);
                 }
@@ -5972,7 +5951,7 @@ namespace LeagueSharp.SDK.Clipper
             OutPt lastOk = null;
             outRec.BottomPt = null;
             var pp = outRec.Pts;
-            for (;;)
+            for (; ;)
             {
                 if (pp.Prev == pp || pp.Prev == pp.Next)
                 {
@@ -6524,8 +6503,8 @@ namespace LeagueSharp.SDK.Clipper
                         }
                         else
                         {
-                            var d = (double)(ip.X - pt.X) * (ipNext.Y - pt.Y)
-                                    - (double)(ipNext.X - pt.X) * (ip.Y - pt.Y);
+                            var d = ((double)(ip.X - pt.X) * (ipNext.Y - pt.Y))
+                                    - ((double)(ipNext.X - pt.X) * (ip.Y - pt.Y));
                             if (Math.Abs(d) < float.Epsilon)
                             {
                                 return -1;
@@ -6541,8 +6520,8 @@ namespace LeagueSharp.SDK.Clipper
                     {
                         if (ipNext.X > pt.X)
                         {
-                            var d = (double)(ip.X - pt.X) * (ipNext.Y - pt.Y)
-                                    - (double)(ipNext.X - pt.X) * (ip.Y - pt.Y);
+                            var d = ((double)(ip.X - pt.X) * (ipNext.Y - pt.Y))
+                                    - ((double)(ipNext.X - pt.X) * (ip.Y - pt.Y));
                             if (Math.Abs(d) < float.Epsilon)
                             {
                                 return -1;
@@ -6608,7 +6587,8 @@ namespace LeagueSharp.SDK.Clipper
                         }
                         else
                         {
-                            var d = (double)(poly0X - ptx) * (poly1Y - pty) - (double)(poly1X - ptx) * (poly0Y - pty);
+                            var d = ((double)(poly0X - ptx) * (poly1Y - pty))
+                                    - ((double)(poly1X - ptx) * (poly0Y - pty));
                             if (Math.Abs(d) < float.Epsilon)
                             {
                                 return -1;
@@ -6624,7 +6604,8 @@ namespace LeagueSharp.SDK.Clipper
                     {
                         if (poly1X > ptx)
                         {
-                            var d = (double)(poly0X - ptx) * (poly1Y - pty) - (double)(poly1X - ptx) * (poly0Y - pty);
+                            var d = ((double)(poly0X - ptx) * (poly1Y - pty))
+                                    - ((double)(poly1X - ptx) * (poly0Y - pty));
                             if (Math.Abs(d) < float.Epsilon)
                             {
                                 return -1;
@@ -6923,6 +6904,7 @@ namespace LeagueSharp.SDK.Clipper
                 {
                     continue;
                 }
+
                 do
                 {
                     // for each Pt in Polygon until duplicate found do ...
@@ -7039,7 +7021,7 @@ namespace LeagueSharp.SDK.Clipper
             double a = 0;
             do
             {
-                a = a + (op.Prev.Pt.X + op.Pt.X) * (double)(op.Prev.Pt.Y - op.Pt.Y);
+                a = a + ((op.Prev.Pt.X + op.Pt.X) * (double)(op.Prev.Pt.Y - op.Pt.Y));
                 op = op.Next;
             }
             while (op != outRec.Pts);
@@ -7122,9 +7104,9 @@ namespace LeagueSharp.SDK.Clipper
             // see http://en.wikipedia.org/wiki/Perpendicular_distance
             double a = ln1.Y - ln2.Y;
             double b = ln2.X - ln1.X;
-            var c = a * ln1.X + b * ln1.Y;
-            c = a * pt.X + b * pt.Y - c;
-            return (c * c) / (a * a + b * b);
+            var c = (a * ln1.X) + (b * ln1.Y);
+            c = (a * pt.X) + (b * pt.Y) - c;
+            return (c * c) / ((a * a) + (b * b));
         }
 
         // ---------------------------------------------------------------------------
@@ -7526,7 +7508,7 @@ namespace LeagueSharp.SDK.Clipper
             ///     The nt closed.
             /// </summary>
             NtClosed
-        };
+        }
 
         /// <summary>
         ///     Converts a <see cref="PolyTree" /> to a <see cref="Paths" />.
@@ -7966,7 +7948,7 @@ namespace LeagueSharp.SDK.Clipper
                 return new DoublePoint();
             }
 
-            var f = 1 * 1.0 / Math.Sqrt(dx * dx + dy * dy);
+            var f = 1 * 1.0 / Math.Sqrt((dx * dx) + (dy * dy));
             dx *= f;
             dy *= f;
 
@@ -7984,6 +7966,8 @@ namespace LeagueSharp.SDK.Clipper
         /// <returns>
         ///     The <see cref="long" />.
         /// </returns>
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias",
+            Justification = "Can be changed by a pre-processor definition.")]
         internal static long Round(double value)
         {
             return value < 0 ? (cInt)(value - 0.5) : (cInt)(value + 0.5);
@@ -8008,8 +7992,8 @@ namespace LeagueSharp.SDK.Clipper
             var q = this.mDelta / r;
             this.mDestPoly.Add(
                 new IntPoint(
-                    Round(this.mSrcPoly[j].X + (this.mNormals[k].X + this.mNormals[j].X) * q),
-                    Round(this.mSrcPoly[j].Y + (this.mNormals[k].Y + this.mNormals[j].Y) * q)));
+                    Round(this.mSrcPoly[j].X + ((this.mNormals[k].X + this.mNormals[j].X) * q)),
+                    Round(this.mSrcPoly[j].Y + ((this.mNormals[k].Y + this.mNormals[j].Y) * q))));
         }
 
         // ------------------------------------------------------------------------------
@@ -8027,7 +8011,7 @@ namespace LeagueSharp.SDK.Clipper
         {
             var a = Math.Atan2(
                 this.mSinA,
-                this.mNormals[k].X * this.mNormals[j].X + this.mNormals[k].Y * this.mNormals[j].Y);
+                (this.mNormals[k].X * this.mNormals[j].X) + (this.mNormals[k].Y * this.mNormals[j].Y));
             var steps = Math.Max(Round(this.mStepsPerRad * Math.Abs(a)), 1);
 
             double x = this.mNormals[k].X, y = this.mNormals[k].Y;
@@ -8035,17 +8019,17 @@ namespace LeagueSharp.SDK.Clipper
             {
                 this.mDestPoly.Add(
                     new IntPoint(
-                        Round(this.mSrcPoly[j].X + x * this.mDelta),
-                        Round(this.mSrcPoly[j].Y + y * this.mDelta)));
+                        Round(this.mSrcPoly[j].X + (x * this.mDelta)),
+                        Round(this.mSrcPoly[j].Y + (y * this.mDelta))));
                 var x2 = x;
-                x = x * this.mCos - this.mSin * y;
-                y = x2 * this.mSin + y * this.mCos;
+                x = (x * this.mCos) - (this.mSin * y);
+                y = (x2 * this.mSin) + (y * this.mCos);
             }
 
             this.mDestPoly.Add(
                 new IntPoint(
-                    Round(this.mSrcPoly[j].X + this.mNormals[j].X * this.mDelta),
-                    Round(this.mSrcPoly[j].Y + this.mNormals[j].Y * this.mDelta)));
+                    Round(this.mSrcPoly[j].X + (this.mNormals[j].X * this.mDelta)),
+                    Round(this.mSrcPoly[j].Y + (this.mNormals[j].Y * this.mDelta))));
         }
 
         // ------------------------------------------------------------------------------
@@ -8065,15 +8049,15 @@ namespace LeagueSharp.SDK.Clipper
                 Math.Tan(
                     Math.Atan2(
                         this.mSinA,
-                        this.mNormals[k].X * this.mNormals[j].X + this.mNormals[k].Y * this.mNormals[j].Y) / 4);
+                        (this.mNormals[k].X * this.mNormals[j].X) + (this.mNormals[k].Y * this.mNormals[j].Y)) / 4);
             this.mDestPoly.Add(
                 new IntPoint(
-                    Round(this.mSrcPoly[j].X + this.mDelta * (this.mNormals[k].X - this.mNormals[k].Y * dx)),
-                    Round(this.mSrcPoly[j].Y + this.mDelta * (this.mNormals[k].Y + this.mNormals[k].X * dx))));
+                    Round(this.mSrcPoly[j].X + (this.mDelta * (this.mNormals[k].X - (this.mNormals[k].Y * dx)))),
+                    Round(this.mSrcPoly[j].Y + (this.mDelta * (this.mNormals[k].Y + (this.mNormals[k].X * dx))))));
             this.mDestPoly.Add(
                 new IntPoint(
-                    Round(this.mSrcPoly[j].X + this.mDelta * (this.mNormals[j].X + this.mNormals[j].Y * dx)),
-                    Round(this.mSrcPoly[j].Y + this.mDelta * (this.mNormals[j].Y - this.mNormals[j].X * dx))));
+                    Round(this.mSrcPoly[j].X + (this.mDelta * (this.mNormals[j].X + (this.mNormals[j].Y * dx)))),
+                    Round(this.mSrcPoly[j].Y + (this.mDelta * (this.mNormals[j].Y - (this.mNormals[j].X * dx))))));
         }
 
         // ------------------------------------------------------------------------------
@@ -8130,7 +8114,7 @@ namespace LeagueSharp.SDK.Clipper
             }
 
             // see offset_triginometry2.svg in the documentation folder ...
-            var steps = Math.PI / Math.Acos(1 - y / Math.Abs(delta));
+            var steps = Math.PI / Math.Acos(1 - (y / Math.Abs(delta)));
             this.mSin = Math.Sin(TwoPi / steps);
             this.mCos = Math.Cos(TwoPi / steps);
             this.mStepsPerRad = steps / TwoPi;
@@ -8164,11 +8148,11 @@ namespace LeagueSharp.SDK.Clipper
                         {
                             this.mDestPoly.Add(
                                 new IntPoint(
-                                    Round(this.mSrcPoly[0].X + x * delta),
-                                    Round(this.mSrcPoly[0].Y + y * delta)));
+                                    Round(this.mSrcPoly[0].X + (x * delta)),
+                                    Round(this.mSrcPoly[0].Y + (y * delta))));
                             var x2 = x;
-                            x = x * this.mCos - this.mSin * y;
-                            y = x2 * this.mSin + y * this.mCos;
+                            x = (x * this.mCos) - (this.mSin * y);
+                            y = (x2 * this.mSin) + (y * this.mCos);
                         }
                     }
                     else
@@ -8179,8 +8163,8 @@ namespace LeagueSharp.SDK.Clipper
                         {
                             this.mDestPoly.Add(
                                 new IntPoint(
-                                    Round(this.mSrcPoly[0].X + x * delta),
-                                    Round(this.mSrcPoly[0].Y + y * delta)));
+                                    Round(this.mSrcPoly[0].X + (x * delta)),
+                                    Round(this.mSrcPoly[0].Y + (y * delta))));
                             if (x < 0)
                             {
                                 x = 1;
@@ -8267,12 +8251,12 @@ namespace LeagueSharp.SDK.Clipper
                     {
                         var j = len - 1;
                         pt1 = new IntPoint(
-                            Round(this.mSrcPoly[j].X + this.mNormals[j].X * delta),
-                            Round(this.mSrcPoly[j].Y + this.mNormals[j].Y * delta));
+                            Round(this.mSrcPoly[j].X + (this.mNormals[j].X * delta)),
+                            Round(this.mSrcPoly[j].Y + (this.mNormals[j].Y * delta)));
                         this.mDestPoly.Add(pt1);
                         pt1 = new IntPoint(
-                            Round(this.mSrcPoly[j].X - this.mNormals[j].X * delta),
-                            Round(this.mSrcPoly[j].Y - this.mNormals[j].Y * delta));
+                            Round(this.mSrcPoly[j].X - (this.mNormals[j].X * delta)),
+                            Round(this.mSrcPoly[j].Y - (this.mNormals[j].Y * delta)));
                         this.mDestPoly.Add(pt1);
                     }
                     else
@@ -8308,12 +8292,12 @@ namespace LeagueSharp.SDK.Clipper
                     if (node.MEndtype == EndType.EtOpenButt)
                     {
                         pt1 = new IntPoint(
-                            Round(this.mSrcPoly[0].X - this.mNormals[0].X * delta),
-                            Round(this.mSrcPoly[0].Y - this.mNormals[0].Y * delta));
+                            Round(this.mSrcPoly[0].X - (this.mNormals[0].X * delta)),
+                            Round(this.mSrcPoly[0].Y - (this.mNormals[0].Y * delta)));
                         this.mDestPoly.Add(pt1);
                         pt1 = new IntPoint(
-                            Round(this.mSrcPoly[0].X + this.mNormals[0].X * delta),
-                            Round(this.mSrcPoly[0].Y + this.mNormals[0].Y * delta));
+                            Round(this.mSrcPoly[0].X + (this.mNormals[0].X * delta)),
+                            Round(this.mSrcPoly[0].Y + (this.mNormals[0].Y * delta)));
                         this.mDestPoly.Add(pt1);
                     }
                     else
@@ -8389,19 +8373,19 @@ namespace LeagueSharp.SDK.Clipper
         private void OffsetPoint(int j, ref int k, JoinType jointype)
         {
             // cross product ...
-            this.mSinA = this.mNormals[k].X * this.mNormals[j].Y - this.mNormals[j].X * this.mNormals[k].Y;
+            this.mSinA = (this.mNormals[k].X * this.mNormals[j].Y) - (this.mNormals[j].X * this.mNormals[k].Y);
 
             if (Math.Abs(this.mSinA * this.mDelta) < 1.0)
             {
                 // dot product ...
-                var cosA = this.mNormals[k].X * this.mNormals[j].X + this.mNormals[j].Y * this.mNormals[k].Y;
+                var cosA = (this.mNormals[k].X * this.mNormals[j].X) + (this.mNormals[j].Y * this.mNormals[k].Y);
                 if (cosA > 0)
                 {
                     // angle ==> 0 degrees
                     this.mDestPoly.Add(
                         new IntPoint(
-                            Round(this.mSrcPoly[j].X + this.mNormals[k].X * this.mDelta),
-                            Round(this.mSrcPoly[j].Y + this.mNormals[k].Y * this.mDelta)));
+                            Round(this.mSrcPoly[j].X + (this.mNormals[k].X * this.mDelta)),
+                            Round(this.mSrcPoly[j].Y + (this.mNormals[k].Y * this.mDelta))));
                     return;
                 }
 
@@ -8420,13 +8404,13 @@ namespace LeagueSharp.SDK.Clipper
             {
                 this.mDestPoly.Add(
                     new IntPoint(
-                        Round(this.mSrcPoly[j].X + this.mNormals[k].X * this.mDelta),
-                        Round(this.mSrcPoly[j].Y + this.mNormals[k].Y * this.mDelta)));
+                        Round(this.mSrcPoly[j].X + (this.mNormals[k].X * this.mDelta)),
+                        Round(this.mSrcPoly[j].Y + (this.mNormals[k].Y * this.mDelta))));
                 this.mDestPoly.Add(this.mSrcPoly[j]);
                 this.mDestPoly.Add(
                     new IntPoint(
-                        Round(this.mSrcPoly[j].X + this.mNormals[j].X * this.mDelta),
-                        Round(this.mSrcPoly[j].Y + this.mNormals[j].Y * this.mDelta)));
+                        Round(this.mSrcPoly[j].X + (this.mNormals[j].X * this.mDelta)),
+                        Round(this.mSrcPoly[j].Y + (this.mNormals[j].Y * this.mDelta))));
             }
             else
             {
@@ -8435,7 +8419,8 @@ namespace LeagueSharp.SDK.Clipper
                     case JoinType.JtMiter:
                         {
                             var r = 1
-                                    + (this.mNormals[j].X * this.mNormals[k].X + this.mNormals[j].Y * this.mNormals[k].Y);
+                                    + ((this.mNormals[j].X * this.mNormals[k].X)
+                                       + (this.mNormals[j].Y * this.mNormals[k].Y));
                             if (r >= this.mMiterLim)
                             {
                                 this.DoMiter(j, k, r);

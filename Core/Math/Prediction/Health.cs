@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Health.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="Health.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   Health Prediction class for prediction of health of units.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.Math.Prediction
 {
     using System;
@@ -132,7 +128,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                     && attack.Target.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
                 {
                     var landTime = attack.StartTick + attack.Delay
-                                   + 1000 * unit.Distance(attack.Source) / attack.ProjectileSpeed + delay;
+                                   + (1000 * unit.Distance(attack.Source) / attack.ProjectileSpeed) + delay;
 
                     if (Variables.TickCount < landTime - delay && landTime < Variables.TickCount + time)
                     {
@@ -175,7 +171,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                     while (fromT < toT)
                     {
                         if (fromT >= Variables.TickCount
-                            && (fromT + attack.Delay + unit.Distance(attack.Source) / attack.ProjectileSpeed < toT))
+                            && (fromT + attack.Delay + (unit.Distance(attack.Source) / attack.ProjectileSpeed) < toT))
                         {
                             n++;
                         }
@@ -209,9 +205,9 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
             var attackData = new PredictedDamage(
                 sender, 
                 target, 
-                Variables.TickCount - Game.Ping / 2, 
+                Variables.TickCount - (Game.Ping / 2), 
                 sender.AttackCastDelay * 1000, 
-                sender.AttackDelay * 1000 - (sender is Obj_AI_Turret ? 70 : 0), 
+                (sender.AttackDelay * 1000) - (sender is Obj_AI_Turret ? 70 : 0), 
                 sender.CombatType == GameObjectCombatType.Melee ? int.MaxValue : (int)args.SData.MissileSpeed, 
                 sender.TotalAttackDamage);
 

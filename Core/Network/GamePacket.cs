@@ -1,24 +1,19 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GamePacket.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="GamePacket.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   This class makes easier to handle packets.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
 
 namespace LeagueSharp.SDK.Core.Network
 {
@@ -40,11 +35,6 @@ namespace LeagueSharp.SDK.Core.Network
         ///     Game Packet Data
         /// </summary>
         private readonly GamePacketData packetData;
-
-        /// <summary>
-        ///     Local protocol that packet is sent on.
-        /// </summary>
-        private PacketProtocolFlags flags = PacketProtocolFlags.Reliable;
 
         #endregion
 
@@ -118,41 +108,18 @@ namespace LeagueSharp.SDK.Core.Network
         /// <summary>
         ///     Gets or sets the protocol that packet is sent on.
         /// </summary>
-        public PacketProtocolFlags Flags
-        {
-            get
-            {
-                return this.flags;
-            }
-
-            set
-            {
-                this.flags = value;
-            }
-        }
+        public PacketProtocolFlags Flags { get; set; } = PacketProtocolFlags.Reliable;
 
         /// <summary>
         ///     Gets the raw packet bytes
         /// </summary>
         /// <returns>Bytes of the packet</returns>
-        public byte[] PacketData
-        {
-            get
-            {
-                return this.packetData.PacketData;
-            }
-        }
+        public byte[] PacketData => this.packetData.PacketData;
 
         /// <summary>
         ///     Gets the Header of the packet(The first byte)
         /// </summary>
-        public short PacketId
-        {
-            get
-            {
-                return this.packetData.GetPacketId();
-            }
-        }
+        public short PacketId => this.packetData.GetPacketId();
 
         /// <summary>
         ///     Gets or sets the position of the reader.
@@ -181,13 +148,7 @@ namespace LeagueSharp.SDK.Core.Network
         /// <summary>
         ///     Gets the packet size.
         /// </summary>
-        public long Size
-        {
-            get
-            {
-                return this.Reader.BaseStream.Length;
-            }
-        }
+        public long Size => this.Reader.BaseStream.Length;
 
         #endregion
 
@@ -196,24 +157,12 @@ namespace LeagueSharp.SDK.Core.Network
         /// <summary>
         ///     Gets the reader.
         /// </summary>
-        private BinaryReader Reader
-        {
-            get
-            {
-                return this.packetData.Reader;
-            }
-        }
+        private BinaryReader Reader => this.packetData.Reader;
 
         /// <summary>
         ///     Gets the writer.
         /// </summary>
-        private BinaryWriter Writer
-        {
-            get
-            {
-                return this.packetData.Writer;
-            }
-        }
+        private BinaryWriter Writer => this.packetData.Writer;
 
         #endregion
 
@@ -224,20 +173,9 @@ namespace LeagueSharp.SDK.Core.Network
         /// </summary>
         public void Dispose()
         {
-            if (this.packetData != null)
-            {
-                this.packetData.Dispose();
-            }
-
-            if (this.Reader != null)
-            {
-                this.Reader.Dispose();
-            }
-
-            if (this.Writer != null)
-            {
-                this.Writer.Dispose();
-            }
+            this.packetData?.Dispose();
+            this.Reader?.Dispose();
+            this.Writer?.Dispose();
         }
 
         /// <summary>
@@ -361,7 +299,7 @@ namespace LeagueSharp.SDK.Core.Network
         /// <param name="channel">Channel to send the packet on</param>
         /// <param name="packetFlags">Protocol to send to packet on</param>
         public void SendPacket(
-            PacketChannel channel = PacketChannel.C2S, 
+            PacketChannel channel = PacketChannel.C2S,
             PacketProtocolFlags packetFlags = PacketProtocolFlags.Reliable)
         {
             if (this.Process)
@@ -504,13 +442,7 @@ namespace LeagueSharp.SDK.Core.Network
         /// <summary>
         ///     Gets the Packet Data.
         /// </summary>
-        public byte[] PacketData
-        {
-            get
-            {
-                return this.ms.ToArray();
-            }
-        }
+        public byte[] PacketData => this.ms.ToArray();
 
         /// <summary>
         ///     Gets the Binary Reader.

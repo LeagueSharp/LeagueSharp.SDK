@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AutoAttack.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="AutoAttack.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   AutoAttack utility class.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.Utils
 {
     using System.Linq;
@@ -40,16 +36,16 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         private static readonly string[] AttackResets =
             {
-                "dariusnoxiantacticsonh", "fioraflurry", "garenq", 
-                "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge", 
-                "leonashieldofdaybreak", "luciane", "lucianq", 
-                "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq", 
-                "nautiluspiercinggaze", "netherblade", "parley", 
-                "poppydevastatingblow", "powerfist", "renektonpreexecute", 
-                "rengarq", "shyvanadoubleattack", "sivirw", "takedown", 
-                "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble", 
-                "vie", "volibearq", "xenzhaocombotarget", "yorickspectral", 
-                "reksaiq"
+                "dariusnoxiantacticsonh", "fioraflurry", "garenq",
+                "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge",
+                "leonashieldofdaybreak", "luciane", "lucianq",
+                "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq",
+                "nautiluspiercinggaze", "netherblade", "parley",
+                "poppydevastatingblow", "powerfist", "renektonpreexecute",
+                "rengarq", "shyvanadoubleattack", "sivirw", "takedown",
+                "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble",
+                "vie", "volibearq", "xenzhaocombotarget", "yorickspectral",
+                "reksaiq", "itemtitanichydracleave"
             };
 
         /// <summary>
@@ -57,10 +53,10 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         private static readonly string[] Attacks =
             {
-                "caitlynheadshotmissile", "frostarrow", "garenslash2", 
-                "kennenmegaproc", "lucianpassiveattack", "masteryidoublestrike", 
-                "quinnwenhanced", "renektonexecute", "renektonsuperexecute", 
-                "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust", 
+                "caitlynheadshotmissile", "frostarrow", "garenslash2",
+                "kennenmegaproc", "lucianpassiveattack", "masteryidoublestrike",
+                "quinnwenhanced", "renektonexecute", "renektonsuperexecute",
+                "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust",
                 "xenzhaothrust2", "xenzhaothrust3", "viktorqbuff"
             };
 
@@ -69,11 +65,17 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         private static readonly string[] NoAttacks =
             {
-                "jarvanivcataclysmattack", "monkeykingdoubleattack", 
-                "shyvanadoubleattack", "shyvanadoubleattackdragon", 
-                "zyragraspingplantattack", "zyragraspingplantattack2", 
-                "zyragraspingplantattackfire", "zyragraspingplantattack2fire", 
-                "viktorpowertransfer", "sivirwattackbounce"
+                "jarvanivcataclysmattack", "monkeykingdoubleattack",
+                "shyvanadoubleattack", "shyvanadoubleattackdragon",
+                "zyragraspingplantattack", "zyragraspingplantattack2",
+                "zyragraspingplantattackfire", "zyragraspingplantattack2fire",
+                "viktorpowertransfer", "sivirwattackbounce", "asheqattacknoonhit",
+                "elisespiderlingbasicattack", "heimertyellowbasicattack",
+                "heimertyellowbasicattack2", "heimertbluebasicattack",
+                "annietibbersbasicattack", "annietibbersbasicattack2",
+                "yorickdecayedghoulbasicattack", "yorickravenousghoulbasicattack",
+                "yorickspectralghoulbasicattack", "malzaharvoidlingbasicattack",
+                "malzaharvoidlingbasicattack2", "malzaharvoidlingbasicattack3"
             };
 
         /// <summary>
@@ -136,8 +138,8 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>The <see cref="float" /></returns>
         public static float GetTimeToHit(this AttackableUnit target)
         {
-            return GameObjects.Player.AttackCastDelay * 1000 - 100 + Game.Ping / 2f
-                   + 1000 * GameObjects.Player.Distance(target) / GameObjects.Player.GetProjectileSpeed();
+            return (GameObjects.Player.AttackCastDelay * 1000) - 100 + (Game.Ping / 2f)
+                   + (1000 * GameObjects.Player.Distance(target) / GameObjects.Player.GetProjectileSpeed());
         }
 
         /// <summary>
@@ -160,9 +162,7 @@ namespace LeagueSharp.SDK.Core.Utils
 
             return
                 Vector2.DistanceSquared(
-                    (target is Obj_AI_Base)
-                        ? ((Obj_AI_Base)target).ServerPosition.ToVector2()
-                        : target.Position.ToVector2(), 
+                    (target as Obj_AI_Base)?.ServerPosition.ToVector2() ?? target.Position.ToVector2(),
                     GameObjects.Player.ServerPosition.ToVector2()) <= myRange * myRange;
         }
 
@@ -194,8 +194,12 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <summary>
         ///     Returns whether the object is a melee combat type or ranged.
         /// </summary>
-        /// <param name="sender"><see cref="Obj_AI_Base" /> sender</param>
-        /// <returns>Is object melee.</returns>
+        /// <param name="sender">
+        ///     <see cref="Obj_AI_Base" /> sender
+        /// </param>
+        /// <returns>
+        ///     Is object melee.
+        /// </returns>
         public static bool IsMelee(this Obj_AI_Base sender)
         {
             return sender.CombatType == GameObjectCombatType.Melee;

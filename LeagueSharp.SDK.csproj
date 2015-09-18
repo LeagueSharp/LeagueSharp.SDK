@@ -27,6 +27,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\LeagueSharp.SDK.xml</DocumentationFile>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet>LeagueSharp.SDK.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -38,6 +39,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\LeagueSharp.SDK.xml</DocumentationFile>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet>LeagueSharp.SDK.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -50,18 +52,28 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>D:\Program Files\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis">
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp">
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>D:\Program Files\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>D:\Program Files\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>D:\Program Files\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Net.Http" />
@@ -76,7 +88,6 @@
     <Compile Include="Core\Enumerations\CastStates.cs" />
     <Compile Include="Core\Enumerations\CenteredFlags.cs" />
     <Compile Include="Core\Enumerations\CollisionableObjects.cs" />
-    <Compile Include="Core\Enumerations\DamageFlags.cs" />
     <Compile Include="Core\Enumerations\DangerLevel.cs" />
     <Compile Include="Core\Enumerations\GapcloserType.cs" />
     <Compile Include="Core\Enumerations\HealthPredictionType.cs" />
@@ -137,7 +148,8 @@
     <Compile Include="Core\Enumerations\NotificationIconType.cs" />
     <Compile Include="Core\UI\INotifications\Notifications.cs" />
     <Compile Include="Core\Utils\BinarySerializer.cs" />
-    <Compile Include="Core\Utils\DefaultValue.cs" />
+    <Compile Include="Core\Wrappers\DamageJson.cs" />
+    <Compile Include="Core\Wrappers\DamageLibrary.cs" />
     <Compile Include="Core\Wrappers\Items.cs" />
     <Compile Include="Core\Math\ConvexHull.cs" />
     <Compile Include="Core\Math\Geometry.cs" />
@@ -187,12 +199,12 @@
     <Compile Include="Core\Utils\WeightedRandom.cs" />
     <Compile Include="Core\Variables.cs" />
     <Compile Include="Core\Wrappers\Damage.cs" />
-    <Compile Include="Core\UI\DamageIndicator.cs" />
     <Compile Include="Core\Wrappers\LastCastedSpell.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
     <Compile Include="Core\Wrappers\Spell.cs" />
     <Compile Include="Core\Wrappers\SpellDataWrapper.cs" />
     <Compile Include="Core\Wrappers\TargetSelector.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -209,6 +221,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="LeagueSharp.SDK.ruleset" />
     <None Include="LeagueSharp.SDK.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -222,10 +235,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\Damage\5.15.0.333.json" />
-    <None Include="Resources\Damage\5.17.json" />
+    <None Include="Resources\Damage\5.18.json" />
     <None Include="Resources\Data\Gapclosers.json" />
     <None Include="Third_Party\Clipper\License.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0-beta012\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0-beta012\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties stylecop_1json__JSONSchema="https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

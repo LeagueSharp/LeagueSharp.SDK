@@ -1,29 +1,22 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MenuSettings.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="MenuSettings.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   Default Skin Settings.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
-    using System.Collections.Generic;
-    using System.ComponentModel;
-
     using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
 
     using SharpDX;
@@ -40,7 +33,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         ///     Local Font.
         /// </summary>
         private static Font font;
-        
+
+        private static Vector2 position;
 
         #endregion
 
@@ -58,16 +52,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
             Position = new Vector2(30, 30);
             ContainerWidth = 200f;
             Font = new Font(
-                Drawing.Direct3DDevice, 
-                14, 
-                0, 
-                FontWeight.DoNotCare, 
-                0, 
-                false, 
-                FontCharacterSet.Default, 
-                FontPrecision.Raster, 
-                FontQuality.Antialiased, 
-                FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative, 
+                Drawing.Direct3DDevice,
+                14,
+                0,
+                FontWeight.DoNotCare,
+                0,
+                false,
+                FontCharacterSet.Default,
+                FontPrecision.Raster,
+                FontQuality.Antialiased,
+                FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative,
                 "Tahoma");
             ContainerTextMarkOffset = 8f;
             ContainerTextOffset = 15f;
@@ -137,19 +131,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         /// </summary>
         public static ColorBGRA HoverColor { get; set; }
 
-        private static Vector2 position;
-
         /// <summary>
         ///     Gets or sets the default menu zero-position.
         /// </summary>
-        public static Vector2 Position {
+        public static Vector2 Position
+        {
             get
             {
                 return position;
             }
+
             set
             {
-                
                 if (MenuCustomizer.Instance != null)
                 {
                     position = value;

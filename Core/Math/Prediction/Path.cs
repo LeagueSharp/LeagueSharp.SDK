@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Path.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="Path.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   Path class, contains path tracker and a container
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.Math.Prediction
 {
     using System;
@@ -185,13 +181,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
             /// <summary>
             /// Gets the end point.
             /// </summary>
-            public Vector2 EndPoint
-            {
-                get
-                {
-                    return this.Path.LastOrDefault();
-                }
-            }
+            public Vector2 EndPoint => this.Path.LastOrDefault();
 
             /// <summary>
             /// Gets or sets the path.
@@ -201,13 +191,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
             /// <summary>
             /// Gets the start point.
             /// </summary>
-            public Vector2 StartPoint
-            {
-                get
-                {
-                    return this.Path.FirstOrDefault();
-                }
-            }
+            public Vector2 StartPoint => this.Path.FirstOrDefault();
 
             /// <summary>
             /// Gets or sets the tick.
@@ -217,24 +201,12 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
             /// <summary>
             ///     Gets the current tick of the path.
             /// </summary>
-            public double Time
-            {
-                get
-                {
-                    return (Variables.TickCount - this.Tick) / 1000d;
-                }
-            }
+            public double Time => (Variables.TickCount - this.Tick) / 1000d;
 
             /// <summary>
             ///     Gets the number of waypoints within the path.
             /// </summary>
-            public int WaypointCount
-            {
-                get
-                {
-                    return this.Path.Count;
-                }
-            }
+            public int WaypointCount => this.Path.Count;
 
             #endregion
         }

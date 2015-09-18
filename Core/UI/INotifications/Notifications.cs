@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Notifications.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="Notifications.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   The notifications main handler.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.INotifications
 {
     using System;
@@ -194,7 +190,7 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
             if (Menu["edit"].GetValue<MenuBool>().Value)
             {
                 var notification = NotificationsList.MaxOrDefault(n => n.GetReservedWidth());
-                var width = notification != null ? notification.GetReservedWidth() : 300f;
+                var width = notification?.GetReservedWidth() ?? 300f;
                 if (Math.Abs(height - Position.Y) < float.Epsilon)
                 {
                     height += 30f;
@@ -205,8 +201,8 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
                 Line.Draw(
                     new[]
                         {
-                            new Vector2(Position.X - line.Width / 2f, Position.Y), 
-                            new Vector2(Position.X - line.Width / 2f, height)
+                            new Vector2(Position.X - (line.Width / 2f), Position.Y), 
+                            new Vector2(Position.X - (line.Width / 2f), height)
                         }, 
                     new ColorBGRA(255, 0, 0, 255 / 2));
                 Line.End();
@@ -246,7 +242,7 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
             }
 
             var notificationW = NotificationsList.MaxOrDefault(n => n.GetReservedWidth());
-            var widthRectangle = notificationW != null ? notificationW.GetReservedWidth() : 300f;
+            var widthRectangle = notificationW?.GetReservedWidth() ?? 300f;
             if (windowsKeys.Msg == WindowsMessages.LBUTTONDOWN || windowsKeys.Msg == WindowsMessages.LBUTTONUP)
             {
                 var heightRectangle =

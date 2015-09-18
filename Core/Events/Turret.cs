@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Turret.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="Turret.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   Turret tracker and event handler.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.Events
 {
     using System;
@@ -37,7 +33,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     The Turrets list.
         /// </summary>
-        public static readonly IDictionary<Obj_AI_Turret, TurretArgs> Turrets =
+        private static readonly IDictionary<Obj_AI_Turret, TurretArgs> Turrets =
             new Dictionary<Obj_AI_Turret, TurretArgs>();
 
         #endregion
@@ -148,16 +144,13 @@ namespace LeagueSharp.SDK.Core.Events
                 Turrets[turret[0]].AttackStart = Variables.TickCount;
                 if (Turrets[turret[0]].Target != null && Turrets[turret[0]].Target.IsValid)
                 {
-                    Turrets[turret[0]].AttackDelay = turret[0].AttackCastDelay * 1000
-                                                     + turret[0].Distance(Turrets[turret[0]].Target)
-                                                     / turret[0].BasicAttack.MissileSpeed * 1000;
+                    Turrets[turret[0]].AttackDelay = (turret[0].AttackCastDelay * 1000)
+                                                     + (turret[0].Distance(Turrets[turret[0]].Target)
+                                                        / turret[0].BasicAttack.MissileSpeed * 1000);
                     Turrets[turret[0]].AttackEnd = (int)(Variables.TickCount + Turrets[turret[0]].AttackDelay);
                 }
 
-                if (OnTurretAttack != null)
-                {
-                    OnTurretAttack(turret[0], Turrets[turret[0]]);
-                }
+                OnTurretAttack?.Invoke(turret[0], Turrets[turret[0]]);
             }
         }
 
@@ -189,24 +182,12 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     Gets a value indicating whether the turret is winding up.
         /// </summary>
-        public bool IsWindingUp
-        {
-            get
-            {
-                return this.Turret.IsWindingUp;
-            }
-        }
+        public bool IsWindingUp => this.Turret.IsWindingUp;
 
         /// <summary>
         ///     Gets the target.
         /// </summary>
-        public AttackableUnit Target
-        {
-            get
-            {
-                return this.Turret != null ? this.Turret.Target : null;
-            }
-        }
+        public AttackableUnit Target => this.Turret?.Target;
 
         /// <summary>
         ///     Gets or sets the turret.

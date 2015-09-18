@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Collision.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="Collision.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   Collision class, calculates collision for moving objects.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.Math
 {
     using System;
@@ -163,17 +159,17 @@ namespace LeagueSharp.SDK.Core.Math
                     }
 
                     var level = wall.Name.Substring(wall.Name.Length - 6, 1);
-                    var wallWidth = 300 + 50 * Convert.ToInt32(level);
+                    var wallWidth = 300 + (50 * Convert.ToInt32(level));
 
                     var wallDirection = (wall.Position.ToVector2() - yasuoWallCastedPos).Normalized().Perpendicular();
-                    var wallStart = wall.Position.ToVector2() + wallWidth / 2f * wallDirection;
-                    var wallEnd = wallStart - wallWidth * wallDirection;
+                    var wallStart = wall.Position.ToVector2() + (wallWidth / 2f * wallDirection);
+                    var wallEnd = wallStart - (wallWidth * wallDirection);
 
                     if (wallStart.Intersection(wallEnd, position.ToVector2(), input.From.ToVector2()).Intersects)
                     {
                         var t = Variables.TickCount
-                                + (wallStart.Intersection(wallEnd, position.ToVector2(), input.From.ToVector2())
-                                       .Point.Distance(input.From) / input.Speed + input.Delay) * 1000;
+                                + (((wallStart.Intersection(wallEnd, position.ToVector2(), input.From.ToVector2())
+                                       .Point.Distance(input.From) / input.Speed) + input.Delay) * 1000);
                         if (t < wallCastT + 4000)
                         {
                             result.Add(GameObjects.Player);

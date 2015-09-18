@@ -1,25 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Teleport.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="Teleport.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   Teleport class, contains Teleport even which is triggered on recalls, teleports and <c>shen</c> or twisted fate
-//   <c>ultimates</c>.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.Events
 {
     using System;
@@ -55,14 +50,14 @@ namespace LeagueSharp.SDK.Core.Events
         /// </summary>
         private static readonly IDictionary<string, ITeleport> TypeByString = new Dictionary<string, ITeleport>
                                                                                   {
-                                                                                      { "Recall", new RecallTeleport() }, 
+                                                                                      { "Recall", new RecallTeleport() },
                                                                                       {
                                                                                           "Teleport", new TeleportTeleport()
-                                                                                      }, 
+                                                                                      },
                                                                                       {
                                                                                           "Gate", new TwistedFateTeleport()
-                                                                                      }, 
-                                                                                      { "Shen", new ShenTeleport() }, 
+                                                                                      },
+                                                                                      { "Shen", new ShenTeleport() },
                                                                                   };
 
         #endregion
@@ -112,10 +107,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// </param>
         private static void FireEvent(Obj_AI_Base sender, TeleportEventArgs args)
         {
-            if (OnTeleport != null)
-            {
-                OnTeleport(sender, args);
-            }
+            OnTeleport?.Invoke(sender, args);
         }
 
         /// <summary>
@@ -160,8 +152,8 @@ namespace LeagueSharp.SDK.Core.Events
                 else
                 {
                     Console.WriteLine(
-                        @"Teleport type {0} with name {1} is not supported yet. Please report it!", 
-                        args.RecallType, 
+                        @"Teleport type {0} with name {1} is not supported yet. Please report it!",
+                        args.RecallType,
                         args.RecallName);
                 }
             }
@@ -270,13 +262,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     Gets the type.
         /// </summary>
-        public TeleportType Type
-        {
-            get
-            {
-                return TeleportType.Recall;
-            }
-        }
+        public TeleportType Type => TeleportType.Recall;
 
         #endregion
 
@@ -316,7 +302,7 @@ namespace LeagueSharp.SDK.Core.Events
                     duration = 4000;
                     break;
                 default:
-                    Console.WriteLine(@"Recall {0} is not supported yet. Please report it!", args.RecallName);
+                    Console.WriteLine($"Recall {args.RecallName} is not supported yet. Please report it!");
                     break;
             }
 
@@ -350,13 +336,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     Gets the type.
         /// </summary>
-        public TeleportType Type
-        {
-            get
-            {
-                return TeleportType.Teleport;
-            }
-        }
+        public TeleportType Type => TeleportType.Teleport;
 
         #endregion
 
@@ -403,13 +383,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     Gets the type.
         /// </summary>
-        public TeleportType Type
-        {
-            get
-            {
-                return TeleportType.TwistedFate;
-            }
-        }
+        public TeleportType Type => TeleportType.TwistedFate;
 
         #endregion
 
@@ -456,13 +430,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     Gets the type.
         /// </summary>
-        public TeleportType Type
-        {
-            get
-            {
-                return TeleportType.Shen;
-            }
-        }
+        public TeleportType Type => TeleportType.Shen;
 
         #endregion
 

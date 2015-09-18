@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Enumerable.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="Enumerable.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   Enumerable Extensions.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.Extensions
 {
     using System;
@@ -57,13 +53,12 @@ namespace LeagueSharp.SDK.Core.Extensions
         {
             if (!typeof(T).IsEnum)
             {
-                throw new ArgumentException(string.Format("Type '{0}' is not an enum.", typeof(T).FullName));
+                throw new ArgumentException($"Type '{typeof(T).FullName}' is not an enum.");
             }
 
             if (!Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
             {
-                throw new ArgumentException(
-                    string.Format("Type '{0}' doesn't have the 'Flags' attribute.", typeof(T).FullName));
+                throw new ArgumentException($"Type '{typeof(T).FullName}' doesn't have the 'Flags' attribute.");
             }
 
             return value.SetFlags(flags, false);
@@ -79,32 +74,31 @@ namespace LeagueSharp.SDK.Core.Extensions
         {
             if (!typeof(T).IsEnum)
             {
-                throw new ArgumentException(string.Format("Type '{0}' is not an enum.", typeof(T).FullName));
+                throw new ArgumentException($"Type '{typeof(T).FullName}' is not an enum.");
             }
 
             if (!Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
             {
-                throw new ArgumentException(
-                    string.Format("Type '{0}' doesn't have the 'Flags' attribute.", typeof(T).FullName));
+                throw new ArgumentException($"Type '{typeof(T).FullName}' doesn't have the 'Flags' attribute.");
             }
 
             return (T)Enum.ToObject(typeof(T), flags.Aggregate(0L, (current, flag) => current | Convert.ToInt64(flag)));
         }
 
         /// <summary>
-        /// Finds match in a container of values.
+        ///     Finds match in a container of values.
         /// </summary>
         /// <typeparam name="TSource">
         ///     Given source
         /// </typeparam>
         /// <param name="source">
-        /// List of all the values
+        ///     List of all the values
         /// </param>
         /// <param name="match">
-        /// Method that determines whether the specified object meets the criteria
+        ///     Method that determines whether the specified object meets the criteria
         /// </param>
         /// <returns>
-        /// Matches based on the predicate
+        ///     Matches based on the predicate
         /// </returns>
         public static TSource Find<TSource>(this IEnumerable<TSource> source, Predicate<TSource> match)
         {
@@ -152,13 +146,12 @@ namespace LeagueSharp.SDK.Core.Extensions
         {
             if (!typeof(T).IsEnum)
             {
-                throw new ArgumentException(string.Format("Type '{0}' is not an enum.", typeof(T).FullName));
+                throw new ArgumentException($"Type '{typeof(T).FullName}' is not an enum.");
             }
 
             if (!Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
             {
-                throw new ArgumentException(
-                    string.Format("Type '{0}' doesn't have the 'Flags' attribute.", typeof(T).FullName));
+                throw new ArgumentException($"Type '{typeof(T).FullName}' doesn't have the 'Flags' attribute.");
             }
 
             var name = Enum.GetName(typeof(T), value);
@@ -169,7 +162,7 @@ namespace LeagueSharp.SDK.Core.Extensions
                 {
                     var attributeDesc =
                         Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) as DescriptionAttribute;
-                    return attributeDesc != null ? attributeDesc.Description : null;
+                    return attributeDesc?.Description;
                 }
             }
 
@@ -186,13 +179,12 @@ namespace LeagueSharp.SDK.Core.Extensions
         {
             if (!typeof(T).IsEnum)
             {
-                throw new ArgumentException(string.Format("Type '{0}' is not an enum.", typeof(T).FullName));
+                throw new ArgumentException($"Type '{typeof(T).FullName}' is not an enum.");
             }
 
             if (!Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
             {
-                throw new ArgumentException(
-                    string.Format("Type '{0}' doesn't have the 'Flags' attribute.", typeof(T).FullName));
+                throw new ArgumentException($"Type '{typeof(T).FullName}' doesn't have the 'Flags' attribute.");
             }
 
             return
@@ -302,19 +294,18 @@ namespace LeagueSharp.SDK.Core.Extensions
         {
             if (!typeof(T).IsEnum)
             {
-                throw new ArgumentException(string.Format("Type '{0}' is not an enum.", typeof(T).FullName));
+                throw new ArgumentException($"Type '{typeof(T).FullName}' is not an enum.");
             }
 
             if (!Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
             {
-                throw new ArgumentException(
-                    string.Format("Type '{0}' doesn't have the 'Flags' attribute.", typeof(T).FullName));
+                throw new ArgumentException($"Type '{typeof(T).FullName}' doesn't have the 'Flags' attribute.");
             }
 
             return
                 (T)
                 Enum.ToObject(
-                    typeof(T), 
+                    typeof(T),
                     status
                         ? Convert.ToInt64(flags) | Convert.ToInt64(value)
                         : ~Convert.ToInt64(flags) & Convert.ToInt64(value));

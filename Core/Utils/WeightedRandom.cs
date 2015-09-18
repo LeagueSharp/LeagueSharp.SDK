@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WeightedRandom.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="WeightedRandom.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   Weighted Random, contains useful extensions for randomizer.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.Utils
 {
     using System;
@@ -32,11 +28,6 @@ namespace LeagueSharp.SDK.Core.Utils
     {
         #region Static Fields
 
-        /// <summary>
-        ///     Random that is being used by WeightedRandom.
-        /// </summary>
-        private static Random random = new Random(Variables.TickCount);
-
         #endregion
 
         #region Public Properties
@@ -44,18 +35,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <summary>
         ///     Gets or sets the random that is being used by WeightedRandom.
         /// </summary>
-        public static Random Random
-        {
-            get
-            {
-                return random;
-            }
-
-            set
-            {
-                random = value;
-            }
-        }
+        public static Random Random { get; set; } = new Random(Variables.TickCount);
 
         #endregion
 
@@ -79,7 +59,7 @@ namespace LeagueSharp.SDK.Core.Utils
             var v2 = Random.NextDouble();
 
             var randStdNormal = Math.Sqrt(-2.0 * Math.Log(v1)) * Math.Sin(2.0 * Math.PI * v2);
-            return (int)(mean + stdDev * randStdNormal);
+            return (int)(mean + (stdDev * randStdNormal));
         }
 
         #endregion

@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Rectangle.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="Rectangle.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   Represents a Rectangle <see cref="Polygon" />
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.Math.Polygons
 {
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
@@ -77,13 +73,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         /// <summary>
         ///     Gets the direction of the Rectangle(Does not need update)
         /// </summary>
-        public Vector2 Direction
-        {
-            get
-            {
-                return (this.End - this.Start).Normalized();
-            }
-        }
+        public Vector2 Direction => (this.End - this.Start).Normalized();
 
         /// <summary>
         /// Gets or sets the end.
@@ -93,13 +83,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         /// <summary>
         ///     Gets a perpendicular direction of the Rectangle(Does not need an update)
         /// </summary>
-        public Vector2 Perpendicular
-        {
-            get
-            {
-                return this.Direction.Perpendicular();
-            }
-        }
+        public Vector2 Perpendicular => this.Direction.Perpendicular();
 
         /// <summary>
         /// Gets or sets the start.
@@ -124,17 +108,17 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         {
             this.Points.Clear();
             this.Points.Add(
-                this.Start + (overrideWidth > 0 ? overrideWidth : this.Width + offset) * this.Perpendicular
-                - offset * this.Direction);
+                this.Start + ((overrideWidth > 0 ? overrideWidth : this.Width + offset) * this.Perpendicular)
+                - (offset * this.Direction));
             this.Points.Add(
-                this.Start - (overrideWidth > 0 ? overrideWidth : this.Width + offset) * this.Perpendicular
-                - offset * this.Direction);
+                this.Start - ((overrideWidth > 0 ? overrideWidth : this.Width + offset) * this.Perpendicular)
+                - (offset * this.Direction));
             this.Points.Add(
-                this.End - (overrideWidth > 0 ? overrideWidth : this.Width + offset) * this.Perpendicular
-                + offset * this.Direction);
+                this.End - ((overrideWidth > 0 ? overrideWidth : this.Width + offset) * this.Perpendicular)
+                + (offset * this.Direction));
             this.Points.Add(
-                this.End + (overrideWidth > 0 ? overrideWidth : this.Width + offset) * this.Perpendicular
-                + offset * this.Direction);
+                this.End + ((overrideWidth > 0 ? overrideWidth : this.Width + offset) * this.Perpendicular)
+                + (offset * this.Direction));
         }
 
         #endregion

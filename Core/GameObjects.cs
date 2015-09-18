@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GameObjects.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="GameObjects.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   A static (stack) class which contains a sort-of cached versions of the important game objects.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core
 {
     using System;
@@ -210,57 +206,27 @@ namespace LeagueSharp.SDK.Core
         /// <summary>
         ///     Gets the game objects.
         /// </summary>
-        public static IEnumerable<GameObject> AllGameObjects
-        {
-            get
-            {
-                return GameObjectsList;
-            }
-        }
+        public static IEnumerable<GameObject> AllGameObjects => GameObjectsList;
 
         /// <summary>
         ///     Gets the ally.
         /// </summary>
-        public static IEnumerable<Obj_AI_Base> Ally
-        {
-            get
-            {
-                return AllyList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Base> Ally => AllyList;
 
         /// <summary>
         ///     Gets the ally heroes.
         /// </summary>
-        public static IEnumerable<Obj_AI_Hero> AllyHeroes
-        {
-            get
-            {
-                return AllyHeroesList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Hero> AllyHeroes => AllyHeroesList;
 
         /// <summary>
         ///     Gets the ally inhibitors.
         /// </summary>
-        public static IEnumerable<Obj_BarracksDampener> AllyInhibitors
-        {
-            get
-            {
-                return AllyInhibitorsList;
-            }
-        }
+        public static IEnumerable<Obj_BarracksDampener> AllyInhibitors => AllyInhibitorsList;
 
         /// <summary>
         ///     Gets the ally minions.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> AllyMinions
-        {
-            get
-            {
-                return AllyMinionsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> AllyMinions => AllyMinionsList;
 
         /// <summary>
         ///     Gets or sets the ally nexus.
@@ -270,101 +236,47 @@ namespace LeagueSharp.SDK.Core
         /// <summary>
         ///     Gets the ally shops.
         /// </summary>
-        public static IEnumerable<Obj_Shop> AllyShops
-        {
-            get
-            {
-                return AllyShopsList;
-            }
-        }
+        public static IEnumerable<Obj_Shop> AllyShops => AllyShopsList;
 
         /// <summary>
         ///     Gets the ally spawn points.
         /// </summary>
-        public static IEnumerable<Obj_SpawnPoint> AllySpawnPoints
-        {
-            get
-            {
-                return AllySpawnPointsList;
-            }
-        }
+        public static IEnumerable<Obj_SpawnPoint> AllySpawnPoints => AllySpawnPointsList;
 
         /// <summary>
         ///     Gets the ally turrets.
         /// </summary>
-        public static IEnumerable<Obj_AI_Turret> AllyTurrets
-        {
-            get
-            {
-                return AllyTurretsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Turret> AllyTurrets => AllyTurretsList;
 
         /// <summary>
         ///     Gets the ally wards.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> AllyWards
-        {
-            get
-            {
-                return AllyWardsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> AllyWards => AllyWardsList;
 
         /// <summary>
         ///     Gets the attackable units.
         /// </summary>
-        public static IEnumerable<AttackableUnit> AttackableUnits
-        {
-            get
-            {
-                return AttackableUnitsList;
-            }
-        }
+        public static IEnumerable<AttackableUnit> AttackableUnits => AttackableUnitsList;
 
         /// <summary>
         ///     Gets the enemy.
         /// </summary>
-        public static IEnumerable<Obj_AI_Base> Enemy
-        {
-            get
-            {
-                return EnemyList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Base> Enemy => EnemyList;
 
         /// <summary>
         ///     Gets the enemy heroes.
         /// </summary>
-        public static IEnumerable<Obj_AI_Hero> EnemyHeroes
-        {
-            get
-            {
-                return EnemyHeroesList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Hero> EnemyHeroes => EnemyHeroesList;
 
         /// <summary>
         ///     Gets the enemy inhibitors.
         /// </summary>
-        public static IEnumerable<Obj_BarracksDampener> EnemyInhibitors
-        {
-            get
-            {
-                return EnemyInhibitorsList;
-            }
-        }
+        public static IEnumerable<Obj_BarracksDampener> EnemyInhibitors => EnemyInhibitorsList;
 
         /// <summary>
         ///     Gets the enemy minions.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> EnemyMinions
-        {
-            get
-            {
-                return EnemyMinionsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> EnemyMinions => EnemyMinionsList;
 
         /// <summary>
         ///     Gets or sets the enemy nexus.
@@ -374,134 +286,62 @@ namespace LeagueSharp.SDK.Core
         /// <summary>
         ///     Gets the enemy shops.
         /// </summary>
-        public static IEnumerable<Obj_Shop> EnemyShops
-        {
-            get
-            {
-                return EnemyShopsList;
-            }
-        }
+        public static IEnumerable<Obj_Shop> EnemyShops => EnemyShopsList;
 
         /// <summary>
         ///     Gets the enemy spawn points.
         /// </summary>
-        public static IEnumerable<Obj_SpawnPoint> EnemySpawnPoints
-        {
-            get
-            {
-                return EnemySpawnPointsList;
-            }
-        }
+        public static IEnumerable<Obj_SpawnPoint> EnemySpawnPoints => EnemySpawnPointsList;
 
         /// <summary>
         ///     Gets the enemy turrets.
         /// </summary>
-        public static IEnumerable<Obj_AI_Turret> EnemyTurrets
-        {
-            get
-            {
-                return EnemyTurretsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Turret> EnemyTurrets => EnemyTurretsList;
 
         /// <summary>
         ///     Gets the enemy wards.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> EnemyWards
-        {
-            get
-            {
-                return EnemyWardsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> EnemyWards => EnemyWardsList;
 
         /// <summary>
         ///     Gets the heroes.
         /// </summary>
-        public static IEnumerable<Obj_AI_Hero> Heroes
-        {
-            get
-            {
-                return HeroesList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Hero> Heroes => HeroesList;
 
         /// <summary>
         ///     Gets the inhibitors.
         /// </summary>
-        public static IEnumerable<Obj_BarracksDampener> Inhibitors
-        {
-            get
-            {
-                return InhibitorsList;
-            }
-        }
+        public static IEnumerable<Obj_BarracksDampener> Inhibitors => InhibitorsList;
 
         /// <summary>
         ///     Gets the jungle.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> Jungle
-        {
-            get
-            {
-                return JungleList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> Jungle => JungleList;
 
         /// <summary>
         ///     Gets the jungle large.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> JungleLarge
-        {
-            get
-            {
-                return JungleLargeList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> JungleLarge => JungleLargeList;
 
         /// <summary>
         ///     Gets the jungle legendary.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> JungleLegendary
-        {
-            get
-            {
-                return JungleLegendaryList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> JungleLegendary => JungleLegendaryList;
 
         /// <summary>
         ///     Gets the jungle small.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> JungleSmall
-        {
-            get
-            {
-                return JungleSmallList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> JungleSmall => JungleSmallList;
 
         /// <summary>
         ///     Gets the minions.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> Minions
-        {
-            get
-            {
-                return MinionsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> Minions => MinionsList;
 
         /// <summary>
         ///     Gets the nexuses.
         /// </summary>
-        public static IEnumerable<Obj_HQ> Nexuses
-        {
-            get
-            {
-                return NexusList;
-            }
-        }
+        public static IEnumerable<Obj_HQ> Nexuses => NexusList;
 
         /// <summary>
         ///     Gets or sets the player.
@@ -511,46 +351,22 @@ namespace LeagueSharp.SDK.Core
         /// <summary>
         ///     Gets the shops.
         /// </summary>
-        public static IEnumerable<Obj_Shop> Shops
-        {
-            get
-            {
-                return ShopsList;
-            }
-        }
+        public static IEnumerable<Obj_Shop> Shops => ShopsList;
 
         /// <summary>
         ///     Gets the spawn points.
         /// </summary>
-        public static IEnumerable<Obj_SpawnPoint> SpawnPoints
-        {
-            get
-            {
-                return SpawnPointsList;
-            }
-        }
+        public static IEnumerable<Obj_SpawnPoint> SpawnPoints => SpawnPointsList;
 
         /// <summary>
         ///     Gets the turrets.
         /// </summary>
-        public static IEnumerable<Obj_AI_Turret> Turrets
-        {
-            get
-            {
-                return TurretsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Turret> Turrets => TurretsList;
 
         /// <summary>
         ///     Gets the wards.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> Wards
-        {
-            get
-            {
-                return WardsList;
-            }
-        }
+        public static IEnumerable<Obj_AI_Minion> Wards => WardsList;
 
         #endregion
 

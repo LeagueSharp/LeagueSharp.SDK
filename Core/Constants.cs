@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Constants.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="Constants.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   Constant values of LeagueSharp.SDK
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core
 {
     using System;
@@ -53,10 +49,10 @@ namespace LeagueSharp.SDK.Core
             {
                 return
                     Cache.Instance.AddOrGetExisting(
-                        "LeagueSharpDir", 
+                        "LeagueSharpDir",
                         () =>
                         Path.Combine(
-                            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
+                            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                             "LS" + Environment.UserName.GetHashCode().ToString("X"))).ToString();
             }
         }
@@ -76,16 +72,16 @@ namespace LeagueSharp.SDK.Core
                 return
                     leagueSharpFont =
                     new Font(
-                        Drawing.Direct3DDevice, 
-                        14, 
-                        0, 
-                        FontWeight.DoNotCare, 
-                        0, 
-                        false, 
-                        FontCharacterSet.Default, 
-                        FontPrecision.Default, 
-                        FontQuality.Antialiased, 
-                        FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative, 
+                        Drawing.Direct3DDevice,
+                        14,
+                        0,
+                        FontWeight.DoNotCare,
+                        0,
+                        false,
+                        FontCharacterSet.Default,
+                        FontPrecision.Default,
+                        FontQuality.Antialiased,
+                        FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative,
                         "Tahoma");
             }
         }
@@ -99,7 +95,7 @@ namespace LeagueSharp.SDK.Core
             {
                 return
                     Cache.Instance.AddOrGetExisting(
-                        "LogDirectory", 
+                        "LogDirectory",
                         () => Path.Combine(LeagueSharpAppData, "Logs", "SDK")).ToString();
             }
         }
@@ -113,7 +109,7 @@ namespace LeagueSharp.SDK.Core
             {
                 return
                     Cache.Instance.AddOrGetExisting(
-                        "LogFileName", 
+                        "LogFileName",
                         () => DateTime.Now.ToString("d").Replace('/', '-') + ".log").ToString();
             }
         }
