@@ -42,13 +42,16 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Angle between two vectors in float-units</returns>
         public static float AngleBetween(this Vector3 vector3, Vector3 toVector3)
         {
-            var magnitudeA = Math.Sqrt((vector3.X * vector3.X) + (vector3.Y * vector3.Y) + (vector3.Z * vector3.Z));
-            var magnitudeB =
-                Math.Sqrt((toVector3.X * toVector3.X) + (toVector3.Y * toVector3.Y) + (toVector3.Z * toVector3.Z));
-
-            var dotProduct = (vector3.X * toVector3.X) + (vector3.Y * toVector3.Y) + (vector3.Z + toVector3.Z);
-
-            return (float)Math.Cos(dotProduct / magnitudeA * magnitudeB);
+            var theta = vector3.Polar() - toVector3.Polar();
+            if (theta < 0)
+            {
+                theta = theta + 360;
+            }
+            if (theta > 180)
+            {
+                theta = 360 - theta;
+            }
+            return theta;
         }
 
         /// <summary>
@@ -393,8 +396,8 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         public static Vector3 Perpendicular(this Vector3 vector3, int offset = 0)
         {
             return (offset == 0)
-                       ? new Vector3(-vector3.X, vector3.Y, vector3.Z)
-                       : new Vector3(vector3.X, -vector3.Y, vector3.Z);
+                       ? new Vector3(-vector3.Y, vector3.X, vector3.Z)
+                       : new Vector3(vector3.Y, -vector3.X, vector3.Z);
         }
 
         /// <summary>
@@ -417,7 +420,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
 
             if (theta < 0)
             {
-                theta += 180;
+                theta += 360;
             }
 
             return theta;
