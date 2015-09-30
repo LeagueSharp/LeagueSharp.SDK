@@ -454,6 +454,16 @@ namespace LeagueSharp.SDK.Core
             LastAutoAttackTick = 0;
         }
 
+        /// <summary>
+        /// Sets the <c>orbwalk</c> position to the specified point.
+        /// </summary>
+        /// <param name="point">The position you want to orbwalk at.</param>
+        public static void SetOrbwalkingPoint(Vector3 point)
+        {
+            if (position != Vector3.Zero)
+                OrbwalkPosition = position;
+        }
+
         #endregion
 
         #region Methods
