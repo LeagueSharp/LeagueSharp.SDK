@@ -73,7 +73,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// </returns>
         public static Color ToSharpDxColor(this System.Drawing.Color color)
         {
-            return Color.FromRgba(color.ToRgba());
+            return new Color(color.R, color.G, color.B, color.A);
         }
 
         /// <summary>
@@ -87,7 +87,21 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// </returns>
         public static System.Drawing.Color ToSystemColor(this Color color)
         {
-            return System.Drawing.Color.FromArgb(color.ToArgb());
+            return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
+        /// <summary>
+        ///     Converts a SharpDX Color to a System Color.
+        /// </summary>
+        /// <param name="color">
+        ///     The color.
+        /// </param>
+        /// <returns>
+        ///     The System Color instance.
+        /// </returns>
+        public static System.Drawing.Color ToSystemColor(this ColorBGRA color)
+        {
+            return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 
         #endregion

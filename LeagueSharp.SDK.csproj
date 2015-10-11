@@ -69,6 +69,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Presentation" />
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +103,7 @@
     <Compile Include="Core\GameObjects.cs" />
     <Compile Include="Core\Enumerations\DrawType.cs" />
     <Compile Include="Core\UI\IMenu\Abstracts\AMenuComponent.cs" />
+    <Compile Include="Core\UI\IMenu\ColorSpectrum.cs" />
     <Compile Include="Core\UI\IMenu\Menu.cs" />
     <Compile Include="Core\UI\IMenu\Customizer\MenuCustomizer.cs" />
     <Compile Include="Core\UI\IMenu\MenuItem.cs" />
@@ -110,6 +112,18 @@
     <Compile Include="Core\UI\IMenu\RadioMenu.cs" />
     <Compile Include="Core\UI\IMenu\Skins\ADrawable.cs" />
     <Compile Include="Core\UI\IMenu\Skins\ADrawableAdapter.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueBool.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueButton.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueKeyBind.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueList.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueMenu.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueSeparator.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueSlider.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueTextures.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueTheme.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueUtilities.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueMenuSettings.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueColorPicker.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultBool.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultButton.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultColorPicker.cs" />
@@ -136,6 +150,7 @@
     <Compile Include="Core\UI\INotifications\NotificationIcons.cs" />
     <Compile Include="Core\Enumerations\NotificationIconType.cs" />
     <Compile Include="Core\UI\INotifications\Notifications.cs" />
+    <Compile Include="Core\UI\Utils.cs" />
     <Compile Include="Core\Utils\BinarySerializer.cs" />
     <Compile Include="Core\Utils\DefaultValue.cs" />
     <Compile Include="Core\Wrappers\Items.cs" />
