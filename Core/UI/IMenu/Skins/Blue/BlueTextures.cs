@@ -75,7 +75,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
 
     internal class BlueTextureWrapper
     {
-        public Texture Texture { get; }
+        public Texture Texture { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
 
