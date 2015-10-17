@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueBool.cs" company="LeagueSharp">
+// <copyright file="LightBool.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 //   A default implementation of a <see cref="ADrawable{MenuBool}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
 {
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
@@ -33,7 +33,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     /// <summary>
     ///     A blue implementation of a <see cref="ADrawable{MenuBool}" />
     /// </summary>
-    public class BlueBool : ADrawable<MenuBool>
+    public class LightBool : ADrawable<MenuBool>
     {
         #region Static Fields
 
@@ -52,7 +52,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <param name="component">
         ///     The component
         /// </param>
-        public BlueBool(MenuBool component)
+        public LightBool(MenuBool component)
             : base(component)
         {
         }
@@ -90,7 +90,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         {
             var centerY =
                 (int)
-                BlueUtilities.GetContainerRectangle(this.Component)
+                LightUtilities.GetContainerRectangle(this.Component)
                     .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
 
@@ -115,7 +115,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                             + MenuSettings.ContainerHeight / 2f, 
                             this.Component.Position.Y + MenuSettings.ContainerHeight - 3)
                     }, 
-                this.Component.Value ? new ColorBGRA(0, 186, 255, 255) : new ColorBGRA(36, 36, 36, 255));
+                this.Component.Value ? new ColorBGRA(68, 160, 255, 255) : new ColorBGRA(151, 151, 151, 255));
             Line.End();
 
             var centerX =
@@ -134,7 +134,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 this.Component.Value ? "On" : "Off", 
                 centerX, 
                 centerY,
-                this.Component.Value ? new ColorBGRA(0, 27, 41, 255) : MenuSettings.TextColor);
+                new ColorBGRA(221, 233, 255, 255));
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// </returns>
         public override int Width()
         {
-            return BlueUtilities.CalcWidthItem(this.Component) + MenuSettings.ContainerHeight;
+            return LightUtilities.CalcWidthItem(this.Component) + MenuSettings.ContainerHeight;
         }
 
         #endregion

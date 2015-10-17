@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueSeparator.cs" company="LeagueSharp">
+// <copyright file="LightSeparator.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,27 +19,30 @@
 //   Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
 {
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Math;
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Light;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
+
+    using SharpDX;
 
     /// <summary>
     ///     Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.
     /// </summary>
-    public class BlueSeparator : ADrawable<MenuSeparator>
+    public class LightSeparator2 : LightSeparator
     {
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlueSeparator" /> class.
+        ///     Initializes a new instance of the <see cref="LightSeparator" /> class.
         /// </summary>
         /// <param name="component">
         ///     The menu component
         /// </param>
-        public BlueSeparator(MenuSeparator component)
+        public LightSeparator2(MenuSeparator component)
             : base(component)
         {
         }
@@ -49,53 +52,23 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Disposes any resources used in this handler.
-        /// </summary>
-        public override void Dispose()
-        {
-            // Do nothing.
-        }
-
-        /// <summary>
         ///     Draw a <see cref="MenuSeparator" />
         /// </summary>
         public override void Draw()
         {
-            var centerY = BlueUtilities.GetContainerRectangle(this.Component)
+            var centerY = LightUtilities.GetContainerRectangle(this.Component)
                 .GetCenteredText(
                     null,
-                    MenuSettings.Font,
-                    this.Component.DisplayName,
+                    MenuSettings.Font, 
+                    this.Component.DisplayName, 
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
-            BlueMenuSettings.FontCaption.DrawText(
-                MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
-                (int)centerY.X,
+            LightMenuSettings.FontCaption.DrawText(
+                MenuManager.Instance.Sprite, 
+                this.Component.DisplayName.ToUpper(), 
+                (int)centerY.X, 
                 (int)centerY.Y,
-                BlueMenuSettings.TextCaptionColor);
-        }
-
-        /// <summary>
-        ///     Processes windows messages
-        /// </summary>
-        /// <param name="args">
-        ///     The event data
-        /// </param>
-        public override void OnWndProc(WindowsKeys args)
-        {
-            // Do nothing.
-        }
-
-        /// <summary>
-        ///     Calculates the Width of an AMenuComponent
-        /// </summary>
-        /// <returns>
-        ///     The width.
-        /// </returns>
-        public override int Width()
-        {
-            return BlueUtilities.CalcWidthItem(this.Component);
+                new ColorBGRA(40, 40, 40, 255));
         }
 
         #endregion

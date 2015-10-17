@@ -20,7 +20,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 {
     using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
 
@@ -29,7 +29,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     /// <summary>
     ///     Provides a set of functions used in the Default theme.
     /// </summary>
-    public class BlueUtilities
+    public class BlueUtilities2
     {
         #region Public Methods and Operators
 

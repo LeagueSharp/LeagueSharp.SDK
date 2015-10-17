@@ -19,7 +19,7 @@
 //   Provides a default implementation of <see cref="ADrawable{Menu}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 {
     using System;
     using System.Drawing;
@@ -29,6 +29,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Properties;
 
@@ -40,7 +41,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     /// <summary>
     ///     Provides a default implementation of <see cref="ADrawable{Menu}" />
     /// </summary>
-    public class BlueMenu : ADrawable<Menu>
+    public class BlueMenu2 : BlueMenu
     {
         #region Constants
 
@@ -95,7 +96,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <param name="component">
         ///     The component.
         /// </param>
-        public BlueMenu(Menu component)
+        public BlueMenu2(Menu component)
             : base(component)
         {
             
@@ -148,8 +149,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 MenuSettings.TextColor);
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                "»", 
+                MenuManager.Instance.Sprite,
+                "\u25B6", 
                 (int)
                 (position.X + this.Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
                  - MenuSettings.ContainerTextMarkOffset), 
@@ -168,7 +169,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                                 position.X + this.Component.MenuWidth / 2f, 
                                 position.Y + MenuSettings.ContainerHeight)
                         },
-                    MenuSettings.ContainerSelectedColor);
+                    BlueMenuSettings2.ContainerSelectedColor);
                 Line.End();
 
                 float height = MenuSettings.ContainerHeight * this.Component.Components.Count;
@@ -199,22 +200,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                         var childPos = new Vector2(
                             position.X + this.Component.MenuWidth, 
                             position.Y + i * MenuSettings.ContainerHeight);
-
-                        if (i < this.Component.Components.Count - 1)
-                        {
-                            Line.Width = 1f;
-                            Line.Begin();
-                            Line.Draw(
-                                new[]
-                                    {
-                                        new Vector2(childPos.X + 15, childPos.Y + MenuSettings.ContainerHeight), 
-                                        new Vector2(
-                                            childPos.X - 15 + childComponent.MenuWidth, 
-                                            childPos.Y + MenuSettings.ContainerHeight)
-                                    },
-                                MenuSettings.ContainerSeparatorColor);
-                            Line.End();
-                        }
 
                         childComponent.OnDraw(childPos);
                     }
@@ -262,7 +247,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 var oldMatrix = sprite.Transform;
                 var y =
                     (int)(MenuSettings.Position.Y + (MenuManager.Instance.Menus.Count * MenuSettings.ContainerHeight));
-                var dragTexture = BlueTextures.Instance[BlueTexture.Dragging];
+                var dragTexture = BlueTextures2.Instance[BlueTexture2.Dragging];
                 var x = MenuSettings.Position.X - dragTexture.Width;
                 sprite.Transform = Matrix.Translation(x - 1, y + 2, 0);
                 sprite.Draw(dragTexture.Texture, Color.White);
@@ -338,7 +323,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         {
             return
                 (int)
-                (BlueUtilities.MeasureString(this.Component.DisplayName + " »").Width
+                (BlueUtilities.MeasureString(this.Component.DisplayName + " \u25B6").Width
                  + (MenuSettings.ContainerTextOffset * 2) + MenuSettings.ContainerTextMarkWidth);
         }
 

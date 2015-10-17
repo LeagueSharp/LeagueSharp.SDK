@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueButton.cs" company="LeagueSharp">
+// <copyright file="LightButton.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 //   A default implementation of <see cref="ADrawable{MenuButton}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
 {
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
@@ -33,7 +33,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     /// <summary>
     ///     A default implementation of <see cref="ADrawable{MenuButton}" />
     /// </summary>
-    public class BlueButton : ADrawable<MenuButton>
+    public class LightButton : ADrawable<MenuButton>
     {
         #region Constants
 
@@ -58,24 +58,24 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <summary>
         ///     The button color.
         /// </summary>
-        private readonly ColorBGRA buttonColor = new ColorBGRA(37, 37, 37, 255);
+        private readonly ColorBGRA buttonColor = new ColorBGRA(151, 151, 151, 255);
 
         /// <summary>
         ///     The button hover color.
         /// </summary>
-        private readonly ColorBGRA buttonHoverColor = new ColorBGRA(67, 67, 67, 200);
+        private readonly ColorBGRA buttonHoverColor = new ColorBGRA(171, 171, 171, 200);
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlueButton" /> class.
+        ///     Initializes a new instance of the <see cref="LightButton" /> class.
         /// </summary>
         /// <param name="component">
         ///     The menu component
         /// </param>
-        public BlueButton(MenuButton component)
+        public LightButton(MenuButton component)
             : base(component)
         {
         }
@@ -115,7 +115,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// </summary>
         public override void Draw()
         {
-            var rectangleName = BlueUtilities.GetContainerRectangle(this.Component)
+            var rectangleName = LightUtilities.GetContainerRectangle(this.Component)
                 .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
@@ -128,20 +128,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             var buttonTextWidth =
                 MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, this.Component.ButtonText, 0).Width;
 
-            //Line.Width = MenuSettings.ContainerHeight;
-            //Line.Begin();
-            //Line.Draw(
-            //    new[]
-            //        {
-            //            new Vector2(
-            //                this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - (2 * TextGap), 
-            //                this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
-            //            new Vector2(
-            //                this.Component.Position.X + this.Component.MenuWidth, 
-            //                this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
-            //        },
-            //    MenuSettings.HoverColor);
-            //Line.End();
             Line.Width = MenuSettings.ContainerHeight - 5;
             Line.Begin();
             Line.Draw(
@@ -162,7 +148,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 this.Component.ButtonText, 
                 (int)(this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - TextGap), 
                 (int)rectangleName.Y,
-                MenuSettings.TextColor);
+                new ColorBGRA(221, 233, 255, 255));
         }
 
         /// <summary>
@@ -202,7 +188,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// </returns>
         public override int Width()
         {
-            return BlueUtilities.CalcWidthItem(this.Component) + (2 * TextGap)
+            return LightUtilities.CalcWidthItem(this.Component) + (2 * TextGap)
                    + MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, this.Component.ButtonText, 0).Width;
         }
 

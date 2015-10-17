@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueSlider.cs" company="LeagueSharp">
+// <copyright file="LightSlider.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 //   A default implementation of an <see cref="ADrawable{MenuSlider}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
 {
     using System;
     using System.Globalization;
@@ -36,7 +36,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     /// <summary>
     ///     A default implementation of an <see cref="ADrawable{MenuSlider}" />
     /// </summary>
-    public class BlueSlider : ADrawable<MenuSlider>
+    public class LightSlider : ADrawable<MenuSlider>
     {
         #region Static Fields
 
@@ -55,12 +55,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlueSlider" /> class.
+        ///     Initializes a new instance of the <see cref="LightSlider" /> class.
         /// </summary>
         /// <param name="component">
         ///     The menu component
         /// </param>
-        public BlueSlider(MenuSlider component)
+        public LightSlider(MenuSlider component)
             : base(component)
         {
         }
@@ -76,7 +76,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <returns>The <see cref="Rectangle" /></returns>
         public Rectangle AdditionalBoundries(MenuSlider component)
         {
-            return BlueUtilities.GetContainerRectangle(component);
+            return LightUtilities.GetContainerRectangle(component);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <returns>The <see cref="Rectangle" /></returns>
         public Rectangle Bounding(MenuSlider component)
         {
-            return BlueUtilities.GetContainerRectangle(component);
+            return LightUtilities.GetContainerRectangle(component);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             var position = this.Component.Position;
             var centeredY =
                 (int)
-                BlueUtilities.GetContainerRectangle(this.Component)
+                LightUtilities.GetContainerRectangle(this.Component)
                     .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
             var percent = (this.Component.Value - this.Component.MinValue)
@@ -116,7 +116,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             Line.Begin();
             Line.Draw(
                 new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) }, 
-                this.Component.Interacting ? new ColorBGRA(90, 129, 144, 255) : new ColorBGRA(0, 39, 54, 255));
+                this.Component.Interacting ? new ColorBGRA(90, 129, 144, 255) : new ColorBGRA(94, 170, 246, 255));
             Line.End();
 
             MenuSettings.Font.DrawText(
@@ -145,7 +145,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                         new Vector2(position.X + Offset, position.Y + MenuSettings.ContainerHeight / 2f),
                         new Vector2(x, position.Y + MenuSettings.ContainerHeight / 2f)
                     },
-                BlueMenuSettings.SliderColor);
+                LightMenuSettings.SliderColor);
             Line.End();
         }
 
@@ -188,7 +188,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// </returns>
         public override int Width()
         {
-            return BlueUtilities.CalcWidthItem(this.Component) + 100;
+            return LightUtilities.CalcWidthItem(this.Component) + 100;
         }
 
         #endregion

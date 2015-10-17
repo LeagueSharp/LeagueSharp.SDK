@@ -654,9 +654,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             //Left
             Utils.DrawLine(
                 this.mPos.X - 1,
-                this.mPos.Y + this.mHeight - 1,
+                this.mPos.Y + this.mHeight - 2,
                 this.mPos.X + this.mWidth - 3,
-                this.mPos.Y + this.mHeight - 1,
+                this.mPos.Y + this.mHeight - 2,
                 1,
                 color); //Bot
             Utils.DrawLine(
@@ -1002,37 +1002,58 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             this.mHeight = size.Height;
             this.mWidth = size.Width;
 
-            this.RedrawControl();
+            this.DrawControl();
         }
 
         #endregion
 
         #region Delegates
 
+        /// <summary>
+        /// EventHandler for the event <see cref="VerticalColorSlider.ColorSliderScroll" />
+        /// </summary>
         public delegate void ColorSliderScrollEventHandler();
 
         #endregion
 
         #region Public Events
-
+        /// <summary>
+        /// The event which gets fired when the color get changed
+        /// </summary>
         public event ColorSliderScrollEventHandler ColorSliderScroll;
 
         #endregion
 
         #region Enums
 
+        /// <summary>
+        /// The DrawStyle enum
+        /// </summary>
         public enum EDrawStyle
         {
+            /// <summary>
+            /// Hue Style
+            /// </summary>
             Hue,
-
+            /// <summary>
+            /// Saturation Style
+            /// </summary>
             Saturation,
-
+            /// <summary>
+            /// Brightness Style
+            /// </summary>
             Brightness,
-
+            /// <summary>
+            /// Red Style
+            /// </summary>
             Red,
-
+            /// <summary>
+            /// Green Style
+            /// </summary>
             Green,
-
+            /// <summary>
+            /// Blue Style
+            /// </summary>
             Blue
         }
 
@@ -1040,8 +1061,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 
         #region Public Properties
 
+        /// <summary>
+        /// Position of the two Arrows
+        /// </summary>
         public int ArrowPos { get; private set; }
 
+        /// <summary>
+        /// Hue, Saturation, Lightness Property
+        /// </summary>
         public Hsl CbHsl
         {
             get
@@ -1054,10 +1081,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.mRgb = Utilities.HslToRgb(this.mHsl);
 
                 this.ResetSlider(true);
-                this.RedrawControl();
+                this.DrawControl();
             }
         }
 
+        /// <summary>
+        /// The DrawStyle Property
+        /// </summary>
         public EDrawStyle DrawStyle
         {
             get
@@ -1069,12 +1099,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.mEDrawStyle = value;
 
                 this.ResetSlider(true);
-                this.RedrawControl();
+                this.DrawControl();
             }
         }
 
+        /// <summary>
+        /// Position of the ColorSlider
+        /// </summary>
         public Vector2 Position { get; set; }
 
+        /// <summary>
+        /// Red, Green, Blue Property
+        /// </summary>
         public Color Rgb
         {
             get
@@ -1087,7 +1123,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.mHsl = Utilities.RgbToHsl(this.mRgb);
 
                 this.ResetSlider(true);
-                this.RedrawControl();
+                this.DrawControl();
             }
         }
 
@@ -1095,7 +1131,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 
         #region Public Methods and Operators
 
-        public void RedrawControl(Vector2 newPos = new Vector2())
+        /// <summary>
+        /// Draws the ColorSlider
+        /// </summary>
+        /// <param name="newPos">Sets a new Position</param>
+        public void DrawControl(Vector2 newPos = new Vector2())
         {
             this.Position = newPos;
 
@@ -1104,6 +1144,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             this.DrawBorder();
         }
 
+        /// <summary>
+        /// Gets fired when the left mouse button is pressed
+        /// </summary>
+        /// <param name="args">Keys</param>
         public void VerticalColorSlider_MouseDown(WindowsKeys args)
         {
             if (args.Msg == WindowsMessages.LBUTTONDOWN)
@@ -1132,6 +1176,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
+        /// <summary>
+        /// Gets fired when the mouse is moved and pressed before
+        /// </summary>
+        /// <param name="args">Keys</param>
         public void VerticalColorSlider_MouseMove(WindowsKeys args)
         {
             if (this.mDragging && args.Msg == WindowsMessages.MOUSEMOVE)
@@ -1157,6 +1205,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
+        /// <summary>
+        /// Gets fired when the mouse is released and pressed before
+        /// </summary>
+        /// <param name="args">Keys</param>
         public void VerticalColorSlider_MouseUp(WindowsKeys args)
         {
             if (this.mDragging && args.Msg == WindowsMessages.LBUTTONUP)
@@ -1188,6 +1240,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 
         #region Methods
 
+        /// <summary>
+        /// Draws in Blue Style
+        /// </summary>
         private void DrawStyleBlue()
         {
             Line.Begin();
@@ -1207,6 +1262,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             Line.End();
         }
 
+        /// <summary>
+        /// Draws in Green Style
+        /// </summary>
         private void DrawStyleGreen()
         {
             Line.Begin();
@@ -1226,6 +1284,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             Line.End();
         }
 
+        /// <summary>
+        /// Draws in Hue Style
+        /// </summary>
         private void DrawStyleHue()
         {
             var hsl = new Hsl();
@@ -1249,6 +1310,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             Line.End();
         }
 
+        /// <summary>
+        /// Draws in Luminance Style
+        /// </summary>
         private void DrawStyleLuminance()
         {
             var hsl = new Hsl();
@@ -1272,6 +1336,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             Line.End();
         }
 
+        /// <summary>
+        /// Draws in Red Style
+        /// </summary>
         private void DrawStyleRed()
         {
             Line.Begin();
@@ -1291,6 +1358,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             Line.End();
         }
 
+        /// <summary>
+        /// Draws in Saturation Style
+        /// </summary>
         private void DrawStyleSaturation()
         {
             var hsl = new Hsl();
@@ -1314,6 +1384,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             Line.End();
         }
 
+        /// <summary>
+        /// Draws the Border around the ColorSlider
+        /// </summary>
         private void DrawBorder()
         {
             ColorBGRA color = Color.FromArgb(37, 37, 37).ToSharpDxColor();
@@ -1350,6 +1423,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             //Right
         }
 
+        /// <summary>
+        /// Draws in Content of the ColorSlider
+        /// </summary>
         private void DrawContent()
         {
             switch (this.mEDrawStyle)
@@ -1381,6 +1457,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
+        /// <summary>
+        /// Draws the Arrows
+        /// </summary>
         private void DrawSlider(int position, bool unconditional)
         {
             if (position < 0)
@@ -1412,6 +1491,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             Utils.DrawBoxFilled(this.Position.X + this.mWidth - 2 - 6, this.Position.Y + position + 3, 2, 1, color);
         }
 
+        /// <summary>
+        /// Resets the Arrows
+        /// </summary>
+        /// <param name="redraw">Force Redraw</param>
         private void ResetSlider(bool redraw)
         {
             switch (this.mEDrawStyle)
@@ -1454,6 +1537,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
+        /// <summary>
+        /// Resets the Color
+        /// </summary>
         private void ResetHslrgb()
         {
             switch (this.mEDrawStyle)
@@ -1504,6 +1590,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #endregion
     }
 
+    /// <summary>
+    /// The VerticalAlphaSlider
+    /// </summary>
     public class VerticalAlphaSlider
     {
         #region Static Fields
@@ -1517,22 +1606,44 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 
         #region Fields
 
+        /// <summary>
+        /// Is User dragging the slider
+        /// </summary>
         private bool mBDragging;
 
+        /// <summary>
+        /// Defines the Display Style
+        /// </summary>
         private EDrawStyle mEDrawStyle = EDrawStyle.Brightness;
 
+        /// <summary>
+        /// Height of the ColorBox
+        /// </summary>
         private int mHeight;
 
+        /// <summary>
+        /// Width of the ColorBox
+        /// </summary>
+        private int mWidth;
+
+        /// <summary>
+        /// Hue, Saturation, Lightness 
+        /// </summary>
         private Hsl mHsl;
 
+        /// <summary>
+        /// Reg, Green, Blue
+        /// </summary>
         private Color mRgb;
-
-        private int mWidth;
 
         #endregion
 
         #region Constructors and Destructors
 
+        /// <summary>
+        /// Init the VerticalAlphaSlider
+        /// </summary>
+        /// <param name="size"></param>
         public VerticalAlphaSlider(Size size)
         {
             this.mHsl = new Hsl();
@@ -1546,37 +1657,59 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             this.mHeight = size.Height;
             this.mWidth = size.Width;
 
-            this.RedrawControl();
+            this.DrawControl();
         }
 
         #endregion
 
         #region Delegates
 
-        public delegate void ColorSliderScrollEventHandler();
+        /// <summary>
+        /// EventHandler for the event <see cref="VerticalAlphaSlider.AlphaSliderScroll" />
+        /// </summary>
+        public delegate void AlphaSliderScrollEventHandler();
 
         #endregion
 
         #region Public Events
 
-        public event ColorSliderScrollEventHandler ColorSliderScroll;
+        /// <summary>
+        /// The event which gets fired when the color get changed
+        /// </summary>
+        public event AlphaSliderScrollEventHandler AlphaSliderScroll;
 
         #endregion
 
         #region Enums
 
+        /// <summary>
+        /// The DrawStyle enum
+        /// </summary>
         public enum EDrawStyle
         {
+            /// <summary>
+            /// Hue Style
+            /// </summary>
             Hue,
-
+            /// <summary>
+            /// Saturation Style
+            /// </summary>
             Saturation,
-
+            /// <summary>
+            /// Brightness Style
+            /// </summary>
             Brightness,
-
+            /// <summary>
+            /// Red Style
+            /// </summary>
             Red,
-
+            /// <summary>
+            /// Green Style
+            /// </summary>
             Green,
-
+            /// <summary>
+            /// Blue Style
+            /// </summary>
             Blue
         }
 
@@ -1584,8 +1717,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 
         #region Public Properties
 
+        /// <summary>
+        /// Position of the two Arrows
+        /// </summary>
         public int ArrowPos { get; private set; }
 
+        /// <summary>
+        /// Hue, Saturation, Lightness Property
+        /// </summary>
         public Hsl CbHsl
         {
             get
@@ -1598,10 +1737,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.mRgb = Utilities.HslToRgb(this.mHsl);
 
                 this.ResetSlider(true);
-                this.RedrawControl();
+                this.DrawControl();
             }
         }
 
+        /// <summary>
+        /// The DrawStyle Property
+        /// </summary>
         public EDrawStyle DrawStyle
         {
             get
@@ -1613,12 +1755,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.mEDrawStyle = value;
 
                 this.ResetSlider(true);
-                this.RedrawControl();
+                this.DrawControl();
             }
         }
 
+        /// <summary>
+        /// Position of the ColorSlider
+        /// </summary>
         public Vector2 Position { get; set; }
 
+        /// <summary>
+        /// Red, Green, Blue Property
+        /// </summary>
         public Color Rgb
         {
             get
@@ -1631,7 +1779,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.mHsl = Utilities.RgbToHsl(this.mRgb);
 
                 this.ResetSlider(true);
-                this.RedrawControl();
+                this.DrawControl();
             }
         }
 
@@ -1639,7 +1787,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 
         #region Public Methods and Operators
 
-        public void RedrawControl(Vector2 newPos = new Vector2())
+        /// <summary>
+        /// Draws the AlphaSlider
+        /// </summary>
+        /// <param name="newPos">Sets a new Position</param>
+        public void DrawControl(Vector2 newPos = new Vector2())
         {
             this.Position = newPos;
 
@@ -1648,6 +1800,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             this.DrawBorder();
         }
 
+        /// <summary>
+        /// Gets fired when the left mouse button is pressed
+        /// </summary>
+        /// <param name="args">Keys</param>
         public void VerticalAlphaSlider_MouseDown(WindowsKeys args)
         {
             if (args.Msg == WindowsMessages.LBUTTONDOWN)
@@ -1669,13 +1825,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 
                 this.DrawSlider(y, false);
                 this.ResetHslrgb();
-                if (this.ColorSliderScroll != null)
+                if (this.AlphaSliderScroll != null)
                 {
-                    this.ColorSliderScroll();
+                    this.AlphaSliderScroll();
                 }
             }
         }
 
+        /// <summary>
+        /// Gets fired when the mouse is moved and pressed before
+        /// </summary>
+        /// <param name="args">Keys</param>
         public void VerticalAlphaSlider_MouseMove(WindowsKeys args)
         {
             if (this.mBDragging && args.Msg == WindowsMessages.MOUSEMOVE)
@@ -1694,13 +1854,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.ArrowPos = y;
                 this.DrawSlider(y, false);
                 this.ResetHslrgb();
-                if (this.ColorSliderScroll != null)
+                if (this.AlphaSliderScroll != null)
                 {
-                    this.ColorSliderScroll();
+                    this.AlphaSliderScroll();
                 }
             }
         }
 
+        /// <summary>
+        /// Gets fired when the mouse is released and pressed before
+        /// </summary>
+        /// <param name="args">Keys</param>
         public void VerticalAlphaSlider_MouseUp(WindowsKeys args)
         {
             if (this.mBDragging && args.Msg == WindowsMessages.LBUTTONUP)
@@ -1721,9 +1885,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.ArrowPos = y;
                 this.DrawSlider(y, false);
                 this.ResetHslrgb();
-                if (this.ColorSliderScroll != null)
+                if (this.AlphaSliderScroll != null)
                 {
-                    this.ColorSliderScroll();
+                    this.AlphaSliderScroll();
                 }
             }
         }
@@ -1732,6 +1896,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 
         #region Methods
 
+        /// <summary>
+        /// Draws in Blue Style
+        /// </summary>
         private void DrawStyleBlue()
         {
             Line.Begin();
@@ -1751,6 +1918,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             Line.End();
         }
 
+        /// <summary>
+        /// Draws in Green Style
+        /// </summary>
         private void DrawStyleGreen()
         {
             Line.Begin();
@@ -1770,6 +1940,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             Line.End();
         }
 
+        /// <summary>
+        /// Draws in Hue Style
+        /// </summary>
         private void DrawStyleHue()
         {
             var hsl = new Hsl();
@@ -1793,6 +1966,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             Line.End();
         }
 
+        /// <summary>
+        /// Draws in Luminance Style
+        /// </summary>
         private void DrawStyleLuminance()
         {
             var hsl = new Hsl();
@@ -1816,6 +1992,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             Line.End();
         }
 
+        /// <summary>
+        /// Draws in Red Style
+        /// </summary>
         private void DrawStyleRed()
         {
             Line.Begin();
@@ -1835,6 +2014,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             Line.End();
         }
 
+        /// <summary>
+        /// Draws in Saturation Style
+        /// </summary>
         private void DrawStyleSaturation()
         {
             var hsl = new Hsl();
@@ -1858,6 +2040,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             Line.End();
         }
 
+        /// <summary>
+        /// Draws the Border around the AlphaSlider
+        /// </summary>
         private void DrawBorder()
         {
             ColorBGRA color = Color.FromArgb(37, 37, 37).ToSharpDxColor();
@@ -1894,6 +2079,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             //Right
         }
 
+        /// <summary>
+        /// Draws in Content of the AlphaSlider
+        /// </summary>
         private void DrawContent()
         {
             switch (this.mEDrawStyle)
@@ -1925,6 +2113,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
+        /// <summary>
+        /// Draws the Arrows
+        /// </summary>
         private void DrawSlider(int position, bool unconditional)
         {
             if (position < 0)
@@ -1956,6 +2147,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             Utils.DrawBoxFilled(this.Position.X + this.mWidth - 2 - 6, this.Position.Y + position + 3, 2, 1, color);
         }
 
+        /// <summary>
+        /// Resets the Arrows
+        /// </summary>
+        /// <param name="redraw">Force Redraw</param>
         private void ResetSlider(bool redraw)
         {
             switch (this.mEDrawStyle)
@@ -1998,6 +2193,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
+        /// <summary>
+        /// Resets the Color
+        /// </summary>
         private void ResetHslrgb()
         {
             switch (this.mEDrawStyle)
@@ -2048,10 +2246,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #endregion
     }
 
+    /// <summary>
+    /// Adobe Color Utitlies for HSL
+    /// </summary>
     public class AdobeColors
     {
         #region Public Methods and Operators
 
+        /// <summary>
+        /// Modifies brightness of c by brightness
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="brightness"></param>
+        /// <returns>New color</returns>
         public Color ModifyBrightness(Color c, double brightness)
         {
             var hsl = new Hsl();
@@ -2059,6 +2266,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             return Utilities.HslToRgb(hsl);
         }
 
+        /// <summary>
+        /// Modifies hue of c by hue
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="hue"></param>
+        /// <returns>New color</returns>
         public Color ModifyHue(Color c, double hue)
         {
             var hsl = new Hsl();
@@ -2066,6 +2279,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             return Utilities.HslToRgb(hsl);
         }
 
+        /// <summary>
+        /// Modifies saturation of c by saturation
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="saturation"></param>
+        /// <returns>New color</returns>
         public Color ModifySaturation(Color c, double saturation)
         {
             var hsl = new Hsl();
@@ -2073,6 +2292,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             return Utilities.HslToRgb(hsl);
         }
 
+        /// <summary>
+        /// Sets brightness of c by brightness
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="brightness"></param>
+        /// <returns>New color</returns>
         public Color SetBrightness(Color c, double brightness)
         {
             var hsl = new Hsl();
@@ -2080,6 +2305,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             return Utilities.HslToRgb(hsl);
         }
 
+        /// <summary>
+        /// Sets hue of c by hue
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="hue"></param>
+        /// <returns>New color</returns>
         public Color SetHue(Color c, double hue)
         {
             var hsl = new Hsl();
@@ -2087,6 +2318,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             return Utilities.HslToRgb(hsl);
         }
 
+        /// <summary>
+        /// Sets saturation of c by saturation
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="saturation"></param>
+        /// <returns>New color</returns>
         public Color SetSaturation(Color c, double saturation)
         {
             var hsl = new Hsl();
@@ -2097,22 +2334,40 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #endregion
     }
 
+    /// <summary>
+    /// Color spectrum CMYK
+    /// </summary>
     public class Cmyk
     {
         #region Fields
 
+        /// <summary>
+        /// Cyan
+        /// </summary>
         private double c;
 
+        /// <summary>
+        /// Key plate (black)
+        /// </summary>
         private double k;
 
+        /// <summary>
+        /// Magenta
+        /// </summary>
         private double m;
 
+        /// <summary>
+        /// Yellow
+        /// </summary>
         private double y;
 
         #endregion
 
         #region Public Properties
 
+        /// <summary>
+        /// Cyan
+        /// </summary>
         public double C
         {
             get
@@ -2133,6 +2388,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
+        /// <summary>
+        /// Key plate (black)
+        /// </summary>
         public double K
         {
             get
@@ -2153,6 +2411,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
+        /// <summary>
+        /// Magenta
+        /// </summary>
         public double M
         {
             get
@@ -2173,6 +2434,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
+        /// <summary>
+        /// Yellow
+        /// </summary>
         public double Y
         {
             get
@@ -2196,20 +2460,35 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #endregion
     }
 
+    /// <summary>
+    /// Color spectrum HSL
+    /// </summary>
     public class Hsl
     {
         #region Fields
 
+        /// <summary>
+        /// Hue
+        /// </summary>
         private double h;
 
+        /// <summary>
+        /// Lightness
+        /// </summary>
         private double l;
 
+        /// <summary>
+        /// Saturation
+        /// </summary>
         private double s;
 
         #endregion
 
         #region Public Properties
 
+        /// <summary>
+        /// Hue
+        /// </summary>
         public double H
         {
             get
@@ -2230,6 +2509,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
+        /// <summary>
+        /// Lightness
+        /// </summary>
         public double L
         {
             get
@@ -2250,6 +2532,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
+        /// <summary>
+        /// Saturation
+        /// </summary>
         public double S
         {
             get
@@ -2273,10 +2558,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #endregion
     }
 
+    /// <summary>
+    /// Color Utilities
+    /// </summary>
     internal static class Utilities
     {
         #region Public Methods and Operators
 
+        /// <summary>
+        /// Converts the CMYK color format to RGB
+        /// </summary>
+        /// <param name="cmyk"></param>
+        /// <returns>Converted color</returns>
         public static Color CmykToRgb(Cmyk cmyk)
         {
             var red = 0;
@@ -2295,6 +2588,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             return Color.FromArgb(red, green, blue);
         }
 
+        /// <summary>
+        /// Converts the HSL color format to RGB
+        /// </summary>
+        /// <param name="hsl"></param>
+        /// <returns>Converted color</returns>
         public static Color HslToRgb(Hsl hsl)
         {
             var max = 0;
@@ -2339,6 +2637,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             return Color.FromArgb(0, 0, 0);
         }
 
+        /// <summary>
+        /// Converts the RGB color format to CMYK
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns>Converted color</returns>
         public static Cmyk RgbToCmyk(Color c)
         {
             var cmyk = new Cmyk();
@@ -2370,6 +2673,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             return cmyk;
         }
 
+        /// <summary>
+        /// Converts the RGB color format to HSL
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns>Converted color</returns>
         public static Hsl RgbToHsl(Color c)
         {
             var hsl = new Hsl();

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueTextures.cs" company="LeagueSharp">
+// <copyright file="LightTextures.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
 {
     using System.Drawing;
 
@@ -34,31 +34,31 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     using SharpDX;
     using SharpDX.Direct3D9;
 
-    internal enum BlueTexture
+    internal enum LightTexture
     {
         Dragging,
     }
 
-    internal class BlueTextures
+    internal class LightTextures
     {
 
-        private readonly Dictionary<BlueTexture, BlueTextureWrapper> textures = new Dictionary<BlueTexture, BlueTextureWrapper>();
+        private readonly Dictionary<LightTexture, BlueTextureWrapper> textures = new Dictionary<LightTexture, BlueTextureWrapper>();
 
-        public static readonly BlueTextures Instance = new BlueTextures();
+        public static readonly LightTextures Instance = new LightTextures();
 
-        private BlueTextures()
+        private LightTextures()
         {
-            this.textures[BlueTexture.Dragging] = BuildTexture(Resources.cursor_drag, 16, 16);
+            this.textures[LightTexture.Dragging] = BuildTexture(Resources.cursor_drag, 16, 16);
         }
 
-        ~BlueTextures()
+        ~LightTextures()
         {
             foreach (var entry in this.textures.Where(entry => !entry.Value.Texture.IsDisposed)) {
                 entry.Value.Texture.Dispose();
             }
         }
 
-        public BlueTextureWrapper this[BlueTexture textureType]
+        public BlueTextureWrapper this[LightTexture textureType]
         {
             get
             {
@@ -86,7 +86,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             return new BlueTextureWrapper(texture, width, height);
         }
 
-        public BlueTextureWrapper AddTexture(Image bmp, int width, int height, BlueTexture textureType)
+        public BlueTextureWrapper AddTexture(Image bmp, int width, int height, LightTexture textureType)
         {
             this.textures[textureType] = BuildTexture(bmp, height, width);
             return this.textures[textureType];

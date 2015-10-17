@@ -19,13 +19,14 @@
 //   A default implementation of a <see cref="ADrawable{MenuList}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 {
     using System.Collections.Generic;
 
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
 
@@ -35,7 +36,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     /// <summary>
     ///     A default implementation of a <see cref="ADrawable{MenuList}" />
     /// </summary>
-    public class BlueList : ADrawable<MenuList>
+    public class BlueList2 : BlueList
     {
         #region Constants
 
@@ -77,7 +78,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <param name="component">
         ///     The component.
         /// </param>
-        public BlueList(MenuList component)
+        public BlueList2(MenuList component)
             : base(component)
         {
             var arrowSize = MenuSettings.Font.MeasureText(null, "V", 0);

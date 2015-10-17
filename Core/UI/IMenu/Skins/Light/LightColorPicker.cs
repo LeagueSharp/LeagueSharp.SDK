@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueColorPicker.cs" company="LeagueSharp">
+// <copyright file="LightColorPicker.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 //   A default implementation of <see cref="ADrawable{MenuButton}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
 {
     using System.Drawing;
 
@@ -37,7 +37,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     using Rectangle = SharpDX.Rectangle;
     using Utilities = LeagueSharp.SDK.Core.UI.IMenu.Utilities;
 
-    internal class BlueColorPicker : ADrawable<MenuColor>
+    internal class LightColorPicker : ADrawable<MenuColor>
     {
         #region Constants
 
@@ -149,12 +149,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlueColorPicker" /> class.
+        ///     Initializes a new instance of the <see cref="LightColorPicker" /> class.
         /// </summary>
         /// <param name="component">
         ///     The component.
         /// </param>
-        public BlueColorPicker(MenuColor component)
+        public LightColorPicker(MenuColor component)
             : base(component)
         {
             Hsl tempHsl;
@@ -218,7 +218,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// </summary>
         public override void Draw()
         {
-            var rectangleName = BlueUtilities.GetContainerRectangle(this.Component)
+            var rectangleName = LightUtilities.GetContainerRectangle(this.Component)
                 .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
@@ -312,7 +312,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                                             ApplyButtonBoundaries().X + 25,
                                             ApplyButtonBoundaries().Y + ApplyButtonBoundaries().Height)
                                     },
-                                new ColorBGRA(4, 187, 255, 255));
+                                new ColorBGRA(68, 160, 255, 255));
                             Line.End();
 
                             MenuSettings.Font.DrawText(
@@ -323,7 +323,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                                 CancelButtonBoundaries()
                                     .GetCenteredText(null, MenuSettings.Font, "Apply", CenteredFlags.VerticalCenter)
                                     .Y,
-                                new ColorBGRA(0, 27, 41, 255));
+                                new ColorBGRA(221, 233, 255, 255));
 
                             Line.Width = CancelButtonBoundaries().Width;
                             Line.Begin();
@@ -335,7 +335,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                                             CancelButtonBoundaries().X + 25,
                                             CancelButtonBoundaries().Y + CancelButtonBoundaries().Height)
                                     },
-                                new ColorBGRA(4, 187, 255, 255));
+                                new ColorBGRA(68, 160, 255, 255));
                             Line.End();
 
                             MenuSettings.Font.DrawText(
@@ -346,7 +346,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                                 CancelButtonBoundaries()
                                     .GetCenteredText(null, MenuSettings.Font, "Cancel", CenteredFlags.VerticalCenter)
                                     .Y,
-                                new ColorBGRA(0, 27, 41, 255));
+                                new ColorBGRA(221, 233, 255, 255));
                         });
             }
         }
@@ -488,7 +488,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <returns>The <see cref="int" /></returns>
         public override int Width()
         {
-            return BlueUtilities.CalcWidthItem(this.Component) + MenuSettings.ContainerHeight;
+            return LightUtilities.CalcWidthItem(this.Component) + MenuSettings.ContainerHeight;
         }
 
         #endregion

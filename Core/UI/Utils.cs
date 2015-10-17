@@ -365,7 +365,5 @@
                 DrawCircleFilled(x + radius, y + h - radius - 1, radius, 270, CircleType.Quarter, false, 16, color);       // Bottom-left corner
             }
         }
-
-        
     }
 }
