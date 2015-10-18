@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueMenuSettings.cs" company="LeagueSharp">
+// <copyright file="LightMenuSettings.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 
 //Concept by User Vasconcellos
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
 {
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -36,7 +36,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     /// <summary>
     ///     Default Skin Settings.
     /// </summary>
-    public class BlueMenuSettings : MenuSettings
+    public class LightMenuSettings : MenuSettings
     {
         #region Static Fields
 
@@ -53,11 +53,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         ///     Initializes static members of the <see cref="MenuSettings" /> class.
         ///     Default Settings Static Constructor.
         /// </summary>
-        static BlueMenuSettings()
+        static LightMenuSettings()
         {
-            RootContainerColor = new ColorBGRA(0, 0, 0, 255);
-            ContainerSeparatorColor = new ColorBGRA(24, 24, 24, 255);
-            ContainerSelectedColor = new ColorBGRA(21, 21, 21, 255);
+            RootContainerColor = new ColorBGRA(231, 231, 231, 255);
+            ContainerSeparatorColor = new ColorBGRA(210, 210, 210, 255);
+            ContainerSelectedColor = new ColorBGRA(67, 160, 255, 255);
 
             FontCaption = new Font(
                 Drawing.Direct3DDevice,
@@ -72,9 +72,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative | FontPitchAndFamily.Modern,
                 "Tahoma");
             
-            TextCaptionColor = new ColorBGRA(0, 185, 252, 255);
-            KeyBindColor = new ColorBGRA(5, 168, 235, 255);
-            SliderColor = new ColorBGRA(0, 75, 101, 255);
+            TextColor = new ColorBGRA(17, 17, 17, 255);
+            TextCaptionColor = new ColorBGRA(72, 157, 248, 255);
+            KeyBindColor = new ColorBGRA(67, 159, 255, 255);
+            SliderColor = new ColorBGRA(163, 202, 241, 255);
         }
 
         #endregion

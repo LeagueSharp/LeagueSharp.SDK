@@ -19,17 +19,18 @@
 //   Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 {
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Math;
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.
     /// </summary>
-    public class BlueSeparator : ADrawable<MenuSeparator>
+    public class BlueSeparator2 : BlueSeparator
     {
         #region Constructors and Destructors
 
@@ -39,7 +40,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <param name="component">
         ///     The menu component
         /// </param>
-        public BlueSeparator(MenuSeparator component)
+        public BlueSeparator2(MenuSeparator component)
             : base(component)
         {
         }
@@ -49,14 +50,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Disposes any resources used in this handler.
-        /// </summary>
-        public override void Dispose()
-        {
-            // Do nothing.
-        }
-
-        /// <summary>
         ///     Draw a <see cref="MenuSeparator" />
         /// </summary>
         public override void Draw()
@@ -64,38 +57,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             var centerY = BlueUtilities.GetContainerRectangle(this.Component)
                 .GetCenteredText(
                     null,
-                    MenuSettings.Font,
-                    this.Component.DisplayName,
+                    MenuSettings.Font, 
+                    this.Component.DisplayName, 
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
             BlueMenuSettings.FontCaption.DrawText(
-                MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
-                (int)centerY.X,
-                (int)centerY.Y,
+                MenuManager.Instance.Sprite, 
+                this.Component.DisplayName.ToUpper(), 
+                (int)centerY.X, 
+                (int)centerY.Y, 
                 BlueMenuSettings.TextCaptionColor);
-        }
-
-        /// <summary>
-        ///     Processes windows messages
-        /// </summary>
-        /// <param name="args">
-        ///     The event data
-        /// </param>
-        public override void OnWndProc(WindowsKeys args)
-        {
-            // Do nothing.
-        }
-
-        /// <summary>
-        ///     Calculates the Width of an AMenuComponent
-        /// </summary>
-        /// <returns>
-        ///     The width.
-        /// </returns>
-        public override int Width()
-        {
-            return BlueUtilities.CalcWidthItem(this.Component);
         }
 
         #endregion

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueList.cs" company="LeagueSharp">
+// <copyright file="LightList.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 //   A default implementation of a <see cref="ADrawable{MenuList}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
 {
     using System.Collections.Generic;
 
@@ -35,7 +35,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     /// <summary>
     ///     A default implementation of a <see cref="ADrawable{MenuList}" />
     /// </summary>
-    public class BlueList : ADrawable<MenuList>
+    public class LightList : ADrawable<MenuList>
     {
         #region Constants
 
@@ -72,12 +72,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlueList" /> class.
+        ///     Initializes a new instance of the <see cref="LightList" /> class.
         /// </summary>
         /// <param name="component">
         ///     The component.
         /// </param>
-        public BlueList(MenuList component)
+        public LightList(MenuList component)
             : base(component)
         {
             var arrowSize = MenuSettings.Font.MeasureText(null, "V", 0);
@@ -103,7 +103,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         {
             var dropdownMenuWidth = this.dropDownButtonWidth + (2 * TextSpacing) + this.Component.MaxStringWidth;
             var position = this.Component.Position;
-            var rectangleName = BlueUtilities.GetContainerRectangle(this.Component)
+            var rectangleName = LightUtilities.GetContainerRectangle(this.Component)
                 .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
@@ -382,7 +382,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <returns>The <see cref="int" /></returns>
         public override int Width()
         {
-            return BlueUtilities.CalcWidthItem(this.Component) + this.Component.MaxStringWidth + (2 * TextSpacing)
+            return LightUtilities.CalcWidthItem(this.Component) + this.Component.MaxStringWidth + (2 * TextSpacing)
                    + this.dropDownButtonWidth;
         }
 

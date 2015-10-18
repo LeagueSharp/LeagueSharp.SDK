@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueSeparator.cs" company="LeagueSharp">
+// <copyright file="LightSeparator.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 //   Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
 {
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Math;
@@ -29,17 +29,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     /// <summary>
     ///     Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.
     /// </summary>
-    public class BlueSeparator : ADrawable<MenuSeparator>
+    public class LightSeparator : ADrawable<MenuSeparator>
     {
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlueSeparator" /> class.
+        ///     Initializes a new instance of the <see cref="LightSeparator" /> class.
         /// </summary>
         /// <param name="component">
         ///     The menu component
         /// </param>
-        public BlueSeparator(MenuSeparator component)
+        public LightSeparator(MenuSeparator component)
             : base(component)
         {
         }
@@ -61,19 +61,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// </summary>
         public override void Draw()
         {
-            var centerY = BlueUtilities.GetContainerRectangle(this.Component)
+            var centerY = LightUtilities.GetContainerRectangle(this.Component)
                 .GetCenteredText(
                     null,
                     MenuSettings.Font,
                     this.Component.DisplayName,
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
-            BlueMenuSettings.FontCaption.DrawText(
+            LightMenuSettings.FontCaption.DrawText(
                 MenuManager.Instance.Sprite,
                 this.Component.DisplayName,
                 (int)centerY.X,
                 (int)centerY.Y,
-                BlueMenuSettings.TextCaptionColor);
+                LightMenuSettings.TextCaptionColor);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// </returns>
         public override int Width()
         {
-            return BlueUtilities.CalcWidthItem(this.Component);
+            return LightUtilities.CalcWidthItem(this.Component);
         }
 
         #endregion

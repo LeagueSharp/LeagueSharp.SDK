@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueTheme.cs" company="LeagueSharp">
+// <copyright file="LightTheme.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 //   Implements a default ITheme.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
 {
     using System.Linq;
 
@@ -31,7 +31,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     /// <summary>
     ///     Implements a default ITheme.
     /// </summary>
-    public class BlueTheme : ITheme
+    public class LightTheme : ITheme
     {
         #region Static Fields
 
@@ -51,7 +51,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <returns>The handler</returns>
         public ADrawable<MenuBool> BuildBoolHandler(MenuBool component)
         {
-            return new BlueBool(component);
+            return new LightBool(component);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <returns>The handler</returns>
         public ADrawable<MenuButton> BuildButtonHandler(MenuButton component)
         {
-            return new BlueButton(component);
+            return new LightButton(component);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <returns>The handler</returns>
         public ADrawable<MenuColor> BuildColorHandler(MenuColor component)
         {
-            return new BlueColorPicker(component);
+            return new LightColorPicker(component);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <returns>The handler</returns>
         public ADrawable<MenuKeyBind> BuildKeyBindHandler(MenuKeyBind component)
         {
-            return new BlueKeyBind(component);
+            return new LightKeyBind(component);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <returns>The handler</returns>
         public ADrawable<MenuList> BuildListHandler(MenuList component)
         {
-            return new BlueList(component);
+            return new LightList(component);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <returns>The handler</returns>
         public ADrawable<Menu> BuildMenuHandler(Menu menu)
         {
-            return new BlueMenu(menu);
+            return new LightMenu(menu);
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <returns>The handler</returns>
         public ADrawable<MenuSeparator> BuildSeparatorHandler(MenuSeparator component)
         {
-            return new BlueSeparator(component);
+            return new LightSeparator(component);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <returns>The handler</returns>
         public ADrawable<MenuSlider> BuildSliderHandler(MenuSlider component)
         {
-            return new BlueSlider(component);
+            return new LightSlider(component);
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                         new Vector2(position.X + width, position.Y + height), new Vector2(position.X, position.Y + height), 
                         new Vector2(position.X, position.Y)
                     },
-                new ColorBGRA(21, 26, 45, 255));
+                new ColorBGRA(254, 255, 255, 255));
             Line.End();
             
         }

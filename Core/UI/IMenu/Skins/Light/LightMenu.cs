@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueMenu.cs" company="LeagueSharp">
+// <copyright file="LightMenu.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 //   Provides a default implementation of <see cref="ADrawable{Menu}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
 {
     using System;
     using System.Drawing;
@@ -40,7 +40,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     /// <summary>
     ///     Provides a default implementation of <see cref="ADrawable{Menu}" />
     /// </summary>
-    public class BlueMenu : ADrawable<Menu>
+    public class LightMenu : ADrawable<Menu>
     {
         #region Constants
 
@@ -90,12 +90,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlueMenu" /> class.
+        ///     Initializes a new instance of the <see cref="LightMenu" /> class.
         /// </summary>
         /// <param name="component">
         ///     The component.
         /// </param>
-        public BlueMenu(Menu component)
+        public LightMenu(Menu component)
             : base(component)
         {
             
@@ -136,25 +136,46 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
 
             var centerY =
                 (int)
-                BlueUtilities.GetContainerRectangle(this.Component)
+                LightUtilities.GetContainerRectangle(this.Component)
                     .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
 
-            MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)(position.X + MenuSettings.ContainerTextOffset), 
-                centerY,
-                MenuSettings.TextColor);
+            if (this.Component.Toggled)
+            {
+                MenuSettings.Font.DrawText(
+                    MenuManager.Instance.Sprite,
+                    this.Component.DisplayName,
+                    (int)(position.X + MenuSettings.ContainerTextOffset),
+                    centerY,
+                    new ColorBGRA(237, 245, 254, 255));
 
-            MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                "»", 
-                (int)
-                (position.X + this.Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
-                 - MenuSettings.ContainerTextMarkOffset), 
-                centerY, 
-                this.Component.Components.Count > 0 ? MenuSettings.TextColor : MenuSettings.ContainerSeparatorColor);
+                MenuSettings.Font.DrawText(
+                    MenuManager.Instance.Sprite,
+                    "»",
+                    (int)
+                    (position.X + this.Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
+                     - MenuSettings.ContainerTextMarkOffset),
+                    centerY,
+                    this.Component.Components.Count > 0 ? new ColorBGRA(237, 245, 254, 255) : MenuSettings.ContainerSeparatorColor);
+            }
+            else
+            {
+                MenuSettings.Font.DrawText(
+                    MenuManager.Instance.Sprite,
+                    this.Component.DisplayName,
+                    (int)(position.X + MenuSettings.ContainerTextOffset),
+                    centerY,
+                    MenuSettings.TextColor);
+
+                MenuSettings.Font.DrawText(
+                    MenuManager.Instance.Sprite,
+                    "»",
+                    (int)
+                    (position.X + this.Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
+                     - MenuSettings.ContainerTextMarkOffset),
+                    centerY,
+                    this.Component.Components.Count > 0 ? MenuSettings.TextColor : MenuSettings.ContainerSeparatorColor);
+            }
 
             if (this.Component.Toggled)
             {
@@ -220,7 +241,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                     }
                 }
 
-                var contourColor = new ColorBGRA(21, 26, 45, 255);
+                var contourColor = new ColorBGRA(254, 255, 255, 255);
 
                 Line.Width = 1f;
                 Line.Begin();
@@ -262,7 +283,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 var oldMatrix = sprite.Transform;
                 var y =
                     (int)(MenuSettings.Position.Y + (MenuManager.Instance.Menus.Count * MenuSettings.ContainerHeight));
-                var dragTexture = BlueTextures.Instance[BlueTexture.Dragging];
+                var dragTexture = LightTextures.Instance[LightTexture.Dragging];
                 var x = MenuSettings.Position.X - dragTexture.Width;
                 sprite.Transform = Matrix.Translation(x - 1, y + 2, 0);
                 sprite.Draw(dragTexture.Texture, Color.White);
@@ -338,7 +359,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         {
             return
                 (int)
-                (BlueUtilities.MeasureString(this.Component.DisplayName + " »").Width
+                (LightUtilities.MeasureString(this.Component.DisplayName + " »").Width
                  + (MenuSettings.ContainerTextOffset * 2) + MenuSettings.ContainerTextMarkWidth);
         }
 

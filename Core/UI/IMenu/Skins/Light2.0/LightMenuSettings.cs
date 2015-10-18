@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueMenuSettings.cs" company="LeagueSharp">
+// <copyright file="LightMenuSettings.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -22,13 +22,14 @@
 
 //Concept by User Vasconcellos
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
 {
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
 
     using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Light;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -36,28 +37,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     /// <summary>
     ///     Default Skin Settings.
     /// </summary>
-    public class BlueMenuSettings : MenuSettings
+    public class LightMenuSettings2 : MenuSettings
     {
-        #region Static Fields
-
-        /// <summary>
-        ///     Local Caption Font.
-        /// </summary>
-        private static Font fontCaption;
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
         ///     Initializes static members of the <see cref="MenuSettings" /> class.
         ///     Default Settings Static Constructor.
         /// </summary>
-        static BlueMenuSettings()
+        static LightMenuSettings2()
         {
-            RootContainerColor = new ColorBGRA(0, 0, 0, 255);
-            ContainerSeparatorColor = new ColorBGRA(24, 24, 24, 255);
-            ContainerSelectedColor = new ColorBGRA(21, 21, 21, 255);
+            RootContainerColor = new ColorBGRA(255, 255, 255, 255);
+            ContainerSeparatorColor = new ColorBGRA(210, 210, 210, 255);
+            ContainerSelectedColor = new ColorBGRA(1, 149, 255, 255);
 
             FontCaption = new Font(
                 Drawing.Direct3DDevice,
@@ -71,11 +63,25 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 FontQuality.ClearType,
                 FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative | FontPitchAndFamily.Modern,
                 "Tahoma");
-            
-            TextCaptionColor = new ColorBGRA(0, 185, 252, 255);
-            KeyBindColor = new ColorBGRA(5, 168, 235, 255);
-            SliderColor = new ColorBGRA(0, 75, 101, 255);
+
+            TextColor = new ColorBGRA(0, 0, 0, 255);
+            TextCaptionColor = new ColorBGRA(40, 40, 40, 255);
+            KeyBindColor = new ColorBGRA(67, 159, 255, 255);
+            SliderColor = new ColorBGRA(163, 202, 241, 255);
         }
+
+        #endregion
+
+        #region Static Fields
+
+        /// <summary>
+        ///     Local Caption Font.
+        /// </summary>
+        private static Font fontCaption;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         #endregion
 

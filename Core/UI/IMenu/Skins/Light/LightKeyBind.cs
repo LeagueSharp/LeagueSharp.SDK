@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueKeyBind.cs" company="LeagueSharp">
+// <copyright file="LightKeyBind.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
 {
     using System.Windows.Forms;
 
@@ -36,7 +36,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     /// <summary>
     ///     A default implementation of <see cref="ADrawable{MenuKeyBind}" />
     /// </summary>
-    public class BlueKeyBind : ADrawable<MenuKeyBind>
+    public class LightKeyBind : ADrawable<MenuKeyBind>
     {
         #region Static Fields
 
@@ -50,12 +50,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlueKeyBind" /> class.
+        ///     Initializes a new instance of the <see cref="LightKeyBind" /> class.
         /// </summary>
         /// <param name="component">
         ///     The menu component
         /// </param>
-        public BlueKeyBind(MenuKeyBind component)
+        public LightKeyBind(MenuKeyBind component)
             : base(component)
         {
         }
@@ -93,7 +93,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         {
             var centerY =
                 (int)
-                BlueUtilities.GetContainerRectangle(this.Component)
+                LightUtilities.GetContainerRectangle(this.Component)
                     .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
             MenuSettings.Font.DrawText(
@@ -111,9 +111,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                     keyString,
                     (int)
                     (this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight
-                     - BlueUtilities.CalcWidthText(keyString) - MenuSettings.ContainerTextOffset),
+                     - LightUtilities.CalcWidthText(keyString) - MenuSettings.ContainerTextOffset),
                     centerY,
-                    BlueMenuSettings.KeyBindColor);
+                    LightMenuSettings.KeyBindColor);
             }
 
             Line.Width = MenuSettings.ContainerHeight - 7;
@@ -130,7 +130,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                             + MenuSettings.ContainerHeight / 2f,
                             this.Component.Position.Y + MenuSettings.ContainerHeight - 3)
                     },
-                this.Component.Active ? new ColorBGRA(0, 186, 255, 255) : new ColorBGRA(36, 36, 36, 255));
+                this.Component.Active ? new ColorBGRA(68, 160, 255, 255) : new ColorBGRA(151, 151, 151, 255));
             Line.End();
 
             var centerX =
@@ -149,7 +149,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 this.Component.Active ? "On" : "Off",
                 centerX,
                 centerY,
-                this.Component.Active ? new ColorBGRA(0, 27, 41, 255) : MenuSettings.TextColor);
+                new ColorBGRA(221, 233, 255, 255));
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <returns>The <see cref="Rectangle" /></returns>
         public Rectangle KeyBindBoundaries(MenuKeyBind component)
         {
-            return BlueUtilities.GetContainerRectangle(component);
+            return LightUtilities.GetContainerRectangle(component);
         }
 
         /// <summary>
@@ -270,9 +270,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <returns>The <see cref="int" /></returns>
         public override int Width()
         {
-            return BlueUtilities.CalcWidthItem(this.Component)
+            return LightUtilities.CalcWidthItem(this.Component)
                    + (int)
-                     (MenuSettings.ContainerHeight + BlueUtilities.CalcWidthText("[" + this.Component.Key + "]")
+                     (MenuSettings.ContainerHeight + LightUtilities.CalcWidthText("[" + this.Component.Key + "]")
                       + MenuSettings.ContainerTextOffset);
         }
 

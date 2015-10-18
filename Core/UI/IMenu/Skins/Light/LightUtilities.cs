@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueUtilities.cs" company="LeagueSharp">
+// <copyright file="LightUtilities.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
 {
     using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
 
@@ -29,7 +29,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     /// <summary>
     ///     Provides a set of functions used in the Default theme.
     /// </summary>
-    public class BlueUtilities
+    public class LightUtilities
     {
         #region Public Methods and Operators
 

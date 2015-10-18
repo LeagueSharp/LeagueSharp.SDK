@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueSlider.cs" company="LeagueSharp">
+// <copyright file="LightSlider.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 //   A default implementation of an <see cref="ADrawable{MenuSlider}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
 {
     using System;
     using System.Globalization;
@@ -27,6 +27,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Light;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
 
@@ -36,7 +37,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     /// <summary>
     ///     A default implementation of an <see cref="ADrawable{MenuSlider}" />
     /// </summary>
-    public class BlueSlider : ADrawable<MenuSlider>
+    public class LightSlider2 : LightSlider
     {
         #region Static Fields
 
@@ -60,7 +61,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <param name="component">
         ///     The menu component
         /// </param>
-        public BlueSlider(MenuSlider component)
+        public LightSlider2(MenuSlider component)
             : base(component)
         {
         }
@@ -70,34 +71,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Gets the additional boundaries.
-        /// </summary>
-        /// <param name="component">The <see cref="MenuSlider" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        public Rectangle AdditionalBoundries(MenuSlider component)
-        {
-            return BlueUtilities.GetContainerRectangle(component);
-        }
-
-        /// <summary>
-        ///     Gets the boundaries
-        /// </summary>
-        /// <param name="component">The <see cref="MenuSlider" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        public Rectangle Bounding(MenuSlider component)
-        {
-            return BlueUtilities.GetContainerRectangle(component);
-        }
-
-        /// <summary>
-        ///     Disposes any resources used in this handler.
-        /// </summary>
-        public override void Dispose()
-        {
-            // Do nothing.
-        }
-
-        /// <summary>
         ///     Draws a <see cref="MenuSlider" />
         /// </summary>
         public override void Draw()
@@ -105,7 +78,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             var position = this.Component.Position;
             var centeredY =
                 (int)
-                BlueUtilities.GetContainerRectangle(this.Component)
+                LightUtilities.GetContainerRectangle(this.Component)
                     .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
             var percent = (this.Component.Value - this.Component.MinValue)
@@ -115,8 +88,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             Line.Width = 3;
             Line.Begin();
             Line.Draw(
-                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) }, 
-                this.Component.Interacting ? new ColorBGRA(90, 129, 144, 255) : new ColorBGRA(0, 39, 54, 255));
+                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) },
+                this.Component.Interacting ? new ColorBGRA(210, 210, 210, 255) : new ColorBGRA(170, 170, 170, 255));
             Line.End();
 
             MenuSettings.Font.DrawText(
@@ -145,85 +118,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                         new Vector2(position.X + Offset, position.Y + MenuSettings.ContainerHeight / 2f),
                         new Vector2(x, position.Y + MenuSettings.ContainerHeight / 2f)
                     },
-                BlueMenuSettings.SliderColor);
+                new ColorBGRA(229, 229, 229, 255));
             Line.End();
-        }
-
-        /// <summary>
-        ///     Processes windows messages
-        /// </summary>
-        /// <param name="args">event data</param>
-        public override void OnWndProc(WindowsKeys args)
-        {
-            if (!this.Component.Visible)
-            {
-                return;
-            }
-
-            if (args.Msg == WindowsMessages.MOUSEMOVE && this.Component.Interacting)
-            {
-                this.CalculateNewValue(this.Component, args);
-            }
-            else if (args.Msg == WindowsMessages.LBUTTONDOWN && !this.Component.Interacting)
-            {
-                var container = this.Bounding(this.Component);
-
-                if (args.Cursor.IsUnderRectangle(container.X, container.Y, container.Width, container.Height))
-                {
-                    this.Component.Interacting = true;
-                    this.CalculateNewValue(this.Component, args);
-                }
-            }
-            else if (args.Msg == WindowsMessages.LBUTTONUP)
-            {
-                this.Component.Interacting = false;
-            }
-        }
-
-        /// <summary>
-        ///     Calculates the width of this component
-        /// </summary>
-        /// <returns>
-        ///     The width.
-        /// </returns>
-        public override int Width()
-        {
-            return BlueUtilities.CalcWidthItem(this.Component) + 100;
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        ///     Calculate the new value based onto the cursor position.
-        /// </summary>
-        /// <param name="component">menu component</param>
-        /// <param name="args">
-        ///     <see cref="WindowsKeys" /> data
-        /// </param>
-        private void CalculateNewValue(MenuSlider component, WindowsKeys args)
-        {
-            var newValue =
-                (int)
-                Math.Round(
-                    component.MinValue
-                    + ((args.Cursor.X - component.Position.X - Offset) * (component.MaxValue - component.MinValue))
-                    / (component.MenuWidth - Offset * 2));
-            if (newValue < component.MinValue)
-            {
-                newValue = component.MinValue;
-            }
-            else if (newValue > component.MaxValue)
-            {
-                newValue = component.MaxValue;
-            }
-
-            if (newValue != component.Value)
-            {
-                component.Value = newValue;
-                component.FireEvent();
-            }
         }
 
         #endregion
