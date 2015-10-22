@@ -42,6 +42,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
 
         #endregion
 
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes static members of the <see cref="LightMenuSettings2" /> class.
+        ///     Use to preload <see cref="LightTheme2" /> visual settings.
+        /// </summary>
+        static LightTheme2()
+        {
+            LightMenuSettings2.LoadSettings();
+        }
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>

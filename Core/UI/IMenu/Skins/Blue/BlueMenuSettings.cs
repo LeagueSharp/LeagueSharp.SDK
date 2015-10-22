@@ -114,5 +114,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         public static ColorBGRA SliderColor { get; set; }
 
         #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Used to load the menu settings.
+        /// </summary>
+        public static void LoadSettings()
+        {
+
+        }
+
+        #endregion
+
     }
 }

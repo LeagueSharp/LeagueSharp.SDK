@@ -59,8 +59,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
             var centerY = LightUtilities.GetContainerRectangle(this.Component)
                 .GetCenteredText(
                     null,
-                    MenuSettings.Font, 
-                    this.Component.DisplayName, 
+                    LightMenuSettings.FontCaption, 
+                    this.Component.DisplayName.ToUpper(), 
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
             LightMenuSettings.FontCaption.DrawText(

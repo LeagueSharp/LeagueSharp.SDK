@@ -100,6 +100,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             this.Key = (Keys)info.GetValue("key", typeof(Keys));
             this.original = (Keys)info.GetValue("original", typeof(Keys));
+            this.Active = (bool)info.GetValue("active", typeof(bool));
         }
 
         #endregion
@@ -190,6 +191,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
             {
                 this.Key = keybind.Key;
             }
+            this.Active = keybind.active;
         }
 
         /// <summary>
@@ -198,6 +200,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         public override void RestoreDefault()
         {
             this.Key = this.original;
+            this.Active = false;
         }
 
         /// <summary>
@@ -235,6 +238,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
 
             info.AddValue("key", this.Key, typeof(Keys));
             info.AddValue("original", this.original, typeof(Keys));
+            info.AddValue("active", this.active, typeof(bool));
         }
 
         #endregion
@@ -270,6 +274,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         {
             info.AddValue("key", this.Key, typeof(Keys));
             info.AddValue("original", this.original, typeof(Keys));
+            info.AddValue("active", this.active, typeof(bool));
         }
 
         #endregion

@@ -95,7 +95,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
             set
             {
                 fontCaption = value;
-                ContainerTextMarkWidth = value.MeasureText(null, "»", 0).Width;
             }
         }
 
@@ -113,6 +112,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         ///     Gets or sets the Global Slider Color.
         /// </summary>
         public static ColorBGRA SliderColor { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Used to load the menu settings.
+        /// </summary>
+        public static void LoadSettings()
+        {
+            
+        }
 
         #endregion
     }

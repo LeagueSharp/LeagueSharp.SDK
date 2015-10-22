@@ -42,6 +42,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 
         #endregion
 
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes static members of the <see cref="BlueMenuSettings2" /> class.
+        ///     Use to preload <see cref="BlueTheme2" /> visual settings.
+        /// </summary>
+        static BlueTheme2()
+        {
+            BlueMenuSettings2.LoadSettings();
+        }
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>

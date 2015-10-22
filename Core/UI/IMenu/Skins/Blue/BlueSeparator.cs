@@ -64,7 +64,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             var centerY = BlueUtilities.GetContainerRectangle(this.Component)
                 .GetCenteredText(
                     null,
-                    MenuSettings.Font,
+                    BlueMenuSettings.FontCaption,
                     this.Component.DisplayName,
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
