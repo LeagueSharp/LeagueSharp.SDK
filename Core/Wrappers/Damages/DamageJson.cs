@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers
+namespace LeagueSharp.SDK.Core.Wrappers.Damages
 {
     using System.Collections.Generic;
 
@@ -121,7 +121,17 @@ namespace LeagueSharp.SDK.Core.Wrappers
             /// <summary>
             ///     The Second Cast stage.
             /// </summary>
-            SecondCast
+            SecondCast,
+
+            /// <summary>
+            ///     The Buff stage.
+            /// </summary>
+            Buff,
+
+            /// <summary>
+            ///     The Empowered stage.
+            /// </summary>
+            Empowered
         }
 
         #endregion
@@ -129,29 +139,29 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     The Champion Damage class container.
         /// </summary>
-        public class ChampionDamage
+        internal class ChampionDamage
         {
             #region Public Properties
 
             /// <summary>
             ///     Gets the 'E' spell damage classes.
             /// </summary>
-            public List<ChampionDamageSpell> E { get; internal set; }
+            public List<ChampionDamageSpell> E { get; set; }
 
             /// <summary>
             ///     Gets the 'Q' spell damage classes.
             /// </summary>
-            public List<ChampionDamageSpell> Q { get; internal set; }
+            public List<ChampionDamageSpell> Q { get; set; }
 
             /// <summary>
             ///     Gets the 'R' spell damage classes.
             /// </summary>
-            public List<ChampionDamageSpell> R { get; internal set; }
+            public List<ChampionDamageSpell> R { get; set; }
 
             /// <summary>
             ///     Gets the 'W' spell damage classes.
             /// </summary>
-            public List<ChampionDamageSpell> W { get; internal set; }
+            public List<ChampionDamageSpell> W { get; set; }
 
             #endregion
 
@@ -166,7 +176,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             /// <returns>
             ///     The spell damage classes of the requested Spell Slot.
             /// </returns>
-            public List<ChampionDamageSpell> GetSlot(SpellSlot slot)
+            public IEnumerable<ChampionDamageSpell> GetSlot(SpellSlot slot)
             {
                 switch (slot)
                 {
@@ -189,19 +199,19 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     The Champion Damage Spell class container.
         /// </summary>
-        public class ChampionDamageSpell
+        internal class ChampionDamageSpell
         {
             #region Public Properties
 
             /// <summary>
             ///     Gets the Spell Data.
             /// </summary>
-            public ChampionDamageSpellData SpellData { get; internal set; }
+            public ChampionDamageSpellData SpellData { get; set; }
 
             /// <summary>
             ///     Gets the Spell Stage.
             /// </summary>
-            public DamageStage Stage { get; internal set; }
+            public DamageStage Stage { get; set; }
 
             #endregion
         }
@@ -209,29 +219,49 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     The Champion Damage Spell Bonus class container.
         /// </summary>
-        public class ChampionDamageSpellBonus
+        internal class ChampionDamageSpellBonus
         {
             #region Public Properties
 
             /// <summary>
             ///     Gets the Damage Percentages.
             /// </summary>
-            public List<double> DamagePercentages { get; internal set; }
+            public List<double> DamagePercentages { get; set; }
 
             /// <summary>
             ///     Gets the Damage Type.
             /// </summary>
-            public DamageType DamageType { get; internal set; }
+            public DamageType DamageType { get; set; }
+
+            /// <summary>
+            ///     Gets the Scaling Slot.
+            /// </summary>
+            public SpellSlot ScaleSlot { get; set; }
+
+            /// <summary>
+            ///     Gets the Scaling Buff.
+            /// </summary>
+            public string ScalingBuff { get; set; }
+
+            /// <summary>
+            ///     Gets the Scaling Buff Offset.
+            /// </summary>
+            public int ScalingBuffOffset { get; set; }
+
+            /// <summary>
+            ///     Gets the Scaling Buff Target.
+            /// </summary>
+            public DamageScalingTarget ScalingBuffTarget { get; set; }
 
             /// <summary>
             ///     Gets the Scaling Target Type.
             /// </summary>
-            public DamageScalingTarget ScalingTarget { get; internal set; }
+            public DamageScalingTarget ScalingTarget { get; set; }
 
             /// <summary>
             ///     Gets the Scaling Type.
             /// </summary>
-            public DamageScalingType ScalingType { get; internal set; }
+            public DamageScalingType ScalingType { get; set; }
 
             #endregion
         }
@@ -239,24 +269,44 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     The Champion Damage Spell Data class container.
         /// </summary>
-        public class ChampionDamageSpellData
+        internal class ChampionDamageSpellData
         {
             #region Public Properties
 
             /// <summary>
             ///     Gets the Bonus Damages.
             /// </summary>
-            public List<ChampionDamageSpellBonus> BonusDamages { get; internal set; }
+            public List<ChampionDamageSpellBonus> BonusDamages { get; set; }
 
             /// <summary>
             ///     Gets the Main Damages.
             /// </summary>
-            public List<int> Damages { get; internal set; }
+            public List<int> Damages { get; set; }
 
             /// <summary>
             ///     Gets the Damage Type.
             /// </summary>
-            public DamageType DamageType { get; internal set; }
+            public DamageType DamageType { get; set; }
+
+            /// <summary>
+            ///     Gets the Scaling Slot.
+            /// </summary>
+            public SpellSlot ScaleSlot { get; set; }
+
+            /// <summary>
+            ///     Gets the Scaling Buff.
+            /// </summary>
+            public string ScalingBuff { get; set; }
+
+            /// <summary>
+            ///     Gets the Scaling Buff Offset.
+            /// </summary>
+            public int ScalingBuffOffset { get; set; }
+
+            /// <summary>
+            ///     Gets the Scaling Buff Target.
+            /// </summary>
+            public DamageScalingTarget ScalingBuffTarget { get; set; }
 
             #endregion
         }

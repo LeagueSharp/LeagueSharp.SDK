@@ -30,6 +30,7 @@ namespace LeagueSharp.SDK.Core
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers;
+    using LeagueSharp.SDK.Core.Wrappers.Damages;
 
     using SharpDX;
 
@@ -53,6 +54,13 @@ namespace LeagueSharp.SDK.Core
         ///     The <c>orbwalker</c> menu.
         /// </summary>
         private static readonly Menu Menu = new Menu("orbwalker", "Orbwalker");
+
+        private static readonly string[] SpecialMinions =
+            {
+                "zyrathornplant", "zyragraspingplant", "heimertyellow",
+                "heimertblue", "malzaharvoidling", "yorickdecayedghoul",
+                "yorickravenousghoul", "yorickspectralghoul", "shacobox"
+            };
 
         /// <summary>
         ///     Value indicating whether the <see cref="Orbwalker" /> is enabled.
@@ -287,6 +295,17 @@ namespace LeagueSharp.SDK.Core
                         <= GameObjects.Player.GetAutoAttackDamage(m, true));
                 if (!shouldWait)
                 {
+                    // H-28G, Sumon Voidling, Jack In The Box, (Clyde, Inky, Blinky), Plant
+                    foreach (var specialMinion in
+                        GameObjects.EnemyMinions.Where(
+                            m =>
+                            m.IsValidTarget(m.GetRealAutoAttackRange())
+                            && SpecialMinions.Any(s => s.Equals(m.CharData.BaseSkinName))))
+                    {
+                        return specialMinion;
+                    }
+
+                    // Jungle mob.
                     var mob =
                         (GameObjects.JungleLegendary.FirstOrDefault(j => j.IsValidTarget(j.GetRealAutoAttackRange()))
                          ?? GameObjects.JungleSmall.FirstOrDefault(
@@ -300,6 +319,16 @@ namespace LeagueSharp.SDK.Core
                         return mob;
                     }
 
+                    // Sentinel
+                    foreach (var sentinel in
+                        GameObjects.EnemyMinions.Where(
+                            m =>
+                            m.IsValidTarget(m.GetRealAutoAttackRange()) && m.CharData.BaseSkinName == "kalistaspawn"))
+                    {
+                        return sentinel;
+                    }
+
+                    // Last Minion
                     if (LastMinion.IsValidTarget(LastMinion.GetRealAutoAttackRange()))
                     {
                         var predHealth = Health.GetPrediction(
@@ -313,6 +342,7 @@ namespace LeagueSharp.SDK.Core
                         }
                     }
 
+                    // Minion
                     var minion = (from m in
                                       GameObjects.EnemyMinions.Where(m => m.IsValidTarget(m.GetRealAutoAttackRange()))
                                   let predictedHealth =
@@ -326,7 +356,11 @@ namespace LeagueSharp.SDK.Core
                         return LastMinion = minion;
                     }
 
-                    // TODO: Add special minions (zyra plants, donger turrets, etc).
+                    // Elise Spiderlings
+                    return
+                        GameObjects.EnemyMinions.FirstOrDefault(
+                            m =>
+                            m.IsValidTarget(m.GetRealAutoAttackRange()) && m.CharData.BaseSkinName == "elisespiderling");
                 }
             }
 
@@ -468,9 +502,9 @@ namespace LeagueSharp.SDK.Core
                 new MenuSlider(
                     "movementDelay",
                     "Delay between Movement",
-                    new Random(Variables.TickCount).Next(30, 101),
+                    new Random(Variables.TickCount).Next(80, 121),
                     0,
-                    2500));
+                    500));
             advanced.Add(new MenuBool("movementScramble", "Randomize movement location", true));
             advanced.Add(new MenuSlider("movementExtraHold", "Extra Hold Position", 25, 0, 250));
             advanced.Add(
@@ -495,7 +529,7 @@ namespace LeagueSharp.SDK.Core
                                 Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value = new Random().Next(
                                     500,
                                     1201);
-                                Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value = new Random().Next(30, 101);
+                                Menu["advanced"]["movementDelay"].GetValue<MenuSlider>().Value = new Random().Next(80, 121);
                             }
                     });
             Menu.Add(advanced);

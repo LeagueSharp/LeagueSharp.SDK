@@ -148,8 +148,9 @@
     <Compile Include="Core\Enumerations\NotificationIconType.cs" />
     <Compile Include="Core\UI\INotifications\Notifications.cs" />
     <Compile Include="Core\Utils\BinarySerializer.cs" />
-    <Compile Include="Core\Wrappers\DamageJson.cs" />
-    <Compile Include="Core\Wrappers\DamageLibrary.cs" />
+    <Compile Include="Core\Wrappers\Damages\DamageJson.cs" />
+    <Compile Include="Core\Wrappers\Damages\DamageLibrary.cs" />
+    <Compile Include="Core\Wrappers\Damages\DamagePassives.cs" />
     <Compile Include="Core\Wrappers\Items.cs" />
     <Compile Include="Core\Math\ConvexHull.cs" />
     <Compile Include="Core\Math\Geometry.cs" />
@@ -198,7 +199,7 @@
     <Compile Include="Core\Utils\TickOperation.cs" />
     <Compile Include="Core\Utils\WeightedRandom.cs" />
     <Compile Include="Core\Variables.cs" />
-    <Compile Include="Core\Wrappers\Damage.cs" />
+    <Compile Include="Core\Wrappers\Damages\Damage.cs" />
     <Compile Include="Core\Wrappers\LastCastedSpell.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
     <Compile Include="Core\Wrappers\Spell.cs" />
@@ -235,7 +236,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\Damage\5.18.json" />
+    <None Include="Resources\Damage\5.20.json" />
     <None Include="Resources\Data\Gapclosers.json" />
     <None Include="Third_Party\Clipper\License.txt" />
   </ItemGroup>

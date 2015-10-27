@@ -15,45 +15,21 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers
+namespace LeagueSharp.SDK.Core.Wrappers.Damages
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
+    using System.Runtime.Remoting.Messaging;
 
     using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Events;
     using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Properties;
-
-    using Newtonsoft.Json.Linq;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
     /// </summary>
     public static partial class Damage
     {
-        #region Static Fields
-
-        /// <summary>
-        ///     The damage version files.
-        /// </summary>
-        private static readonly IDictionary<string, byte[]> DamageFiles = new Dictionary<string, byte[]>
-                                                                              { { "5.18", Resources._5_18 } };
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        ///     Gets the version.
-        /// </summary>
-        public static string Version { get; private set; }
-
-        #endregion
-
         #region Public Methods and Operators
 
         /// <summary>
@@ -151,6 +127,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
             double result = source.TotalAttackDamage;
             var damageModifier = 1d;
             var reduction = 0d;
+            var passive = 0d;
 
             if (includePassive)
             {
@@ -193,8 +170,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     {
                         reduction -= CalculateMagicDamage(hero, target, 0.05 * hero.FlatMagicDamageMod);
                     }
-
-                    result += hero.GetPassiveDamageSum();
                 }
 
                 if (targetHero != null)
@@ -223,10 +198,22 @@ namespace LeagueSharp.SDK.Core.Wrappers
                         }
                     }
                 }
+
+                // Bonus Damage (Passive)
+                if (hero != null)
+                {
+                    var passiveInfo = hero.GetPassiveDamageInfo(target);
+                    if (passiveInfo.Override)
+                    {
+                        return source.CalculatePhysicalDamage(target, -reduction * damageModifier) + passiveInfo.Value;
+                    }
+
+                    passive += passiveInfo.Value;
+                }
             }
 
             // This formula is right, work out the math yourself if you don't believe me
-            return source.CalculatePhysicalDamage(target, (result - reduction) * damageModifier);
+            return source.CalculatePhysicalDamage(target, (result - reduction) * damageModifier) + passive;
         }
 
         /// <summary>
@@ -253,6 +240,11 @@ namespace LeagueSharp.SDK.Core.Wrappers
             SpellSlot spellSlot,
             DamageStage stage = DamageStage.Default)
         {
+            if (source == null || !source.IsValid || target == null || !target.IsValid)
+            {
+                return 0d;
+            }
+
             var spellLevel = source.Spellbook.GetSpell(spellSlot).Level;
             if (spellLevel == 0)
             {
@@ -262,23 +254,42 @@ namespace LeagueSharp.SDK.Core.Wrappers
             ChampionDamage value;
             if (DamageCollection.TryGetValue(source.ChampionName, out value))
             {
+                var baseDamage = 0d;
+                var bonusDamage = 0d;
+
                 var spellData = value.GetSlot(spellSlot)?.FirstOrDefault(e => e.Stage == stage)?.SpellData;
-                if (spellData != null)
+                if (spellData?.Damages?.Count > 0)
                 {
-                    return
-                        Math.Max(
+                    baseDamage = source.CalculateDamage(
+                        target,
+                        spellData.DamageType,
+                        spellData.Damages[Math.Min(spellLevel - 1, spellData.Damages.Count)]);
+
+                    if (!string.IsNullOrEmpty(spellData.ScalingBuff))
+                    {
+                        var buffCount =
+                            (spellData.ScalingBuffTarget == DamageScalingTarget.Source ? source : target).GetBuffCount(
+                                spellData.ScalingBuff);
+
+                        if (buffCount != 0)
+                        {
+                            baseDamage *= buffCount + spellData.ScalingBuffOffset;
+                        }
+                    }
+                }
+
+                if (spellData?.BonusDamages?.Count > 0)
+                {
+                    bonusDamage =
+                        spellData.BonusDamages.Sum(
+                            instance =>
                             source.CalculateDamage(
                                 target,
-                                spellData.DamageType,
-                                spellData.Damages[Math.Min(spellLevel - 1, spellData.Damages.Count)])
-                            + spellData.BonusDamages.Sum(
-                                bonusDamage =>
-                                source.CalculateDamage(
-                                    target,
-                                    bonusDamage.DamageType,
-                                    source.ResolveBonusSpellDamage(target, bonusDamage, spellLevel - 1))),
-                            0d);
+                                instance.DamageType,
+                                source.ResolveBonusSpellDamage(target, instance, spellLevel - 1)));
                 }
+
+                return baseDamage + bonusDamage;
             }
 
             return 0d;
@@ -287,74 +298,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
         #endregion
 
         #region Methods
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="Damage" /> class.
-        /// </summary>
-        /// <param name="gameVersion">
-        ///     The client version.
-        /// </param>
-        internal static void Initialize(Version gameVersion)
-        {
-            Load.OnLoad += (sender, args) =>
-                {
-                    var version = $"{gameVersion.Major}.{gameVersion.Minor}";
-                    IDictionary<string, JToken> damageFile = null;
-
-                    byte[] value;
-                    if (DamageFiles.TryGetValue(version, out value))
-                    {
-                        Version = version;
-                        damageFile = JObject.Parse(Encoding.Default.GetString(value));
-                    }
-                    else
-                    {
-                        var sysVersion = new Version(version);
-                        foreach (var file in from file in DamageFiles
-                                             let fileVersion = new Version(file.Key)
-                                             where
-                                                 sysVersion.Major == fileVersion.Major
-                                                 && sysVersion.Minor == fileVersion.Minor
-                                             select file)
-                        {
-                            Version = file.Key;
-                            damageFile = JObject.Parse(Encoding.Default.GetString(file.Value));
-                            break;
-                        }
-
-                        if (damageFile == null)
-                        {
-                            foreach (
-                                var file in DamageFiles.Where(file => sysVersion.Major == new Version(file.Key).Major))
-                            {
-                                Version = file.Key;
-                                damageFile = JObject.Parse(Encoding.Default.GetString(file.Value));
-                                break;
-                            }
-                        }
-
-                        if (damageFile == null)
-                        {
-                            var pair = DamageFiles.FirstOrDefault();
-                            if (!string.IsNullOrEmpty(pair.Key))
-                            {
-                                Version = pair.Key;
-                                damageFile = JObject.Parse(Encoding.Default.GetString(pair.Value));
-                            }
-                        }
-                    }
-
-                    if (damageFile == null)
-                    {
-                        Logging.Write()(
-                            LogLevel.Fatal,
-                            $"[GameVersion:{Variables.GameVersion}] No suitable damage library found, unable to load damages.");
-                        return;
-                    }
-
-                    CreateDamages(damageFile);
-                };
-        }
 
         /// <summary>
         ///     Calculates the magic damage the source would deal towards the target on a specific given amount, taking in
@@ -468,6 +411,34 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 target,
                 source.PassivePercentMod(target, value) * amount,
                 DamageType.Physical) + source.PassiveFlatMod(target);
+        }
+
+        /// <summary>
+        ///     Calculates the physical damage the source would deal towards the target on a specific given amount, taking in
+        ///     consideration all of the damage modifiers.
+        /// </summary>
+        /// <param name="source">
+        ///     The source
+        /// </param>
+        /// <param name="target">
+        ///     The target
+        /// </param>
+        /// <param name="amount">
+        ///     The amount of damage
+        /// </param>
+        /// <param name="ignoreArmorPercent">
+        ///     The amount of armor to ignore.
+        /// </param>
+        /// <returns>
+        ///     The amount of estimated damage dealt to target from source.
+        /// </returns>
+        internal static double CalculatePhysicalDamage(
+            this Obj_AI_Base source,
+            Obj_AI_Base target,
+            double amount,
+            double ignoreArmorPercent)
+        {
+            return source.CalculatePhysicalDamage(target, amount) * ignoreArmorPercent;
         }
 
         /// <summary>
@@ -771,65 +742,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
             }
 
             return amount;
-        }
-
-        /// <summary>
-        ///     Resolves the spell bonus damage.
-        /// </summary>
-        /// <param name="source">
-        ///     The source
-        /// </param>
-        /// <param name="target">
-        ///     The target
-        /// </param>
-        /// <param name="spellBonus">
-        ///     The spell bonus collection
-        /// </param>
-        /// <param name="index">
-        ///     The index (spell level - 1)
-        /// </param>
-        /// <returns>
-        ///     The <see cref="double" />.
-        /// </returns>
-        private static double ResolveBonusSpellDamage(
-            this Obj_AI_Base source,
-            Obj_AI_Base target,
-            ChampionDamageSpellBonus spellBonus,
-            int index)
-        {
-            var sourceScale = spellBonus.ScalingTarget == DamageScalingTarget.Source ? source : target;
-            var percent = spellBonus.DamagePercentages[Math.Min(index, spellBonus.DamagePercentages.Count)];
-            var origin = 0f;
-
-            switch (spellBonus.ScalingType)
-            {
-                case DamageScalingType.BonusAttackPoints:
-                    origin = sourceScale.FlatPhysicalDamageMod;
-                    break;
-                case DamageScalingType.AbilityPoints:
-                    origin = sourceScale.TotalMagicalDamage;
-                    break;
-                case DamageScalingType.AttackPoints:
-                    origin = sourceScale.TotalAttackDamage;
-                    break;
-                case DamageScalingType.MaxHealth:
-                    origin = sourceScale.MaxHealth;
-                    break;
-                case DamageScalingType.CurrentHealth:
-                    origin = sourceScale.Health;
-                    break;
-                case DamageScalingType.MissingHealth:
-                    origin = sourceScale.MaxHealth - sourceScale.Health;
-                    break;
-                case DamageScalingType.Armor:
-                    origin = sourceScale.Armor;
-                    break;
-                case DamageScalingType.MaxMana:
-                    origin = sourceScale.MaxMana;
-                    break;
-            }
-
-            return origin * percent;
         }
 
         #endregion
