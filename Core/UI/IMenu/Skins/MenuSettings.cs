@@ -52,6 +52,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
             Position = new Vector2(30, 30);
             ContainerWidth = 200f;
             Font = new Font(
+<<<<<<< HEAD
                 Drawing.Direct3DDevice,
                 14,
                 0,
@@ -62,6 +63,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
                 FontPrecision.Raster,
                 FontQuality.Antialiased,
                 FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative,
+=======
+                Drawing.Direct3DDevice, 
+                14, 
+                0, 
+                FontWeight.DoNotCare, 
+                0, 
+                false, 
+                FontCharacterSet.Default,
+                FontPrecision.TrueType,
+                FontQuality.ClearType,
+                FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative | FontPitchAndFamily.Modern, 
+>>>>>>> master
                 "Tahoma");
             ContainerTextMarkOffset = 8f;
             ContainerTextOffset = 15f;
