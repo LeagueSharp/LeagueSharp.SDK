@@ -1,23 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!--EXTERNAL_PROPERTIES: MSBuildToolsVersion-->
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8CD6364A-5FEC-4111-AE46-492A11DC8251}</ProjectGuid>
+    <ProjectGuid>{84C40F29-82FB-42CC-9E75-A229D875DC40}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LeagueSharp.SDK</RootNamespace>
     <AssemblyName>LeagueSharp.SDK</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PreBuildEvent />
     <PostBuildEvent />
     <OutputPath>bin\Release</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,24 +25,18 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\LeagueSharp.SDK.xml</DocumentationFile>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>LeagueSharp.SDK.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>x86</PlatformTarget>
+    <DocumentationFile>bin\Debug\LeagueSharp.SDK.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\LeagueSharp.SDK.xml</DocumentationFile>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>LeagueSharp.SDK.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
+    <DocumentationFile>bin\Release\LeagueSharp.SDK.XML</DocumentationFile>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -54,14 +48,9 @@
     <Reference Include="LeagueSharp">
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\Microsoft.CodeAnalysis.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>C:\Users\FINN\Desktop\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SharpDX">
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
@@ -70,59 +59,125 @@
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\System.Collections.Immutable.dll</HintPath>
-    </Reference>
     <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Windows.Presentation" />
-    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Bootstrap.cs" />
+    <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\Enumerations\CastStates.cs" />
     <Compile Include="Core\Enumerations\CenteredFlags.cs" />
     <Compile Include="Core\Enumerations\CollisionableObjects.cs" />
     <Compile Include="Core\Enumerations\DangerLevel.cs" />
+    <Compile Include="Core\Enumerations\DrawType.cs" />
     <Compile Include="Core\Enumerations\GapcloserType.cs" />
     <Compile Include="Core\Enumerations\HealthPredictionType.cs" />
+    <Compile Include="Core\Enumerations\HitChance.cs" />
     <Compile Include="Core\Enumerations\JungleType.cs" />
     <Compile Include="Core\Enumerations\KeyBindType.cs" />
     <Compile Include="Core\Enumerations\LogLevel.cs" />
     <Compile Include="Core\Enumerations\MapType.cs" />
     <Compile Include="Core\Enumerations\MinionTypes.cs" />
+    <Compile Include="Core\Enumerations\NotificationIconType.cs" />
     <Compile Include="Core\Enumerations\OrbwalkerMode.cs" />
     <Compile Include="Core\Enumerations\OrbwalkerType.cs" />
     <Compile Include="Core\Enumerations\PerformanceType.cs" />
+    <Compile Include="Core\Enumerations\SkillshotType.cs" />
     <Compile Include="Core\Enumerations\TargetSelectorMode.cs" />
     <Compile Include="Core\Enumerations\TeleportStatus.cs" />
     <Compile Include="Core\Enumerations\TeleportType.cs" />
     <Compile Include="Core\Enumerations\TurretType.cs" />
     <Compile Include="Core\Enumerations\WindowsMessages.cs" />
+    <Compile Include="Core\Events\Dash.cs" />
     <Compile Include="Core\Events\Gapcloser.cs" />
+    <Compile Include="Core\Events\InterruptableSpell.cs" />
+    <Compile Include="Core\Events\Load.cs" />
+    <Compile Include="Core\Events\Stealth.cs" />
     <Compile Include="Core\Events\Teleport.cs" />
     <Compile Include="Core\Events\Turret.cs" />
+    <Compile Include="Core\Extensions\Enumerable.cs" />
     <Compile Include="Core\Extensions\GameRuntime.cs" />
     <Compile Include="Core\Extensions\Runtime.cs" />
     <Compile Include="Core\Extensions\SharpDX\Generic.cs" />
+    <Compile Include="Core\Extensions\SharpDX\Vector2Extensions.cs" />
+    <Compile Include="Core\Extensions\SharpDX\Vector3Extensions.cs" />
+    <Compile Include="Core\Extensions\SharpDX\Vector4Extensions.cs" />
+    <Compile Include="Core\Extensions\Unit.cs" />
     <Compile Include="Core\GameObjects.cs" />
-    <Compile Include="Core\Enumerations\DrawType.cs" />
+    <Compile Include="Core\Math\Collision.cs" />
+    <Compile Include="Core\Math\ConvexHull.cs" />
+    <Compile Include="Core\Math\Geometry.cs" />
+    <Compile Include="Core\Math\Polygons\Arc.cs" />
+    <Compile Include="Core\Math\Polygons\Circle.cs" />
+    <Compile Include="Core\Math\Polygons\Line.cs" />
+    <Compile Include="Core\Math\Polygons\Polygon.cs" />
+    <Compile Include="Core\Math\Polygons\Rectangle.cs" />
+    <Compile Include="Core\Math\Polygons\Ring.cs" />
+    <Compile Include="Core\Math\Polygons\Sector.cs" />
+    <Compile Include="Core\Math\Prediction\Cluster.cs" />
+    <Compile Include="Core\Math\Prediction\Health.cs" />
+    <Compile Include="Core\Math\Prediction\Movement.cs" />
+    <Compile Include="Core\Math\Prediction\Path.cs" />
+    <Compile Include="Core\Network\GamePacket.cs" />
+    <Compile Include="Core\Network\Packet.cs" />
+    <Compile Include="Core\Orbwalker.cs" />
+    <Compile Include="Core\Signals\Signal.cs" />
+    <Compile Include="Core\Signals\SignalManager.cs" />
     <Compile Include="Core\UI\IMenu\Abstracts\AMenuComponent.cs" />
     <Compile Include="Core\UI\IMenu\ColorSpectrum.cs" />
-    <Compile Include="Core\UI\IMenu\Menu.cs" />
     <Compile Include="Core\UI\IMenu\Customizer\MenuCustomizer.cs" />
+    <Compile Include="Core\UI\IMenu\Menu.cs" />
     <Compile Include="Core\UI\IMenu\MenuItem.cs" />
     <Compile Include="Core\UI\IMenu\MenuManager.cs" />
     <Compile Include="Core\UI\IMenu\MenuValueChangedEventArgs.cs" />
     <Compile Include="Core\UI\IMenu\RadioMenu.cs" />
     <Compile Include="Core\UI\IMenu\Skins\ADrawable.cs" />
     <Compile Include="Core\UI\IMenu\Skins\ADrawableAdapter.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueBool.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueButton.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueColorPicker.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueKeyBind.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueList.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueMenu.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueMenuSettings.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueSeparator.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueSlider.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueTextures.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueTheme.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueUtilities.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueBool.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueButton.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueColorPicker.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueKeyBind.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueList.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueMenu.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueMenuSettings.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueSeparator.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueSlider.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueTextures.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueTheme.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueUtilities.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultBool.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultButton.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultColorPicker.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultKeyBind.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultList.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultMenu.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultSeparator.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultSlider.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultTextures.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultTheme.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultUtilities.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\ITheme.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Light2.0\LightBool.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Light2.0\LightButton.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Light2.0\LightColorPicker.cs" />
@@ -147,43 +202,7 @@
     <Compile Include="Core\UI\IMenu\Skins\Light\LightTextures.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Light\LightTheme.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Light\LightUtilities.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueBool.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueButton.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueColorPicker.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueKeyBind.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueList.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueMenu.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueMenuSettings.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueSeparator.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueSlider.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueTextures.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueTheme.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueUtilities.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueBool.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueButton.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueKeyBind.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueList.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueMenu.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueSeparator.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueSlider.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueTextures.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueTheme.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueUtilities.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueMenuSettings.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue\BlueColorPicker.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultBool.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultButton.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultColorPicker.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultKeyBind.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultList.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultMenu.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultSeparator.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultTextures.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultUtilities.cs" />
     <Compile Include="Core\UI\IMenu\Skins\MenuSettings.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultSlider.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Default\DefaultTheme.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\ITheme.cs" />
     <Compile Include="Core\UI\IMenu\Skins\ThemeManager.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuBool.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuButton.cs" />
@@ -195,62 +214,30 @@
     <Compile Include="Core\UI\INotifications\ANotification.cs" />
     <Compile Include="Core\UI\INotifications\Notification.cs" />
     <Compile Include="Core\UI\INotifications\NotificationIcons.cs" />
-    <Compile Include="Core\Enumerations\NotificationIconType.cs" />
     <Compile Include="Core\UI\INotifications\Notifications.cs" />
     <Compile Include="Core\UI\Utils.cs" />
+    <Compile Include="Core\Utils\AutoAttack.cs" />
     <Compile Include="Core\Utils\BinarySerializer.cs" />
+    <Compile Include="Core\Utils\Cache.cs" />
+    <Compile Include="Core\Utils\CallbackPerformance.cs" />
+    <Compile Include="Core\Utils\Cursor.cs" />
+    <Compile Include="Core\Utils\DelayAction.cs" />
+    <Compile Include="Core\Utils\Jungle.cs" />
+    <Compile Include="Core\Utils\Logging.cs" />
+    <Compile Include="Core\Utils\Math.cs" />
+    <Compile Include="Core\Utils\Minion.cs" />
+    <Compile Include="Core\Utils\Network.cs" />
+    <Compile Include="Core\Utils\Performance.cs" />
+    <Compile Include="Core\Utils\Storage.cs" />
+    <Compile Include="Core\Utils\TickOperation.cs" />
+    <Compile Include="Core\Utils\WeightedRandom.cs" />
+    <Compile Include="Core\Utils\WindowsKeys.cs" />
+    <Compile Include="Core\Variables.cs" />
+    <Compile Include="Core\Wrappers\Damages\Damage.cs" />
     <Compile Include="Core\Wrappers\Damages\DamageJson.cs" />
     <Compile Include="Core\Wrappers\Damages\DamageLibrary.cs" />
     <Compile Include="Core\Wrappers\Damages\DamagePassives.cs" />
     <Compile Include="Core\Wrappers\Items.cs" />
-    <Compile Include="Core\Math\ConvexHull.cs" />
-    <Compile Include="Core\Math\Geometry.cs" />
-    <Compile Include="Core\Math\Prediction\Health.cs" />
-    <Compile Include="Core\Orbwalker.cs" />
-    <Compile Include="Core\Signals\Signal.cs" />
-    <Compile Include="Core\Signals\SignalManager.cs" />
-    <Compile Include="Core\Utils\Jungle.cs" />
-    <Compile Include="Core\Utils\Minion.cs" />
-    <Compile Include="Core\Utils\AutoAttack.cs" />
-    <Compile Include="Core\Utils\CallbackPerformance.cs" />
-    <Compile Include="Core\Constants.cs" />
-    <Compile Include="Core\Enumerations\HitChance.cs" />
-    <Compile Include="Core\Enumerations\SkillshotType.cs" />
-    <Compile Include="Core\Events\Dash.cs" />
-    <Compile Include="Core\Events\InterruptableSpell.cs" />
-    <Compile Include="Core\Events\Load.cs" />
-    <Compile Include="Core\Events\Stealth.cs" />
-    <Compile Include="Core\Extensions\Enumerable.cs" />
-    <Compile Include="Core\Extensions\SharpDX\Vector2Extensions.cs" />
-    <Compile Include="Core\Extensions\SharpDX\Vector3Extensions.cs" />
-    <Compile Include="Core\Extensions\SharpDX\Vector4Extensions.cs" />
-    <Compile Include="Core\Extensions\Unit.cs" />
-    <Compile Include="Core\Math\Collision.cs" />
-    <Compile Include="Core\Utils\Cursor.cs" />
-    <Compile Include="Core\Utils\Storage.cs" />
-    <Compile Include="Core\Utils\WindowsKeys.cs" />
-    <Compile Include="Core\Utils\Math.cs" />
-    <Compile Include="Core\Math\Polygons\Arc.cs" />
-    <Compile Include="Core\Math\Polygons\Circle.cs" />
-    <Compile Include="Core\Math\Polygons\Line.cs" />
-    <Compile Include="Core\Math\Polygons\Polygon.cs" />
-    <Compile Include="Core\Math\Polygons\Rectangle.cs" />
-    <Compile Include="Core\Math\Polygons\Ring.cs" />
-    <Compile Include="Core\Math\Polygons\Sector.cs" />
-    <Compile Include="Core\Math\Prediction\Cluster.cs" />
-    <Compile Include="Core\Math\Prediction\Movement.cs" />
-    <Compile Include="Core\Math\Prediction\Path.cs" />
-    <Compile Include="Core\Network\GamePacket.cs" />
-    <Compile Include="Core\Network\Packet.cs" />
-    <Compile Include="Core\Utils\Network.cs" />
-    <Compile Include="Core\Utils\Cache.cs" />
-    <Compile Include="Core\Utils\DelayAction.cs" />
-    <Compile Include="Core\Utils\Logging.cs" />
-    <Compile Include="Core\Utils\Performance.cs" />
-    <Compile Include="Core\Utils\TickOperation.cs" />
-    <Compile Include="Core\Utils\WeightedRandom.cs" />
-    <Compile Include="Core\Variables.cs" />
-    <Compile Include="Core\Wrappers\Damages\Damage.cs" />
     <Compile Include="Core\Wrappers\LastCastedSpell.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
     <Compile Include="Core\Wrappers\Spell.cs" />
@@ -263,18 +250,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Third_Party\Clipper\Clipper.cs">
-      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
-    </Compile>
+    <Compile Include="Third_Party\clipper\clipper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="LeagueSharp.SDK.ruleset" />
     <None Include="LeagueSharp.SDK.snk" />
+    <None Include="packages.config" />
+    <None Include="Resources\Damage\5.20.json" />
+    <None Include="Resources\Data\Gapclosers.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Images\cursor_drag.png" />
@@ -284,20 +266,27 @@
     <Content Include="Resources\Images\notifications_select.png" />
     <Content Include="Resources\Images\notifications_star.png" />
     <Content Include="Resources\Images\notifications_warning.png" />
+    <Content Include="Third_Party\clipper\License.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="Resources\Damage\5.20.json" />
-    <None Include="Resources\Data\Gapclosers.json" />
-    <None Include="Third_Party\Clipper\License.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="stylecop.json" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties stylecop_1json__JSONSchema="https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json" />
-    </VisualStudio>
-  </ProjectExtensions>
+  <Import Project="packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets" Condition="Exists('packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>
