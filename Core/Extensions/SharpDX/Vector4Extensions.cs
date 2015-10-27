@@ -65,10 +65,12 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
             {
                 theta = theta + 360;
             }
+
             if (theta > 180)
             {
                 theta = 360 - theta;
             }
+
             return theta;
         }
 

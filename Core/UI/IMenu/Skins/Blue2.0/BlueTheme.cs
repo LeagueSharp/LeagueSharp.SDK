@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueTheme.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="BlueTheme.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   Implements a default ITheme.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 {
     using System.Linq;
@@ -151,7 +147,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 
             for (var i = 0; i < menuManager.Menus.Count; ++i)
             {
-                var childPos = new Vector2(position.X, position.Y + i * MenuSettings.ContainerHeight);
+                var childPos = new Vector2(position.X, position.Y + (i * MenuSettings.ContainerHeight));
 
                 if (i < menuManager.Menus.Count - 1)
                 {
@@ -183,7 +179,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
                     },
                 new ColorBGRA(21, 26, 45, 255));
             Line.End();
-            
         }
 
         #endregion

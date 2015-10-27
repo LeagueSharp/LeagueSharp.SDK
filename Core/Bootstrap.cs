@@ -24,6 +24,7 @@ namespace LeagueSharp.SDK.Core
     using LeagueSharp.SDK.Core.UI.INotifications;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers;
+    using LeagueSharp.SDK.Core.Wrappers.Damages;
 
     /// <summary>
     ///     Bootstrap is an initialization pointer for the AppDomainManager to initialize the library correctly once loaded in

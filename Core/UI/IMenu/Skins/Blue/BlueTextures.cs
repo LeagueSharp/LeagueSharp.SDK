@@ -1,24 +1,20 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueTextures.cs" company="LeagueSharp">
-//   Copyright (C) 2015 LeagueSharp
-//   
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//   
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//   
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+﻿// <copyright file="BlueTextures.cs" company="LeagueSharp">
+//    Copyright (c) 2015 LeagueSharp.
+// 
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-// <summary>
-//   A default implementation of <see cref="ADrawable{MenuButton}" />
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,19 +37,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
 
     internal class BlueTextures
     {
-
         private readonly Dictionary<BlueTexture, BlueTextureWrapper> textures = new Dictionary<BlueTexture, BlueTextureWrapper>();
 
         public static readonly BlueTextures Instance = new BlueTextures();
 
         private BlueTextures()
         {
-            this.textures[BlueTexture.Dragging] = BuildTexture(Resources.cursor_drag, 16, 16);
+            this.textures[BlueTexture.Dragging] = this.BuildTexture(Resources.cursor_drag, 16, 16);
         }
 
         ~BlueTextures()
         {
-            foreach (var entry in this.textures.Where(entry => !entry.Value.Texture.IsDisposed)) {
+            foreach (var entry in this.textures.Where(entry => !entry.Value.Texture.IsDisposed))
+            {
                 entry.Value.Texture.Dispose();
             }
         }
@@ -69,7 +65,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         private BlueTextureWrapper BuildTexture(Image bmp, int height, int width)
         {
             var resized = new Bitmap(bmp, width, height);
-            var texture =  Texture.FromMemory(
+            var texture = Texture.FromMemory(
                 Drawing.Direct3DDevice,
                 (byte[])new ImageConverter().ConvertTo(resized, typeof(byte[])),
                 resized.Width,
@@ -88,16 +84,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
 
         public BlueTextureWrapper AddTexture(Image bmp, int width, int height, BlueTexture textureType)
         {
-            this.textures[textureType] = BuildTexture(bmp, height, width);
+            this.textures[textureType] = this.BuildTexture(bmp, height, width);
             return this.textures[textureType];
         }
-        
     }
 
     internal class BlueTextureWrapper
     {
         public Texture Texture { get; private set; }
+
         public int Width { get; private set; }
+
         public int Height { get; private set; }
 
         public BlueTextureWrapper(Texture texture, int width, int height)
@@ -106,6 +103,5 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             this.Width = width;
             this.Height = height;
         }
-        
     }
 }
