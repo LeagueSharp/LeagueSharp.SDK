@@ -20,15 +20,13 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Events;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.UI.IMenu;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
-
+    using Core.Utils;
+    using Enumerations;
+    using Events;
+    using Extensions;
+    using Extensions.SharpDX;
+    using IMenu;
+    using IMenu.Values;
     using SharpDX;
     using SharpDX.Direct3D9;
 

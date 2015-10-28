@@ -17,8 +17,8 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
-    using LeagueSharp.SDK.Core.Utils;
+    using Abstracts;
+    using Core.Utils;
 
     /// <summary>
     ///     Defines a handler which is responsible for the drawing and interactions of an <see cref="AMenuComponent" />.

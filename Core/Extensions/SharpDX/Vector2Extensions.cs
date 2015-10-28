@@ -394,23 +394,23 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
                         return new IntersectionResult(true, lineSegment2Start);
                     }
 
-                    return new IntersectionResult();
+                    return default(IntersectionResult);
                 }
 
                 // parallel
-                return new IntersectionResult();
+                return default(IntersectionResult);
             }
 
             var r = numerator / denominator;
             if (r < 0 || r > 1)
             {
-                return new IntersectionResult();
+                return default(IntersectionResult);
             }
 
             var s = ((deltaACy * deltaBAx) - (deltaACx * deltaBAy)) / denominator;
             if (s < 0 || s > 1)
             {
-                return new IntersectionResult();
+                return default(IntersectionResult);
             }
 
             return new IntersectionResult(
@@ -771,7 +771,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         {
             if (pointA.Length < 1)
             {
-                return new MovementCollisionInfo();
+                return default(MovementCollisionInfo);
             }
 
             float sP1X = pointA[0].X,
@@ -849,7 +849,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
 
             return new MovementCollisionInfo(
                 t1,
-                (!float.IsNaN(t1)) ? new Vector2(sP1X + (s * t1), sP1Y + (k * t1)) : new Vector2());
+                (!float.IsNaN(t1)) ? new Vector2(sP1X + (s * t1), sP1Y + (k * t1)) : default(Vector2));
         }
 
         #endregion
@@ -988,7 +988,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <param name="point">
         ///     Intersection Point
         /// </param>
-        public IntersectionResult(bool intersects = false, Vector2 point = new Vector2())
+        public IntersectionResult(bool intersects = false, Vector2 point = default(Vector2))
         {
             this.Intersects = intersects;
             this.Point = point;

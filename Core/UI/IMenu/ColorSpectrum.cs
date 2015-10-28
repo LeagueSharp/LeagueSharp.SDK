@@ -19,20 +19,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 {
     using System;
     using System.Drawing;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Utils;
-
+    using Core.Utils;
+    using Enumerations;
+    using Extensions.SharpDX;
     using SharpDX;
     using SharpDX.Direct3D9;
-
     using Color = System.Drawing.Color;
 
     /// <summary>
     ///     The ColorBox
     /// </summary>
-    public class ColorBox
+    public class ColorSpectrum
     {
         #region Fields
 
@@ -91,10 +88,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ColorBox"/> class.
+        /// Initializes a new instance of the <see cref="ColorSpectrum"/> class.
         /// </summary>
         /// <param name="size">The size of the new ColorBox</param>
-        public ColorBox(Size size)
+        public ColorSpectrum(Size size)
         {
             this.mHsl = new Hsl { H = 1, S = 1, L = 1 };
 
@@ -112,7 +109,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Delegates
 
         /// <summary>
-        ///     EventHandler for the event <see cref="ColorBox.ColorBoxScrolled" />
+        ///     EventHandler for the event <see cref="ColorSpectrum.ColorBoxScrolled" />
         /// </summary>
         public delegate void ColorBoxScrolledEventHandler();
 
@@ -390,7 +387,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         ///     Draws the ColorBox
         /// </summary>
         /// <param name="newPos">Sets a new Position</param>
-        public void DrawControl(Vector2 newPos = new Vector2())
+        public void DrawControl(Vector2 newPos = default(Vector2))
         {
             if (!newPos.IsZero)
             {
@@ -1133,7 +1130,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         ///     Draws the ColorSlider
         /// </summary>
         /// <param name="newPos">Sets a new Position</param>
-        public void DrawControl(Vector2 newPos = new Vector2())
+        public void DrawControl(Vector2 newPos = default(Vector2))
         {
             this.Position = newPos;
 
@@ -1784,7 +1781,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         ///     Draws the AlphaSlider
         /// </summary>
         /// <param name="newPos">Sets a new Position</param>
-        public void DrawControl(Vector2 newPos = new Vector2())
+        public void DrawControl(Vector2 newPos = default(Vector2))
         {
             this.Position = newPos;
 

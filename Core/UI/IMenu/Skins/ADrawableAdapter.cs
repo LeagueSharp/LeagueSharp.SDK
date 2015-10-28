@@ -17,8 +17,8 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
-    using LeagueSharp.SDK.Core.Utils;
+    using Abstracts;
+    using Core.Utils;
 
     /// <summary>
     ///     Provides an implementation of <see cref="ADrawable" /> that does nothing. This is used to prevent exceptions when

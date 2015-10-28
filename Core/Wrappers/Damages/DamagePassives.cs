@@ -21,7 +21,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using Extensions.SharpDX;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -458,30 +458,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                             ? (.4f * hero.TotalAttackDamage)
                                             : (.5f * hero.TotalAttackDamage),
                             true);
-                        break;
-                    case "Lulu":
-                        AddPassiveAttack(
-                            string.Empty,
-                            (hero, @base) => hero.Pet?.Name == "RobotBuddy",
-                            DamageType.Magical,
-                            (hero, @base) =>
-                                {
-                                    var level = hero.Level;
-                                    return (level == 1
-                                                ? 9
-                                                : level < 5
-                                                      ? 21
-                                                      : level < 7
-                                                            ? 33
-                                                            : level < 9
-                                                                  ? 45
-                                                                  : level < 11
-                                                                        ? 57
-                                                                        : level < 13
-                                                                              ? 69
-                                                                              : level < 15 ? 81 : level < 17 ? 93 : 105)
-                                           + (hero.TotalMagicalDamage * .15f);
-                                });
                         break;
                     case "Lux":
                         AddPassiveAttack(

@@ -19,7 +19,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 {
     using System.Collections.Generic;
 
-    using LeagueSharp.SDK.Core.Enumerations;
+    using Enumerations;
 
     using SharpDX;
 

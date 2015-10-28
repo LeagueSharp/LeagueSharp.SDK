@@ -15,16 +15,8 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-// Concept by User Vasconcellos
-
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
 {
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
-
-    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
-
     using SharpDX;
     using SharpDX.Direct3D9;
 
@@ -45,8 +37,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes static members of the <see cref="MenuSettings" /> class.
-        ///     Default Settings Static Constructor.
+        ///     Initializes static members of the <see cref="BlueMenuSettings" /> class.
         /// </summary>
         static BlueMenuSettings()
         {
@@ -66,7 +57,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 FontQuality.ClearType,
                 FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative | FontPitchAndFamily.Modern,
                 "Tahoma");
-            
+
             TextCaptionColor = new ColorBGRA(0, 185, 252, 255);
             KeyBindColor = new ColorBGRA(5, 168, 235, 255);
             SliderColor = new ColorBGRA(0, 75, 101, 255);
@@ -94,11 +85,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         }
 
         /// <summary>
-        ///     Gets or sets the Global Text Caption Color.
-        /// </summary>
-        public static ColorBGRA TextCaptionColor { get; set; }
-
-        /// <summary>
         ///     Gets or sets the Global KeyBind Color.
         /// </summary>
         public static ColorBGRA KeyBindColor { get; set; }
@@ -107,6 +93,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         ///     Gets or sets the Global Slider Color.
         /// </summary>
         public static ColorBGRA SliderColor { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the Global Text Caption Color.
+        /// </summary>
+        public static ColorBGRA TextCaptionColor { get; set; }
 
         #endregion
     }

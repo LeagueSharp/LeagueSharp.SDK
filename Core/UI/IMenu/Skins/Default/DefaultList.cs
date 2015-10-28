@@ -18,15 +18,13 @@
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
     using System.Collections.Generic;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
-
+    using Core.Utils;
+    using Enumerations;
+    using Extensions.SharpDX;
+    using Math;
     using SharpDX;
     using SharpDX.Direct3D9;
+    using Values;
 
     /// <summary>
     ///     A default implementation of a <see cref="ADrawable{MenuList}" />
@@ -186,7 +184,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 var valueStrings = this.Component.ValuesAsStrings;
                 var dropdownMenuHeight = valueStrings.Length * MenuSettings.ContainerHeight;
                 MenuManager.Instance.DrawDelayed(
-                    delegate
+                    () =>
                         {
                             var color = MenuSettings.RootContainerColor;
                             var dropdownColor = new ColorBGRA(color.R, color.G, color.B, 255);

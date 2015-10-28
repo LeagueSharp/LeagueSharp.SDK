@@ -18,5 +18,6 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly:
-    SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1633:File must have header",
-        Justification = "Third Party Library", Scope = "namespace", Target = "~N:LeagueSharp.SDK.Clipper")]
+    SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1633:File must have header", Justification = "Third Party Library", Scope = "namespace", Target = "~N:LeagueSharp.SDK.Clipper")]
+[assembly: 
+    SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:File name must match first type name", Justification = "Third Party Library", Scope = "type", Target = "~T:LeagueSharp.SDK.Clipper.DoublePoint")]

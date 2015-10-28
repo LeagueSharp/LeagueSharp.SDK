@@ -22,9 +22,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
-    using LeagueSharp.SDK.Core.Utils;
+    using Core.Utils;
+    using Skins;
 
     /// <summary>
     ///     A list of values.

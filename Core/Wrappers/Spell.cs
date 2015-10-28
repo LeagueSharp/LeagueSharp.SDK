@@ -20,14 +20,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math.Prediction;
-    using LeagueSharp.SDK.Core.Utils;
-
+    using Enumerations;
+    using Extensions;
+    using Extensions.SharpDX;
+    using Math.Prediction;
     using SharpDX;
+    using Utils;
 
     /// <summary>
     ///     Spell Container
@@ -900,8 +898,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
             float speed, 
             bool collision, 
             SkillshotType type, 
-            Vector3 fromVector3 = new Vector3(), 
-            Vector3 rangeCheckFromVector3 = new Vector3())
+            Vector3 fromVector3 = default(Vector3), 
+            Vector3 rangeCheckFromVector3 = default(Vector3))
         {
             this.Delay = delay;
             this.Width = skillWidth;
@@ -936,8 +934,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public Spell SetSkillshot(
             bool collision, 
             SkillshotType type, 
-            Vector3 fromVector3 = new Vector3(), 
-            Vector3 rangeCheckFromVector3 = new Vector3())
+            Vector3 fromVector3 = default(Vector3), 
+            Vector3 rangeCheckFromVector3 = default(Vector3))
         {
             this.From = fromVector3;
             this.Collision = collision;
@@ -969,8 +967,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public Spell SetTargetted(
             float delay, 
             float speed, 
-            Vector3 fromVector3 = new Vector3(), 
-            Vector3 rangeCheckFromVector3 = new Vector3())
+            Vector3 fromVector3 = default(Vector3), 
+            Vector3 rangeCheckFromVector3 = default(Vector3))
         {
             this.Delay = delay;
             this.Speed = speed;
@@ -993,7 +991,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <returns>
         ///     The <see cref="Spell" />.
         /// </returns>
-        public Spell SetTargetted(Vector3 fromVector3 = new Vector3(), Vector3 rangeCheckFromVector3 = new Vector3())
+        public Spell SetTargetted(Vector3 fromVector3 = default(Vector3), Vector3 rangeCheckFromVector3 = default(Vector3))
         {
             this.From = fromVector3;
             this.RangeCheckFrom = rangeCheckFromVector3;
@@ -1039,8 +1037,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="fromVector3">From Vector3 Source</param>
         /// <param name="rangeCheckFromVector3">Range Check From Vector3 Source</param>
         public void UpdateSourcePosition(
-            Vector3 fromVector3 = new Vector3(), 
-            Vector3 rangeCheckFromVector3 = new Vector3())
+            Vector3 fromVector3 = default(Vector3), 
+            Vector3 rangeCheckFromVector3 = default(Vector3))
         {
             this.From = fromVector3;
             this.RangeCheckFrom = rangeCheckFromVector3;

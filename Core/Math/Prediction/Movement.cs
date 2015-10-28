@@ -20,16 +20,13 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Events;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Utils;
-
+    using Enumerations;
+    using Events;
+    using Extensions;
+    using Extensions.SharpDX;
     using SharpDX;
-
-    using Collision = LeagueSharp.SDK.Core.Math.Collision;
+    using Utils;
+    using Collision = Collision;
 
     /// <summary>
     ///     Calculates a prediction based off data values given by the source input and converts it into a output prediction

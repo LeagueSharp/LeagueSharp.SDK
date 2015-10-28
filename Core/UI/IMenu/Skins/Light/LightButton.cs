@@ -17,14 +17,13 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
 {
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
-
+    using Core.Utils;
+    using Enumerations;
+    using Extensions.SharpDX;
+    using Math;
     using SharpDX;
     using SharpDX.Direct3D9;
+    using Values;
 
     /// <summary>
     ///     A default implementation of <see cref="ADrawable{MenuButton}" />

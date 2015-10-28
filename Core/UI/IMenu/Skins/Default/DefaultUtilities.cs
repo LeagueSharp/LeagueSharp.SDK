@@ -17,7 +17,7 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
+    using Abstracts;
 
     using SharpDX;
 

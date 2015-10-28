@@ -27,6 +27,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <DocumentationFile>bin\Debug\LeagueSharp.SDK.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>LeagueSharp.SDK.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\LeagueSharp.SDK.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>LeagueSharp.SDK.ruleset</CodeAnalysisRuleSet>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
@@ -142,18 +144,18 @@
     <Compile Include="Core\UI\IMenu\RadioMenu.cs" />
     <Compile Include="Core\UI\IMenu\Skins\ADrawable.cs" />
     <Compile Include="Core\UI\IMenu\Skins\ADrawableAdapter.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueBool.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueButton.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueColorPicker.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueKeyBind.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueList.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueMenu.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueMenuSettings.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueSeparator.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueSlider.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueTextures.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueTheme.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Blue2.0\BlueUtilities.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2\BlueBool2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2\BlueButton2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2\BlueColorPicker2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2\BlueKeyBind2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2\BlueList2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2\BlueMenu2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2\BlueMenuSettings2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2\BlueSeparator2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2\BlueSlider2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2\BlueTextures2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2\BlueTheme2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Blue2\BlueUtilities2.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Blue\BlueBool.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Blue\BlueButton.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Blue\BlueColorPicker.cs" />
@@ -178,18 +180,18 @@
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultTheme.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultUtilities.cs" />
     <Compile Include="Core\UI\IMenu\Skins\ITheme.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Light2.0\LightBool.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Light2.0\LightButton.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Light2.0\LightColorPicker.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Light2.0\LightKeyBind.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Light2.0\LightList.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Light2.0\LightMenu.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Light2.0\LightMenuSettings.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Light2.0\LightSeparator.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Light2.0\LightSlider.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Light2.0\LightTextures.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Light2.0\LightTheme.cs" />
-    <Compile Include="Core\UI\IMenu\Skins\Light2.0\LightUtilities.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Light2\LightBool2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Light2\LightButton2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Light2\LightColorPicker2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Light2\LightKeyBind2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Light2\LightList2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Light2\LightMenu2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Light2\LightMenuSettings2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Light2\LightSeparator2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Light2\LightSlider2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Light2\LightTextures2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Light2\LightTheme2.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Light2\LightUtilities2.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Light\LightBool.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Light\LightButton.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Light\LightColorPicker.cs" />
@@ -224,9 +226,9 @@
     <Compile Include="Core\Utils\DelayAction.cs" />
     <Compile Include="Core\Utils\Jungle.cs" />
     <Compile Include="Core\Utils\Logging.cs" />
-    <Compile Include="Core\Utils\Math.cs" />
+    <Compile Include="Core\Utils\MathUtils.cs" />
     <Compile Include="Core\Utils\Minion.cs" />
-    <Compile Include="Core\Utils\Network.cs" />
+    <Compile Include="Core\Utils\NetworkUtils.cs" />
     <Compile Include="Core\Utils\Performance.cs" />
     <Compile Include="Core\Utils\Storage.cs" />
     <Compile Include="Core\Utils\TickOperation.cs" />
@@ -259,6 +261,9 @@
     <None Include="Resources\Data\Gapclosers.json" />
   </ItemGroup>
   <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Resources\Images\cursor_drag.png" />
     <Content Include="Resources\Images\notifications_arrow.png" />
     <Content Include="Resources\Images\notifications_check.png" />
@@ -274,6 +279,13 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <!--
+  <ItemGroup>
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0-beta015\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--
   <Import Project="packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets" Condition="Exists('packages\StyleCop.Analyzers.1.0.0-beta015\build\StyleCop.Analyzers.targets')" />

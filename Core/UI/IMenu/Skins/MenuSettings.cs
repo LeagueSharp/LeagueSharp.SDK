@@ -17,7 +17,7 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
-    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
+    using Customizer;
 
     using SharpDX;
     using SharpDX.Direct3D9;

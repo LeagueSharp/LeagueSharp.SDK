@@ -1,21 +1,21 @@
-﻿// <copyright file="LightTextures.cs" company="LeagueSharp">
+﻿// <copyright file="BlueTextures2.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
-// 
+//
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
-// 
+//
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
-// 
+//
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 {
     using System.Collections.Generic;
     using System.Drawing;
@@ -26,9 +26,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
     using SharpDX.Direct3D9;
 
     /// <summary>
-    ///     The light textures types.
+    ///     The blue texture type.
     /// </summary>
-    internal enum LightTexture
+    internal enum BlueTexture2
     {
         /// <summary>
         ///     The dragging type.
@@ -37,37 +37,37 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
     }
 
     /// <summary>
-    ///     The light textures.
+    ///     The blue textures.
     /// </summary>
-    internal class LightTextures
+    internal class BlueTextures2
     {
         #region Static Fields
 
         /// <summary>
         ///     The instance.
         /// </summary>
-        public static readonly LightTextures Instance = new LightTextures();
+        public static readonly BlueTextures2 Instance = new BlueTextures2();
 
         #endregion
 
         #region Fields
 
-        private readonly Dictionary<LightTexture, BlueTextureWrapper> textures =
-            new Dictionary<LightTexture, BlueTextureWrapper>();
+        private readonly Dictionary<BlueTexture2, BlueTextureWrapper> textures =
+            new Dictionary<BlueTexture2, BlueTextureWrapper>();
 
         #endregion
 
         #region Constructors and Destructors
 
-        private LightTextures()
+        private BlueTextures2()
         {
-            this.textures[LightTexture.Dragging] = BuildTexture(Resources.cursor_drag, 16, 16);
+            this.textures[BlueTexture2.Dragging] = BuildTexture(Resources.cursor_drag, 16, 16);
         }
 
         /// <summary>
-        ///     Finalizes an instance of the <see cref="LightTextures" /> class.
+        ///     Finalizes an instance of the <see cref="BlueTextures2" /> class.
         /// </summary>
-        ~LightTextures()
+        ~BlueTextures2()
         {
             foreach (var entry in this.textures.Where(entry => !entry.Value.Texture.IsDisposed))
             {
@@ -88,7 +88,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         /// <returns>
         ///     The <see cref="BlueTextureWrapper" />.
         /// </returns>
-        public BlueTextureWrapper this[LightTexture textureType] => this.textures[textureType];
+        public BlueTextureWrapper this[BlueTexture2 textureType] => this.textures[textureType];
 
         #endregion
 
@@ -112,7 +112,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         /// <returns>
         ///     The <see cref="BlueTextureWrapper" />.
         /// </returns>
-        public BlueTextureWrapper AddTexture(Image bmp, int width, int height, LightTexture textureType)
+        public BlueTextureWrapper AddTexture(Image bmp, int width, int height, BlueTexture2 textureType)
         {
             this.textures[textureType] = BuildTexture(bmp, height, width);
             return this.textures[textureType];

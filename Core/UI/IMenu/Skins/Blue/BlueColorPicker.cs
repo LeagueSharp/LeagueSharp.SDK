@@ -18,21 +18,21 @@
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
 {
     using System.Drawing;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math;
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
-
+    using Abstracts;
+    using Core.Utils;
+    using Enumerations;
+    using Extensions.SharpDX;
+    using Math;
     using SharpDX;
     using SharpDX.Direct3D9;
-
+    using Values;
     using Color = SharpDX.Color;
     using Rectangle = SharpDX.Rectangle;
     using Utilities = LeagueSharp.SDK.Core.UI.IMenu.Utilities;
 
+    /// <summary>
+    ///     The blue color picker.
+    /// </summary>
     internal class BlueColorPicker : ADrawable<MenuColor>
     {
         #region Constants
@@ -128,17 +128,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// <summary>
         ///     The ColorBox to display the color spectrum.
         /// </summary>
-        protected ColorBox colorBox;
+        protected ColorSpectrum ColorBox;
 
         /// <summary>
         ///     The VerticalAlphaSlider to change the opacity.
         /// </summary>
-        protected VerticalAlphaSlider verticalAlphaSlider;
+        protected VerticalAlphaSlider VerticalAlphaSlider;
 
         /// <summary>
         ///     The VerticalColorSlider to change the color spectrum.
         /// </summary>
-        protected VerticalColorSlider verticalColorSlider;
+        protected VerticalColorSlider VerticalColorSlider;
 
         #endregion
 
@@ -154,27 +154,27 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             : base(component)
         {
             Hsl tempHsl;
-            this.colorBox = new ColorBox(new Size(200, 200))
+            this.ColorBox = new ColorSpectrum(new Size(200, 200))
                                 { Hsl = Utilities.RgbToHsl(this.Component.Color.ToSystemColor()) };
 
-            this.verticalColorSlider = new VerticalColorSlider(new Size(40, 200))
+            this.VerticalColorSlider = new VerticalColorSlider(new Size(40, 200))
                                            { CbHsl = Utilities.RgbToHsl(this.Component.Color.ToSystemColor()) };
-            this.verticalColorSlider.ColorSliderScroll += () =>
+            this.VerticalColorSlider.ColorSliderScroll += () =>
                 {
-                    tempHsl = this.colorBox.Hsl;
-                    tempHsl.H = this.verticalColorSlider.CbHsl.H;
-                    this.colorBox.Hsl = tempHsl;
+                    tempHsl = this.ColorBox.Hsl;
+                    tempHsl.H = this.VerticalColorSlider.CbHsl.H;
+                    this.ColorBox.Hsl = tempHsl;
                 };
 
-            this.verticalAlphaSlider = new VerticalAlphaSlider(new Size(40, 200));
-            tempHsl = this.verticalAlphaSlider.CbHsl;
-            tempHsl.L = this.colorBox.Hsl.L;
-            this.verticalAlphaSlider.CbHsl = tempHsl;
-            this.verticalAlphaSlider.AlphaSliderScroll += () =>
+            this.VerticalAlphaSlider = new VerticalAlphaSlider(new Size(40, 200));
+            tempHsl = this.VerticalAlphaSlider.CbHsl;
+            tempHsl.L = this.ColorBox.Hsl.L;
+            this.VerticalAlphaSlider.CbHsl = tempHsl;
+            this.VerticalAlphaSlider.AlphaSliderScroll += () =>
                 {
-                    tempHsl = this.colorBox.Hsl;
-                    tempHsl.L = this.verticalAlphaSlider.CbHsl.L;
-                    this.colorBox.Hsl = tempHsl;
+                    tempHsl = this.ColorBox.Hsl;
+                    tempHsl.L = this.VerticalAlphaSlider.CbHsl.L;
+                    this.ColorBox.Hsl = tempHsl;
                 };
         }
 
@@ -258,7 +258,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             if (this.Component.Active)
             {
                 MenuManager.Instance.DrawDelayed(
-                    delegate
+                    () =>
                         {
                             Line.Width = this.ColorPickerBoundaries().Width;
                             Line.Begin();
@@ -273,11 +273,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                                 MenuSettings.RootContainerColor);
                             Line.End();
 
-                            this.colorBox.DrawControl(new Vector2(this.ColorBoxBoundaries().X, this.ColorBoxBoundaries().Y));
-                            this.verticalColorSlider.DrawControl(
-                                new Vector2(this.VerticalColorSliderBoundaries().X, this.VerticalColorSliderBoundaries().Y));
-                            this.verticalAlphaSlider.DrawControl(
-                                new Vector2(this.VerticalAlphaSliderBoundaries().X, this.VerticalAlphaSliderBoundaries().Y));
+                            this.ColorBox.DrawControl(
+                                new Vector2(this.ColorBoxBoundaries().X, this.ColorBoxBoundaries().Y));
+                            this.VerticalColorSlider.DrawControl(
+                                new Vector2(
+                                    this.VerticalColorSliderBoundaries().X,
+                                    this.VerticalColorSliderBoundaries().Y));
+                            this.VerticalAlphaSlider.DrawControl(
+                                new Vector2(
+                                    this.VerticalAlphaSliderBoundaries().X,
+                                    this.VerticalAlphaSliderBoundaries().Y));
 
                             Utils.DrawBoxFilled(
                                 this.PreviewBoundaries().X,
@@ -291,7 +296,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                                 this.PreviewBoundaries().Y,
                                 this.PreviewBoundaries().Width,
                                 this.PreviewBoundaries().Height,
-                                this.colorBox.Rgb.ToSharpDxColor());
+                                this.ColorBox.Rgb.ToSharpDxColor());
 
                             var applyButtonTextWidth =
                                 MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, "Apply", 0).Width;
@@ -374,15 +379,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 {
                     if (this.InteractingColorBox)
                     {
-                        this.colorBox.ColorBoxMouseMove(args);
+                        this.ColorBox.ColorBoxMouseMove(args);
                     }
                     else if (this.InteractingVerticalColorSlider)
                     {
-                        this.verticalColorSlider.VerticalColorSliderMouseMove(args);
+                        this.VerticalColorSlider.VerticalColorSliderMouseMove(args);
                     }
                     else if (this.InteractingVerticalAlphaSlider)
                     {
-                        this.verticalAlphaSlider.VerticalAlphaSliderMouseMove(args);
+                        this.VerticalAlphaSlider.VerticalAlphaSliderMouseMove(args);
                     }
                 }
             }
@@ -392,19 +397,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 if (this.InteractingColorBox)
                 {
                     this.InteractingColorBox = false;
-                    this.colorBox.ColorBoxMouseUp(args);
+                    this.ColorBox.ColorBoxMouseUp(args);
                 }
 
                 if (this.InteractingVerticalColorSlider)
                 {
                     this.InteractingVerticalColorSlider = false;
-                    this.verticalColorSlider.VerticalColorSliderMouseUp(args);
+                    this.VerticalColorSlider.VerticalColorSliderMouseUp(args);
                 }
 
                 if (this.InteractingVerticalAlphaSlider)
                 {
                     this.InteractingVerticalAlphaSlider = false;
-                    this.verticalAlphaSlider.VerticalAlphaSliderMouseUp(args);
+                    this.VerticalAlphaSlider.VerticalAlphaSliderMouseUp(args);
                 }
             }
 
@@ -424,7 +429,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                         this.ColorBoxBoundaries().Height))
                     {
                         this.InteractingColorBox = true;
-                        this.colorBox.ColorBoxMouseDown(args);
+                        this.ColorBox.ColorBoxMouseDown(args);
                     }
                     else if (args.Cursor.IsUnderRectangle(
                         this.VerticalColorSliderBoundaries().X,
@@ -433,7 +438,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                         this.VerticalColorSliderBoundaries().Height))
                     {
                         this.InteractingVerticalColorSlider = true;
-                        this.verticalColorSlider.VerticalColorSliderMouseDown(args);
+                        this.VerticalColorSlider.VerticalColorSliderMouseDown(args);
                     }
                     else if (args.Cursor.IsUnderRectangle(
                         this.VerticalAlphaSliderBoundaries().X,
@@ -442,7 +447,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                         this.VerticalAlphaSliderBoundaries().Height))
                     {
                         this.InteractingVerticalAlphaSlider = true;
-                        this.verticalAlphaSlider.VerticalAlphaSliderMouseDown(args);
+                        this.VerticalAlphaSlider.VerticalAlphaSliderMouseDown(args);
                     }
                     else if (args.Cursor.IsUnderRectangle(
                         this.ApplyButtonBoundaries().X,
@@ -451,7 +456,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                         this.ApplyButtonBoundaries().Height))
                     {
                         this.Component.Active = false;
-                        this.Component.Color = this.colorBox.Rgb.ToSharpDxColor();
+                        this.Component.Color = this.ColorBox.Rgb.ToSharpDxColor();
                     }
                     else if (args.Cursor.IsUnderRectangle(
                         this.CancelButtonBoundaries().X,
@@ -460,9 +465,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                         this.CancelButtonBoundaries().Height))
                     {
                         this.Component.Active = false;
-                        this.colorBox.Rgb = this.Component.Color.ToSystemColor();
-                        this.verticalColorSlider.Rgb = this.Component.Color.ToSystemColor();
-                        this.verticalAlphaSlider.Rgb = this.Component.Color.ToSystemColor();
+                        this.ColorBox.Rgb = this.Component.Color.ToSystemColor();
+                        this.VerticalColorSlider.Rgb = this.Component.Color.ToSystemColor();
+                        this.VerticalAlphaSlider.Rgb = this.Component.Color.ToSystemColor();
                     }
                 }
                 else if (args.Cursor.IsUnderRectangle(

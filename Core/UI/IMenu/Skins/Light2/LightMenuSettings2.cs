@@ -1,31 +1,22 @@
-﻿// <copyright file="LightMenuSettings.cs" company="LeagueSharp">
+﻿// <copyright file="LightMenuSettings2.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
-// 
+//
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
-// 
+//
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
-// 
+//
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-// Concept by User Vasconcellos
-
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
 {
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
-
-    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Light;
-
     using SharpDX;
     using SharpDX.Direct3D9;
 
@@ -34,10 +25,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
     /// </summary>
     public class LightMenuSettings2 : MenuSettings
     {
+        #region Static Fields
+
+        /// <summary>
+        ///     Local Caption Font.
+        /// </summary>
+        private static Font fontCaption;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes static members of the <see cref="MenuSettings" /> class.
+        ///     Initializes static members of the <see cref="LightMenuSettings2" /> class.
         ///     Default Settings Static Constructor.
         /// </summary>
         static LightMenuSettings2()
@@ -67,19 +67,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
 
         #endregion
 
-        #region Static Fields
-
-        /// <summary>
-        ///     Local Caption Font.
-        /// </summary>
-        private static Font fontCaption;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
@@ -100,11 +87,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
         }
 
         /// <summary>
-        ///     Gets or sets the Global Text Caption Color.
-        /// </summary>
-        public static ColorBGRA TextCaptionColor { get; set; }
-
-        /// <summary>
         ///     Gets or sets the Global KeyBind Color.
         /// </summary>
         public static ColorBGRA KeyBindColor { get; set; }
@@ -113,6 +95,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
         ///     Gets or sets the Global Slider Color.
         /// </summary>
         public static ColorBGRA SliderColor { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the Global Text Caption Color.
+        /// </summary>
+        public static ColorBGRA TextCaptionColor { get; set; }
 
         #endregion
     }

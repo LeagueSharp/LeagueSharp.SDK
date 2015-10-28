@@ -22,10 +22,10 @@ namespace LeagueSharp.SDK.Core.Math
     using System.Linq;
     using System.Text.RegularExpressions;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math.Prediction;
+    using Enumerations;
+    using Extensions;
+    using Extensions.SharpDX;
+    using Prediction;
 
     using SharpDX;
 

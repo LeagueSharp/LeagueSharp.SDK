@@ -20,11 +20,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
-    using LeagueSharp.SDK.Core.Utils;
-
+    using Core.Utils;
     using SharpDX;
+    using Skins;
 
     /// <summary>
     ///     The menu color.

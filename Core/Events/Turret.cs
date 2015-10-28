@@ -21,7 +21,7 @@ namespace LeagueSharp.SDK.Core.Events
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Extensions;
+    using Extensions;
 
     /// <summary>
     ///     Turret tracker and event handler.

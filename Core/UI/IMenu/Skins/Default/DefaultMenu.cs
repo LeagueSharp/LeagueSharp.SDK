@@ -18,13 +18,11 @@
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
     using System.Linq;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math;
-    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
-    using LeagueSharp.SDK.Core.Utils;
-
+    using Core.Utils;
+    using Customizer;
+    using Enumerations;
+    using Extensions.SharpDX;
+    using Math;
     using SharpDX;
     using SharpDX.Direct3D9;
 

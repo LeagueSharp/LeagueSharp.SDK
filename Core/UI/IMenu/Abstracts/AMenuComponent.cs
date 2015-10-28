@@ -20,12 +20,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
     using System;
     using System.Dynamic;
     using System.Linq;
-
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
-
+    using Core.Utils;
     using SharpDX;
+    using Skins;
+    using Values;
 
     /// <summary>
     ///     Abstract build of a menu component.

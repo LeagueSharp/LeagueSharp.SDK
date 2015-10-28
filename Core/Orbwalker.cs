@@ -22,20 +22,17 @@ namespace LeagueSharp.SDK.Core
     using System.Linq;
     using System.Reflection;
     using System.Windows.Forms;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math.Prediction;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Core.Wrappers;
-    using LeagueSharp.SDK.Core.Wrappers.Damages;
-
+    using Enumerations;
+    using Extensions;
+    using Extensions.SharpDX;
+    using Math.Prediction;
     using SharpDX;
-
+    using UI.IMenu.Values;
+    using Utils;
+    using Wrappers;
+    using Wrappers.Damages;
     using Color = System.Drawing.Color;
-    using Menu = LeagueSharp.SDK.Core.UI.IMenu.Menu;
+    using Menu = UI.IMenu.Menu;
 
     /// <summary>
     ///     The <c>orbwalker</c> system.

@@ -22,12 +22,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     using System.IO;
     using System.Linq;
     using System.Reflection;
-
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
-    using LeagueSharp.SDK.Core.Utils;
-
+    using Abstracts;
+    using Core.Utils;
     using SharpDX;
+    using Skins;
 
     /// <summary>
     ///     Menu Value Changed delegate

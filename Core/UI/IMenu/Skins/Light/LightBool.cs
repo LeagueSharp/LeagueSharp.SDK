@@ -17,14 +17,13 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
 {
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
-
+    using Core.Utils;
+    using Enumerations;
+    using Extensions.SharpDX;
+    using Math;
     using SharpDX;
     using SharpDX.Direct3D9;
+    using Values;
 
     /// <summary>
     ///     A blue implementation of a <see cref="ADrawable{MenuBool}" />
@@ -43,7 +42,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlueBool" /> class.
+        ///     Initializes a new instance of the <see cref="LightBool"/> class.
         /// </summary>
         /// <param name="component">
         ///     The component

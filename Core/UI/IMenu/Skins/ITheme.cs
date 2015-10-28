@@ -17,7 +17,7 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using Values;
 
     /// <summary>
     ///     Defines a Theme used to draw components of the menu.

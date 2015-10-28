@@ -21,7 +21,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using Extensions.SharpDX;
 
     using SharpDX;
 

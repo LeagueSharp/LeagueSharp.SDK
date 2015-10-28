@@ -19,7 +19,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
 {
     using System;
 
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using Extensions.SharpDX;
 
     using SharpDX;
 

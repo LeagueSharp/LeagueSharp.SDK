@@ -20,8 +20,8 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Clipper;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using Clipper;
+    using Extensions.SharpDX;
 
     using SharpDX;
 

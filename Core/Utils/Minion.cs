@@ -20,11 +20,11 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math;
-    using LeagueSharp.SDK.Core.Math.Prediction;
+    using Enumerations;
+    using Extensions;
+    using Extensions.SharpDX;
+    using Math;
+    using Math.Prediction;
 
     using SharpDX;
 
@@ -88,7 +88,7 @@ namespace LeagueSharp.SDK.Core.Utils
             float range, 
             int useMecMax = 9)
         {
-            var result = new Vector2();
+            var result = default(Vector2);
             var minionCount = 0;
             var startPos = ObjectManager.Player.ServerPosition.ToVector2();
 
@@ -154,7 +154,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static FarmLocation GetBestLineFarmLocation(List<Vector2> minions, float width, float range)
         {
-            var result = new Vector2();
+            var result = default(Vector2);
             var minionCount = 0;
             var startPos = ObjectManager.Player.ServerPosition.ToVector2();
 
@@ -234,7 +234,7 @@ namespace LeagueSharp.SDK.Core.Utils
             float range, 
             bool collision, 
             SkillshotType stype, 
-            Vector3 rangeCheckFrom = new Vector3())
+            Vector3 rangeCheckFrom = default(Vector3))
         {
             from = from.ToVector2().IsValid() ? from : ObjectManager.Player.ServerPosition;
 

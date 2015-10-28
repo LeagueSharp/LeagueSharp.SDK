@@ -1,4 +1,4 @@
-﻿// <copyright file="BlueMenuSettings.cs" company="LeagueSharp">
+﻿// <copyright file="BlueBool2.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
 // 
 //    This program is free software: you can redistribute it and/or modify
@@ -15,41 +15,29 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-// Concept by User Vasconcellos
-
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 {
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
-
-    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue;
-
-    using SharpDX;
-    using SharpDX.Direct3D9;
+    using Values;
 
     /// <summary>
-    ///     Default Skin Settings.
+    ///     A blue implementation of a <see cref="ADrawable{MenuBool}" />
     /// </summary>
-    public class BlueMenuSettings2 : BlueMenuSettings
+    public class BlueBool2 : BlueBool
     {
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes static members of the <see cref="MenuSettings" /> class.
-        ///     Default Settings Static Constructor.
+        ///     Initializes a new instance of the <see cref="BlueBool2" /> class.
         /// </summary>
-        static BlueMenuSettings2()
+        /// <param name="component">
+        ///     The component
+        /// </param>
+        public BlueBool2(MenuBool component)
+            : base(component)
         {
-            ContainerSelectedColor = new ColorBGRA(0, 37, 53, 255);
         }
 
         #endregion
-
-        /// <summary>
-        ///     Gets or sets the Global Container Selected Color.
-        /// </summary>
-        public static ColorBGRA ContainerSelectedColor { get; set; }
     }
 }

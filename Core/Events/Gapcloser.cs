@@ -22,14 +22,11 @@ namespace LeagueSharp.SDK.Core.Events
     using System.Linq;
     using System.Security.Permissions;
     using System.Text;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Properties;
-
+    using Enumerations;
+    using Extensions;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-
+    using Properties;
     using SharpDX;
 
     /// <summary>

@@ -22,7 +22,7 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Linq;
     using System.Runtime.Caching;
 
-    using LeagueSharp.SDK.Core.Enumerations;
+    using Enumerations;
 
     /// <summary>
     ///     Provides an implementation of ObjectCache, for any object. Check <see cref="DefaultCacheCapabilities" /> for
@@ -236,7 +236,7 @@ namespace LeagueSharp.SDK.Core.Utils
 
             DelayAction.Add(
                 (int)(absoluteExpiration - DateTime.Now).TotalMilliseconds,
-                delegate
+                () =>
                     {
                         if (!this.InternalCache[regionName].ContainsKey(key))
                         {
@@ -282,7 +282,7 @@ namespace LeagueSharp.SDK.Core.Utils
 
             DelayAction.Add(
                 (int)(policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds,
-                delegate
+                () =>
                     {
                         if (!this.InternalCache[regionName].ContainsKey(value.Key))
                         {
@@ -332,7 +332,7 @@ namespace LeagueSharp.SDK.Core.Utils
 
             DelayAction.Add(
                 (int)(policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds,
-                delegate
+                () =>
                     {
                         if (!this.InternalCache[regionName].ContainsKey(key))
                         {
@@ -502,7 +502,7 @@ namespace LeagueSharp.SDK.Core.Utils
 
             DelayAction.Add(
                 (int)(absoluteExpiration - DateTime.Now).TotalMilliseconds,
-                delegate
+                () =>
                     {
                         if (!this.InternalCache[regionName].ContainsKey(key))
                         {
@@ -537,7 +537,7 @@ namespace LeagueSharp.SDK.Core.Utils
 
             DelayAction.Add(
                 (int)(policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds,
-                delegate
+                () =>
                     {
                         if (!this.InternalCache[regionName].ContainsKey(item.Key))
                         {
@@ -572,7 +572,7 @@ namespace LeagueSharp.SDK.Core.Utils
 
             DelayAction.Add(
                 (int)(policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds,
-                delegate
+                () =>
                     {
                         if (!this.InternalCache[regionName].ContainsKey(key))
                         {
@@ -595,10 +595,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <param name="regionName">The name of the region in the InternalCache</param>
         /// <returns>If the InternalCache contains the value</returns>
         public bool TryGetValue(string key, out object value, string regionName = null)
-        {
-            regionName = regionName ?? "Default";
-            return this.InternalCache[regionName].TryGetValue(key, out value);
-        }
+            => this.InternalCache[regionName ?? "Default"].TryGetValue(key, out value);
 
         #endregion
 
@@ -609,9 +606,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         /// <returns>Enumerator of InternalCache</returns>
         protected override IEnumerator<KeyValuePair<string, object>> GetEnumerator()
-        {
-            return this.InternalCache["Default"].GetEnumerator();
-        }
+            => this.InternalCache["Default"].GetEnumerator();
 
         /// <summary>
         ///     Calls the <see cref="CacheEntryRemovedCallback" /> for the selected key.

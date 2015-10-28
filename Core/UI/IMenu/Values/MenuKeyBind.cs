@@ -21,12 +21,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using System.Windows.Forms;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
-    using LeagueSharp.SDK.Core.Utils;
-
-    using MenuItem = LeagueSharp.SDK.Core.UI.IMenu.MenuItem;
+    using Core.Utils;
+    using Enumerations;
+    using Skins;
+    using MenuItem = MenuItem;
 
     /// <summary>
     ///     Menu KeyBind.

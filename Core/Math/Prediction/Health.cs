@@ -21,8 +21,8 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
+    using Enumerations;
+    using Extensions;
 
     /// <summary>
     ///     Health Prediction class for prediction of health of units.

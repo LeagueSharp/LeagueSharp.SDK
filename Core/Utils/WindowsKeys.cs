@@ -20,7 +20,7 @@ namespace LeagueSharp.SDK.Core.Utils
     using System;
     using System.Windows.Forms;
 
-    using LeagueSharp.SDK.Core.Enumerations;
+    using Enumerations;
 
     using SharpDX;
 

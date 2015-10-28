@@ -21,7 +21,7 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Collections.Generic;
     using System.Threading;
 
-    using LeagueSharp.SDK.Core.Signals;
+    using Signals;
 
     /// <summary>
     ///     Delays actions by a set time.
@@ -81,7 +81,7 @@ namespace LeagueSharp.SDK.Core.Utils
         public static void Add(DelayActionItem item)
         {
             Signal.Create(
-                delegate(object sender, Signal.RaisedArgs args)
+                (sender, args) =>
                     {
                         var delayActionItem = (DelayActionItem)args.Signal.Properties["DelayActionItem"];
 
@@ -91,13 +91,13 @@ namespace LeagueSharp.SDK.Core.Utils
                         }
 
                         delayActionItem.Function();
-                    }, 
-                delegate(Signal signal)
+                    },
+                signal =>
                     {
                         var delayActionItem = (DelayActionItem)signal.Properties["DelayActionItem"];
                         return Variables.TickCount >= delayActionItem.Time;
-                    }, 
-                default(DateTimeOffset), 
+                    },
+                default(DateTimeOffset),
                 new Dictionary<string, object> { { "DelayActionItem", item } });
         }
 

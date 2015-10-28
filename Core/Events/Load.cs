@@ -22,8 +22,8 @@ namespace LeagueSharp.SDK.Core.Events
     using System.Linq;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Utils;
+    using Enumerations;
+    using Utils;
 
     /// <summary>
     ///     Provides an event for when the game starts.

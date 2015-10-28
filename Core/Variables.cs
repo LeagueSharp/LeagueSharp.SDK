@@ -19,7 +19,7 @@ namespace LeagueSharp.SDK.Core
 {
     using System;
 
-    using LeagueSharp.SDK.Core.UI.IMenu;
+    using UI.IMenu;
 
     /// <summary>
     ///     Class that contains helpful variables.

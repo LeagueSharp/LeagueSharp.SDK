@@ -17,7 +17,7 @@
 
 namespace LeagueSharp.SDK.Core.Extensions
 {
-    using LeagueSharp.SDK.Core.Wrappers;
+    using Wrappers;
 
     /// <summary>
     ///     The game runtime extensions.

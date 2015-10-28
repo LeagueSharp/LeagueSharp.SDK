@@ -21,7 +21,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using System.Drawing;
     using System.Linq;
 
-    using LeagueSharp.SDK.Properties;
+    using Properties;
 
     using SharpDX.Direct3D9;
 

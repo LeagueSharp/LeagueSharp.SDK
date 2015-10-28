@@ -685,8 +685,7 @@ namespace LeagueSharp.SDK.Clipper
         /// <returns>
         ///     The <see cref="int" />.
         /// </returns>
-        [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode",
-            Justification = "Hashcode is dynamic on clipper.")]
+        [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode", Justification = "Hashcode is dynamic on clipper.")]
         public override int GetHashCode()
         {
             return this.hi.GetHashCode() ^ this.lo.GetHashCode();
@@ -803,8 +802,7 @@ namespace LeagueSharp.SDK.Clipper
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias",
-            Justification = "Can be changed by a pre-processor definition.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Can be changed by a pre-processor definition.")]
         public IntPoint(double x, double y)
         {
             this.X = (cInt)x;
@@ -5496,8 +5494,7 @@ namespace LeagueSharp.SDK.Clipper
         /// <returns>
         ///     The <see cref="long" />.
         /// </returns>
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias",
-            Justification = "Can be changed by a pre-processor definition.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Can be changed by a pre-processor definition.")]
         internal static long Round(double value)
         {
             return value < 0 ? (cInt)(value - 0.5) : (cInt)(value + 0.5);
@@ -5543,7 +5540,7 @@ namespace LeagueSharp.SDK.Clipper
         /// </param>
         private static void IntersectPoint(Edge edge1, Edge edge2, out IntPoint ip)
         {
-            ip = new IntPoint();
+            ip = default(IntPoint);
             double b1, b2;
 
             // nb: with very large coordinate values, it's possible for SlopesEqual() to 
@@ -7945,7 +7942,7 @@ namespace LeagueSharp.SDK.Clipper
             double dy = pt2.Y - pt1.Y;
             if ((Math.Abs(dx) < float.Epsilon) && (Math.Abs(dy) < float.Epsilon))
             {
-                return new DoublePoint();
+                return default(DoublePoint);
             }
 
             var f = 1 * 1.0 / Math.Sqrt((dx * dx) + (dy * dy));
@@ -7966,8 +7963,7 @@ namespace LeagueSharp.SDK.Clipper
         /// <returns>
         ///     The <see cref="long" />.
         /// </returns>
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias",
-            Justification = "Can be changed by a pre-processor definition.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Can be changed by a pre-processor definition.")]
         internal static long Round(double value)
         {
             return value < 0 ? (cInt)(value - 0.5) : (cInt)(value + 0.5);

@@ -20,9 +20,9 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using Enumerations;
+    using Extensions;
+    using Extensions.SharpDX;
 
     using SharpDX;
 
@@ -223,7 +223,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                     }
 
                     var bestCandidateHits = -1;
-                    var bestCandidate = new Vector2();
+                    var bestCandidate = default(Vector2);
                     var positionsList = posibleTargets.Select(t => t.Position).ToList();
 
                     foreach (var candidate in candidates)
@@ -268,7 +268,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                         let edge1 = end.Rotated(-angle / 2)
                         let edge2 = edge1.Rotated(angle)
                         where
-                            point.DistanceSquared(new Vector2()) < range * range && edge1.CrossProduct(point) > 0
+                            point.DistanceSquared(default(Vector2)) < range * range && edge1.CrossProduct(point) > 0
                             && point.CrossProduct(edge2) > 0
                         select point).Count();
             }
@@ -321,7 +321,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                     }
 
                     var bestCandidateHits = -1;
-                    var bestCandidate = new Vector2();
+                    var bestCandidate = default(Vector2);
                     var bestCandidateHitPoints = new List<Vector2>();
                     var positionsList = posibleTargets.Select(t => t.Position).ToList();
 
@@ -348,7 +348,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                     if (bestCandidateHits > 1)
                     {
                         float maxDistance = -1;
-                        Vector2 p1 = new Vector2(), p2 = new Vector2();
+                        Vector2 p1 = default(Vector2), p2 = default(Vector2);
 
                         // Center the position
                         for (var i = 0; i < bestCandidateHitPoints.Count; i++)

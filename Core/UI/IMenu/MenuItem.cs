@@ -24,8 +24,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
 
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
-    using LeagueSharp.SDK.Core.Utils;
+    using Abstracts;
+    using Core.Utils;
 
     using SharpDX;
 

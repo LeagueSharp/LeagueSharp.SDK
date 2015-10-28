@@ -19,7 +19,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 {
     using System;
 
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using Values;
 
     /// <summary>
     ///     RadioMenu Item.

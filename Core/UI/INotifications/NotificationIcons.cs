@@ -21,8 +21,8 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
     using System.Drawing;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Properties;
+    using Enumerations;
+    using Properties;
 
     using SharpDX.Direct3D9;
 

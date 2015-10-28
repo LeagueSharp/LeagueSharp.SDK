@@ -20,16 +20,13 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
     using System;
     using System.Collections.Generic;
     using System.Drawing;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math;
-    using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Properties;
-
+    using Core.Utils;
+    using Enumerations;
+    using Extensions.SharpDX;
+    using Math;
+    using Properties;
     using SharpDX;
     using SharpDX.Direct3D9;
-
     using Color = SharpDX.Color;
     using Font = SharpDX.Direct3D9.Font;
     using Rectangle = SharpDX.Rectangle;

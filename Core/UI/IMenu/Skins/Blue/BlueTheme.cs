@@ -18,11 +18,9 @@
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
 {
     using System.Linq;
-
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-
     using SharpDX;
     using SharpDX.Direct3D9;
+    using Values;
 
     /// <summary>
     ///     Implements a default ITheme.
