@@ -3270,7 +3270,7 @@
 				}
 			},
 			{
-				"Stage": "Default",
+				"Stage": "SecondCast",
 				"SpellData": {
 					"DamageType": "Physical",
 					"Damages": [ 50, 80, 110, 140, 170 ],
@@ -3280,6 +3280,12 @@
 							"DamagePercentages": [ 0.9, 0.9, 0.9, 0.9, 0.9 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "BonusAttackPoints"
+						},
+						{
+							"DamageType": "Physical",
+							"DamagePercentages": [ 0.08, 0.08, 0.08, 0.08, 0.08 ],
+							"ScalingTarget": "Target",
+							"ScalingType": "MissingHealth"
 						}
 					]
 				}
@@ -7009,7 +7015,7 @@
 				}
 			},
 			{
-				"Stage": "Default",
+				"Stage": "SecondForm",
 				"SpellData": {
 					"DamageType": "Physical",
 					"Damages": [ 45, 69, 93, 117, 141 ],

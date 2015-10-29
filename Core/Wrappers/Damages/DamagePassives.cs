@@ -1004,9 +1004,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     case "Zed":
                         AddPassiveAttack(
                             "Zed",
-                            (hero, @base) => @base.HealthPercent < .5f,
+                            (hero, @base) => @base.HealthPercent <= 50f && !@base.HasBuff("ZedPassiveCD"),
                             DamageType.Magical,
-                            (hero, @base) => (hero.Level == 1 ? .06f : hero.Level < 17 ? .08f : .1f) * @base.MaxHealth);
+                            (hero, @base) => (hero.Level < 7 ? .06f : hero.Level < 17 ? .08f : .1f) * @base.MaxHealth);
                         break;
                     case "Ziggs":
                         AddPassiveAttack(
