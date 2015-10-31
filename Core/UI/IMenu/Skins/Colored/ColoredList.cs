@@ -126,7 +126,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                 (int)position.X + this.Component.MenuWidth - this.dropDownButtonWidth - TextSpacing
                 - this.Component.MaxStringWidth, 
                 (int)rectangleName.Y,
-                this.Component.Active ? new ColorBGRA(0, 186, 255, 255) : MenuSettings.TextColor);
+                this.Component.Active ? MenuSettings.ContainerSelectedColor : MenuSettings.TextColor);
 
             if (this.Component.Active)
             {
