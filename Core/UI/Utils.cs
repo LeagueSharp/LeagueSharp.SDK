@@ -143,7 +143,7 @@
         public static void DrawCircle(float x, float y, float radius, int rotate, CircleType type, bool smoothing, int resolution, Color color)
         {
             VertexBuffer vertices = new VertexBuffer(
-             Drawing.Direct3DDevice, Utilities.SizeOf<Vector4>() * 2 * (resolution + 2), Usage.WriteOnly, VertexFormat.Diffuse | VertexFormat.PositionRhw, Pool.Default);
+             Drawing.Direct3DDevice, Utilities.SizeOf<Vector4>() * 2 * (resolution + 4), Usage.WriteOnly, VertexFormat.Diffuse | VertexFormat.PositionRhw, Pool.Default);
 
             float angle = rotate * (float)Math.PI / 180f;
             float pi = 0.0f;
@@ -154,7 +154,7 @@
 
             List<Vector4> data = new List<Vector4>();
 
-            for (int i = 0; i < resolution + 2; i++)
+            for (int i = 0; i < resolution + 4; i++)
             {
                 float x1 = x - radius * (float)Math.Cos(i * (2f * pi / resolution));
                 float y1 = y - radius * (float)Math.Sin(i * (2f * pi / resolution));
@@ -165,7 +165,7 @@
             }
 
             // Rotate matrix
-            int res = 2 * resolution + 2;
+            int res = 2 * resolution + 4;
             for (int i = 0; i < res; i = i + 2)
             {
                 data[i] = new Vector4((float)(x + Math.Cos(angle) * (data[i].X - x) - Math.Sin(angle) * (data[i].Y - y)),
@@ -190,6 +190,11 @@
             {
                 Drawing.Direct3DDevice.SetRenderState(RenderState.MultisampleAntialias, true);
                 Drawing.Direct3DDevice.SetRenderState(RenderState.AntialiasedLineEnable, true);
+            }
+            else
+            {
+                Drawing.Direct3DDevice.SetRenderState(RenderState.MultisampleAntialias, false);
+                Drawing.Direct3DDevice.SetRenderState(RenderState.AntialiasedLineEnable, false);
             }
 
             var olddec = Drawing.Direct3DDevice.VertexDeclaration;
@@ -210,12 +215,13 @@
         /// <param name="rad">Radius</param>
         /// <param name="rotate">Rotation 0 - 360</param>
         /// <param name="type">Circle Type</param>
+        /// <param name="smoothing">Smooth Antialiasing</param>
         /// <param name="resolution">Real smooth value</param>
         /// <param name="color">Color</param>
         public static void DrawCircleFilled(float x, float y, float rad, float rotate, CircleType type, bool smoothing, int resolution, Color color)
         {
             VertexBuffer vertices = new VertexBuffer(
-             Drawing.Direct3DDevice, Utilities.SizeOf<Vector4>() * 2 * (resolution + 2), Usage.WriteOnly, VertexFormat.Diffuse | VertexFormat.PositionRhw, Pool.Default);
+             Drawing.Direct3DDevice, Utilities.SizeOf<Vector4>() * 2 * (resolution + 4), Usage.WriteOnly, VertexFormat.Diffuse | VertexFormat.PositionRhw, Pool.Default);
 
             double angle = rotate * Math.PI / 180d;
             double pi = 0.0d;
@@ -229,7 +235,7 @@
                                                             new Vector4(x, y, 0f, 1f), color.ToVector4() 
                                                         });
 
-            for (int i = 0; i < resolution + 2; i++)
+            for (int i = 1; i < resolution + 4; i++)
             {
                 float x1 = (float)(x - rad * Math.Cos(pi * ((i - 1) / (resolution / 2.0f))));
                 float y1 = (float)(y - rad * Math.Sin(pi * ((i - 1) / (resolution / 2.0f))));
@@ -240,7 +246,7 @@
             }
 
             // Rotate matrix
-            int res = 2 * resolution + 2;
+            int res = 2 * resolution + 4;
             for (int i = 0; i < res; i = i + 2)
             {
                 data[i] = new Vector4((float)(x + Math.Cos(angle) * (data[i].X - x) - Math.Sin(angle) * (data[i].Y - y)),
@@ -248,7 +254,7 @@
                     data[i].Z, data[i].W);
             }
 
-            vertices.Lock(0, 0, LockFlags.None).WriteRange(data.ToArray());
+            vertices.Lock(0, Utilities.SizeOf<Vector4>() * 2 * (resolution + 4), LockFlags.None).WriteRange(data.ToArray());
             vertices.Unlock();
 
             VertexElement[] vertexElements = {
@@ -265,6 +271,11 @@
             {
                 Drawing.Direct3DDevice.SetRenderState(RenderState.MultisampleAntialias, true);
                 Drawing.Direct3DDevice.SetRenderState(RenderState.AntialiasedLineEnable, true);
+            }
+            else
+            {
+                Drawing.Direct3DDevice.SetRenderState(RenderState.MultisampleAntialias, false);
+                Drawing.Direct3DDevice.SetRenderState(RenderState.AntialiasedLineEnable, false);
             }
 
             var olddec = Drawing.Direct3DDevice.VertexDeclaration;
@@ -334,9 +345,9 @@
         public static void DrawBoxRounded(float x, float y, float w, float h, float radius, bool smoothing, Color color, Color bcolor)
         {
             DrawBoxFilled(x + radius, y + radius, w - 2 * radius - 1, h - 2 * radius - 1, color);   // Center rect.
-            DrawBoxFilled(x + radius, y + 1, w - 2 * radius - 1, radius - 1, color);            // Top rect.
+            DrawBoxFilled(x + radius, y, w - 2 * radius - 1, radius, color);            // Top rect.
             DrawBoxFilled(x + radius, y + h - radius - 1, w - 2 * radius - 1, radius, color);     // Bottom rect.
-            DrawBoxFilled(x + 1, y + radius, radius - 1, h - 2 * radius - 1, color);            // Left rect.
+            DrawBoxFilled(x, y + radius, radius, h - 2 * radius - 1, color);            // Left rect.
             DrawBoxFilled(x + w - radius - 1, y + radius, radius, h - 2 * radius - 1, color);     // Right rect.
 
             // Smoothing method
@@ -352,9 +363,9 @@
                 DrawCircle(x + w - radius - 1, y + h - radius - 1, radius, 180, CircleType.Quarter, true, 16, bcolor);    // Bottom-right corner
                 DrawCircle(x + radius + 1, y + h - radius - 1, radius, 270, CircleType.Quarter, true, 16, bcolor);      // Bottom-left corner
 
-                DrawLine(x + radius, y + 1, x + w - radius - 1, y + 1, 1, bcolor);       // Top line
+                DrawLine(x + radius, y, x + w - radius - 1, y, 1, bcolor);       // Top line
                 DrawLine(x + radius, y + h - 2, x + w - radius - 1, y + h - 2, 1, bcolor);   // Bottom line
-                DrawLine(x + 1, y + radius, x + 1, y + h - radius - 1, 1, bcolor);       // Left line
+                DrawLine(x, y + radius, x, y + h - radius - 1, 1, bcolor);       // Left line
                 DrawLine(x + w - 2, y + radius, x + w - 2, y + h - radius - 1, 1, bcolor);   // Right line
             }
             else

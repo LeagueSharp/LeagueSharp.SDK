@@ -66,7 +66,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
                 false, 
                 FontCharacterSet.Default,
                 FontPrecision.TrueType,
-                FontQuality.ClearType,
+                FontQuality.ClearTypeNatural,
                 FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative | FontPitchAndFamily.Modern, 
                 "Tahoma");
             ContainerTextMarkOffset = 8f;
