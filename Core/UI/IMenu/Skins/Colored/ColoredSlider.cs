@@ -113,12 +113,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             var x = position.X + Offset + (percent * (this.Component.MenuWidth - Offset * 2));
             var maxX = position.X + Offset + ((this.Component.MenuWidth - Offset * 2));
 
-            //Line.Width = 3;
-            //Line.Begin();
-            //Line.Draw(
-            //    new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) },
-            //    MenuSettings.ContainerSelectedColor);
-            //Line.End();
             MenuManager.Instance.DrawDelayed(
                 delegate
                     {

@@ -116,23 +116,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                     MenuSettings.ContainerSelectedColor);
             }
 
-            /*Line.Width = MenuSettings.ContainerHeight - 7;
-            Line.Begin();
-            Line.Draw(
-                new[]
-                    {
-                        new Vector2(
-                            (this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight - 1)
-                            + MenuSettings.ContainerHeight / 2f,
-                            this.Component.Position.Y + 1 + 3),
-                        new Vector2(
-                            (this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight - 1)
-                            + MenuSettings.ContainerHeight / 2f,
-                            this.Component.Position.Y + MenuSettings.ContainerHeight - 3)
-                    },
-                this.Component.Active ? new ColorBGRA(68, 160, 255, 255) : new ColorBGRA(151, 151, 151, 255));
-            Line.End();*/
-
             var centerX =
                 (int)
                 new Rectangle(
@@ -144,12 +127,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                         MenuSettings.Font,
                         this.Component.Active ? "On" : "Off",
                         CenteredFlags.HorizontalCenter).X - 5;
-            /*MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite,
-                this.Component.Active ? "On" : "Off",
-                centerX,
-                centerY,
-                new ColorBGRA(221, 233, 255, 255));*/
 
             //Left
             Utils.DrawCircle(centerX, this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 7, 270, Utils.CircleType.Half, true, 32, MenuSettings.TextColor);

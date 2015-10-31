@@ -127,22 +127,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                 - this.Component.MaxStringWidth, 
                 (int)rectangleName.Y,
                 this.Component.Active ? new ColorBGRA(0, 186, 255, 255) : MenuSettings.TextColor);
-            /*Line.Width = 1f;
-            Line.Begin();
-            Line.Draw(
-                new[]
-                    {
-                        new Vector2(
-                            position.X + this.Component.MenuWidth - this.dropDownButtonWidth - (2 * TextSpacing)
-                            - this.Component.MaxStringWidth,
-                            position.Y + 5),
-                        new Vector2(
-                            position.X + this.Component.MenuWidth - this.dropDownButtonWidth - (2 * TextSpacing)
-                            - this.Component.MaxStringWidth,
-                            position.Y + MenuSettings.ContainerHeight - 5)
-                    },
-                MenuSettings.ContainerSeparatorColor);
-            Line.End();*/
 
             if (this.Component.Active)
             {
@@ -152,20 +136,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                     delegate
                         {
                             var color = MenuSettings.RootContainerColor;
-                            var dropdownColor = new ColorBGRA(color.R, color.G, color.B, 255);
-                            Line.Width = dropdownMenuWidth;
-                            Line.Begin();
-                            Line.Draw(
-                                new[]
-                                    {
-                                        new Vector2(
-                                            position.X + Component.MenuWidth - (Line.Width / 2), 
-                                            position.Y + MenuSettings.ContainerHeight), 
-                                        new Vector2(
-                                            position.X + Component.MenuWidth - (Line.Width / 2), 
-                                            position.Y + MenuSettings.ContainerHeight + dropdownMenuHeight)
-                                    }, dropdownColor);
-                            Line.End();
 
                             Utils.DrawBoxRounded(position.X + Component.MenuWidth - dropdownMenuWidth, position.Y + MenuSettings.ContainerHeight, 
                                 dropdownMenuWidth, dropdownMenuHeight, 4, true,

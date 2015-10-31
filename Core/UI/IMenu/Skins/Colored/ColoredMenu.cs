@@ -159,39 +159,34 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                     MenuSettings.TextColor);
             }
 
-            //if (this.Component.Toggled)
-            //{
-                MenuManager.Instance.DrawDelayed(
-                    delegate
-                        {
-                            var symbolCenterY =
-                                            (int)
-                                            ColoredUtilities.GetContainerRectangle(this.Component)
-                                                .GetCenteredText(null, ColoredMenuSettings.FontMenuSymbol, this.Component.DisplayName, CenteredFlags.VerticalCenter)
-                                                .Y;
+            MenuManager.Instance.DrawDelayed(
+                delegate
+                    {
+                        var symbolCenterY =
+                                        (int)
+                                        ColoredUtilities.GetContainerRectangle(this.Component)
+                                            .GetCenteredText(null, ColoredMenuSettings.FontMenuSymbol, this.Component.DisplayName, CenteredFlags.VerticalCenter)
+                                            .Y;
 
-                            Utils.DrawCircleFilled(
-                                (position.X + this.Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
-                                 - MenuSettings.ContainerTextMarkOffset) + 4,
-                                symbolCenterY + 11,
-                                6,
-                                0,
-                                Utils.CircleType.Full,
-                                true,
-                                16,
-                                new ColorBGRA(252, 248, 245, 255));
-                            ColoredMenuSettings.FontMenuSymbol.DrawText(
-                                MenuManager.Instance.Sprite,
-                                "›",
-                                (int)
-                                (position.X + this.Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
-                                 - MenuSettings.ContainerTextMarkOffset) + 1,
-                                symbolCenterY,
-                                this.Component.Components.Count > 0 ? ColoredMenuSettings.TextCaptionColor : MenuSettings.ContainerSeparatorColor);
-                        });
-            //}
-
-            
+                        Utils.DrawCircleFilled(
+                            (position.X + this.Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
+                                - MenuSettings.ContainerTextMarkOffset) + 4,
+                            symbolCenterY + 11,
+                            6,
+                            0,
+                            Utils.CircleType.Full,
+                            true,
+                            16,
+                            new ColorBGRA(252, 248, 245, 255));
+                        ColoredMenuSettings.FontMenuSymbol.DrawText(
+                            MenuManager.Instance.Sprite,
+                            "›",
+                            (int)
+                            (position.X + this.Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
+                                - MenuSettings.ContainerTextMarkOffset) + 1,
+                            symbolCenterY,
+                            this.Component.Components.Count > 0 ? ColoredMenuSettings.TextCaptionColor : MenuSettings.ContainerSeparatorColor);
+                    });
 
             if (this.Component.Toggled)
             {
@@ -217,18 +212,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 
                 Utils.DrawBoxRounded(position.X + this.Component.MenuWidth, position.Y, width, height, 4, true, 
                     MenuSettings.RootContainerColor, new ColorBGRA(55, 76, 95, 255));
-                /*Line.Width = width;
-                Line.Begin();
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2((position.X + this.Component.MenuWidth) + width / 2, position.Y), 
-                            new Vector2((position.X + this.Component.MenuWidth) + width / 2, position.Y + height)
-                        },
-                    MenuSettings.RootContainerColor);
-                Line.End();*/
-
-
 
                 for (var i = 0; i < this.Component.Components.Count; ++i)
                 {
@@ -242,41 +225,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                         childComponent.OnDraw(childPos);
                     }
                 }
-
-                var contourColor = new ColorBGRA(254, 255, 255, 255);
-
-                /*Line.Width = 1f;
-                Line.Begin();
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(position.X + this.Component.MenuWidth, position.Y), 
-                            new Vector2(position.X + this.Component.MenuWidth + width, position.Y)
-                        },
-                    contourColor);
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(position.X + this.Component.MenuWidth, position.Y + height), 
-                            new Vector2(position.X + this.Component.MenuWidth + width, position.Y + height)
-                        },
-                    contourColor);
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(position.X + this.Component.MenuWidth, position.Y), 
-                            new Vector2(position.X + this.Component.MenuWidth, position.Y + height)
-                        },
-                    contourColor);
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(position.X + this.Component.MenuWidth + width, position.Y), 
-                            new Vector2(position.X + this.Component.MenuWidth + width, position.Y + height)
-                        },
-                    contourColor);
-                Line.End();*/
-                
             }
 
             if (this.hasDragged && !MenuCustomizer.Instance.LockPosition.Value)

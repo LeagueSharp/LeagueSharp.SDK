@@ -135,21 +135,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                 this.Component.Hovering ? MenuSettings.ContainerSelectedColor : this.buttonColor, 
                 this.Component.Hovering ? MenuSettings.ContainerSelectedColor : this.buttonColor);
 
-            /*Line.Width = MenuSettings.ContainerHeight - 5;
-            Line.Begin();
-            Line.Draw(
-                new[]
-                    {
-                        new Vector2(
-                            this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - (2 * TextGap) + 2, 
-                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
-                        new Vector2(
-                            this.Component.Position.X + this.Component.MenuWidth - 2, 
-                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
-                    }, 
-                this.Component.Hovering ? this.buttonHoverColor : this.buttonColor);
-            Line.End();*/
-
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 this.Component.ButtonText, 
