@@ -22,7 +22,7 @@ namespace LeagueSharp.SDK.Core.Events
     using System.Linq;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using Extensions.SharpDX;
 
     using SharpDX;
 

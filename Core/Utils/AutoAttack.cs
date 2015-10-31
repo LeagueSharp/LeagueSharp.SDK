@@ -65,6 +65,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         private static readonly string[] NoAttacks =
             {
+                "volleyattack", "volleyattackwithsound",
                 "jarvanivcataclysmattack", "monkeykingdoubleattack",
                 "shyvanadoubleattack", "shyvanadoubleattackdragon",
                 "zyragraspingplantattack", "zyragraspingplantattack2",
@@ -75,7 +76,9 @@ namespace LeagueSharp.SDK.Core.Utils
                 "annietibbersbasicattack", "annietibbersbasicattack2",
                 "yorickdecayedghoulbasicattack", "yorickravenousghoulbasicattack",
                 "yorickspectralghoulbasicattack", "malzaharvoidlingbasicattack",
-                "malzaharvoidlingbasicattack2", "malzaharvoidlingbasicattack3"
+                "malzaharvoidlingbasicattack2", "malzaharvoidlingbasicattack3",
+                "kindredwolfbasicattack",
+                "kindredbasicattackoverridelightbombfinal"
             };
 
         /// <summary>
@@ -108,7 +111,10 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static float GetProjectileSpeed(this Obj_AI_Hero hero)
         {
-            return IsMelee(hero) || hero.ChampionName == "Azir" ? float.MaxValue : hero.BasicAttack.MissileSpeed;
+            return IsMelee(hero) || hero.ChampionName == "Azir" || hero.ChampionName == "Velkoz"
+                   || hero.ChampionName == "Viktor" && hero.HasBuff("ViktorPowerTransferReturn")
+                       ? float.MaxValue
+                       : hero.BasicAttack.MissileSpeed;
         }
 
         /// <summary>
