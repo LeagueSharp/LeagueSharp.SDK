@@ -1,22 +1,35 @@
-﻿// <copyright file="BlueMenuSettings.cs" company="LeagueSharp">
-//    Copyright (c) 2015 LeagueSharp.
-// 
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-// 
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-// 
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see http://www.gnu.org/licenses/
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="BlueMenuSettings.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
+// <summary>
+//   Default Skin Settings.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+//Concept by User Vasconcellos
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
 {
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+
+    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
+
     using SharpDX;
     using SharpDX.Direct3D9;
 
@@ -37,7 +50,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes static members of the <see cref="BlueMenuSettings" /> class.
+        ///     Initializes static members of the <see cref="MenuSettings" /> class.
+        ///     Default Settings Static Constructor.
         /// </summary>
         static BlueMenuSettings()
         {
@@ -57,7 +71,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 FontQuality.ClearType,
                 FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative | FontPitchAndFamily.Modern,
                 "Tahoma");
-
+            
             TextCaptionColor = new ColorBGRA(0, 185, 252, 255);
             KeyBindColor = new ColorBGRA(5, 168, 235, 255);
             SliderColor = new ColorBGRA(0, 75, 101, 255);
@@ -85,6 +99,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         }
 
         /// <summary>
+        ///     Gets or sets the Global Text Caption Color.
+        /// </summary>
+        public static ColorBGRA TextCaptionColor { get; set; }
+
+        /// <summary>
         ///     Gets or sets the Global KeyBind Color.
         /// </summary>
         public static ColorBGRA KeyBindColor { get; set; }
@@ -94,11 +113,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// </summary>
         public static ColorBGRA SliderColor { get; set; }
 
+        #endregion
+
+        #region Public Methods and Operators
+
         /// <summary>
-        ///     Gets or sets the Global Text Caption Color.
+        ///     Used to load the menu settings.
         /// </summary>
-        public static ColorBGRA TextCaptionColor { get; set; }
+        public static void LoadSettings()
+        {
+
+        }
 
         #endregion
+
     }
 }

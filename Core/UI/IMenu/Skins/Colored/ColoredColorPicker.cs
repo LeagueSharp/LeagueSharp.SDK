@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LightColorPicker.cs" company="LeagueSharp">
+// <copyright file="ColoredColorPicker.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 //   A default implementation of <see cref="ADrawable{MenuButton}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 {
     using System.Drawing;
 
@@ -37,7 +37,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
     using Rectangle = SharpDX.Rectangle;
     using Utilities = LeagueSharp.SDK.Core.UI.IMenu.Utilities;
 
-    internal class LightColorPicker : ADrawable<MenuColor>
+    internal class ColoredColorPicker : ADrawable<MenuColor>
     {
         #region Constants
 
@@ -149,12 +149,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="LightColorPicker" /> class.
+        ///     Initializes a new instance of the <see cref="ColoredColorPicker" /> class.
         /// </summary>
         /// <param name="component">
         ///     The component.
         /// </param>
-        public LightColorPicker(MenuColor component)
+        public ColoredColorPicker(MenuColor component)
             : base(component)
         {
             Hsl tempHsl;
@@ -218,7 +218,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         /// </summary>
         public override void Draw()
         {
-            var rectangleName = LightUtilities.GetContainerRectangle(this.Component)
+            var rectangleName = ColoredUtilities.GetContainerRectangle(this.Component)
                 .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
@@ -488,7 +488,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         /// <returns>The <see cref="int" /></returns>
         public override int Width()
         {
-            return LightUtilities.CalcWidthItem(this.Component) + MenuSettings.ContainerHeight;
+            return ColoredUtilities.CalcWidthItem(this.Component) + MenuSettings.ContainerHeight;
         }
 
         #endregion

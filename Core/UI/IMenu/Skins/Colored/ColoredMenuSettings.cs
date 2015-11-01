@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LightMenuSettings.cs" company="LeagueSharp">
+// <copyright file="ColoredMenuSettings.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 
 //Concept by User Vasconcellos
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 {
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -36,7 +36,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
     /// <summary>
     ///     Default Skin Settings.
     /// </summary>
-    public class LightMenuSettings : MenuSettings
+    public class ColoredMenuSettings : MenuSettings
     {
         #region Static Fields
 
@@ -45,19 +45,23 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         /// </summary>
         private static Font fontCaption;
 
+        /// <summary>
+        ///     Local Caption Font.
+        /// </summary>
+        private static Font fontMenuSymbol;
+
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes static members of the <see cref="MenuSettings" /> class.
+        ///     Initializes static members of the <see cref="ColoredMenuSettings" /> class.
         ///     Default Settings Static Constructor.
         /// </summary>
-        static LightMenuSettings()
+        static ColoredMenuSettings()
         {
-            RootContainerColor = new ColorBGRA(231, 231, 231, 255);
-            ContainerSeparatorColor = new ColorBGRA(210, 210, 210, 255);
-            ContainerSelectedColor = new ColorBGRA(67, 160, 255, 255);
+            RootContainerColor = new ColorBGRA(232, 230, 231, 255);
+            ContainerSelectedColor = new ColorBGRA(215, 70, 53, 255);
 
             FontCaption = new Font(
                 Drawing.Direct3DDevice,
@@ -68,12 +72,25 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
                 true,
                 FontCharacterSet.Default,
                 FontPrecision.TrueType,
-                FontQuality.ClearType,
+                FontQuality.ClearTypeNatural,
                 FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative | FontPitchAndFamily.Modern,
                 "Tahoma");
-            
-            TextColor = new ColorBGRA(17, 17, 17, 255);
-            TextCaptionColor = new ColorBGRA(72, 157, 248, 255);
+
+            FontMenuSymbol = new Font(
+                Drawing.Direct3DDevice,
+                20,
+                0,
+                FontWeight.DoNotCare,
+                0,
+                false,
+                FontCharacterSet.Default,
+                FontPrecision.TrueType,
+                FontQuality.ClearTypeNatural,
+                FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative | FontPitchAndFamily.Modern,
+                "Tahoma");
+
+            TextColor = new ColorBGRA(49, 73, 97, 255);
+            TextCaptionColor = new ColorBGRA(207, 70, 52, 255);
             KeyBindColor = new ColorBGRA(67, 159, 255, 255);
             SliderColor = new ColorBGRA(163, 202, 241, 255);
         }
@@ -95,6 +112,22 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
             set
             {
                 fontCaption = value;
+            }
+        }
+
+        /// <summary>
+        ///     Gets or sets the Global Symbol Menu Font.
+        /// </summary>
+        public static Font FontMenuSymbol
+        {
+            get
+            {
+                return fontMenuSymbol;
+            }
+
+            set
+            {
+                fontMenuSymbol = value;
             }
         }
 

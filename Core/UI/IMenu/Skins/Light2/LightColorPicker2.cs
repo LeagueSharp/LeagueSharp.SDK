@@ -1,39 +1,43 @@
-﻿// <copyright file="LightColorPicker2.cs" company="LeagueSharp">
-//    Copyright (c) 2015 LeagueSharp.
-//
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see http://www.gnu.org/licenses/
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="LightColorPicker.cs" company="LeagueSharp">
+//   Copyright (C) 2015 LeagueSharp
+//   
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//   
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//   
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
-
+// <summary>
+//   A default implementation of <see cref="ADrawable{MenuButton}" />
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
 {
     using System.Drawing;
-    using Abstracts;
-    using Core.Utils;
-    using Enumerations;
-    using Extensions.SharpDX;
+
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Math;
+    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins.Light;
-    using Math;
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using Values;
+
     using Color = SharpDX.Color;
     using Rectangle = SharpDX.Rectangle;
     using Utilities = LeagueSharp.SDK.Core.UI.IMenu.Utilities;
 
-    /// <summary>
-    ///     The Light color picker.
-    /// </summary>
     internal class LightColorPicker2 : LightColorPicker
     {
         #region Constants
@@ -129,24 +133,24 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
         /// <summary>
         ///     The ColorBox to display the color spectrum.
         /// </summary>
-        protected new ColorSpectrum ColorBox;
+        protected ColorBox colorBox;
 
         /// <summary>
         ///     The VerticalAlphaSlider to change the opacity.
         /// </summary>
-        protected new VerticalAlphaSlider VerticalAlphaSlider;
+        protected VerticalAlphaSlider verticalAlphaSlider;
 
         /// <summary>
         ///     The VerticalColorSlider to change the color spectrum.
         /// </summary>
-        protected new VerticalColorSlider VerticalColorSlider;
+        protected VerticalColorSlider verticalColorSlider;
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="LightColorPicker2" /> class.
+        ///     Initializes a new instance of the <see cref="LightColorPicker" /> class.
         /// </summary>
         /// <param name="component">
         ///     The component.
@@ -155,28 +159,28 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
             : base(component)
         {
             Hsl tempHsl;
-            this.ColorBox = new ColorSpectrum(new Size(200, 200))
-                                { Hsl = Utilities.RgbToHsl(this.Component.Color.ToSystemColor()) };
+            this.colorBox = new ColorBox(new Size(200, 200))
+            { Hsl = Utilities.RgbToHsl(this.Component.Color.ToSystemColor()) };
 
-            this.VerticalColorSlider = new VerticalColorSlider(new Size(40, 200))
-                                           { CbHsl = Utilities.RgbToHsl(this.Component.Color.ToSystemColor()) };
-            this.VerticalColorSlider.ColorSliderScroll += () =>
-                {
-                    tempHsl = this.ColorBox.Hsl;
-                    tempHsl.H = this.VerticalColorSlider.CbHsl.H;
-                    this.ColorBox.Hsl = tempHsl;
-                };
+            this.verticalColorSlider = new VerticalColorSlider(new Size(40, 200))
+            { CbHsl = Utilities.RgbToHsl(this.Component.Color.ToSystemColor()) };
+            this.verticalColorSlider.ColorSliderScroll += () =>
+            {
+                tempHsl = this.colorBox.Hsl;
+                tempHsl.H = this.verticalColorSlider.CbHsl.H;
+                this.colorBox.Hsl = tempHsl;
+            };
 
-            this.VerticalAlphaSlider = new VerticalAlphaSlider(new Size(40, 200));
-            tempHsl = this.VerticalAlphaSlider.CbHsl;
-            tempHsl.L = this.ColorBox.Hsl.L;
-            this.VerticalAlphaSlider.CbHsl = tempHsl;
-            this.VerticalAlphaSlider.AlphaSliderScroll += () =>
-                {
-                    tempHsl = this.ColorBox.Hsl;
-                    tempHsl.L = this.VerticalAlphaSlider.CbHsl.L;
-                    this.ColorBox.Hsl = tempHsl;
-                };
+            this.verticalAlphaSlider = new VerticalAlphaSlider(new Size(40, 200));
+            tempHsl = this.verticalAlphaSlider.CbHsl;
+            tempHsl.L = this.colorBox.Hsl.L;
+            this.verticalAlphaSlider.CbHsl = tempHsl;
+            this.verticalAlphaSlider.AlphaSliderScroll += () =>
+            {
+                tempHsl = this.colorBox.Hsl;
+                tempHsl.L = this.verticalAlphaSlider.CbHsl.L;
+                this.colorBox.Hsl = tempHsl;
+            };
         }
 
         #endregion
@@ -246,11 +250,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                     new[]
                         {
                             new Vector2(
-                                this.Component.Position.X + this.Component.MenuWidth - (Line.Width / 2f) - 4,
-                                this.Component.Position.Y + 1 + 3),
-                            new Vector2(
-                                this.Component.Position.X + this.Component.MenuWidth - (Line.Width / 2f) - 4,
-                                this.Component.Position.Y + Line.Width + 3)
+                            this.Component.Position.X + this.Component.MenuWidth - (Line.Width / 2f) - 4,
+                            this.Component.Position.Y + 1 + 3),
+                        new Vector2(
+                            this.Component.Position.X + this.Component.MenuWidth - (Line.Width / 2f) - 4,
+                            this.Component.Position.Y + Line.Width + 3)
                         },
                     MenuSettings.HoverColor);
                 Line.End();
@@ -259,97 +263,92 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
             if (this.Component.Active)
             {
                 MenuManager.Instance.DrawDelayed(
-                    () =>
-                        {
-                            Line.Width = this.ColorPickerBoundaries().Width;
-                            Line.Begin();
-                            Line.Draw(
-                                new[]
-                                    {
-                                        new Vector2(this.ColorPickerBoundaries().X + 165, this.ColorPickerBoundaries().Y),
+                    delegate
+                    {
+                        Line.Width = ColorPickerBoundaries().Width;
+                        Line.Begin();
+                        Line.Draw(
+                            new[]
+                                {
+                                        new Vector2(ColorPickerBoundaries().X + 165, ColorPickerBoundaries().Y),
                                         new Vector2(
-                                            this.ColorPickerBoundaries().X + 165,
-                                            this.ColorPickerBoundaries().Y + this.ColorPickerBoundaries().Height)
-                                    },
-                                new ColorBGRA(254, 255, 255, 255));
-                            Line.End();
+                                            ColorPickerBoundaries().X + 165,
+                                            ColorPickerBoundaries().Y + ColorPickerBoundaries().Height)
+                                },
+                            new ColorBGRA(254, 255, 255, 255));
+                        Line.End();
 
-                            this.ColorBox.DrawControl(
-                                new Vector2(this.ColorBoxBoundaries().X, this.ColorBoxBoundaries().Y));
-                            this.VerticalColorSlider.DrawControl(
-                                new Vector2(
-                                    this.VerticalColorSliderBoundaries().X,
-                                    this.VerticalColorSliderBoundaries().Y));
-                            this.VerticalAlphaSlider.DrawControl(
-                                new Vector2(
-                                    this.VerticalAlphaSliderBoundaries().X,
-                                    this.VerticalAlphaSliderBoundaries().Y));
+                        colorBox.DrawControl(new Vector2(ColorBoxBoundaries().X, ColorBoxBoundaries().Y));
+                        verticalColorSlider.DrawControl(
+                            new Vector2(VerticalColorSliderBoundaries().X, VerticalColorSliderBoundaries().Y));
+                        verticalAlphaSlider.DrawControl(
+                            new Vector2(VerticalAlphaSliderBoundaries().X, VerticalAlphaSliderBoundaries().Y));
 
-                            Utils.DrawBoxFilled(
-                                this.PreviewBoundaries().X,
-                                this.PreviewBoundaries().Y,
-                                this.PreviewBoundaries().Width,
-                                this.PreviewBoundaries().Height,
-                                Color.Black);
+                        Utils.DrawBoxFilled(
+                            PreviewBoundaries().X,
+                            PreviewBoundaries().Y,
+                            PreviewBoundaries().Width,
+                            PreviewBoundaries().Height,
+                            Color.Black);
 
-                            Utils.DrawBoxFilled(
-                                this.PreviewBoundaries().X,
-                                this.PreviewBoundaries().Y,
-                                this.PreviewBoundaries().Width,
-                                this.PreviewBoundaries().Height,
-                                this.ColorBox.Rgb.ToSharpDxColor());
+                        Utils.DrawBoxFilled(
+                            PreviewBoundaries().X,
+                            PreviewBoundaries().Y,
+                            PreviewBoundaries().Width,
+                            PreviewBoundaries().Height,
+                            colorBox.Rgb.ToSharpDxColor());
 
-                            var applyButtonTextWidth =
-                                MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, "Apply", 0).Width;
-                            var cancelButtonTextWidth =
-                                MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, "Cancel", 0).Width;
+                        var applyButtonTextWidth =
+                            MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, "Apply", 0).Width;
+                        var cancelButtonTextWidth =
+                            MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, "Cancel", 0).Width;
 
-                            Line.Width = this.ApplyButtonBoundaries().Width;
-                            Line.Begin();
-                            Line.Draw(
-                                new[]
-                                    {
-                                        new Vector2(this.ApplyButtonBoundaries().X + 25, this.ApplyButtonBoundaries().Y),
+                        Line.Width = ApplyButtonBoundaries().Width;
+                        Line.Begin();
+                        Line.Draw(
+                            new[]
+                                {
+                                        new Vector2(ApplyButtonBoundaries().X + 25, ApplyButtonBoundaries().Y),
                                         new Vector2(
-                                            this.ApplyButtonBoundaries().X + 25,
-                                            this.ApplyButtonBoundaries().Y + this.ApplyButtonBoundaries().Height)
-                                    },
-                                new ColorBGRA(68, 160, 255, 255));
-                            Line.End();
+                                            ApplyButtonBoundaries().X + 25,
+                                            ApplyButtonBoundaries().Y + ApplyButtonBoundaries().Height)
+                                },
+                            new ColorBGRA(68, 160, 255, 255));
+                        Line.End();
 
-                            MenuSettings.Font.DrawText(
-                                MenuManager.Instance.Sprite,
-                                "Apply",
-                                this.ApplyButtonBoundaries().X - (applyButtonTextWidth / 2) + 25,
-                                (int)
-                                this.CancelButtonBoundaries()
-                                    .GetCenteredText(null, MenuSettings.Font, "Apply", CenteredFlags.VerticalCenter)
-                                    .Y,
-                                new ColorBGRA(221, 233, 255, 255));
+                        MenuSettings.Font.DrawText(
+                            MenuManager.Instance.Sprite,
+                            "Apply",
+                            ApplyButtonBoundaries().X - applyButtonTextWidth / 2 + 25,
+                            (int)
+                            CancelButtonBoundaries()
+                                .GetCenteredText(null, MenuSettings.Font, "Apply", CenteredFlags.VerticalCenter)
+                                .Y,
+                            new ColorBGRA(221, 233, 255, 255));
 
-                            Line.Width = this.CancelButtonBoundaries().Width;
-                            Line.Begin();
-                            Line.Draw(
-                                new[]
-                                    {
-                                        new Vector2(this.CancelButtonBoundaries().X + 25, this.CancelButtonBoundaries().Y),
+                        Line.Width = CancelButtonBoundaries().Width;
+                        Line.Begin();
+                        Line.Draw(
+                            new[]
+                                {
+                                        new Vector2(CancelButtonBoundaries().X + 25, CancelButtonBoundaries().Y),
                                         new Vector2(
-                                            this.CancelButtonBoundaries().X + 25,
-                                            this.CancelButtonBoundaries().Y + this.CancelButtonBoundaries().Height)
-                                    },
-                                new ColorBGRA(68, 160, 255, 255));
-                            Line.End();
+                                            CancelButtonBoundaries().X + 25,
+                                            CancelButtonBoundaries().Y + CancelButtonBoundaries().Height)
+                                },
+                            new ColorBGRA(68, 160, 255, 255));
+                        Line.End();
 
-                            MenuSettings.Font.DrawText(
-                                MenuManager.Instance.Sprite,
-                                "Cancel",
-                                this.CancelButtonBoundaries().X - (cancelButtonTextWidth / 2) + 25,
-                                (int)
-                                this.CancelButtonBoundaries()
-                                    .GetCenteredText(null, MenuSettings.Font, "Cancel", CenteredFlags.VerticalCenter)
-                                    .Y,
-                                new ColorBGRA(221, 233, 255, 255));
-                        });
+                        MenuSettings.Font.DrawText(
+                            MenuManager.Instance.Sprite,
+                            "Cancel",
+                            CancelButtonBoundaries().X - cancelButtonTextWidth / 2 + 25,
+                            (int)
+                            CancelButtonBoundaries()
+                                .GetCenteredText(null, MenuSettings.Font, "Cancel", CenteredFlags.VerticalCenter)
+                                .Y,
+                            new ColorBGRA(221, 233, 255, 255));
+                    });
             }
         }
 
@@ -380,15 +379,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                 {
                     if (this.InteractingColorBox)
                     {
-                        this.ColorBox.ColorBoxMouseMove(args);
+                        this.colorBox.ColorBoxMouseMove(args);
                     }
                     else if (this.InteractingVerticalColorSlider)
                     {
-                        this.VerticalColorSlider.VerticalColorSliderMouseMove(args);
+                        this.verticalColorSlider.VerticalColorSlider_MouseMove(args);
                     }
                     else if (this.InteractingVerticalAlphaSlider)
                     {
-                        this.VerticalAlphaSlider.VerticalAlphaSliderMouseMove(args);
+                        this.verticalAlphaSlider.VerticalAlphaSlider_MouseMove(args);
                     }
                 }
             }
@@ -398,19 +397,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                 if (this.InteractingColorBox)
                 {
                     this.InteractingColorBox = false;
-                    this.ColorBox.ColorBoxMouseUp(args);
+                    this.colorBox.ColorBoxMouseUp(args);
                 }
-
                 if (this.InteractingVerticalColorSlider)
                 {
                     this.InteractingVerticalColorSlider = false;
-                    this.VerticalColorSlider.VerticalColorSliderMouseUp(args);
+                    this.verticalColorSlider.VerticalColorSlider_MouseUp(args);
                 }
-
                 if (this.InteractingVerticalAlphaSlider)
                 {
                     this.InteractingVerticalAlphaSlider = false;
-                    this.VerticalAlphaSlider.VerticalAlphaSliderMouseUp(args);
+                    this.verticalAlphaSlider.VerticalAlphaSlider_MouseUp(args);
                 }
             }
 
@@ -430,7 +427,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                         this.ColorBoxBoundaries().Height))
                     {
                         this.InteractingColorBox = true;
-                        this.ColorBox.ColorBoxMouseDown(args);
+                        this.colorBox.ColorBoxMouseDown(args);
                     }
                     else if (args.Cursor.IsUnderRectangle(
                         this.VerticalColorSliderBoundaries().X,
@@ -439,7 +436,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                         this.VerticalColorSliderBoundaries().Height))
                     {
                         this.InteractingVerticalColorSlider = true;
-                        this.VerticalColorSlider.VerticalColorSliderMouseDown(args);
+                        this.verticalColorSlider.VerticalColorSlider_MouseDown(args);
                     }
                     else if (args.Cursor.IsUnderRectangle(
                         this.VerticalAlphaSliderBoundaries().X,
@@ -448,7 +445,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                         this.VerticalAlphaSliderBoundaries().Height))
                     {
                         this.InteractingVerticalAlphaSlider = true;
-                        this.VerticalAlphaSlider.VerticalAlphaSliderMouseDown(args);
+                        this.verticalAlphaSlider.VerticalAlphaSlider_MouseDown(args);
                     }
                     else if (args.Cursor.IsUnderRectangle(
                         this.ApplyButtonBoundaries().X,
@@ -457,7 +454,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                         this.ApplyButtonBoundaries().Height))
                     {
                         this.Component.Active = false;
-                        this.Component.Color = this.ColorBox.Rgb.ToSharpDxColor();
+                        this.Component.Color = this.colorBox.Rgb.ToSharpDxColor();
                     }
                     else if (args.Cursor.IsUnderRectangle(
                         this.CancelButtonBoundaries().X,
@@ -466,9 +463,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                         this.CancelButtonBoundaries().Height))
                     {
                         this.Component.Active = false;
-                        this.ColorBox.Rgb = this.Component.Color.ToSystemColor();
-                        this.VerticalColorSlider.Rgb = this.Component.Color.ToSystemColor();
-                        this.VerticalAlphaSlider.Rgb = this.Component.Color.ToSystemColor();
+                        this.colorBox.Rgb = this.Component.Color.ToSystemColor();
+                        this.verticalColorSlider.Rgb = this.Component.Color.ToSystemColor();
+                        this.verticalAlphaSlider.Rgb = this.Component.Color.ToSystemColor();
                     }
                 }
                 else if (args.Cursor.IsUnderRectangle(
@@ -522,7 +519,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
             return
                 new Rectangle(
                     this.VerticalColorSliderBoundaries().X + BorderOffset
-                    - (this.VerticalColorSliderBoundaries().Width / 2),
+                    - this.VerticalColorSliderBoundaries().Width / 2,
                     this.VerticalColorSliderBoundaries().Y + BorderOffset + this.VerticalColorSliderBoundaries().Height,
                     ApplyButtonWidth,
                     ApplyButtonHeight);

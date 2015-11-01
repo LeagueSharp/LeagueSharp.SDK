@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueTheme.cs" company="LeagueSharp">
+// <copyright file="ColoredTheme.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 //   Implements a default ITheme.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 {
     using System.Linq;
 
@@ -31,7 +31,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
     /// <summary>
     ///     Implements a default ITheme.
     /// </summary>
-    public class BlueTheme2 : ITheme
+    public class ColoredTheme : ITheme
     {
         #region Static Fields
 
@@ -45,12 +45,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes static members of the <see cref="BlueMenuSettings2" /> class.
-        ///     Use to preload <see cref="BlueTheme2" /> visual settings.
+        ///     Initializes static members of the <see cref="ColoredMenuSettings" /> class.
+        ///     Use to preload <see cref="ColoredTheme" /> visual settings.
         /// </summary>
-        static BlueTheme2()
+        static ColoredTheme()
         {
-            BlueMenuSettings2.LoadSettings();
+            ColoredMenuSettings.LoadSettings();
         }
 
         #endregion
@@ -64,7 +64,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
         /// <returns>The handler</returns>
         public ADrawable<MenuBool> BuildBoolHandler(MenuBool component)
         {
-            return new BlueBool2(component);
+            return new ColoredBool(component);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
         /// <returns>The handler</returns>
         public ADrawable<MenuButton> BuildButtonHandler(MenuButton component)
         {
-            return new BlueButton2(component);
+            return new ColoredButton(component);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
         /// <returns>The handler</returns>
         public ADrawable<MenuColor> BuildColorHandler(MenuColor component)
         {
-            return new BlueColorPicker2(component);
+            return new ColoredColorPicker(component);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
         /// <returns>The handler</returns>
         public ADrawable<MenuKeyBind> BuildKeyBindHandler(MenuKeyBind component)
         {
-            return new BlueKeyBind2(component);
+            return new ColoredKeyBind(component);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
         /// <returns>The handler</returns>
         public ADrawable<MenuList> BuildListHandler(MenuList component)
         {
-            return new BlueList2(component);
+            return new ColoredList(component);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
         /// <returns>The handler</returns>
         public ADrawable<Menu> BuildMenuHandler(Menu menu)
         {
-            return new BlueMenu2(menu);
+            return new ColoredMenu(menu);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
         /// <returns>The handler</returns>
         public ADrawable<MenuSeparator> BuildSeparatorHandler(MenuSeparator component)
         {
-            return new BlueSeparator2(component);
+            return new ColoredSeparator(component);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
         /// <returns>The handler</returns>
         public ADrawable<MenuSlider> BuildSliderHandler(MenuSlider component)
         {
-            return new BlueSlider2(component);
+            return new ColoredSlider(component);
         }
 
         /// <summary>
@@ -151,52 +151,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
                 width = menuManager.Menus.First().MenuWidth;
             }
 
-            Line.Width = width;
-            Line.Begin();
-            Line.Draw(
-                new[]
-                    {
-                        new Vector2(position.X + (width / 2f), position.Y), 
-                        new Vector2(position.X + (width / 2), position.Y + height)
-                    },
-                MenuSettings.RootContainerColor);
-            Line.End();
+            Utils.DrawBoxRounded(position.X, position.Y, width, height, 4, true,
+                    MenuSettings.RootContainerColor, new ColorBGRA(55, 76, 95, 255));
 
             for (var i = 0; i < menuManager.Menus.Count; ++i)
             {
                 var childPos = new Vector2(position.X, position.Y + i * MenuSettings.ContainerHeight);
 
-                if (i < menuManager.Menus.Count - 1)
-                {
-                    Line.Width = 1f;
-                    Line.Begin();
-                    Line.Draw(
-                        new[]
-                            {
-                                new Vector2(childPos.X, childPos.Y + MenuSettings.ContainerHeight),
-                                new Vector2(
-                                    childPos.X + menuManager.Menus[i].MenuWidth,
-                                    childPos.Y + MenuSettings.ContainerHeight)
-                            },
-                        MenuSettings.ContainerSeparatorColor);
-                    Line.End();
-                }
+                Utils.DrawBoxRounded(childPos.X, childPos.Y, width, height, 4, true,
+                    MenuSettings.RootContainerColor, new ColorBGRA(55, 76, 95, 255));
 
                 menuManager.Menus[i].OnDraw(childPos);
             }
-
-            Line.Width = 1f;
-            Line.Begin();
-            Line.Draw(
-                new[]
-                    {
-                        new Vector2(position.X, position.Y), new Vector2(position.X + width, position.Y), 
-                        new Vector2(position.X + width, position.Y + height), new Vector2(position.X, position.Y + height), 
-                        new Vector2(position.X, position.Y)
-                    },
-                new ColorBGRA(21, 26, 45, 255));
-            Line.End();
-            
         }
 
         #endregion

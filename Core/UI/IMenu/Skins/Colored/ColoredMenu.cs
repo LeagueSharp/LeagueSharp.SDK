@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LightMenu.cs" company="LeagueSharp">
+// <copyright file="ColoredMenu.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 //   Provides a default implementation of <see cref="ADrawable{Menu}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 {
     using System;
     using System.Drawing;
@@ -29,7 +29,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Light;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Properties;
 
@@ -41,7 +40,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
     /// <summary>
     ///     Provides a default implementation of <see cref="ADrawable{Menu}" />
     /// </summary>
-    public class LightMenu2 : LightMenu
+    public class ColoredMenu : ADrawable<Menu>
     {
         #region Constants
 
@@ -91,12 +90,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="LightMenu" /> class.
+        ///     Initializes a new instance of the <see cref="ColoredMenu" /> class.
         /// </summary>
         /// <param name="component">
         ///     The component.
         /// </param>
-        public LightMenu2(Menu component)
+        public ColoredMenu(Menu component)
             : base(component)
         {
             
@@ -137,7 +136,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
 
             var centerY =
                 (int)
-                LightUtilities.GetContainerRectangle(this.Component)
+                ColoredUtilities.GetContainerRectangle(this.Component)
                     .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
 
@@ -149,15 +148,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                     (int)(position.X + MenuSettings.ContainerTextOffset),
                     centerY,
                     new ColorBGRA(237, 245, 254, 255));
-
-                MenuSettings.Font.DrawText(
-                    MenuManager.Instance.Sprite,
-                    "\u25B6",
-                    (int)
-                    (position.X + this.Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
-                     - MenuSettings.ContainerTextMarkOffset),
-                    centerY,
-                    this.Component.Components.Count > 0 ? new ColorBGRA(237, 245, 254, 255) : MenuSettings.ContainerSeparatorColor);
             }
             else
             {
@@ -166,29 +156,49 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                     this.Component.DisplayName,
                     (int)(position.X + MenuSettings.ContainerTextOffset),
                     centerY,
-                    new ColorBGRA(62, 151, 251, 255));
-
-                MenuSettings.Font.DrawText(
-                    MenuManager.Instance.Sprite,
-                    "\u25B6",
-                    (int)
-                    (position.X + this.Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
-                     - MenuSettings.ContainerTextMarkOffset),
-                    centerY,
-                    this.Component.Components.Count > 0 ? new ColorBGRA(5, 151, 250, 255) : MenuSettings.ContainerSeparatorColor);
+                    MenuSettings.TextColor);
             }
+
+            MenuManager.Instance.DrawDelayed(
+                delegate
+                    {
+                        var symbolCenterY =
+                                        (int)
+                                        ColoredUtilities.GetContainerRectangle(this.Component)
+                                            .GetCenteredText(null, ColoredMenuSettings.FontMenuSymbol, this.Component.DisplayName, CenteredFlags.VerticalCenter)
+                                            .Y;
+
+                        Utils.DrawCircleFilled(
+                            (position.X + this.Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
+                                - MenuSettings.ContainerTextMarkOffset) + 4,
+                            symbolCenterY + 11,
+                            6,
+                            0,
+                            Utils.CircleType.Full,
+                            true,
+                            16,
+                            new ColorBGRA(252, 248, 245, 255));
+                        ColoredMenuSettings.FontMenuSymbol.DrawText(
+                            MenuManager.Instance.Sprite,
+                            "›",
+                            (int)
+                            (position.X + this.Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
+                                - MenuSettings.ContainerTextMarkOffset) + 1,
+                            symbolCenterY,
+                            this.Component.Components.Count > 0 ? ColoredMenuSettings.TextCaptionColor : MenuSettings.ContainerSeparatorColor);
+                    });
 
             if (this.Component.Toggled)
             {
-                Line.Width = this.Component.MenuWidth;
+                Line.Width = this.Component.MenuWidth - 3;
                 Line.Begin();
                 Line.Draw(
                     new[]
                         {
-                            new Vector2(position.X + this.Component.MenuWidth / 2f, position.Y), 
+                            new Vector2(position.X + this.Component.MenuWidth / 2f - 1, position.Y + 1), 
                             new Vector2(
-                                position.X + this.Component.MenuWidth / 2f, 
-                                position.Y + MenuSettings.ContainerHeight)
+                                position.X + this.Component.MenuWidth / 2f - 1, 
+                                position.Y + MenuSettings.ContainerHeight - 1)
                         },
                     MenuSettings.ContainerSelectedColor);
                 Line.End();
@@ -200,18 +210,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                     width = this.Component.Components.First().Value.MenuWidth;
                 }
 
-                Line.Width = width;
-                Line.Begin();
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2((position.X + this.Component.MenuWidth) + width / 2, position.Y), 
-                            new Vector2((position.X + this.Component.MenuWidth) + width / 2, position.Y + height)
-                        },
-                    new ColorBGRA(255, 255, 255, 255));
-                Line.End();
-
-                
+                Utils.DrawBoxRounded(position.X + this.Component.MenuWidth, position.Y, width, height, 4, true, 
+                    MenuSettings.RootContainerColor, new ColorBGRA(55, 76, 95, 255));
 
                 for (var i = 0; i < this.Component.Components.Count; ++i)
                 {
@@ -225,41 +225,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                         childComponent.OnDraw(childPos);
                     }
                 }
-
-                var contourColor = new ColorBGRA(254, 255, 255, 255);
-
-                Line.Width = 1f;
-                Line.Begin();
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(position.X + this.Component.MenuWidth, position.Y), 
-                            new Vector2(position.X + this.Component.MenuWidth + width, position.Y)
-                        },
-                    contourColor);
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(position.X + this.Component.MenuWidth, position.Y + height), 
-                            new Vector2(position.X + this.Component.MenuWidth + width, position.Y + height)
-                        },
-                    contourColor);
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(position.X + this.Component.MenuWidth, position.Y), 
-                            new Vector2(position.X + this.Component.MenuWidth, position.Y + height)
-                        },
-                    contourColor);
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(position.X + this.Component.MenuWidth + width, position.Y), 
-                            new Vector2(position.X + this.Component.MenuWidth + width, position.Y + height)
-                        },
-                    contourColor);
-                Line.End();
-                
             }
 
             if (this.hasDragged && !MenuCustomizer.Instance.LockPosition.Value)
@@ -268,7 +233,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                 var oldMatrix = sprite.Transform;
                 var y =
                     (int)(MenuSettings.Position.Y + (MenuManager.Instance.Menus.Count * MenuSettings.ContainerHeight));
-                var dragTexture = LightTextures2.Instance[LightTexture2.Dragging];
+                var dragTexture = ColoredTextures.Instance[ColoredTexture.Dragging];
                 var x = MenuSettings.Position.X - dragTexture.Width;
                 sprite.Transform = Matrix.Translation(x - 1, y + 2, 0);
                 sprite.Draw(dragTexture.Texture, Color.White);
@@ -335,6 +300,74 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
         }
 
         /// <summary>
+        /// Draws a rounded Box. If Smoothing is true it will draw also a border.
+        /// </summary>
+        /// <param name="x">Position X</param>
+        /// <param name="y">Position Y</param>
+        /// <param name="w">Width</param>
+        /// <param name="h">Height</param>
+        /// <param name="radius">Radius</param>
+        /// <param name="color">Color</param>
+        /// <param name="bcolor">Border Color</param>
+        public static void DrawBoxTopRounded(float x, float y, float w, float h, float radius, Color color, Color bcolor)
+        {
+            Utils.DrawBoxFilled(x + radius, y + radius, w - 2 * radius - 1, h - 2 * radius - 1, color);   // Center rect.
+            Utils.DrawBoxFilled(x + radius, y + 1, w - 2 * radius - 1, radius - 1, color);            // Top rect.
+            Utils.DrawBoxFilled(x + radius, y + h - radius - 1, w - 2 * radius - 1, radius, color);     // Bottom rect.
+            Utils.DrawBoxFilled(x + 1, y + radius, radius - 1, h - 2 * radius - 1, color);            // Left rect.
+            Utils.DrawBoxFilled(x + w - radius - 1, y + radius, radius, h - 2 * radius - 1, color);     // Right rect.
+
+            Utils.DrawCircleFilled(x + radius, y + radius, radius - 1, 0, Utils.CircleType.Quarter, true, 16, color);             // Top-left corner
+            Utils.DrawCircleFilled(x + w - radius - 1, y + radius, radius - 1, 90, Utils.CircleType.Quarter, true, 16, color);        // Top-right corner
+            Utils.DrawCircleFilled(x + w - radius - 1, y + h - radius - 1, radius - 1, 180, Utils.CircleType.Quarter, true, 16, color);   // Bottom-right corner
+            Utils.DrawCircleFilled(x + radius, y + h - radius - 1, radius - 1, 270, Utils.CircleType.Quarter, true, 16, color);       // Bottom-left corner
+
+            Utils.DrawCircle(x + radius + 1, y + radius + 1, radius, 0, Utils.CircleType.Quarter, true, 16, bcolor);          // Top-left corner
+            Utils.DrawCircle(x + w - radius - 1, y + radius + 1, radius, 90, Utils.CircleType.Quarter, true, 16, bcolor);       // Top-right corner
+            Utils.DrawCircle(x + w - radius - 1, y + h - radius - 1, radius, 180, Utils.CircleType.Quarter, true, 16, bcolor);    // Bottom-right corner
+            Utils.DrawCircle(x + radius + 1, y + h - radius - 1, radius, 270, Utils.CircleType.Quarter, true, 16, bcolor);      // Bottom-left corner
+
+            Utils.DrawLine(x + radius, y + 1, x + w - radius - 1, y + 1, 1, bcolor);       // Top line
+            Utils.DrawLine(x + radius, y + h - 2, x + w - radius - 1, y + h - 2, 1, bcolor);   // Bottom line
+            Utils.DrawLine(x + 1, y + radius, x + 1, y + h - radius - 1, 1, bcolor);       // Left line
+            Utils.DrawLine(x + w - 2, y + radius, x + w - 2, y + h - radius - 1, 1, bcolor);   // Right line
+        }
+
+        /// <summary>
+        /// Draws a rounded Box. If Smoothing is true it will draw also a border.
+        /// </summary>
+        /// <param name="x">Position X</param>
+        /// <param name="y">Position Y</param>
+        /// <param name="w">Width</param>
+        /// <param name="h">Height</param>
+        /// <param name="radius">Radius</param>
+        /// <param name="color">Color</param>
+        /// <param name="bcolor">Border Color</param>
+        public static void DrawBoxBotRounded(float x, float y, float w, float h, float radius, Color color, Color bcolor)
+        {
+            Utils.DrawBoxFilled(x + radius, y + radius, w - 2 * radius - 1, h - 2 * radius - 1, color);   // Center rect.
+            Utils.DrawBoxFilled(x + radius, y + 1, w - 2 * radius - 1, radius - 1, color);            // Top rect.
+            Utils.DrawBoxFilled(x + radius, y + h - radius - 1, w - 2 * radius - 1, radius, color);     // Bottom rect.
+            Utils.DrawBoxFilled(x + 1, y + radius, radius - 1, h - 2 * radius - 1, color);            // Left rect.
+            Utils.DrawBoxFilled(x + w - radius - 1, y + radius, radius, h - 2 * radius - 1, color);     // Right rect.
+
+            Utils.DrawCircleFilled(x + radius, y + radius, radius - 1, 0, Utils.CircleType.Quarter, true, 16, color);             // Top-left corner
+            Utils.DrawCircleFilled(x + w - radius - 1, y + radius, radius - 1, 90, Utils.CircleType.Quarter, true, 16, color);        // Top-right corner
+            Utils.DrawCircleFilled(x + w - radius - 1, y + h - radius - 1, radius - 1, 180, Utils.CircleType.Quarter, true, 16, color);   // Bottom-right corner
+            Utils.DrawCircleFilled(x + radius, y + h - radius - 1, radius - 1, 270, Utils.CircleType.Quarter, true, 16, color);       // Bottom-left corner
+
+            Utils.DrawCircle(x + radius + 1, y + radius + 1, radius, 0, Utils.CircleType.Quarter, true, 16, bcolor);          // Top-left corner
+            Utils.DrawCircle(x + w - radius - 1, y + radius + 1, radius, 90, Utils.CircleType.Quarter, true, 16, bcolor);       // Top-right corner
+            Utils.DrawCircle(x + w - radius - 1, y + h - radius - 1, radius, 180, Utils.CircleType.Quarter, true, 16, bcolor);    // Bottom-right corner
+            Utils.DrawCircle(x + radius + 1, y + h - radius - 1, radius, 270, Utils.CircleType.Quarter, true, 16, bcolor);      // Bottom-left corner
+
+            Utils.DrawLine(x + radius, y + 1, x + w - radius - 1, y + 1, 1, bcolor);       // Top line
+            Utils.DrawLine(x + radius, y + h - 2, x + w - radius - 1, y + h - 2, 1, bcolor);   // Bottom line
+            Utils.DrawLine(x + 1, y + radius, x + 1, y + h - radius - 1, 1, bcolor);       // Left line
+            Utils.DrawLine(x + w - 2, y + radius, x + w - 2, y + h - radius - 1, 1, bcolor);   // Right line
+        }
+
+        /// <summary>
         ///     Calculates the Width of an AMenuComponent
         /// </summary>
         /// <returns>
@@ -344,7 +377,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
         {
             return
                 (int)
-                (LightUtilities.MeasureString(this.Component.DisplayName + " \u25B6").Width
+                (ColoredUtilities.MeasureString(this.Component.DisplayName + " »").Width
                  + (MenuSettings.ContainerTextOffset * 2) + MenuSettings.ContainerTextMarkWidth);
         }
 
