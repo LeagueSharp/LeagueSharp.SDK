@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueTextures.cs" company="LeagueSharp">
+// <copyright file="ColoredTextures.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,14 +19,13 @@
 //   A default implementation of <see cref="ADrawable{MenuButton}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 {
     using System.Drawing;
 
@@ -35,31 +34,31 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
     using SharpDX;
     using SharpDX.Direct3D9;
 
-    internal enum BlueTexture2
+    internal enum ColoredTexture
     {
         Dragging,
     }
 
-    internal class BlueTextures2
+    internal class ColoredTextures
     {
 
-        private readonly Dictionary<BlueTexture2, BlueTextureWrapper> textures = new Dictionary<BlueTexture2, BlueTextureWrapper>();
+        private readonly Dictionary<ColoredTexture, BlueTextureWrapper> textures = new Dictionary<ColoredTexture, BlueTextureWrapper>();
 
-        public static readonly BlueTextures2 Instance = new BlueTextures2();
+        public static readonly ColoredTextures Instance = new ColoredTextures();
 
-        private BlueTextures2()
+        private ColoredTextures()
         {
-            this.textures[BlueTexture2.Dragging] = BuildTexture(Resources.cursor_drag, 16, 16);
+            this.textures[ColoredTexture.Dragging] = BuildTexture(Resources.cursor_drag, 16, 16);
         }
 
-        ~BlueTextures2()
+        ~ColoredTextures()
         {
             foreach (var entry in this.textures.Where(entry => !entry.Value.Texture.IsDisposed)) {
                 entry.Value.Texture.Dispose();
             }
         }
 
-        public BlueTextureWrapper this[BlueTexture2 textureType]
+        public BlueTextureWrapper this[ColoredTexture textureType]
         {
             get
             {
@@ -87,7 +86,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
             return new BlueTextureWrapper(texture, width, height);
         }
 
-        public BlueTextureWrapper AddTexture(Image bmp, int width, int height, BlueTexture2 textureType)
+        public BlueTextureWrapper AddTexture(Image bmp, int width, int height, ColoredTexture textureType)
         {
             this.textures[textureType] = BuildTexture(bmp, height, width);
             return this.textures[textureType];

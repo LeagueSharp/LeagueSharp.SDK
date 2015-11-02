@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueSeparator.cs" company="LeagueSharp">
+// <copyright file="ColoredSeparator.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,27 +19,44 @@
 //   Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 {
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
+    using SharpDX;
+    using SharpDX.Direct3D9;
 
     /// <summary>
     ///     Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.
     /// </summary>
-    public class BlueSeparator : ADrawable<MenuSeparator>
+    public class ColoredSeparator : ADrawable<MenuSeparator>
     {
+
+        #region Static Fields
+
+        /// <summary>
+        ///     The line.
+        /// </summary>
+        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
+
+        /// <summary>
+        ///     Offset.
+        /// </summary>
+        private static readonly int Offset = 15;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlueSeparator" /> class.
+        ///     Initializes a new instance of the <see cref="ColoredSeparator" /> class.
         /// </summary>
         /// <param name="component">
         ///     The menu component
         /// </param>
-        public BlueSeparator(MenuSeparator component)
+        public ColoredSeparator(MenuSeparator component)
             : base(component)
         {
         }
@@ -61,19 +78,38 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// </summary>
         public override void Draw()
         {
-            var centerY = BlueUtilities.GetContainerRectangle(this.Component)
+            var centerY = ColoredUtilities.GetContainerRectangle(this.Component)
                 .GetCenteredText(
                     null,
-                    BlueMenuSettings.FontCaption,
-                    this.Component.DisplayName,
+                    ColoredMenuSettings.FontCaption,
+                    this.Component.DisplayName.ToUpper(),
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
-            BlueMenuSettings.FontCaption.DrawText(
+            ColoredMenuSettings.FontCaption.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
+                this.Component.DisplayName.ToUpper(),
                 (int)centerY.X,
                 (int)centerY.Y,
-                BlueMenuSettings.TextCaptionColor);
+                ColoredMenuSettings.TextCaptionColor);
+
+            Line.Width = 2;
+            Line.Begin();
+            Line.Draw(
+                new[]
+                    {
+                            new Vector2(this.Component.Position.X + Offset, ColoredUtilities.GetContainerRectangle(this.Component).Center.Y),
+                            new Vector2(centerY.X - 5, ColoredUtilities.GetContainerRectangle(this.Component).Center.Y)
+                    },
+                MenuSettings.ContainerSelectedColor);
+            int newX = ColoredMenuSettings.FontCaption.MeasureText(MenuManager.Instance.Sprite, this.Component.DisplayName.ToUpper(), 0).Width;
+            Line.Draw(
+                new[]
+                    {
+                            new Vector2(centerY.X + newX + 5, ColoredUtilities.GetContainerRectangle(this.Component).Center.Y),
+                            new Vector2(ColoredUtilities.GetContainerRectangle(this.Component).Right - Offset, ColoredUtilities.GetContainerRectangle(this.Component).Center.Y)
+                    },
+                MenuSettings.ContainerSelectedColor);
+            Line.End();
         }
 
         /// <summary>
@@ -95,7 +131,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         /// </returns>
         public override int Width()
         {
-            return BlueUtilities.CalcWidthItem(this.Component);
+            return ColoredUtilities.CalcWidthItem(this.Component);
         }
 
         #endregion

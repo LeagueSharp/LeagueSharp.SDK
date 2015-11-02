@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LightSlider.cs" company="LeagueSharp">
+// <copyright file="ColoredSlider.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 //   A default implementation of an <see cref="ADrawable{MenuSlider}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 {
     using System;
     using System.Globalization;
@@ -36,7 +36,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
     /// <summary>
     ///     A default implementation of an <see cref="ADrawable{MenuSlider}" />
     /// </summary>
-    public class LightSlider : ADrawable<MenuSlider>
+    public class ColoredSlider : ADrawable<MenuSlider>
     {
         #region Static Fields
 
@@ -55,12 +55,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="LightSlider" /> class.
+        ///     Initializes a new instance of the <see cref="ColoredSlider" /> class.
         /// </summary>
         /// <param name="component">
         ///     The menu component
         /// </param>
-        public LightSlider(MenuSlider component)
+        public ColoredSlider(MenuSlider component)
             : base(component)
         {
         }
@@ -76,7 +76,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         /// <returns>The <see cref="Rectangle" /></returns>
         public Rectangle AdditionalBoundries(MenuSlider component)
         {
-            return LightUtilities.GetContainerRectangle(component);
+            return ColoredUtilities.GetContainerRectangle(component);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         /// <returns>The <see cref="Rectangle" /></returns>
         public Rectangle Bounding(MenuSlider component)
         {
-            return LightUtilities.GetContainerRectangle(component);
+            return ColoredUtilities.GetContainerRectangle(component);
         }
 
         /// <summary>
@@ -105,25 +105,33 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
             var position = this.Component.Position;
             var centeredY =
                 (int)
-                LightUtilities.GetContainerRectangle(this.Component)
+                ColoredUtilities.GetContainerRectangle(this.Component)
                     .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
             var percent = (this.Component.Value - this.Component.MinValue)
                           / (float)(this.Component.MaxValue - this.Component.MinValue);
             var x = position.X + Offset + (percent * (this.Component.MenuWidth - Offset * 2));
+            var maxX = position.X + Offset + ((this.Component.MenuWidth - Offset * 2));
 
-            Line.Width = 3;
-            Line.Begin();
-            Line.Draw(
-                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) }, 
-                this.Component.Interacting ? new ColorBGRA(90, 129, 144, 255) : new ColorBGRA(94, 170, 246, 255));
-            Line.End();
+            MenuManager.Instance.DrawDelayed(
+                delegate
+                    {
+                        Utils.DrawCircleFilled(
+                            x,
+                            position.Y + MenuSettings.ContainerHeight / 1.5f + 3,
+                            4,
+                            0,
+                            Utils.CircleType.Full,
+                            true,
+                            32,
+                            MenuSettings.ContainerSelectedColor);
+                    });
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 this.Component.DisplayName, 
-                (int)(position.X + MenuSettings.ContainerTextOffset), 
-                centeredY,
+                (int)(position.X + MenuSettings.ContainerTextOffset),
+                (int)(position.Y + (centeredY - position.Y) / 2),
                 MenuSettings.TextColor);
 
             var measureText = MenuSettings.Font.MeasureText(
@@ -133,19 +141,30 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
                 this.Component.Value.ToString(CultureInfo.InvariantCulture), 
-                (int)(position.X + this.Component.MenuWidth - 5 - measureText.Width), 
-                centeredY,
+                (int)(position.X +   this.Component.MenuWidth - measureText.Width - Offset),
+                (int)(position.Y + (centeredY - position.Y) / 2),
                 MenuSettings.TextColor);
 
-            Line.Width = MenuSettings.ContainerHeight;
+            Line.Width = 2;
             Line.Begin();
             Line.Draw(
                 new[]
                     {
-                        new Vector2(position.X + Offset, position.Y + MenuSettings.ContainerHeight / 2f),
-                        new Vector2(x, position.Y + MenuSettings.ContainerHeight / 2f)
+                        new Vector2(position.X + Offset, position.Y + MenuSettings.ContainerHeight / 1.5f + 3),
+                        new Vector2(maxX, position.Y + MenuSettings.ContainerHeight / 1.5f + 3)
                     },
-                LightMenuSettings.SliderColor);
+                new ColorBGRA(193, 189, 188, 255));
+            Line.End();
+
+            Line.Width = 2;
+            Line.Begin();
+            Line.Draw(
+                new[]
+                    {
+                        new Vector2(position.X + Offset, position.Y + MenuSettings.ContainerHeight / 1.5f + 3),
+                        new Vector2(x, position.Y + MenuSettings.ContainerHeight / 1.5f + 3)
+                    },
+                MenuSettings.ContainerSelectedColor);
             Line.End();
         }
 
@@ -188,7 +207,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         /// </returns>
         public override int Width()
         {
-            return LightUtilities.CalcWidthItem(this.Component) + 100;
+            return ColoredUtilities.CalcWidthItem(this.Component) + 100;
         }
 
         #endregion

@@ -48,17 +48,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>D:\Spiele\Riot Games\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>C:\Users\FINN\Desktop\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
+      <HintPath>D:\Spiele\Riot Games\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>D:\Spiele\Riot Games\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>D:\Spiele\Riot Games\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -168,6 +168,18 @@
     <Compile Include="Core\UI\IMenu\Skins\Blue\BlueTextures.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Blue\BlueTheme.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Blue\BlueUtilities.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Colored\ColoredBool.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Colored\ColoredButton.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Colored\ColoredColorPicker.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Colored\ColoredKeyBind.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Colored\ColoredList.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Colored\ColoredMenu.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Colored\ColoredMenuSettings.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Colored\ColoredSeparator.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Colored\ColoredSlider.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Colored\ColoredTextures.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Colored\ColoredTheme.cs" />
+    <Compile Include="Core\UI\IMenu\Skins\Colored\ColoredUtilities.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultBool.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultButton.cs" />
     <Compile Include="Core\UI\IMenu\Skins\Default\DefaultColorPicker.cs" />
