@@ -20,9 +20,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System;
     using System.Linq;
 
-    using Enumerations;
-    using Extensions;
-    using Utils;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -137,7 +137,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 if (hero != null)
                 {
                     // Spoils of War
-                    if (hero.IsMelee() && targetMinion != null && targetMinion.IsEnemy
+                    if (hero.IsMelee && targetMinion != null && targetMinion.IsEnemy
                         && targetMinion.Team != GameObjectTeam.Neutral && hero.GetBuffCount("talentreaperdisplay") > 0)
                     {
                         if (
@@ -244,59 +244,111 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 return 0d;
             }
 
-            var spellLevel = source.Spellbook.GetSpell(spellSlot).Level;
+            ChampionDamage value;
+            if (!DamageCollection.TryGetValue(source.ChampionName, out value))
+            {
+                return 0d;
+            }
+
+            var spellData = value.GetSlot(spellSlot)?.FirstOrDefault(e => e.Stage == stage)?.SpellData;
+            if (spellData == null)
+            {
+                return 0d;
+            }
+
+            var spellLevel =
+                source.Spellbook.GetSpell(spellData.ScaleSlot != SpellSlot.Unknown ? spellData.ScaleSlot : spellSlot)
+                    .Level;
             if (spellLevel == 0)
             {
                 return 0d;
             }
 
-            ChampionDamage value;
-            if (DamageCollection.TryGetValue(source.ChampionName, out value))
+            var baseDamage = 0d;
+            var bonusDamage = 0d;
+
+            if (spellData.Damages?.Count > 0)
             {
-                var baseDamage = 0d;
-                var bonusDamage = 0d;
-
-                var spellData = value.GetSlot(spellSlot)?.FirstOrDefault(e => e.Stage == stage)?.SpellData;
-                if (spellData?.Damages?.Count > 0)
+                baseDamage = source.CalculateDamage(
+                    target,
+                    spellData.DamageType,
+                    spellData.Damages[Math.Min(spellLevel - 1, spellData.Damages.Count - 1)]);
+                if (!string.IsNullOrEmpty(spellData.ScalingBuff))
                 {
-                    baseDamage = source.CalculateDamage(
-                        target,
-                        spellData.DamageType,
-                        spellData.Damages[Math.Min(spellLevel - 1, spellData.Damages.Count)]);
-
-                    if (!string.IsNullOrEmpty(spellData.ScalingBuff))
-                    {
-                        var buffCount =
-                            (spellData.ScalingBuffTarget == DamageScalingTarget.Source ? source : target).GetBuffCount(
-                                spellData.ScalingBuff);
-
-                        if (buffCount != 0)
-                        {
-                            baseDamage *= buffCount + spellData.ScalingBuffOffset;
-                        }
-                    }
+                    var buffCount =
+                        (spellData.ScalingBuffTarget == DamageScalingTarget.Source ? source : target).GetBuffCount(
+                            spellData.ScalingBuff);
+                    baseDamage = buffCount != 0 ? baseDamage * (buffCount + spellData.ScalingBuffOffset) : 0d;
                 }
-
-                if (spellData?.BonusDamages?.Count > 0)
-                {
-                    bonusDamage =
-                        spellData.BonusDamages.Sum(
-                            instance =>
+            }
+            if (spellData.DamagesPerLvl?.Count > 0)
+            {
+                baseDamage = source.CalculateDamage(
+                    target,
+                    spellData.DamageType,
+                    spellData.Damages[Math.Min(source.Level - 1, spellData.DamagesPerLvl.Count - 1)]);
+            }
+            if (spellData.BonusDamages?.Count > 0)
+            {
+                bonusDamage =
+                    spellData.BonusDamages.Where(i => source.ResolveBonusSpellDamage(target, i, spellLevel - 1) > 0)
+                        .Sum(
+                            i =>
                             source.CalculateDamage(
                                 target,
-                                instance.DamageType,
-                                source.ResolveBonusSpellDamage(target, instance, spellLevel - 1)));
+                                i.DamageType,
+                                source.ResolveBonusSpellDamage(target, i, spellLevel - 1)));
+            }
+            var totalDamage = baseDamage + bonusDamage;
+            if (totalDamage > 0)
+            {
+                if (spellData.ScalePerTargetMissHealth > 0)
+                {
+                    totalDamage *= (target.MaxHealth - target.Health) / target.MaxHealth
+                                   * spellData.ScalePerTargetMissHealth + 1;
                 }
-
-                return baseDamage + bonusDamage;
+                if (target is Obj_AI_Minion && spellData.MaxDamageOnMinion?.Count > 0)
+                {
+                    totalDamage = Math.Min(
+                        totalDamage,
+                        spellData.MaxDamageOnMinion[Math.Min(spellLevel - 1, spellData.MaxDamageOnMinion.Count - 1)]);
+                }
             }
 
-            return 0d;
+            return totalDamage;
         }
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        ///     Calculates the physical damage the source would deal towards the target on a specific given amount, taking in
+        ///     consideration all of the damage modifiers.
+        /// </summary>
+        /// <param name="source">
+        ///     The source
+        /// </param>
+        /// <param name="target">
+        ///     The target
+        /// </param>
+        /// <param name="amount">
+        ///     The amount of damage
+        /// </param>
+        /// <param name="ignoreArmorPercent">
+        ///     The amount of armor to ignore.
+        /// </param>
+        /// <returns>
+        ///     The amount of estimated damage dealt to target from source.
+        /// </returns>
+        internal static double CalculatePhysicalDamage(
+            this Obj_AI_Base source,
+            Obj_AI_Base target,
+            double amount,
+            double ignoreArmorPercent)
+        {
+            return source.CalculatePhysicalDamage(target, amount) * ignoreArmorPercent;
+        }
 
         /// <summary>
         ///     Calculates the magic damage the source would deal towards the target on a specific given amount, taking in
@@ -410,34 +462,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 target,
                 source.PassivePercentMod(target, value) * amount,
                 DamageType.Physical) + source.PassiveFlatMod(target);
-        }
-
-        /// <summary>
-        ///     Calculates the physical damage the source would deal towards the target on a specific given amount, taking in
-        ///     consideration all of the damage modifiers.
-        /// </summary>
-        /// <param name="source">
-        ///     The source
-        /// </param>
-        /// <param name="target">
-        ///     The target
-        /// </param>
-        /// <param name="amount">
-        ///     The amount of damage
-        /// </param>
-        /// <param name="ignoreArmorPercent">
-        ///     The amount of armor to ignore.
-        /// </param>
-        /// <returns>
-        ///     The amount of estimated damage dealt to target from source.
-        /// </returns>
-        internal static double CalculatePhysicalDamage(
-            this Obj_AI_Base source,
-            Obj_AI_Base target,
-            double amount,
-            double ignoreArmorPercent)
-        {
-            return source.CalculatePhysicalDamage(target, amount) * ignoreArmorPercent;
         }
 
         /// <summary>
@@ -651,7 +675,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
                 if (mastery != null && mastery.Points == 1)
                 {
-                    value -= targetHero.IsMelee() ? 2 : 1;
+                    value -= targetHero.IsMelee ? 2 : 1;
                 }
             }
 
@@ -704,7 +728,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 // + Ranged champions: You deal and take 1.5% increased damage from all sources. 
                 if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
                 {
-                    amount *= hero.IsMelee() ? 1.02d : 1.015d;
+                    amount *= hero.IsMelee ? 1.02d : 1.015d;
                 }
 
                 // Havoc:
@@ -736,7 +760,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 // + Ranged champions: You deal and take 1.5% increased damage from all sources.
                 if (targetHero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
                 {
-                    amount *= targetHero.IsMelee() ? 1.01d : 1.015d;
+                    amount *= targetHero.IsMelee ? 1.01d : 1.015d;
                 }
             }
 

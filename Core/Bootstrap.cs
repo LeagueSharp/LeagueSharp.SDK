@@ -37,7 +37,7 @@ namespace LeagueSharp.SDK.Core
         /// <summary>
         ///     Indicates whether the bootstrap has been initialized.
         /// </summary>
-        private static bool initialized;
+        internal static bool Initialized;
 
         #endregion
 
@@ -51,12 +51,10 @@ namespace LeagueSharp.SDK.Core
         /// </param>
         public static void Init(string[] args)
         {
-            if (initialized)
+            if (Initialized)
             {
                 return;
             }
-
-            initialized = true;
 
             // Initial notification.
             Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");
@@ -92,6 +90,8 @@ namespace LeagueSharp.SDK.Core
 
             // Final notification.
             Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");
+
+            Initialized = true;
         }
 
         #endregion

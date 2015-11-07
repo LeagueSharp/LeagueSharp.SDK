@@ -93,8 +93,18 @@ namespace LeagueSharp.SDK.Core.Events
         {
             if (OnLoad != null)
             {
-                InvocationList.AddRange(OnLoad.GetInvocationList());
-                OnLoad(MethodBase.GetCurrentMethod().DeclaringType, EventArgs.Empty);
+                foreach (var invocation in OnLoad.GetInvocationList().Where(i => InvocationList.All(l => l != i)))
+                {
+                    InvocationList.Add(invocation);
+                    try
+                    {
+                        invocation.DynamicInvoke(MethodBase.GetCurrentMethod().DeclaringType, EventArgs.Empty);
+                    }
+                    catch (Exception e)
+                    {
+                        Logging.Write()(LogLevel.Fatal, "Failure to invoke invocation.\n{0}", e);
+                    }
+                }
             }
         }
 
@@ -106,7 +116,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// </param>
         private static void OnUpdate(EventArgs args)
         {
-            if (OnLoad == null)
+            if (OnLoad == null || !Bootstrap.Initialized)
             {
                 return;
             }
