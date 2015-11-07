@@ -116,7 +116,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// </param>
         private static void OnUpdate(EventArgs args)
         {
-            if (OnLoad == null || !Bootstrap.Initialized)
+            if (OnLoad == null)
             {
                 return;
             }
