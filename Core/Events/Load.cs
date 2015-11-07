@@ -22,8 +22,8 @@ namespace LeagueSharp.SDK.Core.Events
     using System.Linq;
     using System.Reflection;
 
-    using Enumerations;
-    using Utils;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     Provides an event for when the game starts.
@@ -116,7 +116,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// </param>
         private static void OnUpdate(EventArgs args)
         {
-            if (OnLoad == null)
+            if (OnLoad == null || !Bootstrap.Initialized)
             {
                 return;
             }

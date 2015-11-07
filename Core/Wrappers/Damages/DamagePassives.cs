@@ -71,7 +71,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 (hero.ChampionName != "Fiora" || hero.ChampionName != "Shaco" || hero.ChampionName != "Yasuo")
                 && Math.Abs(hero.Crit - 1) < float.Epsilon,
                 DamageType.Physical,
-                (hero, @base) => hero.TotalAttackDamage);
+                (hero, @base) => (1f + (Items.HasItem(3031, hero) ? .5f : 0f)) * hero.TotalAttackDamage);
 
             var excluded = new List<string>();
             foreach (var name in GameObjects.Heroes.Select(h => h.ChampionName).Where(name => !excluded.Contains(name)))
@@ -799,15 +799,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             DamageType.Physical,
                             (hero, @base) =>
                             Math.Min(.1f * @base.MaxHealth, @base is Obj_AI_Minion ? 75 : @base.MaxHealth));
-                        break;
-                    case "Sivir":
-                        AddPassiveAttack(
-                            "Sivir",
-                            (hero, @base) => hero.HasBuff("sivirwmarker"),
-                            DamageType.Physical,
-                            (hero, @base) => hero.GetSpellDamage(@base, SpellSlot.W),
-                            false,
-                            true);
                         break;
                     case "Skarner":
                         AddPassiveAttack(

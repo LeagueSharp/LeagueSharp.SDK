@@ -17,14 +17,14 @@
 
 namespace LeagueSharp.SDK.Core
 {
-    using Enumerations;
-    using Events;
-    using UI.IMenu;
-    using UI.IMenu.Customizer;
-    using UI.INotifications;
-    using Utils;
-    using Wrappers;
-    using Wrappers.Damages;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Events;
+    using LeagueSharp.SDK.Core.UI.IMenu;
+    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
+    using LeagueSharp.SDK.Core.UI.INotifications;
+    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Core.Wrappers;
+    using LeagueSharp.SDK.Core.Wrappers.Damages;
 
     /// <summary>
     ///     Bootstrap is an initialization pointer for the AppDomainManager to initialize the library correctly once loaded in
@@ -37,7 +37,7 @@ namespace LeagueSharp.SDK.Core
         /// <summary>
         ///     Indicates whether the bootstrap has been initialized.
         /// </summary>
-        private static bool initialized;
+        internal static bool Initialized;
 
         #endregion
 
@@ -51,12 +51,10 @@ namespace LeagueSharp.SDK.Core
         /// </param>
         public static void Init(string[] args)
         {
-            if (initialized)
+            if (Initialized)
             {
                 return;
             }
-
-            initialized = true;
 
             // Initial notification.
             Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");
@@ -92,7 +90,8 @@ namespace LeagueSharp.SDK.Core
 
             // Final notification.
             Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");
-            
+
+            Initialized = true;
         }
 
         #endregion
