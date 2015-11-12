@@ -158,9 +158,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             {
                 var childPos = new Vector2(position.X, position.Y + i * MenuSettings.ContainerHeight);
 
-                Utils.DrawBoxRounded(childPos.X, childPos.Y, width, height, 4, true,
-                    MenuSettings.RootContainerColor, new ColorBGRA(55, 76, 95, 255));
-
                 menuManager.Menus[i].OnDraw(childPos);
             }
         }
