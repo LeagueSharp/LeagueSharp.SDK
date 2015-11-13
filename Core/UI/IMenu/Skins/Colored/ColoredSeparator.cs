@@ -21,6 +21,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 {
+    using System;
+
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
@@ -98,7 +100,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                 new[]
                     {
                             new Vector2(this.Component.Position.X + Offset, ColoredUtilities.GetContainerRectangle(this.Component).Center.Y),
-                            new Vector2(centerY.X - 5, ColoredUtilities.GetContainerRectangle(this.Component).Center.Y)
+                            new Vector2(Math.Max(this.Component.Position.X + Offset, centerY.X - 5), ColoredUtilities.GetContainerRectangle(this.Component).Center.Y)
                     },
                 MenuSettings.ContainerSelectedColor);
             int newX = ColoredMenuSettings.FontCaption.MeasureText(MenuManager.Instance.Sprite, this.Component.DisplayName.ToUpper(), 0).Width;
@@ -106,7 +108,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                 new[]
                     {
                             new Vector2(centerY.X + newX + 5, ColoredUtilities.GetContainerRectangle(this.Component).Center.Y),
-                            new Vector2(ColoredUtilities.GetContainerRectangle(this.Component).Right - Offset, ColoredUtilities.GetContainerRectangle(this.Component).Center.Y)
+                            new Vector2(Math.Max(centerY.X + newX + 5, ColoredUtilities.GetContainerRectangle(this.Component).Right - Offset), ColoredUtilities.GetContainerRectangle(this.Component).Center.Y)
                     },
                 MenuSettings.ContainerSelectedColor);
             Line.End();
