@@ -22,12 +22,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System.Linq;
     using System.Security.Permissions;
     using System.Text;
-    using Enumerations;
-    using Events;
+
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Events;
+    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Properties;
+
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using Properties;
-    using Utils;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -40,7 +42,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         ///     The damage version files.
         /// </summary>
         private static readonly IDictionary<string, byte[]> DamageFiles = new Dictionary<string, byte[]>
-                                                                              { { "5.20", Resources._5_20 } };
+                                                                              { { "5.21", Resources._5_21 } };
 
         #endregion
 
@@ -131,7 +133,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             int index)
         {
             var sourceScale = spellBonus.ScalingTarget == DamageScalingTarget.Source ? source : target;
-            var percent = spellBonus.DamagePercentages?[Math.Min(index, spellBonus.DamagePercentages.Count - 1)];
+            var percent = spellBonus.DamagePercentages?.Count > 0
+                              ? spellBonus.DamagePercentages[Math.Min(index, spellBonus.DamagePercentages.Count - 1)]
+                              : 0d;
             var origin = 0f;
 
             switch (spellBonus.ScalingType)
@@ -154,6 +158,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 case DamageScalingType.MissingHealth:
                     origin = sourceScale.MaxHealth - sourceScale.Health;
                     break;
+                case DamageScalingType.BonusHealth:
+                    origin = ((Obj_AI_Hero)sourceScale).BonusHealth;
+                    break;
                 case DamageScalingType.Armor:
                     origin = sourceScale.Armor;
                     break;
@@ -162,16 +169,38 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     break;
             }
 
+            var dmg = origin
+                      * (percent > 0
+                             ? percent
+                               + (spellBonus.ScalePer100Ap > 0
+                                      ? Math.Abs(source.TotalMagicalDamage / 100) * spellBonus.ScalePer100Ap
+                                      : 0)
+                               + (spellBonus.ScalePer100BonusAd > 0
+                                      ? Math.Abs(source.FlatPhysicalDamageMod / 100) * spellBonus.ScalePer100BonusAd
+                                      : 0)
+                             : 0);
             if (!string.IsNullOrEmpty(spellBonus.ScalingBuff))
             {
                 var buffCount =
                     (spellBonus.ScalingBuffTarget == DamageScalingTarget.Source ? source : target).GetBuffCount(
                         spellBonus.ScalingBuff);
-
-                return buffCount != 0 ? (origin * (percent ?? 0)) * (buffCount + spellBonus.ScalingBuffOffset) : 0d;
+                dmg = buffCount != 0 ? dmg * (buffCount + spellBonus.ScalingBuffOffset) : 0d;
+            }
+            if (dmg > 0)
+            {
+                if (spellBonus.MinDamage?.Count > 0)
+                {
+                    dmg = Math.Max(dmg, spellBonus.MinDamage[Math.Min(index, spellBonus.MinDamage.Count - 1)]);
+                }
+                if (target is Obj_AI_Minion && spellBonus.MaxDamageOnMinion?.Count > 0)
+                {
+                    dmg = Math.Min(
+                        dmg,
+                        spellBonus.MaxDamageOnMinion[Math.Min(index, spellBonus.MaxDamageOnMinion.Count - 1)]);
+                }
             }
 
-            return origin * (percent ?? 0);
+            return dmg;
         }
 
         #endregion

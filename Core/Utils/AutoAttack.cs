@@ -19,8 +19,8 @@ namespace LeagueSharp.SDK.Core.Utils
 {
     using System.Linq;
 
-    using Extensions;
-    using Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Extensions;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
 
     using SharpDX;
 
@@ -40,7 +40,7 @@ namespace LeagueSharp.SDK.Core.Utils
                 "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge",
                 "leonashieldofdaybreak", "luciane", "lucianq",
                 "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq",
-                "nautiluspiercinggaze", "netherblade", "parley",
+                "nautiluspiercinggaze", "netherblade", "gangplankqwrapper",
                 "poppydevastatingblow", "powerfist", "renektonpreexecute",
                 "rengarq", "shyvanadoubleattack", "sivirw", "takedown",
                 "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble",
@@ -111,7 +111,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static float GetProjectileSpeed(this Obj_AI_Hero hero)
         {
-            return IsMelee(hero) || hero.ChampionName == "Azir" || hero.ChampionName == "Velkoz"
+            return hero.IsMelee || hero.ChampionName == "Azir" || hero.ChampionName == "Velkoz"
                    || hero.ChampionName == "Viktor" && hero.HasBuff("ViktorPowerTransferReturn")
                        ? float.MaxValue
                        : hero.BasicAttack.MissileSpeed;
@@ -195,20 +195,6 @@ namespace LeagueSharp.SDK.Core.Utils
         public static bool IsAutoAttackReset(string name)
         {
             return AttackResets.Contains(name.ToLower());
-        }
-
-        /// <summary>
-        ///     Returns whether the object is a melee combat type or ranged.
-        /// </summary>
-        /// <param name="sender">
-        ///     <see cref="Obj_AI_Base" /> sender
-        /// </param>
-        /// <returns>
-        ///     Is object melee.
-        /// </returns>
-        public static bool IsMelee(this Obj_AI_Base sender)
-        {
-            return sender.CombatType == GameObjectCombatType.Melee;
         }
 
         #endregion
