@@ -242,6 +242,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
 
             public List<int> MinDamage { get; set; }
 
+            public double ScalePer100Ad { get; set; }
+
             public double ScalePer100Ap { get; set; }
 
             public double ScalePer100BonusAd { get; set; }

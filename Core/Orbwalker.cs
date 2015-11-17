@@ -22,17 +22,20 @@ namespace LeagueSharp.SDK.Core
     using System.Linq;
     using System.Reflection;
     using System.Windows.Forms;
-    using Enumerations;
-    using Extensions;
-    using Extensions.SharpDX;
-    using Math.Prediction;
+
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Math.Prediction;
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Core.Wrappers;
+    using LeagueSharp.SDK.Core.Wrappers.Damages;
+
     using SharpDX;
-    using UI.IMenu.Values;
-    using Utils;
-    using Wrappers;
-    using Wrappers.Damages;
+
     using Color = System.Drawing.Color;
-    using Menu = UI.IMenu.Menu;
+    using Menu = LeagueSharp.SDK.Core.UI.IMenu.Menu;
 
     /// <summary>
     ///     The <c>orbwalker</c> system.
@@ -102,9 +105,18 @@ namespace LeagueSharp.SDK.Core
         ///     Gets a value indicating whether can attack.
         /// </summary>
         public static bool CanAttack
-            =>
-                Variables.TickCount + (Game.Ping / 2) + 25
-                >= LastAutoAttackTick + (GameObjects.Player.AttackDelay * 1000) && Attack;
+        {
+            get
+            {
+                if (GameObjects.Player.ChampionName == "Graves" && GameObjects.Player.HasBuff("GravesBasicAttackAmmo1")
+                    && Variables.TickCount + (Game.Ping / 2) + 25 >= LastAutoAttackTick + 1500 && Attack)
+                {
+                    return true;
+                }
+                return Variables.TickCount + (Game.Ping / 2) + 25
+                       >= LastAutoAttackTick + (GameObjects.Player.AttackDelay * 1000) && Attack;
+            }
+        }
 
         /// <summary>
         ///     Gets a value indicating whether can move.
@@ -250,6 +262,16 @@ namespace LeagueSharp.SDK.Core
                     {
                         return minion;
                     }
+                }
+                foreach (var minion in
+                    GameObjects.AttackableUnits.Where(m => m.IsValidTarget(m.GetRealAutoAttackRange()))
+                        .Select(barrel => barrel as Obj_AI_Minion)
+                        .Where(
+                            m =>
+                            m != null && m.CharData.BaseSkinName == "gangplankbarrel" && m.IsHPBarRendered
+                            && m.Health < 2))
+                {
+                    return minion;
                 }
             }
 

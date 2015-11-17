@@ -138,43 +138,72 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 {
                     // Spoils of War
                     if (hero.IsMelee && targetMinion != null && targetMinion.IsEnemy
-                        && targetMinion.Team != GameObjectTeam.Neutral && hero.GetBuffCount("talentreaperdisplay") > 0)
+                        && targetMinion.Team != GameObjectTeam.Neutral && hero.GetBuffCount("TalentReaper") > 0
+                        && GameObjects.AllyHeroes.Any(
+                            h => h.NetworkId != hero.NetworkId && h.Distance(targetMinion) < 1100))
                     {
-                        if (
-                            GameObjects.AllyHeroes.Any(
-                                h => h.NetworkId != source.NetworkId && h.Distance(targetMinion.Position) < 1100))
-                        {
-                            var value = 200; // Relic Shield - 3302
-
-                            if (!Items.HasItem(3302, hero))
-                            {
-                                // 240 = Tragon's Brace (3097)
-                                // 400 = Face of the Mountain (3401)
-                                value = Items.HasItem(3097, hero) ? 240 : 400;
-                            }
-
-                            return value + hero.TotalAttackDamage;
-                        }
+                        return hero.TotalAttackDamage
+                               + (Items.HasItem((int)ItemId.Relic_Shield, hero)
+                                      ? 200
+                                      : (Items.HasItem((int)ItemId.Targons_Brace, hero) ? 240 : 400));
                     }
 
                     // BotRK
-                    if (Items.HasItem(3153, hero))
+                    if (Items.HasItem((int)ItemId.Blade_of_the_Ruined_King, hero))
                     {
-                        var d = 0.08 * target.Health;
+                        var d = 0.06 * target.Health;
                         result += targetMinion != null ? Math.Min(d, 60) : d;
                     }
 
-                    // Arcane blade
-                    if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 132 && m.Points == 1))
+                    if (hero.IsMelee && hero.GetBuffCount("DreadnoughtMomentumBuff") > 0)
                     {
-                        reduction -= CalculateMagicDamage(hero, target, 0.05 * hero.FlatMagicDamageMod);
+                        result += hero.GetBuffCount("DreadnoughtMomentumBuff") / 2
+                                  * (hero.GetBuffCount("DreadnoughtMomentumBuff") == 100 ? 2 : 1);
+                    }
+
+                    if (hero.GetBuffCount("kagesluckypickdisplay") > 0
+                        && (targetHero != null || target is Obj_AI_Turret))
+                    {
+                        result += Items.HasItem((int)ItemId.Spellthiefs_Edge, hero) ? 10 : 15;
+                    }
+
+                    // Serrated Dirk
+                    /*if (hero.HasBuff(""))
+                    {
+                        result += 15;
+                    }*/
+
+                    if (targetHero != null)
+                    {
+                        // Fervorofbattle:
+                        // + STACKTIVATE Your basic attacks and spells give you stacks of Fervor for 5 seconds, stacking 10 times. Each stack of Fervor adds 1-8 bonus physical damage to your basic attacks against champions, based on your level.
+                        var fervorofBattle = hero.GetFerocity(DamageMastery.Ferocity.FervorofBattle);
+                        if (fervorofBattle.IsValid())
+                        {
+                            result += (1 + (hero.Level - 1) * 7 / 17) * hero.GetBuffCount("MasteryOnHitDamageStacker");
+                        }
+
+                        // Phantom Dancer:
+                        // + Reduces damage dealt to attacker (if he's attack you) by 12%
+                        if (hero.HasBuff("itemphantomdancerdebuff")
+                            && hero.GetBuff("itemphantomdancerdebuff").Caster.NetworkId == targetHero.NetworkId)
+                        {
+                            damageModifier *= 0.88d;
+                        }
+
+                        if ((Items.HasItem(3034, hero) || Items.HasItem(3036, hero))
+                            && hero.MaxHealth < targetHero.MaxHealth)
+                        {
+                            result *= Math.Min(targetHero.MaxHealth - hero.MaxHealth, 500) / 50
+                                      * (Items.HasItem(3034, hero) ? 0.01 : 0.015) + 1;
+                        }
                     }
                 }
 
                 if (targetHero != null)
                 {
                     // Ninja tabi
-                    if (Items.HasItem(3047, targetHero))
+                    if (Items.HasItem((int)ItemId.Ninja_Tabi, targetHero))
                     {
                         damageModifier *= 0.9d;
                     }
@@ -185,16 +214,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         reduction += 4 + ((targetHero.Level - (1 / 3)) * 2);
                     }
 
-                    // Block
-                    // + Reduces incoming damage from champion basic attacks by 1 / 2
-                    if (hero != null)
+                    // Tough Skin
+                    // + Take 2 less damage from champion and monster basic attacks
+                    if ((source is Obj_AI_Minion || hero != null)
+                        && targetHero.GetResolve(DamageMastery.Resolve.ToughSkin).IsValid())
                     {
-                        var mastery =
-                            targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
-                        if (mastery != null && mastery.Points >= 1)
-                        {
-                            reduction += 1 * mastery.Points;
-                        }
+                        reduction += 2;
                     }
                 }
 
@@ -269,16 +294,31 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
 
             if (spellData.Damages?.Count > 0)
             {
-                baseDamage = source.CalculateDamage(
-                    target,
-                    spellData.DamageType,
-                    spellData.Damages[Math.Min(spellLevel - 1, spellData.Damages.Count - 1)]);
-                if (!string.IsNullOrEmpty(spellData.ScalingBuff))
+                if (spellData.DamageType == DamageType.Mixed)
                 {
-                    var buffCount =
-                        (spellData.ScalingBuffTarget == DamageScalingTarget.Source ? source : target).GetBuffCount(
-                            spellData.ScalingBuff);
-                    baseDamage = buffCount != 0 ? baseDamage * (buffCount + spellData.ScalingBuffOffset) : 0d;
+                    var oriDamage = spellData.Damages[Math.Min(spellLevel - 1, spellData.Damages.Count - 1)];
+                    baseDamage = source.CalculateMixedDamage(target, oriDamage / 2, oriDamage / 2);
+                    if (!string.IsNullOrEmpty(spellData.ScalingBuff))
+                    {
+                        var buffCount =
+                            (spellData.ScalingBuffTarget == DamageScalingTarget.Source ? source : target).GetBuffCount(
+                                spellData.ScalingBuff);
+                        baseDamage = buffCount != 0 ? baseDamage * (buffCount + spellData.ScalingBuffOffset) : 0d;
+                    }
+                }
+                else
+                {
+                    baseDamage = source.CalculateDamage(
+                        target,
+                        spellData.DamageType,
+                        spellData.Damages[Math.Min(spellLevel - 1, spellData.Damages.Count - 1)]);
+                    if (!string.IsNullOrEmpty(spellData.ScalingBuff))
+                    {
+                        var buffCount =
+                            (spellData.ScalingBuffTarget == DamageScalingTarget.Source ? source : target).GetBuffCount(
+                                spellData.ScalingBuff);
+                        baseDamage = buffCount != 0 ? baseDamage * (buffCount + spellData.ScalingBuffOffset) : 0d;
+                    }
                 }
             }
             if (spellData.DamagesPerLvl?.Count > 0)
@@ -290,14 +330,22 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             }
             if (spellData.BonusDamages?.Count > 0)
             {
-                bonusDamage =
-                    spellData.BonusDamages.Where(i => source.ResolveBonusSpellDamage(target, i, spellLevel - 1) > 0)
-                        .Sum(
-                            i =>
-                            source.CalculateDamage(
-                                target,
-                                i.DamageType,
-                                source.ResolveBonusSpellDamage(target, i, spellLevel - 1)));
+                foreach (var bonusDmg in
+                    spellData.BonusDamages.Where(i => source.ResolveBonusSpellDamage(target, i, spellLevel - 1) > 0))
+                {
+                    if (bonusDmg.DamageType == DamageType.Mixed)
+                    {
+                        var oriDamage = source.ResolveBonusSpellDamage(target, bonusDmg, spellLevel - 1);
+                        bonusDamage += source.CalculateMixedDamage(target, oriDamage / 2, oriDamage / 2);
+                    }
+                    else
+                    {
+                        bonusDamage += source.CalculateDamage(
+                            target,
+                            bonusDmg.DamageType,
+                            source.ResolveBonusSpellDamage(target, bonusDmg, spellLevel - 1));
+                    }
+                }
             }
             var totalDamage = baseDamage + bonusDamage;
             if (totalDamage > 0)
@@ -438,6 +486,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         armorPenetrationPercent = 0.3d;
                         break;
                 }
+                if (target is Obj_AI_Minion)
+                {
+                    amount *= 1.25;
+                    if (target.GetMinionType() == MinionTypes.Siege)
+                    {
+                        amount *= 0.7;
+                    }
+                    return amount;
+                }
             }
 
             // Penetration can't reduce armor below 0.
@@ -497,18 +554,32 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 // + Exhausts target enemy champion, reducing their Movement Speed and Attack Speed by 30%, their Armor and Magic Resist by 10, and their damage dealt by 40% for 2.5 seconds.
                 if (source.HasBuff("Exhaust"))
                 {
-                    amount /= 0.4d;
+                    amount *= 0.6d;
                 }
             }
 
             var targetHero = target as Obj_AI_Hero;
             if (targetHero != null)
             {
+                // Masteries:
+
+                // BondofStone
+                // + DAMAGE REDUCTION 4 %, doubling to 8 % when near at least one allied champion
+                // + IN THIS TOGETHER 8 % of the damage that the nearest allied champion would take is dealt to you instead.This can't bring you below 15% health.
+                if (targetHero.GetResolve(DamageMastery.Resolve.BondofStone).IsValid())
+                {
+                    amount *=
+                        GameObjects.EnemyHeroes.Any(
+                            x => x.NetworkId != targetHero.NetworkId && x.Distance(targetHero) <= 500)
+                            ? 0.92d
+                            : 0.96d;
+                }
+
                 // Items:
 
                 // Doran's Shield
                 // + Blocks 8 damage from single target attacks and spells from champions.
-                if (Items.HasItem(1054, targetHero))
+                if (Items.HasItem((int)ItemId.Dorans_Shield, targetHero))
                 {
                     amount -= 8;
                 }
@@ -517,68 +588,68 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
 
                 // Unbreakable Will
                 // + Alistar removes all crowd control effects from himself, then gains additional attack damage and takes 70% reduced physical and magic damage for 7 seconds.
-                if (target.HasBuff("Ferocious Howl"))
+                if (targetHero.HasBuff("Ferocious Howl"))
                 {
                     amount *= 0.3d;
                 }
 
                 // Tantrum
                 // + Amumu takes reduced physical damage from basic attacks and abilities.
-                if (target.HasBuff("Tantrum") && damageType == DamageType.Physical)
+                if (targetHero.HasBuff("Tantrum") && damageType == DamageType.Physical)
                 {
-                    amount -= new[] { 2, 4, 6, 8, 10 }[target.Spellbook.GetSpell(SpellSlot.E).Level - 1];
+                    amount -= new[] { 2, 4, 6, 8, 10 }[targetHero.Spellbook.GetSpell(SpellSlot.E).Level - 1];
                 }
 
                 // Unbreakable
                 // + Grants Braum 30% / 32.5% / 35% / 37.5% / 40% damage reduction from oncoming sources (excluding true damage and towers) for 3 / 3.25 / 3.5 / 3.75 / 4 seconds.
                 // + The damage reduction is increased to 100% for the first source of champion damage that would be reduced.
-                if (target.HasBuff("BraumShieldRaise"))
+                if (targetHero.HasBuff("BraumShieldRaise"))
                 {
-                    amount -= amount
-                              * new[] { 0.3d, 0.325d, 0.35d, 0.375d, 0.4d }[
-                                  target.Spellbook.GetSpell(SpellSlot.E).Level - 1];
+                    amount *= 1
+                              - new[] { 0.3d, 0.325d, 0.35d, 0.375d, 0.4d }[
+                                  targetHero.Spellbook.GetSpell(SpellSlot.E).Level - 1];
                 }
 
                 // Idol of Durand
                 // + Galio becomes a statue and channels for 2 seconds, Taunt icon taunting nearby foes and reducing incoming physical and magic damage by 50%.
-                if (target.HasBuff("GalioIdolOfDurand"))
+                if (targetHero.HasBuff("GalioIdolOfDurand"))
                 {
                     amount *= 0.5d;
                 }
 
                 // Courage
                 // + Garen gains a defensive shield for a few seconds, reducing incoming damage by 30% and granting 30% crowd control reduction for the duration.
-                if (target.HasBuff("GarenW"))
+                if (targetHero.HasBuff("GarenW"))
                 {
                     amount *= 0.7d;
                 }
 
                 // Drunken Rage
                 // + Gragas takes a long swig from his barrel, disabling his ability to cast or attack for 1 second and then receives 10% / 12% / 14% / 16% / 18% reduced damage for 3 seconds.
-                if (target.HasBuff("GragasWSelf"))
+                if (targetHero.HasBuff("GragasWSelf"))
                 {
-                    amount -= amount
-                              * new[] { 0.1d, 0.12d, 0.14d, 0.16d, 0.18d }[
-                                  target.Spellbook.GetSpell(SpellSlot.W).Level - 1];
+                    amount *= 1
+                              - new[] { 0.1d, 0.12d, 0.14d, 0.16d, 0.18d }[
+                                  targetHero.Spellbook.GetSpell(SpellSlot.W).Level - 1];
                 }
 
                 // Void Stone
                 // + Kassadin reduces all magic damage taken by 15%.
-                if (target.HasBuff("VoidStone") && damageType == DamageType.Magical)
+                if (targetHero.HasBuff("VoidStone") && damageType == DamageType.Magical)
                 {
                     amount *= 0.85d;
                 }
 
                 // Shunpo
                 // + Katarina teleports to target unit and gains 15% damage reduction for 1.5 seconds. If the target is an enemy, the target takes magic damage.
-                if (target.HasBuff("KatarinaEReduction"))
+                if (targetHero.HasBuff("KatarinaEReduction"))
                 {
                     amount *= 0.85d;
                 }
 
                 // Vengeful Maelstrom
                 // + Maokai creates a magical vortex around himself, protecting him and allied champions by reducing damage from non-turret sources by 20% for a maximum of 10 seconds.
-                if (target.HasBuff("MaokaiDrainDefense") && !(source is Obj_AI_Turret))
+                if (targetHero.HasBuff("MaokaiDrainDefense") && !(source is Obj_AI_Turret))
                 {
                     amount *= 0.8d;
                 }
@@ -586,30 +657,33 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 // Meditate
                 // + Master Yi channels for up to 4 seconds, restoring health each second. This healing is increased by 1% for every 1% of his missing health. Meditate also resets the autoattack timer.
                 // + While channeling, Master Yi reduces incoming damage (halved against turrets).
-                if (target.HasBuff("Meditate"))
+                if (targetHero.HasBuff("Meditate"))
                 {
-                    amount -= amount
-                              * new[] { 0.5d, 0.55d, 0.6d, 0.65d, 0.7d }[
-                                  target.Spellbook.GetSpell(SpellSlot.W).Level - 1] / (source is Obj_AI_Turret ? 2 : 1);
+                    amount *= (1
+                               - new[] { 0.5d, 0.55d, 0.6d, 0.65d, 0.7d }[
+                                   targetHero.Spellbook.GetSpell(SpellSlot.W).Level - 1])
+                              / (source is Obj_AI_Turret ? 2 : 1);
                 }
 
                 // Valiant Fighter
                 // + Poppy reduces all damage that exceeds 10% of her current health by 50%.
-                if (target.HasBuff("PoppyValiantFighter") && !(source is Obj_AI_Turret) && amount / target.Health > 0.1d)
+                if (targetHero.HasBuff("PoppyValiantFighter") && !(source is Obj_AI_Turret)
+                    && amount / targetHero.Health > 0.1d)
                 {
                     amount *= 0.5d;
                 }
 
                 // Shadow Dash
                 // + Shen reduces all physical damage by 50% from taunted enemies.
-                if (target.HasBuff("Shen Shadow Dash") && source.HasBuff("Taunt") && damageType == DamageType.Physical)
+                if (targetHero.HasBuff("Shen Shadow Dash") && source.HasBuff("Taunt")
+                    && damageType == DamageType.Physical)
                 {
                     amount *= 0.5d;
                 }
 
                 // Unholy Covenant
                 // + Yorick grants him 5% damage reduction for each ghoul currently summoned.
-                if (target.HasBuff("YorickUnholySymbiosis"))
+                if (targetHero.HasBuff("YorickUnholySymbiosis"))
                 {
                     amount -= amount
                               * GameObjects.AttackableUnits.Count(
@@ -640,42 +714,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         {
             var value = 0d;
             var hero = source as Obj_AI_Hero;
-            var targetHero = target as Obj_AI_Hero;
 
-            // Offensive masteries:
-
-            // Butcher
-            // + Basic attacks and single target abilities do 2 bonus damage to minions and monsters. 
+            // SAVAGERY:
+            // + BONUS DAMAGE TO MINIONS AND MONSTERS 1/2/3/4/5 on single target spells and basic attacks
             if (hero != null && target is Obj_AI_Minion)
             {
-                if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 68 && m.Points == 1))
+                var savagery = hero.GetCunning(DamageMastery.Cunning.Savagery);
+                if (savagery.IsValid())
                 {
-                    value += 2d;
-                }
-            }
-
-            // Defensive masteries:
-
-            // Tough Skin
-            // + Reduces damage taken from neutral monsters by 1 / 2
-            if (source is Obj_AI_Minion && targetHero != null && source.Team == GameObjectTeam.Neutral)
-            {
-                var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
-                if (mastery != null && mastery.Points >= 1)
-                {
-                    value -= 1 * mastery.Points;
-                }
-            }
-
-            // Unyielding
-            // + Melee - Reduces all incoming damage from champions by 2
-            // + Ranged - Reduces all incoming damage from champions by 1
-            if (hero != null && targetHero != null)
-            {
-                var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
-                if (mastery != null && mastery.Points == 1)
-                {
-                    value -= targetHero.IsMelee ? 2 : 1;
+                    value += new[] { 1, 2, 3, 4, 5 }[savagery.Points - 1];
                 }
             }
 
@@ -721,46 +768,41 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             var targetHero = target as Obj_AI_Hero;
             if (hero != null)
             {
-                // Offensive masteries:
-
-                // Double-Edged Sword:
-                // + Melee champions: You deal 2% increase damage from all sources, but take 1% increase damage from all sources.
-                // + Ranged champions: You deal and take 1.5% increased damage from all sources. 
-                if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
+                // DoubleEdgedSword:
+                // + MELEE Deal an additional 3 % damage, but receive an additional 1.5 % damage
+                // + RANGED Deal an additional 2 % damage, but receive an additional 2 % damage
+                if (hero.GetFerocity(DamageMastery.Ferocity.DoubleEdgedSword).IsValid())
                 {
-                    amount *= hero.IsMelee ? 1.02d : 1.015d;
+                    amount *= hero.IsMelee ? 1.03d : 1.02d;
                 }
 
-                // Havoc:
-                // + Increases damage by 3%.
-                if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 146 && m.Points == 1))
-                {
-                    amount *= 1.03d;
-                }
-
-                // Executioner
-                // + Increases damage dealt to champions below 20 / 35 / 50% by 5%. 
                 if (targetHero != null)
                 {
-                    var mastery = hero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Offense && m.Id == 100);
-                    if (mastery != null && mastery.Points >= 1
-                        && target.Health / target.MaxHealth <= 0.05d + (0.15d * mastery.Points))
+                    // Oppressor:
+                    // + KICK 'EM WHEN THEY'RE DOWN You deal 2.5% increased damage to targets with impaired movement (slows, stuns, taunts, etc)
+                    if (hero.GetFerocity(DamageMastery.Ferocity.Oppressor).IsValid() && targetHero.IsMoveImpaired())
                     {
-                        amount *= 1.05d;
+                        amount *= 1.025;
+                    }
+
+                    // Merciless:
+                    // + DAMAGE AMPLIFICATION 1 / 2 / 3 / 4 / 5 % increased damage to champions below 40 % health
+                    var merciless = hero.GetCunning(DamageMastery.Cunning.Merciless);
+                    if (merciless.IsValid() && targetHero.HealthPercent < 40)
+                    {
+                        amount *= 1 + new[] { 1, 2, 3, 4, 5 }[merciless.Points - 1] / 100;
                     }
                 }
             }
 
             if (targetHero != null)
             {
-                // Defensive masteries:
-
-                // Double edge sword:
-                // + Melee champions: You deal 2% increase damage from all sources, but take 1% increase damage from all sources.
-                // + Ranged champions: You deal and take 1.5% increased damage from all sources.
-                if (targetHero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
+                // DoubleEdgedSword:
+                // + MELEE Deal an additional 3 % damage, but receive an additional 1.5 % damage
+                // + RANGED Deal an additional 2 % damage, but receive an additional 2 % damage
+                if (targetHero.GetFerocity(DamageMastery.Ferocity.DoubleEdgedSword).IsValid())
                 {
-                    amount *= targetHero.IsMelee ? 1.01d : 1.015d;
+                    amount *= targetHero.IsMelee ? 1.015d : 1.02d;
                 }
             }
 

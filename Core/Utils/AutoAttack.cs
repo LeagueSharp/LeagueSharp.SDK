@@ -37,15 +37,16 @@ namespace LeagueSharp.SDK.Core.Utils
         private static readonly string[] AttackResets =
             {
                 "dariusnoxiantacticsonh", "fioraflurry", "garenq",
-                "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge",
-                "leonashieldofdaybreak", "luciane", "lucianq",
-                "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq",
-                "nautiluspiercinggaze", "netherblade", "gangplankqwrapper",
-                "poppydevastatingblow", "powerfist", "renektonpreexecute",
-                "rengarq", "shyvanadoubleattack", "sivirw", "takedown",
-                "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble",
-                "vie", "volibearq", "xenzhaocombotarget", "yorickspectral",
-                "reksaiq", "itemtitanichydracleave"
+                "gravesmove", "hecarimrapidslash", "jaxempowertwo",
+                "jaycehypercharge", "leonashieldofdaybreak", "luciane",
+                "lucianq", "monkeykingdoubleattack", "mordekaisermaceofspades",
+                "nasusq", "nautiluspiercinggaze", "netherblade",
+                "gangplankqwrapper", "poppydevastatingblow", "powerfist",
+                "renektonpreexecute", "rengarq", "shyvanadoubleattack",
+                "sivirw", "takedown", "talonnoxiandiplomacy",
+                "trundletrollsmash", "vaynetumble", "vie", "volibearq",
+                "xenzhaocombotarget", "yorickspectral", "reksaiq",
+                "itemtitanichydracleave"
             };
 
         /// <summary>
@@ -131,6 +132,12 @@ namespace LeagueSharp.SDK.Core.Utils
             var result = GameObjects.Player.AttackRange + GameObjects.Player.BoundingRadius;
             if (target != null && target.IsValid)
             {
+                var targetBase = target as Obj_AI_Base;
+                if (targetBase != null && GameObjects.Player.ChampionName == "Caitlyn"
+                    && targetBase.HasBuff("caitlynyordletrapinternal"))
+                {
+                    result += 650;
+                }
                 return result + target.BoundingRadius;
             }
 

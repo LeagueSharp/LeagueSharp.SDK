@@ -263,7 +263,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                         targets.MinOrDefault(
                             hero => (rangeCheckFrom ?? GameObjects.Player.ServerPosition).DistanceSquared(hero.Position));
                 case TargetSelectorMode.NearMouse:
-                    return targets.Find(t => t.DistanceSquared(Game.CursorPos) < 22500);
+                    return targets.MinOrDefault(t => t.DistanceSquared(Game.CursorPos));
                 case TargetSelectorMode.AutoPriority:
                     return
                         targets.MinOrDefault(

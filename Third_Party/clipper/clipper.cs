@@ -805,8 +805,8 @@ namespace LeagueSharp.SDK.Clipper
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Can be changed by a pre-processor definition.")]
         public IntPoint(double x, double y)
         {
-            this.X = (cInt)x;
-            this.Y = (cInt)y;
+            this.X = (long)x;
+            this.Y = (long)y;
         }
 
         /// <summary>
@@ -5497,7 +5497,7 @@ namespace LeagueSharp.SDK.Clipper
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Can be changed by a pre-processor definition.")]
         internal static long Round(double value)
         {
-            return value < 0 ? (cInt)(value - 0.5) : (cInt)(value + 0.5);
+            return value < 0 ? (long)(value - 0.5) : (long)(value + 0.5);
         }
 
         // ------------------------------------------------------------------------------
@@ -7966,7 +7966,7 @@ namespace LeagueSharp.SDK.Clipper
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Can be changed by a pre-processor definition.")]
         internal static long Round(double value)
         {
-            return value < 0 ? (cInt)(value - 0.5) : (cInt)(value + 0.5);
+            return value < 0 ? (long)(value - 0.5) : (long)(value + 0.5);
         }
 
         // ------------------------------------------------------------------------------

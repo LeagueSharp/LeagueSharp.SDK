@@ -42,7 +42,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         ///     The damage version files.
         /// </summary>
         private static readonly IDictionary<string, byte[]> DamageFiles = new Dictionary<string, byte[]>
-                                                                              { { "5.21", Resources._5_21 } };
+                                                                              { { "5.22", Resources._5_22 } };
 
         #endregion
 
@@ -170,13 +170,16 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             }
 
             var dmg = origin
-                      * (percent > 0
-                             ? percent
+                      * (percent > 0 || percent < 0
+                             ? (percent > 0 ? percent : 0)
                                + (spellBonus.ScalePer100Ap > 0
                                       ? Math.Abs(source.TotalMagicalDamage / 100) * spellBonus.ScalePer100Ap
                                       : 0)
                                + (spellBonus.ScalePer100BonusAd > 0
                                       ? Math.Abs(source.FlatPhysicalDamageMod / 100) * spellBonus.ScalePer100BonusAd
+                                      : 0)
+                               + (spellBonus.ScalePer100Ad > 0
+                                      ? Math.Abs(source.TotalAttackDamage / 100) * spellBonus.ScalePer100Ad
                                       : 0)
                              : 0);
             if (!string.IsNullOrEmpty(spellBonus.ScalingBuff))

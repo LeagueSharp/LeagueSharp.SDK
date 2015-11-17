@@ -68,10 +68,63 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             AddPassiveAttack(
                 string.Empty,
                 (hero, @base) =>
-                (hero.ChampionName != "Fiora" || hero.ChampionName != "Shaco" || hero.ChampionName != "Yasuo")
+                hero.ChampionName != "Ashe" && hero.ChampionName != "Fiora" && hero.ChampionName != "Shaco"
+                && hero.ChampionName != "Yasuo" && hero.ChampionName != "Graves"
                 && Math.Abs(hero.Crit - 1) < float.Epsilon,
                 DamageType.Physical,
-                (hero, @base) => (1f + (Items.HasItem(3031, hero) ? .5f : 0f)) * hero.TotalAttackDamage);
+                (hero, @base) =>
+                (1f + (Items.HasItem((int)ItemId.Infinity_Edge, hero) ? .5f : 0f)) * hero.TotalAttackDamage);
+            AddPassiveAttack(
+                string.Empty,
+                (hero, @base) => hero.GetBuffCount("ItemStatikShankCharge") == 100,
+                DamageType.Magical,
+                (hero, @base) =>
+                    {
+                        var d = 30d;
+                        if (!Items.HasItem(2015, hero))
+                        {
+                            d = Items.HasItem(3087, hero)
+                                    ? (50 + (hero.Level - 1) * 100 / 17) * (@base is Obj_AI_Minion ? 1.5f : 1)
+                                      * (Math.Abs(hero.Crit - 1) < float.Epsilon
+                                             ? (2 + (Items.HasItem((int)ItemId.Infinity_Edge, hero) ? .5f : 0))
+                                             : 1)
+                                    : 50 + (hero.Level - 1) * 150 / 17;
+                        }
+                        return d;
+                    });
+            AddPassiveAttack(
+                string.Empty,
+                (hero, @base) => Items.HasItem((int)ItemId.Nashors_Tooth, hero),
+                DamageType.Magical,
+                (hero, @base) => 15 + (.15f * hero.TotalMagicalDamage));
+            AddPassiveAttack(
+                string.Empty,
+                (hero, @base) => Items.HasItem((int)ItemId.Wits_End, hero),
+                DamageType.Magical,
+                (hero, @base) => 40);
+            AddPassiveAttack(
+                string.Empty,
+                (hero, @base) =>
+                Items.HasItem((int)ItemId.Recurve_Bow, hero)
+                || (Items.HasItem((int)ItemId.Runaans_Hurricane_Ranged_Only, hero) && hero.IsRanged),
+                DamageType.Physical,
+                (hero, @base) => 15);
+            AddPassiveAttack(
+                string.Empty,
+                (hero, @base) => Items.HasItem(3748, hero),
+                DamageType.Physical,
+                (hero, @base) => hero.HasBuff("") ? 40 + (.1f * hero.MaxHealth) : 5 + (.01f * hero.MaxHealth));
+            /*AddPassiveAttack(
+                string.Empty,
+                (hero, @base) => hero.HasBuff("Sheen"),
+                DamageType.Physical,
+                (hero, @base) => { return 0; });*/
+            /*AddPassiveAttack(
+                string.Empty,
+                (hero, @base) => hero.HasBuff(""),
+                DamageType.Magical,
+                (hero, @base) => 20 + (.15f * hero.FlatPhysicalDamageMod) + (.075 * hero.TotalMagicalDamage));*/
+                //Guinsoo's Rageblade
 
             var excluded = new List<string>();
             foreach (var name in GameObjects.Heroes.Select(h => h.ChampionName).Where(name => !excluded.Contains(name)))
@@ -119,7 +172,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             (hero, @base) => @base.HasBuff("ashepassiveslow"),
                             DamageType.Physical,
                             (hero, @base) =>
-                            hero.TotalAttackDamage * (1 + .1f + (hero.FlatCritChanceMod * (1 + hero.FlatCritDamageMod))));
+                            hero.TotalAttackDamage * (.1f + (hero.FlatCritChanceMod * (1 + hero.FlatCritDamageMod))));
+                        AddPassiveAttack(
+                            "Ashe",
+                            (hero, @base) => Math.Abs(hero.Crit - 1) < float.Epsilon,
+                            DamageType.Physical,
+                            (hero, @base) =>
+                            (1f + (Items.HasItem((int)ItemId.Infinity_Edge, hero) ? .5f : 0f)) * hero.TotalAttackDamage,
+                            true);
                         AddPassiveAttack(
                             "Ashe",
                             (hero, @base) => hero.HasBuff("asheqbuff"),
@@ -155,11 +215,25 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             (hero, @base) => hero.HasBuff("caitlynheadshot"),
                             DamageType.Physical,
                             (hero, @base) =>
-                            @base is Obj_AI_Minion && @base.GetMinionType() != MinionTypes.Ward
-                                ? hero.CalculateDamage(@base, DamageType.Physical, hero.TotalAttackDamage * 1.5f)
-                                : @base is Obj_AI_Hero
-                                      ? hero.CalculatePhysicalDamage(@base, hero.TotalAttackDamage * .5f, .5f)
-                                      : 0d,
+                                {
+                                    var dmg = 0d;
+                                    if (@base is Obj_AI_Minion && @base.GetMinionType() != MinionTypes.Ward)
+                                    {
+                                        dmg = hero.TotalAttackDamage * 1.5f;
+                                    }
+                                    else if (@base is Obj_AI_Hero)
+                                    {
+                                        dmg = hero.TotalAttackDamage
+                                              * (.5f + (hero.FlatCritChanceMod * (1 + hero.FlatCritDamageMod)));
+                                        if (@base.HasBuff("caitlynyordletrapinternal"))
+                                        {
+                                            dmg *=
+                                                new[] { 1.1, 1.2, 1.3, 1.4, 1.5 }[
+                                                    hero.Spellbook.GetSpell(SpellSlot.W).Level - 1];
+                                        }
+                                    }
+                                    return dmg > 0 ? hero.CalculateDamage(@base, DamageType.Physical, dmg) : 0d;
+                                },
                             false,
                             true);
                         break;
@@ -176,8 +250,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         AddPassiveAttack(
                             "Corki",
                             (hero, @base) => true,
-                            DamageType.True,
-                            (hero, @base) => hero.TotalAttackDamage * .1f);
+                            DamageType.Mixed,
+                            (hero, @base) =>
+                                {
+                                    var dmg = hero.TotalAttackDamage * 1.1f;
+                                    return hero.CalculateMixedDamage(@base, dmg / 2, dmg / 2);
+                                },
+                            true,
+                            true);
                         break;
                     case "Darius":
                         AddPassiveAttack(
@@ -254,7 +334,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             (hero, @base) => hero.HasBuff("fiorae2"),
                             DamageType.Physical,
                             (hero, @base) =>
-                            (1f + (Items.HasItem(3031, hero) ? .5f : 0f)
+                            (1f + (Items.HasItem((int)ItemId.Infinity_Edge, hero) ? .5f : 0f)
                              + new[] { -.6f, -.45f, -.3f, -.15f, 0 }[hero.Spellbook.GetSpell(SpellSlot.E).Level - 1])
                             * hero.TotalAttackDamage);
                         break;
@@ -312,6 +392,25 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             DamageType.Magical,
                             (hero, @base) => hero.GetSpellDamage(@base, SpellSlot.W),
                             false,
+                            true);
+                        break;
+                    case "Graves":
+                        AddPassiveAttack(
+                            "Graves",
+                            (hero, @base) => true,
+                            DamageType.Magical,
+                            (hero, @base) =>
+                                {
+                                    var mainDmg =
+                                        new[]
+                                            {
+                                                0.75, 0.76, 0.78, 0.79, 0.81, 0.82, 0.84, 0.86, 0.88, 0.9, 0.92, 0.95,
+                                                0.97, 0.99, 1.02, 1.04, 1.07, 1.1
+                                            }[hero.Level - 1];
+                                    var bonusDmg = mainDmg / 3;
+                                    return (mainDmg * hero.TotalAttackDamage + bonusDmg)
+                                           * (@base is Obj_AI_Turret ? .75f : 1);
+                                },
                             true);
                         break;
                     case "Hecarim":
@@ -469,14 +568,19 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             (hero, @base) => hero.GetBuffCount("kindredmarkofthekindredstackcounter") > 0,
                             DamageType.Physical,
                             (hero, @base) =>
-                            (.125f * @base.Health) * hero.GetBuffCount("kindredmarkofthekindredstackcounter"));
+                            Math.Min(
+                                (.125f * @base.Health) * hero.GetBuffCount("kindredmarkofthekindredstackcounter"),
+                                @base is Obj_AI_Minion
+                                    ? 75 + (10 * hero.GetBuffCount("kindredmarkofthekindredstackcounter"))
+                                    : @base.MaxHealth));
                         break;
                     case "KogMaw":
                         AddPassiveAttack(
                             "KogMaw",
                             (hero, @base) => hero.HasBuff("KogMawBioArcaneBarrage"),
                             DamageType.Magical,
-                            (hero, @base) => hero.GetSpellDamage(@base, SpellSlot.W),
+                            (hero, @base) =>
+                            hero.GetSpellDamage(@base, SpellSlot.W) * (@base is Obj_AI_Minion ? 1 : .55f),
                             false,
                             true);
                         break;
@@ -547,15 +651,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     case "MissFortune":
                         AddPassiveAttack(
                             "MissFortune",
-                            (hero, @base) => true,
-                            DamageType.Magical,
-                            (hero, @base) =>
-                            Math.Min(
-                                @base.GetBuffCount("missfortunepassivestack") + 1,
-                                5 + hero.Spellbook.GetSpell(SpellSlot.R).Level)
-                            * hero.GetSpellDamage(@base, SpellSlot.W),
-                            false,
-                            true);
+                            (hero, @base) => !@base.HasBuff(""),
+                            DamageType.Physical,
+                            (hero, @base) => (.6f + (hero.Level-1)*.4f/17) * hero.TotalAttackDamage / (@base is Obj_AI_Hero ? 1 : 2));
                         break;
                     case "Mordekaiser":
                         AddPassiveAttack(
@@ -660,7 +758,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             "Pantheon",
                             (hero, @base) => @base.HealthPercent < 15 && hero.Spellbook.GetSpell(SpellSlot.E).Level > 0,
                             DamageType.Physical,
-                            (hero, @base) => (1f + (Items.HasItem(3031, hero) ? .5f : 0f)) * hero.TotalAttackDamage);
+                            (hero, @base) =>
+                            (1f + (Items.HasItem((int)ItemId.Infinity_Edge, hero) ? .5f : 0f)) * hero.TotalAttackDamage);
                         break;
                     case "Poppy":
                         AddPassiveAttack(
@@ -676,8 +775,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             "Quinn",
                             (hero, @base) => @base.HasBuff("QuinnW"),
                             DamageType.Physical,
-                            (hero, @base) =>
-                            15 + ((hero.Level <= 14 ? 10 : 15) * hero.Level) + (.5f * hero.FlatPhysicalDamageMod));
+                            (hero, @base) => .5f * hero.TotalAttackDamage);
                         break;
                     case "Rammus":
                         AddPassiveAttack(
@@ -765,7 +863,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             (hero, @base) => hero.HasBuff("Deceive"),
                             DamageType.Physical,
                             (hero, @base) =>
-                            (1f + (Items.HasItem(3031, hero) ? .5f : 0f)
+                            (1f + (Items.HasItem((int)ItemId.Infinity_Edge, hero) ? .5f : 0f)
                              + new[] { -.6f, -.4f, -.2f, 0, .2f }[hero.Spellbook.GetSpell(SpellSlot.Q).Level - 1])
                             * hero.TotalAttackDamage);
                         break;
@@ -900,11 +998,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     case "Tristana":
                         AddPassiveAttack(
                             "Tristana",
-                            (hero, @base) => @base.GetBuffCount("tristanaecharge") == 4,
+                            (hero, @base) => @base.GetBuffCount("tristanaecharge") == 3,
                             DamageType.Physical,
                             (hero, @base) =>
                             hero.GetSpellDamage(@base, SpellSlot.E)
-                            + hero.GetSpellDamage(@base, SpellSlot.E, DamageStage.Buff),
+                            + hero.GetSpellDamage(@base, SpellSlot.E, DamageStage.Buff) / 3 * 4,
                             false,
                             true);
                         break;
@@ -1073,7 +1171,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             "Yasuo",
                             (hero, @base) => Math.Abs(hero.Crit - 1) < float.Epsilon,
                             DamageType.Physical,
-                            (hero, @base) => (Items.HasItem(3031, hero) ? 2.25f : 1.8f) * hero.TotalAttackDamage);
+                            (hero, @base) =>
+                            (Items.HasItem((int)ItemId.Infinity_Edge, hero) ? 2.25f : 1.8f) * hero.TotalAttackDamage);
                         break;
                     case "Yorick":
                         AddPassiveAttack(
