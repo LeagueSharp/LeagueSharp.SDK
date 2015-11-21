@@ -3690,27 +3690,6 @@
 						}
 					]
 				}
-			},
-			{
-				"Stage": "SecondForm",
-				"SpellData": {
-					"DamageType": "Physical",
-					"Damages": [ 200, 400, 600 ],
-					"BonusDamages": [
-						{
-							"DamageType": "Physical",
-							"DamagePercentages": [ 2, 2, 2 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "BonusAttackPoints"
-						},
-						{
-							"DamageType": "Physical",
-							"DamagePercentages": [ 0.12, 0.15, 0.18 ],
-							"ScalingTarget": "Target",
-							"ScalingType": "BonusHealth"
-						}
-					]
-				}
 			}
 		]
 	},
