@@ -102,29 +102,16 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 (hero, @base) => Items.HasItem((int)ItemId.Wits_End, hero),
                 DamageType.Magical,
                 (hero, @base) => 40);
-            AddPassiveAttack(
-                string.Empty,
-                (hero, @base) =>
-                Items.HasItem((int)ItemId.Recurve_Bow, hero)
-                || (Items.HasItem((int)ItemId.Runaans_Hurricane_Ranged_Only, hero) && hero.IsRanged),
-                DamageType.Physical,
-                (hero, @base) => 15);
-            AddPassiveAttack(
-                string.Empty,
-                (hero, @base) => Items.HasItem(3748, hero),
-                DamageType.Physical,
-                (hero, @base) => hero.HasBuff("") ? 40 + (.1f * hero.MaxHealth) : 5 + (.01f * hero.MaxHealth));
             /*AddPassiveAttack(
                 string.Empty,
                 (hero, @base) => hero.HasBuff("Sheen"),
                 DamageType.Physical,
                 (hero, @base) => { return 0; });*/
-            /*AddPassiveAttack(
+            AddPassiveAttack(
                 string.Empty,
-                (hero, @base) => hero.HasBuff(""),
+                (hero, @base) => hero.GetBuffCount("rageblade") == 8,
                 DamageType.Magical,
-                (hero, @base) => 20 + (.15f * hero.FlatPhysicalDamageMod) + (.075 * hero.TotalMagicalDamage));*/
-                //Guinsoo's Rageblade
+                (hero, @base) => 20 + (.15f * hero.FlatPhysicalDamageMod) + (.075 * hero.TotalMagicalDamage));
 
             var excluded = new List<string>();
             foreach (var name in GameObjects.Heroes.Select(h => h.ChampionName).Where(name => !excluded.Contains(name)))
@@ -394,7 +381,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             false,
                             true);
                         break;
-                    case "Graves":
+                    /*case "Graves":
                         AddPassiveAttack(
                             "Graves",
                             (hero, @base) => true,
@@ -412,7 +399,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                            * (@base is Obj_AI_Turret ? .75f : 1);
                                 },
                             true);
-                        break;
+                        break;*/
                     case "Hecarim":
                         AddPassiveAttack(
                             "Hecarim",
@@ -648,13 +635,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             false,
                             true);
                         break;
-                    case "MissFortune":
+                    /*case "MissFortune":
                         AddPassiveAttack(
                             "MissFortune",
                             (hero, @base) => !@base.HasBuff(""),
                             DamageType.Physical,
-                            (hero, @base) => (.6f + (hero.Level-1)*.4f/17) * hero.TotalAttackDamage / (@base is Obj_AI_Hero ? 1 : 2));
-                        break;
+                            (hero, @base) =>
+                            (.6f + (hero.Level - 1) * .4f / 17) * hero.TotalAttackDamage
+                            / (@base is Obj_AI_Hero ? 1 : 2));
+                        break;*/
                     case "Mordekaiser":
                         AddPassiveAttack(
                             "Mordekaiser",
@@ -1177,10 +1166,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     case "Yorick":
                         AddPassiveAttack(
                             "Yorick",
-                            (hero, @base) => hero.GetBuffCount("yorickunholysymbiosis") > 0,
+                            (hero, @base) => hero.HasBuff("YorickUnholySymbiosis"),
                             DamageType.Physical,
                             (hero, @base) =>
-                            (.05f * hero.GetBuffCount("yorickunholysymbiosis")) * hero.TotalAttackDamage);
+                            (.05f
+                             * GameObjects.AttackableUnits.Count(
+                                 g =>
+                                 g.Team == hero.Team
+                                 && (g.Name.Equals("Clyde") || g.Name.Equals("Inky") || g.Name.Equals("Blinky"))))
+                            * hero.TotalAttackDamage);
                         AddPassiveAttack(
                             "Yorick",
                             (hero, @base) => hero.HasBuff("YorickSpectral"),

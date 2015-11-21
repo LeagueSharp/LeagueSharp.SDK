@@ -46,7 +46,7 @@ namespace LeagueSharp.SDK.Core.Utils
                 "sivirw", "takedown", "talonnoxiandiplomacy",
                 "trundletrollsmash", "vaynetumble", "vie", "volibearq",
                 "xenzhaocombotarget", "yorickspectral", "reksaiq",
-                "itemtitanichydracleave"
+                "itemtitanichydracleave", "masochism"
             };
 
         /// <summary>

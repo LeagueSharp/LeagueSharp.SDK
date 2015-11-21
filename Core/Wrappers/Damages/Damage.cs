@@ -139,8 +139,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     // Spoils of War
                     if (hero.IsMelee && targetMinion != null && targetMinion.IsEnemy
                         && targetMinion.Team != GameObjectTeam.Neutral && hero.GetBuffCount("TalentReaper") > 0
-                        && GameObjects.AllyHeroes.Any(
-                            h => h.NetworkId != hero.NetworkId && h.Distance(targetMinion) < 1100))
+                        && GameObjects.Heroes.Any(
+                            h => h.Team == hero.Team && h.NetworkId != hero.NetworkId && h.Distance(targetMinion) < 1100))
                     {
                         return hero.TotalAttackDamage
                                + (Items.HasItem((int)ItemId.Relic_Shield, hero)
@@ -148,19 +148,24 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                       : (Items.HasItem((int)ItemId.Targons_Brace, hero) ? 240 : 400));
                     }
 
-                    // BotRK
+                    // Blade of the Ruined King
+                    // + Deal 6% of the target's current health in bonus on-hit physical damage (max 60 vs. minions and monsters)
                     if (Items.HasItem((int)ItemId.Blade_of_the_Ruined_King, hero))
                     {
                         var d = 0.06 * target.Health;
                         result += targetMinion != null ? Math.Min(d, 60) : d;
                     }
 
+                    // Dead Man's Plate
+                    // + Dealing +1 on-hit physical damage for every 2 Momentum discharged
                     if (hero.IsMelee && hero.GetBuffCount("DreadnoughtMomentumBuff") > 0)
                     {
                         result += hero.GetBuffCount("DreadnoughtMomentumBuff") / 2
                                   * (hero.GetBuffCount("DreadnoughtMomentumBuff") == 100 ? 2 : 1);
                     }
 
+                    // Spellthief's Edge
+                    // + Spells and basic attacks against champions or buildings deal 10 additional damage
                     if (hero.GetBuffCount("kagesluckypickdisplay") > 0
                         && (targetHero != null || target is Obj_AI_Turret))
                     {
@@ -168,10 +173,23 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     }
 
                     // Serrated Dirk
-                    /*if (hero.HasBuff(""))
+                    if (hero.HasBuff("Serrated"))
                     {
                         result += 15;
-                    }*/
+                    }
+
+                    if (Items.HasItem((int)ItemId.Recurve_Bow, hero)
+                        || (Items.HasItem((int)ItemId.Runaans_Hurricane_Ranged_Only, hero) && hero.IsRanged))
+                    {
+                        result += 15;
+                    }
+
+                    if (Items.HasItem(3748, hero))
+                    {
+                        result += hero.HasBuff("itemtitanichydracleavebuff")
+                                      ? 40 + (.1f * hero.MaxHealth)
+                                      : 5 + (.01f * hero.MaxHealth);
+                    }
 
                     if (targetHero != null)
                     {
@@ -191,6 +209,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             damageModifier *= 0.88d;
                         }
 
+                        // Giant Slayer - Lord Dominik's Regards
+                        // + Grants up to 10% physical damage against enemy champions with greater maximum Health
                         if ((Items.HasItem(3034, hero) || Items.HasItem(3036, hero))
                             && hero.MaxHealth < targetHero.MaxHealth)
                         {
@@ -569,8 +589,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 if (targetHero.GetResolve(DamageMastery.Resolve.BondofStone).IsValid())
                 {
                     amount *=
-                        GameObjects.EnemyHeroes.Any(
-                            x => x.NetworkId != targetHero.NetworkId && x.Distance(targetHero) <= 500)
+                        GameObjects.Heroes.Any(
+                            x =>
+                            x.Team == targetHero.Team && x.NetworkId != targetHero.NetworkId
+                            && x.Distance(targetHero) <= 500)
                             ? 0.92d
                             : 0.96d;
                 }
@@ -688,7 +710,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     amount -= amount
                               * GameObjects.AttackableUnits.Count(
                                   g =>
-                                  g.IsEnemy
+                                  g.Team == targetHero.Team
                                   && (g.Name.Equals("Clyde") || g.Name.Equals("Inky") || g.Name.Equals("Blinky")))
                               * 0.05d;
                 }

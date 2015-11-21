@@ -2126,7 +2126,7 @@
 				"Stage": "Default",
 				"SpellData": {
 					"DamageType": "Physical",
-					"Damages": [ 60, 80, 100, 120, 140 ],
+					"Damages": [ 55, 70, 85, 100, 115 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -2141,7 +2141,7 @@
 				"Stage": "Detonation",
 				"SpellData": {
 					"DamageType": "Physical",
-					"Damages": [ 90, 155, 220, 285, 350 ],
+					"Damages": [ 85, 145, 205, 265, 325 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
