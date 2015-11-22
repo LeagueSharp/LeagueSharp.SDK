@@ -4,11 +4,11 @@
 
     /// <summary>
     /// </summary>
-    internal static class DamageMastery
+    public static class DamageMastery
     {
         #region Enums
 
-        internal enum Cunning
+        public enum Cunning
         {
             Wanderer = 65,
 
@@ -37,7 +37,7 @@
             WindspeakerBlessing = 147
         }
 
-        internal enum Ferocity
+        public enum Ferocity
         {
             Fury = 65,
 
@@ -66,7 +66,7 @@
             DeathfireTouch = 137
         }
 
-        internal enum Resolve
+        public enum Resolve
         {
             Recovery = 65,
 
@@ -97,22 +97,50 @@
 
         #endregion
 
-        #region Methods
+        #region Public Methods and Operators
 
-        internal static Mastery GetCunning(this Obj_AI_Hero hero, Cunning cunning)
+        /// <summary>
+        /// </summary>
+        /// <param name="hero"></param>
+        /// <param name="cunning"></param>
+        /// <returns></returns>
+        public static Mastery GetCunning(this Obj_AI_Hero hero, Cunning cunning)
         {
             return hero.GetMastery(MasteryPage.Defense, (int)cunning);
         }
 
-        internal static Mastery GetFerocity(this Obj_AI_Hero hero, Ferocity ferocity)
+        /// <summary>
+        /// </summary>
+        /// <param name="hero"></param>
+        /// <param name="ferocity"></param>
+        /// <returns></returns>
+        public static Mastery GetFerocity(this Obj_AI_Hero hero, Ferocity ferocity)
         {
             return hero.GetMastery(MasteryPage.Offense, (int)ferocity);
         }
 
-        internal static Mastery GetResolve(this Obj_AI_Hero hero, Resolve resolve)
+        /// <summary>
+        /// </summary>
+        /// <param name="hero"></param>
+        /// <param name="resolve"></param>
+        /// <returns></returns>
+        public static Mastery GetResolve(this Obj_AI_Hero hero, Resolve resolve)
         {
             return hero.GetMastery(MasteryPage.Utility, (int)resolve);
         }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="mastery"></param>
+        /// <returns></returns>
+        public static bool IsValid(this Mastery mastery)
+        {
+            return mastery != null && mastery.Points > 0;
+        }
+
+        #endregion
+
+        #region Methods
 
         internal static bool IsMoveImpaired(this Obj_AI_Hero hero)
         {
@@ -120,11 +148,6 @@
                    || hero.HasBuffOfType(BuffType.Slow) || hero.HasBuffOfType(BuffType.Stun)
                    || hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Fear)
                    || hero.HasBuffOfType(BuffType.Taunt) || hero.HasBuffOfType(BuffType.Suppression);
-        }
-
-        internal static bool IsValid(this Mastery mastery)
-        {
-            return mastery != null && mastery.Points > 0;
         }
 
         private static Mastery GetMastery(this Obj_AI_Hero hero, MasteryPage page, int id)
