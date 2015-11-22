@@ -490,11 +490,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                     var spellW =
                                         ((Obj_AI_Hero)@base.GetBuff("kalistacoopstrikemarkbuff").Caster).Spellbook
                                             .GetSpell(SpellSlot.W).Level - 1;
-                                    return Math.Min(
-                                        new[] { 75, 125, 150, 175, 200 }[spellW],
-                                        hero.CalculateMagicDamage(
-                                            @base,
-                                            new[] { 0.1, 0.125, 0.15, 0.175, 0.2 }[spellW] * @base.MaxHealth));
+                                    return
+                                        Math.Min(
+                                            hero.CalculateMagicDamage(
+                                                @base,
+                                                new[] { 0.1, 0.125, 0.15, 0.175, 0.2 }[spellW] * @base.MaxHealth),
+                                            @base is Obj_AI_Minion
+                                                ? new[] { 75, 125, 150, 175, 200 }[spellW]
+                                                : @base.MaxHealth);
                                 },
                             false,
                             true);
@@ -736,10 +739,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                                              : hero.Level < 13 ? 34 : hero.Level < 16 ? 42 : 50)
                                             + (.15f * hero.TotalMagicalDamage);
                                     return d
-                                           + (Orbwalker.LastTarget.Compare(@base)
+                                        /*+ (Orbwalker.LastTarget.Compare(@base)
                                                   ? d * .2f
                                                     * Math.Min(hero.GetBuffCount("orianapowerdaggerdisplay") + 1, 2)
-                                                  : 0);
+                                                  : 0)*/;
                                 });
                         break;
                     case "Pantheon":

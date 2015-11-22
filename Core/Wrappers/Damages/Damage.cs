@@ -592,7 +592,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         GameObjects.Heroes.Any(
                             x =>
                             x.Team == targetHero.Team && x.NetworkId != targetHero.NetworkId
-                            && x.Distance(targetHero) <= 500)
+                            && x.Distance(targetHero) <= 1000)
                             ? 0.92d
                             : 0.96d;
                 }
