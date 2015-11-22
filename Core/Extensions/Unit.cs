@@ -242,8 +242,8 @@ namespace LeagueSharp.SDK.Core.Extensions
                 case "SRUAP_Turret_Chaos2":
                     return TurretType.TierTwo;
 
-                case "SRUAP_Turret_Order3_Test":
-                case "SRUAP_Turret_Chaos3_Test":
+                case "SRUAP_Turret_Order3":
+                case "SRUAP_Turret_Chaos3":
                     return TurretType.TierThree;
 
                 case "SRUAP_Turret_Order4":

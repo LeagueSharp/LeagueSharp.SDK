@@ -20,9 +20,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Utils;
+    using Enumerations;
+    using Extensions;
+    using Utils;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -223,7 +223,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 if (targetHero != null)
                 {
                     // Ninja tabi
-                    if (Items.HasItem((int)ItemId.Ninja_Tabi, targetHero))
+                    if (new[] { 3047, 1316, 1318, 1315, 1317, 1319 }.Any(i => Items.HasItem(i, targetHero)))
                     {
                         damageModifier *= 0.9d;
                     }
@@ -499,11 +499,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 {
                     case TurretType.TierOne:
                     case TurretType.TierTwo:
-                        armorPenetrationPercent = 0.7d;
+                        armorPenetrationPercent = 0.3d;
                         break;
                     case TurretType.TierThree:
                     case TurretType.TierFour:
-                        armorPenetrationPercent = 0.3d;
+                        armorPenetrationPercent = 0.75d;
                         break;
                 }
                 if (target is Obj_AI_Minion)

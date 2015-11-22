@@ -21,14 +21,14 @@ namespace LeagueSharp.SDK.Core.Wrappers
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Events;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.UI.IMenu;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Core.Wrappers.Damages;
+    using Enumerations;
+    using Events;
+    using Extensions;
+    using Extensions.SharpDX;
+    using UI.IMenu;
+    using UI.IMenu.Values;
+    using Utils;
+    using Damages;
 
     using SharpDX;
 

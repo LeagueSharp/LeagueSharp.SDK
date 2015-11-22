@@ -19,8 +19,8 @@ namespace LeagueSharp.SDK.Core.Utils
 {
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using Extensions;
+    using Extensions.SharpDX;
 
     using SharpDX;
 

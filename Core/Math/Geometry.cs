@@ -19,7 +19,7 @@ namespace LeagueSharp.SDK.Core.Math
 {
     using System;
 
-    using LeagueSharp.SDK.Core.Enumerations;
+    using Enumerations;
 
     using SharpDX;
     using SharpDX.Direct3D9;

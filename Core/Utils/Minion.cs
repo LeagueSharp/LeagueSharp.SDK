@@ -20,11 +20,13 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math;
-    using LeagueSharp.SDK.Core.Math.Prediction;
+    using Enumerations;
+
+    using Extensions;
+    using Extensions.SharpDX;
+
+    using Math;
+    using Math.Prediction;
 
     using SharpDX;
 
@@ -276,7 +278,7 @@ namespace LeagueSharp.SDK.Core.Utils
                 return MinionTypes.Super | MinionTypes.Melee;
             }
 
-            if (baseSkinName.ToLower().Contains("ward"))
+            if (baseSkinName.ToLower().Contains("ward") || baseSkinName.ToLower().Contains("trinket"))
             {
                 return MinionTypes.Ward;
             }
