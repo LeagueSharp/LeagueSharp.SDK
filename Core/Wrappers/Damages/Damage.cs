@@ -714,6 +714,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                   && (g.Name.Equals("Clyde") || g.Name.Equals("Inky") || g.Name.Equals("Blinky")))
                               * 0.05d;
                 }
+
+                // Hyper-Kinetic Position Reverser
+                // + Urgot grants himself damage reduction for 5 seconds
+                if (targetHero.HasBuff("urgotswapdef"))
+                {
+                    amount *= 1 - new[] { 0.3d, 0.4d, 0.5d }[targetHero.Spellbook.GetSpell(SpellSlot.R).Level - 1];
+                }
             }
 
             return amount;
