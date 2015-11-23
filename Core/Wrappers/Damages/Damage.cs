@@ -19,6 +19,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
 {
     using System;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     using Enumerations;
     using Extensions;
@@ -216,6 +217,22 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         {
                             result *= Math.Min(targetHero.MaxHealth - hero.MaxHealth, 500) / 50
                                       * (Items.HasItem(3034, hero) ? 0.01 : 0.015) + 1;
+                        }
+                    }
+
+                    // SAVAGERY:
+                    // + BONUS DAMAGE TO MINIONS AND MONSTERS 1/2/3/4/5 on single target spells and basic attacks
+                    if (targetMinion != null)
+                    {
+                        var savagery = hero.GetCunning(DamageMastery.Cunning.Savagery);
+                        if (savagery.IsValid())
+                        {
+                            result += savagery.Points;
+                        }
+                        if (hero.IsRanged && targetMinion.GetJungleType() == JungleType.Legendary
+                            && Regex.IsMatch(targetMinion.Name, "SRU_RiftHerald"))
+                        {
+                            damageModifier *= 0.65d;
                         }
                     }
                 }
@@ -744,17 +761,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             var value = 0d;
             var hero = source as Obj_AI_Hero;
 
-            // SAVAGERY:
-            // + BONUS DAMAGE TO MINIONS AND MONSTERS 1/2/3/4/5 on single target spells and basic attacks
-            if (hero != null && target is Obj_AI_Minion)
-            {
-                var savagery = hero.GetCunning(DamageMastery.Cunning.Savagery);
-                if (savagery.IsValid())
-                {
-                    value += new[] { 1, 2, 3, 4, 5 }[savagery.Points - 1];
-                }
-            }
-
             return value;
         }
 
@@ -811,7 +817,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     // + KICK 'EM WHEN THEY'RE DOWN You deal 2.5% increased damage to targets with impaired movement (slows, stuns, taunts, etc)
                     if (hero.GetFerocity(DamageMastery.Ferocity.Oppressor).IsValid() && targetHero.IsMoveImpaired())
                     {
-                        amount *= 1.025;
+                        amount *= 1.025d;
                     }
 
                     // Merciless:
@@ -819,7 +825,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     var merciless = hero.GetCunning(DamageMastery.Cunning.Merciless);
                     if (merciless.IsValid() && targetHero.HealthPercent < 40)
                     {
-                        amount *= 1 + new[] { 1, 2, 3, 4, 5 }[merciless.Points - 1] / 100;
+                        amount *= 1 + merciless.Points / 100;
                     }
                 }
             }

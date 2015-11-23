@@ -42,7 +42,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <summary>
         ///     The legendary name regex list.
         /// </summary>
-        private static readonly string[] LegendaryNameRegex = { "SRU_Dragon", "SRU_Baron" };
+        private static readonly string[] LegendaryNameRegex = { "SRU_Dragon", "SRU_Baron", "SRU_RiftHerald" };
 
         /// <summary>
         ///     The small name regex list.

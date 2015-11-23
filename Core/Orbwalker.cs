@@ -24,11 +24,16 @@ namespace LeagueSharp.SDK.Core
     using System.Windows.Forms;
 
     using Enumerations;
+
     using Extensions;
     using Extensions.SharpDX;
+
     using Math.Prediction;
+
     using UI.IMenu.Values;
+
     using Utils;
+
     using Wrappers;
     using Wrappers.Damages;
 
@@ -108,10 +113,10 @@ namespace LeagueSharp.SDK.Core
         {
             get
             {
-                if (GameObjects.Player.ChampionName == "Graves" && GameObjects.Player.HasBuff("GravesBasicAttackAmmo1")
-                    && Variables.TickCount + (Game.Ping / 2) + 25 >= LastAutoAttackTick + 1500 && Attack)
+                if (GameObjects.Player.ChampionName == "Graves" && Attack)
                 {
-                    return true;
+                    return GameObjects.Player.HasBuff("GravesBasicAttackAmmo1")
+                           && Variables.TickCount + (Game.Ping / 2) + 25 >= LastAutoAttackTick + 1500;
                 }
                 return Variables.TickCount + (Game.Ping / 2) + 25
                        >= LastAutoAttackTick + (GameObjects.Player.AttackDelay * 1000) && Attack;
@@ -237,9 +242,8 @@ namespace LeagueSharp.SDK.Core
             {
                 foreach (var minion in
                     GameObjects.EnemyMinions.Where(
-                        m =>
-                        m.IsValidTarget(m.GetRealAutoAttackRange())
-                        && m.Health < 2 * GameObjects.Player.TotalAttackDamage).OrderByDescending(m => m.MaxHealth))
+                        m => m.InAutoAttackRange() && m.Health < 2 * GameObjects.Player.TotalAttackDamage)
+                        .OrderByDescending(m => m.MaxHealth))
                 {
                     var time =
                         (int)
@@ -264,7 +268,7 @@ namespace LeagueSharp.SDK.Core
                     }
                 }
                 foreach (var minion in
-                    GameObjects.AttackableUnits.Where(m => m.IsValidTarget(m.GetRealAutoAttackRange()))
+                    GameObjects.AttackableUnits.Where(m => m.InAutoAttackRange())
                         .Select(barrel => barrel as Obj_AI_Minion)
                         .Where(
                             m =>
@@ -277,19 +281,17 @@ namespace LeagueSharp.SDK.Core
 
             if (mode == OrbwalkerMode.LaneClear)
             {
-                foreach (var turret in GameObjects.EnemyTurrets.Where(t => t.IsValidTarget(t.GetRealAutoAttackRange())))
+                foreach (var turret in GameObjects.EnemyTurrets.Where(t => t.InAutoAttackRange()))
                 {
                     return turret;
                 }
 
-                foreach (
-                    var inhibitor in GameObjects.EnemyInhibitors.Where(i => i.IsValidTarget(i.GetRealAutoAttackRange()))
-                    )
+                foreach (var inhibitor in GameObjects.EnemyInhibitors.Where(i => i.InAutoAttackRange()))
                 {
                     return inhibitor;
                 }
 
-                if (GameObjects.EnemyNexus.IsValidTarget(GameObjects.EnemyNexus.GetRealAutoAttackRange()))
+                if (GameObjects.EnemyNexus.InAutoAttackRange())
                 {
                     return GameObjects.EnemyNexus;
                 }
@@ -309,7 +311,7 @@ namespace LeagueSharp.SDK.Core
                 var shouldWait =
                     GameObjects.EnemyMinions.Any(
                         m =>
-                        m.IsValidTarget(m.GetRealAutoAttackRange())
+                        m.InAutoAttackRange()
                         && Health.GetPrediction(m, (int)((GameObjects.Player.AttackDelay * 1000) * 2f), 100)
                         <= GameObjects.Player.GetAutoAttackDamage(m, true));
                 if (!shouldWait)
@@ -317,22 +319,18 @@ namespace LeagueSharp.SDK.Core
                     // H-28G, Sumon Voidling, Jack In The Box, (Clyde, Inky, Blinky), Plant
                     foreach (var specialMinion in
                         GameObjects.EnemyMinions.Where(
-                            m =>
-                            m.IsValidTarget(m.GetRealAutoAttackRange())
-                            && SpecialMinions.Any(s => s.Equals(m.CharData.BaseSkinName))))
+                            m => m.InAutoAttackRange() && SpecialMinions.Any(s => s.Equals(m.CharData.BaseSkinName))))
                     {
                         return specialMinion;
                     }
 
                     // Jungle mob.
-                    var mob =
-                        (GameObjects.JungleLegendary.FirstOrDefault(j => j.IsValidTarget(j.GetRealAutoAttackRange()))
-                         ?? GameObjects.JungleSmall.FirstOrDefault(
-                             j =>
-                             j.IsValidTarget(j.GetRealAutoAttackRange()) && j.Name.Contains("Mini")
-                             && j.Name.Contains("SRU_Razorbeak"))
-                         ?? GameObjects.JungleLarge.FirstOrDefault(j => j.IsValidTarget(j.GetRealAutoAttackRange())))
-                        ?? GameObjects.JungleSmall.FirstOrDefault(j => j.IsValidTarget(j.GetRealAutoAttackRange()));
+                    var mob = (GameObjects.JungleLegendary.FirstOrDefault(j => j.InAutoAttackRange())
+                               ?? GameObjects.JungleSmall.FirstOrDefault(
+                                   j =>
+                                   j.InAutoAttackRange() && j.Name.Contains("Mini") && j.Name.Contains("SRU_Razorbeak"))
+                               ?? GameObjects.JungleLarge.FirstOrDefault(j => j.InAutoAttackRange()))
+                              ?? GameObjects.JungleSmall.FirstOrDefault(j => j.InAutoAttackRange());
                     if (mob != null)
                     {
                         return mob;
@@ -341,14 +339,13 @@ namespace LeagueSharp.SDK.Core
                     // Sentinel
                     foreach (var sentinel in
                         GameObjects.EnemyMinions.Where(
-                            m =>
-                            m.IsValidTarget(m.GetRealAutoAttackRange()) && m.CharData.BaseSkinName == "kalistaspawn"))
+                            m => m.InAutoAttackRange() && m.CharData.BaseSkinName == "kalistaspawn"))
                     {
                         return sentinel;
                     }
 
                     // Last Minion
-                    if (LastMinion.IsValidTarget(LastMinion.GetRealAutoAttackRange()))
+                    if (LastMinion.InAutoAttackRange())
                     {
                         var predHealth = Health.GetPrediction(
                             LastMinion,
@@ -362,8 +359,7 @@ namespace LeagueSharp.SDK.Core
                     }
 
                     // Minion
-                    var minion = (from m in
-                                      GameObjects.EnemyMinions.Where(m => m.IsValidTarget(m.GetRealAutoAttackRange()))
+                    var minion = (from m in GameObjects.EnemyMinions.Where(m => m.InAutoAttackRange())
                                   let predictedHealth =
                                       Health.GetPrediction(m, (int)((GameObjects.Player.AttackDelay * 1000) * 2f), 100)
                                   where
@@ -378,8 +374,7 @@ namespace LeagueSharp.SDK.Core
                     // Elise Spiderlings
                     return
                         GameObjects.EnemyMinions.FirstOrDefault(
-                            m =>
-                            m.IsValidTarget(m.GetRealAutoAttackRange()) && m.CharData.BaseSkinName == "elisespiderling");
+                            m => m.InAutoAttackRange() && m.CharData.BaseSkinName == "elisespiderling");
                 }
             }
 
@@ -535,7 +530,6 @@ namespace LeagueSharp.SDK.Core
                     1200));
             advanced.Add(new MenuSeparator("separatorMisc", "Miscellaneous"));
             advanced.Add(new MenuSlider("miscExtraWindup", "Extra Windup", 80, 0, 200));
-            advanced.Add(new MenuSlider("miscFarmDelay", "Farm Delay", 0, 0, 200));
             advanced.Add(new MenuBool("miscPriorizeFarm", "Priorize farm over harass", true));
             advanced.Add(new MenuBool("miscMissile", "Use Missile Checks", true));
             advanced.Add(new MenuSeparator("separatorOther", "Other"));
