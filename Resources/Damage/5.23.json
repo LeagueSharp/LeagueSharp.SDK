@@ -3873,7 +3873,7 @@
 				"Stage": "Default",
 				"SpellData": {
 					"DamageType": "Physical",
-					"Damages": [ 40, 50, 60 ],
+					"Damages": [ 20, 35, 50 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -3883,9 +3883,9 @@
 						},
 						{
 							"DamageType": "Physical",
-							"DamagePercentages": [ 0.25, 0.25, 0.25 ],
+							"DamagePercentages": [ 0.2, 0.2, 0.2 ],
 							"ScalingTarget": "Source",
-							"ScalingType": "BonusAttackPoints"
+							"ScalingType": "AttackPoints"
 						}
 					]
 				}
@@ -4344,17 +4344,17 @@
 				"Stage": "Default",
 				"SpellData": {
 					"DamageType": "Magical",
-					"Damages": [ 4, 8, 12, 16, 20 ],
+					"Damages": [ 10, 20, 30, 40, 50 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
-							"DamagePercentages": [ 0.25, 0.263, 0.275, 0.288, 0.3 ],
+							"DamagePercentages": [ 0.5, 0.6, 0.7, 0.8, 0.9 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AttackPoints"
 						},
 						{
 							"DamageType": "Magical",
-							"DamagePercentages": [ 0.2, 0.2, 0.2, 0.2, 0.2 ],
+							"DamagePercentages": [ 0.6, 0.6, 0.6, 0.6, 0.6 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AbilityPoints"
 						}
@@ -4372,6 +4372,21 @@
 						{
 							"DamageType": "Magical",
 							"DamagePercentages": [ 0.225, 0.225, 0.225, 0.225, 0.225 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "AbilityPoints"
+						}
+					]
+				}
+			},
+			{
+				"Stage": "SecondCast",
+				"SpellData": {
+					"DamageType": "Magical",
+					"Damages": [ 50, 85, 120, 155, 190 ],
+					"BonusDamages": [
+						{
+							"DamageType": "Magical",
+							"DamagePercentages": [ 0.3, 0.3, 0.3, 0.3, 0.3 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AbilityPoints"
 						}
@@ -5134,18 +5149,17 @@
 				"Stage": "Default",
 				"SpellData": {
 					"DamageType": "Physical",
-					"Damages": [ 20, 45, 70, 95, 120 ],
-					"ScalePerTargetMissHealth": 1,
+					"Damages": [ 25, 55, 85, 115, 145 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
-							"DamagePercentages": [ 0.7, 0.75, 0.8, 0.85, 0.9 ],
+							"DamagePercentages": [ 0.8, 0.95, 1.1, 1.25, 1.4 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AttackPoints"
 						},
 						{
 							"DamageType": "Physical",
-							"DamagePercentages": [ 0.35, 0.35, 0.35, 0.35, 0.35 ],
+							"DamagePercentages": [ 0.5, 0.5, 0.5, 0.5, 0.5 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AbilityPoints"
 						}
@@ -6481,7 +6495,7 @@
 				}
 			},
 			{
-				"Stage": "Detonation",
+				"Stage": "SecondCast",
 				"SpellData": {
 					"DamageType": "Magical",
 					"Damages": [ 100, 150, 200, 250, 300 ],

@@ -128,6 +128,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             var damageModifier = 1d;
             var reduction = 0d;
             var passive = 0d;
+            var bonus = 0d;
 
             if (includePassive)
             {
@@ -154,15 +155,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     if (Items.HasItem((int)ItemId.Blade_of_the_Ruined_King, hero))
                     {
                         var d = 0.06 * target.Health;
-                        result += targetMinion != null ? Math.Min(d, 60) : d;
+                        bonus += targetMinion != null ? Math.Min(d, 60) : d;
                     }
 
                     // Dead Man's Plate
                     // + Dealing +1 on-hit physical damage for every 2 Momentum discharged
                     if (hero.IsMelee && hero.GetBuffCount("DreadnoughtMomentumBuff") > 0)
                     {
-                        result += hero.GetBuffCount("DreadnoughtMomentumBuff") / 2
-                                  * (hero.GetBuffCount("DreadnoughtMomentumBuff") == 100 ? 2 : 1);
+                        bonus += hero.GetBuffCount("DreadnoughtMomentumBuff") / 2
+                                 * (hero.GetBuffCount("DreadnoughtMomentumBuff") == 100 ? 2 : 1);
                     }
 
                     // Spellthief's Edge
@@ -170,26 +171,26 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     if (hero.GetBuffCount("kagesluckypickdisplay") > 0
                         && (targetHero != null || target is Obj_AI_Turret))
                     {
-                        result += Items.HasItem((int)ItemId.Spellthiefs_Edge, hero) ? 10 : 15;
+                        bonus += Items.HasItem((int)ItemId.Spellthiefs_Edge, hero) ? 10 : 15;
                     }
 
                     // Serrated Dirk
                     if (hero.HasBuff("Serrated"))
                     {
-                        result += 15;
+                        bonus += 15;
                     }
 
                     if (Items.HasItem((int)ItemId.Recurve_Bow, hero)
                         || (Items.HasItem((int)ItemId.Runaans_Hurricane_Ranged_Only, hero) && hero.IsRanged))
                     {
-                        result += 15;
+                        bonus += 15;
                     }
 
                     if (Items.HasItem(3748, hero))
                     {
-                        result += hero.HasBuff("itemtitanichydracleavebuff")
-                                      ? 40 + (.1f * hero.MaxHealth)
-                                      : 5 + (.01f * hero.MaxHealth);
+                        bonus += hero.HasBuff("itemtitanichydracleavebuff")
+                                     ? 40 + (.1f * hero.MaxHealth)
+                                     : 5 + (.01f * hero.MaxHealth);
                     }
 
                     if (targetHero != null)
@@ -199,7 +200,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         var fervorofBattle = hero.GetFerocity(DamageMastery.Ferocity.FervorofBattle);
                         if (fervorofBattle.IsValid())
                         {
-                            result += (1 + (hero.Level - 1) * 7 / 17) * hero.GetBuffCount("MasteryOnHitDamageStacker");
+                            bonus += (0.9f + (0.42f * hero.Level)) * hero.GetBuffCount("MasteryOnHitDamageStacker");
                         }
 
                         // Phantom Dancer:
@@ -215,8 +216,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         if ((Items.HasItem(3034, hero) || Items.HasItem(3036, hero))
                             && hero.MaxHealth < targetHero.MaxHealth)
                         {
-                            result *= Math.Min(targetHero.MaxHealth - hero.MaxHealth, 500) / 50
-                                      * (Items.HasItem(3034, hero) ? 0.01 : 0.015) + 1;
+                            bonus *= Math.Min(targetHero.MaxHealth - hero.MaxHealth, 500) / 50
+                                     * (Items.HasItem(3034, hero) ? 0.01 : 0.015) + 1;
                         }
                     }
 
@@ -227,7 +228,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         var savagery = hero.GetCunning(DamageMastery.Cunning.Savagery);
                         if (savagery.IsValid())
                         {
-                            result += savagery.Points;
+                            bonus += savagery.Points;
                         }
                         if (hero.IsRanged && targetMinion.GetJungleType() == JungleType.Legendary
                             && Regex.IsMatch(targetMinion.Name, "SRU_RiftHerald"))
@@ -240,7 +241,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 if (targetHero != null)
                 {
                     // Ninja tabi
-                    if (new[] { 3047, 1316, 1318, 1315, 1317, 1319 }.Any(i => Items.HasItem(i, targetHero)))
+                    if (new[] { 3047, 1316, 1318, 1315, 1317 }.Any(i => Items.HasItem(i, targetHero)))
                     {
                         damageModifier *= 0.9d;
                     }
@@ -266,7 +267,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     var passiveInfo = hero.GetPassiveDamageInfo(target);
                     if (passiveInfo.Override)
                     {
-                        return source.CalculatePhysicalDamage(target, -reduction * damageModifier) + passiveInfo.Value;
+                        return source.CalculatePhysicalDamage(target, (bonus - reduction) * damageModifier)
+                               + passiveInfo.Value;
                     }
 
                     passive += passiveInfo.Value;
@@ -274,7 +276,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             }
 
             // This formula is right, work out the math yourself if you don't believe me
-            return source.CalculatePhysicalDamage(target, (result - reduction) * damageModifier) + passive;
+            return source.CalculatePhysicalDamage(target, (result + bonus - reduction) * damageModifier) + passive;
         }
 
         /// <summary>
@@ -611,7 +613,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             x.Team == targetHero.Team && x.NetworkId != targetHero.NetworkId
                             && x.Distance(targetHero) <= 1000)
                             ? 0.92d
-                            : 0.96d;
+                            : 0.98d;
                 }
 
                 // Items:
