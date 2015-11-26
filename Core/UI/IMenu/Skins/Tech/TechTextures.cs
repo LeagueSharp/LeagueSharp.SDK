@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ColoredTextures.cs" company="LeagueSharp">
+// <copyright file="TechTextures.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
 {
     using System.Drawing;
 
@@ -34,31 +34,31 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
     using SharpDX;
     using SharpDX.Direct3D9;
 
-    internal enum ColoredTexture
+    internal enum TechTexture
     {
         Dragging,
     }
 
-    internal class ColoredTextures
+    internal class TechTextures
     {
 
-        private readonly Dictionary<ColoredTexture, ColoredTextureWrapper> textures = new Dictionary<ColoredTexture, ColoredTextureWrapper>();
+        private readonly Dictionary<TechTexture, TechTextureWrapper> textures = new Dictionary<TechTexture, TechTextureWrapper>();
 
-        public static readonly ColoredTextures Instance = new ColoredTextures();
+        public static readonly TechTextures Instance = new TechTextures();
 
-        private ColoredTextures()
+        private TechTextures()
         {
-            this.textures[ColoredTexture.Dragging] = BuildTexture(Resources.cursor_drag, 16, 16);
+            this.textures[TechTexture.Dragging] = BuildTexture(Resources.cursor_drag, 16, 16);
         }
 
-        ~ColoredTextures()
+        ~TechTextures()
         {
             foreach (var entry in this.textures.Where(entry => !entry.Value.Texture.IsDisposed)) {
                 entry.Value.Texture.Dispose();
             }
         }
 
-        public ColoredTextureWrapper this[ColoredTexture textureType]
+        public TechTextureWrapper this[TechTexture textureType]
         {
             get
             {
@@ -66,7 +66,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             }
         }
 
-        private ColoredTextureWrapper BuildTexture(Image bmp, int height, int width)
+        private TechTextureWrapper BuildTexture(Image bmp, int height, int width)
         {
             var resized = new Bitmap(bmp, width, height);
             var texture =  Texture.FromMemory(
@@ -83,10 +83,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                 0);
             resized.Dispose();
             bmp.Dispose();
-            return new ColoredTextureWrapper(texture, width, height);
+            return new TechTextureWrapper(texture, width, height);
         }
 
-        public ColoredTextureWrapper AddTexture(Image bmp, int width, int height, ColoredTexture textureType)
+        public TechTextureWrapper AddTexture(Image bmp, int width, int height, TechTexture textureType)
         {
             this.textures[textureType] = BuildTexture(bmp, height, width);
             return this.textures[textureType];
@@ -94,13 +94,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
         
     }
 
-    internal class ColoredTextureWrapper
+    internal class TechTextureWrapper
     {
         public Texture Texture { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        public ColoredTextureWrapper(Texture texture, int width, int height)
+        public TechTextureWrapper(Texture texture, int width, int height)
         {
             this.Texture = texture;
             this.Width = width;
