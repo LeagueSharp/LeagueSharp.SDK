@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LightList.cs" company="LeagueSharp">
+// <copyright file="LightList2.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   A default implementation of a <see cref="ADrawable{MenuList}" />
+//   A custom implementation of a <see cref="ADrawable{MenuList}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2

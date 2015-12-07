@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LightColorPicker.cs" company="LeagueSharp">
+// <copyright file="LightColorPicker2.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   A default implementation of <see cref="ADrawable{MenuButton}" />
+//   A custom implementation of <see cref="ADrawable{MenuColorPicker}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2

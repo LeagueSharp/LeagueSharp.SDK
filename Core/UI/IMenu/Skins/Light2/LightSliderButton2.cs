@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BlueSlider2.cs" company="LeagueSharp">
+// <copyright file="LightSliderButton2.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   A custom implementation of an <see cref="ADrawable{MenuSlider}" />
+//   A custom implementation of an <see cref="ADrawable{MenuSliderButton}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
+namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
 {
     using System;
     using System.Globalization;
@@ -27,7 +27,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue;
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Light;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
 
@@ -35,9 +35,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
     using SharpDX.Direct3D9;
 
     /// <summary>
-    ///     A default implementation of an <see cref="ADrawable{MenuSlider}" />
+    ///     A default implementation of an <see cref="ADrawable{MenuSliderButton}" />
     /// </summary>
-    public class BlueSlider2 : BlueSlider
+    public class LightSliderButton2 : LightSliderButton
     {
         #region Static Fields
 
@@ -56,12 +56,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlueSlider" /> class.
+        ///     Initializes a new instance of the <see cref="LightSliderButton2" /> class.
         /// </summary>
         /// <param name="component">
         ///     The menu component
         /// </param>
-        public BlueSlider2(MenuSlider component)
+        public LightSliderButton2(MenuSliderButton component)
             : base(component)
         {
         }
@@ -71,25 +71,27 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Draws a <see cref="MenuSlider" />
+        ///     Draws a <see cref="MenuSliderButton" />
         /// </summary>
         public override void Draw()
         {
+            //Slider
+
             var position = this.Component.Position;
             var centeredY =
                 (int)
-                BlueUtilities.GetContainerRectangle(this.Component)
+                LightUtilities.GetContainerRectangle(this.Component)
                     .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
-            var percent = (this.Component.Value - this.Component.MinValue)
+            var percent = (this.Component.SValue - this.Component.MinValue)
                           / (float)(this.Component.MaxValue - this.Component.MinValue);
-            var x = position.X + Offset + (percent * (this.Component.MenuWidth - Offset * 2));
+            var x = position.X + Offset + (percent * (this.Component.MenuWidth - Offset * 2 - MenuSettings.ContainerHeight / 2));
 
             Line.Width = 3;
             Line.Begin();
             Line.Draw(
-                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) }, 
-                this.Component.Interacting ? new ColorBGRA(90, 129, 144, 255) : new ColorBGRA(0, 74, 103, 255));
+                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) },
+                this.Component.Interacting ? new ColorBGRA(210, 210, 210, 255) : new ColorBGRA(170, 170, 170, 255));
             Line.End();
 
             MenuSettings.Font.DrawText(
@@ -101,12 +103,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 
             var measureText = MenuSettings.Font.MeasureText(
                 null, 
-                this.Component.Value.ToString(CultureInfo.InvariantCulture), 
+                this.Component.SValue.ToString(CultureInfo.InvariantCulture), 
                 0);
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite, 
-                this.Component.Value.ToString(CultureInfo.InvariantCulture), 
-                (int)(position.X + this.Component.MenuWidth - 5 - measureText.Width), 
+                this.Component.SValue.ToString(CultureInfo.InvariantCulture), 
+                (int)(position.X + this.Component.MenuWidth - 5 - measureText.Width - MenuSettings.ContainerHeight), 
                 centeredY,
                 MenuSettings.TextColor);
 
@@ -118,8 +120,45 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
                         new Vector2(position.X + Offset, position.Y + MenuSettings.ContainerHeight / 2f),
                         new Vector2(x, position.Y + MenuSettings.ContainerHeight / 2f)
                     },
-                new ColorBGRA(0, 37, 53, 255));
+                new ColorBGRA(229, 229, 229, 255));
             Line.End();
+
+            //On / Off Button
+
+            Line.Width = MenuSettings.ContainerHeight - 7;
+            Line.Begin();
+            Line.Draw(
+                new[]
+                    {
+                        new Vector2(
+                            (this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight - 1)
+                            + MenuSettings.ContainerHeight / 2f,
+                            this.Component.Position.Y + 1 + 3),
+                        new Vector2(
+                            (this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight - 1)
+                            + MenuSettings.ContainerHeight / 2f,
+                            this.Component.Position.Y + MenuSettings.ContainerHeight - 3)
+                    },
+                this.Component.BValue ? new ColorBGRA(68, 160, 255, 255) : new ColorBGRA(151, 151, 151, 255));
+            Line.End();
+
+            var centerX =
+                (int)
+                new Rectangle(
+                    (int)(this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight),
+                    (int)this.Component.Position.Y,
+                    MenuSettings.ContainerHeight,
+                    MenuSettings.ContainerHeight).GetCenteredText(
+                        null,
+                        MenuSettings.Font,
+                        this.Component.BValue ? "On" : "Off",
+                        CenteredFlags.HorizontalCenter).X;
+            MenuSettings.Font.DrawText(
+                MenuManager.Instance.Sprite,
+                this.Component.BValue ? "On" : "Off",
+                centerX,
+                centeredY,
+                new ColorBGRA(221, 233, 255, 255));
         }
 
         #endregion

@@ -119,6 +119,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         }
 
         /// <summary>
+        ///     Builds a new handler for the given <see cref="MenuSliderButton" />.
+        /// </summary>
+        /// <param name="component">The <see cref="MenuSliderButton" /> where this handler is responsible for.</param>
+        /// <returns>The handler</returns>
+        public ADrawable<MenuSliderButton> BuildSliderButtonHandler(MenuSliderButton component)
+        {
+            return new DefaultSliderButton(component);
+        }
+
+        /// <summary>
         ///     OnDraw event.
         /// </summary>
         public void Draw()

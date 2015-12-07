@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Default Skin Settings.
+//   Light Skin Settings.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 

@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Provides a set of functions used in the Default theme.
+//   Provides a set of functions used in the custom theme.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 

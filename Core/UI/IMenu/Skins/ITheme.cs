@@ -83,6 +83,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         ADrawable<MenuSlider> BuildSliderHandler(MenuSlider component);
 
         /// <summary>
+        ///     Builds a new handler for the given <see cref="MenuSlider" />.
+        /// </summary>
+        /// <param name="component">The <see cref="MenuSlider" /> where this handler is responsible for.</param>
+        /// <returns>The handler</returns>
+        ADrawable<MenuSliderButton> BuildSliderButtonHandler(MenuSliderButton component);
+
+        /// <summary>
         ///     Draws the list of root menus on the given position.
         /// </summary>
         void Draw();

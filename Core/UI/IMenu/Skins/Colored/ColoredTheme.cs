@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Implements a default ITheme.
+//   Implements a custom ITheme.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
@@ -135,6 +135,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
         public ADrawable<MenuSlider> BuildSliderHandler(MenuSlider component)
         {
             return new ColoredSlider(component);
+        }
+
+        /// <summary>
+        ///     Builds a new handler for the given <see cref="MenuSliderButton" />.
+        /// </summary>
+        /// <param name="component">The <see cref="MenuSliderButton" /> where this handler is responsible for.</param>
+        /// <returns>The handler</returns>
+        public ADrawable<MenuSliderButton> BuildSliderButtonHandler(MenuSliderButton component)
+        {
+            return new ColoredSliderButton(component);
         }
 
         /// <summary>

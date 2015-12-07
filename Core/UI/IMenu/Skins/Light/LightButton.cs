@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   A default implementation of <see cref="ADrawable{MenuButton}" />
+//   A custom implementation of <see cref="ADrawable{MenuButton}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
