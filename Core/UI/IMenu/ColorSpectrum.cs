@@ -79,6 +79,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private Vector2 mPos;
 
+        /// <summary>
+        /// Colorbox disabled
+        /// </summary>
+        private bool mDisabled;
+
         #endregion
 
         #region Constructors and Destructors
@@ -87,7 +92,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// Init the ColorBox
         /// </summary>
         /// <param name="size">The size of the new ColorBox</param>
-        public ColorBox(Size size)
+        public ColorBox(Size size, bool disabled = false)
         {
             this.mHsl = new Hsl { H = 1, S = 1, L = 1 };
 
@@ -96,6 +101,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 
             this.mWidth = size.Width;
             this.mHeight = size.Height;
+
+            this.mDisabled = disabled;
 
             this.DrawControl();
         }
@@ -250,7 +257,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <param name="args">Keys</param>
         public void ColorBoxMouseDown(WindowsKeys args)
         {
-            if (args.Msg == WindowsMessages.LBUTTONDOWN)
+            if (args.Msg == WindowsMessages.LBUTTONDOWN && !this.mDisabled)
             {
                 this.mDragging = true;
                 var x = (int)args.Cursor.X - 2 - (int)this.mPos.X;
@@ -295,7 +302,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <param name="args">Keys</param>
         public void ColorBoxMouseMove(WindowsKeys args)
         {
-            if (this.mDragging && args.Msg == WindowsMessages.MOUSEMOVE)
+            if (this.mDragging && args.Msg == WindowsMessages.MOUSEMOVE && !this.mDisabled)
             {
                 var x = (int)args.Cursor.X - 2 - (int)this.mPos.X;
                 var y = (int)args.Cursor.Y - 2 - (int)this.mPos.Y;
@@ -339,7 +346,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <param name="args">Keys</param>
         public void ColorBoxMouseUp(WindowsKeys args)
         {
-            if (this.mDragging && args.Msg == WindowsMessages.LBUTTONUP)
+            if (this.mDragging && args.Msg == WindowsMessages.LBUTTONUP && !this.mDisabled)
             {
                 this.mDragging = false;
                 var x = (int)args.Cursor.X - 2 - (int)this.mPos.X;
@@ -981,6 +988,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private Color mRgb;
 
+        /// <summary>
+        /// VerticalColorSlider disabled
+        /// </summary>
+        private bool mDisabled;
+
         #endregion
 
         #region Constructors and Destructors
@@ -989,7 +1001,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// Init the VerticalColorSlider
         /// </summary>
         /// <param name="size"></param>
-        public VerticalColorSlider(Size size)
+        /// <param name="disabled"></param>
+        public VerticalColorSlider(Size size, bool disabled = false)
         {
             this.mHsl = new Hsl();
             this.mHsl.H = 1;
@@ -1001,6 +1014,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 
             this.mHeight = size.Height;
             this.mWidth = size.Width;
+
+            this.mDisabled = disabled;
 
             this.DrawControl();
         }
@@ -1150,7 +1165,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <param name="args">Keys</param>
         public void VerticalColorSlider_MouseDown(WindowsKeys args)
         {
-            if (args.Msg == WindowsMessages.LBUTTONDOWN)
+            if (args.Msg == WindowsMessages.LBUTTONDOWN && !this.mDisabled)
             {
                 this.mDragging = true;
 
@@ -1182,7 +1197,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <param name="args">Keys</param>
         public void VerticalColorSlider_MouseMove(WindowsKeys args)
         {
-            if (this.mDragging && args.Msg == WindowsMessages.MOUSEMOVE)
+            if (this.mDragging && args.Msg == WindowsMessages.MOUSEMOVE && !this.mDisabled)
             {
                 var y = (int)args.Cursor.Y - (int)this.Position.Y;
                 y -= 4;
@@ -1211,7 +1226,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <param name="args">Keys</param>
         public void VerticalColorSlider_MouseUp(WindowsKeys args)
         {
-            if (this.mDragging && args.Msg == WindowsMessages.LBUTTONUP)
+            if (this.mDragging && args.Msg == WindowsMessages.LBUTTONUP && !this.mDisabled)
             {
                 this.mDragging = false;
 
@@ -1636,6 +1651,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private Color mRgb;
 
+        /// <summary>
+        /// VerticalAlphaSlider disabled
+        /// </summary>
+        private bool mDisabled;
+
         #endregion
 
         #region Constructors and Destructors
@@ -1644,7 +1664,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// Init the VerticalAlphaSlider
         /// </summary>
         /// <param name="size"></param>
-        public VerticalAlphaSlider(Size size)
+        public VerticalAlphaSlider(Size size, bool disabled = false)
         {
             this.mHsl = new Hsl();
             this.mHsl.H = 1;
@@ -1656,6 +1676,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 
             this.mHeight = size.Height;
             this.mWidth = size.Width;
+
+            this.mDisabled = disabled;
 
             this.DrawControl();
         }
@@ -1806,7 +1828,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <param name="args">Keys</param>
         public void VerticalAlphaSlider_MouseDown(WindowsKeys args)
         {
-            if (args.Msg == WindowsMessages.LBUTTONDOWN)
+            if (args.Msg == WindowsMessages.LBUTTONDOWN && !mDisabled)
             {
                 this.mBDragging = true;
 
@@ -1838,7 +1860,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <param name="args">Keys</param>
         public void VerticalAlphaSlider_MouseMove(WindowsKeys args)
         {
-            if (this.mBDragging && args.Msg == WindowsMessages.MOUSEMOVE)
+            if (this.mBDragging && args.Msg == WindowsMessages.MOUSEMOVE && !mDisabled)
             {
                 var y = (int)args.Cursor.Y - (int)this.Position.Y;
                 y -= 4;
@@ -1867,7 +1889,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <param name="args">Keys</param>
         public void VerticalAlphaSlider_MouseUp(WindowsKeys args)
         {
-            if (this.mBDragging && args.Msg == WindowsMessages.LBUTTONUP)
+            if (this.mBDragging && args.Msg == WindowsMessages.LBUTTONUP && !mDisabled)
             {
                 this.mBDragging = false;
 

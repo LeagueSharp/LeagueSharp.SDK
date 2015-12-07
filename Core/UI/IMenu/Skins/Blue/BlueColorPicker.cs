@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   A default implementation of <see cref="ADrawable{MenuButton}" />
+//   A custom implementation of <see cref="ADrawable{MenuColorPicker}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
@@ -158,10 +158,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             : base(component)
         {
             Hsl tempHsl;
-            this.colorBox = new ColorBox(new Size(200, 200))
+            this.colorBox = new ColorBox(new Size(200, 200), true)
                                 { Hsl = Utilities.RgbToHsl(this.Component.Color.ToSystemColor()) };
 
-            this.verticalColorSlider = new VerticalColorSlider(new Size(40, 200))
+            this.verticalColorSlider = new VerticalColorSlider(new Size(40, 200), true)
                                            { CbHsl = Utilities.RgbToHsl(this.Component.Color.ToSystemColor()) };
             this.verticalColorSlider.ColorSliderScroll += () =>
                 {

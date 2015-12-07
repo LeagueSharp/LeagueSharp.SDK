@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LightMenuSettings.cs" company="LeagueSharp">
+// <copyright file="LightMenuSettings2.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Default Skin Settings.
+//   Light 2 Skin Settings.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 

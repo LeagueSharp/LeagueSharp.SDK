@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LightSlider.cs" company="LeagueSharp">
+// <copyright file="LightSlider2.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   A default implementation of an <see cref="ADrawable{MenuSlider}" />
+//   A custom implementation of an <see cref="ADrawable{MenuSlider}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
@@ -56,7 +56,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="BlueSlider" /> class.
+        ///     Initializes a new instance of the <see cref="LightSlider2" /> class.
         /// </summary>
         /// <param name="component">
         ///     The menu component

@@ -332,7 +332,7 @@
         }
 
         /// <summary>
-        /// Draws a rounded Box. If Smoothing is true it will draw also a border.
+        /// Draws a rounded Box. If Smoothing is true it will draw a border too.
         /// </summary>
         /// <param name="x">Position X</param>
         /// <param name="y">Position Y</param>
@@ -342,8 +342,19 @@
         /// <param name="smoothing">Smoothing</param>
         /// <param name="color">Color</param>
         /// <param name="bcolor">Border Color</param>
-        public static void DrawBoxRounded(float x, float y, float w, float h, float radius, bool smoothing, Color color, Color bcolor)
+        /// <param name="ccolor">Corner Color</param>
+        public static void DrawBoxRounded(float x, float y, float w, float h, float radius, bool smoothing, Color color, Color bcolor, Color? ccolor = null)
         {
+            Color cornerColor;
+            if (!ccolor.HasValue)
+            {
+                cornerColor = bcolor;
+            }
+            else
+            {
+                cornerColor = ccolor.Value;
+            }
+
             DrawBoxFilled(x + radius, y + radius, w - 2 * radius - 1, h - 2 * radius - 1, color);   // Center rect.
             DrawBoxFilled(x + radius, y, w - 2 * radius - 1, radius, color);            // Top rect.
             DrawBoxFilled(x + radius, y + h - radius - 1, w - 2 * radius - 1, radius, color);     // Bottom rect.
@@ -358,10 +369,10 @@
                 DrawCircleFilled(x + w - radius - 1, y + h - radius - 1, radius - 1, 180, CircleType.Quarter, true, 16, color);   // Bottom-right corner
                 DrawCircleFilled(x + radius, y + h - radius - 1, radius - 1, 270, CircleType.Quarter, true, 16, color);       // Bottom-left corner
 
-                DrawCircle(x + radius + 1, y + radius + 1, radius, 0, CircleType.Quarter, true, 16, bcolor);          // Top-left corner
-                DrawCircle(x + w - radius - 1, y + radius + 1, radius, 90, CircleType.Quarter, true, 16, bcolor);       // Top-right corner
-                DrawCircle(x + w - radius - 1, y + h - radius - 1, radius, 180, CircleType.Quarter, true, 16, bcolor);    // Bottom-right corner
-                DrawCircle(x + radius + 1, y + h - radius - 1, radius, 270, CircleType.Quarter, true, 16, bcolor);      // Bottom-left corner
+                DrawCircle(x + radius + 1, y + radius + 1, radius, 0, CircleType.Quarter, true, 16, cornerColor);          // Top-left corner
+                DrawCircle(x + w - radius - 1, y + radius + 1, radius, 90, CircleType.Quarter, true, 16, cornerColor);       // Top-right corner
+                DrawCircle(x + w - radius - 1, y + h - radius - 1, radius, 180, CircleType.Quarter, true, 16, cornerColor);    // Bottom-right corner
+                DrawCircle(x + radius + 1, y + h - radius - 1, radius, 270, CircleType.Quarter, true, 16, cornerColor);      // Bottom-left corner
 
                 DrawLine(x + radius, y, x + w - radius - 1, y, 1, bcolor);       // Top line
                 DrawLine(x + radius, y + h - 2, x + w - radius - 1, y + h - 2, 1, bcolor);   // Bottom line

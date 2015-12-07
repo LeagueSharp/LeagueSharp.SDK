@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LightUtilities.cs" company="LeagueSharp">
+// <copyright file="LightUtilities2.cs" company="LeagueSharp">
 //   Copyright (C) 2015 LeagueSharp
 //   
 //   This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   Provides a set of functions used in the Default theme.
+//   Provides a set of functions used in the Custom theme.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 

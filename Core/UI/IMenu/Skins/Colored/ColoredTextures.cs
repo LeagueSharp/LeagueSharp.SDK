@@ -16,7 +16,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // <summary>
-//   A default implementation of <see cref="ADrawable{MenuButton}" />
+//   A custom implementation of <see cref="ADrawable{MenuTexture}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 using System;
@@ -42,7 +42,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
     internal class ColoredTextures
     {
 
-        private readonly Dictionary<ColoredTexture, BlueTextureWrapper> textures = new Dictionary<ColoredTexture, BlueTextureWrapper>();
+        private readonly Dictionary<ColoredTexture, ColoredTextureWrapper> textures = new Dictionary<ColoredTexture, ColoredTextureWrapper>();
 
         public static readonly ColoredTextures Instance = new ColoredTextures();
 
@@ -58,7 +58,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             }
         }
 
-        public BlueTextureWrapper this[ColoredTexture textureType]
+        public ColoredTextureWrapper this[ColoredTexture textureType]
         {
             get
             {
@@ -66,7 +66,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             }
         }
 
-        private BlueTextureWrapper BuildTexture(Image bmp, int height, int width)
+        private ColoredTextureWrapper BuildTexture(Image bmp, int height, int width)
         {
             var resized = new Bitmap(bmp, width, height);
             var texture =  Texture.FromMemory(
@@ -83,10 +83,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                 0);
             resized.Dispose();
             bmp.Dispose();
-            return new BlueTextureWrapper(texture, width, height);
+            return new ColoredTextureWrapper(texture, width, height);
         }
 
-        public BlueTextureWrapper AddTexture(Image bmp, int width, int height, ColoredTexture textureType)
+        public ColoredTextureWrapper AddTexture(Image bmp, int width, int height, ColoredTexture textureType)
         {
             this.textures[textureType] = BuildTexture(bmp, height, width);
             return this.textures[textureType];
@@ -94,13 +94,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
         
     }
 
-    internal class BlueTextureWrapper
+    internal class ColoredTextureWrapper
     {
         public Texture Texture { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        public BlueTextureWrapper(Texture texture, int width, int height)
+        public ColoredTextureWrapper(Texture texture, int width, int height)
         {
             this.Texture = texture;
             this.Width = width;
