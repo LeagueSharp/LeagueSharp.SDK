@@ -128,11 +128,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
             var buttonTextWidth =
                 MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, this.Component.ButtonText, 0).Width;
 
-            Utils.DrawBoxRounded(this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - (2 * TextGap) + 2,
+            Utils.DrawBoxRounded(
+                this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - (2 * TextGap) + 2,
                 this.Component.Position.Y + (MenuSettings.ContainerHeight / 8f),
-                (this.Component.Position.X + this.Component.MenuWidth - 2) - (this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - (2 * TextGap) + 2),
-                MenuSettings.ContainerHeight - 5, 8, true,
-                this.Component.Hovering ? new ColorBGRA(17, 65, 65, 255) : this.buttonColor, 
+                (this.Component.Position.X + this.Component.MenuWidth - 2)
+                - (this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - (2 * TextGap) + 2),
+                MenuSettings.ContainerHeight - 8,
+                8,
+                true,
+                this.Component.Hovering ? new ColorBGRA(17, 65, 65, 255) : this.buttonColor,
                 this.Component.Hovering ? new ColorBGRA(17, 65, 65, 255) : this.buttonColor);
 
             MenuSettings.Font.DrawText(
