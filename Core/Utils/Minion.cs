@@ -258,7 +258,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>
         ///     The <see cref="MinionTypes" />
         /// </returns>
-        public static MinionTypes GetMinionType(this Obj_AI_Base minion)
+        public static MinionTypes GetMinionType(this Obj_AI_Minion minion)
         {
             var baseSkinName = minion.CharData.BaseSkinName;
 
@@ -290,12 +290,21 @@ namespace LeagueSharp.SDK.Core.Utils
         ///     Tells whether the <see cref="Obj_AI_Minion" /> is an actual minion.
         /// </summary>
         /// <param name="minion">The Minion</param>
-        /// <param name="includeWards">Whether to include wards.</param>
+        /// <param name="includeClones">Whether to include clones.</param>
         /// <returns>Whether the <see cref="Obj_AI_Minion" /> is an actual minion.</returns>
-        public static bool IsMinion(Obj_AI_Minion minion, bool includeWards = false)
+        public static bool IsMinion(this Obj_AI_Minion minion, bool includeClones = true)
         {
-            return minion.CharData.BaseSkinName.ToLower().Contains("minion")
-                   || (includeWards && minion.GetMinionType() == MinionTypes.Ward);
+            var name = minion.CharData.BaseSkinName.ToLower();
+            var pets = new[]
+                           {
+                               "annietibbers", "elisespiderling", "heimertyellow", "heimertblue", "malzaharvoidling",
+                               "shacobox", "yorickspectralghoul", "yorickdecayedghoul", "yorickravenousghoul",
+                               "zyrathornplant", "zyragraspingplant"
+                           };
+            var clones = new[] { "leblanc", "shaco", "monkeyking" };
+            return minion.GetMinionType().HasFlag(MinionTypes.Melee)
+                   || minion.GetMinionType().HasFlag(MinionTypes.Ranged) || pets.Contains(name)
+                   || (includeClones && clones.Contains(name));
         }
 
         #endregion

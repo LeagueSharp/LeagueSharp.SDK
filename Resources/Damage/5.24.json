@@ -4,6 +4,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 70, 115, 160, 205, 250 ],
 					"BonusDamages": [
@@ -21,6 +22,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 60, 95, 130, 165, 200 ],
 					"BonusDamages": [
@@ -38,6 +40,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 75, 110, 145, 180, 215 ],
 					"BonusDamages": [
@@ -61,6 +64,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 200, 300, 400 ],
 					"BonusDamages": [
@@ -80,6 +84,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 40, 65, 90, 115, 140 ],
 					"BonusDamages": [
@@ -112,12 +117,13 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
-					"Damages": [ 40, 65, 90, 115, 140 ],
+					"Damages": [ 64, 104, 144, 184, 224 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
-							"DamagePercentages": [ 0.4, 0.4, 0.4, 0.4, 0.4 ],
+							"DamagePercentages": [ 0.64, 0.64, 0.64, 0.64, 0.64 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AbilityPoints"
 						}
@@ -129,6 +135,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 60, 95, 130, 165, 200 ],
 					"BonusDamages": [
@@ -146,6 +153,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 110, 150 ],
 					"BonusDamages": [
@@ -165,6 +173,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 35, 55, 75, 95, 115 ],
 					"BonusDamages": [
@@ -180,6 +189,7 @@
 			{
 				"Stage": "Detonation",
 				"SpellData": {
+					"SpellEffectType": "Attack",
 					"DamageType": "Magical",
 					"Damages": [ 45, 70, 95, 120, 145 ],
 					"BonusDamages": [
@@ -197,6 +207,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 30, 55, 80, 105, 130 ],
 					"BonusDamages": [
@@ -220,6 +231,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 100, 175, 250 ],
 					"BonusDamages": [
@@ -239,6 +251,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 105, 150, 195, 240 ],
 					"BonusDamages": [
@@ -256,6 +269,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 55, 110, 165, 220, 275 ],
 					"BonusDamages": [
@@ -275,6 +289,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 80, 130, 180, 230, 280 ],
 					"BonusDamages": [
@@ -292,6 +307,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 8, 12, 16, 20, 24 ],
 					"BonusDamages": [
@@ -310,6 +326,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 75, 100, 125, 150, 175 ],
 					"BonusDamages": [
@@ -327,6 +344,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 250, 350 ],
 					"BonusDamages": [
@@ -346,6 +364,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 90, 120, 150, 180 ],
 					"BonusDamages": [
@@ -363,6 +382,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 55, 85, 115, 145, 175 ],
 					"BonusDamages": [
@@ -380,6 +400,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 120, 160 ],
 					"BonusDamages": [
@@ -399,6 +420,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 80, 115, 150, 185, 220 ],
 					"BonusDamages": [
@@ -416,6 +438,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 115, 160, 205, 250 ],
 					"BonusDamages": [
@@ -429,27 +452,11 @@
 				}
 			}
 		],
-		"E": [
-			{
-				"Stage": "Default",
-				"SpellData": {
-					"DamageType": "Magical",
-					"Damages": [ 20, 30, 40, 50, 60 ],
-					"BonusDamages": [
-						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 0.2, 0.2, 0.2, 0.2, 0.2 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "AbilityPoints"
-						}
-					]
-				}
-			}
-		],
 		"R": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 175, 300, 425 ],
 					"BonusDamages": [
@@ -465,6 +472,7 @@
 			{
 				"Stage": "DamagePerSecond",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 20, 30, 40 ],
 					"BonusDamages": [
@@ -484,6 +492,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -499,6 +508,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 20, 35, 50, 65, 80 ],
 					"BonusDamages": [
@@ -516,6 +526,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 250, 425, 600 ],
 					"BonusDamages": [
@@ -535,6 +546,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 65, 85, 105, 125, 145 ],
 					"BonusDamages": [
@@ -548,10 +560,45 @@
 				}
 			}
 		],
+		"W": [
+			{
+				"Stage": "Default",
+				"SpellData": {
+					"SpellEffectType": "AoE",
+					"DamageType": "Magical",
+					"DamagesPerLvl": [ 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 160, 170 ],
+					"BonusDamages": [
+						{
+							"DamageType": "Magical",
+							"DamagePercentages": [ 0.6, 0.6, 0.6, 0.6, 0.6 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "AbilityPoints"
+						}
+					]
+				}
+			},
+			{
+				"Stage": "Empowered",
+				"SpellData": {
+					"SpellEffectType": "AoE",
+					"DamageType": "Magical",
+					"DamagesPerLvl": [ 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230 ],
+					"BonusDamages": [
+						{
+							"DamageType": "Magical",
+							"DamagePercentages": [ 0.4, 0.4, 0.4, 0.4, 0.4 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "AbilityPoints"
+						}
+					]
+				}
+			}
+		],
 		"E": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 90, 120, 150, 180 ],
 					"BonusDamages": [
@@ -569,6 +616,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 225, 300 ],
 					"BonusDamages": [
@@ -588,6 +636,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 125, 170, 215, 260 ],
 					"BonusDamages": [
@@ -607,6 +656,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 80, 135, 190, 245, 300 ],
 					"BonusDamages": [
@@ -624,6 +674,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -639,6 +690,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 250, 375, 500 ],
 					"BonusDamages": [
@@ -658,6 +710,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 80, 120, 160, 200, 240 ],
 					"BonusDamages": [
@@ -675,6 +728,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 75, 120, 165, 210, 255 ],
 					"BonusDamages": [
@@ -692,6 +746,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 70, 105, 140, 175, 210 ],
 					"BonusDamages": [
@@ -709,6 +764,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 250, 350 ],
 					"BonusDamages": [
@@ -728,6 +784,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 70, 115, 160, 205, 250 ],
 					"BonusDamages": [
@@ -745,6 +802,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 250, 350 ],
 					"BonusDamages": [
@@ -764,6 +822,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 30, 70, 110, 150, 190 ],
 					"BonusDamages": [
@@ -781,6 +840,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 70, 110, 150, 190, 230 ],
 					"BonusDamages": [
@@ -798,6 +858,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 250, 475, 700 ],
 					"BonusDamages": [
@@ -817,6 +878,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 75, 115, 155, 195, 235 ],
 					"BonusDamages": [
@@ -834,6 +896,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 20, 30, 40, 50, 60 ],
 					"BonusDamages": [
@@ -851,6 +914,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 55, 80, 105, 130, 155 ],
 					"BonusDamages": [
@@ -868,6 +932,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 250, 350 ],
 					"BonusDamages": [
@@ -887,6 +952,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 135, 190, 245, 305 ],
 					"BonusDamages": [
@@ -904,6 +970,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 75, 125, 175, 225, 275 ],
 					"BonusDamages": [
@@ -921,6 +988,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 20, 35, 50, 65, 80 ],
 					"BonusDamages": [
@@ -938,6 +1006,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "True",
 					"Damages": [ 300, 475, 650 ],
 					"BonusDamages": [
@@ -953,6 +1022,7 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "True",
 					"Damages": [ 1000, 1000, 1000 ],
 					"BonusDamages": [
@@ -972,6 +1042,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 130, 180, 230, 280 ],
 					"BonusDamages": [
@@ -995,6 +1066,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 90, 120, 150, 180 ],
 					"BonusDamages": [
@@ -1010,6 +1082,7 @@
 			{
 				"Stage": "Empowered",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"DamagesPerLvl": [ 30, 30, 30, 30, 30, 30, 30, 35, 40, 45, 50, 55, 60, 65, 70, 80, 90, 100 ],
 					"BonusDamages": [
@@ -1033,6 +1106,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Mixed",
 					"Damages": [ 20, 32, 44, 56, 68 ],
 					"BonusDamages": [
@@ -1050,6 +1124,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 100, 130, 160 ],
 					"BonusDamages": [
@@ -1075,6 +1150,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 20, 35, 50, 65, 80 ],
 					"BonusDamages": [
@@ -1092,6 +1168,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -1107,6 +1184,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "True",
 					"Damages": [ 100, 200, 300 ],
 					"BonusDamages": [
@@ -1122,6 +1200,7 @@
 			{
 				"Stage": "Buff",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "True",
 					"Damages": [ 20, 40, 60 ],
 					"ScalingBuff": "dariushemo",
@@ -1145,6 +1224,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 95, 130, 165, 200 ],
 					"BonusDamages": [
@@ -1162,12 +1242,13 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
-					"Damages": [ 22, 34, 46, 58, 70 ],
+					"Damages": [ 66, 102, 138, 174, 210 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
-							"DamagePercentages": [ 0.2, 0.2, 0.2, 0.2, 0.2 ],
+							"DamagePercentages": [ 0.6, 0.6, 0.6, 0.6, 0.6 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AbilityPoints"
 						}
@@ -1179,6 +1260,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 100, 160, 220 ],
 					"BonusDamages": [
@@ -1198,12 +1280,13 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
-							"DamagePercentages": [ 0.15, 0.18, 0.21, 0.23, 0.25 ],
+							"DamagePercentages": [ 0.15, 0.175, 0.20, 0.225, 0.25 ],
 							"MinDamage": [ 80, 130, 180, 230, 280 ],
-							"MaxDamageOnMinion": [ 300, 400, 500, 600, 700 ],
+							"MaxDamageOnMinion": [ 300, 350, 400, 450, 500 ],
 							"ScalingTarget": "Target",
 							"ScalingType": "CurrentHealth"
 						}
@@ -1215,6 +1298,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 35, 50, 65, 80, 95 ],
 					"BonusDamages": [
@@ -1232,10 +1316,11 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
-							"DamagePercentages": [ 0.05, 0.05, 0.05, 0.05, 0.05 ],
+							"DamagePercentages": [ 0.03, 0.035, 0.04, 0.045, 0.05 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "MaxHealth"
 						}
@@ -1249,6 +1334,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -1264,6 +1350,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 70, 105, 140, 175, 210 ],
 					"BonusDamages": [
@@ -1281,6 +1368,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 175, 275, 375 ],
 					"BonusDamages": [
@@ -1300,6 +1388,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 75, 90, 105, 120 ],
 					"BonusDamages": [
@@ -1315,6 +1404,7 @@
 			{
 				"Stage": "WayBack",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 85, 110, 135, 160 ],
 					"BonusDamages": [
@@ -1328,10 +1418,29 @@
 				}
 			}
 		],
+		"W": [
+			{
+				"Stage": "Default",
+				"SpellData": {
+					"SpellEffectType": "None",
+					"BonusDamages": [
+						{
+							"DamageType": "Magical",
+							"DamagePercentages": [ 0.05, 0.05, 0.05, 0.05, 0.05 ],
+							"MaxDamageOnMinion": [ 150, 150, 150, 150, 150 ],
+							"ScalePer100Ap": 0.022,
+							"ScalingTarget": "Target",
+							"ScalingType": "MissingHealth"
+						}
+					]
+				}
+			}
+		],
 		"E": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Attack",
 					"DamageType": "Magical",
 					"Damages": [ 50, 80, 110, 140, 170 ],
 					"BonusDamages": [
@@ -1349,6 +1458,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 200, 350, 500 ],
 					"BonusDamages": [
@@ -1368,13 +1478,14 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 40, 75, 110, 145, 180 ],
-					"MaxDamageOnMinion": [ 115, 175, 235, 295, 355 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
 							"DamagePercentages": [ 0.04, 0.04, 0.04, 0.04, 0.04 ],
+							"MaxDamageOnMinion": [ 75, 100, 125, 150, 175 ],
 							"ScalePer100Ap": 0.03,
 							"ScalingTarget": "Target",
 							"ScalingType": "CurrentHealth"
@@ -1385,13 +1496,14 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 60, 100, 140, 180, 220 ],
-					"MaxDamageOnMinion": [ 135, 200, 265, 330, 395 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
 							"DamagePercentages": [ 0.08, 0.08, 0.08, 0.08, 0.08 ],
+							"MaxDamageOnMinion": [ 75, 100, 125, 150, 175 ],
 							"ScalePer100Ap": 0.03,
 							"ScalingTarget": "Target",
 							"ScalingType": "MissingHealth"
@@ -1404,6 +1516,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 75, 125, 175, 225, 275 ],
 					"BonusDamages": [
@@ -1421,6 +1534,7 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 10, 20, 30, 40 ],
 					"BonusDamages": [
@@ -1440,6 +1554,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 40, 50, 60, 70, 80 ],
 					"BonusDamages": [
@@ -1463,6 +1578,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 70, 110, 150, 190, 230 ],
 					"BonusDamages": [
@@ -1486,10 +1602,12 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
 							"DamagePercentages": [ 0.15, 0.2, 0.25 ],
+							"MaxDamageOnMinion": [ 1000, 1000, 1000 ],
 							"ScalePer100Ap": 0.01,
 							"ScalingTarget": "Target",
 							"ScalingType": "CurrentHealth"
@@ -1504,6 +1622,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 35, 55, 75, 95, 115 ],
 					"BonusDamages": [
@@ -1527,6 +1646,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 115, 160, 205, 250 ],
 					"BonusDamages": [
@@ -1544,6 +1664,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 75, 125, 175, 225, 275 ],
 					"BonusDamages": [
@@ -1567,6 +1688,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 350, 500, 650 ],
 					"BonusDamages": [
@@ -1592,6 +1714,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "OverTime",
 					"DamageType": "Magical",
 					"Damages": [ 60, 90, 120, 150, 180 ],
 					"BonusDamages": [
@@ -1609,6 +1732,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 65, 85, 105, 125, 145 ],
 					"BonusDamages": [
@@ -1626,6 +1750,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 125, 225, 325 ],
 					"BonusDamages": [
@@ -1645,6 +1770,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 65, 75, 85, 95, 105 ],
 					"BonusDamages": [
@@ -1662,6 +1788,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 90, 130, 170, 210, 250 ],
 					"BonusDamages": [
@@ -1681,15 +1808,10 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Attack",
 					"DamageType": "Magical",
 					"Damages": [ 10, 25, 40, 55, 70 ],
 					"BonusDamages": [
-						{
-							"DamageType": "Physical",
-							"DamagePercentages": [ 1, 1, 1, 1, 1 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "AttackPoints"
-						},
 						{
 							"DamageType": "Magical",
 							"DamagePercentages": [ 0.35, 0.35, 0.35, 0.35, 0.35 ],
@@ -1704,6 +1826,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "OverTime",
 					"DamageType": "Magical",
 					"Damages": [ 20, 30, 40, 50, 60 ],
 					"BonusDamages": [
@@ -1725,6 +1848,7 @@
 			{
 				"Stage": "Empowered",
 				"SpellData": {
+					"SpellEffectType": "Attack",
 					"DamageType": "Magical",
 					"Damages": [ 10, 15, 20, 25, 30 ],
 					"BonusDamages": [
@@ -1742,6 +1866,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 120, 170, 220, 270 ],
 					"BonusDamages": [
@@ -1759,6 +1884,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 200, 325, 450 ],
 					"BonusDamages": [
@@ -1778,6 +1904,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 135, 190, 245, 300 ],
 					"BonusDamages": [
@@ -1795,6 +1922,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 105, 150, 195, 240 ],
 					"BonusDamages": [
@@ -1812,6 +1940,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 200, 300, 400 ],
 					"BonusDamages": [
@@ -1831,6 +1960,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 20, 45, 70, 95, 120 ],
 					"BonusDamages": [
@@ -1848,6 +1978,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 50, 70, 90 ],
 					"BonusDamages": [
@@ -1867,6 +1998,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 30, 55, 80, 105, 130 ],
 					"BonusDamages": [
@@ -1884,6 +2016,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 15, 18.8, 22.5, 26.3, 30 ],
 					"BonusDamages": [
@@ -1901,6 +2034,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 175, 350, 525 ],
 					"BonusDamages": [
@@ -1916,6 +2050,7 @@
 			{
 				"Stage": "Empowered",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "True",
 					"Damages": [ 175, 350, 525 ],
 					"BonusDamages": [
@@ -1935,6 +2070,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 5, 35, 65, 95, 125 ],
 					"BonusDamages": [
@@ -1950,6 +2086,7 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 5, 45, 85, 125, 165 ],
 					"BonusDamages": [
@@ -1967,6 +2104,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 10, 20, 30, 40, 50 ],
 					"BonusDamages": [
@@ -1979,7 +2117,7 @@
 						{
 							"DamageType": "Magical",
 							"DamagePercentages": [ 0.06, 0.08, 0.1, 0.12, 0.14 ],
-							"MaxDamageOnMinion": [ 100, 150, 200, 250, 300 ],
+							"MaxDamageOnMinion": [ 90, 130, 170, 210, 250 ],
 							"ScalingTarget": "Target",
 							"ScalingType": "MaxHealth"
 						}
@@ -1989,6 +2127,7 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 25, 45, 65, 85, 105 ],
 					"BonusDamages": [
@@ -2006,6 +2145,23 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
+					"DamageType": "Physical",
+					"Damages": [ 20, 60, 100, 140, 180 ],
+					"BonusDamages": [
+						{
+							"DamageType": "Physical",
+							"DamagePercentages": [ 0.06, 0.06, 0.06, 0.06, 0.06 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "MaxHealth"
+						}
+					]
+				}
+			},
+			{
+				"Stage": "SecondForm",
+				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 20, 60, 100, 140, 180 ],
 					"BonusDamages": [
@@ -2023,6 +2179,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 200, 300, 400 ],
 					"BonusDamages": [
@@ -2048,6 +2205,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 120, 160, 200, 240 ],
 					"BonusDamages": [
@@ -2065,9 +2223,9 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Attack",
 					"DamageType": "Magical",
 					"Damages": [ 20, 50, 80, 110, 140 ],
-					"MaxDamageOnMinion": [ 300, 300, 300, 300, 300 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
@@ -2078,6 +2236,7 @@
 						{
 							"DamageType": "Magical",
 							"DamagePercentages": [ 0.08, 0.08, 0.08, 0.08, 0.08 ],
+							"MaxDamageOnMinion": [ 300, 300, 300, 300, 300 ],
 							"ScalingTarget": "Target",
 							"ScalingType": "MaxHealth"
 						}
@@ -2089,6 +2248,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 130, 180, 230, 280 ],
 					"BonusDamages": [
@@ -2106,6 +2266,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 200, 300, 400 ],
 					"BonusDamages": [
@@ -2125,6 +2286,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 55, 70, 85, 100, 115 ],
 					"BonusDamages": [
@@ -2140,6 +2302,7 @@
 			{
 				"Stage": "Detonation",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 85, 145, 205, 265, 325 ],
 					"BonusDamages": [
@@ -2157,6 +2320,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 110, 160, 210, 260 ],
 					"BonusDamages": [
@@ -2174,12 +2338,29 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 250, 400, 550 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
 							"DamagePercentages": [ 1.5, 1.5, 1.5 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "BonusAttackPoints"
+						}
+					]
+				}
+			},
+			{
+				"Stage": "Detonation",
+				"SpellData": {
+					"SpellEffectType": "AoE",
+					"DamageType": "Physical",
+					"Damages": [ 200, 320, 440 ],
+					"BonusDamages": [
+						{
+							"DamageType": "Physical",
+							"DamagePercentages": [ 1.2, 1.2, 1.2 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "BonusAttackPoints"
 						}
@@ -2193,6 +2374,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 60, 95, 130, 165, 200 ],
 					"BonusDamages": [
@@ -2210,6 +2392,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 20, 30, 40, 50, 60 ],
 					"BonusDamages": [
@@ -2227,6 +2410,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 40, 75, 110, 145, 180 ],
 					"BonusDamages": [
@@ -2238,27 +2422,13 @@
 						}
 					]
 				}
-			},
-			{
-				"Stage": "Empowered",
-				"SpellData": {
-					"DamageType": "Physical",
-					"Damages": [ 80, 150, 220, 290, 360 ],
-					"BonusDamages": [
-						{
-							"DamageType": "Physical",
-							"DamagePercentages": [ 1, 1, 1, 1, 1 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "BonusAttackPoints"
-						}
-					]
-				}
 			}
 		],
 		"R": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 250, 350 ],
 					"BonusDamages": [
@@ -2278,6 +2448,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 108, 162, 216, 270, 324 ],
 					"BonusDamages": [
@@ -2293,6 +2464,7 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 648, 864, 1180 ],
 					"ScaleSlot": "R",
@@ -2312,6 +2484,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 100, 140, 180, 220 ],
 					"BonusDamages": [
@@ -2327,6 +2500,7 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 200, 250 ],
 					"ScaleSlot": "R",
@@ -2343,11 +2517,68 @@
 			}
 		]
 	},
+	"Illaoi": {
+		"Q": [
+			{
+				"Stage": "Default",
+				"SpellData": {
+					"SpellEffectType": "AoE",
+					"DamageType": "Physical",
+					"DamagesPerLvl": [ 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180 ],
+					"BonusDamages": [
+						{
+							"DamageType": "Physical",
+							"DamagePercentages": [ 1.2, 1.3, 1.4, 1.5, 1.6 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "AttackPoints"
+						}
+					]
+				}
+			}
+		],
+		"W": [
+			{
+				"Stage": "Default",
+				"SpellData": {
+					"SpellEffectType": "None",
+					"DamageType": "Physical",
+					"Damages": [ 15, 35, 55, 75, 95 ],
+					"BonusDamages": [
+						{
+							"DamageType": "Physical",
+							"DamagePercentages": [ 0.1, 0.1, 0.1, 0.1, 0.1 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "AttackPoints"
+						}
+					]
+				}
+			}
+		],
+		"R": [
+			{
+				"Stage": "Default",
+				"SpellData": {
+					"SpellEffectType": "AoE",
+					"DamageType": "Physical",
+					"Damages": [ 150, 250, 350 ],
+					"BonusDamages": [
+						{
+							"DamageType": "Physical",
+							"DamagePercentages": [ 0.5, 0.5, 0.5 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "BonusAttackPoints"
+						}
+					]
+				}
+			}
+		]
+	},
 	"Irelia": {
 		"Q": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 20, 50, 80, 110, 140 ],
 					"BonusDamages": [
@@ -2365,6 +2596,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "True",
 					"Damages": [ 15, 30, 45, 60, 75 ]
 				}
@@ -2374,6 +2606,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 80, 120, 160, 200, 240 ],
 					"BonusDamages": [
@@ -2391,6 +2624,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 80, 120, 160 ],
 					"BonusDamages": [
@@ -2416,6 +2650,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 85, 110, 135, 160 ],
 					"BonusDamages": [
@@ -2431,6 +2666,7 @@
 			{
 				"Stage": "DamagePerSecond",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 15, 20, 25, 30, 35 ],
 					"BonusDamages": [
@@ -2448,6 +2684,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 60, 115, 170, 225, 280 ],
 					"BonusDamages": [
@@ -2467,6 +2704,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 70, 115, 160, 205, 250 ],
 					"BonusDamages": [
@@ -2484,6 +2722,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 105, 150, 195, 240 ],
 					"BonusDamages": [
@@ -2501,6 +2740,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 200, 325, 450 ],
 					"BonusDamages": [
@@ -2520,6 +2760,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 70, 110, 150, 190, 230 ],
 					"BonusDamages": [
@@ -2543,6 +2784,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Attack",
 					"DamageType": "Magical",
 					"Damages": [ 40, 75, 110, 145, 180 ],
 					"BonusDamages": [
@@ -2560,6 +2802,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 50, 75, 100, 125, 150 ],
 					"BonusDamages": [
@@ -2577,6 +2820,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Attack",
 					"DamageType": "Magical",
 					"Damages": [ 100, 160, 220 ],
 					"BonusDamages": [
@@ -2596,6 +2840,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 30, 70, 110, 150, 190, 230 ],
 					"BonusDamages": [
@@ -2611,6 +2856,7 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 70, 120, 170, 220, 270, 320 ],
 					"BonusDamages": [
@@ -2628,6 +2874,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 25, 40, 55, 70, 85, 100 ],
 					"BonusDamages": [
@@ -2643,6 +2890,7 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -2658,6 +2906,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"MaxDamageOnMinion": [ 200, 300, 400, 500, 600, 700 ],
 					"BonusDamages": [
 						{
@@ -2675,6 +2924,24 @@
 					]
 				}
 			}
+		],
+		"R": [
+			{
+				"Stage": "Default",
+				"SpellData": {
+					"SpellEffectType": "None",
+					"DamageType": "Magical",
+					"Damages": [ 20, 60, 100, 140 ],
+					"BonusDamages": [
+						{
+							"DamageType": "Magical",
+							"DamagePercentages": [ 0.4, 0.4, 0.4, 0.4 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "AbilityPoints"
+						}
+					]
+				}
+			}
 		]
 	},
 	"Jinx": {
@@ -2682,6 +2949,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -2697,6 +2965,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 10, 60, 110, 160, 210 ],
 					"BonusDamages": [
@@ -2714,6 +2983,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 135, 190, 245, 300 ],
 					"BonusDamages": [
@@ -2731,6 +3001,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 25, 35, 45 ],
 					"BonusDamages": [
@@ -2739,33 +3010,6 @@
 							"DamagePercentages": [ 0.1, 0.1, 0.1 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "BonusAttackPoints"
-						},
-						{
-							"DamageType": "Physical",
-							"DamagePercentages": [ 0.25, 0.3, 0.35 ],
-							"ScalingTarget": "Target",
-							"ScalingType": "MissingHealth"
-						}
-					]
-				}
-			},
-			{
-				"Stage": "Empowered",
-				"SpellData": {
-					"DamageType": "Physical",
-					"Damages": [ 250, 350, 450 ],
-					"BonusDamages": [
-						{
-							"DamageType": "Physical",
-							"DamagePercentages": [ 1, 1, 1 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "BonusAttackPoints"
-						},
-						{
-							"DamageType": "Physical",
-							"DamagePercentages": [ 0.25, 0.3, 0.35 ],
-							"ScalingTarget": "Target",
-							"ScalingType": "MissingHealth"
 						}
 					]
 				}
@@ -2777,6 +3021,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 10, 70, 130, 190, 250 ],
 					"BonusDamages": [
@@ -2794,6 +3039,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
@@ -2810,6 +3056,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 20, 30, 40, 50, 60 ],
 					"BonusDamages": [
@@ -2825,6 +3072,7 @@
 			{
 				"Stage": "Buff",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 10, 14, 19, 25, 32 ],
 					"ScalingBuff": "kalistaexpungemarker",
@@ -2850,6 +3098,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 125, 170, 215, 260 ],
 					"BonusDamages": [
@@ -2865,6 +3114,7 @@
 			{
 				"Stage": "Empowered",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 25, 75, 125, 175 ],
 					"ScaleSlot": "R",
@@ -2882,6 +3132,7 @@
 			{
 				"Stage": "Detonation",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 50, 150, 250, 350 ],
 					"ScaleSlot": "R",
@@ -2901,6 +3152,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "OverTime",
 					"DamageType": "Magical",
 					"Damages": [ 60, 110, 160, 210, 260 ],
 					"BonusDamages": [
@@ -2920,6 +3172,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 40, 60, 80, 100, 120 ],
 					"BonusDamages": [
@@ -2935,8 +3188,9 @@
 		],
 		"E": [
 			{
-				"Stage": "DamagePerSecond",
+				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 30, 50, 70, 90, 110 ],
 					"BonusDamages": [
@@ -2954,6 +3208,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 250, 400, 550 ],
 					"BonusDamages": [
@@ -2973,6 +3228,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 70, 95, 120, 145, 170 ],
 					"BonusDamages": [
@@ -2990,6 +3246,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 20, 20, 20, 20, 20 ],
 					"BonusDamages": [
@@ -3003,8 +3260,9 @@
 				}
 			},
 			{
-				"Stage": "Empowered",
+				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 40, 65, 90, 115, 140 ],
 					"BonusDamages": [
@@ -3022,6 +3280,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 105, 130, 155, 180 ],
 					"BonusDamages": [
@@ -3039,6 +3298,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 100, 120 ],
 					"BonusDamages": [
@@ -3060,6 +3320,7 @@
 			{
 				"Stage": "Buff",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 40, 50, 60 ],
 					"ScalingBuff": "RiftWalk",
@@ -3091,6 +3352,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 85, 110, 135, 160 ],
 					"BonusDamages": [
@@ -3106,6 +3368,7 @@
 			{
 				"Stage": "Detonation",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 15, 30, 45, 60, 75 ],
 					"BonusDamages": [
@@ -3123,6 +3386,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 40, 75, 110, 145, 180 ],
 					"BonusDamages": [
@@ -3146,6 +3410,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 40, 70, 100, 130, 160 ],
 					"BonusDamages": [
@@ -3163,6 +3428,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 350, 550, 750 ],
 					"BonusDamages": [
@@ -3188,6 +3454,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 60, 110, 160, 210, 260 ],
 					"BonusDamages": [
@@ -3211,33 +3478,13 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 10, 15, 20, 25, 30 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
 							"DamagePercentages": [ 0.15, 0.15, 0.15, 0.15, 0.15 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "AbilityPoints"
-						}
-					]
-				}
-			},
-			{
-				"Stage": "Empowered",
-				"SpellData": {
-					"DamageType": "Magical",
-					"Damages": [ 20, 30, 40, 50, 60 ],
-					"BonusDamages": [
-						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 0.2, 0.25, 0.3, 0.35, 0.4 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "AttackPoints"
-						},
-						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 0.3, 0.3, 0.3, 0.3, 0.3 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AbilityPoints"
 						}
@@ -3251,6 +3498,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 75, 115, 155, 195, 235 ],
 					"BonusDamages": [
@@ -3268,6 +3516,21 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Attack",
+					"BonusDamages": [
+						{
+							"DamageType": "Magical",
+							"DamagePercentages": [ 0.4, 0.5, 0.6, 0.7, 0.8 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "AttackPoints"
+						}
+					]
+				}
+			},
+			{
+				"Stage": "Empowered",
+				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 65, 95, 125, 155, 185 ],
 					"BonusDamages": [
@@ -3279,25 +3542,13 @@
 						}
 					]
 				}
-			},
-			{
-				"Stage": "Empowered",
-				"SpellData": {
-					"BonusDamages": [
-						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 0.4, 0.5, 0.6, 0.7, 0.8 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "AttackPoints"
-						}
-					]
-				}
 			}
 		],
 		"E": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 85, 125, 165, 205, 245 ],
 					"BonusDamages": [
@@ -3315,6 +3566,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 240, 435, 630 ],
 					"BonusDamages": [
@@ -3334,6 +3586,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 70, 95, 120, 145, 170 ],
 					"BonusDamages": [
@@ -3349,6 +3602,7 @@
 			{
 				"Stage": "Empowered",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"DamagesPerLvl": [ 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180 ],
 					"BonusDamages": [
@@ -3366,6 +3620,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 80, 110, 140, 170, 200 ],
 					"BonusDamages": [
@@ -3383,6 +3638,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 65, 100, 135, 170, 205 ],
 					"BonusDamages": [
@@ -3402,6 +3658,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 60, 90, 120, 150, 180 ],
 					"BonusDamages": [
@@ -3419,6 +3676,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Attack",
 					"DamageType": "Physical",
 					"Damages": [ 25, 30, 35, 40, 45 ],
 					"BonusDamages": [
@@ -3436,13 +3694,14 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 80, 110, 140, 170, 200 ],
+					"MaxDamageOnMinion": [ 300, 300, 300, 300, 300],
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
 							"DamagePercentages": [ 0.05, 0.05, 0.05, 0.05, 0.05 ],
-							"MaxDamageOnMinion": [ 300, 300, 300, 300, 300],
 							"ScalingTarget": "Target",
 							"ScalingType": "MaxHealth"
 						},
@@ -3462,6 +3721,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 80, 130, 180, 230, 280 ],
 					"BonusDamages": [
@@ -3479,11 +3739,11 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
-							"DamagePercentages": [ -1, -1, -1, -1, -1 ],
-							"ScalePer100Ad": 0.0125,
+							"DamagePercentages": [ 0.02, 0.02, 0.02, 0.02, 0.02 ],
 							"ScalePer100Ap": 0.0075,
 							"ScalingTarget": "Target",
 							"ScalingType": "MaxHealth"
@@ -3496,6 +3756,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 110, 160, 210, 260 ],
 					"BonusDamages": [
@@ -3513,6 +3774,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 110, 150 ],
 					"BonusDamages": [
@@ -3538,6 +3800,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 55, 80, 105, 130, 155 ],
 					"BonusDamages": [
@@ -3549,12 +3812,47 @@
 						}
 					]
 				}
+			},
+			{
+				"Stage": "Detonation",
+				"SpellData": {
+					"SpellEffectType": "None",
+					"DamageType": "Magical",
+					"Damages": [ 55, 80, 105, 130, 155 ],
+					"BonusDamages": [
+						{
+							"DamageType": "Magical",
+							"DamagePercentages": [ 0.4, 0.4, 0.4, 0.4, 0.4 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "AbilityPoints"
+						}
+					]
+				}
+			},
+			{
+				"Stage": "Empowered",
+				"SpellData": {
+					"SpellEffectType": "Single",
+					"DamageType": "Magical",
+					"Damages": [ 100, 200, 300 ],
+					"ScaleSlot": "R",
+					"BonusDamages": [
+						{
+							"DamageType": "Magical",
+							"DamagePercentages": [ 0.6, 0.6, 0.6 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "AbilityPoints",
+							"ScaleSlot": "R"
+						}
+					]
+				}
 			}
 		],
 		"W": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 85, 125, 165, 205, 245 ],
 					"BonusDamages": [
@@ -3566,12 +3864,31 @@
 						}
 					]
 				}
+			},
+			{
+				"Stage": "Empowered",
+				"SpellData": {
+					"SpellEffectType": "AoE",
+					"DamageType": "Magical",
+					"Damages": [ 150, 300, 450 ],
+					"ScaleSlot": "R",
+					"BonusDamages": [
+						{
+							"DamageType": "Magical",
+							"DamagePercentages": [ 0.9, 0.9, 0.9 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "AbilityPoints",
+							"ScaleSlot": "R"
+						}
+					]
+				}
 			}
 		],
 		"E": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 40, 65, 90, 115, 140 ],
 					"BonusDamages": [
@@ -3583,33 +3900,37 @@
 						}
 					]
 				}
+			},
+			{
+				"Stage": "Empowered",
+				"SpellData": {
+					"SpellEffectType": "Single",
+					"DamageType": "Magical",
+					"Damages": [ 100, 200, 300 ],
+					"ScaleSlot": "R",
+					"BonusDamages": [
+						{
+							"DamageType": "Magical",
+							"DamagePercentages": [ 0.6, 0.6, 0.6 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "AbilityPoints",
+							"ScaleSlot": "R"
+						}
+					]
+				}
 			}
 		],
 		"R": [
 			{
-				"Stage": "Default",
+				"Stage": "Detonation",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 100, 200, 300 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
 							"DamagePercentages": [ 0.6, 0.6, 0.6 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "AbilityPoints"
-						}
-					]
-				}
-			},
-			{
-				"Stage": "SecondForm",
-				"SpellData": {
-					"DamageType": "Magical",
-					"Damages": [ 150, 300, 450 ],
-					"BonusDamages": [
-						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 0.9, 0.9, 0.9 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AbilityPoints"
 						}
@@ -3623,6 +3944,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 50, 80, 110, 140, 170 ],
 					"BonusDamages": [
@@ -3638,6 +3960,7 @@
 			{
 				"Stage": "SecondCast",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 50, 80, 110, 140, 170 ],
 					"MaxDamageOnMinion": [ 400, 400, 400, 400, 400 ],
@@ -3662,6 +3985,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 95, 130, 165, 200 ],
 					"BonusDamages": [
@@ -3679,6 +4003,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 200, 400, 600 ],
 					"BonusDamages": [
@@ -3698,6 +4023,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Attack",
 					"DamageType": "Magical",
 					"Damages": [ 40, 70, 100, 130, 160 ],
 					"BonusDamages": [
@@ -3715,6 +4041,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 110, 160, 210, 260 ],
 					"BonusDamages": [
@@ -3732,6 +4059,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 100, 140, 180, 220 ],
 					"BonusDamages": [
@@ -3749,6 +4077,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 250, 350 ],
 					"BonusDamages": [
@@ -3768,6 +4097,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 100, 130, 160, 190 ],
 					"BonusDamages": [
@@ -3785,6 +4115,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 110, 150, 190, 230 ],
 					"BonusDamages": [
@@ -3802,6 +4133,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 115, 160, 205, 250 ],
 					"BonusDamages": [
@@ -3819,6 +4151,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 250, 350 ],
 					"BonusDamages": [
@@ -3838,6 +4171,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 80, 110, 140, 170, 200 ],
 					"BonusDamages": [
@@ -3855,6 +4189,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 100, 140, 180, 220 ],
 					"BonusDamages": [
@@ -3872,6 +4207,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 20, 35, 50 ],
 					"BonusDamages": [
@@ -3897,6 +4233,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 125, 170, 215, 260 ],
 					"BonusDamages": [
@@ -3914,6 +4251,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 80, 110, 140, 170, 200 ],
 					"BonusDamages": [
@@ -3933,6 +4271,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 110, 160, 210, 260 ],
 					"BonusDamages": [
@@ -3950,6 +4289,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 105, 150, 195, 240 ],
 					"BonusDamages": [
@@ -3967,6 +4307,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 300, 400, 500 ],
 					"BonusDamages": [
@@ -3986,6 +4327,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 70, 120, 170, 220, 270 ],
 					"BonusDamages": [
@@ -4003,6 +4345,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 15, 30, 45, 60, 75 ],
 					"BonusDamages": [
@@ -4026,6 +4369,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 100, 140, 180, 220 ],
 					"BonusDamages": [
@@ -4049,6 +4393,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 200, 300, 400 ],
 					"BonusDamages": [
@@ -4068,6 +4413,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 135, 190, 245, 300 ],
 					"BonusDamages": [
@@ -4085,10 +4431,11 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
-							"DamagePercentages": [ 0.04, 0.05, 0.06, 0.07, 0.08 ],
+							"DamagePercentages": [ 0.04, 0.045, 0.05, 0.055, 0.06 ],
 							"ScalePer100Ap": 0.01,
 							"MaxDamageOnMinion": [ 120, 120, 120, 120, 120 ],
 							"ScalingTarget": "Target",
@@ -4102,6 +4449,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "OverTime",
 					"DamageType": "Magical",
 					"Damages": [ 80, 140, 200, 260, 320 ],
 					"BonusDamages": [
@@ -4119,6 +4467,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "OverTime",
 					"DamageType": "Magical",
 					"Damages": [ 250, 400, 550 ],
 					"BonusDamages": [
@@ -4138,6 +4487,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 115, 160, 205, 250 ],
 					"BonusDamages": [
@@ -4155,6 +4505,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
@@ -4172,6 +4523,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 40, 60, 80, 100, 120 ],
 					"BonusDamages": [
@@ -4187,6 +4539,7 @@
 			{
 				"Stage": "Detonation",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 120, 160, 200, 240 ],
 					"BonusDamages": [
@@ -4204,6 +4557,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 100, 150, 200 ],
 					"BonusDamages": [
@@ -4223,8 +4577,9 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
-					"Damages": [ 100, 160, 220, 280, 340 ],
+					"Damages": [ 25, 60, 95, 130, 165 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -4240,6 +4595,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "True",
 					"Damages": [ 10, 15, 20, 25, 30 ],
 					"BonusDamages": [
@@ -4259,6 +4615,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 20, 35, 50, 65, 80 ],
 					"BonusDamages": [
@@ -4280,6 +4637,7 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 40, 70, 100, 130, 160 ],
 					"BonusDamages": [
@@ -4303,6 +4661,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 90, 145, 200, 255, 310 ],
 					"BonusDamages": [
@@ -4320,6 +4679,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -4343,6 +4703,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 10, 20, 30, 40, 50 ],
 					"BonusDamages": [
@@ -4366,6 +4727,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 35, 45, 55, 65, 75 ],
 					"BonusDamages": [
@@ -4381,6 +4743,7 @@
 			{
 				"Stage": "SecondCast",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 50, 85, 120, 155, 190 ],
 					"BonusDamages": [
@@ -4398,6 +4761,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 35, 65, 95, 125, 155 ],
 					"BonusDamages": [
@@ -4421,6 +4785,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "OverTime",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
@@ -4439,6 +4804,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 80, 135, 190, 245, 300 ],
 					"BonusDamages": [
@@ -4456,6 +4822,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 16, 32, 48, 64, 80 ],
 					"ScalePerTargetMissHealth": 0.5,
@@ -4474,6 +4841,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 225, 300 ],
 					"BonusDamages": [
@@ -4493,6 +4861,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 75, 130, 185, 240, 295 ],
 					"BonusDamages": [
@@ -4510,6 +4879,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 110, 150, 190, 230 ],
 					"BonusDamages": [
@@ -4523,27 +4893,11 @@
 				}
 			}
 		],
-		"E": [
-			{
-				"Stage": "Default",
-				"SpellData": {
-					"DamageType": "Magical",
-					"Damages": [ 25, 40, 55, 70, 85 ],
-					"BonusDamages": [
-						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 0.2, 0.2, 0.2, 0.2, 0.2 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "AbilityPoints"
-						}
-					]
-				}
-			}
-		],
 		"R": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 250, 350 ],
 					"BonusDamages": [
@@ -4559,10 +4913,21 @@
 		]
 	},
 	"Nasus": {
+		"Q": [
+			{
+				"Stage": "Default",
+				"SpellData": {
+					"SpellEffectType": "None",
+					"DamageType": "Physical",
+					"Damages": [ 30, 50, 70, 90, 110 ]
+				}
+			}
+		],
 		"E": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 55, 95, 135, 175, 215 ],
 					"BonusDamages": [
@@ -4578,6 +4943,7 @@
 			{
 				"Stage": "DamagePerSecond",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 11, 19, 27, 35, 43 ],
 					"BonusDamages": [
@@ -4595,6 +4961,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
@@ -4613,6 +4980,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 60, 105, 150, 195, 240 ],
 					"BonusDamages": [
@@ -4630,6 +4998,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 30, 40, 50, 60, 70 ],
 					"BonusDamages": [
@@ -4647,6 +5016,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 95, 130, 165, 200 ],
 					"BonusDamages": [
@@ -4664,6 +5034,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 200, 325, 450 ],
 					"BonusDamages": [
@@ -4679,6 +5050,7 @@
 			{
 				"Stage": "Detonation",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 125, 175, 225 ],
 					"BonusDamages": [
@@ -4698,8 +5070,9 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
-					"Damages": [ 50, 75, 100, 125, 150 ],
+					"Damages": [ 60, 77.5, 95, 112.5, 130 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
@@ -4711,23 +5084,9 @@
 				}
 			},
 			{
-				"Stage": "Empowered",
-				"SpellData": {
-					"DamageType": "Magical",
-					"Damages": [ 150, 225, 300, 375, 450 ],
-					"BonusDamages": [
-						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 1.2, 1.2, 1.2, 1.2, 1.2 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "AbilityPoints"
-						}
-					]
-				}
-			},
-			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 4, 20, 50, 90 ],
 					"ScalePerTargetMissHealth": 1.5,
@@ -4755,6 +5114,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "OverTime",
 					"DamageType": "Magical",
 					"Damages": [ 40, 80, 120, 160, 200 ],
 					"BonusDamages": [
@@ -4770,6 +5130,7 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 50, 100, 150, 200 ],
 					"ScaleSlot": "R",
@@ -4789,6 +5150,7 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 130, 190, 250 ],
 					"ScaleSlot": "R",
@@ -4810,6 +5172,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 60, 105, 150, 195, 240 ],
 					"BonusDamages": [
@@ -4827,6 +5190,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "OverTime",
 					"DamageType": "Magical",
 					"Damages": [ 80, 125, 170, 215, 260 ],
 					"BonusDamages": [
@@ -4844,6 +5208,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 150, 250, 350 ],
 					"BonusDamages": [
@@ -4863,6 +5228,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "True",
 					"Damages": [ 400, 550, 700, 850, 1000 ]
 				}
@@ -4872,6 +5238,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 85, 130, 175, 225, 275 ],
 					"BonusDamages": [
@@ -4889,6 +5256,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 625, 875, 1125 ],
 					"BonusDamages": [
@@ -4908,6 +5276,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 70, 115, 160, 205, 250 ],
 					"BonusDamages": [
@@ -4925,6 +5294,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "True",
 					"Damages": [ 70, 115, 160, 205, 250 ],
 					"BonusDamages": [
@@ -4944,6 +5314,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 90, 120, 150, 180 ],
 					"BonusDamages": [
@@ -4961,6 +5332,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 115, 160, 205, 250 ],
 					"BonusDamages": [
@@ -4978,6 +5350,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 90, 120, 150, 180 ],
 					"BonusDamages": [
@@ -4995,6 +5368,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 225, 300 ],
 					"BonusDamages": [
@@ -5014,6 +5388,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 65, 105, 145, 185, 225 ],
 					"BonusDamages": [
@@ -5031,6 +5406,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 50, 75, 100, 125, 150 ],
 					"BonusDamages": [
@@ -5048,6 +5424,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 80, 140, 200, 260, 320 ],
 					"BonusDamages": [
@@ -5065,6 +5442,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 400, 700, 1000 ],
 					"BonusDamages": [
@@ -5084,25 +5462,37 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
-					"DamageType": "Magical",
-					"Damages": [ 20, 40, 60, 80, 100 ],
+					"SpellEffectType": "AoE",
+					"DamageType": "Physical",
+					"Damages": [ 30, 65, 100, 135, 170 ],
 					"BonusDamages": [
 						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 0.08, 0.08, 0.08, 0.08, 0.08 ],
-							"MaxDamageOnMinion": [ 55, 110, 165, 220, 275 ],
+							"DamageType": "Physical",
+							"DamagePercentages": [ 0.06, 0.06, 0.06, 0.06, 0.06 ],
 							"ScalingTarget": "Target",
 							"ScalingType": "MaxHealth"
 						},
 						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 1, 1, 1, 1, 1 ],
+							"DamageType": "Physical",
+							"DamagePercentages": [ 0.65, 0.65, 0.65, 0.65, 0.65 ],
 							"ScalingTarget": "Source",
-							"ScalingType": "AttackPoints"
-						},
+							"ScalingType": "BonusAttackPoints"
+						}
+					]
+				}
+			}
+		],
+		"W": [
+			{
+				"Stage": "Default",
+				"SpellData": {
+					"SpellEffectType": "AoE",
+					"DamageType": "Magical",
+					"Damages": [ 70, 110, 150, 190, 230 ],
+					"BonusDamages": [
 						{
 							"DamageType": "Magical",
-							"DamagePercentages": [ 0.6, 0.6, 0.6, 0.6, 0.6 ],
+							"DamagePercentages": [ 0.7, 0.7, 0.7, 0.7, 0.7 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AbilityPoints"
 						}
@@ -5114,29 +5504,33 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
-					"DamageType": "Magical",
-					"Damages": [ 50, 75, 100, 125, 150 ],
+					"SpellEffectType": "Single",
+					"DamageType": "Physical",
+					"Damages": [ 50, 70, 90, 110, 130 ],
 					"BonusDamages": [
 						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 0.4, 0.4, 0.4, 0.4, 0.4 ],
+							"DamageType": "Physical",
+							"DamagePercentages": [ 0.5, 0.5, 0.5, 0.5, 0.5 ],
 							"ScalingTarget": "Source",
-							"ScalingType": "AbilityPoints"
+							"ScalingType": "BonusAttackPoints"
 						}
 					]
 				}
-			},
+			}
+		],
+		"R": [
 			{
-				"Stage": "Empowered",
+				"Stage": "Default",
 				"SpellData": {
-					"DamageType": "Magical",
-					"Damages": [ 125, 200, 275, 350, 425 ],
+					"SpellEffectType": "AoE",
+					"DamageType": "Physical",
+					"Damages": [ 200, 300, 400 ],
 					"BonusDamages": [
 						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 0.8, 0.8, 0.8, 0.8, 0.8 ],
+							"DamageType": "Physical",
+							"DamagePercentages": [ 0.9, 0.9, 0.9 ],
 							"ScalingTarget": "Source",
-							"ScalingType": "AbilityPoints"
+							"ScalingType": "BonusAttackPoints"
 						}
 					]
 				}
@@ -5148,12 +5542,13 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
-					"Damages": [ 25, 55, 85, 115, 145 ],
+					"Damages": [ 20, 45, 70, 95, 120 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
-							"DamagePercentages": [ 0.8, 0.95, 1.1, 1.25, 1.4 ],
+							"DamagePercentages": [ 0.8, 0.9, 1, 1.1, 1.2 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AttackPoints"
 						},
@@ -5171,6 +5566,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 40, 70, 100, 130, 160 ],
 					"BonusDamages": [
@@ -5188,6 +5584,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -5205,6 +5602,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 100, 150, 200, 250, 300 ],
 					"BonusDamages": [
@@ -5218,27 +5616,11 @@
 				}
 			}
 		],
-		"W": [
-			{
-				"Stage": "Default",
-				"SpellData": {
-					"DamageType": "Magical",
-					"Damages": [ 25, 35, 45, 55, 65 ],
-					"BonusDamages": [
-						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 0.1, 0.1, 0.1, 0.1, 0.1 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "Armor"
-						}
-					]
-				}
-			}
-		],
 		"R": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 65, 130, 195 ],
 					"BonusDamages": [
@@ -5258,6 +5640,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 15, 25, 35, 45, 55 ],
 					"BonusDamages": [
@@ -5273,6 +5656,7 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 90, 120, 150, 180 ],
 					"BonusDamages": [
@@ -5290,6 +5674,7 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 40, 80, 120, 160, 200 ],
 					"BonusDamages": [
@@ -5307,6 +5692,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -5320,6 +5706,7 @@
 			{
 				"Stage": "Empowered",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "True",
@@ -5337,6 +5724,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 60, 90, 120, 150, 180 ],
 					"BonusDamages": [
@@ -5354,6 +5742,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 10, 30, 50, 70, 90 ],
 					"BonusDamages": [
@@ -5371,6 +5760,23 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
+					"DamageType": "Physical",
+					"Damages": [ 30, 60, 90, 120, 150 ],
+					"BonusDamages": [
+						{
+							"DamageType": "Physical",
+							"DamagePercentages": [ 0.9, 0.9, 0.9, 0.9, 0.9 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "BonusAttackPoints"
+						}
+					]
+				}
+			},
+			{
+				"Stage": "SecondCast",
+				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 30, 60, 90, 120, 150 ],
 					"BonusDamages": [
@@ -5388,6 +5794,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 30, 60, 120 ],
 					"BonusDamages": [
@@ -5407,6 +5814,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 30, 60, 90, 120, 150 ],
 					"BonusDamages": [
@@ -5422,6 +5830,7 @@
 			{
 				"Stage": "Empowered",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"DamagesPerLvl": [ 30, 45, 60, 75, 90, 105, 120, 135, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240 ],
 					"BonusDamages": [
@@ -5439,6 +5848,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 50, 80, 110, 140, 170 ],
 					"BonusDamages": [
@@ -5454,6 +5864,7 @@
 			{
 				"Stage": "Empowered",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"DamagesPerLvl": [ 40, 55, 70, 85, 100, 115, 130, 145, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250 ],
 					"BonusDamages": [
@@ -5471,6 +5882,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 50, 100, 150, 200, 250 ],
 					"BonusDamages": [
@@ -5486,6 +5898,7 @@
 			{
 				"Stage": "Empowered",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"DamagesPerLvl": [ 50, 75, 100, 125, 150, 175, 200, 225, 250, 260, 270, 280, 290, 300, 310, 320, 330, 340 ],
 					"BonusDamages": [
@@ -5505,6 +5918,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 10, 30, 50, 70, 90 ],
 					"BonusDamages": [
@@ -5522,6 +5936,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 50, 80, 110, 140, 170 ],
 					"BonusDamages": [
@@ -5539,6 +5954,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 80, 120, 160 ],
 					"ScalePerTargetMissHealth": 2.67,
@@ -5546,21 +5962,6 @@
 						{
 							"DamageType": "Physical",
 							"DamagePercentages": [ 0.6, 0.6, 0.6 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "BonusAttackPoints"
-						}
-					]
-				}
-			},
-			{
-				"Stage": "Empowered",
-				"SpellData": {
-					"DamageType": "Physical",
-					"Damages": [ 240, 360, 480 ],
-					"BonusDamages": [
-						{
-							"DamageType": "Physical",
-							"DamagePercentages": [ 1.8, 1.8, 1.8 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "BonusAttackPoints"
 						}
@@ -5574,6 +5975,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 75, 135, 195, 255, 315 ],
 					"BonusDamages": [
@@ -5591,6 +5993,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 45, 70, 95, 120, 145 ],
 					"BonusDamages": [
@@ -5608,12 +6011,13 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
-					"Damages": [ 130, 185, 240 ],
+					"Damages": [ 650, 925, 1200 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
-							"DamagePercentages": [ 0.3, 0.3, 0.3 ],
+							"DamagePercentages": [ 1.5, 1.5, 1.5 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AbilityPoints"
 						}
@@ -5627,6 +6031,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 60, 85, 110, 135, 160 ],
 					"BonusDamages": [
@@ -5650,6 +6055,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 80, 100, 120, 140, 160 ],
 					"BonusDamages": [
@@ -5673,6 +6079,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 36, 52, 68, 84, 100 ],
 					"BonusDamages": [
@@ -5698,6 +6105,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 125, 170, 215, 260 ],
 					"BonusDamages": [
@@ -5715,11 +6123,13 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Attack",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
 							"DamagePercentages": [ 0.04, 0.045, 0.05, 0.055, 0.06 ],
 							"ScalePer100Ap": 0.03,
+							"MaxDamageOnMinion": [ 300, 300, 300, 300, 300 ],
 							"ScalingTarget": "Target",
 							"ScalingType": "MaxHealth"
 						}
@@ -5729,6 +6139,7 @@
 			{
 				"Stage": "DamagePerSecond",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 10, 17.5, 25, 32.5, 40 ],
 					"BonusDamages": [
@@ -5752,6 +6163,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 90, 120, 150, 180 ],
 					"BonusDamages": [
@@ -5769,6 +6181,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 250, 350 ],
 					"BonusDamages": [
@@ -5788,6 +6201,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 35, 50, 65, 80, 95 ],
 					"BonusDamages": [
@@ -5805,6 +6219,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 50, 90, 130, 170, 210 ],
 					"BonusDamages": [
@@ -5828,6 +6243,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 300, 450, 600 ],
 					"BonusDamages": [
@@ -5847,6 +6263,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 60, 100, 140, 180, 220 ],
 					"BonusDamages": [
@@ -5864,6 +6281,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 50, 85, 120, 155, 190 ],
 					"BonusDamages": [
@@ -5883,6 +6301,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -5898,6 +6317,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 20, 32, 45, 57, 70 ],
 					"BonusDamages": [
@@ -5909,27 +6329,13 @@
 						}
 					]
 				}
-			},
-			{
-				"Stage": "SecondForm",
-				"SpellData": {
-					"DamageType": "Magical",
-					"Damages": [ 5, 8, 11.25, 14.25, 17.5 ],
-					"BonusDamages": [
-						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 0.05, 0.05, 0.05, 0.05, 0.05 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "BonusAttackPoints"
-						}
-					]
-				}
 			}
 		],
 		"E": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 100, 140, 180, 220 ],
 					"BonusDamages": [
@@ -5945,6 +6351,7 @@
 			{
 				"Stage": "Detonation",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
@@ -5961,6 +6368,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 175, 300, 425 ],
 					"BonusDamages": [
@@ -5980,6 +6388,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "OverTime",
 					"DamageType": "Magical",
 					"Damages": [ 44, 68, 92, 116, 140 ],
 					"BonusDamages": [
@@ -5997,6 +6406,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 50, 65, 80, 95, 110 ],
 					"BonusDamages": [
@@ -6023,12 +6433,13 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
-					"Damages": [ 60, 120, 180, 240, 300 ],
+					"Damages": [ 12, 24, 36, 48, 60 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
-							"DamagePercentages": [ 1.95, 1.95, 1.95, 1.95, 1.95 ],
+							"DamagePercentages": [ 0.39, 0.39, 0.39, 0.39, 0.39 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AttackPoints"
 						}
@@ -6040,19 +6451,14 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 40, 65, 90, 115, 140 ],
+					"MaxDamageOnMinion": [ 400, 400, 400, 400, 400 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
-							"DamagePercentages": [ 0.4, 0.4, 0.4, 0.4, 0.4 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "AbilityPoints"
-						},
-						{
-							"DamageType": "Magical",
 							"DamagePercentages": [ 0.1, 0.11, 0.12, 0.13, 0.14 ],
-							"MaxDamageOnMinion": [ 400, 400, 400, 400, 400 ],
 							"ScalingTarget": "Target",
 							"ScalingType": "MaxHealth"
 						}
@@ -6064,6 +6470,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 105, 140, 175, 210 ],
 					"BonusDamages": [
@@ -6081,27 +6488,13 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 150, 300, 450 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
 							"DamagePercentages": [ 0.4, 0.4, 0.4 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "BonusAttackPoints"
-						}
-					]
-				}
-			},
-			{
-				"Stage": "Empowered",
-				"SpellData": {
-					"DamageType": "Physical",
-					"Damages": [ 300, 600, 900 ],
-					"BonusDamages": [
-						{
-							"DamageType": "Physical",
-							"DamagePercentages": [ 0.8, 0.8, 0.8 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "BonusAttackPoints"
 						}
@@ -6115,6 +6508,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 25, 45, 65, 85, 105 ],
 					"BonusDamages": [
@@ -6133,21 +6527,6 @@
 					]
 				}
 			}
-		],
-		"W": [
-			{
-				"Stage": "Default",
-				"SpellData": {
-					"BonusDamages": [
-						{
-							"DamageType": "Physical",
-							"DamagePercentages": [ 0.5, 0.55, 0.6, 0.65, 0.7 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "AttackPoints"
-						}
-					]
-				}
-			}
 		]
 	},
 	"Skarner": {
@@ -6155,10 +6534,11 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
-							"DamagePercentages": [ 0.3, 0.36, 0.39, 0.42, 0.45 ],
+							"DamagePercentages": [ 0.33, 0.36, 0.39, 0.42, 0.45 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AttackPoints"
 						}
@@ -6168,10 +6548,11 @@
 			{
 				"Stage": "Empowered",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
-							"DamagePercentages": [ 0.3, 0.36, 0.39, 0.42, 0.45 ],
+							"DamagePercentages": [ 0.33, 0.36, 0.39, 0.42, 0.45 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AttackPoints"
 						},
@@ -6189,6 +6570,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 40, 65, 90, 115, 140 ],
 					"BonusDamages": [
@@ -6204,6 +6586,7 @@
 			{
 				"Stage": "Detonation",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 25, 35, 45, 55, 65 ]
 				}
@@ -6213,6 +6596,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 40, 120, 200 ],
 					"BonusDamages": [
@@ -6224,7 +6608,7 @@
 						},
 						{
 							"DamageType": "Physical",
-							"DamagePercentages": [ 2, 2, 2 ],
+							"DamagePercentages": [ 1.2, 1.2, 1.2 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AttackPoints"
 						}
@@ -6238,6 +6622,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 40, 80, 120, 160, 200 ],
 					"BonusDamages": [
@@ -6255,6 +6640,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 250, 350 ],
 					"BonusDamages": [
@@ -6274,6 +6660,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 105, 165, 225, 285, 345 ],
 					"BonusDamages": [
@@ -6291,6 +6678,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 110, 150, 190, 230 ],
 					"BonusDamages": [
@@ -6310,6 +6698,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "OverTime",
 					"DamageType": "Magical",
 					"Damages": [ 75, 120, 165, 210, 255 ],
 					"BonusDamages": [
@@ -6327,6 +6716,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 120, 160, 200, 240 ],
 					"BonusDamages": [
@@ -6344,6 +6734,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "OverTime",
 					"DamageType": "Magical",
 					"Damages": [ 81, 127.65, 176.7, 228.15, 282 ],
 					"BonusDamages": [
@@ -6361,6 +6752,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 50, 70, 90 ],
 					"BonusDamages": [
@@ -6380,6 +6772,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 50, 95, 140, 185, 230 ],
 					"BonusDamages": [
@@ -6397,6 +6790,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 120, 160, 200, 240 ],
 					"BonusDamages": [
@@ -6414,6 +6808,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 115, 160, 205, 250 ],
 					"BonusDamages": [
@@ -6431,27 +6826,13 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 90, 135, 180 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
 							"DamagePercentages": [ 0.2, 0.2, 0.2 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "AbilityPoints"
-						}
-					]
-				}
-			},
-			{
-				"Stage": "Empowered",
-				"SpellData": {
-					"DamageType": "Magical",
-					"Damages": [ 630, 975, 1260 ],
-					"BonusDamages": [
-						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 1.4, 1.4, 1.4 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AbilityPoints"
 						}
@@ -6465,6 +6846,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 80, 125, 170, 215, 260 ],
 					"BonusDamages": [
@@ -6482,6 +6864,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
@@ -6497,6 +6880,7 @@
 			{
 				"Stage": "SecondCast",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 100, 150, 200, 250, 300 ],
 					"BonusDamages": [
@@ -6514,6 +6898,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 20, 20, 20 ],
 					"BonusDamages": [
@@ -6533,6 +6918,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 30, 60, 90, 120, 150 ],
 					"BonusDamages": [
@@ -6546,8 +6932,9 @@
 				}
 			},
 			{
-				"Stage": "DamagePerSecond",
+				"Stage": "Empowered",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 40, 80, 120, 160, 200 ],
 					"BonusDamages": [
@@ -6565,6 +6952,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 60, 110, 160, 210, 260 ],
 					"BonusDamages": [
@@ -6582,6 +6970,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 120, 170, 220 ],
 					"BonusDamages": [
@@ -6601,6 +6990,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 40, 80, 120, 160, 200 ],
 					"BonusDamages": [
@@ -6618,6 +7008,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 80, 140, 200, 260, 320 ],
 					"BonusDamages": [
@@ -6635,6 +7026,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 250, 350 ],
 					"BonusDamages": [
@@ -6654,6 +7046,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 80, 125, 170, 215, 260 ],
 					"BonusDamages": [
@@ -6671,6 +7064,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 10, 20, 30, 40, 50 ],
 					"BonusDamages": [
@@ -6686,6 +7080,7 @@
 			{
 				"Stage": "DamagePerSecond",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 24, 48, 72, 96, 120 ],
 					"BonusDamages": [
@@ -6703,6 +7098,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 200, 325, 450 ],
 					"BonusDamages": [
@@ -6722,6 +7118,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 80, 120, 160, 200, 240 ],
 					"BonusDamages": [
@@ -6739,6 +7136,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 65, 95, 125, 155, 185 ],
 					"BonusDamages": [
@@ -6750,12 +7148,27 @@
 						}
 					]
 				}
+			},
+			{
+				"Stage": "Empowered",
+				"SpellData": {
+					"SpellEffectType": "None",
+					"BonusDamages": [
+						{
+							"DamageType": "Magical",
+							"DamagePercentages": [ 0.8, 1.1, 1.4, 1.7, 2 ],
+							"ScalingTarget": "Source",
+							"ScalingType": "AttackPoints"
+						}
+					]
+				}
 			}
 		],
 		"R": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 250, 400, 550 ],
 					"BonusDamages": [
@@ -6775,6 +7188,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 110, 160, 210, 260 ],
 					"BonusDamages": [
@@ -6792,6 +7206,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 60, 70, 80, 90, 100 ],
 					"BonusDamages": [
@@ -6813,6 +7228,7 @@
 			{
 				"Stage": "Buff",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 18, 21, 24, 27, 30 ],
 					"ScalingBuff": "tristanaecharge",
@@ -6842,6 +7258,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 300, 400, 500 ],
 					"BonusDamages": [
@@ -6861,6 +7278,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 20, 40, 60, 80, 100 ],
 					"BonusDamages": [
@@ -6878,6 +7296,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
@@ -6892,6 +7311,7 @@
 			{
 				"Stage": "DamagePerSecond",
 				"SpellData": {
+					"SpellEffectType": "OverTime",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
@@ -6910,6 +7330,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 70, 100, 130, 160, 190 ],
 					"BonusDamages": [
@@ -6930,13 +7351,14 @@
 			}
 		]
 	},
-	"Twisted Fate": {
+	"TwistedFate": {
 		"Q": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
-					"Damages": [ 60, 110, 160, 210, 260 ],
+					"Damages": [ 60, 105, 150, 195, 240 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
@@ -6952,6 +7374,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Attack",
 					"DamageType": "Magical",
 					"Damages": [ 40, 60, 80, 100, 120 ],
 					"BonusDamages": [
@@ -6973,6 +7396,7 @@
 			{
 				"Stage": "Detonation",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 30, 45, 60, 75, 90 ],
 					"BonusDamages": [
@@ -6994,6 +7418,7 @@
 			{
 				"Stage": "Empowered",
 				"SpellData": {
+					"SpellEffectType": "Attack",
 					"DamageType": "Magical",
 					"Damages": [ 15, 22.5, 30, 37.5, 45 ],
 					"BonusDamages": [
@@ -7017,6 +7442,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 55, 80, 105, 130, 155 ],
 					"BonusDamages": [
@@ -7036,6 +7462,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 20, 35, 50, 65, 80 ]
 				}
@@ -7043,6 +7470,7 @@
 			{
 				"Stage": "Buff",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 15, 20, 25, 30, 35 ],
 					"ScalingBuff": "twitchdeadlyvenom",
@@ -7074,6 +7502,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -7087,6 +7516,7 @@
 			{
 				"Stage": "DamagePerSecond",
 				"SpellData": {
+					"SpellEffectType": "OverTime",
 					"DamageType": "Physical",
 					"Damages": [ 30, 80, 130, 180, 230 ],
 					"BonusDamages": [
@@ -7104,6 +7534,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 40, 80, 120, 160, 200 ],
 					"BonusDamages": [
@@ -7119,6 +7550,7 @@
 			{
 				"Stage": "DamagePerSecond",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 15, 25, 35, 45, 55 ],
 					"BonusDamages": [
@@ -7138,6 +7570,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 10, 40, 70, 100, 130 ],
 					"BonusDamages": [
@@ -7155,6 +7588,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 75, 130, 185, 240, 295 ],
 					"BonusDamages": [
@@ -7174,6 +7608,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 10, 46.7, 83.3, 120, 156.7 ],
 					"BonusDamages": [
@@ -7185,27 +7620,13 @@
 						}
 					]
 				}
-			},
-			{
-				"Stage": "Empowered",
-				"SpellData": {
-					"DamageType": "Physical",
-					"Damages": [ 15, 70, 125, 180, 235 ],
-					"BonusDamages": [
-						{
-							"DamageType": "Physical",
-							"DamagePercentages": [ 1.6, 1.6, 1.6, 1.6, 1.6 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "AttackPoints"
-						}
-					]
-				}
 			}
 		],
 		"W": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 10, 14, 18, 22, 26 ],
 					"BonusDamages": [
@@ -7221,6 +7642,7 @@
 			{
 				"Stage": "Buff",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
@@ -7240,6 +7662,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 65, 100, 135, 170, 205 ],
 					"BonusDamages": [
@@ -7257,6 +7680,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 100, 175, 250 ],
 					"BonusDamages": [
@@ -7276,6 +7700,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -7291,6 +7716,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "True",
@@ -7308,6 +7734,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 45, 80, 115, 150, 185 ],
 					"BonusDamages": [
@@ -7327,6 +7754,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 110, 150, 190, 230 ],
 					"BonusDamages": [
@@ -7344,6 +7772,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 100, 150, 200, 250, 300 ],
 					"BonusDamages": [
@@ -7361,6 +7790,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 250, 375, 500 ],
 					"BonusDamages": [
@@ -7386,6 +7816,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 80, 120, 160, 200, 240 ],
 					"BonusDamages": [
@@ -7403,6 +7834,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 30, 50, 70, 90, 110 ],
 					"BonusDamages": [
@@ -7418,6 +7850,7 @@
 			{
 				"Stage": "Detonation",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 45, 75, 105, 135, 165 ],
 					"BonusDamages": [
@@ -7435,6 +7868,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 100, 130, 160, 190 ],
 					"BonusDamages": [
@@ -7452,6 +7886,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 500, 700, 900 ],
 					"BonusDamages": [
@@ -7471,12 +7906,13 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
-					"Damages": [ 50, 75, 100, 125, 150 ],
+					"Damages": [ 40, 60, 80, 100, 120 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
-							"DamagePercentages": [ 0.8, 0.8, 0.8, 0.8, 0.8 ],
+							"DamagePercentages": [ 0.6, 0.6, 0.6, 0.6, 0.6 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "BonusAttackPoints"
 						}
@@ -7503,6 +7939,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -7520,6 +7957,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 5, 20, 35, 50, 65 ],
 					"BonusDamages": [
@@ -7543,6 +7981,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 150, 300, 450 ],
 					"BonusDamages": [
@@ -7562,6 +8001,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 40, 60, 80, 100, 120 ],
 					"BonusDamages": [
@@ -7577,6 +8017,7 @@
 			{
 				"Stage": "Empowered",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"DamagesPerLvl": [ 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 110, 130, 150, 170, 190, 210 ],
 					"BonusDamages": [
@@ -7585,12 +8026,6 @@
 							"DamagePercentages": [ 0.5, 0.5, 0.5, 0.5, 0.5 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AbilityPoints"
-						},
-						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 1, 1, 1, 1, 1 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "AttackPoints"
 						}
 					]
 				}
@@ -7600,6 +8035,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 115, 160, 205, 250 ],
 					"BonusDamages": [
@@ -7611,27 +8047,13 @@
 						}
 					]
 				}
-			},
-			{
-				"Stage": "Empowered",
-				"SpellData": {
-					"DamageType": "Magical",
-					"Damages": [ 28, 46, 64, 82, 100 ],
-					"BonusDamages": [
-						{
-							"DamageType": "Magical",
-							"DamagePercentages": [ 0.28, 0.28, 0.28, 0.28, 0.28 ],
-							"ScalingTarget": "Source",
-							"ScalingType": "AbilityPoints"
-						}
-					]
-				}
 			}
 		],
 		"R": [
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 150, 250, 350 ],
 					"BonusDamages": [
@@ -7647,6 +8069,7 @@
 			{
 				"Stage": "DamagePerSecond",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 30, 60, 90 ],
 					"BonusDamages": [
@@ -7666,6 +8089,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 90, 125, 160, 195, 230 ],
 					"BonusDamages": [
@@ -7683,6 +8107,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 40, 67.5, 95, 122.5, 150 ],
 					"BonusDamages": [
@@ -7700,6 +8125,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 85, 110, 135, 160 ],
 					"BonusDamages": [
@@ -7715,6 +8141,7 @@
 			{
 				"Stage": "Buff",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 15, 21.25, 27.5, 33.75, 40 ],
 					"ScalingBuff": "vladimirtidesofbloodcost",
@@ -7726,6 +8153,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 168, 280, 392 ],
 					"BonusDamages": [
@@ -7745,6 +8173,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 30, 60, 90, 120, 150 ]
 				}
@@ -7754,6 +8183,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Physical",
 					"Damages": [ 80, 125, 170, 215, 260 ],
 					"ScalePerTargetMissHealth": 1,
@@ -7772,6 +8202,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 105, 150, 195, 240 ],
 					"BonusDamages": [
@@ -7789,6 +8220,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 75, 115, 155 ],
 					"BonusDamages": [
@@ -7808,6 +8240,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 75, 125, 175, 225, 275 ],
 					"BonusDamages": [
@@ -7823,6 +8256,7 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
@@ -7845,6 +8279,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Attack",
 					"DamageType": "Magical",
 					"Damages": [ 150, 250, 350 ],
 					"BonusDamages": [
@@ -7864,6 +8299,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 30, 60, 90, 120, 150 ],
 					"BonusDamages": [
@@ -7881,6 +8317,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 115, 160, 205, 250 ],
 					"BonusDamages": [
@@ -7898,6 +8335,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 60, 105, 150, 195, 240 ],
 					"BonusDamages": [
@@ -7915,6 +8353,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 20, 110, 200 ],
 					"BonusDamages": [
@@ -7934,6 +8373,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 120, 160, 200, 240 ],
 					"BonusDamages": [
@@ -7951,6 +8391,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 90, 135, 180, 225, 270 ],
 					"BonusDamages": [
@@ -7968,6 +8409,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 80, 110, 140, 170, 200 ],
 					"BonusDamages": [
@@ -7985,6 +8427,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 190, 245, 300 ],
 					"BonusDamages": [
@@ -8004,6 +8447,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 15, 30, 45, 60, 75 ],
 					"BonusDamages": [
@@ -8021,6 +8465,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 110, 150, 190, 230 ],
 					"BonusDamages": [
@@ -8038,6 +8483,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 75, 175, 275 ],
 					"BonusDamages": [
@@ -8064,6 +8510,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 20, 40, 60, 80, 100 ],
 					"BonusDamages": [
@@ -8081,6 +8528,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 70, 90, 110, 130, 150 ],
 					"BonusDamages": [
@@ -8096,6 +8544,7 @@
 			{
 				"Stage": "Buff",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Magical",
 					"Damages": [ 17.5, 22.5, 27.5, 32.5, 37.5 ],
 					"ScalingBuff": "YasuoDashScalar",
@@ -8107,6 +8556,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 200, 300, 400 ],
 					"BonusDamages": [
@@ -8126,6 +8576,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "None",
 					"DamageType": "Physical",
 					"Damages": [ 30, 60, 90, 120, 150 ],
 					"BonusDamages": [
@@ -8143,6 +8594,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 95, 130, 165, 200 ],
 					"BonusDamages": [
@@ -8160,6 +8612,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"DamageType": "Magical",
 					"Damages": [ 55, 85, 115, 145, 175 ],
 					"BonusDamages": [
@@ -8179,6 +8632,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 110, 150, 190, 230 ],
 					"BonusDamages": [
@@ -8196,6 +8650,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 40, 55, 70, 85, 100 ],
 					"MaxDamageOnMinion": [ 240, 255, 270, 285, 300 ],
@@ -8215,6 +8670,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 80, 130, 180, 230, 280 ],
 					"BonusDamages": [
@@ -8232,6 +8688,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 350, 525, 700 ],
 					"BonusDamages": [
@@ -8251,6 +8708,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 75, 115, 155, 195, 235 ],
 					"BonusDamages": [
@@ -8266,6 +8724,7 @@
 			{
 				"Stage": "SecondForm",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 45, 69, 93, 117, 141 ],
 					"BonusDamages": [
@@ -8283,6 +8742,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Physical",
 					"Damages": [ 60, 90, 120, 150, 180 ],
 					"BonusDamages": [
@@ -8300,6 +8760,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "Single",
 					"BonusDamages": [
 						{
 							"DamageType": "Physical",
@@ -8317,6 +8778,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 75, 120, 165, 210, 255 ],
 					"BonusDamages": [
@@ -8334,6 +8796,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 105, 140, 175, 210 ],
 					"BonusDamages": [
@@ -8351,12 +8814,13 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
-					"Damages": [ 40, 65, 90, 115, 140 ],
+					"Damages": [ 200, 325, 450, 575, 700 ],
 					"BonusDamages": [
 						{
 							"DamageType": "Magical",
-							"DamagePercentages": [ 0.3, 0.3, 0.3, 0.3, 0.3 ],
+							"DamagePercentages": [ 1.5, 1.5, 1.5, 1.5, 1.5 ],
 							"ScalingTarget": "Source",
 							"ScalingType": "AbilityPoints"
 						}
@@ -8368,6 +8832,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 250, 375, 500 ],
 					"BonusDamages": [
@@ -8387,6 +8852,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 75, 115, 165, 230, 300 ],
 					"BonusDamages": [
@@ -8406,6 +8872,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 70, 105, 140, 175, 210 ],
 					"BonusDamages": [
@@ -8423,6 +8890,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 60, 95, 130, 165, 200 ],
 					"BonusDamages": [
@@ -8440,6 +8908,7 @@
 			{
 				"Stage": "Default",
 				"SpellData": {
+					"SpellEffectType": "AoE",
 					"DamageType": "Magical",
 					"Damages": [ 180, 265, 350 ],
 					"BonusDamages": [

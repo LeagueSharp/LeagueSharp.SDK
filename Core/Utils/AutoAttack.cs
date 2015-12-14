@@ -36,17 +36,18 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         private static readonly string[] AttackResets =
             {
-                "dariusnoxiantacticsonh", "fioraflurry", "garenq",
-                "gravesmove", "hecarimrapidslash", "jaxempowertwo",
-                "jaycehypercharge", "leonashieldofdaybreak", "luciane",
-                "lucianq", "monkeykingdoubleattack", "mordekaisermaceofspades",
-                "nasusq", "nautiluspiercinggaze", "netherblade",
-                "gangplankqwrapper", "poppydevastatingblow", "powerfist",
-                "renektonpreexecute", "rengarq", "shyvanadoubleattack",
-                "sivirw", "takedown", "talonnoxiandiplomacy",
-                "trundletrollsmash", "vaynetumble", "vie", "volibearq",
-                "xenzhaocombotarget", "yorickspectral", "reksaiq",
-                "itemtitanichydracleave", "masochism"
+                "powerfist", "dariusnoxiantacticsonh", "masochism", "fiorae",
+                "gangplankqwrapper", "garenq", "gravesmove", "hecarimramp",
+                "illaoiw", "jaxempowertwo", "jaycehypercharge", "netherblade",
+                "leonashieldofdaybreak", "luciane", "meditate",
+                "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze",
+                "takedown", "reksaiq", "renektonpreexecute", "rengarq",
+                "riventricleave", "sejuaninorthernwinds",
+                "shyvanadoubleattack", "shyvanadoubleattackdragon", "sivirw",
+                "talonnoxiandiplomacy", "blindingdart", "trundletrollsmash",
+                "vaynetumble", "vie", "volibearq", "monkeykingdoubleattack",
+                "xenzhaocombotarget", "yorickspectral",
+                "itemtitanichydracleave"
             };
 
         /// <summary>
@@ -54,11 +55,10 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         private static readonly string[] Attacks =
             {
-                "caitlynheadshotmissile", "frostarrow", "garenslash2",
-                "kennenmegaproc", "lucianpassiveattack", "masteryidoublestrike",
+                "caitlynheadshotmissile", "kennenmegaproc", "masteryidoublestrike",
                 "quinnwenhanced", "renektonexecute", "renektonsuperexecute",
-                "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust",
-                "xenzhaothrust2", "xenzhaothrust3", "viktorqbuff"
+                /*"rengarnewpassivebuffdash",*/ "trundleq", "viktorqbuff",
+                "xenzhaothrust", "xenzhaothrust2", "xenzhaothrust3"
             };
 
         /// <summary>
@@ -66,20 +66,18 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         private static readonly string[] NoAttacks =
             {
-                "volleyattack", "volleyattackwithsound",
-                "jarvanivcataclysmattack", "monkeykingdoubleattack",
-                "shyvanadoubleattack", "shyvanadoubleattackdragon",
-                "zyragraspingplantattack", "zyragraspingplantattack2",
-                "zyragraspingplantattackfire", "zyragraspingplantattack2fire",
-                "viktorpowertransfer", "sivirwattackbounce", "asheqattacknoonhit",
+                "annietibbersbasicattack", "annietibbersbasicattack2",
+                "azirsoldierbasicattack", "azirsundiscbasicattack",
                 "elisespiderlingbasicattack", "heimertyellowbasicattack",
                 "heimertyellowbasicattack2", "heimertbluebasicattack",
-                "annietibbersbasicattack", "annietibbersbasicattack2",
-                "yorickdecayedghoulbasicattack", "yorickravenousghoulbasicattack",
-                "yorickspectralghoulbasicattack", "malzaharvoidlingbasicattack",
+                /*"jarvanivcataclysmattack",*/ 
+                "kindredwolfbasicattack", "malzaharvoidlingbasicattack",
                 "malzaharvoidlingbasicattack2", "malzaharvoidlingbasicattack3",
-                "kindredwolfbasicattack",
-                "kindredbasicattackoverridelightbombfinal"
+                "shyvanadoubleattack", "shyvanadoubleattackdragon",
+                "monkeykingdoubleattack", "yorickspectralghoulbasicattack",
+                "yorickdecayedghoulbasicattack", "yorickravenousghoulbasicattack",
+                "zyragraspingplantattack", "zyragraspingplantattack2",
+                "zyragraspingplantattackfire", "zyragraspingplantattack2fire"
             };
 
         /// <summary>

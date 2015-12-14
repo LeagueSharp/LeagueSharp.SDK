@@ -186,9 +186,11 @@ namespace LeagueSharp.SDK.Core.Events
             RegisterSpell("Nunu", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Pantheon", new InterruptableSpellData(SpellSlot.E, DangerLevel.Low));
             RegisterSpell("Pantheon", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("Quinn", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
             RegisterSpell("RekSai", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Sion", new InterruptableSpellData(SpellSlot.R, DangerLevel.Low));
             RegisterSpell("Shen", new InterruptableSpellData(SpellSlot.R, DangerLevel.Low));
+            RegisterSpell("TahmKench", new InterruptableSpellData(SpellSlot.R, DangerLevel.Medium));
             RegisterSpell("TwistedFate", new InterruptableSpellData(SpellSlot.R, DangerLevel.Medium));
             RegisterSpell("Urgot", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Velkoz", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));

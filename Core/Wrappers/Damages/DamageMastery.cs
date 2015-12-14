@@ -18,9 +18,11 @@
 
             SecretStash = 82,
 
-            Meditation = 98,
+            Assassin = 83,
 
             Merciless = 97,
+
+            Meditation = 98,
 
             Bandit = 114,
 
@@ -30,11 +32,11 @@
 
             Intelligence = 130,
 
-            StormraiderSurge = 145,
+            StormraidersSurge = 145,
 
-            ThunderlordDecree = 146,
+            ThunderlordsDecree = 146,
 
-            WindspeakerBlessing = 147
+            WindspeakersBlessing = 147
         }
 
         public enum Ferocity
@@ -45,11 +47,11 @@
 
             DoubleEdgedSword = 81,
 
+            Feast = 82,
+
             Vampirism = 97,
 
             NaturalTalent = 100,
-
-            Feast = 82,
 
             BountyHunter = 113,
 
@@ -59,7 +61,7 @@
 
             PiercingThoughts = 132,
 
-            WarlordBloodlust = 145,
+            WarlordsBloodlust = 145,
 
             FervorofBattle = 146,
 
@@ -78,7 +80,7 @@
 
             RunicArmor = 97,
 
-            VeteranScars = 98,
+            VeteransScars = 98,
 
             Insight = 113,
 
@@ -106,7 +108,7 @@
         /// <returns></returns>
         public static Mastery GetCunning(this Obj_AI_Hero hero, Cunning cunning)
         {
-            return hero.GetMastery(MasteryPage.Defense, (int)cunning);
+            return hero.GetMastery(MasteryPage.Cunning, (int)cunning);
         }
 
         /// <summary>
@@ -116,7 +118,7 @@
         /// <returns></returns>
         public static Mastery GetFerocity(this Obj_AI_Hero hero, Ferocity ferocity)
         {
-            return hero.GetMastery(MasteryPage.Offense, (int)ferocity);
+            return hero.GetMastery(MasteryPage.Ferocity, (int)ferocity);
         }
 
         /// <summary>
@@ -126,7 +128,7 @@
         /// <returns></returns>
         public static Mastery GetResolve(this Obj_AI_Hero hero, Resolve resolve)
         {
-            return hero.GetMastery(MasteryPage.Utility, (int)resolve);
+            return hero.GetMastery(MasteryPage.Resolve, (int)resolve);
         }
 
         /// <summary>

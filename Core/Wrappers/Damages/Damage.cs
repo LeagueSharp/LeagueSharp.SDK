@@ -18,12 +18,13 @@
 namespace LeagueSharp.SDK.Core.Wrappers.Damages
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
 
-    using Enumerations;
-    using Extensions;
-    using Utils;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -70,7 +71,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     break;
             }
 
-            return Math.Max(damage, 0d);
+            return Math.Max(damage, 0);
         }
 
         /// <summary>
@@ -101,7 +102,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 Math.Max(
                     source.CalculatePhysicalDamage(target, physicalAmount)
                     + source.CalculateMagicDamage(target, magicalAmount),
-                    0d);
+                    0);
         }
 
         /// <summary>
@@ -113,170 +114,87 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         /// <param name="target">
         ///     The target
         /// </param>
-        /// <param name="includePassive">
-        ///     Indicates whether to include passive effects.
-        /// </param>
         /// <returns>
         ///     The estimated auto attack damage.
         /// </returns>
-        public static double GetAutoAttackDamage(
-            this Obj_AI_Base source,
-            Obj_AI_Base target,
-            bool includePassive = false)
+        public static double GetAutoAttackDamage(this Obj_AI_Base source, Obj_AI_Base target)
         {
             double result = source.TotalAttackDamage;
             var damageModifier = 1d;
-            var reduction = 0d;
             var passive = 0d;
-            var bonus = 0d;
 
-            if (includePassive)
+            var hero = source as Obj_AI_Hero;
+            var targetHero = target as Obj_AI_Hero;
+            var targetMinion = target as Obj_AI_Minion;
+
+            if (hero != null)
             {
-                var hero = source as Obj_AI_Hero;
-                var targetHero = target as Obj_AI_Hero;
-                var targetMinion = target as Obj_AI_Minion;
-
-                if (hero != null)
+                if (hero.ChampionName == "Kalista")
                 {
-                    // Spoils of War
-                    if (hero.IsMelee && targetMinion != null && targetMinion.IsEnemy
-                        && targetMinion.Team != GameObjectTeam.Neutral && hero.GetBuffCount("TalentReaper") > 0
-                        && GameObjects.Heroes.Any(
-                            h => h.Team == hero.Team && h.NetworkId != hero.NetworkId && h.Distance(targetMinion) < 1100))
-                    {
-                        return hero.TotalAttackDamage
-                               + (Items.HasItem((int)ItemId.Relic_Shield, hero)
-                                      ? 200
-                                      : (Items.HasItem((int)ItemId.Targons_Brace, hero) ? 240 : 400));
-                    }
+                    result *= 0.9;
+                }
 
-                    // Blade of the Ruined King
-                    // + Deal 6% of the target's current health in bonus on-hit physical damage (max 60 vs. minions and monsters)
-                    if (Items.HasItem((int)ItemId.Blade_of_the_Ruined_King, hero))
-                    {
-                        var d = 0.06 * target.Health;
-                        bonus += targetMinion != null ? Math.Min(d, 60) : d;
-                    }
-
-                    // Dead Man's Plate
-                    // + Dealing +1 on-hit physical damage for every 2 Momentum discharged
-                    if (hero.IsMelee && hero.GetBuffCount("DreadnoughtMomentumBuff") > 0)
-                    {
-                        bonus += hero.GetBuffCount("DreadnoughtMomentumBuff") / 2
-                                 * (hero.GetBuffCount("DreadnoughtMomentumBuff") == 100 ? 2 : 1);
-                    }
-
-                    // Spellthief's Edge
-                    // + Spells and basic attacks against champions or buildings deal 10 additional damage
-                    if (hero.GetBuffCount("kagesluckypickdisplay") > 0
-                        && (targetHero != null || target is Obj_AI_Turret))
-                    {
-                        bonus += Items.HasItem((int)ItemId.Spellthiefs_Edge, hero) ? 10 : 15;
-                    }
-
-                    // Serrated Dirk
-                    if (hero.HasBuff("Serrated"))
-                    {
-                        bonus += 15;
-                    }
-
-                    if (Items.HasItem((int)ItemId.Recurve_Bow, hero)
-                        || (Items.HasItem((int)ItemId.Runaans_Hurricane_Ranged_Only, hero) && hero.IsRanged))
-                    {
-                        bonus += 15;
-                    }
-
-                    if (Items.HasItem(3748, hero))
-                    {
-                        bonus += hero.HasBuff("itemtitanichydracleavebuff")
-                                     ? 40 + (.1f * hero.MaxHealth)
-                                     : 5 + (.01f * hero.MaxHealth);
-                    }
-
-                    if (targetHero != null)
-                    {
-                        // Fervorofbattle:
-                        // + STACKTIVATE Your basic attacks and spells give you stacks of Fervor for 5 seconds, stacking 10 times. Each stack of Fervor adds 1-8 bonus physical damage to your basic attacks against champions, based on your level.
-                        var fervorofBattle = hero.GetFerocity(DamageMastery.Ferocity.FervorofBattle);
-                        if (fervorofBattle.IsValid())
-                        {
-                            bonus += (0.9f + (0.42f * hero.Level)) * hero.GetBuffCount("MasteryOnHitDamageStacker");
-                        }
-
-                        // Phantom Dancer:
-                        // + Reduces damage dealt to attacker (if he's attack you) by 12%
-                        if (hero.HasBuff("itemphantomdancerdebuff")
-                            && hero.GetBuff("itemphantomdancerdebuff").Caster.NetworkId == targetHero.NetworkId)
-                        {
-                            damageModifier *= 0.88d;
-                        }
-
-                        // Giant Slayer - Lord Dominik's Regards
-                        // + Grants up to 10% physical damage against enemy champions with greater maximum Health
-                        if ((Items.HasItem(3034, hero) || Items.HasItem(3036, hero))
-                            && hero.MaxHealth < targetHero.MaxHealth)
-                        {
-                            bonus *= Math.Min(targetHero.MaxHealth - hero.MaxHealth, 500) / 50
-                                     * (Items.HasItem(3034, hero) ? 0.01 : 0.015) + 1;
-                        }
-                    }
-
-                    // SAVAGERY:
-                    // + BONUS DAMAGE TO MINIONS AND MONSTERS 1/2/3/4/5 on single target spells and basic attacks
-                    if (targetMinion != null)
-                    {
-                        var savagery = hero.GetCunning(DamageMastery.Cunning.Savagery);
-                        if (savagery.IsValid())
-                        {
-                            bonus += savagery.Points;
-                        }
-                        if (hero.IsRanged && targetMinion.GetJungleType() == JungleType.Legendary
-                            && Regex.IsMatch(targetMinion.Name, "SRU_RiftHerald"))
-                        {
-                            damageModifier *= 0.65d;
-                        }
-                    }
+                // Spoils Of War
+                if (hero.IsMelee && targetMinion != null && targetMinion.Team != hero.Team
+                    && targetMinion.Team != GameObjectTeam.Neutral && hero.GetBuffCount("TalentReaper") > 0
+                    && GameObjects.Heroes.Any(
+                        h => h.Team == hero.Team && h.NetworkId != hero.NetworkId && h.Distance(targetMinion) < 1100))
+                {
+                    return result
+                           + (Items.HasItem((int)ItemId.Relic_Shield, hero)
+                                  ? 200
+                                  : (Items.HasItem((int)ItemId.Targons_Brace, hero) ? 240 : 400));
                 }
 
                 if (targetHero != null)
                 {
-                    // Ninja tabi
-                    if (new[] { 3047, 1316, 1318, 1315, 1317 }.Any(i => Items.HasItem(i, targetHero)))
+                    // Dorans Shield
+                    if (Items.HasItem((int)ItemId.Dorans_Shield, targetHero))
                     {
-                        damageModifier *= 0.9d;
+                        result -= 8;
                     }
 
-                    // Nimble Fighter
-                    if (targetHero.ChampionName == "Fizz")
+                    // Fervor Of Battle
+                    var fervorofBattle = hero.GetFerocity(DamageMastery.Ferocity.FervorofBattle);
+                    if (fervorofBattle.IsValid())
                     {
-                        reduction += 4 + ((targetHero.Level - (1 / 3)) * 2);
-                    }
-
-                    // Tough Skin
-                    // + Take 2 less damage from champion and monster basic attacks
-                    if ((source is Obj_AI_Minion || hero != null)
-                        && targetHero.GetResolve(DamageMastery.Resolve.ToughSkin).IsValid())
-                    {
-                        reduction += 2;
+                        result += (0.9 + (0.42 * hero.Level)) * hero.GetBuffCount("MasteryOnHitDamageStacker");
                     }
                 }
 
-                // Bonus Damage (Passive)
-                if (hero != null)
+                // RiftHerald P
+                if (targetMinion != null && hero.IsRanged && targetMinion.Team == GameObjectTeam.Neutral
+                    && Regex.IsMatch(targetMinion.Name, "SRU_RiftHerald"))
                 {
-                    var passiveInfo = hero.GetPassiveDamageInfo(target);
-                    if (passiveInfo.Override)
-                    {
-                        return source.CalculatePhysicalDamage(target, (bonus - reduction) * damageModifier)
-                               + passiveInfo.Value;
-                    }
-
-                    passive += passiveInfo.Value;
+                    damageModifier *= 0.65;
                 }
             }
 
+            // Ninja Tabi
+            if (targetHero != null && new[] { 3047, 1316, 1318, 1315, 1317 }.Any(i => Items.HasItem(i, targetHero))
+                && !(source is Obj_AI_Turret))
+            {
+                damageModifier *= 0.9;
+            }
+
+            // Bonus Damage (Passive)
+            if (hero != null)
+            {
+                var passiveInfo = hero.GetPassiveDamageInfo(target);
+                if (passiveInfo.Override)
+                {
+                    return passiveInfo.Value + source.PassiveFlatMod(target);
+                }
+
+                passive += passiveInfo.Value;
+            }
+
             // This formula is right, work out the math yourself if you don't believe me
-            return source.CalculatePhysicalDamage(target, (result + bonus - reduction) * damageModifier) + passive;
+            return
+                Math.Max(
+                    source.CalculatePhysicalDamage(target, result) * damageModifier + passive
+                    + source.PassiveFlatMod(target),
+                    0);
         }
 
         /// <summary>
@@ -305,19 +223,19 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         {
             if (source == null || !source.IsValid || target == null || !target.IsValid)
             {
-                return 0d;
+                return 0;
             }
 
             ChampionDamage value;
             if (!DamageCollection.TryGetValue(source.ChampionName, out value))
             {
-                return 0d;
+                return 0;
             }
 
             var spellData = value.GetSlot(spellSlot)?.FirstOrDefault(e => e.Stage == stage)?.SpellData;
             if (spellData == null)
             {
-                return 0d;
+                return 0;
             }
 
             var spellLevel =
@@ -325,8 +243,42 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     .Level;
             if (spellLevel == 0)
             {
-                return 0d;
+                return 0;
             }
+
+            var dictOnHit = new Dictionary<string, SpellSlot>
+                                {
+                                    { "Evelynn", SpellSlot.E }, { "Ezreal", SpellSlot.Q }, { "Fiora", SpellSlot.Q },
+                                    { "Fizz", SpellSlot.Q }, { "Gangplank", SpellSlot.Q }, { "Irelia", SpellSlot.Q },
+                                    { "MissFortune", SpellSlot.Q }, { "Warwick", SpellSlot.R }, { "Yasuo", SpellSlot.Q }
+                                };
+            var isOnHit = dictOnHit.ContainsKey(source.ChampionName) && dictOnHit[source.ChampionName] == spellSlot;
+
+            var dictModifier = new Dictionary<string, Tuple<SpellSlot, DamageStage>>
+                                   {
+                                       { "Ashe", new Tuple<SpellSlot, DamageStage>(SpellSlot.Q, DamageStage.Default) },
+                                       { "Jayce", new Tuple<SpellSlot, DamageStage>(SpellSlot.W, DamageStage.SecondForm) },
+                                       {
+                                           "Nidalee", new Tuple<SpellSlot, DamageStage>(SpellSlot.Q, DamageStage.SecondForm)
+                                       },
+                                       { "Renekton", new Tuple<SpellSlot, DamageStage>(SpellSlot.W, DamageStage.Default) },
+                                       {
+                                           "TwistedFate",
+                                           new Tuple<SpellSlot, DamageStage>(SpellSlot.W, DamageStage.Default)
+                                       },
+                                       {
+                                           "TwistedFate",
+                                           new Tuple<SpellSlot, DamageStage>(SpellSlot.W, DamageStage.Detonation)
+                                       },
+                                       {
+                                           "TwistedFate",
+                                           new Tuple<SpellSlot, DamageStage>(SpellSlot.W, DamageStage.Empowered)
+                                       },
+                                       { "Viktor", new Tuple<SpellSlot, DamageStage>(SpellSlot.Q, DamageStage.Empowered) }
+                                   };
+            var isModifier = dictModifier.ContainsKey(source.ChampionName)
+                             && dictModifier[source.ChampionName].Item1 == spellSlot
+                             && dictModifier[source.ChampionName].Item2 == stage;
 
             var baseDamage = 0d;
             var bonusDamage = 0d;
@@ -342,7 +294,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         var buffCount =
                             (spellData.ScalingBuffTarget == DamageScalingTarget.Source ? source : target).GetBuffCount(
                                 spellData.ScalingBuff);
-                        baseDamage = buffCount != 0 ? baseDamage * (buffCount + spellData.ScalingBuffOffset) : 0d;
+                        baseDamage = buffCount != 0 ? baseDamage * (buffCount + spellData.ScalingBuffOffset) : 0;
                     }
                 }
                 else
@@ -356,7 +308,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         var buffCount =
                             (spellData.ScalingBuffTarget == DamageScalingTarget.Source ? source : target).GetBuffCount(
                                 spellData.ScalingBuff);
-                        baseDamage = buffCount != 0 ? baseDamage * (buffCount + spellData.ScalingBuffOffset) : 0d;
+                        baseDamage = buffCount != 0 ? baseDamage * (buffCount + spellData.ScalingBuffOffset) : 0;
                     }
                 }
             }
@@ -386,7 +338,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     }
                 }
             }
+
             var totalDamage = baseDamage + bonusDamage;
+            var passiveDamage = 0d;
+
             if (totalDamage > 0)
             {
                 if (spellData.ScalePerTargetMissHealth > 0)
@@ -400,9 +355,631 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         totalDamage,
                         spellData.MaxDamageOnMinion[Math.Min(spellLevel - 1, spellData.MaxDamageOnMinion.Count - 1)]);
                 }
+                if (spellData.SpellEffectType == SpellEffectType.Single && target is Obj_AI_Minion)
+                {
+                    var savagery = source.GetCunning(DamageMastery.Cunning.Savagery);
+                    if (savagery.IsValid())
+                    {
+                        passiveDamage += savagery.Points;
+                    }
+                }
+                if (spellData.SpellEffectType != SpellEffectType.None && !isOnHit)
+                {
+                    var sorcery = source.GetFerocity(DamageMastery.Ferocity.Sorcery);
+                    if (sorcery.IsValid())
+                    {
+                        totalDamage *= 1 + new[] { 0.4, 0.8, 1.2, 1.6, 2 }[sorcery.Points - 1] / 100;
+                    }
+                }
+                if (isModifier || isOnHit)
+                {
+                    var targetHero = target as Obj_AI_Hero;
+                    if (targetHero != null
+                        && new[] { 3047, 1316, 1318, 1315, 1317 }.Any(i => Items.HasItem(i, targetHero)))
+                    {
+                        totalDamage *= 0.9;
+                    }
+                }
+                if (isOnHit)
+                {
+                    passiveDamage += source.PassiveFlatMod(target);
+                    passiveDamage += source.GetPassiveDamageInfo(target).Value;
+                    if (source.GetFerocity(DamageMastery.Ferocity.FervorofBattle).IsValid())
+                    {
+                        passiveDamage += source.CalculateDamage(
+                            target,
+                            DamageType.Physical,
+                            (0.9 + (0.42 * source.Level)) * source.GetBuffCount("MasteryOnHitDamageStacker"));
+                    }
+                }
+                switch (source.ChampionName)
+                {
+                    case "Anivia":
+                        if (spellSlot == SpellSlot.E && target.HasBuff("chilled"))
+                        {
+                            totalDamage *= 2;
+                        }
+                        break;
+                    case "Ashe":
+                        if (spellSlot == SpellSlot.Q && Math.Abs(source.Crit - 1) < float.Epsilon)
+                        {
+                            totalDamage *= 2 + (Items.HasItem((int)ItemId.Infinity_Edge, source) ? 0.5 : 0);
+                        }
+                        break;
+                    case "Brand":
+                        if (spellSlot == SpellSlot.W && target.HasBuff("brandablaze"))
+                        {
+                            totalDamage *= 1.25;
+                        }
+                        break;
+                    case "Braum":
+                        if (spellSlot == SpellSlot.Q)
+                        {
+                            if (target.GetBuffCount("braummark") == 3)
+                            {
+                                passiveDamage += source.CalculateDamage(
+                                    target,
+                                    DamageType.Magical,
+                                    32 + (8 * source.Level));
+                            }
+                            else if (target.HasBuff("braummarkstunreduction"))
+                            {
+                                passiveDamage += source.CalculateDamage(
+                                    target,
+                                    DamageType.Magical,
+                                    6.4 + (1.6 * source.Level));
+                            }
+                        }
+                        break;
+                    case "Cassiopeia":
+                        if ((spellSlot == SpellSlot.Q || spellSlot == SpellSlot.W)
+                            && target.HasBuff("cassiopeiatwinfangdebuff"))
+                        {
+                            totalDamage *= 1 + (0.2 * target.GetBuffCount("cassiopeiatwinfangdebuff"));
+                        }
+                        break;
+                    case "Corki":
+                        if (spellSlot == SpellSlot.R && source.HasBuff("corkimissilebarragecounterbig"))
+                        {
+                            totalDamage *= 1.5;
+                        }
+                        break;
+                    case "Darius":
+                        if (spellSlot == SpellSlot.R && stage == DamageStage.Default)
+                        {
+                            totalDamage += source.GetSpellDamage(target, SpellSlot.R, DamageStage.Buff);
+                        }
+                        break;
+                    case "Fiddlesticks":
+                        if (spellSlot == SpellSlot.E && target is Obj_AI_Minion)
+                        {
+                            totalDamage *= 1.5;
+                        }
+                        break;
+                    case "Fizz":
+                        if (spellSlot == SpellSlot.Q)
+                        {
+                            passiveDamage += source.CalculateDamage(
+                                target,
+                                DamageType.Physical,
+                                source.TotalAttackDamage);
+                        }
+                        if ((spellSlot == SpellSlot.Q || spellSlot == SpellSlot.W || spellSlot == SpellSlot.E)
+                            && target.HasBuff("fizzrbonusbuff"))
+                        {
+                            totalDamage *= 1.2;
+                        }
+                        break;
+                    case "Garen":
+                        if (spellSlot == SpellSlot.E)
+                        {
+                            totalDamage *= source.Level < 4
+                                               ? 5
+                                               : source.Level < 7
+                                                     ? 6
+                                                     : source.Level < 10
+                                                           ? 7
+                                                           : source.Level < 13 ? 8 : source.Level < 16 ? 9 : 10;
+                        }
+                        break;
+                    case "Gnar":
+                        if ((spellSlot == SpellSlot.Q || spellSlot == SpellSlot.E) && stage == DamageStage.Default
+                            && target.GetBuffCount("gnarwproc") == 2)
+                        {
+                            passiveDamage += source.GetSpellDamage(target, SpellSlot.W);
+                        }
+                        break;
+                    case "Gragas":
+                        if (spellSlot == SpellSlot.Q)
+                        {
+                            if (target is Obj_AI_Minion)
+                            {
+                                totalDamage *= 0.7;
+                            }
+                            if (source.HasBuff("GragasQ"))
+                            {
+                                totalDamage += (totalDamage * 0.25)
+                                               * Math.Min(Game.Time - source.GetBuff("GragasQ").StartTime, 2);
+                            }
+                        }
+                        break;
+                    case "Hecarim":
+                        if (spellSlot == SpellSlot.E && source.HasBuff("hecarimrampspeed"))
+                        {
+                            totalDamage =
+                                Math.Min(
+                                    Math.Max(
+                                        totalDamage * (Game.Time - source.GetBuff("hecarimrampspeed").StartTime),
+                                        totalDamage),
+                                    totalDamage * 2);
+                        }
+                        break;
+                    case "Illaoi":
+                        if (spellSlot == SpellSlot.W)
+                        {
+                            passiveDamage += source.GetSpellDamage(target, SpellSlot.Q)
+                                             * GameObjects.Minions.Count(
+                                                 i =>
+                                                 i.IsValidTarget(800, false, target.ServerPosition)
+                                                 && i.CharData.BaseSkinName == "God" && i.Team == source.Team);
+                        }
+                        break;
+                    case "Janna":
+                        if (spellSlot == SpellSlot.Q && source.HasBuff("HowlingGale"))
+                        {
+                            totalDamage += source.GetSpellDamage(target, SpellSlot.Q, DamageStage.DamagePerSecond)
+                                           * Math.Truncate(Game.Time - source.GetBuff("HowlingGale").StartTime);
+                        }
+                        break;
+                    case "Jax":
+                        if (spellSlot == SpellSlot.Q && source.HasBuff("JaxEmpowerTwo"))
+                        {
+                            passiveDamage += source.GetSpellDamage(target, SpellSlot.W);
+                        }
+                        break;
+                    case "Jayce":
+                        if (spellSlot == SpellSlot.W && stage == DamageStage.SecondForm
+                            && Math.Abs(source.Crit - 1) < float.Epsilon)
+                        {
+                            totalDamage *= 2 + (Items.HasItem((int)ItemId.Infinity_Edge, source) ? 0.5 : 0);
+                        }
+                        break;
+                    case "Jinx":
+                        if (spellSlot == SpellSlot.R)
+                        {
+                            totalDamage *= Math.Min(1 + source.Distance(target) / 15 * 0.09, 10);
+                            totalDamage += source.CalculateDamage(
+                                target,
+                                spellData.DamageType,
+                                new[] { 0.25, 0.3, 0.35 }[spellLevel - 1] * (target.MaxHealth - target.Health));
+                        }
+                        break;
+                    case "Kalista":
+                        if (spellSlot == SpellSlot.E && stage == DamageStage.Default)
+                        {
+                            totalDamage += source.GetSpellDamage(target, SpellSlot.E, DamageStage.Buff);
+                        }
+                        break;
+                    case "Karma":
+                        if (spellSlot == SpellSlot.Q && stage == DamageStage.Default && source.HasBuff("KarmaMantra"))
+                        {
+                            totalDamage += source.GetSpellDamage(target, SpellSlot.Q, DamageStage.Empowered);
+                            passiveDamage += source.GetSpellDamage(target, SpellSlot.Q, DamageStage.Detonation);
+                        }
+                        break;
+                    case "Kassadin":
+                        if (spellSlot == SpellSlot.R && stage == DamageStage.Default)
+                        {
+                            totalDamage += source.GetSpellDamage(target, SpellSlot.R, DamageStage.Buff);
+                        }
+                        break;
+                    case "Katarina":
+                        if ((spellSlot == SpellSlot.W || spellSlot == SpellSlot.E || spellSlot == SpellSlot.R)
+                            && target.HasBuff("katarinaqmark"))
+                        {
+                            passiveDamage += source.GetSpellDamage(target, SpellSlot.Q, DamageStage.Detonation);
+                        }
+                        break;
+                    case "Kayle":
+                        if (spellSlot == SpellSlot.E && source.HasBuff("JudicatorRighteousFury"))
+                        {
+                            totalDamage *= 2;
+                        }
+                        break;
+                    case "KhaZix":
+                        if (spellSlot == SpellSlot.Q && stage == DamageStage.Default
+                            && !new List<Obj_AI_Base>().Concat(GameObjects.Minions.Where(i => i.IsMinion()))
+                                    .Concat(GameObjects.Jungle)
+                                    .Concat(GameObjects.Heroes)
+                                    .Any(
+                                        i =>
+                                        i.IsValidTarget(425, false, target.ServerPosition)
+                                        && i.NetworkId != target.NetworkId
+                                        && (i.Team == target.Team || i.Team == GameObjectTeam.Neutral)))
+                        {
+                            totalDamage *= 1.3;
+                            if (source.HasBuff("khazixqevo"))
+                            {
+                                totalDamage += source.GetSpellDamage(target, SpellSlot.Q, DamageStage.Empowered);
+                            }
+                        }
+                        if (spellSlot == SpellSlot.W && target is Obj_AI_Minion)
+                        {
+                            totalDamage *= 1.2;
+                        }
+                        break;
+                    case "Kindred":
+                        if (spellSlot == SpellSlot.W && source.GetBuffCount("kindredmarkofthekindredstackcounter") > 0)
+                        {
+                            totalDamage += source.CalculateDamage(
+                                target,
+                                DamageType.Physical,
+                                Math.Min(
+                                    (0.125 * target.Health) * source.GetBuffCount("kindredmarkofthekindredstackcounter"),
+                                    target is Obj_AI_Minion
+                                        ? 75 + (10 * source.GetBuffCount("kindredmarkofthekindredstackcounter"))
+                                        : target.MaxHealth) * 0.4);
+                        }
+                        break;
+                    case "KogMaw":
+                        if (spellSlot == SpellSlot.W && !(target is Obj_AI_Minion))
+                        {
+                            totalDamage *= 0.55;
+                        }
+                        if (spellSlot == SpellSlot.R && target.HealthPercent < 50)
+                        {
+                            totalDamage *= target.HealthPercent < 25 ? 3 : 2;
+                        }
+                        break;
+                    case "LeBlanc":
+                        if (((spellSlot == SpellSlot.Q && stage != DamageStage.Detonation) || spellSlot == SpellSlot.W
+                             || spellSlot == SpellSlot.E) && target.HasBuff("LeblancChaosOrb"))
+                        {
+                            totalDamage += source.GetSpellDamage(target, SpellSlot.Q, DamageStage.Detonation);
+                        }
+                        if ((spellSlot == SpellSlot.Q || spellSlot == SpellSlot.W || spellSlot == SpellSlot.E)
+                            && stage == DamageStage.Default && target.HasBuff("LeblancChaosOrbM"))
+                        {
+                            totalDamage += source.GetSpellDamage(target, SpellSlot.R, DamageStage.Detonation);
+                        }
+                        break;
+                    case "Lucian":
+                        if (spellSlot == SpellSlot.R)
+                        {
+                            totalDamage *= new[] { 20, 25, 30 }[spellLevel - 1];
+                        }
+                        break;
+                    case "Lux":
+                        if (spellSlot == SpellSlot.R && target.HasBuff("LuxIlluminatingFraulein"))
+                        {
+                            passiveDamage += source.CalculateDamage(
+                                target,
+                                DamageType.Magical,
+                                10 + (8 * source.Level) + (0.2 * source.TotalMagicalDamage));
+                        }
+                        break;
+                    case "Malphite":
+                        if (spellSlot == SpellSlot.W)
+                        {
+                            totalDamage *= (Math.Abs(source.Crit - 1) < float.Epsilon
+                                                ? 2 + (Items.HasItem((int)ItemId.Infinity_Edge, source) ? 0.5 : 0)
+                                                : 1);
+                        }
+                        break;
+                    case "Maokai":
+                        if (spellSlot == SpellSlot.R && source.HasBuff("MaokaiDrain3"))
+                        {
+                            totalDamage += source.CalculateDamage(
+                                target,
+                                spellData.DamageType,
+                                source.Spellbook.GetSpell(spellSlot).Ammo);
+                        }
+                        break;
+                    case "MasterYi":
+                        if (spellSlot == SpellSlot.Q && target is Obj_AI_Minion)
+                        {
+                            totalDamage += source.CalculateDamage(
+                                target,
+                                spellData.DamageType,
+                                new[] { 75, 100, 125, 150, 175 }[spellLevel - 1]);
+                        }
+                        break;
+                    case "Mordekaiser":
+                        if (spellSlot == SpellSlot.Q && source.HasBuff("mordekaisermaceofspades2"))
+                        {
+                            totalDamage *= 2;
+                        }
+                        break;
+                    case "Nami":
+                        if (spellSlot == SpellSlot.W) //Todo
+                        {
+                            var bounceDmg = 0.85 + (Math.Abs(source.TotalMagicalDamage / 100) * 0.075);
+                            if (bounceDmg > 1) {}
+                        }
+                        break;
+                    case "Nasus":
+                        if (spellSlot == SpellSlot.Q)
+                        {
+                            totalDamage *= (Math.Abs(source.Crit - 1) < float.Epsilon
+                                                ? 2 + (Items.HasItem((int)ItemId.Infinity_Edge, source) ? 0.5 : 0)
+                                                : 1);
+                            totalDamage += source.GetBuffCount("nasusqstacks");
+                        }
+                        if (spellSlot == SpellSlot.R)
+                        {
+                            totalDamage = Math.Min(totalDamage, 240);
+                        }
+                        break;
+                    case "Nidalee":
+                        if (spellSlot == SpellSlot.Q && stage == DamageStage.Default && source.Distance(target) > 525)
+                        {
+                            totalDamage *= 1 + ((Math.Min(source.Distance(target), 1300) - 525) / 7.75 * 0.02);
+                        }
+                        if (spellSlot == SpellSlot.Q && stage == DamageStage.SecondForm
+                            && target.HasBuff("nidaleepassivehunted"))
+                        {
+                            totalDamage *= 1.33;
+                        }
+                        break;
+                    case "Nunu":
+                        if ((spellSlot == SpellSlot.E || spellSlot == SpellSlot.R) && source.HasBuff("nunuqbufflizard"))
+                        {
+                            passiveDamage += source.CalculateDamage(target, DamageType.Magical, 0.01 * target.MaxHealth);
+                        }
+                        break;
+                    case "Pantheon":
+                        if (spellSlot == SpellSlot.Q
+                            && ((target.HealthPercent < 15 && source.Spellbook.GetSpell(SpellSlot.E).Level > 0)
+                                || Math.Abs(source.Crit - 1) < float.Epsilon))
+                        {
+                            totalDamage *= 2 + (Items.HasItem((int)ItemId.Infinity_Edge, source) ? 0.5 : 0);
+                        }
+                        if (spellSlot == SpellSlot.E && !(target is Obj_AI_Hero))
+                        {
+                            totalDamage /= 2;
+                        }
+                        break;
+                    case "Poppy":
+                        if (spellSlot == SpellSlot.Q && target is Obj_AI_Minion)
+                        {
+                            totalDamage *= 0.8;
+                        }
+                        break;
+                    case "RekSai":
+                        if (spellSlot == SpellSlot.E && stage == DamageStage.Default)
+                        {
+                            if (source.Mana < 100)
+                            {
+                                totalDamage *= 1 + (0.01 * source.Mana);
+                            }
+                            else
+                            {
+                                totalDamage = source.GetSpellDamage(target, SpellSlot.E, DamageStage.Empowered);
+                            }
+                        }
+                        break;
+                    case "Renekton":
+                        if ((spellSlot == SpellSlot.Q || spellSlot == SpellSlot.W
+                             || (spellSlot == SpellSlot.E && stage == DamageStage.SecondCast)) && source.Mana >= 50)
+                        {
+                            totalDamage *= 1.5;
+                        }
+                        break;
+                    case "Riven":
+                        if (spellSlot == SpellSlot.R)
+                        {
+                            totalDamage = Math.Min(
+                                totalDamage,
+                                source.CalculateDamage(
+                                    target,
+                                    spellData.DamageType,
+                                    new[] { 240, 360, 480 }[spellLevel - 1] + (1.8 * source.FlatPhysicalDamageMod)));
+                        }
+                        break;
+                    case "Rumble":
+                        if (spellSlot == SpellSlot.Q && !(target is Obj_AI_Hero))
+                        {
+                            totalDamage /= 2;
+                        }
+                        if ((spellSlot == SpellSlot.Q || spellSlot == SpellSlot.E) && source.Mana >= 50)
+                        {
+                            totalDamage *= 1.5;
+                        }
+                        break;
+                    case "Ryze":
+                        if (spellSlot == SpellSlot.E && source.Distance(target) < 200)
+                        {
+                            totalDamage *= 1.5;
+                        }
+                        break;
+                    case "Shaco":
+                        if (spellSlot == SpellSlot.E && source.IsFacing(target) && !target.IsFacing(source))
+                        {
+                            totalDamage *= 1.2;
+                        }
+                        break;
+                    case "Shyvana":
+                        if (spellSlot == SpellSlot.W && target.Team == GameObjectTeam.Neutral)
+                        {
+                            totalDamage *= 1.2;
+                        }
+                        break;
+                    case "Sion":
+                        if (spellSlot == SpellSlot.Q)
+                        {
+                            if (target.Team == GameObjectTeam.Neutral)
+                            {
+                                totalDamage *= 1.333;
+                            }
+                            else if (target is Obj_AI_Hero)
+                            {
+                                totalDamage *= 1.667;
+                            }
+                            /*if (source.HasBuff("SionQ"))//Todo
+                            {
+                                totalDamage *= 1;
+                            }*/
+                        }
+                        /*if (spellSlot == SpellSlot.R && source.HasBuff("SionR"))//Todo
+                        {
+                            totalDamage *= 1;
+                        }*/
+                        break;
+                    case "Skarner":
+                        if (spellSlot == SpellSlot.Q && stage == DamageStage.Default
+                            && source.HasBuff("SkarnerVirulentSlash"))
+                        {
+                            totalDamage += source.GetSpellDamage(target, SpellSlot.Q, DamageStage.Empowered);
+                        }
+                        break;
+                    case "Syndra":
+                        if (spellSlot == SpellSlot.Q && target is Obj_AI_Hero && spellLevel == 5)
+                        {
+                            totalDamage *= 1.15;
+                        }
+                        if (spellSlot == SpellSlot.R)
+                        {
+                            totalDamage *= Math.Min(source.Spellbook.GetSpell(spellSlot).Ammo, 7);
+                        }
+                        break;
+                    case "TahmKench":
+                        if ((spellSlot == SpellSlot.Q || spellSlot == SpellSlot.W)
+                            && source.Spellbook.GetSpell(SpellSlot.R).Level > 0)
+                        {
+                            passiveDamage += source.GetSpellDamage(target, SpellSlot.R);
+                        }
+                        break;
+                    case "Talon":
+                        if (spellSlot == SpellSlot.Q && stage == DamageStage.Default && target is Obj_AI_Hero)
+                        {
+                            passiveDamage += source.GetSpellDamage(target, SpellSlot.Q, DamageStage.Empowered);
+                        }
+                        break;
+                    case "Teemo":
+                        if (spellSlot == SpellSlot.E && stage == DamageStage.Default)
+                        {
+                            passiveDamage += source.GetSpellDamage(target, SpellSlot.E, DamageStage.DamagePerSecond);
+                        }
+                        if (spellSlot == SpellSlot.E && stage == DamageStage.DamagePerSecond && !(target is Obj_AI_Hero))
+                        {
+                            totalDamage /= 4;
+                        }
+                        break;
+                    case "Thresh":
+                        if (spellSlot == SpellSlot.E && stage == DamageStage.Empowered
+                            && source.Buffs.Any(b => b.Name.Contains("threshqpassive")))
+                        {
+                            totalDamage /= source.HasBuff("threshqpassive1")
+                                               ? 4
+                                               : source.HasBuff("threshqpassive2")
+                                                     ? 3
+                                                     : source.HasBuff("threshqpassive3") ? 2 : 1;
+                            totalDamage += source.CalculateDamage(
+                                target,
+                                DamageType.Magical,
+                                source.GetBuffCount("threshpassivesouls"));
+                        }
+                        break;
+                    case "Tristana":
+                        if (spellSlot == SpellSlot.E && stage == DamageStage.Default)
+                        {
+                            var buffDmg = source.GetSpellDamage(target, SpellSlot.E, DamageStage.Buff);
+                            totalDamage += target.GetBuffCount("tristanaecharge") == 3 ? buffDmg / 3 * 4 : buffDmg;
+                        }
+                        if ((spellSlot == SpellSlot.W || spellSlot == SpellSlot.R)
+                            && target.GetBuffCount("tristanaecharge") == 3)
+                        {
+                            passiveDamage += source.GetSpellDamage(target, SpellSlot.E);
+                        }
+                        break;
+                    case "Twitch":
+                        if (spellSlot == SpellSlot.E && stage == DamageStage.Default)
+                        {
+                            totalDamage += source.GetSpellDamage(target, SpellSlot.E, DamageStage.Buff);
+                        }
+                        break;
+                    case "Varus":
+                        if (spellSlot == SpellSlot.Q || spellSlot == SpellSlot.E || spellSlot == SpellSlot.R)
+                        {
+                            passiveDamage += source.GetSpellDamage(target, SpellSlot.W, DamageStage.Buff);
+                        }
+                        /*if (spellSlot == SpellSlot.Q && source.HasBuff("VarusQ")) //Todo
+                        {
+                            totalDamage *= 1;
+                        }*/
+                        break;
+                    case "Vayne":
+                        if (spellSlot == SpellSlot.E && target.GetBuffCount("vaynesilvereddebuff") == 2)
+                        {
+                            passiveDamage += source.GetSpellDamage(target, SpellSlot.W);
+                        }
+                        break;
+                    case "Velkoz":
+                        if (spellSlot >= SpellSlot.Q && spellSlot <= SpellSlot.R
+                            && target.GetBuffCount("velkozresearchstack") == 2)
+                        {
+                            passiveDamage += source.CalculateDamage(target, DamageType.True, 25 + (10 * source.Level));
+                        }
+                        break;
+                    case "Vi":
+                        if (spellSlot == SpellSlot.Q)
+                        {
+                            if (target is Obj_AI_Hero)
+                            {
+                                totalDamage *= 1.333;
+                            }
+                            if (target.GetBuffCount("viwproc") == 2)
+                            {
+                                passiveDamage += source.GetSpellDamage(target, SpellSlot.W);
+                            }
+                            /*if (source.HasBuff("ViQ"))//Todo
+                            {
+                                totalDamage *= 1;
+                            }*/
+                        }
+                        break;
+                    case "Viktor":
+                        if (spellSlot == SpellSlot.Q && stage == DamageStage.Empowered)
+                        {
+                            totalDamage += source.CalculateDamage(
+                                target,
+                                DamageType.Magical,
+                                source.TotalAttackDamage
+                                * (Math.Abs(source.Crit - 1) < float.Epsilon
+                                       ? 2 + (Items.HasItem((int)ItemId.Infinity_Edge, source) ? 0.5 : 0)
+                                       : 1));
+                        }
+                        break;
+                    case "Vladimir":
+                        if (spellSlot == SpellSlot.E && stage == DamageStage.Default)
+                        {
+                            totalDamage += source.GetSpellDamage(target, SpellSlot.E, DamageStage.Buff);
+                        }
+                        if (spellSlot == SpellSlot.R && target.HasBuff("vladimirhemoplaguedebuff"))
+                        {
+                            totalDamage *= 0.88;
+                        }
+                        break;
+                    case "Yasuo":
+                        if (spellSlot == SpellSlot.Q && Math.Abs(source.Crit - 1) < float.Epsilon)
+                        {
+                            totalDamage += source.CalculateDamage(
+                                target,
+                                spellData.DamageType,
+                                (Items.HasItem((int)ItemId.Infinity_Edge, source) ? 0.875 : 0.5)
+                                * source.TotalAttackDamage);
+                        }
+                        break;
+                    case "Ziggs":
+                        if (spellSlot == SpellSlot.R && target is Obj_AI_Minion && target.Team != GameObjectTeam.Neutral)
+                        {
+                            totalDamage *= 2;
+                        }
+                        break;
+                }
             }
 
-            return totalDamage;
+            return totalDamage + passiveDamage;
         }
 
         #endregion
@@ -475,8 +1052,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
 
             return source.DamageReductionMod(
                 target,
-                source.PassivePercentMod(target, value) * amount,
-                DamageType.Magical) + source.PassiveFlatMod(target);
+                source.PassivePercentMod(target, value, DamageType.Magical) * amount,
+                DamageType.Magical);
         }
 
         /// <summary>
@@ -499,65 +1076,62 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         {
             double armorPenetrationPercent = source.PercentArmorPenetrationMod;
             double armorPenetrationFlat = source.FlatArmorPenetrationMod;
+            double bonusArmorPenetrationMod = source.PercentBonusArmorPenetrationMod;
 
             // Minions return wrong percent values.
             if (source is Obj_AI_Minion)
             {
-                armorPenetrationFlat = 0d;
-                armorPenetrationPercent = 1d;
+                armorPenetrationFlat = 0;
+                armorPenetrationPercent = 1;
+                bonusArmorPenetrationMod = 1;
             }
 
             // Turrets passive.
             var turret = source as Obj_AI_Turret;
             if (turret != null)
             {
-                armorPenetrationFlat = 0d;
+                armorPenetrationFlat = 0;
+                bonusArmorPenetrationMod = 1;
 
-                var tier = turret.GetTurretType();
-                switch (tier)
+                switch (turret.GetTurretType())
                 {
                     case TurretType.TierOne:
                     case TurretType.TierTwo:
-                        armorPenetrationPercent = 0.3d;
+                        armorPenetrationPercent = 0.7;
                         break;
                     case TurretType.TierThree:
                     case TurretType.TierFour:
-                        armorPenetrationPercent = 0.75d;
+                        armorPenetrationPercent = 0.25;
                         break;
-                }
-                if (target is Obj_AI_Minion)
-                {
-                    amount *= 1.25;
-                    if (target.GetMinionType() == MinionTypes.Siege)
-                    {
-                        amount *= 0.7;
-                    }
-                    return amount;
                 }
             }
 
             // Penetration can't reduce armor below 0.
             var armor = target.Armor;
+            var bonusArmor = armor - target.CharData.Armor;
 
             double value;
             if (armor < 0)
             {
                 value = 2 - (100 / (100 - armor));
             }
-            else if ((armor * armorPenetrationPercent) - armorPenetrationFlat < 0)
+            else if ((armor * armorPenetrationPercent) - (bonusArmor * (1 - bonusArmorPenetrationMod))
+                     - armorPenetrationFlat < 0)
             {
                 value = 1;
             }
             else
             {
-                value = 100 / (100 + (armor * armorPenetrationPercent) - armorPenetrationFlat);
+                value = 100
+                        / (100 + (armor * armorPenetrationPercent) - (bonusArmor * (1 - bonusArmorPenetrationMod))
+                           - armorPenetrationFlat);
             }
 
             // Take into account the percent passives, flat passives and damage reduction.
             return source.DamageReductionMod(
                 target,
-                source.PassivePercentMod(target, value) * amount,
-                DamageType.Physical) + source.PassiveFlatMod(target);
+                source.PassivePercentMod(target, value, DamageType.Physical) * amount,
+                DamageType.Physical);
         }
 
         /// <summary>
@@ -585,160 +1159,138 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             double amount,
             DamageType damageType)
         {
-            if (source is Obj_AI_Hero)
+            var hero = source as Obj_AI_Hero;
+            var targetHero = target as Obj_AI_Hero;
+            if (hero != null)
             {
-                // Summoners:
-
-                // Exhaust:
-                // + Exhausts target enemy champion, reducing their Movement Speed and Attack Speed by 30%, their Armor and Magic Resist by 10, and their damage dealt by 40% for 2.5 seconds.
-                if (source.HasBuff("Exhaust"))
+                // Exhaust
+                if (hero.HasBuff("Exhaust"))
                 {
-                    amount *= 0.6d;
+                    amount *= 0.6;
+                }
+
+                if (targetHero != null)
+                {
+                    // Phantom Dancer
+                    if (hero.HasBuff("itemphantomdancerdebuff")
+                        && hero.GetBuff("itemphantomdancerdebuff").Caster.NetworkId == targetHero.NetworkId)
+                    {
+                        amount *= 0.88;
+                    }
+
+                    // Urgot P
+                    if (hero.HasBuff("urgotentropypassive") && targetHero.ChampionName == "Urgot")
+                    {
+                        amount *= 0.85;
+                    }
                 }
             }
 
-            var targetHero = target as Obj_AI_Hero;
             if (targetHero != null)
             {
-                // Masteries:
-
-                // BondofStone
-                // + DAMAGE REDUCTION 4 %, doubling to 8 % when near at least one allied champion
-                // + IN THIS TOGETHER 8 % of the damage that the nearest allied champion would take is dealt to you instead.This can't bring you below 15% health.
-                if (targetHero.GetResolve(DamageMastery.Resolve.BondofStone).IsValid())
+                // Bond Of Stone
+                if (hero != null && targetHero.GetResolve(DamageMastery.Resolve.BondofStone).IsValid())
                 {
                     amount *=
                         GameObjects.Heroes.Any(
                             x =>
                             x.Team == targetHero.Team && x.NetworkId != targetHero.NetworkId
                             && x.Distance(targetHero) <= 1000)
-                            ? 0.92d
-                            : 0.98d;
+                            ? 0.94
+                            : 0.97;
                 }
 
-                // Items:
-
-                // Doran's Shield
-                // + Blocks 8 damage from single target attacks and spells from champions.
-                if (Items.HasItem((int)ItemId.Dorans_Shield, targetHero))
-                {
-                    amount -= 8;
-                }
-
-                // Passives:
-
-                // Unbreakable Will
-                // + Alistar removes all crowd control effects from himself, then gains additional attack damage and takes 70% reduced physical and magic damage for 7 seconds.
+                // Alistar R
                 if (targetHero.HasBuff("Ferocious Howl"))
                 {
-                    amount *= 0.3d;
+                    amount *= 0.3;
                 }
 
-                // Tantrum
-                // + Amumu takes reduced physical damage from basic attacks and abilities.
+                // Amumu E
                 if (targetHero.HasBuff("Tantrum") && damageType == DamageType.Physical)
                 {
                     amount -= new[] { 2, 4, 6, 8, 10 }[targetHero.Spellbook.GetSpell(SpellSlot.E).Level - 1];
                 }
 
-                // Unbreakable
-                // + Grants Braum 30% / 32.5% / 35% / 37.5% / 40% damage reduction from oncoming sources (excluding true damage and towers) for 3 / 3.25 / 3.5 / 3.75 / 4 seconds.
-                // + The damage reduction is increased to 100% for the first source of champion damage that would be reduced.
+                // Braum E
                 if (targetHero.HasBuff("BraumShieldRaise"))
                 {
                     amount *= 1
-                              - new[] { 0.3d, 0.325d, 0.35d, 0.375d, 0.4d }[
+                              - new[] { 0.3, 0.325, 0.35, 0.375, 0.4 }[
                                   targetHero.Spellbook.GetSpell(SpellSlot.E).Level - 1];
                 }
 
-                // Idol of Durand
-                // + Galio becomes a statue and channels for 2 seconds, Taunt icon taunting nearby foes and reducing incoming physical and magic damage by 50%.
+                // Galio R
                 if (targetHero.HasBuff("GalioIdolOfDurand"))
                 {
-                    amount *= 0.5d;
+                    amount *= 0.5;
                 }
 
-                // Courage
-                // + Garen gains a defensive shield for a few seconds, reducing incoming damage by 30% and granting 30% crowd control reduction for the duration.
+                // Garen W
                 if (targetHero.HasBuff("GarenW"))
                 {
-                    amount *= 0.7d;
+                    amount *= 0.7;
                 }
 
-                // Drunken Rage
-                // + Gragas takes a long swig from his barrel, disabling his ability to cast or attack for 1 second and then receives 10% / 12% / 14% / 16% / 18% reduced damage for 3 seconds.
+                // Gragas W
                 if (targetHero.HasBuff("GragasWSelf"))
                 {
                     amount *= 1
-                              - new[] { 0.1d, 0.12d, 0.14d, 0.16d, 0.18d }[
+                              - new[] { 0.1, 0.12, 0.14, 0.16, 0.18 }[
                                   targetHero.Spellbook.GetSpell(SpellSlot.W).Level - 1];
                 }
 
-                // Void Stone
-                // + Kassadin reduces all magic damage taken by 15%.
+                // Kassadin P
                 if (targetHero.HasBuff("VoidStone") && damageType == DamageType.Magical)
                 {
-                    amount *= 0.85d;
+                    amount *= 0.85;
                 }
 
-                // Shunpo
-                // + Katarina teleports to target unit and gains 15% damage reduction for 1.5 seconds. If the target is an enemy, the target takes magic damage.
+                // Katarina E
                 if (targetHero.HasBuff("KatarinaEReduction"))
                 {
-                    amount *= 0.85d;
+                    amount *= 0.85;
                 }
 
-                // Vengeful Maelstrom
-                // + Maokai creates a magical vortex around himself, protecting him and allied champions by reducing damage from non-turret sources by 20% for a maximum of 10 seconds.
+                // Maokai R
                 if (targetHero.HasBuff("MaokaiDrainDefense") && !(source is Obj_AI_Turret))
                 {
-                    amount *= 0.8d;
+                    amount *= 0.8;
                 }
 
-                // Meditate
-                // + Master Yi channels for up to 4 seconds, restoring health each second. This healing is increased by 1% for every 1% of his missing health. Meditate also resets the autoattack timer.
-                // + While channeling, Master Yi reduces incoming damage (halved against turrets).
+                // MasterYi W
                 if (targetHero.HasBuff("Meditate"))
                 {
                     amount *= (1
-                               - new[] { 0.5d, 0.55d, 0.6d, 0.65d, 0.7d }[
+                               - new[] { 0.5, 0.55, 0.6, 0.65, 0.7 }[
                                    targetHero.Spellbook.GetSpell(SpellSlot.W).Level - 1])
                               / (source is Obj_AI_Turret ? 2 : 1);
                 }
 
-                // Valiant Fighter
-                // + Poppy reduces all damage that exceeds 10% of her current health by 50%.
-                if (targetHero.HasBuff("PoppyValiantFighter") && !(source is Obj_AI_Turret)
-                    && amount / targetHero.Health > 0.1d)
-                {
-                    amount *= 0.5d;
-                }
-
-                // Shadow Dash
-                // + Shen reduces all physical damage by 50% from taunted enemies.
-                if (targetHero.HasBuff("Shen Shadow Dash") && source.HasBuff("Taunt")
+                // Shen E
+                if (targetHero.HasBuff("Shen Shadow Dash") && hero != null && hero.HasBuff("Taunt")
                     && damageType == DamageType.Physical)
                 {
-                    amount *= 0.5d;
+                    amount *= 0.5;
                 }
 
-                // Unholy Covenant
-                // + Yorick grants him 5% damage reduction for each ghoul currently summoned.
+                // Yorick P
                 if (targetHero.HasBuff("YorickUnholySymbiosis"))
                 {
-                    amount -= amount
-                              * GameObjects.AttackableUnits.Count(
+                    amount *= 1
+                              - (GameObjects.Minions.Count(
                                   g =>
                                   g.Team == targetHero.Team
-                                  && (g.Name.Equals("Clyde") || g.Name.Equals("Inky") || g.Name.Equals("Blinky")))
-                              * 0.05d;
+                                  && (g.Name.Equals("Clyde") || g.Name.Equals("Inky") || g.Name.Equals("Blinky")
+                                      || (g.HasBuff("yorickunholysymbiosis")
+                                          && g.GetBuff("yorickunholysymbiosis").Caster.NetworkId == targetHero.NetworkId)))
+                                 * 0.05);
                 }
 
-                // Hyper-Kinetic Position Reverser
-                // + Urgot grants himself damage reduction for 5 seconds
+                // Urgot R
                 if (targetHero.HasBuff("urgotswapdef"))
                 {
-                    amount *= 1 - new[] { 0.3d, 0.4d, 0.5d }[targetHero.Spellbook.GetSpell(SpellSlot.R).Level - 1];
+                    amount *= 1 - new[] { 0.3, 0.4, 0.5 }[targetHero.Spellbook.GetSpell(SpellSlot.R).Level - 1];
                 }
             }
 
@@ -762,6 +1314,31 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         {
             var value = 0d;
             var hero = source as Obj_AI_Hero;
+            var targetHero = target as Obj_AI_Hero;
+
+            if (hero != null && target is Obj_AI_Minion)
+            {
+                // Savagery
+                var savagery = hero.GetCunning(DamageMastery.Cunning.Savagery);
+                if (savagery.IsValid())
+                {
+                    value += savagery.Points;
+                }
+            }
+
+            // ToughSkin
+            if (targetHero != null
+                && (hero != null || (source is Obj_AI_Minion && source.Team == GameObjectTeam.Neutral))
+                && targetHero.GetResolve(DamageMastery.Resolve.ToughSkin).IsValid())
+            {
+                value -= 2;
+            }
+
+            // Fizz P
+            if (targetHero != null && targetHero.ChampionName == "Fizz")
+            {
+                value -= new[] { 4, 6, 8, 10, 12, 14 }[(targetHero.Level - 1) / 3];
+            }
 
             return value;
         }
@@ -779,67 +1356,93 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         /// <param name="amount">
         ///     The amount
         /// </param>
+        /// <param name="damageType">
+        ///     The damage Type.
+        /// </param>
         /// <returns>
         ///     The damage after passive percent modifier calculations.
         /// </returns>
-        private static double PassivePercentMod(this Obj_AI_Base source, Obj_AI_Base target, double amount)
+        private static double PassivePercentMod(
+            this Obj_AI_Base source,
+            Obj_AI_Base target,
+            double amount,
+            DamageType damageType)
         {
             if (source is Obj_AI_Turret)
             {
-                var minionType = target.GetMinionType();
-
-                if (minionType.HasFlag(MinionTypes.Siege) || minionType.HasFlag(MinionTypes.Super))
+                var minion = target as Obj_AI_Minion;
+                if (minion != null)
                 {
-                    // Siege minions and super minions receive 70% damage from turrets.
-                    amount *= 0.7d;
-                }
-                else if (minionType.HasFlag(MinionTypes.Normal))
-                {
-                    // Normal minions take 114% more damage from towers.
-                    amount *= 1.14285714285714d;
+                    var minionType = minion.GetMinionType();
+                    if (minionType.HasFlag(MinionTypes.Siege) || minionType.HasFlag(MinionTypes.Super))
+                    {
+                        // Siege minions and super minions receive 70% damage from turrets.
+                        amount *= 0.7;
+                    }
+                    else if (minionType.HasFlag(MinionTypes.Normal))
+                    {
+                        // Normal minions take 114% more damage from towers.
+                        amount *= 1.14285714285714;
+                    }
                 }
             }
 
-            // Masteries:
             var hero = source as Obj_AI_Hero;
             var targetHero = target as Obj_AI_Hero;
             if (hero != null)
             {
-                // DoubleEdgedSword:
-                // + MELEE Deal an additional 3 % damage, but receive an additional 1.5 % damage
-                // + RANGED Deal an additional 2 % damage, but receive an additional 2 % damage
+                // DoubleEdgedSword
                 if (hero.GetFerocity(DamageMastery.Ferocity.DoubleEdgedSword).IsValid())
                 {
-                    amount *= hero.IsMelee ? 1.03d : 1.02d;
+                    amount *= hero.IsMelee ? 1.03 : 1.02;
                 }
 
                 if (targetHero != null)
                 {
-                    // Oppressor:
-                    // + KICK 'EM WHEN THEY'RE DOWN You deal 2.5% increased damage to targets with impaired movement (slows, stuns, taunts, etc)
+                    // Oppressor
                     if (hero.GetFerocity(DamageMastery.Ferocity.Oppressor).IsValid() && targetHero.IsMoveImpaired())
                     {
-                        amount *= 1.025d;
+                        amount *= 1.025;
                     }
 
-                    // Merciless:
-                    // + DAMAGE AMPLIFICATION 1 / 2 / 3 / 4 / 5 % increased damage to champions below 40 % health
-                    var merciless = hero.GetCunning(DamageMastery.Cunning.Merciless);
-                    if (merciless.IsValid() && targetHero.HealthPercent < 40)
+                    // Assassin
+                    if (hero.GetCunning(DamageMastery.Cunning.Assassin).IsValid()
+                        && !GameObjects.Heroes.Any(
+                            h => h.Team == hero.Team && h.NetworkId != hero.NetworkId && h.Distance(hero) <= 800))
                     {
-                        amount *= 1 + merciless.Points / 100;
+                        amount *= 1.015;
+                    }
+
+                    // Merciless
+                    var merciless = hero.GetCunning(DamageMastery.Cunning.Merciless);
+                    if (merciless.IsValid() && targetHero.HealthPercent <= 40)
+                    {
+                        amount *= 1 + (merciless.Points / 100);
+                    }
+
+                    // Giant Slayer - Lord Dominik's Regards
+                    if ((Items.HasItem(3034, hero) || Items.HasItem(3036, hero))
+                        && hero.MaxHealth < targetHero.MaxHealth && damageType == DamageType.Physical)
+                    {
+                        amount *= 1
+                                  + Math.Min(targetHero.MaxHealth - hero.MaxHealth, 500) / 50
+                                  * (Items.HasItem(3034, hero) ? 0.01 : 0.015);
                     }
                 }
             }
 
             if (targetHero != null)
             {
-                // DoubleEdgedSword:
-                // + MELEE Deal an additional 3 % damage, but receive an additional 1.5 % damage
-                // + RANGED Deal an additional 2 % damage, but receive an additional 2 % damage
+                // DoubleEdgedSword
                 if (targetHero.GetFerocity(DamageMastery.Ferocity.DoubleEdgedSword).IsValid())
                 {
-                    amount *= targetHero.IsMelee ? 1.015d : 1.02d;
+                    amount *= targetHero.IsMelee ? 1.015 : 1.02;
+                }
+
+                // Vlad R
+                if (targetHero.HasBuff("vladimirhemoplaguedebuff"))
+                {
+                    amount *= 1.12;
                 }
             }
 

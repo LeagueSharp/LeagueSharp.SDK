@@ -47,11 +47,11 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 "Ahri", "Anivia", "Annie", "Ashe", "Brand", "Caitlyn",
                 "Cassiopeia", "Corki", "Draven", "Ezreal", "Graves", "Jinx",
                 "Kalista", "Karma", "Karthus", "Katarina", "Kennen",
-                "KogMaw", "Leblanc", "Lucian", "Lux", "Malzahar", "MasterYi",
-                "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra",
-                "Talon", "Teemo", "Tristana", "TwistedFate", "Twitch",
-                "Varus", "Vayne", "Veigar", "Velkoz", "Viktor", "Xerath",
-                "Zed", "Ziggs"
+                "KogMaw", "Leblanc", "Kindred", "Lucian", "Lux", "Malzahar",
+                "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir",
+                "Syndra", "Talon", "Teemo", "Tristana", "TwistedFate",
+                "Twitch", "Varus", "Vayne", "Veigar", "Velkoz", "Viktor",
+                "Xerath", "Zed", "Ziggs"
             };
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus",
                 "Nunu", "Olaf", "Rammus", "Renekton", "Sejuani", "Shen",
                 "Shyvana", "Singed", "Sion", "Skarner", "Sona", "Soraka",
-                "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing",
-                "Yorick", "Zac", "Zyra"
+                "Taric", "TahmKench", "Thresh", "Volibear", "Warwick",
+                "MonkeyKing", "Yorick", "Zac", "Zyra"
             };
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     return targets.MinOrDefault(
                         t =>
                             {
-                                var attackDamage = GameObjects.Player.GetAutoAttackDamage(t, true);
+                                var attackDamage = GameObjects.Player.GetAutoAttackDamage(t);
                                 var damage = t.Health / attackDamage > 0 ? attackDamage : 1;
                                 try
                                 {
@@ -338,12 +338,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             // Kayle's Intervention (R)
             if (target.HasBuff("JudicatorIntervention"))
-            {
-                return true;
-            }
-
-            // Poppy's Diplomatic Immunity (R)
-            if (target.HasBuff("DiplomaticImmunity") && !GameObjects.Player.HasBuff("poppyulttargetmark"))
             {
                 return true;
             }

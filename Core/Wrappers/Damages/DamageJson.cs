@@ -139,6 +139,31 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             Empowered
         }
 
+        /// <summary>
+        /// </summary>
+        public enum SpellEffectType
+        {
+            /// <summary>
+            /// </summary>
+            None,
+
+            /// <summary>
+            /// </summary>
+            AoE,
+
+            /// <summary>
+            /// </summary>
+            Single,
+
+            /// <summary>
+            /// </summary>
+            OverTime,
+
+            /// <summary>
+            /// </summary>
+            Attack
+        }
+
         #endregion
 
         /// <summary>
@@ -323,6 +348,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             ///     Gets the Scaling Buff Target.
             /// </summary>
             public DamageScalingTarget ScalingBuffTarget { get; set; }
+
+            public SpellEffectType SpellEffectType { get; set; }
 
             #endregion
         }

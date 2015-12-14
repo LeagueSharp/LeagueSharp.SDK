@@ -448,8 +448,8 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
             var sin = Math.Sin(angle);
 
             return new Vector3(
-                (float)((vector3.X * cos) - (vector3.Y * sin)), 
-                (float)((vector3.Y * cos) + (vector3.X * sin)), 
+                (float)((vector3.X * cos) - (vector3.Y * sin)),
+                (float)((vector3.Y * cos) + (vector3.X * sin)),
                 vector3.Z);
         }
 
