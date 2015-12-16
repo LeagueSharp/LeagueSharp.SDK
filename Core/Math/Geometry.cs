@@ -32,7 +32,6 @@ namespace LeagueSharp.SDK.Core.Math
         #region Public Methods and Operators
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="angle"></param>
         /// <returns></returns>
@@ -122,7 +121,6 @@ namespace LeagueSharp.SDK.Core.Math
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="angle"></param>
         /// <returns></returns>

@@ -22,9 +22,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System.Linq;
     using System.Text.RegularExpressions;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Utils;
+    using Enumerations;
+    using Extensions;
+    using Utils;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -132,6 +132,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 if (hero.ChampionName == "Kalista")
                 {
                     result *= 0.9;
+                }
+
+                if (hero.HasBuff("Serrated"))
+                {
+                    result += 15;
                 }
 
                 // Spoils Of War
@@ -262,18 +267,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                            "Nidalee", new Tuple<SpellSlot, DamageStage>(SpellSlot.Q, DamageStage.SecondForm)
                                        },
                                        { "Renekton", new Tuple<SpellSlot, DamageStage>(SpellSlot.W, DamageStage.Default) },
-                                       {
-                                           "TwistedFate",
-                                           new Tuple<SpellSlot, DamageStage>(SpellSlot.W, DamageStage.Default)
-                                       },
-                                       {
-                                           "TwistedFate",
-                                           new Tuple<SpellSlot, DamageStage>(SpellSlot.W, DamageStage.Detonation)
-                                       },
-                                       {
-                                           "TwistedFate",
-                                           new Tuple<SpellSlot, DamageStage>(SpellSlot.W, DamageStage.Empowered)
-                                       },
                                        { "Viktor", new Tuple<SpellSlot, DamageStage>(SpellSlot.Q, DamageStage.Empowered) }
                                    };
             var isModifier = dictModifier.ContainsKey(source.ChampionName)
@@ -303,6 +296,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         target,
                         spellData.DamageType,
                         spellData.Damages[Math.Min(spellLevel - 1, spellData.Damages.Count - 1)]);
+                    if (isOnHit && source.HasBuff("Serrated"))
+                    {
+                        baseDamage += source.CalculateDamage(target, spellData.DamageType, 15);
+                    }
                     if (!string.IsNullOrEmpty(spellData.ScalingBuff))
                     {
                         var buffCount =
@@ -363,7 +360,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         passiveDamage += savagery.Points;
                     }
                 }
-                if (spellData.SpellEffectType != SpellEffectType.None && !isOnHit)
+                if (spellData.SpellEffectType != SpellEffectType.None && (!isOnHit || source.ChampionName == "Fizz"))
                 {
                     var sorcery = source.GetFerocity(DamageMastery.Ferocity.Sorcery);
                     if (sorcery.IsValid())
@@ -371,20 +368,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         totalDamage *= 1 + new[] { 0.4, 0.8, 1.2, 1.6, 2 }[sorcery.Points - 1] / 100;
                     }
                 }
-                if (isModifier || isOnHit)
-                {
-                    var targetHero = target as Obj_AI_Hero;
-                    if (targetHero != null
-                        && new[] { 3047, 1316, 1318, 1315, 1317 }.Any(i => Items.HasItem(i, targetHero)))
-                    {
-                        totalDamage *= 0.9;
-                    }
-                }
                 if (isOnHit)
                 {
                     passiveDamage += source.PassiveFlatMod(target);
                     passiveDamage += source.GetPassiveDamageInfo(target).Value;
-                    if (source.GetFerocity(DamageMastery.Ferocity.FervorofBattle).IsValid())
+                    if (target is Obj_AI_Hero && source.GetFerocity(DamageMastery.Ferocity.FervorofBattle).IsValid())
                     {
                         passiveDamage += source.CalculateDamage(
                             target,
@@ -515,13 +503,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         }
                         break;
                     case "Illaoi":
-                        if (spellSlot == SpellSlot.W)
+                        if (spellSlot == SpellSlot.W || spellSlot == SpellSlot.E)
                         {
                             passiveDamage += source.GetSpellDamage(target, SpellSlot.Q)
                                              * GameObjects.Minions.Count(
                                                  i =>
-                                                 i.IsValidTarget(800, false, target.ServerPosition)
-                                                 && i.CharData.BaseSkinName == "God" && i.Team == source.Team);
+                                                 i.CharData.BaseSkinName == "illaoiminion" && i.Team == source.Team
+                                                 && i.Distance(target) < 800
+                                                 && (i.IsHPBarRendered || i.HasBuff("illaoir2")));
                         }
                         break;
                     case "Janna":
@@ -977,6 +966,16 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         }
                         break;
                 }
+                if (isModifier || (source.ChampionName == "TwistedFate" && spellSlot == SpellSlot.W)
+                    || (isOnHit && source.ChampionName != "Fizz"))
+                {
+                    var targetHero = target as Obj_AI_Hero;
+                    if (targetHero != null
+                        && new[] { 3047, 1316, 1318, 1315, 1317 }.Any(i => Items.HasItem(i, targetHero)))
+                    {
+                        totalDamage *= 0.9;
+                    }
+                }
             }
 
             return totalDamage + passiveDamage;
@@ -1179,7 +1178,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     }
 
                     // Urgot P
-                    if (hero.HasBuff("urgotentropypassive") && targetHero.ChampionName == "Urgot")
+                    if (hero.HasBuff("urgotentropypassive"))
                     {
                         amount *= 0.85;
                     }
@@ -1406,16 +1405,16 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     }
 
                     // Assassin
-                    if (hero.GetCunning(DamageMastery.Cunning.Assassin).IsValid()
+                    /*if (hero.GetCunning(DamageMastery.Cunning.Assassin).IsValid()
                         && !GameObjects.Heroes.Any(
                             h => h.Team == hero.Team && h.NetworkId != hero.NetworkId && h.Distance(hero) <= 800))
                     {
                         amount *= 1.015;
-                    }
+                    }*/
 
                     // Merciless
                     var merciless = hero.GetCunning(DamageMastery.Cunning.Merciless);
-                    if (merciless.IsValid() && targetHero.HealthPercent <= 40)
+                    if (merciless.IsValid() && targetHero.HealthPercent < 40)
                     {
                         amount *= 1 + (merciless.Points / 100);
                     }

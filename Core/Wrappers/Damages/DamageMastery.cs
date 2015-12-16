@@ -1,9 +1,8 @@
-﻿namespace LeagueSharp.SDK.Core.Wrappers.Damages
+﻿#pragma warning disable 1591
+namespace LeagueSharp.SDK.Core.Wrappers.Damages
 {
     using System.Linq;
 
-    /// <summary>
-    /// </summary>
     public static class DamageMastery
     {
         #region Enums
@@ -101,40 +100,21 @@
 
         #region Public Methods and Operators
 
-        /// <summary>
-        /// </summary>
-        /// <param name="hero"></param>
-        /// <param name="cunning"></param>
-        /// <returns></returns>
         public static Mastery GetCunning(this Obj_AI_Hero hero, Cunning cunning)
         {
             return hero.GetMastery(MasteryPage.Cunning, (int)cunning);
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="hero"></param>
-        /// <param name="ferocity"></param>
-        /// <returns></returns>
         public static Mastery GetFerocity(this Obj_AI_Hero hero, Ferocity ferocity)
         {
             return hero.GetMastery(MasteryPage.Ferocity, (int)ferocity);
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="hero"></param>
-        /// <param name="resolve"></param>
-        /// <returns></returns>
         public static Mastery GetResolve(this Obj_AI_Hero hero, Resolve resolve)
         {
             return hero.GetMastery(MasteryPage.Resolve, (int)resolve);
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="mastery"></param>
-        /// <returns></returns>
         public static bool IsValid(this Mastery mastery)
         {
             return mastery != null && mastery.Points > 0;

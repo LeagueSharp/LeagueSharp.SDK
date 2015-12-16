@@ -141,7 +141,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                                    + (1000 * Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
                                       / attack.ProjectileSpeed) + delay;
 
-                    if ( /*Variables.TickCount < landTime - delay &&*/ landTime < Variables.TickCount + time)
+                    if (landTime < Variables.TickCount + time)
                     {
                         attackDamage = attack.Damage;
                     }

@@ -21,10 +21,8 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Linq;
 
     using Enumerations;
-
     using Extensions;
     using Extensions.SharpDX;
-
     using Math;
     using Math.Prediction;
 
@@ -43,20 +41,28 @@ namespace LeagueSharp.SDK.Core.Utils
         private static readonly List<string> NormalMinionList = new List<string>
                                                                     {
                                                                         "SRU_ChaosMinionMelee", "SRU_ChaosMinionRanged",
-                                                                        "SRU_OrderMinionMelee", "SRU_OrderMinionRanged"
+                                                                        "SRU_OrderMinionMelee", "SRU_OrderMinionRanged",
+                                                                        "HA_ChaosMinionMelee", "HA_ChaosMinionRanged",
+                                                                        "HA_OrderMinionMelee", "HA_OrderMinionRanged"
                                                                     };
 
         /// <summary>
         ///     The siege minion list.
         /// </summary>
         private static readonly List<string> SiegeMinionList = new List<string>
-                                                                   { "SRU_ChaosMinionSiege", "SRU_OrderMinionSiege" };
+                                                                   {
+                                                                       "SRU_ChaosMinionSiege", "SRU_OrderMinionSiege",
+                                                                       "HA_ChaosMinionSiege", "HA_OrderMinionSiege"
+                                                                   };
 
         /// <summary>
         ///     The super minion list.
         /// </summary>
         private static readonly List<string> SuperMinionList = new List<string>
-                                                                   { "SRU_ChaosMinionSuper", "SRU_OrderMinionSuper" };
+                                                                   {
+                                                                       "SRU_ChaosMinionSuper", "SRU_OrderMinionSuper",
+                                                                       "HA_ChaosMinionSuper", "HA_OrderMinionSuper"
+                                                                   };
 
         #endregion
 

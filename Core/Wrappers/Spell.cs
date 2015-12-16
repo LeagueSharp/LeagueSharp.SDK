@@ -20,12 +20,14 @@ namespace LeagueSharp.SDK.Core.Wrappers
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using Enumerations;
     using Extensions;
     using Extensions.SharpDX;
     using Math.Prediction;
-    using SharpDX;
     using Utils;
+
+    using SharpDX;
 
     /// <summary>
     ///     Spell Container
@@ -257,9 +259,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 {
                     return this.ChargedMinRange
                            + Math.Min(
-                               this.ChargedMaxRange - this.ChargedMinRange, 
+                               this.ChargedMaxRange - this.ChargedMinRange,
                                ((Variables.TickCount - this.chargedCastedT)
-                               * (this.ChargedMaxRange - this.ChargedMinRange) / this.ChargeDuration) - 150);
+                                * (this.ChargedMaxRange - this.ChargedMinRange) / this.ChargeDuration) - 150);
                 }
 
                 return this.ChargedMaxRange;
@@ -355,10 +357,10 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="tempHitChance">Temporary HitChance Override</param>
         /// <returns>The <see cref="CastStates" /></returns>
         public CastStates Cast(
-            Obj_AI_Base unit, 
-            bool exactHitChance = false, 
-            bool areaOfEffect = false, 
-            int minTargets = -1, 
+            Obj_AI_Base unit,
+            bool exactHitChance = false,
+            bool areaOfEffect = false,
+            int minTargets = -1,
             HitChance tempHitChance = HitChance.None)
         {
             if (!unit.IsValid())
@@ -606,13 +608,13 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public FarmLocation GetCircularFarmLocation(List<Obj_AI_Base> minions, float overrideWidth = -1)
         {
             var positions = Minion.GetMinionsPredictedPositions(
-                minions, 
-                this.Delay, 
-                this.Width, 
-                this.Speed, 
-                this.From, 
-                this.Range, 
-                false, 
+                minions,
+                this.Delay,
+                this.Width,
+                this.Speed,
+                this.From,
+                this.Range,
+                false,
                 SkillshotType.SkillshotCircle);
 
             return this.GetCircularFarmLocation(positions, overrideWidth);
@@ -627,8 +629,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public FarmLocation GetCircularFarmLocation(List<Vector2> minionPositions, float overrideWidth = -1)
         {
             return Minion.GetBestCircularFarmLocation(
-                minionPositions, 
-                overrideWidth >= 0 ? overrideWidth : this.Width, 
+                minionPositions,
+                overrideWidth >= 0 ? overrideWidth : this.Width,
                 this.Range);
         }
 
@@ -642,10 +644,10 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public List<Obj_AI_Base> GetCollision(Vector2 fromVector2, List<Vector2> to, float delayOverride = -1)
         {
             return Core.Math.Collision.GetCollision(
-                to.Select(h => h.ToVector3()).ToList(), 
+                to.Select(h => h.ToVector3()).ToList(),
                 new PredictionInput
                     {
-                        From = fromVector2.ToVector3(), Type = this.Type, Radius = this.Width, 
+                        From = fromVector2.ToVector3(), Type = this.Type, Radius = this.Width,
                         Delay = delayOverride > 0 ? delayOverride : this.Delay, Speed = this.Speed
                     });
         }
@@ -680,13 +682,13 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public FarmLocation GetLineFarmLocation(List<Obj_AI_Base> minionPositions, float overrideWidth = -1)
         {
             var positions = Minion.GetMinionsPredictedPositions(
-                minionPositions, 
-                this.Delay, 
-                this.Width, 
-                this.Speed, 
-                this.From, 
-                this.Range, 
-                false, 
+                minionPositions,
+                this.Delay,
+                this.Width,
+                this.Speed,
+                this.From,
+                this.Range,
+                false,
                 SkillshotType.SkillshotLine);
 
             return this.GetLineFarmLocation(positions, overrideWidth >= 0 ? overrideWidth : this.Width);
@@ -701,8 +703,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public FarmLocation GetLineFarmLocation(List<Vector2> minionPositions, float overrideWidth = -1)
         {
             return Minion.GetBestLineFarmLocation(
-                minionPositions, 
-                overrideWidth >= 0 ? overrideWidth : this.Width, 
+                minionPositions,
+                overrideWidth >= 0 ? overrideWidth : this.Width,
                 this.Range);
         }
 
@@ -717,18 +719,18 @@ namespace LeagueSharp.SDK.Core.Wrappers
         ///     <see cref="PredictionOutput" /> output
         /// </returns>
         public PredictionOutput GetPrediction(
-            Obj_AI_Base unit, 
-            bool aoe = false, 
-            float overrideRange = -1, 
+            Obj_AI_Base unit,
+            bool aoe = false,
+            float overrideRange = -1,
             CollisionableObjects collisionable = CollisionableObjects.Heroes | CollisionableObjects.Minions)
         {
             return
                 Movement.GetPrediction(
                     new PredictionInput
                         {
-                            Unit = unit, Delay = this.Delay, Radius = this.Width, Speed = this.Speed, From = this.From, 
-                            Range = (overrideRange > 0) ? overrideRange : this.Range, Collision = this.Collision, 
-                            Type = this.Type, RangeCheckFrom = this.RangeCheckFrom, AoE = aoe, 
+                            Unit = unit, Delay = this.Delay, Radius = this.Width, Speed = this.Speed, From = this.From,
+                            Range = (overrideRange > 0) ? overrideRange : this.Range, Collision = this.Collision,
+                            Type = this.Type, RangeCheckFrom = this.RangeCheckFrom, AoE = aoe,
                             CollisionObjects = collisionable
                         });
         }
@@ -751,8 +753,8 @@ namespace LeagueSharp.SDK.Core.Wrappers
         ///     The <see cref="Obj_AI_Hero" /> target.
         /// </returns>
         public Obj_AI_Hero GetTarget(
-            float extraRange = 0, 
-            bool accountForCollision = false, 
+            float extraRange = 0,
+            bool accountForCollision = false,
             IEnumerable<Obj_AI_Hero> champsToIgnore = null)
         {
             return accountForCollision
@@ -786,10 +788,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <returns>Is GameObject in range of spell</returns>
         public bool IsInRange(GameObject obj, float otherRange = -1)
         {
-            return
-                this.IsInRange(
-                    (obj as Obj_AI_Base)?.ServerPosition.ToVector2() ?? obj.Position.ToVector2(), 
-                    otherRange);
+            return this.IsInRange(
+                (obj as Obj_AI_Base)?.ServerPosition.ToVector2() ?? obj.Position.ToVector2(),
+                otherRange);
         }
 
         /// <summary>
@@ -893,12 +894,12 @@ namespace LeagueSharp.SDK.Core.Wrappers
         ///     The <see cref="Spell" />.
         /// </returns>
         public Spell SetSkillshot(
-            float delay, 
-            float skillWidth, 
-            float speed, 
-            bool collision, 
-            SkillshotType type, 
-            Vector3 fromVector3 = default(Vector3), 
+            float delay,
+            float skillWidth,
+            float speed,
+            bool collision,
+            SkillshotType type,
+            Vector3 fromVector3 = default(Vector3),
             Vector3 rangeCheckFromVector3 = default(Vector3))
         {
             this.Delay = delay;
@@ -932,9 +933,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
         ///     The <see cref="Spell" />.
         /// </returns>
         public Spell SetSkillshot(
-            bool collision, 
-            SkillshotType type, 
-            Vector3 fromVector3 = default(Vector3), 
+            bool collision,
+            SkillshotType type,
+            Vector3 fromVector3 = default(Vector3),
             Vector3 rangeCheckFromVector3 = default(Vector3))
         {
             this.From = fromVector3;
@@ -965,9 +966,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
         ///     The <see cref="Spell" />.
         /// </returns>
         public Spell SetTargetted(
-            float delay, 
-            float speed, 
-            Vector3 fromVector3 = default(Vector3), 
+            float delay,
+            float speed,
+            Vector3 fromVector3 = default(Vector3),
             Vector3 rangeCheckFromVector3 = default(Vector3))
         {
             this.Delay = delay;
@@ -991,7 +992,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <returns>
         ///     The <see cref="Spell" />.
         /// </returns>
-        public Spell SetTargetted(Vector3 fromVector3 = default(Vector3), Vector3 rangeCheckFromVector3 = default(Vector3))
+        public Spell SetTargetted(
+            Vector3 fromVector3 = default(Vector3),
+            Vector3 rangeCheckFromVector3 = default(Vector3))
         {
             this.From = fromVector3;
             this.RangeCheckFrom = rangeCheckFromVector3;
@@ -1037,7 +1040,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="fromVector3">From Vector3 Source</param>
         /// <param name="rangeCheckFromVector3">Range Check From Vector3 Source</param>
         public void UpdateSourcePosition(
-            Vector3 fromVector3 = default(Vector3), 
+            Vector3 fromVector3 = default(Vector3),
             Vector3 rangeCheckFromVector3 = default(Vector3))
         {
             this.From = fromVector3;
@@ -1053,9 +1056,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="minHitChance">Minimum Hit Chance</param>
         /// <returns>Will Spell Hit</returns>
         public bool WillHit(
-            Obj_AI_Base unit, 
-            Vector3 castPosition, 
-            int extraWidth = 0, 
+            Obj_AI_Base unit,
+            Vector3 castPosition,
+            int extraWidth = 0,
             HitChance minHitChance = HitChance.High)
         {
             var unitPosition = this.GetPrediction(unit);

@@ -70,14 +70,14 @@ namespace LeagueSharp.SDK.Core.Utils
                 "azirsoldierbasicattack", "azirsundiscbasicattack",
                 "elisespiderlingbasicattack", "heimertyellowbasicattack",
                 "heimertyellowbasicattack2", "heimertbluebasicattack",
-                /*"jarvanivcataclysmattack",*/ 
-                "kindredwolfbasicattack", "malzaharvoidlingbasicattack",
-                "malzaharvoidlingbasicattack2", "malzaharvoidlingbasicattack3",
-                "shyvanadoubleattack", "shyvanadoubleattackdragon",
-                "monkeykingdoubleattack", "yorickspectralghoulbasicattack",
-                "yorickdecayedghoulbasicattack", "yorickravenousghoulbasicattack",
-                "zyragraspingplantattack", "zyragraspingplantattack2",
-                "zyragraspingplantattackfire", "zyragraspingplantattack2fire"
+                "jarvanivcataclysmattack", "kindredwolfbasicattack",
+                "malzaharvoidlingbasicattack", "malzaharvoidlingbasicattack2",
+                "malzaharvoidlingbasicattack3", "shyvanadoubleattack",
+                "shyvanadoubleattackdragon", "monkeykingdoubleattack",
+                "yorickspectralghoulbasicattack", "yorickdecayedghoulbasicattack",
+                "yorickravenousghoulbasicattack", "zyragraspingplantattack",
+                "zyragraspingplantattack2", "zyragraspingplantattackfire",
+                "zyragraspingplantattack2fire"
             };
 
         /// <summary>

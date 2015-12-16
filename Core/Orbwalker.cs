@@ -24,16 +24,11 @@ namespace LeagueSharp.SDK.Core
     using System.Windows.Forms;
 
     using Enumerations;
-
     using Extensions;
     using Extensions.SharpDX;
-
     using Math.Prediction;
-
     using UI.IMenu.Values;
-
     using Utils;
-
     using Wrappers;
     using Wrappers.Damages;
 
@@ -62,9 +57,10 @@ namespace LeagueSharp.SDK.Core
 
         private static readonly string[] SpecialMinions =
             {
-                "zyrathornplant", "zyragraspingplant", "heimertyellow",
-                "heimertblue", "malzaharvoidling", "yorickdecayedghoul",
-                "yorickravenousghoul", "yorickspectralghoul", "shacobox"
+                "annietibbers", "zyrathornplant", "zyragraspingplant",
+                "heimertyellow", "heimertblue", "malzaharvoidling",
+                "yorickdecayedghoul", "yorickravenousghoul",
+                "yorickspectralghoul", "shacobox"
             };
 
         /// <summary>
@@ -110,18 +106,14 @@ namespace LeagueSharp.SDK.Core
         ///     Gets a value indicating whether can attack.
         /// </summary>
         public static bool CanAttack
-        {
-            get
-            {
-                if (GameObjects.Player.ChampionName == "Graves" && Attack)
-                {
-                    return GameObjects.Player.HasBuff("GravesBasicAttackAmmo1")
-                           && Variables.TickCount + (Game.Ping / 2) + 25 >= LastAutoAttackTick + 1500;
-                }
-                return Variables.TickCount + (Game.Ping / 2) + 25
-                       >= LastAutoAttackTick + (GameObjects.Player.AttackDelay * 1000) && Attack;
-            }
-        }
+            =>
+                Variables.TickCount + (Game.Ping / 2) + 25
+                >= LastAutoAttackTick
+                + (GameObjects.Player.ChampionName == "Graves"
+                       ? 1.0740296828d * 1000 * GameObjects.Player.AttackDelay - 716.2381256175d
+                       : GameObjects.Player.AttackDelay * 1000) && Attack
+                && (GameObjects.Player.ChampionName != "Graves" || GameObjects.Player.HasBuff("GravesBasicAttackAmmo1"))
+            ;
 
         /// <summary>
         ///     Gets a value indicating whether can move.
@@ -140,10 +132,15 @@ namespace LeagueSharp.SDK.Core
                     return true;
                 }
 
+                var extraWindup = GameObjects.Player.ChampionName == "Rengar"
+                                  && (GameObjects.Player.HasBuff("rengarqbase")
+                                      || GameObjects.Player.HasBuff("rengarqemp"))
+                                      ? 200
+                                      : 0;
                 return !GameObjects.Player.CanCancelAutoAttack()
                        || (Variables.TickCount + (Game.Ping / 2)
                            >= LastAutoAttackTick + (GameObjects.Player.AttackCastDelay * 1000)
-                           + Menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value);
+                           + Menu["advanced"]["miscExtraWindup"].GetValue<MenuSlider>().Value + extraWindup);
             }
         }
 
@@ -206,6 +203,8 @@ namespace LeagueSharp.SDK.Core
 
         #region Properties
 
+        private static int FarmDelay => Menu["advanced"]["miscFarmDelay"].GetValue<MenuSlider>().Value;
+
         /// <summary>
         ///     Gets or sets a value indicating whether missile launched.
         /// </summary>
@@ -228,8 +227,8 @@ namespace LeagueSharp.SDK.Core
         {
             var mode = modeArg ?? ActiveMode;
 
-            if (mode == OrbwalkerMode.Orbwalk || mode == OrbwalkerMode.None
-                || (mode == OrbwalkerMode.Hybrid && !Menu["advanced"]["miscPriorizeFarm"].GetValue<MenuBool>().Value))
+            if ((mode == OrbwalkerMode.Hybrid || mode == OrbwalkerMode.LaneClear)
+                && !Menu["advanced"]["miscPriorizeFarm"].GetValue<MenuBool>().Value)
             {
                 var target = TargetSelector.GetTarget();
                 if (target != null)
@@ -241,16 +240,18 @@ namespace LeagueSharp.SDK.Core
             if (mode == OrbwalkerMode.LaneClear || mode == OrbwalkerMode.Hybrid || mode == OrbwalkerMode.LastHit)
             {
                 foreach (var minion in
-                    GameObjects.EnemyMinions.Where(
-                        m => m.InAutoAttackRange() && m.Health < 2 * GameObjects.Player.TotalAttackDamage)
-                        .OrderByDescending(m => m.MaxHealth))
+                    GameObjects.EnemyMinions.Where(m => m.InAutoAttackRange() && Minion.IsMinion(m, false))
+                        .OrderByDescending(m => m.GetMinionType() == MinionTypes.Siege)
+                        .ThenBy(m => m.GetMinionType() == MinionTypes.Super)
+                        .ThenBy(m => m.Health)
+                        .ThenByDescending(m => m.MaxHealth))
                 {
                     var time =
                         (int)
                         ((GameObjects.Player.AttackCastDelay * 1000)
-                         + (GameObjects.Player.Distance(minion) / GameObjects.Player.GetProjectileSpeed() * 1000)
-                         + (Game.Ping / 2f));
-                    var healthPrediction = Health.GetPrediction(minion, time, 100);
+                         + (System.Math.Max(0, GameObjects.Player.Distance(minion) - GameObjects.Player.BoundingRadius)
+                            / GameObjects.Player.GetProjectileSpeed() * 1000) + (Game.Ping / 2f));
+                    var healthPrediction = Health.GetPrediction(minion, time, FarmDelay);
 
                     if (healthPrediction <= 0)
                     {
@@ -262,7 +263,7 @@ namespace LeagueSharp.SDK.Core
                                 });
                     }
 
-                    if (healthPrediction > 0 && healthPrediction <= GameObjects.Player.GetAutoAttackDamage(minion, true))
+                    if (healthPrediction > 0 && healthPrediction <= GameObjects.Player.GetAutoAttackDamage(minion))
                     {
                         return minion;
                     }
@@ -311,9 +312,12 @@ namespace LeagueSharp.SDK.Core
                 var shouldWait =
                     GameObjects.EnemyMinions.Any(
                         m =>
-                        m.InAutoAttackRange()
-                        && Health.GetPrediction(m, (int)((GameObjects.Player.AttackDelay * 1000) * 2f), 100)
-                        <= GameObjects.Player.GetAutoAttackDamage(m, true));
+                        m.InAutoAttackRange() && Minion.IsMinion(m, false)
+                        && Health.GetPrediction(
+                            m,
+                            (int)((GameObjects.Player.AttackDelay * 1000) * 2f),
+                            FarmDelay,
+                            HealthPredictionType.Simulated) <= GameObjects.Player.GetAutoAttackDamage(m));
                 if (!shouldWait)
                 {
                     // H-28G, Sumon Voidling, Jack In The Box, (Clyde, Inky, Blinky), Plant
@@ -350,8 +354,9 @@ namespace LeagueSharp.SDK.Core
                         var predHealth = Health.GetPrediction(
                             LastMinion,
                             (int)((GameObjects.Player.AttackDelay * 1000) * 2f),
-                            100);
-                        if (predHealth >= 2 * GameObjects.Player.GetAutoAttackDamage(LastMinion, true)
+                            FarmDelay,
+                            HealthPredictionType.Simulated);
+                        if (predHealth >= 2 * GameObjects.Player.GetAutoAttackDamage(LastMinion)
                             || System.Math.Abs(predHealth - LastMinion.Health) < float.Epsilon)
                         {
                             return LastMinion;
@@ -359,11 +364,17 @@ namespace LeagueSharp.SDK.Core
                     }
 
                     // Minion
-                    var minion = (from m in GameObjects.EnemyMinions.Where(m => m.InAutoAttackRange())
+                    var minion = (from m in
+                                      GameObjects.EnemyMinions.Where(
+                                          m => m.InAutoAttackRange() && Minion.IsMinion(m, false))
                                   let predictedHealth =
-                                      Health.GetPrediction(m, (int)((GameObjects.Player.AttackDelay * 1000) * 2f), 100)
+                                      Health.GetPrediction(
+                                          m,
+                                          (int)((GameObjects.Player.AttackDelay * 1000) * 2f),
+                                          FarmDelay,
+                                          HealthPredictionType.Simulated)
                                   where
-                                      predictedHealth >= 2 * GameObjects.Player.GetAutoAttackDamage(m, true)
+                                      predictedHealth >= 2 * GameObjects.Player.GetAutoAttackDamage(m)
                                       || System.Math.Abs(predictedHealth - m.Health) < float.Epsilon
                                   select m).MaxOrDefault(m => m.Health);
                     if (minion != null)
@@ -530,6 +541,7 @@ namespace LeagueSharp.SDK.Core
                     1200));
             advanced.Add(new MenuSeparator("separatorMisc", "Miscellaneous"));
             advanced.Add(new MenuSlider("miscExtraWindup", "Extra Windup", 80, 0, 200));
+            advanced.Add(new MenuSlider("miscFarmDelay", "Farm Delay", 0, 0, 200));
             advanced.Add(new MenuBool("miscPriorizeFarm", "Priorize farm over harass", true));
             advanced.Add(new MenuBool("miscMissile", "Use Missile Checks", true));
             advanced.Add(new MenuSeparator("separatorOther", "Other"));
@@ -663,8 +675,7 @@ namespace LeagueSharp.SDK.Core
                 {
                     var minions =
                         GameObjects.EnemyMinions.Where(
-                            m =>
-                            m.IsValidTarget(1200F) && m.Health < GameObjects.Player.GetAutoAttackDamage(m, true) * 2);
+                            m => m.IsValidTarget(1200F) && m.Health < GameObjects.Player.GetAutoAttackDamage(m) * 2);
                     foreach (var minion in minions)
                     {
                         var value = 255 - (minion.Health * 2);
@@ -680,7 +691,7 @@ namespace LeagueSharp.SDK.Core
                 {
                     var minions =
                         GameObjects.EnemyMinions.Where(
-                            m => m.IsValidTarget(1200F) && m.Health < GameObjects.Player.GetAutoAttackDamage(m, true));
+                            m => m.IsValidTarget(1200F) && m.Health < GameObjects.Player.GetAutoAttackDamage(m));
                     foreach (var minion in minions)
                     {
                         Drawing.DrawCircle(minion.Position, minion.BoundingRadius * 2f, Color.FromArgb(255, 0, 255, 0));

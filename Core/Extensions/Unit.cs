@@ -19,8 +19,10 @@ namespace LeagueSharp.SDK.Core.Extensions
 {
     using System;
     using System.Linq;
-    using Enumerations;
+
     using global::SharpDX;
+
+    using Enumerations;
     using SharpDX;
     using Wrappers;
 
@@ -230,12 +232,18 @@ namespace LeagueSharp.SDK.Core.Extensions
         /// <returns>
         ///     The <see cref="TurretType" />.
         /// </returns>
-        public static TurretType GetTurretType(this Obj_AI_Base turret)
+        public static TurretType GetTurretType(this Obj_AI_Turret turret)
         {
             switch (turret.CharData.BaseSkinName)
             {
                 case "SRUAP_Turret_Order1":
                 case "SRUAP_Turret_Chaos1":
+                case "ha_ap_orderturret":
+                case "HA_AP_OrderTurret2":
+                case "HA_AP_OrderTurret3":
+                case "HA_AP_ChaosTurret":
+                case "HA_AP_ChaosTurret2":
+                case "HA_AP_ChaosTurret3":
                     return TurretType.TierOne;
 
                 case "SRUAP_Turret_Order2":
@@ -370,9 +378,9 @@ namespace LeagueSharp.SDK.Core.Extensions
         ///     The <see cref="bool" />.
         /// </returns>
         public static bool IsValidTarget(
-            this AttackableUnit unit, 
-            float range = float.MaxValue, 
-            bool checkTeam = true, 
+            this AttackableUnit unit,
+            float range = float.MaxValue,
+            bool checkTeam = true,
             Vector3 from = default(Vector3))
         {
             if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable

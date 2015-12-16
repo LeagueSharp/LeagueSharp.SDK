@@ -78,7 +78,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 DamageType.Physical,
                 (hero, @base) =>
                     {
-                        var d = 0.06 * @base.Health;
+                        var d = Math.Max(0.06 * @base.Health, 10);
                         return @base is Obj_AI_Minion ? Math.Min(d, 60) : d;
                     });
             AddPassiveAttack(
@@ -93,7 +93,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 (hero, @base) => 15);
             AddPassiveAttack(
                 string.Empty,
-                (hero, @base) => Items.HasItem((int)ItemId.Runaans_Hurricane_Ranged_Only, hero) && hero.IsRanged,
+                (hero, @base) => Items.HasItem((int)ItemId.Runaans_Hurricane_Ranged_Only, hero),
                 DamageType.Physical,
                 (hero, @base) => 15);
             AddPassiveAttack(
@@ -145,11 +145,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 (hero, @base) =>
                 hero.GetBuffCount("DreadnoughtMomentumBuff") / 2
                 * (hero.GetBuffCount("DreadnoughtMomentumBuff") == 100 ? 2 : 1));
-            AddPassiveAttack(
-                string.Empty,
-                (hero, @base) => hero.HasBuff("Serrated"),
-                DamageType.Physical,
-                (hero, @base) => 15);
 
             var excluded = new List<string>();
             foreach (var name in GameObjects.Heroes.Select(h => h.ChampionName).Where(name => !excluded.Contains(name)))
@@ -816,14 +811,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             (hero, @base) =>
                             (1 + (Items.HasItem((int)ItemId.Infinity_Edge, hero) ? 0.5 : 0)) * hero.TotalAttackDamage);
                         break;
-                    /*case "Poppy":
+                    case "Poppy":
                         AddPassiveAttack(
                             "Poppy",
-                            (hero, @base) => hero.HasBuff(""),
-                            //Todo
+                            (hero, @base) => hero.HasBuff("PoppyPassiveBuff"),
                             DamageType.Magical,
                             (hero, @base) => 10 + (10 * hero.Level));
-                        break;*/
+                        break;
                     case "Quinn":
                         AddPassiveAttack(
                             "Quinn",

@@ -72,12 +72,14 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     Gets the casting interruptible spell dictionary.
         /// </summary>
-        public static IReadOnlyDictionary<int, InterruptableSpellData> CastingInterruptableSpell => CastingInterruptableSpellDictionary;
+        public static IReadOnlyDictionary<int, InterruptableSpellData> CastingInterruptableSpell
+            => CastingInterruptableSpellDictionary;
 
         /// <summary>
         ///     Gets the interruptible spells dictionary.
         /// </summary>
-        public static IReadOnlyDictionary<string, List<InterruptableSpellData>> InterruptableSpells => InterruptableSpellsDictionary;
+        public static IReadOnlyDictionary<string, List<InterruptableSpellData>> InterruptableSpells
+            => InterruptableSpellsDictionary;
 
         #endregion
 
@@ -115,9 +117,9 @@ namespace LeagueSharp.SDK.Core.Events
             if (CastingInterruptableSpellDictionary.TryGetValue(target.NetworkId, out value))
             {
                 return new InterruptableTargetEventArgs(
-                    target, 
-                    value.DangerLevel, 
-                    target.Spellbook.CastEndTime, 
+                    target,
+                    value.DangerLevel,
+                    target.Spellbook.CastEndTime,
                     value.MovementInterrupts);
             }
 
@@ -339,9 +341,9 @@ namespace LeagueSharp.SDK.Core.Events
             ///     Does Movement Interrupts the spell
             /// </param>
             internal InterruptableTargetEventArgs(
-                Obj_AI_Hero sender, 
-                DangerLevel dangerLevel, 
-                float endTime, 
+                Obj_AI_Hero sender,
+                DangerLevel dangerLevel,
+                float endTime,
                 bool movementInterrupts)
             {
                 this.Sender = sender;

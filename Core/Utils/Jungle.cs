@@ -62,7 +62,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>
         ///     The <see cref="JungleType" />
         /// </returns>
-        public static JungleType GetJungleType(this Obj_AI_Base minion)
+        public static JungleType GetJungleType(this Obj_AI_Minion minion)
         {
             if (SmallNameRegex.Any(regex => Regex.IsMatch(minion.Name, regex)))
             {
@@ -91,10 +91,10 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>
         ///     The <see cref="bool" />.
         /// </returns>
-        public static bool IsJungleBuff(this Obj_AI_Base minion)
+        public static bool IsJungleBuff(this Obj_AI_Minion minion)
         {
             var @base = minion.CharData.BaseSkinName;
-            return @base.Equals("SRU_Blue") || @base.Equals("SRU_Red");
+            return @base.StartsWith("SRU_Blue") || @base.StartsWith("SRU_Red");
         }
 
         #endregion

@@ -685,7 +685,8 @@ namespace LeagueSharp.SDK.Clipper
         /// <returns>
         ///     The <see cref="int" />.
         /// </returns>
-        [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode", Justification = "Hashcode is dynamic on clipper.")]
+        [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode",
+            Justification = "Hashcode is dynamic on clipper.")]
         public override int GetHashCode()
         {
             return this.hi.GetHashCode() ^ this.lo.GetHashCode();
@@ -802,11 +803,12 @@ namespace LeagueSharp.SDK.Clipper
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Can be changed by a pre-processor definition.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias",
+            Justification = "Can be changed by a pre-processor definition.")]
         public IntPoint(double x, double y)
         {
-            this.X = (long)x;
-            this.Y = (long)y;
+            this.X = (cInt)x;
+            this.Y = (cInt)y;
         }
 
         /// <summary>
@@ -1885,7 +1887,7 @@ namespace LeagueSharp.SDK.Clipper
         /// </returns>
         private static Edge FindNextLocMin(Edge e)
         {
-            for (; ;)
+            for (;;)
             {
                 while (e.Bot != e.Prev.Bot || e.Curr == e.Top)
                 {
@@ -2177,7 +2179,7 @@ namespace LeagueSharp.SDK.Clipper
 
             // 2. Remove duplicate vertices, and (when closed) collinear edges ...
             Edge e = eStart, eLoopStop = eStart;
-            for (; ;)
+            for (;;)
             {
                 // nb: allows matching start and end points when not Closed ...
                 if (e.Curr == e.Next.Curr)
@@ -2264,7 +2266,7 @@ namespace LeagueSharp.SDK.Clipper
                 e = e.Next;
             }
 
-            for (; ;)
+            for (;;)
             {
                 e = FindNextLocMin(e);
                 if (e == eMin)
@@ -5062,7 +5064,7 @@ namespace LeagueSharp.SDK.Clipper
                 eMaxPair = GetMaximaPair(eLastHorz);
             }
 
-            for (; ;)
+            for (;;)
             {
                 var isLastHorz = horzEdge == eLastHorz;
                 var e = GetNextInAel(horzEdge, dir);
@@ -5494,10 +5496,11 @@ namespace LeagueSharp.SDK.Clipper
         /// <returns>
         ///     The <see cref="long" />.
         /// </returns>
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Can be changed by a pre-processor definition.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias",
+            Justification = "Can be changed by a pre-processor definition.")]
         internal static long Round(double value)
         {
-            return value < 0 ? (long)(value - 0.5) : (long)(value + 0.5);
+            return value < 0 ? (cInt)(value - 0.5) : (cInt)(value + 0.5);
         }
 
         // ------------------------------------------------------------------------------
@@ -5948,7 +5951,7 @@ namespace LeagueSharp.SDK.Clipper
             OutPt lastOk = null;
             outRec.BottomPt = null;
             var pp = outRec.Pts;
-            for (; ;)
+            for (;;)
             {
                 if (pp.Prev == pp || pp.Prev == pp.Next)
                 {
@@ -7963,10 +7966,11 @@ namespace LeagueSharp.SDK.Clipper
         /// <returns>
         ///     The <see cref="long" />.
         /// </returns>
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Can be changed by a pre-processor definition.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias",
+            Justification = "Can be changed by a pre-processor definition.")]
         internal static long Round(double value)
         {
-            return value < 0 ? (long)(value - 0.5) : (long)(value + 0.5);
+            return value < 0 ? (cInt)(value - 0.5) : (cInt)(value + 0.5);
         }
 
         // ------------------------------------------------------------------------------
@@ -8460,9 +8464,7 @@ namespace LeagueSharp.SDK.Clipper
         ///     Exception description
         /// </param>
         public ClipperException(string description)
-            : base(description)
-        {
-        }
+            : base(description) {}
 
         #endregion
     }
