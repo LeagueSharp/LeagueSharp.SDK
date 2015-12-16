@@ -1390,6 +1390,21 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             var targetHero = target as Obj_AI_Hero;
             if (hero != null)
             {
+                // Dragon Buff
+                if (hero.GetBuffCount("s5test_dragonslayerbuff") >= 2)
+                {
+                    var buffCount = hero.GetBuffCount("s5test_dragonslayerbuff");
+                    var bonusPercent = 1.15 * (buffCount == 5 ? 2 : 1);
+                    if (buffCount >= 2 && target is Obj_AI_Turret)
+                    {
+                        amount *= bonusPercent;
+                    }
+                    if (buffCount >= 4 && target is Obj_AI_Minion)
+                    {
+                        amount *= bonusPercent;
+                    }
+                }
+
                 // DoubleEdgedSword
                 if (hero.GetFerocity(DamageMastery.Ferocity.DoubleEdgedSword).IsValid())
                 {

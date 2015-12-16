@@ -47,7 +47,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <summary>
         ///     The small name regex list.
         /// </summary>
-        private static readonly string[] SmallNameRegex = { "Mini", "Sru_Crab" };
+        private static readonly string[] SmallNameRegex = { "SRU_[a-zA-Z]Mini", "Sru_Crab" };
 
         #endregion
 
@@ -94,7 +94,7 @@ namespace LeagueSharp.SDK.Core.Utils
         public static bool IsJungleBuff(this Obj_AI_Minion minion)
         {
             var @base = minion.CharData.BaseSkinName;
-            return @base.StartsWith("SRU_Blue") || @base.StartsWith("SRU_Red");
+            return @base.Equals("SRU_Blue") || @base.Equals("SRU_Red");
         }
 
         #endregion

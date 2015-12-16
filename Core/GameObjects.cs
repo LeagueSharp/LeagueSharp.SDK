@@ -437,18 +437,13 @@ namespace LeagueSharp.SDK.Core
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 o =>
-                                o.Team != GameObjectTeam.Neutral && !o.CharData.BaseSkinName.ToLower().Contains("ward")
-                                && !o.CharData.BaseSkinName.ToLower().Contains("trinket")
+                                o.Team != GameObjectTeam.Neutral && !o.GetMinionType().HasFlag(MinionTypes.Ward)
                                 && !o.CharData.BaseSkinName.Equals("gangplankbarrel")));
                     TurretsList.AddRange(ObjectManager.Get<Obj_AI_Turret>());
                     InhibitorsList.AddRange(ObjectManager.Get<Obj_BarracksDampener>());
                     JungleList.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(o => o.Team == GameObjectTeam.Neutral));
                     WardsList.AddRange(
-                        ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(
-                                o =>
-                                o.CharData.BaseSkinName.ToLower().Contains("ward")
-                                || o.CharData.BaseSkinName.ToLower().Contains("trinket")));
+                        ObjectManager.Get<Obj_AI_Minion>().Where(o => o.GetMinionType().HasFlag(MinionTypes.Ward)));
                     ShopsList.AddRange(ObjectManager.Get<Obj_Shop>());
                     SpawnPointsList.AddRange(ObjectManager.Get<Obj_SpawnPoint>());
                     GameObjectsList.AddRange(ObjectManager.Get<GameObject>());
@@ -531,8 +526,7 @@ namespace LeagueSharp.SDK.Core
             {
                 if (minion.Team != GameObjectTeam.Neutral)
                 {
-                    if (minion.CharData.BaseSkinName.ToLower().Contains("ward")
-                        || minion.CharData.BaseSkinName.ToLower().Contains("trinket"))
+                    if (minion.GetMinionType().HasFlag(MinionTypes.Ward))
                     {
                         WardsList.Add(minion);
                         if (minion.IsEnemy)
@@ -704,8 +698,7 @@ namespace LeagueSharp.SDK.Core
             {
                 if (minion.Team != GameObjectTeam.Neutral)
                 {
-                    if (minion.CharData.BaseSkinName.ToLower().Contains("ward")
-                        || minion.CharData.BaseSkinName.ToLower().Contains("trinket"))
+                    if (minion.GetMinionType().HasFlag(MinionTypes.Ward))
                     {
                         foreach (var ward in WardsList.Where(w => w.Compare(minion)).ToList())
                         {

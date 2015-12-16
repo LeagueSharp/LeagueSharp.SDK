@@ -1,5 +1,4 @@
-﻿#pragma warning disable 1591
-namespace LeagueSharp.SDK.Core.Wrappers.Damages
+﻿namespace LeagueSharp.SDK.Core.Wrappers.Damages
 {
     using System.Linq;
 

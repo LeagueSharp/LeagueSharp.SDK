@@ -145,6 +145,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 (hero, @base) =>
                 hero.GetBuffCount("DreadnoughtMomentumBuff") / 2
                 * (hero.GetBuffCount("DreadnoughtMomentumBuff") == 100 ? 2 : 1));
+            AddPassiveAttack(
+                string.Empty,
+                (hero, @base) => hero.GetBuffCount("s5test_dragonslayerbuff") == 5,
+                DamageType.True,
+                (hero, @base) => 150 / (@base is Obj_AI_Minion ? 5d : 1));
 
             var excluded = new List<string>();
             foreach (var name in GameObjects.Heroes.Select(h => h.ChampionName).Where(name => !excluded.Contains(name)))
@@ -259,10 +264,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                     {
                                         dmg = hero.TotalAttackDamage
                                               * (0.5 + (hero.FlatCritChanceMod * (1 + 0.5 * hero.FlatCritDamageMod)));
-                                        /*if (@base.HasBuff("")) //Todo Trap Buff
+                                        if (@base.HasBuff("caitlynyordletrapsight"))
                                         {
                                             dmg *= 1 + hero.Spellbook.GetSpell(SpellSlot.W).Level / 10;
-                                        }*/
+                                        }
                                     }
                                     return dmg;
                                 });

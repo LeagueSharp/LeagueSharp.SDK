@@ -66,6 +66,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         private static readonly string[] NoAttacks =
             {
+                "asheqattacknoonhit", "volleyattackwithsound", "volleyattack",
                 "annietibbersbasicattack", "annietibbersbasicattack2",
                 "azirsoldierbasicattack", "azirsundiscbasicattack",
                 "elisespiderlingbasicattack", "heimertyellowbasicattack",
@@ -73,11 +74,11 @@ namespace LeagueSharp.SDK.Core.Utils
                 "jarvanivcataclysmattack", "kindredwolfbasicattack",
                 "malzaharvoidlingbasicattack", "malzaharvoidlingbasicattack2",
                 "malzaharvoidlingbasicattack3", "shyvanadoubleattack",
-                "shyvanadoubleattackdragon", "monkeykingdoubleattack",
-                "yorickspectralghoulbasicattack", "yorickdecayedghoulbasicattack",
-                "yorickravenousghoulbasicattack", "zyragraspingplantattack",
-                "zyragraspingplantattack2", "zyragraspingplantattackfire",
-                "zyragraspingplantattack2fire"
+                "shyvanadoubleattackdragon", "sivirwattackbounce",
+                "monkeykingdoubleattack", "yorickspectralghoulbasicattack",
+                "yorickdecayedghoulbasicattack", "yorickravenousghoulbasicattack",
+                "zyragraspingplantattack", "zyragraspingplantattack2",
+                "zyragraspingplantattackfire", "zyragraspingplantattack2fire"
             };
 
         /// <summary>
