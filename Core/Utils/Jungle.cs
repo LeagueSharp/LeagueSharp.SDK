@@ -47,7 +47,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <summary>
         ///     The small name regex list.
         /// </summary>
-        private static readonly string[] SmallNameRegex = { "SRU_[a-zA-Z]Mini", "Sru_Crab" };
+        private static readonly string[] SmallNameRegex = { "SRU_[a-zA-Z](.*?)Mini", "Sru_Crab" };
 
         #endregion
 
