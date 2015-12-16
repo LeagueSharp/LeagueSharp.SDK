@@ -317,7 +317,10 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Is Position under a turret</returns>
         public static bool IsUnderTurret(this Vector3 position, bool enemyTurretsOnly)
         {
-            return GameObjects.Turrets.Any(turret => turret.IsValidTarget(950, enemyTurretsOnly, position));
+            return
+                GameObjects.Turrets.Any(
+                    turret =>
+                    turret.Health > 0 && turret.Distance(position) < 950 && (!enemyTurretsOnly || turret.IsEnemy));
         }
 
         /// <summary>
@@ -448,8 +451,8 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
             var sin = Math.Sin(angle);
 
             return new Vector3(
-                (float)((vector3.X * cos) - (vector3.Y * sin)), 
-                (float)((vector3.Y * cos) + (vector3.X * sin)), 
+                (float)((vector3.X * cos) - (vector3.Y * sin)),
+                (float)((vector3.Y * cos) + (vector3.X * sin)),
                 vector3.Z);
         }
 

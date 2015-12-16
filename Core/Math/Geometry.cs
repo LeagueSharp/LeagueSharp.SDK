@@ -17,6 +17,8 @@
 
 namespace LeagueSharp.SDK.Core.Math
 {
+    using System;
+
     using Enumerations;
 
     using SharpDX;
@@ -30,6 +32,15 @@ namespace LeagueSharp.SDK.Core.Math
         #region Public Methods and Operators
 
         /// <summary>
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        public static float DegreeToRadian(double angle)
+        {
+            return (float)(Math.PI * angle / 180.0);
+        }
+
+        /// <summary>
         ///     Returns the center position of the rendering object on the rectangle.
         /// </summary>
         /// <param name="rectangle">Rectangle boundaries</param>
@@ -38,9 +49,9 @@ namespace LeagueSharp.SDK.Core.Math
         /// <param name="flags">Centered Flags</param>
         /// <returns>Vector2 center position of the rendering object on the rectangle.</returns>
         public static Vector2 GetCenter(
-            this Rectangle rectangle, 
-            Sprite sprite, 
-            Rectangle dimensions, 
+            this Rectangle rectangle,
+            Sprite sprite,
+            Rectangle dimensions,
             CenteredFlags flags)
         {
             var x = 0;
@@ -98,15 +109,24 @@ namespace LeagueSharp.SDK.Core.Math
         /// <param name="flags">Centered Flags</param>
         /// <returns>Returns the center position of the text on the rectangle.</returns>
         public static Vector2 GetCenteredText(
-            this Rectangle rectangle, 
-            Sprite sprite, 
-            Font font, 
-            string text, 
+            this Rectangle rectangle,
+            Sprite sprite,
+            Font font,
+            string text,
             CenteredFlags flags)
         {
             return font == null
                        ? rectangle.GetCenteredText(sprite, text, flags)
                        : rectangle.GetCenter(sprite, font.MeasureText(sprite, text, 0), flags);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        public static float RadianToDegree(double angle)
+        {
+            return (float)(angle * (180.0 / Math.PI));
         }
 
         #endregion

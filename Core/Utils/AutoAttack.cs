@@ -36,16 +36,18 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         private static readonly string[] AttackResets =
             {
-                "dariusnoxiantacticsonh", "fioraflurry", "garenq",
-                "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge",
-                "leonashieldofdaybreak", "luciane", "lucianq",
-                "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq",
-                "nautiluspiercinggaze", "netherblade", "parley",
-                "poppydevastatingblow", "powerfist", "renektonpreexecute",
-                "rengarq", "shyvanadoubleattack", "sivirw", "takedown",
-                "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble",
-                "vie", "volibearq", "xenzhaocombotarget", "yorickspectral",
-                "reksaiq", "itemtitanichydracleave"
+                "powerfist", "dariusnoxiantacticsonh", "masochism", "fiorae",
+                "gangplankqwrapper", "garenq", "gravesmove", "hecarimramp",
+                "illaoiw", "jaxempowertwo", "jaycehypercharge", "netherblade",
+                "leonashieldofdaybreak", "luciane", "meditate",
+                "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze",
+                "takedown", "reksaiq", "renektonpreexecute", "rengarq",
+                "riventricleave", "sejuaninorthernwinds",
+                "shyvanadoubleattack", "shyvanadoubleattackdragon", "sivirw",
+                "talonnoxiandiplomacy", "blindingdart", "trundletrollsmash",
+                "vaynetumble", "vie", "volibearq", "monkeykingdoubleattack",
+                "xenzhaocombotarget", "yorickspectral",
+                "itemtitanichydracleave"
             };
 
         /// <summary>
@@ -53,11 +55,10 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         private static readonly string[] Attacks =
             {
-                "caitlynheadshotmissile", "frostarrow", "garenslash2",
-                "kennenmegaproc", "lucianpassiveattack", "masteryidoublestrike",
+                "caitlynheadshotmissile", "kennenmegaproc", "masteryidoublestrike",
                 "quinnwenhanced", "renektonexecute", "renektonsuperexecute",
-                "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust",
-                "xenzhaothrust2", "xenzhaothrust3", "viktorqbuff"
+                /*"rengarnewpassivebuffdash",*/ "trundleq", "viktorqbuff",
+                "xenzhaothrust", "xenzhaothrust2", "xenzhaothrust3"
             };
 
         /// <summary>
@@ -65,20 +66,19 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         private static readonly string[] NoAttacks =
             {
-                "volleyattack", "volleyattackwithsound",
-                "jarvanivcataclysmattack", "monkeykingdoubleattack",
-                "shyvanadoubleattack", "shyvanadoubleattackdragon",
-                "zyragraspingplantattack", "zyragraspingplantattack2",
-                "zyragraspingplantattackfire", "zyragraspingplantattack2fire",
-                "viktorpowertransfer", "sivirwattackbounce", "asheqattacknoonhit",
+                "asheqattacknoonhit", "volleyattackwithsound", "volleyattack",
+                "annietibbersbasicattack", "annietibbersbasicattack2",
+                "azirsoldierbasicattack", "azirsundiscbasicattack",
                 "elisespiderlingbasicattack", "heimertyellowbasicattack",
                 "heimertyellowbasicattack2", "heimertbluebasicattack",
-                "annietibbersbasicattack", "annietibbersbasicattack2",
+                "jarvanivcataclysmattack", "kindredwolfbasicattack",
+                "malzaharvoidlingbasicattack", "malzaharvoidlingbasicattack2",
+                "malzaharvoidlingbasicattack3", "shyvanadoubleattack",
+                "shyvanadoubleattackdragon", "sivirwattackbounce",
+                "monkeykingdoubleattack", "yorickspectralghoulbasicattack",
                 "yorickdecayedghoulbasicattack", "yorickravenousghoulbasicattack",
-                "yorickspectralghoulbasicattack", "malzaharvoidlingbasicattack",
-                "malzaharvoidlingbasicattack2", "malzaharvoidlingbasicattack3",
-                "kindredwolfbasicattack",
-                "kindredbasicattackoverridelightbombfinal"
+                "zyragraspingplantattack", "zyragraspingplantattack2",
+                "zyragraspingplantattackfire", "zyragraspingplantattack2fire"
             };
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static float GetProjectileSpeed(this Obj_AI_Hero hero)
         {
-            return IsMelee(hero) || hero.ChampionName == "Azir" || hero.ChampionName == "Velkoz"
+            return hero.IsMelee || hero.ChampionName == "Azir" || hero.ChampionName == "Velkoz"
                    || hero.ChampionName == "Viktor" && hero.HasBuff("ViktorPowerTransferReturn")
                        ? float.MaxValue
                        : hero.BasicAttack.MissileSpeed;
@@ -131,6 +131,12 @@ namespace LeagueSharp.SDK.Core.Utils
             var result = GameObjects.Player.AttackRange + GameObjects.Player.BoundingRadius;
             if (target != null && target.IsValid)
             {
+                var targetBase = target as Obj_AI_Base;
+                if (targetBase != null && GameObjects.Player.ChampionName == "Caitlyn"
+                    && targetBase.HasBuff("caitlynyordletrapinternal"))
+                {
+                    result += 650;
+                }
                 return result + target.BoundingRadius;
             }
 
@@ -195,20 +201,6 @@ namespace LeagueSharp.SDK.Core.Utils
         public static bool IsAutoAttackReset(string name)
         {
             return AttackResets.Contains(name.ToLower());
-        }
-
-        /// <summary>
-        ///     Returns whether the object is a melee combat type or ranged.
-        /// </summary>
-        /// <param name="sender">
-        ///     <see cref="Obj_AI_Base" /> sender
-        /// </param>
-        /// <returns>
-        ///     Is object melee.
-        /// </returns>
-        public static bool IsMelee(this Obj_AI_Base sender)
-        {
-            return sender.CombatType == GameObjectCombatType.Melee;
         }
 
         #endregion

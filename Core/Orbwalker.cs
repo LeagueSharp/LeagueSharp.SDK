@@ -22,15 +22,18 @@ namespace LeagueSharp.SDK.Core
     using System.Linq;
     using System.Reflection;
     using System.Windows.Forms;
+
     using Enumerations;
     using Extensions;
     using Extensions.SharpDX;
     using Math.Prediction;
-    using SharpDX;
     using UI.IMenu.Values;
     using Utils;
     using Wrappers;
     using Wrappers.Damages;
+
+    using SharpDX;
+
     using Color = System.Drawing.Color;
     using Menu = UI.IMenu.Menu;
 
@@ -246,7 +249,7 @@ namespace LeagueSharp.SDK.Core
                                 });
                     }
 
-                    if (healthPrediction > 0 && healthPrediction <= GameObjects.Player.GetAutoAttackDamage(minion, true))
+                    if (healthPrediction > 0 && healthPrediction <= GameObjects.Player.GetAutoAttackDamage(minion))
                     {
                         return minion;
                     }
@@ -289,7 +292,7 @@ namespace LeagueSharp.SDK.Core
                         m =>
                         m.IsValidTarget(m.GetRealAutoAttackRange())
                         && Health.GetPrediction(m, (int)((GameObjects.Player.AttackDelay * 1000) * 2f), 100)
-                        <= GameObjects.Player.GetAutoAttackDamage(m, true));
+                        <= GameObjects.Player.GetAutoAttackDamage(m));
                 if (!shouldWait)
                 {
                     // H-28G, Sumon Voidling, Jack In The Box, (Clyde, Inky, Blinky), Plant
@@ -332,7 +335,7 @@ namespace LeagueSharp.SDK.Core
                             LastMinion,
                             (int)((GameObjects.Player.AttackDelay * 1000) * 2f),
                             100);
-                        if (predHealth >= 2 * GameObjects.Player.GetAutoAttackDamage(LastMinion, true)
+                        if (predHealth >= 2 * GameObjects.Player.GetAutoAttackDamage(LastMinion)
                             || System.Math.Abs(predHealth - LastMinion.Health) < float.Epsilon)
                         {
                             return LastMinion;
@@ -345,7 +348,7 @@ namespace LeagueSharp.SDK.Core
                                   let predictedHealth =
                                       Health.GetPrediction(m, (int)((GameObjects.Player.AttackDelay * 1000) * 2f), 100)
                                   where
-                                      predictedHealth >= 2 * GameObjects.Player.GetAutoAttackDamage(m, true)
+                                      predictedHealth >= 2 * GameObjects.Player.GetAutoAttackDamage(m)
                                       || System.Math.Abs(predictedHealth - m.Health) < float.Epsilon
                                   select m).MaxOrDefault(m => m.Health);
                     if (minion != null)
@@ -647,8 +650,7 @@ namespace LeagueSharp.SDK.Core
                 {
                     var minions =
                         GameObjects.EnemyMinions.Where(
-                            m =>
-                            m.IsValidTarget(1200F) && m.Health < GameObjects.Player.GetAutoAttackDamage(m, true) * 2);
+                            m => m.IsValidTarget(1200F) && m.Health < GameObjects.Player.GetAutoAttackDamage(m) * 2);
                     foreach (var minion in minions)
                     {
                         var value = 255 - (minion.Health * 2);
@@ -664,7 +666,7 @@ namespace LeagueSharp.SDK.Core
                 {
                     var minions =
                         GameObjects.EnemyMinions.Where(
-                            m => m.IsValidTarget(1200F) && m.Health < GameObjects.Player.GetAutoAttackDamage(m, true));
+                            m => m.IsValidTarget(1200F) && m.Health < GameObjects.Player.GetAutoAttackDamage(m));
                     foreach (var minion in minions)
                     {
                         Drawing.DrawCircle(minion.Position, minion.BoundingRadius * 2f, Color.FromArgb(255, 0, 255, 0));

@@ -659,7 +659,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>The <see cref="Vector3" /></returns>
         public static Vector3 ToVector3(this Vector2 vector2, float z = 0f)
         {
-            return new Vector3(vector2, z);
+            return new Vector3(vector2, z.Equals(0f) ? GameObjects.Player.ServerPosition.Z : z);
         }
 
         /// <summary>
