@@ -19,10 +19,12 @@ namespace LeagueSharp.SDK.Core.Extensions
 {
     using System;
     using System.Linq;
-    using Enumerations;
+
     using global::SharpDX;
-    using SharpDX;
-    using Wrappers;
+
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Wrappers;
 
     /// <summary>
     ///     Provides helpful extensions to Units.
@@ -317,24 +319,33 @@ namespace LeagueSharp.SDK.Core.Extensions
         }
 
         /// <summary>
-        ///     Returns whether the specific unit is under an enemy turret.
+        ///     Returns whether the specific unit is under a ally turret.
         /// </summary>
         /// <param name="unit"><see cref="Obj_AI_Base" /> unit</param>
         /// <returns>Is Unit under an Enemy Turret</returns>
-        public static bool IsUnderTurret(this Obj_AI_Base unit)
+        public static bool IsUnderAllyTurret(this Obj_AI_Base unit)
         {
-            return unit.Position.IsUnderTurret(true);
+            return unit.Position.IsUnderTurret();
+        }
+
+        /// <summary>
+        ///     Returns whether the specific unit is under a enemy turret.
+        /// </summary>
+        /// <param name="unit"><see cref="Obj_AI_Base" /> unit</param>
+        /// <returns>Is Unit under an Enemy Turret</returns>
+        public static bool IsUnderEnemyTurret(this Obj_AI_Base unit)
+        {
+            return unit.Position.IsUnderTurret();
         }
 
         /// <summary>
         ///     Returns whether the specific unit is under a turret.
         /// </summary>
         /// <param name="unit"><see cref="Obj_AI_Base" /> unit</param>
-        /// <param name="enemyTurretsOnly">Include Enemy Turrets Only</param>
-        /// <returns>Is Unit under a Turret</returns>
-        public static bool IsUnderTurret(this Obj_AI_Base unit, bool enemyTurretsOnly)
+        /// <returns>Is Unit under an Enemy Turret</returns>
+        public static bool IsUnderTurret(this Obj_AI_Base unit)
         {
-            return unit.Position.IsUnderTurret(enemyTurretsOnly);
+            return unit.Position.IsUnderTurret();
         }
 
         /// <summary>
@@ -370,9 +381,9 @@ namespace LeagueSharp.SDK.Core.Extensions
         ///     The <see cref="bool" />.
         /// </returns>
         public static bool IsValidTarget(
-            this AttackableUnit unit, 
-            float range = float.MaxValue, 
-            bool checkTeam = true, 
+            this AttackableUnit unit,
+            float range = float.MaxValue,
+            bool checkTeam = true,
             Vector3 from = default(Vector3))
         {
             if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable

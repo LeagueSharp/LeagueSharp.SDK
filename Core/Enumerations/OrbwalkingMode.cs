@@ -1,4 +1,4 @@
-﻿// <copyright file="OrbwalkerType.cs" company="LeagueSharp">
+﻿// <copyright file="OrbwalkingMode.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
 // 
 //    This program is free software: you can redistribute it and/or modify
@@ -18,43 +18,33 @@
 namespace LeagueSharp.SDK.Core.Enumerations
 {
     /// <summary>
-    ///     <c>Orbwalker</c> Process Type
+    ///     <c>Orbwalker</c> Modes
     /// </summary>
-    public enum OrbwalkerType
+    public enum OrbwalkingMode
     {
         /// <summary>
-        ///     None Type.
+        ///     None Mode
         /// </summary>
-        None, 
+        None,
 
         /// <summary>
-        ///     Movement Type.
+        ///     Combo Mode
         /// </summary>
-        Movement, 
+        Combo,
 
         /// <summary>
-        ///     BeforeAttack Type.
+        ///     Hybrid Mode
         /// </summary>
-        BeforeAttack, 
+        Hybrid,
 
         /// <summary>
-        ///     AfterAttack Type.
+        ///     Last Hit Mode
         /// </summary>
-        AfterAttack, 
+        LastHit,
 
         /// <summary>
-        ///     OnAttack Type.
+        ///     Lane Clear Mode
         /// </summary>
-        OnAttack, 
-
-        /// <summary>
-        ///     Non Kill-able Minion Type.
-        /// </summary>
-        NonKillableMinion, 
-
-        /// <summary>
-        ///     Target Switch Type.
-        /// </summary>
-        TargetSwitch
+        LaneClear
     }
 }

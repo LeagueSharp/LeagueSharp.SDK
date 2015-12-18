@@ -48,17 +48,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>D:\Spiele\Riot Games\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>F:\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>D:\Spiele\Riot Games\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
+      <HintPath>F:\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>D:\Spiele\Riot Games\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>F:\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>D:\Spiele\Riot Games\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>F:\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -90,8 +90,8 @@
     <Compile Include="Core\Enumerations\MapType.cs" />
     <Compile Include="Core\Enumerations\MinionTypes.cs" />
     <Compile Include="Core\Enumerations\NotificationIconType.cs" />
-    <Compile Include="Core\Enumerations\OrbwalkerMode.cs" />
-    <Compile Include="Core\Enumerations\OrbwalkerType.cs" />
+    <Compile Include="Core\Enumerations\OrbwalkingMode.cs" />
+    <Compile Include="Core\Enumerations\OrbwalkingType.cs" />
     <Compile Include="Core\Enumerations\PerformanceType.cs" />
     <Compile Include="Core\Enumerations\SkillshotType.cs" />
     <Compile Include="Core\Enumerations\TargetSelectorMode.cs" />
@@ -131,7 +131,6 @@
     <Compile Include="Core\Math\Prediction\Path.cs" />
     <Compile Include="Core\Network\GamePacket.cs" />
     <Compile Include="Core\Network\Packet.cs" />
-    <Compile Include="Core\Orbwalker.cs" />
     <Compile Include="Core\Signals\Signal.cs" />
     <Compile Include="Core\Signals\SignalManager.cs" />
     <Compile Include="Core\UI\IMenu\Abstracts\AMenuComponent.cs" />
@@ -274,6 +273,9 @@
     <Compile Include="Core\Wrappers\Items.cs" />
     <Compile Include="Core\Wrappers\LastCastedSpell.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
+    <Compile Include="Core\Wrappers\Orbwalking\Base.cs" />
+    <Compile Include="Core\Wrappers\Orbwalking\Orbwalker.cs" />
+    <Compile Include="Core\Wrappers\Orbwalking\Selector.cs" />
     <Compile Include="Core\Wrappers\Spell.cs" />
     <Compile Include="Core\Wrappers\SpellDataWrapper.cs" />
     <Compile Include="Core\Wrappers\TargetSelector.cs" />
