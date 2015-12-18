@@ -19,8 +19,8 @@ namespace LeagueSharp.SDK.Core.Utils
 {
     using System.Linq;
 
-    using Extensions;
-    using Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Extensions;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
 
     using SharpDX;
 
@@ -37,15 +37,15 @@ namespace LeagueSharp.SDK.Core.Utils
         private static readonly string[] AttackResets =
             {
                 "dariusnoxiantacticsonh", "fioraflurry", "garenq",
-                "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge",
-                "leonashieldofdaybreak", "luciane", "lucianq",
+                "gravesmove", "hecarimrapidslash", "jaxempowertwo",
+                "jaycehypercharge", "leonashieldofdaybreak", "luciane",
                 "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq",
-                "nautiluspiercinggaze", "netherblade", "parley",
-                "poppydevastatingblow", "powerfist", "renektonpreexecute",
+                "nautiluspiercinggaze", "netherblade", "gangplankqwrapper",
+                "poppypassiveattack", "powerfist", "renektonpreexecute",
                 "rengarq", "shyvanadoubleattack", "sivirw", "takedown",
                 "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble",
                 "vie", "volibearq", "xenzhaocombotarget", "yorickspectral",
-                "reksaiq", "itemtitanichydracleave"
+                "reksaiq", "itemtitanichydracleave", "masochism", "illaoiw"
             };
 
         /// <summary>
@@ -54,8 +54,8 @@ namespace LeagueSharp.SDK.Core.Utils
         private static readonly string[] Attacks =
             {
                 "caitlynheadshotmissile", "frostarrow", "garenslash2",
-                "kennenmegaproc", "lucianpassiveattack", "masteryidoublestrike",
-                "quinnwenhanced", "renektonexecute", "renektonsuperexecute",
+                "kennenmegaproc", "masteryidoublestrike", "quinnwenhanced",
+                "renektonexecute", "renektonsuperexecute",
                 "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust",
                 "xenzhaothrust2", "xenzhaothrust3", "viktorqbuff"
             };
@@ -77,8 +77,7 @@ namespace LeagueSharp.SDK.Core.Utils
                 "yorickdecayedghoulbasicattack", "yorickravenousghoulbasicattack",
                 "yorickspectralghoulbasicattack", "malzaharvoidlingbasicattack",
                 "malzaharvoidlingbasicattack2", "malzaharvoidlingbasicattack3",
-                "kindredwolfbasicattack",
-                "kindredbasicattackoverridelightbombfinal"
+                "kindredwolfbasicattack"
             };
 
         /// <summary>
@@ -111,8 +110,8 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static float GetProjectileSpeed(this Obj_AI_Hero hero)
         {
-            return IsMelee(hero) || hero.ChampionName == "Azir" || hero.ChampionName == "Velkoz"
-                   || hero.ChampionName == "Viktor" && hero.HasBuff("ViktorPowerTransferReturn")
+            return IsMelee(hero) || hero.ChampionName.Equals("Azir") || hero.ChampionName.Equals("Velkoz")
+                   || hero.ChampionName.Equals("Viktor") && hero.HasBuff("ViktorPowerTransferReturn")
                        ? float.MaxValue
                        : hero.BasicAttack.MissileSpeed;
         }
@@ -128,12 +127,36 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static float GetRealAutoAttackRange(this AttackableUnit target)
         {
-            var result = GameObjects.Player.AttackRange + GameObjects.Player.BoundingRadius;
+            return GetRealAutoAttackRange(GameObjects.Player, target.Compare(GameObjects.Player) ? null : target);
+        }
+
+        /// <summary>
+        ///     Returns the auto-attack range.
+        /// </summary>
+        /// <param name="sender">
+        ///     The sender.
+        /// </param>
+        /// <param name="target">
+        ///     The target.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="float" />.
+        /// </returns>
+        public static float GetRealAutoAttackRange(this Obj_AI_Hero sender, AttackableUnit target)
+        {
+            var result = sender != null && sender.IsValid ? sender.AttackRange + sender.BoundingRadius : 0f;
             if (target != null && target.IsValid)
             {
+                var aiBase = target as Obj_AI_Base;
+                if (aiBase != null && GameObjects.Player.ChampionName.Equals("Caitlyn"))
+                {
+                    if (aiBase.HasBuff("caitlynyordletrapinternal"))
+                    {
+                        result += 650;
+                    }
+                }
                 return result + target.BoundingRadius;
             }
-
             return result;
         }
 
@@ -144,8 +167,8 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>The <see cref="float" /></returns>
         public static float GetTimeToHit(this AttackableUnit target)
         {
-            return (GameObjects.Player.AttackCastDelay * 1000) - 100 + (Game.Ping / 2f)
-                   + (1000 * GameObjects.Player.Distance(target) / GameObjects.Player.GetProjectileSpeed());
+            return GameObjects.Player.AttackCastDelay * 1000 - 100 + Game.Ping / 2f
+                   + 1000 * GameObjects.Player.Distance(target) / GameObjects.Player.GetProjectileSpeed();
         }
 
         /// <summary>

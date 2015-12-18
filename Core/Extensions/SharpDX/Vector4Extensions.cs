@@ -259,6 +259,17 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         }
 
         /// <summary>
+        ///     Returns if the Vector4 is on the screen.
+        /// </summary>
+        /// <param name="vector4">Extended SharpDX Vector4</param>
+        /// /// <param name="radius">Radius</param>
+        /// <returns>Is Vector4 on screen</returns>
+        public static bool IsOnScreen(this Vector4 vector4, float radius)
+        {
+            return vector4.ToVector3().IsOnScreen(radius);
+        }
+
+        /// <summary>
         ///     Returns if the angle is orthogonal.
         /// </summary>
         /// <param name="vector4">Extended SharpDX Vector4</param>
@@ -301,11 +312,30 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         ///     Returns whether the given position is under a turret
         /// </summary>
         /// <param name="position">Extended SharpDX Vector4</param>
-        /// <param name="enemyTurretsOnly">Include Enemy Turret Only</param>
         /// <returns>Is Position under a turret</returns>
-        public static bool IsUnderTurret(this Vector4 position, bool enemyTurretsOnly)
+        public static bool IsUnderTurret(this Vector4 position)
         {
-            return position.ToVector3().IsUnderTurret(enemyTurretsOnly);
+            return position.ToVector3().IsUnderTurret();
+        }
+
+        /// <summary>
+        ///     Returns whether the given position is under a ally turret
+        /// </summary>
+        /// <param name="position">Extended SharpDX Vector4</param>
+        /// <returns>Is Position under a turret</returns>
+        public static bool IsUnderAllyTurret(this Vector4 position)
+        {
+            return position.ToVector3().IsUnderAllyTurret();
+        }
+
+        /// <summary>
+        ///     Returns whether the given position is under a enemy turret
+        /// </summary>
+        /// <param name="position">Extended SharpDX Vector4</param>
+        /// <returns>Is Position under a turret</returns>
+        public static bool IsUnderEnemyTurret(this Vector4 position)
+        {
+            return position.ToVector3().IsUnderEnemyTurret();
         }
 
         /// <summary>
@@ -424,9 +454,9 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
             var sin = Math.Sin(angle);
 
             return new Vector4(
-                (float)((vector4.X * cos) - (vector4.Y * sin)), 
-                (float)((vector4.Y * cos) + (vector4.X * sin)), 
-                vector4.Z, 
+                (float)((vector4.X * cos) - (vector4.Y * sin)),
+                (float)((vector4.Y * cos) + (vector4.X * sin)),
+                vector4.Z,
                 vector4.W);
         }
 

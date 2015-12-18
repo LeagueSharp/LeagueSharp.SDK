@@ -277,6 +277,19 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         }
 
         /// <summary>
+        ///     Returns if the Vector3 is on the screen.
+        /// </summary>
+        /// <param name="vector3">Extended SharpDX Vector3</param>
+        /// /// <param name="radius">Radius</param>
+        /// <returns>Is Vector3 on screen</returns>
+        public static bool IsOnScreen(this Vector3 vector3, float radius)
+        {
+            var pos = Drawing.WorldToScreen(vector3);
+            return !(pos.X + radius < 0) && !(pos.X - radius > Drawing.Width) && !(pos.Y + radius < 0) &&
+                   !(pos.Y - radius > Drawing.Height);
+        }
+
+        /// <summary>
         ///     Returns if the angle is orthogonal.
         /// </summary>
         /// <param name="vector3">Extended SharpDX Vector3</param>
@@ -313,11 +326,30 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         ///     Returns whether the given position is under a turret
         /// </summary>
         /// <param name="position">Extended SharpDX Vector3</param>
-        /// <param name="enemyTurretsOnly">Include Enemy Turret Only</param>
         /// <returns>Is Position under a turret</returns>
-        public static bool IsUnderTurret(this Vector3 position, bool enemyTurretsOnly)
+        public static bool IsUnderTurret(this Vector3 position)
         {
-            return GameObjects.Turrets.Any(turret => turret.IsValidTarget(950, enemyTurretsOnly, position));
+            return GameObjects.Turrets.Any(turret => turret.IsValidTarget(950, false, position));
+        }
+
+        /// <summary>
+        ///     Returns whether the given position is under a ally turret
+        /// </summary>
+        /// <param name="position">Extended SharpDX Vector3</param>
+        /// <returns>Is Position under a turret</returns>
+        public static bool IsUnderAllyTurret(this Vector3 position)
+        {
+            return GameObjects.AllyTurrets.Any(turret => turret.IsValidTarget(950, false, position));
+        }
+
+        /// <summary>
+        ///     Returns whether the given position is under a enemy turret
+        /// </summary>
+        /// <param name="position">Extended SharpDX Vector3</param>
+        /// <returns>Is Position under a turret</returns>
+        public static bool IsUnderEnemyTurret(this Vector3 position)
+        {
+            return GameObjects.EnemyTurrets.Any(turret => turret.IsValidTarget(950, false, position));
         }
 
         /// <summary>
@@ -448,8 +480,8 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
             var sin = Math.Sin(angle);
 
             return new Vector3(
-                (float)((vector3.X * cos) - (vector3.Y * sin)), 
-                (float)((vector3.Y * cos) + (vector3.X * sin)), 
+                (float)((vector3.X * cos) - (vector3.Y * sin)),
+                (float)((vector3.Y * cos) + (vector3.X * sin)),
                 vector3.Z);
         }
 

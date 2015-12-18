@@ -21,9 +21,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System.Collections.Generic;
     using System.Linq;
 
-    using Enumerations;
-    using Extensions;
-    using Utils;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -612,7 +612,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                                              : hero.Level < 13 ? 34 : hero.Level < 16 ? 42 : 50)
                                             + (.15f * hero.TotalMagicalDamage);
                                     return d
-                                           + (Orbwalker.LastTarget.Compare(@base)
+                                           + (Variables.Orbwalker != null
+                                              && Variables.Orbwalker.LastTarget.Compare(@base)
                                                   ? d * .2f * Math.Max(hero.GetBuffCount("orianapowerdaggerdisplay"), 1)
                                                   : 0);
                                 });

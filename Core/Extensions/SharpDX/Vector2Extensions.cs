@@ -431,6 +431,17 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         }
 
         /// <summary>
+        ///     Returns if the Vector2 is on the screen.
+        /// </summary>
+        /// <param name="vector2">Extended SharpDX Vector2</param>
+        /// /// <param name="radius">Radius</param>
+        /// <returns>Is Vector2 on screen</returns>
+        public static bool IsOnScreen(this Vector2 vector2, float radius)
+        {
+            return vector2.ToVector3().IsOnScreen(radius);
+        }
+
+        /// <summary>
         ///     Returns if the angle is orthogonal.
         /// </summary>
         /// <param name="vector2">Extended SharpDX Vector2</param>
@@ -493,11 +504,30 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         ///     Returns whether the given position is under a turret
         /// </summary>
         /// <param name="position">Extended SharpDX Vector2</param>
-        /// <param name="enemyTurretsOnly">Include Enemy Turret Only</param>
         /// <returns>Is Position under a turret</returns>
-        public static bool IsUnderTurret(this Vector2 position, bool enemyTurretsOnly)
+        public static bool IsUnderTurret(this Vector2 position)
         {
-            return position.ToVector3().IsUnderTurret(enemyTurretsOnly);
+            return position.ToVector3().IsUnderTurret();
+        }
+
+        /// <summary>
+        ///     Returns whether the given position is under a ally turret
+        /// </summary>
+        /// <param name="position">Extended SharpDX Vector2</param>
+        /// <returns>Is Position under a turret</returns>
+        public static bool IsUnderAllyTurret(this Vector2 position)
+        {
+            return position.ToVector3().IsUnderAllyTurret();
+        }
+
+        /// <summary>
+        ///     Returns whether the given position is under a enemy turret
+        /// </summary>
+        /// <param name="position">Extended SharpDX Vector2</param>
+        /// <returns>Is Position under a turret</returns>
+        public static bool IsUnderEnemyTurret(this Vector2 position)
+        {
+            return position.ToVector3().IsUnderEnemyTurret();
         }
 
         /// <summary>
