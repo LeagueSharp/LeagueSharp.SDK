@@ -574,8 +574,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         private List<Obj_AI_Minion> OrderEnemyMinions(List<Obj_AI_Minion> minions)
         {
             return
-                minions?.OrderByDescending(minion => minion.GetMinionType() == MinionTypes.Siege)
-                    .ThenBy(minion => minion.GetMinionType() == MinionTypes.Super)
+                minions?.OrderByDescending(minion => minion.GetMinionType().HasFlag(MinionTypes.Siege))
+                    .ThenBy(minion => minion.GetMinionType().HasFlag(MinionTypes.Super))
                     .ThenBy(minion => minion.Health)
                     .ThenByDescending(minion => minion.MaxHealth)
                     .ToList();

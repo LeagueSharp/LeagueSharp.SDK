@@ -435,12 +435,13 @@ namespace LeagueSharp.SDK.Core
                     HeroesList.AddRange(ObjectManager.Get<Obj_AI_Hero>());
                     MinionsList.AddRange(
                         ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(o => o.Team != GameObjectTeam.Neutral && o.GetMinionType() != MinionTypes.Ward));
+                            .Where(
+                                o => o.Team != GameObjectTeam.Neutral && !o.GetMinionType().HasFlag(MinionTypes.Ward)));
                     TurretsList.AddRange(ObjectManager.Get<Obj_AI_Turret>());
                     InhibitorsList.AddRange(ObjectManager.Get<Obj_BarracksDampener>());
                     JungleList.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(o => o.Team == GameObjectTeam.Neutral));
                     WardsList.AddRange(
-                        ObjectManager.Get<Obj_AI_Minion>().Where(o => o.GetMinionType() == MinionTypes.Ward));
+                        ObjectManager.Get<Obj_AI_Minion>().Where(o => o.GetMinionType().HasFlag(MinionTypes.Ward)));
                     ShopsList.AddRange(ObjectManager.Get<Obj_Shop>());
                     SpawnPointsList.AddRange(ObjectManager.Get<Obj_SpawnPoint>());
                     GameObjectsList.AddRange(ObjectManager.Get<GameObject>());
@@ -523,7 +524,7 @@ namespace LeagueSharp.SDK.Core
             {
                 if (minion.Team != GameObjectTeam.Neutral)
                 {
-                    if (minion.GetMinionType() == MinionTypes.Ward)
+                    if (minion.GetMinionType().HasFlag(MinionTypes.Ward))
                     {
                         WardsList.Add(minion);
                         if (minion.IsEnemy)
@@ -695,7 +696,7 @@ namespace LeagueSharp.SDK.Core
             {
                 if (minion.Team != GameObjectTeam.Neutral)
                 {
-                    if (minion.GetMinionType() == MinionTypes.Ward)
+                    if (minion.GetMinionType().HasFlag(MinionTypes.Ward))
                     {
                         foreach (var ward in WardsList.Where(w => w.Compare(minion)).ToList())
                         {
