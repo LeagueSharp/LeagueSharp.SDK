@@ -36,6 +36,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
     public abstract class Base<TK, T>
         where TK : struct, IConvertible where T : AttackableUnit
     {
+        #region Fields
+
+        /// <summary>
+        ///     Value indicating whether the <see cref="Orbwalker" /> is enabled.
+        /// </summary>
+        protected bool Enabled;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -372,7 +381,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
 
         private void ObjAiBaseOnOnBuffAdd(Obj_AI_Base sender, Obj_AI_BaseBuffAddEventArgs args)
         {
-            if (!Variables.Orbwalker.Enabled)
+            if (!this.Enabled)
             {
                 return;
             }
@@ -394,7 +403,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// </param>
         private void OnGameUpdate(EventArgs args)
         {
-            if (!Variables.Orbwalker.Enabled)
+            if (!this.Enabled)
             {
                 return;
             }
@@ -420,7 +429,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// </param>
         private void OnObjAiBaseDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!Variables.Orbwalker.Enabled)
+            if (!this.Enabled)
             {
                 return;
             }
@@ -477,7 +486,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// </param>
         private void OnObjAiBaseProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!Variables.Orbwalker.Enabled)
+            if (!this.Enabled)
             {
                 return;
             }
@@ -522,7 +531,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// </param>
         private void OnSpellbookStopCast(Spellbook spellbook, SpellbookStopCastEventArgs args)
         {
-            if (!Variables.Orbwalker.Enabled)
+            if (!this.Enabled)
             {
                 return;
             }

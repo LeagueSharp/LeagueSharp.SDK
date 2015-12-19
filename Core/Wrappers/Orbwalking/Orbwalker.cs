@@ -31,7 +31,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
     using SharpDX;
 
     using Color = System.Drawing.Color;
-    using Menu = LeagueSharp.SDK.Core.UI.IMenu.Menu;
+    using Menu = UI.IMenu.Menu;
 
     /// <summary>
     ///     The <c>Orbwalker</c> system.
@@ -51,11 +51,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         internal readonly Selector Selector;
 
         private readonly Random random = new Random(DateTime.Now.Millisecond);
-
-        /// <summary>
-        ///     Value indicating whether the <see cref="Orbwalker" /> is enabled.
-        /// </summary>
-        private bool enabled;
 
         #endregion
 
@@ -145,14 +140,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                     {
                         if (boolean.Name.Equals("enableOption"))
                         {
-                            this.enabled = boolean.Value;
+                            this.Enabled = boolean.Value;
                         }
                     }
                 };
 
             menu.Add(this.Menu);
             this.Selector = new Selector(this);
-            this.enabled = this.Menu["enableOption"].GetValue<MenuBool>().Value;
+            this.Enabled = this.Menu["enableOption"].GetValue<MenuBool>().Value;
 
             Drawing.OnDraw += this.OnDrawingDraw;
         }
@@ -169,16 +164,16 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// <summary>
         ///     Gets or sets a value indicating whether the <see cref="Orbwalker" /> is enabled.
         /// </summary>
-        public bool Enabled
+        public bool Enable
         {
             get
             {
-                return this.enabled;
+                return this.Enabled;
             }
 
             set
             {
-                this.enabled = value;
+                this.Enabled = value;
                 this.Menu["enableOption"].GetValue<MenuBool>().Value = value;
             }
         }
