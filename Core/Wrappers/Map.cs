@@ -41,7 +41,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                                                                                 {
                                                                                     Name = "The Crystal Scar",
                                                                                     ShortName = "crystalScar",
-                                                                                    Type = MapType.CrystalScar,
+                                                                                    MapId = GameMapId.CrystalScar,
                                                                                     Grid =
                                                                                         new Vector2(13894f / 2, 13218f / 2),
                                                                                     StartingLevel = 3
@@ -53,7 +53,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                                                                                 {
                                                                                     Name = "The Twisted Treeline",
                                                                                     ShortName = "twistedTreeline",
-                                                                                    Type = MapType.TwistedTreeline,
+                                                                                    MapId = GameMapId.TwistedTreeline,
                                                                                     Grid =
                                                                                         new Vector2(15436f / 2, 14474f / 2),
                                                                                     StartingLevel = 1
@@ -65,7 +65,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                                                                                 {
                                                                                     Name = "Summoner's Rift",
                                                                                     ShortName = "summonerRift",
-                                                                                    Type = MapType.SummonersRift,
+                                                                                    MapId = GameMapId.SummonersRift,
                                                                                     Grid =
                                                                                         new Vector2(13982f / 2, 14446f / 2),
                                                                                     StartingLevel = 1
@@ -77,7 +77,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                                                                                 {
                                                                                     Name = "Howling Abyss",
                                                                                     ShortName = "howlingAbyss",
-                                                                                    Type = MapType.HowlingAbyss,
+                                                                                    MapId = GameMapId.HowlingAbyss,
                                                                                     Grid =
                                                                                         new Vector2(13120f / 2, 12618f / 2),
                                                                                     StartingLevel = 3
@@ -112,7 +112,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <summary>
         ///     Gets the MapType
         /// </summary>
-        public MapType Type { get; private set; }
+        public GameMapId MapId { get; private set; }
 
         #endregion
 
@@ -131,7 +131,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             return new Map
                        {
-                           Name = "Unknown", ShortName = "unknown", Type = MapType.Unknown, Grid = new Vector2(0, 0),
+                           Name = "Unknown", ShortName = "unknown", MapId = (GameMapId) 0, Grid = new Vector2(0, 0),
                            StartingLevel = 1
                        };
         }

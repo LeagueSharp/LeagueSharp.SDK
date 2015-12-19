@@ -87,7 +87,6 @@
     <Compile Include="Core\Enumerations\JungleType.cs" />
     <Compile Include="Core\Enumerations\KeyBindType.cs" />
     <Compile Include="Core\Enumerations\LogLevel.cs" />
-    <Compile Include="Core\Enumerations\MapType.cs" />
     <Compile Include="Core\Enumerations\MinionTypes.cs" />
     <Compile Include="Core\Enumerations\NotificationIconType.cs" />
     <Compile Include="Core\Enumerations\OrbwalkingMode.cs" />

@@ -265,8 +265,7 @@ namespace LeagueSharp.SDK.Core.Extensions
         public static bool InFountain(this Obj_AI_Hero hero)
         {
             float fountainRange = 562500; // 750 * 750
-            var map = Map.GetMap();
-            if (map != null && map.Type == MapType.SummonersRift)
+            if (Game.MapId == GameMapId.SummonersRift)
             {
                 fountainRange = 1102500; // 1050 * 1050
             }
