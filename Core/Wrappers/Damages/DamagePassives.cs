@@ -990,7 +990,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     case "Sona":
                         AddPassiveAttack(
                             "Sona",
-                            (hero, @base) => hero.HasBuff("sonapassiveattack"),
+                            (hero, @base) => hero.HasBuff("SonaPassiveReady"),
                             DamageType.Magical,
                             (hero, @base) =>
                                 {

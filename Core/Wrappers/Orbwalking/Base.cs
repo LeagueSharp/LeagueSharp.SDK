@@ -56,6 +56,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
             this.InActiveMode = (TK)enumValues.GetValue(0);
             Obj_AI_Base.OnProcessSpellCast += this.OnObjAiBaseProcessSpellCast;
             Obj_AI_Base.OnDoCast += this.OnObjAiBaseDoCast;
+            Obj_AI_Base.OnBuffAdd += this.ObjAiBaseOnOnBuffAdd;
             Spellbook.OnStopCast += this.OnSpellbookStopCast;
             Game.OnUpdate += this.OnGameUpdate;
         }
@@ -367,6 +368,22 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         internal void InvokeAction(OrbwalkingActionArgs e)
         {
             this.OnAction?.Invoke(MethodBase.GetCurrentMethod().DeclaringType, e);
+        }
+
+        private void ObjAiBaseOnOnBuffAdd(Obj_AI_Base sender, Obj_AI_BaseBuffAddEventArgs args)
+        {
+            if (!Variables.Orbwalker.Enabled)
+            {
+                return;
+            }
+            if (!sender.IsMe)
+            {
+                return;
+            }
+            if (args.Buff.DisplayName == "PoppyPassiveBuff" || args.Buff.DisplayName == "SonaPassiveReady")
+            {
+                this.ResetSwingTimer();
+            }
         }
 
         /// <summary>
