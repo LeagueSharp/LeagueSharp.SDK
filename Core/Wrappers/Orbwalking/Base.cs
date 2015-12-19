@@ -20,11 +20,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
     using System;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Events;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Utils;
+    using Enumerations;
+    using Events;
+    using Extensions;
+    using Extensions.SharpDX;
+    using Utils;
 
     using SharpDX;
 
@@ -377,6 +377,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// </param>
         private void OnGameUpdate(EventArgs args)
         {
+            if (!Variables.Orbwalker.Enabled)
+            {
+                return;
+            }
             if (GameObjects.Player == null || !GameObjects.Player.IsValid || GameObjects.Player.IsDead
                 || InterruptableSpell.IsCastingInterruptableSpell(GameObjects.Player, true))
             {
@@ -399,6 +403,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// </param>
         private void OnObjAiBaseDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
+            if (!Variables.Orbwalker.Enabled)
+            {
+                return;
+            }
             if (sender.IsValid && sender.IsMe)
             {
                 if (Game.Ping <= 30)
@@ -452,6 +460,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// </param>
         private void OnObjAiBaseProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
+            if (!Variables.Orbwalker.Enabled)
+            {
+                return;
+            }
             if (sender.IsValid && sender.IsMe)
             {
                 var spellName = args.SData.Name;
@@ -493,6 +505,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// </param>
         private void OnSpellbookStopCast(Spellbook spellbook, SpellbookStopCastEventArgs args)
         {
+            if (!Variables.Orbwalker.Enabled)
+            {
+                return;
+            }
             if (spellbook.Owner.IsValid && spellbook.Owner.IsMe && args.DestroyMissile && args.StopAnimation)
             {
                 this.ResetSwingTimer();

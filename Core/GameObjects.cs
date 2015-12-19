@@ -21,9 +21,9 @@ namespace LeagueSharp.SDK.Core
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Events;
-    using LeagueSharp.SDK.Core.Utils;
+    using Enumerations;
+    using Events;
+    using Utils;
 
     /// <summary>
     ///     A static (stack) class which contains a sort-of cached versions of the important game objects.

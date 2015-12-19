@@ -78,6 +78,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             MissingHealth,
 
             /// <summary>
+            ///     The Bonus Health scaling type.
+            /// </summary>
+            BonusHealth,
+
+            /// <summary>
             ///     The Armor scaling type.
             /// </summary>
             Armor,
@@ -132,6 +137,31 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             ///     The Empowered stage.
             /// </summary>
             Empowered
+        }
+
+        /// <summary>
+        /// </summary>
+        public enum SpellEffectType
+        {
+            /// <summary>
+            /// </summary>
+            None,
+
+            /// <summary>
+            /// </summary>
+            AoE,
+
+            /// <summary>
+            /// </summary>
+            Single,
+
+            /// <summary>
+            /// </summary>
+            OverTime,
+
+            /// <summary>
+            /// </summary>
+            Attack
         }
 
         #endregion
@@ -233,10 +263,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             /// </summary>
             public DamageType DamageType { get; set; }
 
-            /// <summary>
-            ///     Gets the Scaling Slot.
-            /// </summary>
-            public SpellSlot ScaleSlot { get; set; }
+            public List<int> MaxDamageOnMinion { get; set; }
+
+            public List<int> MinDamage { get; set; }
+
+            public double ScalePer100Ad { get; set; }
+
+            public double ScalePer100Ap { get; set; }
+
+            public double ScalePer100BonusAd { get; set; }
 
             /// <summary>
             ///     Gets the Scaling Buff.
@@ -281,17 +316,23 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             /// <summary>
             ///     Gets the Main Damages.
             /// </summary>
-            public List<int> Damages { get; set; }
+            public List<double> Damages { get; set; }
+
+            public List<double> DamagesPerLvl { get; set; }
 
             /// <summary>
             ///     Gets the Damage Type.
             /// </summary>
             public DamageType DamageType { get; set; }
 
+            public List<int> MaxDamageOnMinion { get; set; }
+
+            public double ScalePerTargetMissHealth { get; set; }
+
             /// <summary>
             ///     Gets the Scaling Slot.
             /// </summary>
-            public SpellSlot ScaleSlot { get; set; }
+            public SpellSlot ScaleSlot { get; set; } = SpellSlot.Unknown;
 
             /// <summary>
             ///     Gets the Scaling Buff.
@@ -307,6 +348,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             ///     Gets the Scaling Buff Target.
             /// </summary>
             public DamageScalingTarget ScalingBuffTarget { get; set; }
+
+            public SpellEffectType SpellEffectType { get; set; }
 
             #endregion
         }

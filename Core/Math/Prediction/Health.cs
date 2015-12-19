@@ -21,10 +21,10 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Core.Wrappers.Damages;
+    using Enumerations;
+    using Extensions;
+    using Utils;
+    using Wrappers.Damages;
 
     /// <summary>
     ///     Health Prediction class for prediction of health of units.
@@ -52,11 +52,11 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
         /// </summary>
         static Health()
         {
-            Game.OnUpdate += OnGameUpdate;
-            Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
-            Spellbook.OnStopCast += OnSpellbookStopCast;
-            GameObject.OnDelete += OnGameObjectDelete;
-            Obj_AI_Base.OnDoCast += OnObjAiBaseDoCast;
+            Game.OnUpdate += GameOnUpdate;
+            Obj_AI_Base.OnProcessSpellCast += ObjAiBaseOnProcessSpellCast;
+            Spellbook.OnStopCast += SpellbookOnStopCast;
+            GameObject.OnDelete += GameObjectOnOnDelete;
+            Obj_AI_Base.OnDoCast += ObjAiBaseOnOnDoCast;
         }
 
         #endregion
@@ -143,6 +143,52 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
         #region Methods
 
         /// <summary>
+        ///     GameObject on delete subscribed event function.
+        /// </summary>
+        /// <param name="sender">
+        ///     <see cref="GameObject" /> sender
+        /// </param>
+        /// <param name="args">
+        ///     <see cref="System.EventArgs" /> event data
+        /// </param>
+        private static void GameObjectOnOnDelete(GameObject sender, EventArgs args)
+        {
+            var missile = sender as MissileClient;
+            if (missile?.SpellCaster == null)
+            {
+                return;
+            }
+            var casterNetworkId = missile.SpellCaster.NetworkId;
+            foreach (var activeAttack in ActiveAttacks)
+            {
+                if (activeAttack.Key == casterNetworkId)
+                {
+                    ActiveAttacks[casterNetworkId].Processed = true;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Game Tick which is called by the game update event.
+        /// </summary>
+        /// <param name="args">
+        ///     <see cref="System.EventArgs" /> event data
+        /// </param>
+        private static void GameOnUpdate(EventArgs args)
+        {
+            if (Variables.TickCount - lastTick <= 1000)
+            {
+                return;
+            }
+
+            ActiveAttacks.ToList()
+                .Where(pair => pair.Value.StartTick < Variables.TickCount - 3000)
+                .ToList()
+                .ForEach(pair => ActiveAttacks.Remove(pair.Key));
+            lastTick = Variables.TickCount;
+        }
+
+        /// <summary>
         ///     Calculates the default prediction of the unit.
         /// </summary>
         /// <param name="unit">
@@ -167,8 +213,8 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                     && attack.Target.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
                 {
                     var landTime = attack.StartTick + attack.Delay
-                                   + 1000 * Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
-                                   / attack.ProjectileSpeed + delay;
+                                   + (1000 * Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
+                                      / attack.ProjectileSpeed) + delay;
                     if (landTime < Variables.TickCount + time)
                     {
                         attackDamage = attack.Damage;
@@ -207,8 +253,8 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                     {
                         if (fromT >= Variables.TickCount
                             && (fromT + attack.Delay
-                                + Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
-                                / attack.ProjectileSpeed < toT))
+                                + (Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
+                                   / attack.ProjectileSpeed) < toT))
                         {
                             n++;
                         }
@@ -221,56 +267,6 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
         }
 
         /// <summary>
-        ///     GameObject on delete subscribed event function.
-        /// </summary>
-        /// <param name="sender">
-        ///     <see cref="GameObject" /> sender
-        /// </param>
-        /// <param name="args">
-        ///     <see cref="System.EventArgs" /> event data
-        /// </param>
-        private static void OnGameObjectDelete(GameObject sender, EventArgs args)
-        {
-            if (!sender.IsValid)
-            {
-                return;
-            }
-            var missile = sender as MissileClient;
-            if (missile?.SpellCaster != null)
-            {
-                var casterNetworkId = missile.SpellCaster.NetworkId;
-                foreach (var activeAttack in ActiveAttacks)
-                {
-                    if (activeAttack.Key == casterNetworkId)
-                    {
-                        ActiveAttacks[casterNetworkId].Processed = true;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Game Tick which is called by the game update event.
-        /// </summary>
-        /// <param name="args">
-        ///     <see cref="System.EventArgs" /> event data
-        /// </param>
-        private static void OnGameUpdate(EventArgs args)
-        {
-            if (Variables.TickCount - lastTick <= 1000)
-            {
-                return;
-            }
-
-            ActiveAttacks.ToList()
-                .Where(pair => pair.Value.StartTick < Variables.TickCount - 3000)
-                .ToList()
-                .ForEach(pair => ActiveAttacks.Remove(pair.Key));
-
-            lastTick = Variables.TickCount;
-        }
-
-        /// <summary>
         ///     Obj_AI_Base on DoCast subscribed event function.
         /// </summary>
         /// <param name="sender">
@@ -279,9 +275,9 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
         /// <param name="args">
         ///     <see cref="GameObjectProcessSpellCastEventArgs" /> event data
         /// </param>
-        private static void OnObjAiBaseDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private static void ObjAiBaseOnOnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (ActiveAttacks.ContainsKey(sender.NetworkId) && sender.IsMelee)
+            if (sender.IsValid() && ActiveAttacks.ContainsKey(sender.NetworkId) && sender.IsMelee)
             {
                 ActiveAttacks[sender.NetworkId].Processed = true;
             }
@@ -292,9 +288,9 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
         /// </summary>
         /// <param name="sender"><see cref="Obj_AI_Base" /> sender</param>
         /// <param name="args">Processed Spell Cast Data</param>
-        private static void OnObjAiBaseProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private static void ObjAiBaseOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsValidTarget(3000, false) || sender.Team != ObjectManager.Player.Team || sender is Obj_AI_Hero
+            if (!sender.IsValidTarget(3000, false) || sender.Team != GameObjects.Player.Team || sender is Obj_AI_Hero
                 || !AutoAttack.IsAutoAttack(args.SData.Name) || !(args.Target is Obj_AI_Base))
             {
                 return;
@@ -306,11 +302,11 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
             var attackData = new PredictedDamage(
                 sender,
                 target,
-                Variables.TickCount - Game.Ping / 2,
+                Variables.TickCount - (Game.Ping / 2),
                 sender.AttackCastDelay * 1000,
-                sender.AttackDelay * 1000 - (sender is Obj_AI_Turret ? 70 : 0),
-                sender.IsMelee() ? int.MaxValue : (int)args.SData.MissileSpeed,
-                (float)sender.GetAutoAttackDamage(target, true));
+                (sender.AttackDelay * 1000) - (sender is Obj_AI_Turret ? 70 : 0),
+                sender.IsMelee ? int.MaxValue : (int)args.SData.MissileSpeed,
+                (float)sender.GetAutoAttackDamage(target));
             ActiveAttacks.Add(sender.NetworkId, attackData);
         }
 
@@ -321,14 +317,11 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
         ///     <see cref="Spellbook" /> sender
         /// </param>
         /// <param name="args">Spell-book Stop Cast Data</param>
-        private static void OnSpellbookStopCast(Spellbook sender, SpellbookStopCastEventArgs args)
+        private static void SpellbookOnStopCast(Spellbook sender, SpellbookStopCastEventArgs args)
         {
-            if (sender.Owner.IsValid && args.StopAnimation)
+            if (sender.Owner.IsValid && args.StopAnimation && ActiveAttacks.ContainsKey(sender.Owner.NetworkId))
             {
-                if (ActiveAttacks.ContainsKey(sender.Owner.NetworkId))
-                {
-                    ActiveAttacks.Remove(sender.Owner.NetworkId);
-                }
+                ActiveAttacks.Remove(sender.Owner.NetworkId);
             }
         }
 
@@ -426,7 +419,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
 
             #region Public Properties
 
-            public bool Processed { get; set; }
+            public bool Processed { get; internal set; }
 
             #endregion
         }

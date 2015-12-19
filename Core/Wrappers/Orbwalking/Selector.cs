@@ -21,13 +21,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math.Prediction;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Core.Wrappers.Damages;
+    using Enumerations;
+    using Extensions;
+    using Extensions.SharpDX;
+    using Math.Prediction;
+    using UI.IMenu.Values;
+    using Utils;
+    using Damages;
 
     /// <summary>
     ///     The target selecting system for <c>Orbwalker</c>.
@@ -173,7 +173,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                                         Type = OrbwalkingType.NonKillableMinion
                                     });
                         }
-                        if (predHealth > 0 && predHealth <= GameObjects.Player.GetAutoAttackDamage(minion, true))
+                        if (predHealth > 0 && predHealth <= GameObjects.Player.GetAutoAttackDamage(minion))
                         {
                             return minion;
                         }
@@ -233,7 +233,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 Obj_AI_Minion farmUnderTurretMinion = null;
                 Obj_AI_Minion noneKillableMinion = null;
                 // return all the minions under turret
-                var turretMinions = minions.Where(m => Minion.IsMinion(m) && m.Position.IsUnderAllyTurret()).ToList();
+                var turretMinions =
+                    minions.Where(
+                        m => m.CharData.BaseSkinName.ToLower().Contains("minion") && m.Position.IsUnderAllyTurret())
+                        .ToList();
                 if (turretMinions.Any())
                 {
                     // get the turret aggro minion
@@ -280,7 +283,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                             // calculate the hits is needed and possibilty to balance
                             if (hpLeft == 0 && turretAttackCount != 0 && hpLeftBeforeDie != 0)
                             {
-                                var damage = (int)GameObjects.Player.GetAutoAttackDamage(turretMinion, true);
+                                var damage = (int)GameObjects.Player.GetAutoAttackDamage(turretMinion);
                                 var hits = hpLeftBeforeDie / damage;
                                 var timeBeforeDie = turretLandTick
                                                     + (turretAttackCount + 1) * (int)(turret.AttackDelay * 1000)
@@ -292,7 +295,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                                                                  + (int)(GameObjects.Player.AttackDelay * 1000)
                                                                  - (Variables.TickCount + Game.Ping / 2 + 25)
                                                                : 0;
-                                var timeToLandAttack = GameObjects.Player.IsMelee()
+                                var timeToLandAttack = GameObjects.Player.IsMelee
                                                            ? GameObjects.Player.AttackCastDelay * 1000
                                                            : GameObjects.Player.AttackCastDelay * 1000
                                                              + 1000
@@ -333,7 +336,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                                      turretMinions.Where(
                                          x => x.NetworkId != turretMinion.NetworkId && !Health.HasMinionAggro(x))
                                  where
-                                     (int)minion.Health % (int)turret.GetAutoAttackDamage(minion, true)
+                                     (int)minion.Health % (int)turret.GetAutoAttackDamage(minion)
                                      > (int)GameObjects.Player.GetAutoAttackDamage(minion)
                                  select minion).FirstOrDefault();
                         }
@@ -351,7 +354,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                                         x => x.IsValidTarget(950f, false, minion.Position))
                                 where
                                     turret != null
-                                    && (int)minion.Health % (int)turret.GetAutoAttackDamage(minion, true)
+                                    && (int)minion.Health % (int)turret.GetAutoAttackDamage(minion)
                                     > (int)GameObjects.Player.GetAutoAttackDamage(minion)
                                 select minion).FirstOrDefault();
                     }
@@ -489,7 +492,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 GameObjects.EnemyMinions.Where(m => this.IsValidUnit(m)))
             {
                 var baseName = minion.CharData.BaseSkinName.ToLower();
-                if (minions && Minion.IsMinion(minion))
+                if (minions && baseName.Contains("minion"))
                 {
                     minionList.Add(minion);
                 }

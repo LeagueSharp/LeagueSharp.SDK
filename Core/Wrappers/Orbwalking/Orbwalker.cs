@@ -21,12 +21,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
     using System.Linq;
     using System.Windows.Forms;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Core.Wrappers.Damages;
+    using Enumerations;
+    using Extensions;
+    using Extensions.SharpDX;
+    using UI.IMenu.Values;
+    using Utils;
+    using Damages;
 
     using SharpDX;
 
@@ -51,6 +51,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         internal readonly Selector Selector;
 
         private readonly Random random = new Random(DateTime.Now.Millisecond);
+
+        /// <summary>
+        ///     Value indicating whether the <see cref="Orbwalker" /> is enabled.
+        /// </summary>
+        private bool enabled;
 
         #endregion
 
@@ -102,6 +107,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
             this.Menu.Add(advanced);
 
             this.Menu.Add(new MenuSeparator("separatorKeys", "Key Bindings"));
+            this.Menu.Add(new MenuBool("enableOption", "Enable Orbwalker", true));
             this.Menu.Add(new MenuKeyBind("lasthitKey", "Last Hit", Keys.X, KeyBindType.Press));
             this.Menu.Add(new MenuKeyBind("laneclearKey", "Lane Clear", Keys.V, KeyBindType.Press));
             this.Menu.Add(new MenuKeyBind("hybridKey", "Hybrid", Keys.C, KeyBindType.Press));
@@ -133,10 +139,20 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                                                           : this.ActiveMode
                                               : this.ActiveMode;
                     }
+
+                    var boolean = sender as MenuBool;
+                    if (boolean != null)
+                    {
+                        if (boolean.Name.Equals("enableOption"))
+                        {
+                            this.enabled = boolean.Value;
+                        }
+                    }
                 };
 
             menu.Add(this.Menu);
             this.Selector = new Selector(this);
+            this.enabled = this.Menu["enableOption"].GetValue<MenuBool>().Value;
 
             Drawing.OnDraw += this.OnDrawingDraw;
         }
@@ -149,6 +165,23 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         ///     Block Attack & Move methods until tick
         /// </summary>
         public int BlockOrdersUntilTick { get; private set; }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether the <see cref="Orbwalker" /> is enabled.
+        /// </summary>
+        public bool Enabled
+        {
+            get
+            {
+                return this.enabled;
+            }
+
+            set
+            {
+                this.enabled = value;
+                this.Menu["enableOption"].GetValue<MenuBool>().Value = value;
+            }
+        }
 
         /// <summary>
         ///     Forces the orbwalker to select the set target if valid and in range.
@@ -407,6 +440,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// </param>
         private void OnDrawingDraw(EventArgs args)
         {
+            if (!this.Enabled)
+            {
+                return;
+            }
             if (GameObjects.Player == null || !GameObjects.Player.IsValid || GameObjects.Player.IsDead)
             {
                 return;
@@ -452,8 +489,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                         this.Selector.GetEnemyMinions(GameObjects.Player.GetRealAutoAttackRange() * 2f)
                             .Where(
                                 m =>
-                                m.Position.IsOnScreen()
-                                && m.Health < GameObjects.Player.GetAutoAttackDamage(m, true) * 2f);
+                                m.Position.IsOnScreen() && m.Health < GameObjects.Player.GetAutoAttackDamage(m) * 2f);
                     foreach (var minion in minions)
                     {
                         var value = 255 - (minion.Health * 2);
@@ -469,9 +505,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 {
                     var minions =
                         this.Selector.GetEnemyMinions(GameObjects.Player.GetRealAutoAttackRange() * 2f)
-                            .Where(
-                                m =>
-                                m.Position.IsOnScreen() && m.Health < GameObjects.Player.GetAutoAttackDamage(m, true));
+                            .Where(m => m.Position.IsOnScreen() && m.Health < GameObjects.Player.GetAutoAttackDamage(m));
                     foreach (var minion in minions)
                     {
                         Drawing.DrawCircle(minion.Position, minion.BoundingRadius * 2f, Color.FromArgb(255, 0, 255, 0));

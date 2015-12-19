@@ -19,8 +19,8 @@ namespace LeagueSharp.SDK.Core
 {
     using System;
 
-    using LeagueSharp.SDK.Core.UI.IMenu;
-    using LeagueSharp.SDK.Core.Wrappers.Orbwalking;
+    using UI.IMenu;
+    using Wrappers.Orbwalking;
 
     /// <summary>
     ///     Class that contains helpful variables.

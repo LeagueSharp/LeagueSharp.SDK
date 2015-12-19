@@ -24,10 +24,20 @@
         "SpellName": "dianateleport",
         "SkillType": "Targeted"
     },
+    "Ekko": {
+        "Slot": "E",
+        "SpellName": "ekkoe",
+        "SkillType": "Skillshot"
+    },
+    "Ekko": {
+        "Slot": "E",
+        "SpellName": "ekkoeattack",
+        "SkillType": "Targeted"
+    },
     "Elise": {
         "Slot": "Q",
         "SpellName": "elisespiderqcast",
-        "SkillType": "Skillshot"
+        "SkillType": "Targeted"
     },
     "Elise": {
         "Slot": "E",
@@ -37,7 +47,7 @@
     "Fiora": {
         "Slot": "Q",
         "SpellName": "fioraq",
-        "SkillType": "Targeted"
+        "SkillType": "Skillshot"
     },
     "Fizz": {
         "Slot": "Q",
@@ -68,6 +78,11 @@
         "Slot": "R",
         "SpellName": "hecarimult",
         "SkillType": "Skillshot"
+    },
+    "Illaoi": {
+        "Slot": "W",
+        "SpellName": "illaoiwattack",
+        "SkillType": "Targeted"
     },
     "Irelia": {
         "Slot": "Q",

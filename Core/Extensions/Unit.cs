@@ -22,9 +22,9 @@ namespace LeagueSharp.SDK.Core.Extensions
 
     using global::SharpDX;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Wrappers;
+    using Enumerations;
+    using SharpDX;
+    using Wrappers;
 
     /// <summary>
     ///     Provides helpful extensions to Units.
@@ -232,20 +232,26 @@ namespace LeagueSharp.SDK.Core.Extensions
         /// <returns>
         ///     The <see cref="TurretType" />.
         /// </returns>
-        public static TurretType GetTurretType(this Obj_AI_Base turret)
+        public static TurretType GetTurretType(this Obj_AI_Turret turret)
         {
             switch (turret.CharData.BaseSkinName)
             {
                 case "SRUAP_Turret_Order1":
                 case "SRUAP_Turret_Chaos1":
+                case "ha_ap_orderturret":
+                case "HA_AP_OrderTurret2":
+                case "HA_AP_OrderTurret3":
+                case "HA_AP_ChaosTurret":
+                case "HA_AP_ChaosTurret2":
+                case "HA_AP_ChaosTurret3":
                     return TurretType.TierOne;
 
                 case "SRUAP_Turret_Order2":
                 case "SRUAP_Turret_Chaos2":
                     return TurretType.TierTwo;
 
-                case "SRUAP_Turret_Order3_Test":
-                case "SRUAP_Turret_Chaos3_Test":
+                case "SRUAP_Turret_Order3":
+                case "SRUAP_Turret_Chaos3":
                     return TurretType.TierThree;
 
                 case "SRUAP_Turret_Order4":
@@ -325,7 +331,7 @@ namespace LeagueSharp.SDK.Core.Extensions
         /// <returns>Is Unit under an Enemy Turret</returns>
         public static bool IsUnderAllyTurret(this Obj_AI_Base unit)
         {
-            return unit.Position.IsUnderTurret();
+            return unit.ServerPosition.IsUnderAllyTurret();
         }
 
         /// <summary>
@@ -335,17 +341,7 @@ namespace LeagueSharp.SDK.Core.Extensions
         /// <returns>Is Unit under an Enemy Turret</returns>
         public static bool IsUnderEnemyTurret(this Obj_AI_Base unit)
         {
-            return unit.Position.IsUnderTurret();
-        }
-
-        /// <summary>
-        ///     Returns whether the specific unit is under a turret.
-        /// </summary>
-        /// <param name="unit"><see cref="Obj_AI_Base" /> unit</param>
-        /// <returns>Is Unit under an Enemy Turret</returns>
-        public static bool IsUnderTurret(this Obj_AI_Base unit)
-        {
-            return unit.Position.IsUnderTurret();
+            return unit.ServerPosition.IsUnderEnemyTurret();
         }
 
         /// <summary>
