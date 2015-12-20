@@ -254,6 +254,7 @@
     <Compile Include="Core\Utils\BinarySerializer.cs" />
     <Compile Include="Core\Utils\Cache.cs" />
     <Compile Include="Core\Utils\CallbackPerformance.cs" />
+    <Compile Include="Core\Utils\ConcurrentHashSet.cs" />
     <Compile Include="Core\Utils\Cursor.cs" />
     <Compile Include="Core\Utils\DelayAction.cs" />
     <Compile Include="Core\Utils\Jungle.cs" />

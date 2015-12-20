@@ -1,6 +1,7 @@
 ﻿namespace LeagueSharp.SDK.Core.Utils
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Reflection;
 
@@ -31,7 +32,8 @@
         /// <value>
         ///     The queues.
         /// </value>
-        private static Dictionary<string, List<Item>> Queues { get; } = new Dictionary<string, List<Item>>();
+        private static ConcurrentDictionary<string, ConcurrentHashSet<Item>> Queues { get; } =
+            new ConcurrentDictionary<string, ConcurrentHashSet<Item>>();
 
         #endregion
 
@@ -51,7 +53,9 @@
                 return false;
             }
 
-            return Queues[caller].RemoveAll(x => x.Id.Equals(id)) > 0;
+            var queue = Queues[caller];
+
+            return queue.RemoveWhere(x => x.Id.Equals(id)) > 0;
         }
 
         /// <summary>
@@ -68,7 +72,7 @@
 
             if (!Queues.ContainsKey(caller))
             {
-                Queues[caller] = new List<Item>();
+                Queues[caller] = new ConcurrentHashSet<Item>();
             }
 
             Queues[caller].Add(item);
@@ -82,7 +86,7 @@
         /// <returns>An <see cref="IEnumerable{T}" /> of all of the queued items.</returns>
         public static IEnumerable<Item> GetItems()
         {
-            return Queues[Assembly.GetCallingAssembly().FullName] ?? new List<Item>();
+            return Queues[Assembly.GetCallingAssembly().FullName] ?? new ConcurrentHashSet<Item>();
         }
 
         #endregion
