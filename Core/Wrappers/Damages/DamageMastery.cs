@@ -124,9 +124,10 @@
         internal static bool IsMoveImpaired(this Obj_AI_Hero hero)
         {
             return hero.HasBuffOfType(BuffType.Knockback) || hero.HasBuffOfType(BuffType.Knockup)
-                   || hero.HasBuffOfType(BuffType.Slow) || hero.HasBuffOfType(BuffType.Stun)
-                   || hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Fear)
-                   || hero.HasBuffOfType(BuffType.Taunt) || hero.HasBuffOfType(BuffType.Suppression);
+                   || hero.HasBuffOfType(BuffType.Charm) || hero.HasBuffOfType(BuffType.Slow)
+                   || hero.HasBuffOfType(BuffType.Stun) || hero.HasBuffOfType(BuffType.Snare)
+                   || hero.HasBuffOfType(BuffType.Flee) || hero.HasBuffOfType(BuffType.Taunt)
+                   || hero.HasBuffOfType(BuffType.Suppression);
         }
 
         private static Mastery GetMastery(this Obj_AI_Hero hero, MasteryPage page, int id)
