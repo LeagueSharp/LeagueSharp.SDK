@@ -48,17 +48,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>F:\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>F:\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="LeagueSharp.Common">
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX">
-      <HintPath>F:\LeagueSharp\System\SharpDX.dll</HintPath>
+    <Reference Include="SharpDX, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.Direct3D9">
-      <HintPath>F:\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
+    <Reference Include="SharpDX.Direct3D9, Version=2.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -248,6 +249,7 @@
     <Compile Include="Core\UI\INotifications\NotificationIcons.cs" />
     <Compile Include="Core\UI\INotifications\Notifications.cs" />
     <Compile Include="Core\UI\Utils.cs" />
+    <Compile Include="Core\Utils\ActionQueue.cs" />
     <Compile Include="Core\Utils\AutoAttack.cs" />
     <Compile Include="Core\Utils\BinarySerializer.cs" />
     <Compile Include="Core\Utils\Cache.cs" />
