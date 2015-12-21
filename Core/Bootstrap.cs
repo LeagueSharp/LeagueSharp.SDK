@@ -23,9 +23,9 @@ namespace LeagueSharp.SDK.Core
     using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
     using LeagueSharp.SDK.Core.UI.INotifications;
     using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Core.Wrappers;
     using LeagueSharp.SDK.Core.Wrappers.Damages;
     using LeagueSharp.SDK.Core.Wrappers.Orbwalking;
+    using LeagueSharp.SDK.Core.Wrappers.TargetSelector;
 
     /// <summary>
     ///     Bootstrap is an initialization pointer for the AppDomainManager to initialize the library correctly once loaded in
@@ -76,7 +76,7 @@ namespace LeagueSharp.SDK.Core
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Orbwalker Initialized.");
 
             // Load the TargetSelector.
-            TargetSelector.Initialize(Variables.LeagueSharpMenu);
+            Variables.TargetSelector = new TargetSelector(Variables.LeagueSharpMenu);
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] TargetSelector Initialized.");
 
             // Load the Notifications

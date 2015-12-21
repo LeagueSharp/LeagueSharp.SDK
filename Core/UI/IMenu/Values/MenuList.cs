@@ -22,8 +22,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    using Core.Utils;
-    using Skins;
+
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     A list of values.
@@ -45,9 +46,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuList" /> class.
         /// </summary>
-        internal MenuList()
-        {
-        }
+        internal MenuList() {}
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuList" /> class.
@@ -56,9 +55,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="displayName">Display name of the component</param>
         /// <param name="uniqueString">String to make this component unique</param>
         protected MenuList(string name, string displayName, string uniqueString = "")
-            : base(name, displayName, uniqueString)
-        {
-        }
+            : base(name, displayName, uniqueString) {}
 
         #endregion
 
@@ -177,6 +174,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     {
         #region Fields
 
+        private T[] values;
+
         /// <summary>
         ///     Local width.
         /// </summary>
@@ -204,7 +203,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         public MenuList(string name, string displayName, IEnumerable<T> objects, string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
-            this.Values = objects.ToArray();
+            this.values = objects.ToArray();
         }
 
         /// <summary>
@@ -220,9 +219,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     The unique String.
         /// </param>
         public MenuList(string name, string displayName, string uniqueString = "")
-            : this(name, displayName, Enum.GetValues(typeof(T)).Cast<T>(), uniqueString)
-        {
-        }
+            : this(name, displayName, Enum.GetValues(typeof(T)).Cast<T>(), uniqueString) {}
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuList{T}" /> class.
@@ -311,7 +308,21 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <value>
         ///     The values.
         /// </value>
-        public T[] Values { get; }
+        public T[] Values
+        {
+            get
+            {
+                return this.values;
+            }
+            set
+            {
+                this.values = value;
+                if (this.Index >= this.values.Length)
+                {
+                    this.Index = this.values.Length - 1;
+                }
+            }
+        }
 
         /// <summary>
         ///     Gets the values as strings.
