@@ -20,15 +20,17 @@ namespace LeagueSharp.SDK.Core.Wrappers
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Damages;
+
     using Enumerations;
     using Events;
     using Extensions;
     using Extensions.SharpDX;
-    using SharpDX;
     using UI.IMenu;
     using UI.IMenu.Values;
     using Utils;
+    using Damages;
+
+    using SharpDX;
 
     /// <summary>
     ///     Target Selector, manageable utility to return the best candidate target based on chosen settings.
@@ -45,11 +47,11 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 "Ahri", "Anivia", "Annie", "Ashe", "Brand", "Caitlyn",
                 "Cassiopeia", "Corki", "Draven", "Ezreal", "Graves", "Jinx",
                 "Kalista", "Karma", "Karthus", "Katarina", "Kennen",
-                "KogMaw", "Leblanc", "Lucian", "Lux", "Malzahar", "MasterYi",
-                "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra",
-                "Talon", "Teemo", "Tristana", "TwistedFate", "Twitch",
-                "Varus", "Vayne", "Veigar", "VelKoz", "Viktor", "Xerath",
-                "Zed", "Ziggs"
+                "KogMaw", "Leblanc", "Kindred", "Lucian", "Lux", "Malzahar",
+                "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir",
+                "Syndra", "Talon", "Teemo", "Tristana", "TwistedFate",
+                "Twitch", "Varus", "Vayne", "Veigar", "Velkoz", "Viktor",
+                "Xerath", "Zed", "Ziggs"
             };
 
         /// <summary>
@@ -57,13 +59,13 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </summary>
         public static readonly string[] LowestPriority =
             {
-                "Alistar", "Amumu", "Blitzcrank", "Braum", "Cho'Gath",
-                "Dr. Mundo", "Garen", "Gnar", "Hecarim", "Janna", "Jarvan IV",
+                "Alistar", "Amumu", "Blitzcrank", "Braum", "ChoGath",
+                "DrMundo", "Garen", "Gnar", "Hecarim", "Janna", "JarvanIV",
                 "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus",
                 "Nunu", "Olaf", "Rammus", "Renekton", "Sejuani", "Shen",
                 "Shyvana", "Singed", "Sion", "Skarner", "Sona", "Soraka",
-                "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing",
-                "Yorick", "Zac", "Zyra"
+                "Taric", "TahmKench", "Thresh", "Volibear", "Warwick",
+                "MonkeyKing", "Yorick", "Zac", "Zyra"
             };
 
         /// <summary>
@@ -72,7 +74,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public static readonly string[] MedHighPriority =
             {
                 "Akali", "Diana", "Fiddlesticks", "Fiora", "Fizz",
-                "Heimerdinger", "Jayce", "Kassadin", "Kayle", "Kha'Zix",
+                "Heimerdinger", "Jayce", "Kassadin", "Kayle", "KhaZix",
                 "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco",
                 "Vladimir", "Yasuo", "Zilean"
             };
@@ -83,7 +85,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public static readonly string[] MedLowPriority =
             {
                 "Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank",
-                "Gragas", "Irelia", "Jax", "Lee Sin", "Maokai", "Morgana",
+                "Gragas", "Irelia", "Jax", "LeeSin", "Maokai", "Morgana",
                 "Nocturne", "Pantheon", "Poppy", "Rengar", "Rumble", "Ryze",
                 "Swain", "Trundle", "Tryndamere", "Udyr", "Urgot", "Vi",
                 "XinZhao", "RekSai"
@@ -208,11 +210,11 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 targets = targets.Where(t => ignoredChamps.All(i => t.NetworkId == i.NetworkId)).ToArray();
             }
 
-            var excludedTargets = targets.Where(t => t.IsInvulnerable(damage));
+            var validTargets = targets.Where(t => !t.IsInvulnerable(damage)).ToArray();
 
-            return targets.Any()
-                       ? GetTarget(targets, damage, rangeCheckFrom)
-                       : GetTarget(excludedTargets, damage, rangeCheckFrom);
+            return validTargets.Any()
+                       ? GetTarget(validTargets, damage, rangeCheckFrom)
+                       : GetTarget(targets, damage, rangeCheckFrom);
         }
 
         /// <summary>
@@ -241,7 +243,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                     return targets.MinOrDefault(
                         t =>
                             {
-                                var attackDamage = GameObjects.Player.GetAutoAttackDamage(t, true);
+                                var attackDamage = GameObjects.Player.GetAutoAttackDamage(t);
                                 var damage = t.Health / attackDamage > 0 ? attackDamage : 1;
                                 try
                                 {
@@ -261,10 +263,10 @@ namespace LeagueSharp.SDK.Core.Wrappers
                         targets.MinOrDefault(
                             hero => (rangeCheckFrom ?? GameObjects.Player.ServerPosition).DistanceSquared(hero.Position));
                 case TargetSelectorMode.NearMouse:
-                    return targets.Find(t => t.DistanceSquared(Game.CursorPos) < 22500);
+                    return targets.MinOrDefault(t => t.DistanceSquared(Game.CursorPos));
                 case TargetSelectorMode.AutoPriority:
                     return
-                        targets.MaxOrDefault(
+                        targets.MinOrDefault(
                             hero =>
                             GameObjects.Player.CalculateDamage(hero, damageType, 100) / (1 + hero.Health)
                             * GetPriority(hero));
@@ -322,14 +324,49 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </returns>
         public static bool IsInvulnerable(this Obj_AI_Base target, DamageType damageType, bool ignoreShields = true)
         {
+            // Kindred's Lamb's Respite(R)
+            if (target.HasBuff("kindredRnodeathbuff") && target.HealthPercent < 10)
+            {
+                return true;
+            }
+
             // Tryndamere's Undying Rage (R)
-            if (target.HasBuff("Undying Rage") && target.Health <= target.MaxHealth * 0.10f)
+            if (target.HasBuff("Undying Rage") && target.HealthPercent < 10)
             {
                 return true;
             }
 
             // Kayle's Intervention (R)
             if (target.HasBuff("JudicatorIntervention"))
+            {
+                return true;
+            }
+
+            if (ignoreShields)
+            {
+                return false;
+            }
+
+            // Morgana's Black Shield (E)
+            if (damageType.Equals(DamageType.Magical) && target.HasBuff("BlackShield"))
+            {
+                return true;
+            }
+
+            // Banshee's Veil (PASSIVE)
+            if (damageType.Equals(DamageType.Magical) && target.HasBuff("BansheesVeil"))
+            {
+                return true;
+            }
+
+            // Sivir's Spell Shield (E)
+            if (damageType.Equals(DamageType.Magical) && target.HasBuff("SivirShield"))
+            {
+                return true;
+            }
+
+            // Nocturne's Shroud of Darkness (W)
+            if (damageType.Equals(DamageType.Magical) && target.HasBuff("ShroudofDarkness"))
             {
                 return true;
             }

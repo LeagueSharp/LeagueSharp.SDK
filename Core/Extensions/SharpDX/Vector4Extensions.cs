@@ -262,7 +262,8 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         ///     Returns if the Vector4 is on the screen.
         /// </summary>
         /// <param name="vector4">Extended SharpDX Vector4</param>
-        /// /// <param name="radius">Radius</param>
+        /// ///
+        /// <param name="radius">Radius</param>
         /// <returns>Is Vector4 on screen</returns>
         public static bool IsOnScreen(this Vector4 vector4, float radius)
         {
@@ -306,16 +307,6 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         public static bool IsOrthogonal(this Vector4 vector4, Vector3 toVector3)
         {
             return Math.Abs((vector4.X * toVector3.X) + (vector4.Y * toVector3.Y)) < float.Epsilon;
-        }
-
-        /// <summary>
-        ///     Returns whether the given position is under a turret
-        /// </summary>
-        /// <param name="position">Extended SharpDX Vector4</param>
-        /// <returns>Is Position under a turret</returns>
-        public static bool IsUnderTurret(this Vector4 position)
-        {
-            return position.ToVector3().IsUnderTurret();
         }
 
         /// <summary>

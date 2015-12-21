@@ -20,11 +20,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
     using System;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Events;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Utils;
+    using Enumerations;
+    using Events;
+    using Extensions;
+    using Extensions.SharpDX;
+    using Utils;
 
     using SharpDX;
 
@@ -36,6 +36,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
     public abstract class Base<TK, T>
         where TK : struct, IConvertible where T : AttackableUnit
     {
+        #region Fields
+
+        /// <summary>
+        ///     Value indicating whether the <see cref="Orbwalker" /> is enabled.
+        /// </summary>
+        protected bool Enabled;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -56,6 +65,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
             this.InActiveMode = (TK)enumValues.GetValue(0);
             Obj_AI_Base.OnProcessSpellCast += this.OnObjAiBaseProcessSpellCast;
             Obj_AI_Base.OnDoCast += this.OnObjAiBaseDoCast;
+            Obj_AI_Base.OnBuffAdd += this.ObjAiBaseOnOnBuffAdd;
             Spellbook.OnStopCast += this.OnSpellbookStopCast;
             Game.OnUpdate += this.OnGameUpdate;
         }
@@ -369,6 +379,22 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
             this.OnAction?.Invoke(MethodBase.GetCurrentMethod().DeclaringType, e);
         }
 
+        private void ObjAiBaseOnOnBuffAdd(Obj_AI_Base sender, Obj_AI_BaseBuffAddEventArgs args)
+        {
+            if (!this.Enabled)
+            {
+                return;
+            }
+            if (!sender.IsMe)
+            {
+                return;
+            }
+            if (args.Buff.DisplayName == "PoppyPassiveBuff" || args.Buff.DisplayName == "SonaPassiveReady")
+            {
+                this.ResetSwingTimer();
+            }
+        }
+
         /// <summary>
         ///     OnUpdate event.
         /// </summary>
@@ -377,6 +403,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// </param>
         private void OnGameUpdate(EventArgs args)
         {
+            if (!this.Enabled)
+            {
+                return;
+            }
             if (GameObjects.Player == null || !GameObjects.Player.IsValid || GameObjects.Player.IsDead
                 || InterruptableSpell.IsCastingInterruptableSpell(GameObjects.Player, true))
             {
@@ -399,6 +429,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// </param>
         private void OnObjAiBaseDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
+            if (!this.Enabled)
+            {
+                return;
+            }
             if (sender.IsValid && sender.IsMe)
             {
                 if (Game.Ping <= 30)
@@ -452,6 +486,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// </param>
         private void OnObjAiBaseProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
+            if (!this.Enabled)
+            {
+                return;
+            }
             if (sender.IsValid && sender.IsMe)
             {
                 var spellName = args.SData.Name;
@@ -493,6 +531,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// </param>
         private void OnSpellbookStopCast(Spellbook spellbook, SpellbookStopCastEventArgs args)
         {
+            if (!this.Enabled)
+            {
+                return;
+            }
             if (spellbook.Owner.IsValid && spellbook.Owner.IsMe && args.DestroyMissile && args.StopAnimation)
             {
                 this.ResetSwingTimer();
