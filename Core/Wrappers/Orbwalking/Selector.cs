@@ -131,7 +131,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
             if ((mode == OrbwalkingMode.Hybrid || mode == OrbwalkingMode.LaneClear)
                 && !this.orbwalker.Menu["advanced"]["prioritizeFarm"].GetValue<MenuBool>().Value)
             {
-                var target = TargetSelector.GetTarget();
+                var target = Variables.TargetSelector.GetTarget(-1f, DamageType.Physical);
                 if (target != null && target.InAutoAttackRange())
                 {
                     return target;
@@ -210,7 +210,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
             // Champions
             if (mode != OrbwalkingMode.LastHit)
             {
-                var target = TargetSelector.GetTarget();
+                var target = Variables.TargetSelector.GetTarget(-1f, DamageType.Physical);
                 if (target.IsValidTarget() && target.InAutoAttackRange())
                 {
                     return target;

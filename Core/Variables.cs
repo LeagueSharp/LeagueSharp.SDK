@@ -21,6 +21,7 @@ namespace LeagueSharp.SDK.Core
 
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.Wrappers.Orbwalking;
+    using LeagueSharp.SDK.Core.Wrappers.TargetSelector;
 
     /// <summary>
     ///     Class that contains helpful variables.
@@ -46,7 +47,18 @@ namespace LeagueSharp.SDK.Core
         /// <summary>
         ///     Gets or sets the Orbwalker instance.
         /// </summary>
+        /// <value>
+        ///     The orbwalker.
+        /// </value>
         public static Orbwalker Orbwalker { get; internal set; }
+
+        /// <summary>
+        ///     Gets the TargetSelector instance.
+        /// </summary>
+        /// <value>
+        ///     The targetselector.
+        /// </value>
+        public static TargetSelector TargetSelector { get; internal set; }
 
         /// <summary>
         ///     Gets the Safe TickCount.

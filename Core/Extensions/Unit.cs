@@ -24,7 +24,6 @@ namespace LeagueSharp.SDK.Core.Extensions
 
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Wrappers;
 
     /// <summary>
     ///     Provides helpful extensions to Units.
@@ -32,6 +31,28 @@ namespace LeagueSharp.SDK.Core.Extensions
     public static class Unit
     {
         #region Public Methods and Operators
+
+        /// <summary>
+        ///     Counts the ally heroes in range.
+        /// </summary>
+        /// <param name="unit">The unit.</param>
+        /// <param name="range">The range.</param>
+        /// <returns></returns>
+        public static int CountAllyHeroesInRange(this Obj_AI_Base unit, float range)
+        {
+            return unit.ServerPosition.CountAllyHeroesInRange(range, unit);
+        }
+
+        /// <summary>
+        ///     Counts the enemy heroes in range.
+        /// </summary>
+        /// <param name="unit">The unit.</param>
+        /// <param name="range">The range.</param>
+        /// <returns></returns>
+        public static int CountEnemyHeroesInRange(this Obj_AI_Base unit, float range)
+        {
+            return unit.ServerPosition.CountEnemyHeroesInRange(range, unit);
+        }
 
         /// <summary>
         ///     Gets the distance between two GameObjects

@@ -44,7 +44,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     Menu Component Sub-Components.
         /// </summary>
-        public readonly IDictionary<string, AMenuComponent> Components = new Dictionary<string, AMenuComponent>();
+        public IDictionary<string, AMenuComponent> Components = new Dictionary<string, AMenuComponent>();
 
         /// <summary>
         ///     Local toggled indicator.

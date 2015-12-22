@@ -177,6 +177,30 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         }
 
         /// <summary>
+        ///     Counts the ally heroes in range.
+        /// </summary>
+        /// <param name="vector2">The vector2.</param>
+        /// <param name="range">The range.</param>
+        /// <param name="originalUnit">The original unit.</param>
+        /// <returns></returns>
+        public static int CountAllyHeroesInRange(this Vector2 vector2, float range, Obj_AI_Base originalUnit = null)
+        {
+            return vector2.ToVector3().CountAllyHeroesInRange(range, originalUnit);
+        }
+
+        /// <summary>
+        ///     Counts the enemy heroes in range.
+        /// </summary>
+        /// <param name="vector2">The vector2.</param>
+        /// <param name="range">The range.</param>
+        /// <param name="originalUnit">The original unit.</param>
+        /// <returns></returns>
+        public static int CountEnemyHeroesInRange(this Vector2 vector2, float range, Obj_AI_Base originalUnit = null)
+        {
+            return vector2.ToVector3().CountEnemyHeroesInRange(range, originalUnit);
+        }
+
+        /// <summary>
         ///     Returns the cross product Z value.
         /// </summary>
         /// <param name="self">
@@ -434,7 +458,8 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         ///     Returns if the Vector2 is on the screen.
         /// </summary>
         /// <param name="vector2">Extended SharpDX Vector2</param>
-        /// /// <param name="radius">Radius</param>
+        /// ///
+        /// <param name="radius">Radius</param>
         /// <returns>Is Vector2 on screen</returns>
         public static bool IsOnScreen(this Vector2 vector2, float radius)
         {
@@ -475,6 +500,26 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         }
 
         /// <summary>
+        ///     Returns whether the given position is under a ally turret
+        /// </summary>
+        /// <param name="position">Extended SharpDX Vector2</param>
+        /// <returns>Is Position under a turret</returns>
+        public static bool IsUnderAllyTurret(this Vector2 position)
+        {
+            return position.ToVector3().IsUnderAllyTurret();
+        }
+
+        /// <summary>
+        ///     Returns whether the given position is under a enemy turret
+        /// </summary>
+        /// <param name="position">Extended SharpDX Vector2</param>
+        /// <returns>Is Position under a turret</returns>
+        public static bool IsUnderEnemyTurret(this Vector2 position)
+        {
+            return position.ToVector3().IsUnderEnemyTurret();
+        }
+
+        /// <summary>
         ///     Returns true if the point is under the rectangle
         /// </summary>
         /// <param name="point">
@@ -508,26 +553,6 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         public static bool IsUnderTurret(this Vector2 position)
         {
             return position.ToVector3().IsUnderTurret();
-        }
-
-        /// <summary>
-        ///     Returns whether the given position is under a ally turret
-        /// </summary>
-        /// <param name="position">Extended SharpDX Vector2</param>
-        /// <returns>Is Position under a turret</returns>
-        public static bool IsUnderAllyTurret(this Vector2 position)
-        {
-            return position.ToVector3().IsUnderAllyTurret();
-        }
-
-        /// <summary>
-        ///     Returns whether the given position is under a enemy turret
-        /// </summary>
-        /// <param name="position">Extended SharpDX Vector2</param>
-        /// <returns>Is Position under a turret</returns>
-        public static bool IsUnderEnemyTurret(this Vector2 position)
-        {
-            return position.ToVector3().IsUnderEnemyTurret();
         }
 
         /// <summary>
