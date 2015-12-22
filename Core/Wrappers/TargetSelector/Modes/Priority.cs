@@ -81,7 +81,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
                                             "Katarina", "Kennen", "KogMaw", "Leblanc", "Lucian", "Lux", "Malzahar",
                                             "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", "Talon",
                                             "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar",
-                                            "Velkoz", "Viktor", "Xerath", "Zed", "Ziggs"
+                                            "Velkoz", "Viktor", "Xerath", "Zed", "Ziggs", "Soraka"
                                         },
                                 Value = 4
                             },
@@ -102,7 +102,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
                                     new HashSet<string>
                                         {
                                             "Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas",
-                                            "Irelia", "Jax", "Lee Sin", "Maokai", "Morgana", "Nocturne", "Pantheon",
+                                            "Irelia", "Jax", "LeeSin", "Maokai", "Morgana", "Nocturne", "Pantheon",
                                             "Poppy", "Rengar", "Rumble", "Ryze", "Swain", "Trundle", "Tryndamere", "Udyr",
                                             "Urgot", "Vi", "XinZhao", "RekSai"
                                         },
@@ -114,9 +114,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
                                     new HashSet<string>
                                         {
                                             "Alistar", "Amumu", "Bard", "Blitzcrank", "Braum", "ChoGath", "DrMundo",
-                                            "Garen", "Gnar", "Hecarim", "Janna", "Jarvan IV", "Leona", "Lulu", "Malphite",
+                                            "Garen", "Gnar", "Hecarim", "Janna", "JarvanIV", "Leona", "Lulu", "Malphite",
                                             "Nami", "Nasus", "Nautilus", "Nunu", "Olaf", "Rammus", "Renekton", "Sejuani",
-                                            "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona", "Soraka", "TahmKench",
+                                            "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona", "TahmKench",
                                             "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac",
                                             "Zyra"
                                         },
