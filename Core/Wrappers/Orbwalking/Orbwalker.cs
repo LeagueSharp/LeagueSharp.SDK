@@ -36,7 +36,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
     /// <summary>
     ///     The <c>Orbwalker</c> system.
     /// </summary>
-    public class Orbwalker : Base<OrbwalkingMode, AttackableUnit>
+    public sealed class Orbwalker : Base<OrbwalkingMode, AttackableUnit>
     {
         #region Fields
 
@@ -106,6 +106,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
             this.Menu.Add(new MenuKeyBind("laneclearKey", "Lane Clear", Keys.V, KeyBindType.Press));
             this.Menu.Add(new MenuKeyBind("hybridKey", "Hybrid", Keys.C, KeyBindType.Press));
             this.Menu.Add(new MenuKeyBind("comboKey", "Combo", Keys.Space, KeyBindType.Press));
+            this.Menu.Add(new MenuBool("enabledOption", "Enabled", true));
 
             this.Menu.MenuValueChanged += (sender, args) =>
                 {
@@ -133,12 +134,20 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                                                           : this.ActiveMode
                                               : this.ActiveMode;
                     }
+
+                    var boolean = sender as MenuBool;
+                    if (boolean != null)
+                    {
+                        if (boolean.Name.Equals("enabledOption"))
+                        {
+                            this.Enabled = boolean.Value;
+                        }
+                    }
                 };
 
             menu.Add(this.Menu);
             this.Selector = new Selector(this);
-
-            Drawing.OnDraw += this.OnDrawingDraw;
+            this.Enabled = this.Menu["enabledOption"].GetValue<MenuBool>().Value;
         }
 
         #endregion
@@ -149,6 +158,39 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         ///     Block Attack & Move methods until tick
         /// </summary>
         public int BlockOrdersUntilTick { get; private set; }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether this <see cref="Base{TK, T}" /> is enabled.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if enabled; otherwise, <c>false</c>.
+        /// </value>
+        public override bool Enabled
+        {
+            get
+            {
+                return base.Enabled;
+            }
+            set
+            {
+                if (base.Enabled != value)
+                {
+                    if (value)
+                    {
+                        Drawing.OnDraw += this.OnDrawingDraw;
+                    }
+                    else
+                    {
+                        Drawing.OnDraw -= this.OnDrawingDraw;
+                    }
+                }
+                base.Enabled = value;
+                if (this.Menu != null)
+                {
+                    this.Menu["enabledOption"].GetValue<MenuBool>().Value = value;
+                }
+            }
+        }
 
         /// <summary>
         ///     Forces the orbwalker to select the set target if valid and in range.
