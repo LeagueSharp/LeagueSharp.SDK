@@ -91,7 +91,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
                                     new HashSet<string>
                                         {
                                             "Akali", "Diana", "Ekko", "Fiddlesticks", "Fiora", "Fizz", "Heimerdinger",
-                                            "Illaoi", "Jayce", "Kassadin", "Kayle", "Kha'Zix", "Kindred", "Lissandra",
+                                            "Illaoi", "Jayce", "Kassadin", "Kayle", "KhaZix", "Kindred", "Lissandra",
                                             "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo", "Zilean"
                                         },
                                 Value = 3
@@ -113,7 +113,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
                                 Champions =
                                     new HashSet<string>
                                         {
-                                            "Alistar", "Amumu", "Bard", "Blitzcrank", "Braum", "Cho'Gath", "Dr. Mundo",
+                                            "Alistar", "Amumu", "Bard", "Blitzcrank", "Braum", "ChoGath", "DrMundo",
                                             "Garen", "Gnar", "Hecarim", "Janna", "Jarvan IV", "Leona", "Lulu", "Malphite",
                                             "Nami", "Nasus", "Nautilus", "Nunu", "Olaf", "Rammus", "Renekton", "Sejuani",
                                             "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona", "Soraka", "TahmKench",
