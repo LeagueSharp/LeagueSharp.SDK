@@ -35,6 +35,8 @@ namespace LeagueSharp.SDK.Core.Utils
     {
         #region Static Fields
 
+        private static readonly List<string> CloneList = new List<string> { "leblanc", "shaco", "monkeyking" };
+
         /// <summary>
         ///     The normal minion list.
         /// </summary>
@@ -45,6 +47,15 @@ namespace LeagueSharp.SDK.Core.Utils
                                                                         "HA_ChaosMinionMelee", "HA_ChaosMinionRanged",
                                                                         "HA_OrderMinionMelee", "HA_OrderMinionRanged"
                                                                     };
+
+        private static readonly List<string> PetList = new List<string>
+                                                           {
+                                                               "annietibbers", "elisespiderling", "heimertyellow",
+                                                               "heimertblue", "illaoiminion", "malzaharvoidling",
+                                                               "shacobox", "yorickspectralghoul", "yorickdecayedghoul",
+                                                               "yorickravenousghoul", "zyrathornplant",
+                                                               "zyragraspingplant"
+                                                           };
 
         /// <summary>
         ///     The siege minion list.
@@ -312,14 +323,7 @@ namespace LeagueSharp.SDK.Core.Utils
         public static bool IsPet(this Obj_AI_Minion minion, bool includeClones = true)
         {
             var name = minion.CharData.BaseSkinName.ToLower();
-            var pets = new[]
-                           {
-                               "annietibbers", "elisespiderling", "heimertyellow", "heimertblue", "illaoiminion",
-                               "malzaharvoidling", "shacobox", "yorickspectralghoul", "yorickdecayedghoul",
-                               "yorickravenousghoul", "zyrathornplant", "zyragraspingplant"
-                           };
-            var clones = new[] { "leblanc", "shaco", "monkeyking" };
-            return pets.Contains(name) || (includeClones && clones.Contains(name));
+            return PetList.Contains(name) || (includeClones && CloneList.Contains(name));
         }
 
         #endregion
