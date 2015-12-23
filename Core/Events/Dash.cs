@@ -22,7 +22,7 @@ namespace LeagueSharp.SDK.Core.Events
     using System.Linq;
     using System.Reflection;
 
-    using Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
 
     using SharpDX;
 
@@ -137,8 +137,7 @@ namespace LeagueSharp.SDK.Core.Events
                                                              StartTick = Variables.TickCount - (Game.Ping / 2),
                                                              Speed = args.Speed,
                                                              StartPos = hero.ServerPosition.ToVector2(), Unit = sender,
-                                                             Path = path,
-                                                             EndPos = path.Last(),
+                                                             Path = path, EndPos = path.Last(),
                                                              EndTick =
                                                                  DetectedDashes[hero.NetworkId].StartTick
                                                                  + (int)

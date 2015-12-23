@@ -297,21 +297,10 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         ///     Returns if the Vector3 is on the screen.
         /// </summary>
         /// <param name="vector3">Extended SharpDX Vector3</param>
-        /// <returns>Is Vector3 on screen</returns>
-        public static bool IsOnScreen(this Vector3 vector3)
-        {
-            var pos = Drawing.WorldToScreen(vector3);
-            return pos.X > 0 && pos.X <= Drawing.Width && pos.Y > 0 && pos.Y <= Drawing.Height;
-        }
-
-        /// <summary>
-        ///     Returns if the Vector3 is on the screen.
-        /// </summary>
-        /// <param name="vector3">Extended SharpDX Vector3</param>
         /// ///
         /// <param name="radius">Radius</param>
         /// <returns>Is Vector3 on screen</returns>
-        public static bool IsOnScreen(this Vector3 vector3, float radius)
+        public static bool IsOnScreen(this Vector3 vector3, float radius = 0f)
         {
             var pos = Drawing.WorldToScreen(vector3);
             return !(pos.X + radius < 0) && !(pos.X - radius > Drawing.Width) && !(pos.Y + radius < 0)
@@ -358,7 +347,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Is Position under a turret</returns>
         public static bool IsUnderAllyTurret(this Vector3 position)
         {
-            return GameObjects.AllyTurrets.Any(turret => turret.IsValidTarget(950, false, position));
+            return GameObjects.AllyTurrets.Any(turret => !turret.IsDead && turret.Distance(position) < 950);
         }
 
         /// <summary>
@@ -368,17 +357,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Is Position under a turret</returns>
         public static bool IsUnderEnemyTurret(this Vector3 position)
         {
-            return GameObjects.EnemyTurrets.Any(turret => turret.IsValidTarget(950, false, position));
-        }
-
-        /// <summary>
-        ///     Returns whether the given position is under a turret
-        /// </summary>
-        /// <param name="position">Extended SharpDX Vector3</param>
-        /// <returns>Is Position under a turret</returns>
-        public static bool IsUnderTurret(this Vector3 position)
-        {
-            return GameObjects.Turrets.Any(turret => turret.IsValidTarget(950, false, position));
+            return GameObjects.EnemyTurrets.Any(turret => !turret.IsDead && turret.Distance(position) < 950);
         }
 
         /// <summary>

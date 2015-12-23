@@ -21,7 +21,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
     using System.Collections.Generic;
     using System.Linq;
 
-    using Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
 
     using SharpDX;
 
@@ -82,7 +82,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </returns>
         public static InventorySlot GetWardSlot()
         {
-            var wardIds = new[] { 3340, 3350, 3361, 3154, 2045, 2049, 2050, 2044 };
+            var wardIds = new[] { 2049, 2045, 2301, 2302, 2303, 3340, 3363, 3711, 1408, 1409, 1410, 1411, 3932, 2043 };
             return (from wardId in wardIds
                     where CanUseItem(wardId)
                     select GameObjects.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId)wardId))

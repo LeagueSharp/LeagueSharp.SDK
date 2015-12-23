@@ -20,7 +20,7 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Linq;
     using System.Text.RegularExpressions;
 
-    using Enumerations;
+    using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
     ///     The jungle utility class, provides utils for jungle related items.
@@ -42,12 +42,12 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <summary>
         ///     The legendary name regex list.
         /// </summary>
-        private static readonly string[] LegendaryNameRegex = { "SRU_Dragon", "SRU_Baron" };
+        private static readonly string[] LegendaryNameRegex = { "SRU_Dragon", "SRU_Baron", "SRU_RiftHerald" };
 
         /// <summary>
         ///     The small name regex list.
         /// </summary>
-        private static readonly string[] SmallNameRegex = { "Mini", "Sru_Crab" };
+        private static readonly string[] SmallNameRegex = { "SRU_[a-zA-Z](.*?)Mini", "Sru_Crab" };
 
         #endregion
 
@@ -62,7 +62,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>
         ///     The <see cref="JungleType" />
         /// </returns>
-        public static JungleType GetJungleType(this Obj_AI_Base minion)
+        public static JungleType GetJungleType(this Obj_AI_Minion minion)
         {
             if (SmallNameRegex.Any(regex => Regex.IsMatch(minion.Name, regex)))
             {
@@ -91,7 +91,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>
         ///     The <see cref="bool" />.
         /// </returns>
-        public static bool IsJungleBuff(this Obj_AI_Base minion)
+        public static bool IsJungleBuff(this Obj_AI_Minion minion)
         {
             var @base = minion.CharData.BaseSkinName;
             return @base.Equals("SRU_Blue") || @base.Equals("SRU_Red");

@@ -1126,8 +1126,9 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="releaseCast">Release Cast</param>
         private static void ShootChargedSpell(SpellSlot slot, Vector3 position, bool releaseCast = true)
         {
-            GameObjects.Player.Spellbook.CastSpell(slot, position, false);
+            position.Z = NavMesh.GetHeightForPosition(position.X, position.Y);
             GameObjects.Player.Spellbook.UpdateChargedSpell(slot, position, releaseCast, false);
+            GameObjects.Player.Spellbook.CastSpell(slot, position, false);
         }
 
         /// <summary>
@@ -1150,7 +1151,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// <param name="args">Spell-book Update Charged Spell Data</param>
         private void Spellbook_OnUpdateChargedSpell(Spellbook sender, SpellbookUpdateChargedSpellEventArgs args)
         {
-            if (sender.Owner.IsMe && Variables.TickCount - this.chargedReqSentT < 3000)
+            if (sender.Owner.IsMe && Variables.TickCount - this.chargedReqSentT < 3000 && args.ReleaseCast)
             {
                 args.Process = false;
             }

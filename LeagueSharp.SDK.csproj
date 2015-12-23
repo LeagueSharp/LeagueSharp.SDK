@@ -48,17 +48,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>F:\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>E:\Project\League Sharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>F:\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
+      <HintPath>E:\Project\League Sharp\System\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>F:\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>E:\Project\League Sharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>F:\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>E:\Project\League Sharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -317,7 +317,7 @@
   <ItemGroup>
     <None Include="LeagueSharp.SDK.snk" />
     <None Include="packages.config" />
-    <None Include="Resources\Damage\5.20.json" />
+    <None Include="Resources\Damage\5.24.json" />
     <None Include="Resources\Data\Gapclosers.json" />
   </ItemGroup>
   <ItemGroup>

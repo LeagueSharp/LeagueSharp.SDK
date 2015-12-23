@@ -78,10 +78,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
                                         {
                                             "Ahri", "Anivia", "Annie", "Ashe", "Azir", "Brand", "Caitlyn", "Cassiopeia",
                                             "Corki", "Draven", "Ezreal", "Graves", "Jinx", "Kalista", "Karma", "Karthus",
-                                            "Katarina", "Kennen", "KogMaw", "Leblanc", "Lucian", "Lux", "Malzahar",
-                                            "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", "Talon",
-                                            "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar",
-                                            "Velkoz", "Viktor", "Xerath", "Zed", "Ziggs", "Soraka"
+                                            "Katarina", "Kennen", "KogMaw", "Leblanc", "Kindred", "Lucian", "Lux",
+                                            "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra",
+                                            "Talon", "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne",
+                                            "Veigar", "Velkoz", "Viktor", "Xerath", "Zed", "Ziggs", "Soraka"
                                         },
                                 Value = 4
                             },
@@ -116,8 +116,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
                                             "Alistar", "Amumu", "Bard", "Blitzcrank", "Braum", "ChoGath", "DrMundo",
                                             "Garen", "Gnar", "Hecarim", "Janna", "JarvanIV", "Leona", "Lulu", "Malphite",
                                             "Nami", "Nasus", "Nautilus", "Nunu", "Olaf", "Rammus", "Renekton", "Sejuani",
-                                            "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona", "TahmKench",
-                                            "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac",
+                                            "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona", "TahmKench", "Taric",
+                                            "TahmKench", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac",
                                             "Zyra"
                                         },
                                 Value = 1
