@@ -17,6 +17,9 @@
 
 namespace LeagueSharp.SDK.Core
 {
+    using System.Globalization;
+    using System.Threading;
+
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Events;
     using LeagueSharp.SDK.Core.UI.IMenu;
@@ -58,6 +61,11 @@ namespace LeagueSharp.SDK.Core
             }
 
             initialized = true;
+
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
             // Initial notification.
             Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");
