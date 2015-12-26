@@ -18,6 +18,7 @@
 namespace LeagueSharp.SDK.Core
 {
     using System.Globalization;
+    using System.Security.Permissions;
     using System.Threading;
 
     using LeagueSharp.SDK.Core.Enumerations;
@@ -53,6 +54,7 @@ namespace LeagueSharp.SDK.Core
         /// <param name="args">
         ///     The additional arguments the loader passes.
         /// </param>
+        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
         public static void Init(string[] args)
         {
             if (initialized)
