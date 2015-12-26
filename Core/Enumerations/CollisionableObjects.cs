@@ -41,6 +41,11 @@ namespace LeagueSharp.SDK.Core.Enumerations
         YasuoWall,
 
         /// <summary>
+        ///     <c>Braum</c>'s Shield Collision-able Flag
+        /// </summary>
+        BraumShield,
+
+        /// <summary>
         ///     Wall Collision-able Flag
         /// </summary>
         Walls

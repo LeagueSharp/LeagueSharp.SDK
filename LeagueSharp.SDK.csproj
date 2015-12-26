@@ -77,6 +77,7 @@
     <Compile Include="Core\Bootstrap.cs" />
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\Enumerations\CastStates.cs" />
+    <Compile Include="Core\Enumerations\CastTypes.cs" />
     <Compile Include="Core\Enumerations\CenteredFlags.cs" />
     <Compile Include="Core\Enumerations\CollisionableObjects.cs" />
     <Compile Include="Core\Enumerations\DangerLevel.cs" />
@@ -93,6 +94,8 @@
     <Compile Include="Core\Enumerations\OrbwalkingType.cs" />
     <Compile Include="Core\Enumerations\PerformanceType.cs" />
     <Compile Include="Core\Enumerations\SkillshotType.cs" />
+    <Compile Include="Core\Enumerations\SpellTags.cs" />
+    <Compile Include="Core\Enumerations\SpellType.cs" />
     <Compile Include="Core\Enumerations\TargetSelectorMode.cs" />
     <Compile Include="Core\Enumerations\TeleportStatus.cs" />
     <Compile Include="Core\Enumerations\TeleportType.cs" />
@@ -278,6 +281,8 @@
     <Compile Include="Core\Wrappers\Orbwalking\Orbwalker.cs" />
     <Compile Include="Core\Wrappers\Orbwalking\Selector.cs" />
     <Compile Include="Core\Wrappers\Spell.cs" />
+    <Compile Include="Core\Wrappers\SpellDatabase\SpellDatabase.cs" />
+    <Compile Include="Core\Wrappers\SpellDatabase\SpellDatabaseEntry.cs" />
     <Compile Include="Core\Wrappers\SpellDataWrapper.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\Drawing.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\Humanizer.cs" />
