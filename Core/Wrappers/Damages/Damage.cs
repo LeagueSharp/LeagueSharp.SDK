@@ -20,9 +20,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System;
     using System.Linq;
 
-    using Enumerations;
-    using Extensions;
-    using Utils;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -137,7 +137,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 if (hero != null)
                 {
                     // Spoils of War
-                    if (hero.IsMelee() && targetMinion != null && targetMinion.IsEnemy
+                    if (hero.IsMelee && targetMinion != null && targetMinion.IsEnemy
                         && targetMinion.Team != GameObjectTeam.Neutral && hero.GetBuffCount("talentreaperdisplay") > 0)
                     {
                         if (
@@ -299,6 +299,34 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         #region Methods
 
         /// <summary>
+        ///     Calculates the physical damage the source would deal towards the target on a specific given amount, taking in
+        ///     consideration all of the damage modifiers.
+        /// </summary>
+        /// <param name="source">
+        ///     The source
+        /// </param>
+        /// <param name="target">
+        ///     The target
+        /// </param>
+        /// <param name="amount">
+        ///     The amount of damage
+        /// </param>
+        /// <param name="ignoreArmorPercent">
+        ///     The amount of armor to ignore.
+        /// </param>
+        /// <returns>
+        ///     The amount of estimated damage dealt to target from source.
+        /// </returns>
+        internal static double CalculatePhysicalDamage(
+            this Obj_AI_Base source,
+            Obj_AI_Base target,
+            double amount,
+            double ignoreArmorPercent)
+        {
+            return source.CalculatePhysicalDamage(target, amount) * ignoreArmorPercent;
+        }
+
+        /// <summary>
         ///     Calculates the magic damage the source would deal towards the target on a specific given amount, taking in
         ///     consideration all of the damage modifiers.
         /// </summary>
@@ -410,34 +438,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 target,
                 source.PassivePercentMod(target, value) * amount,
                 DamageType.Physical) + source.PassiveFlatMod(target);
-        }
-
-        /// <summary>
-        ///     Calculates the physical damage the source would deal towards the target on a specific given amount, taking in
-        ///     consideration all of the damage modifiers.
-        /// </summary>
-        /// <param name="source">
-        ///     The source
-        /// </param>
-        /// <param name="target">
-        ///     The target
-        /// </param>
-        /// <param name="amount">
-        ///     The amount of damage
-        /// </param>
-        /// <param name="ignoreArmorPercent">
-        ///     The amount of armor to ignore.
-        /// </param>
-        /// <returns>
-        ///     The amount of estimated damage dealt to target from source.
-        /// </returns>
-        internal static double CalculatePhysicalDamage(
-            this Obj_AI_Base source,
-            Obj_AI_Base target,
-            double amount,
-            double ignoreArmorPercent)
-        {
-            return source.CalculatePhysicalDamage(target, amount) * ignoreArmorPercent;
         }
 
         /// <summary>
@@ -651,7 +651,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
                 if (mastery != null && mastery.Points == 1)
                 {
-                    value -= targetHero.IsMelee() ? 2 : 1;
+                    value -= targetHero.IsMelee ? 2 : 1;
                 }
             }
 
@@ -678,17 +678,21 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         {
             if (source is Obj_AI_Turret)
             {
-                var minionType = target.GetMinionType();
+                var targetMinion = target as Obj_AI_Minion;
+                if (targetMinion != null)
+                {
+                    var minionType = targetMinion.GetMinionType();
 
-                if (minionType.HasFlag(MinionTypes.Siege) || minionType.HasFlag(MinionTypes.Super))
-                {
-                    // Siege minions and super minions receive 70% damage from turrets.
-                    amount *= 0.7d;
-                }
-                else if (minionType.HasFlag(MinionTypes.Normal))
-                {
-                    // Normal minions take 114% more damage from towers.
-                    amount *= 1.14285714285714d;
+                    if (minionType.HasFlag(MinionTypes.Siege) || minionType.HasFlag(MinionTypes.Super))
+                    {
+                        // Siege minions and super minions receive 70% damage from turrets.
+                        amount *= 0.7d;
+                    }
+                    else if (minionType.HasFlag(MinionTypes.Normal))
+                    {
+                        // Normal minions take 114% more damage from towers.
+                        amount *= 1.14285714285714d;
+                    }
                 }
             }
 
@@ -704,7 +708,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 // + Ranged champions: You deal and take 1.5% increased damage from all sources. 
                 if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
                 {
-                    amount *= hero.IsMelee() ? 1.02d : 1.015d;
+                    amount *= hero.IsMelee ? 1.02d : 1.015d;
                 }
 
                 // Havoc:
@@ -736,7 +740,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 // + Ranged champions: You deal and take 1.5% increased damage from all sources.
                 if (targetHero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
                 {
-                    amount *= targetHero.IsMelee() ? 1.01d : 1.015d;
+                    amount *= targetHero.IsMelee ? 1.01d : 1.015d;
                 }
             }
 

@@ -106,6 +106,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                     {
                         Obj_AI_Base.OnProcessSpellCast += this.OnObjAiBaseProcessSpellCast;
                         Obj_AI_Base.OnDoCast += this.OnObjAiBaseDoCast;
+                        Obj_AI_Base.OnBuffAdd += this.ObjAiBaseOnOnBuffAdd;
                         Spellbook.OnStopCast += this.OnSpellbookStopCast;
                         Game.OnUpdate += this.OnGameUpdate;
                     }
@@ -113,6 +114,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                     {
                         Obj_AI_Base.OnProcessSpellCast -= this.OnObjAiBaseProcessSpellCast;
                         Obj_AI_Base.OnDoCast -= this.OnObjAiBaseDoCast;
+                        Obj_AI_Base.OnBuffAdd -= this.ObjAiBaseOnOnBuffAdd;
                         Spellbook.OnStopCast -= this.OnSpellbookStopCast;
                         Game.OnUpdate -= this.OnGameUpdate;
                     }
@@ -404,6 +406,22 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         internal void InvokeAction(OrbwalkingActionArgs e)
         {
             this.OnAction?.Invoke(MethodBase.GetCurrentMethod().DeclaringType, e);
+        }
+
+        private void ObjAiBaseOnOnBuffAdd(Obj_AI_Base sender, Obj_AI_BaseBuffAddEventArgs args)
+        {
+            if (!this.Enabled)
+            {
+                return;
+            }
+            if (!sender.IsMe)
+            {
+                return;
+            }
+            if (args.Buff.DisplayName == "PoppyPassiveBuff" || args.Buff.DisplayName == "SonaPassiveReady")
+            {
+                this.ResetSwingTimer();
+            }
         }
 
         /// <summary>
