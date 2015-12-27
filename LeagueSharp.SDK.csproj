@@ -313,6 +313,46 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Third_Party\clipper\clipper.cs" />
+    <Compile Include="Third_Party\MoreLinq\Acquire.cs" />
+    <Compile Include="Third_Party\MoreLinq\AssertCount.cs" />
+    <Compile Include="Third_Party\MoreLinq\Batch.cs" />
+    <Compile Include="Third_Party\MoreLinq\Concat.cs" />
+    <Compile Include="Third_Party\MoreLinq\Consume.cs" />
+    <Compile Include="Third_Party\MoreLinq\DistinctBy.cs" />
+    <Compile Include="Third_Party\MoreLinq\EquiZip.cs" />
+    <Compile Include="Third_Party\MoreLinq\ExceptBy.cs" />
+    <Compile Include="Third_Party\MoreLinq\Fold.cs" />
+    <Compile Include="Third_Party\MoreLinq\Fold.g.cs" />
+    <Compile Include="Third_Party\MoreLinq\ForEach.cs" />
+    <Compile Include="Third_Party\MoreLinq\Generate.cs" />
+    <Compile Include="Third_Party\MoreLinq\GenerateByIndex.cs" />
+    <Compile Include="Third_Party\MoreLinq\GroupAdjacent.cs" />
+    <Compile Include="Third_Party\MoreLinq\Index.cs" />
+    <Compile Include="Third_Party\MoreLinq\MaxBy.cs" />
+    <Compile Include="Third_Party\MoreLinq\MinBy.cs" />
+    <Compile Include="Third_Party\MoreLinq\MoreEnumerable.cs" />
+    <Compile Include="Third_Party\MoreLinq\OrderedMerge.cs" />
+    <Compile Include="Third_Party\MoreLinq\Pad.cs" />
+    <Compile Include="Third_Party\MoreLinq\Pairwise.cs" />
+    <Compile Include="Third_Party\MoreLinq\Pipe.cs" />
+    <Compile Include="Third_Party\MoreLinq\Prepend.cs" />
+    <Compile Include="Third_Party\MoreLinq\PreScan.cs" />
+    <Compile Include="Third_Party\MoreLinq\Scan.cs" />
+    <Compile Include="Third_Party\MoreLinq\SequenceException.cs" />
+    <Compile Include="Third_Party\MoreLinq\SingleOrFallback.cs" />
+    <Compile Include="Third_Party\MoreLinq\SkipUntil.cs" />
+    <Compile Include="Third_Party\MoreLinq\Split.cs" />
+    <Compile Include="Third_Party\MoreLinq\TakeEvery.cs" />
+    <Compile Include="Third_Party\MoreLinq\TakeLast.cs" />
+    <Compile Include="Third_Party\MoreLinq\TakeUntil.cs" />
+    <Compile Include="Third_Party\MoreLinq\ToDataTable.cs" />
+    <Compile Include="Third_Party\MoreLinq\ToDelimitedString.cs" />
+    <Compile Include="Third_Party\MoreLinq\ToDelimitedString.g.cs" />
+    <Compile Include="Third_Party\MoreLinq\ToHashSet.cs" />
+    <Compile Include="Third_Party\MoreLinq\Trace.cs" />
+    <Compile Include="Third_Party\MoreLinq\Zip.cs" />
+    <Compile Include="Third_Party\MoreLinq\Zip.stub.cs" />
+    <Compile Include="Third_Party\MoreLinq\ZipLongest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LeagueSharp.SDK.snk" />
@@ -332,6 +372,7 @@
     <Content Include="Resources\Images\notifications_star.png" />
     <Content Include="Resources\Images\notifications_warning.png" />
     <Content Include="Third_Party\clipper\License.txt" />
+    <Content Include="Third_Party\MoreLinq\License.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
