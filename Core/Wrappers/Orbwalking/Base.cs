@@ -36,6 +36,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
     public abstract class Base<TK, T>
         where TK : struct, IConvertible where T : AttackableUnit
     {
+        #region Fields
+
+        private bool enabled;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -54,10 +60,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 throw new ArgumentException("TK must contain at least one value.");
             }
             this.InActiveMode = (TK)enumValues.GetValue(0);
-            Obj_AI_Base.OnProcessSpellCast += this.OnObjAiBaseProcessSpellCast;
-            Obj_AI_Base.OnDoCast += this.OnObjAiBaseDoCast;
-            Spellbook.OnStopCast += this.OnSpellbookStopCast;
-            Game.OnUpdate += this.OnGameUpdate;
         }
 
         #endregion
@@ -83,6 +85,41 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether this <see cref="Base{TK, T}" /> is enabled.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if enabled; otherwise, <c>false</c>.
+        /// </value>
+        public virtual bool Enabled
+        {
+            get
+            {
+                return this.enabled;
+            }
+            set
+            {
+                if (this.enabled != value)
+                {
+                    if (value)
+                    {
+                        Obj_AI_Base.OnProcessSpellCast += this.OnObjAiBaseProcessSpellCast;
+                        Obj_AI_Base.OnDoCast += this.OnObjAiBaseDoCast;
+                        Spellbook.OnStopCast += this.OnSpellbookStopCast;
+                        Game.OnUpdate += this.OnGameUpdate;
+                    }
+                    else
+                    {
+                        Obj_AI_Base.OnProcessSpellCast -= this.OnObjAiBaseProcessSpellCast;
+                        Obj_AI_Base.OnDoCast -= this.OnObjAiBaseDoCast;
+                        Spellbook.OnStopCast -= this.OnSpellbookStopCast;
+                        Game.OnUpdate -= this.OnGameUpdate;
+                    }
+                }
+                this.enabled = value;
+            }
+        }
 
         /// <summary>
         ///     Gets the last auto attack command tick.

@@ -138,7 +138,7 @@ namespace LeagueSharp.SDK.Core.Events
                                                              Speed = args.Speed,
                                                              StartPos = hero.ServerPosition.ToVector2(), Unit = sender,
                                                              Path = path,
-                                                             EndPos = DetectedDashes[hero.NetworkId].Path.Last(),
+                                                             EndPos = path.Last(),
                                                              EndTick =
                                                                  DetectedDashes[hero.NetworkId].StartTick
                                                                  + (int)

@@ -28,21 +28,26 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     Minion Collision-able Flag
         /// </summary>
-        Minions,
+        Minions = 1 << 0,
 
         /// <summary>
         ///     Hero Collision-able Flag
         /// </summary>
-        Heroes,
+        Heroes = 1 << 1,
 
         /// <summary>
-        ///     <c>Yasuo</c>'s Wall Collision-able Flag
+        ///     Yasuo's Wall Collision-able Flag
         /// </summary>
-        YasuoWall,
+        YasuoWall = 1 << 2,
+
+        /// <summary>
+        ///     Braum's Shield Collision-able Flag
+        /// </summary>
+        BraumShield = 1 << 3,
 
         /// <summary>
         ///     Wall Collision-able Flag
         /// </summary>
-        Walls
+        Walls = 1 << 4
     }
 }
