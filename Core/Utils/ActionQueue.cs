@@ -6,6 +6,7 @@
     using System.Reflection;
 
     using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions;
 
     /// <summary>
     ///     Queues actions.
@@ -32,8 +33,8 @@
         /// <value>
         ///     The queues.
         /// </value>
-        private static ConcurrentDictionary<string, ConcurrentHashSet<Item>> Queues { get; } =
-            new ConcurrentDictionary<string, ConcurrentHashSet<Item>>();
+        private static ConcurrentDictionary<string, SynchronizedCollection<Item>> Queues { get; } =
+            new ConcurrentDictionary<string, SynchronizedCollection<Item>>();
 
         #endregion
 
@@ -55,7 +56,7 @@
 
             var queue = Queues[caller];
 
-            return queue.RemoveWhere(x => x.Id.Equals(id)) > 0;
+            return queue.Remove(queue.Find(x => x.Id.Equals(id)));
         }
 
         /// <summary>
@@ -72,7 +73,7 @@
 
             if (!Queues.ContainsKey(caller))
             {
-                Queues[caller] = new ConcurrentHashSet<Item>();
+                Queues[caller] = new SynchronizedCollection<Item>();
             }
 
             Queues[caller].Add(item);
@@ -86,7 +87,7 @@
         /// <returns>An <see cref="IEnumerable{T}" /> of all of the queued items.</returns>
         public static IEnumerable<Item> GetItems()
         {
-            return Queues[Assembly.GetCallingAssembly().FullName] ?? new ConcurrentHashSet<Item>();
+            return Queues[Assembly.GetCallingAssembly().FullName] ?? new SynchronizedCollection<Item>();
         }
 
         #endregion
