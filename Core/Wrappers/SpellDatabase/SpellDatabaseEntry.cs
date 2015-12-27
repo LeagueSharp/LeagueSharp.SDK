@@ -15,153 +15,240 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-using System;
-using System.Linq;
-using System.Windows.Forms;
-using LeagueSharp;
-using LeagueSharp.SDK.Core.Enumerations;
-using LeagueSharp.SDK.Core.Extensions;
-using LeagueSharp.SDK.Core.Extensions.SharpDX;
-using LeagueSharp.SDK.Core.UI.IMenu.Values;
-using LeagueSharp.SDK.Core.Utils;
-using LeagueSharp.SDK.Core.Wrappers.Damages;
-
 namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
 {
+    using LeagueSharp.SDK.Core.Enumerations;
+
+    /// <summary>
+    ///     The spell database entry.
+    /// </summary>
     public class SpellDatabaseEntry
     {
+        #region Fields
+
         /// <summary>
-        /// SpellData Entry's Champion Name
-        /// </summary>
-        public string ChampionName;
-        /// <summary>
-        /// The SpellSlot
-        /// </summary>
-        public SpellSlot Slot;
-        /// <summary>
-        /// The Spell Type (skillshotline, skillshotcircle, targeted and so on)
-        /// </summary>
-        public SpellType SpellType;
-        /// <summary>
-        /// Array indicating the possible cast types (on enemy champion, on self, on a position)
-        /// </summary>
-        public CastType[] CastType;
-        /// <summary>
-        /// The buffs applied by the spell on the target enemy champion/s
-        /// </summary>
-        public BuffType[] AppliedBuffsOnEnemies;
-        /// <summary>
-        /// The buffs applied by the spell on allies
-        /// </summary>
-        public BuffType[] AppliedBuffsOnAllies;
-        /// <summary>
-        /// The buffs applied by the spell on my hero
-        /// </summary>
-        public BuffType[] AppliedBuffsOnSelf;
-        /// <summary>
-        /// Tags which define the spell (is it a heal? does it deal damage? etc. see <cref="SpellTags">SpellTags</cref>.
-        /// </summary>
-        public SpellTags[] SpellTags;
-        /// <summary>
-        /// The SData Spell Name
-        /// </summary>
-        public string SpellName = "";
-        /// <summary>
-        /// The Spell Delay
-        /// </summary>
-        public int Delay = 250;
-        /// <summary>
-        /// Does the spell reset the autoattack timer?
-        /// </summary>
-        public bool ResetsAutoAttackTimer = false;
-        /// <summary>
-        /// The Raw Spell Range
-        /// </summary>
-        public int Range = int.MaxValue;
-        /// <summary>
-        /// The raw radius of the spell (skillshots only)
-        /// </summary>
-        public int Radius;
-        /// <summary>
-        /// The width of the skillshot.
-        /// </summary>
-        public int Width = 50;
-        /// <summary>
-        /// The angle which the skillshot makes.
+        ///     The angle which the skillshot makes.
         /// </summary>
         public int Angle = 30;
+
         /// <summary>
-        /// The spell's missile name
+        ///     The buffs applied by the spell on allies
         /// </summary>
-        public string MissileSpellName = "";
+        public BuffType[] AppliedBuffsOnAllies;
+
         /// <summary>
-        /// The spell's missile acceleration
+        ///     The buffs applied by the spell on the target enemy champion/s
         /// </summary>
-        public int MissileAccel = 0;
+        public BuffType[] AppliedBuffsOnEnemies;
+
         /// <summary>
-        /// Is the missile delayed?
+        ///     The buffs applied by the spell on my hero
         /// </summary>
-        public bool MissileDelayed;
+        public BuffType[] AppliedBuffsOnSelf;
+        
         /// <summary>
-        /// Does the missile follow the target?
+        ///     Indicates whether the spell can be removed.
         /// </summary>
-        public bool MissileFollowsUnit;
+        public bool CanBeRemoved = false;
+
         /// <summary>
-        /// The max speed the spell missile can reach
+        ///     Array indicating the possible cast types (on enemy champion, on self, on a position)
         /// </summary>
-        public int MissileMaxSpeed = 0;
+        public CastType[] CastType;
+
         /// <summary>
-        /// The min speed you can find the missile at
+        ///     SpellData Entry's Champion Name
         /// </summary>
-        public int MissileMinSpeed = 0;
+        public string ChampionName;
+
         /// <summary>
-        /// Our spell missile average travel speed
-        /// </summary>
-        public int MissileSpeed = 1000;
-        /// <summary>
-        /// Specifies on a scale from 1 to 5 how dangerous our spell is
-        /// </summary>
-        public int DangerValue = 1;
-        /// <summary>
-        /// Extra missile names
-        /// </summary>
-        public string[] ExtraMissileNames = { };
-        /// <summary>
-        /// Extra spell names
-        /// </summary>
-        public string[] ExtraSpellNames = { };
-        /// <summary>
-        /// Is our spell dangerous?
-        /// </summary>
-        public bool IsDangerous = false;
-        /// <summary>
-        /// Source object name
-        /// </summary>
-        public string FromObject = "";
-        /// <summary>
-        /// Source object name
-        /// </summary>
-        public string SourceObjectName = "";
-        /// <summary>
-        /// Particle name on toggle
-        /// </summary>
-        public string ToggleParticleName = "";
-        /// <summary>
-        /// Source objects' names
-        /// </summary>
-        public string[] FromObjects = { };
-        /// <summary>
-        /// What the spell missile (if any) can collide with.
+        ///     What the spell missile (if any) can collide with.
         /// </summary>
         public CollisionableObjects[] CollisionObjects = { };
 
-        //OnProcessSpell Missile Detection stuff
-        public bool CanBeRemoved = false;
+        /// <summary>
+        ///     Specifies on a scale from 1 to 5 how dangerous our spell is
+        /// </summary>
+        public int DangerValue = 1;
+
+        /// <summary>
+        ///     The Spell Delay
+        /// </summary>
+        public int Delay = 250;
+
+        /// <summary>
+        ///     Extra missile names
+        /// </summary>
+        public string[] ExtraMissileNames = { };
+
+        /// <summary>
+        ///     Extra spell names
+        /// </summary>
+        public string[] ExtraSpellNames = { };
+
+        /// <summary>
+        ///     Indicates whether the spell is forcefully removed.
+        /// </summary>
         public bool ForceRemove = false;
 
-        public SpellDatabaseEntry() { }
+        /// <summary>
+        ///     Source object name
+        /// </summary>
+        public string FromObject = string.Empty;
 
-        public SpellDatabaseEntry(string championName,
+        /// <summary>
+        ///     Source objects' names
+        /// </summary>
+        public string[] FromObjects = { };
+
+        /// <summary>
+        ///     Is our spell dangerous?
+        /// </summary>
+        public bool IsDangerous = false;
+
+        /// <summary>
+        ///     The spell's missile acceleration
+        /// </summary>
+        public int MissileAccel = 0;
+
+        /// <summary>
+        ///     Is the missile delayed?
+        /// </summary>
+        public bool MissileDelayed;
+
+        /// <summary>
+        ///     Does the missile follow the target?
+        /// </summary>
+        public bool MissileFollowsUnit;
+
+        /// <summary>
+        ///     The max speed the spell missile can reach
+        /// </summary>
+        public int MissileMaxSpeed = 0;
+
+        /// <summary>
+        ///     The min speed you can find the missile at
+        /// </summary>
+        public int MissileMinSpeed = 0;
+
+        /// <summary>
+        ///     Our spell missile average travel speed
+        /// </summary>
+        public int MissileSpeed = 1000;
+
+        /// <summary>
+        ///     The spell's missile name
+        /// </summary>
+        public string MissileSpellName = string.Empty;
+
+        /// <summary>
+        ///     The raw radius of the spell (skillshots only)
+        /// </summary>
+        public int Radius;
+
+        /// <summary>
+        ///     The Raw Spell Range
+        /// </summary>
+        public int Range = int.MaxValue;
+
+        /// <summary>
+        ///     Does the spell reset the autoattack timer?
+        /// </summary>
+        public bool ResetsAutoAttackTimer;
+
+        /// <summary>
+        ///     The SpellSlot
+        /// </summary>
+        public SpellSlot Slot;
+
+        /// <summary>
+        ///     Source object name
+        /// </summary>
+        public string SourceObjectName = string.Empty;
+
+        /// <summary>
+        ///     The SData Spell Name
+        /// </summary>
+        public string SpellName = string.Empty;
+
+        /// <summary>
+        ///     Tags which define the spell (is it a heal? does it deal damage? etc. see <see cref="SpellTags" />.
+        /// </summary>
+        public SpellTags[] SpellTags;
+
+        /// <summary>
+        ///     The Spell Type (skillshotline, skillshotcircle, targeted and so on)
+        /// </summary>
+        public SpellType SpellType;
+
+        /// <summary>
+        ///     Particle name on toggle
+        /// </summary>
+        public string ToggleParticleName = string.Empty;
+
+        /// <summary>
+        ///     The width of the skillshot.
+        /// </summary>
+        public int Width = 50;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="SpellDatabaseEntry" /> class.
+        /// </summary>
+        public SpellDatabaseEntry()
+        {
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="SpellDatabaseEntry" /> class.
+        /// </summary>
+        /// <param name="championName">
+        ///     The champion name.
+        /// </param>
+        /// <param name="spellName">
+        ///     The spell name.
+        /// </param>
+        /// <param name="slot">
+        ///     The slot.
+        /// </param>
+        /// <param name="spellType">
+        ///     The spell type.
+        /// </param>
+        /// <param name="castType">
+        ///     The cast type.
+        /// </param>
+        /// <param name="spellTags">
+        ///     The spell tags.
+        /// </param>
+        /// <param name="resetsAutoAttackTimer">
+        ///     Indicates whether the spell resets the auto attack timer.
+        /// </param>
+        /// <param name="range">
+        ///     The range.
+        /// </param>
+        /// <param name="delay">
+        ///     The delay.
+        /// </param>
+        /// <param name="radius">
+        ///     The radius.
+        /// </param>
+        /// <param name="width">
+        ///     The width.
+        /// </param>
+        /// <param name="missileSpeed">
+        ///     The missile speed.
+        /// </param>
+        /// <param name="angle">
+        ///     The angle.
+        /// </param>
+        /// <param name="defaultDangerValue">
+        ///     The default danger value.
+        /// </param>
+        public SpellDatabaseEntry(
+            string championName,
             string spellName,
             SpellSlot slot,
             SpellType spellType,
@@ -176,20 +263,22 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             int angle = 360,
             int defaultDangerValue = 1)
         {
-            ChampionName = championName;
-            SpellName = spellName;
-            Slot = slot;
-            SpellType = spellType;
-            CastType = castType;
-            SpellTags = spellTags;
-            ResetsAutoAttackTimer = false;
-            Delay = delay;
-            Range = range;
-            Radius = radius;
-            Width = width;
-            MissileSpeed = missileSpeed;
-            Angle = angle;
-            DangerValue = defaultDangerValue;
+            this.ChampionName = championName;
+            this.SpellName = spellName;
+            this.Slot = slot;
+            this.SpellType = spellType;
+            this.CastType = castType;
+            this.SpellTags = spellTags;
+            this.ResetsAutoAttackTimer = resetsAutoAttackTimer;
+            this.Delay = delay;
+            this.Range = range;
+            this.Radius = radius;
+            this.Width = width;
+            this.MissileSpeed = missileSpeed;
+            this.Angle = angle;
+            this.DangerValue = defaultDangerValue;
         }
+
+        #endregion
     }
 }

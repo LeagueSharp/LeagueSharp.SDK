@@ -18,62 +18,62 @@
 namespace LeagueSharp.SDK.Core.Enumerations
 {
     /// <summary>
-    /// <c>SpellType</c> enumeration
+    ///     <c>SpellType</c> enumeration
     /// </summary>
     public enum SpellType
     {
         /// <summary>
-        /// The spell is a Circle Skillshot
+        ///     The spell is a Circle Skillshot
         /// </summary>
         SkillshotCircle,
-        
+
         /// <summary>
-        /// The spell is a Line Skillshot
+        ///     The spell is a Line Skillshot
         /// </summary>
         SkillshotLine,
 
         /// <summary>
-        /// The spell is a Line Skillshot that creates a Missile
+        ///     The spell is a Line Skillshot that creates a Missile
         /// </summary>
         SkillshotMissileLine,
 
         /// <summary>
-        /// The spell is a Cone Skillshot
+        ///     The spell is a Cone Skillshot
         /// </summary>
         SkillshotCone,
 
         /// <summary>
-        /// The spell is a Cone Skillshot that leaves a Missile
+        ///     The spell is a Cone Skillshot that leaves a Missile
         /// </summary>
         SkillshotMissileCone,
 
         /// <summary>
-        /// The spell is a Ring Skillshot (Veigar E)
+        ///     The spell is a Ring Skillshot (Veigar E)
         /// </summary>
         SkillshotRing,
 
         /// <summary>
-        /// The spell is an Arc Skillshot (Diana Q)
+        ///     The spell is an Arc Skillshot (Diana Q)
         /// </summary>
         SkillshotArc,
 
         /// <summary>
-        /// The spell is Targeted
+        ///     The spell is Targeted
         /// </summary>
         Targeted,
 
         /// <summary>
-        /// The spell can be toggled on/off
+        ///     The spell can be toggled on/off
         /// </summary>
         Toggled,
 
         /// <summary>
-        /// The spell can be activated, after which it lasts for a while (Vayne R, Olaf R)
+        ///     The spell can be activated, after which it lasts for a while (Vayne R, Olaf R)
         /// </summary>
         Activated,
-        
+
         /// <summary>
-        /// The spell does nothing else but contain a passive (Vayne W, Mini Gnar W)
+        ///     The spell does nothing else but contain a passive (Vayne W, Mini Gnar W)
         /// </summary>
         Passive
     }
