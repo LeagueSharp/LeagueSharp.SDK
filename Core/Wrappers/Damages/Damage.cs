@@ -137,7 +137,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 if (hero != null)
                 {
                     // Spoils of War
-                    if (hero.IsMelee() && targetMinion != null && targetMinion.IsEnemy
+                    if (hero.IsMelee && targetMinion != null && targetMinion.IsEnemy
                         && targetMinion.Team != GameObjectTeam.Neutral && hero.GetBuffCount("talentreaperdisplay") > 0)
                     {
                         if (
@@ -651,7 +651,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
                 if (mastery != null && mastery.Points == 1)
                 {
-                    value -= targetHero.IsMelee() ? 2 : 1;
+                    value -= targetHero.IsMelee ? 2 : 1;
                 }
             }
 
@@ -678,17 +678,21 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         {
             if (source is Obj_AI_Turret)
             {
-                var minionType = target.GetMinionType();
+                var minion = target as Obj_AI_Minion;
+                if (minion != null)
+                {
+                    var minionType = minion.GetMinionType();
 
-                if (minionType.HasFlag(MinionTypes.Siege) || minionType.HasFlag(MinionTypes.Super))
-                {
-                    // Siege minions and super minions receive 70% damage from turrets.
-                    amount *= 0.7d;
-                }
-                else if (minionType.HasFlag(MinionTypes.Normal))
-                {
-                    // Normal minions take 114% more damage from towers.
-                    amount *= 1.14285714285714d;
+                    if (minionType.HasFlag(MinionTypes.Siege) || minionType.HasFlag(MinionTypes.Super))
+                    {
+                        // Siege minions and super minions receive 70% damage from turrets.
+                        amount *= 0.7d;
+                    }
+                    else if (minionType.HasFlag(MinionTypes.Normal))
+                    {
+                        // Normal minions take 114% more damage from towers.
+                        amount *= 1.14285714285714d;
+                    }
                 }
             }
 
@@ -704,7 +708,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 // + Ranged champions: You deal and take 1.5% increased damage from all sources. 
                 if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
                 {
-                    amount *= hero.IsMelee() ? 1.02d : 1.015d;
+                    amount *= hero.IsMelee ? 1.02d : 1.015d;
                 }
 
                 // Havoc:
@@ -736,7 +740,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 // + Ranged champions: You deal and take 1.5% increased damage from all sources.
                 if (targetHero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
                 {
-                    amount *= targetHero.IsMelee() ? 1.01d : 1.015d;
+                    amount *= targetHero.IsMelee ? 1.01d : 1.015d;
                 }
             }
 

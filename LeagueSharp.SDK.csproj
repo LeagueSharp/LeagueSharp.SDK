@@ -48,17 +48,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>..\League Sharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>E:\Project\League Sharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\League Sharp\System\Newtonsoft.Json.dll</HintPath>
+      <HintPath>E:\Project\League Sharp\System\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>..\League Sharp\System\SharpDX.dll</HintPath>
+      <HintPath>E:\Project\League Sharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>..\League Sharp\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>E:\Project\League Sharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

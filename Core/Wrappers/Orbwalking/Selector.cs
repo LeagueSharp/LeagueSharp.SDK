@@ -233,7 +233,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 Obj_AI_Minion farmUnderTurretMinion = null;
                 Obj_AI_Minion noneKillableMinion = null;
                 // return all the minions under turret
-                var turretMinions = minions.Where(m => Minion.IsMinion(m) && m.Position.IsUnderAllyTurret()).ToList();
+                var turretMinions = minions.Where(m => m.IsMinion() && m.Position.IsUnderAllyTurret()).ToList();
                 if (turretMinions.Any())
                 {
                     // get the turret aggro minion
@@ -292,7 +292,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                                                                  + (int)(GameObjects.Player.AttackDelay * 1000)
                                                                  - (Variables.TickCount + Game.Ping / 2 + 25)
                                                                : 0;
-                                var timeToLandAttack = GameObjects.Player.IsMelee()
+                                var timeToLandAttack = GameObjects.Player.IsMelee
                                                            ? GameObjects.Player.AttackCastDelay * 1000
                                                            : GameObjects.Player.AttackCastDelay * 1000
                                                              + 1000
@@ -489,7 +489,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 GameObjects.EnemyMinions.Where(m => this.IsValidUnit(m)))
             {
                 var baseName = minion.CharData.BaseSkinName.ToLower();
-                if (minions && Minion.IsMinion(minion))
+                if (minions && minion.IsMinion())
                 {
                     minionList.Add(minion);
                 }
