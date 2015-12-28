@@ -354,16 +354,6 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         }
 
         /// <summary>
-        ///     Returns whether the given position is under a turret
-        /// </summary>
-        /// <param name="position">Extended SharpDX Vector4</param>
-        /// <returns>Is Position under a turret</returns>
-        public static bool IsUnderTurret(this Vector4 position)
-        {
-            return position.ToVector3().IsUnderTurret();
-        }
-
-        /// <summary>
         ///     Checks for if the extended Vector4 is valid.
         /// </summary>
         /// <param name="vector4">

@@ -362,7 +362,7 @@
   <ItemGroup>
     <None Include="LeagueSharp.SDK.snk" />
     <None Include="packages.config" />
-    <None Include="Resources\Damage\5.20.json" />
+    <None Include="Resources\Damage\5.24.json" />
     <None Include="Resources\Data\Gapclosers.json" />
   </ItemGroup>
   <ItemGroup>
