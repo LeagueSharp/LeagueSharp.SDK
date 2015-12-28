@@ -20,10 +20,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Utils;
+    
+    using Extensions;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -155,7 +153,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             (hero, @base) => hero.HasBuff("caitlynheadshot"),
                             DamageType.Physical,
                             (hero, @base) =>
-                            @base is Obj_AI_Minion && @base.GetMinionType() != MinionTypes.Ward
+                            @base is Obj_AI_Minion
                                 ? hero.CalculateDamage(@base, DamageType.Physical, hero.TotalAttackDamage * 1.5f)
                                 : @base is Obj_AI_Hero
                                       ? hero.CalculatePhysicalDamage(@base, hero.TotalAttackDamage * .5f, .5f)
@@ -838,8 +836,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         AddPassiveAttack(
                             "Thresh",
                             (hero, @base) =>
-                            hero.Buffs.Any(b => b.Name.Contains("threshqpassive")) && !(@base is Obj_AI_Turret)
-                            && @base.GetMinionType() != MinionTypes.Ward,
+                            hero.Buffs.Any(b => b.Name.Contains("threshqpassive")) && !(@base is Obj_AI_Turret),
                             DamageType.Magical,
                             (hero, @base) =>
                             Math.Max(hero.GetBuffCount("threshpassivesouls"), 0)
@@ -1006,8 +1003,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     case "Wukong":
                         AddPassiveAttack(
                             "Wukong",
-                            (hero, @base) =>
-                            hero.HasBuff("MonkeyKingDoubleAttack") && @base.GetMinionType() != MinionTypes.Ward,
+                            (hero, @base) => hero.HasBuff("MonkeyKingDoubleAttack"),
                             DamageType.Physical,
                             (hero, @base) =>
                             new[] { 30, 60, 90, 120, 150 }[hero.Spellbook.GetSpell(SpellSlot.Q).Level - 1]
