@@ -348,9 +348,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
             var gTarget = target ?? this.GetTarget();
             if (gTarget != null && gTarget.IsValidTarget(gTarget.GetRealAutoAttackRange()))
             {
-                this.Attack(gTarget);
+                if (this.CanAttack())
+                {
+                    this.Attack(gTarget);
+                }
             }
-            this.Move(position.HasValue && position.Value.IsValid() ? position.Value : Game.CursorPos);
+            if (this.CanMove())
+            {
+                this.Move(position.HasValue && position.Value.IsValid() ? position.Value : Game.CursorPos);
+            }
         }
 
         /// <summary>

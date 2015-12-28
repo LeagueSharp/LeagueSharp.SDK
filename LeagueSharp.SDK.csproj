@@ -96,7 +96,6 @@
     <Compile Include="Core\Enumerations\SkillshotType.cs" />
     <Compile Include="Core\Enumerations\SpellTags.cs" />
     <Compile Include="Core\Enumerations\SpellType.cs" />
-    <Compile Include="Core\Enumerations\TargetSelectorMode.cs" />
     <Compile Include="Core\Enumerations\TeleportStatus.cs" />
     <Compile Include="Core\Enumerations\TeleportType.cs" />
     <Compile Include="Core\Enumerations\TurretType.cs" />
@@ -327,7 +326,6 @@
     <Compile Include="Third_Party\MoreLinq\EquiZip.cs" />
     <Compile Include="Third_Party\MoreLinq\ExceptBy.cs" />
     <Compile Include="Third_Party\MoreLinq\Fold.cs" />
-    <Compile Include="Third_Party\MoreLinq\Fold.g.cs" />
     <Compile Include="Third_Party\MoreLinq\ForEach.cs" />
     <Compile Include="Third_Party\MoreLinq\Generate.cs" />
     <Compile Include="Third_Party\MoreLinq\GenerateByIndex.cs" />
@@ -352,11 +350,9 @@
     <Compile Include="Third_Party\MoreLinq\TakeUntil.cs" />
     <Compile Include="Third_Party\MoreLinq\ToDataTable.cs" />
     <Compile Include="Third_Party\MoreLinq\ToDelimitedString.cs" />
-    <Compile Include="Third_Party\MoreLinq\ToDelimitedString.g.cs" />
     <Compile Include="Third_Party\MoreLinq\ToHashSet.cs" />
     <Compile Include="Third_Party\MoreLinq\Trace.cs" />
     <Compile Include="Third_Party\MoreLinq\Zip.cs" />
-    <Compile Include="Third_Party\MoreLinq\Zip.stub.cs" />
     <Compile Include="Third_Party\MoreLinq\ZipLongest.cs" />
   </ItemGroup>
   <ItemGroup>

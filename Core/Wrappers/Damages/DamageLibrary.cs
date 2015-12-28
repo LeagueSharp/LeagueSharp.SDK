@@ -82,7 +82,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
         private static void CreateDamages(IDictionary<string, JToken> damages)
         {
-            foreach (var champion in GameObjects.Heroes.Select(h => h.ChampionName))
+            foreach (var champion in GameObjects.Heroes.Select(h => h.ChampionName).Distinct())
             {
                 JToken value;
                 if (damages.TryGetValue(champion, out value))
