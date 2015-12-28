@@ -35,21 +35,35 @@ namespace LeagueSharp.SDK.Core.Utils
     {
         #region Static Fields
 
+        private static readonly List<string> CloneList = new List<string> { "leblanc", "shaco", "monkeyking" };
+
         /// <summary>
         ///     The normal minion list.
         /// </summary>
         private static readonly List<string> NormalMinionList = new List<string>
                                                                     {
-                                                                        "SRU_ChaosMinionMelee", "SRU_ChaosMinionRanged", 
-                                                                        "SRU_OrderMinionMelee", "SRU_OrderMinionRanged"
+                                                                        "SRU_ChaosMinionMelee", "SRU_ChaosMinionRanged",
+                                                                        "SRU_OrderMinionMelee", "SRU_OrderMinionRanged",
+                                                                        "HA_ChaosMinionMelee", "HA_ChaosMinionRanged",
+                                                                        "HA_OrderMinionMelee", "HA_OrderMinionRanged"
                                                                     };
+
+        private static readonly List<string> PetList = new List<string>
+                                                           {
+                                                               "annietibbers", "elisespiderling", "heimertyellow",
+                                                               "heimertblue", "illaoiminion", "malzaharvoidling",
+                                                               "shacobox", "yorickspectralghoul", "yorickdecayedghoul",
+                                                               "yorickravenousghoul", "zyrathornplant",
+                                                               "zyragraspingplant"
+                                                           };
 
         /// <summary>
         ///     The siege minion list.
         /// </summary>
         private static readonly List<string> SiegeMinionList = new List<string>
                                                                    {
-                                                                      "SRU_ChaosMinionSiege", "SRU_OrderMinionSiege" 
+                                                                       "SRU_ChaosMinionSiege", "SRU_OrderMinionSiege",
+                                                                       "HA_ChaosMinionSiege", "HA_OrderMinionSiege"
                                                                    };
 
         /// <summary>
@@ -57,7 +71,8 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </summary>
         private static readonly List<string> SuperMinionList = new List<string>
                                                                    {
-                                                                      "SRU_ChaosMinionSuper", "SRU_OrderMinionSuper" 
+                                                                       "SRU_ChaosMinionSuper", "SRU_OrderMinionSuper",
+                                                                       "HA_ChaosMinionSuper", "HA_OrderMinionSuper"
                                                                    };
 
         #endregion
@@ -83,9 +98,9 @@ namespace LeagueSharp.SDK.Core.Utils
         ///     The best <see cref="FarmLocation" />
         /// </returns>
         public static FarmLocation GetBestCircularFarmLocation(
-            List<Vector2> minionPositions, 
-            float width, 
-            float range, 
+            List<Vector2> minionPositions,
+            float width,
+            float range,
             int useMecMax = 9)
         {
             var result = default(Vector2);
@@ -226,14 +241,14 @@ namespace LeagueSharp.SDK.Core.Utils
         ///     List of Points in <see cref="Vector2" /> type
         /// </returns>
         public static List<Vector2> GetMinionsPredictedPositions(
-            List<Obj_AI_Base> minions, 
-            float delay, 
-            float width, 
-            float speed, 
-            Vector3 from, 
-            float range, 
-            bool collision, 
-            SkillshotType stype, 
+            List<Obj_AI_Base> minions,
+            float delay,
+            float width,
+            float speed,
+            Vector3 from,
+            float range,
+            bool collision,
+            SkillshotType stype,
             Vector3 rangeCheckFrom = default(Vector3))
         {
             from = from.ToVector2().IsValid() ? from : ObjectManager.Player.ServerPosition;
@@ -243,7 +258,7 @@ namespace LeagueSharp.SDK.Core.Utils
                         Movement.GetPrediction(
                             new PredictionInput
                                 {
-                                    Unit = minion, Delay = delay, Radius = width, Speed = speed, From = @from, 
+                                    Unit = minion, Delay = delay, Radius = width, Speed = speed, From = @from,
                                     Range = range, Collision = collision, Type = stype, RangeCheckFrom = rangeCheckFrom
                                 })
                     into pos
@@ -260,7 +275,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>
         ///     The <see cref="MinionTypes" />
         /// </returns>
-        public static MinionTypes GetMinionType(this Obj_AI_Base minion)
+        public static MinionTypes GetMinionType(this Obj_AI_Minion minion)
         {
             var baseSkinName = minion.CharData.BaseSkinName;
 
@@ -280,7 +295,7 @@ namespace LeagueSharp.SDK.Core.Utils
                 return MinionTypes.Super | MinionTypes.Melee;
             }
 
-            if (baseSkinName.ToLower().Contains("ward") || baseSkinName.Contains("trinket"))
+            if (baseSkinName.ToLower().Contains("ward") || baseSkinName.ToLower().Contains("trinket"))
             {
                 return MinionTypes.Ward;
             }
@@ -292,12 +307,23 @@ namespace LeagueSharp.SDK.Core.Utils
         ///     Tells whether the <see cref="Obj_AI_Minion" /> is an actual minion.
         /// </summary>
         /// <param name="minion">The Minion</param>
-        /// <param name="includeWards">Whether to include wards.</param>
         /// <returns>Whether the <see cref="Obj_AI_Minion" /> is an actual minion.</returns>
-        public static bool IsMinion(Obj_AI_Minion minion, bool includeWards = false)
+        public static bool IsMinion(this Obj_AI_Minion minion)
+        {
+            return minion.GetMinionType().HasFlag(MinionTypes.Melee)
+                   || minion.GetMinionType().HasFlag(MinionTypes.Ranged);
+        }
+
+        /// <summary>
+        ///     Tells whether the <see cref="Obj_AI_Minion" /> is an actual minion.
+        /// </summary>
+        /// <param name="minion">The Minion</param>
+        /// <param name="includeClones">Whether to include clones.</param>
+        /// <returns>Whether the <see cref="Obj_AI_Minion" /> is an actual pet.</returns>
+        public static bool IsPet(this Obj_AI_Minion minion, bool includeClones = true)
         {
             var name = minion.CharData.BaseSkinName.ToLower();
-            return name.Contains("minion") || (includeWards && (name.Contains("ward") || name.Contains("trinket")));
+            return PetList.Contains(name) || (includeClones && CloneList.Contains(name));
         }
 
         #endregion
