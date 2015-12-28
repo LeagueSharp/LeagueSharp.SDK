@@ -310,7 +310,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                 sender.AttackCastDelay * 1000,
                 sender.AttackDelay * 1000 - (sender is Obj_AI_Turret ? 70 : 0),
                 sender.IsMelee ? int.MaxValue : (int)args.SData.MissileSpeed,
-                (float)sender.GetAutoAttackDamage(target, true));
+                (float)sender.GetAutoAttackDamage(target));
             ActiveAttacks.Add(sender.NetworkId, attackData);
         }
 
