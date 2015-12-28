@@ -38,8 +38,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
 
         #region Public Methods and Operators
 
-        public float GetValue(Obj_AI_Hero hero)
-            => hero.Health < GameObjects.Player.GetAutoAttackDamage(hero, true) ? 1 : 0;
+        public float GetValue(Obj_AI_Hero hero) => hero.Health < GameObjects.Player.GetAutoAttackDamage(hero) ? 1 : 0;
 
         #endregion
     }

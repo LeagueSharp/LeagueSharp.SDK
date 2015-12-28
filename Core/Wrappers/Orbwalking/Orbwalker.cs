@@ -488,8 +488,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                         this.Selector.GetEnemyMinions(GameObjects.Player.GetRealAutoAttackRange() * 2f)
                             .Where(
                                 m =>
-                                m.Position.IsOnScreen()
-                                && m.Health < GameObjects.Player.GetAutoAttackDamage(m, true) * 2f);
+                                m.Position.IsOnScreen() && m.Health < GameObjects.Player.GetAutoAttackDamage(m) * 2f);
                     foreach (var minion in minions)
                     {
                         var value = 255 - (minion.Health * 2);
@@ -505,9 +504,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 {
                     var minions =
                         this.Selector.GetEnemyMinions(GameObjects.Player.GetRealAutoAttackRange() * 2f)
-                            .Where(
-                                m =>
-                                m.Position.IsOnScreen() && m.Health < GameObjects.Player.GetAutoAttackDamage(m, true));
+                            .Where(m => m.Position.IsOnScreen() && m.Health < GameObjects.Player.GetAutoAttackDamage(m));
                     foreach (var minion in minions)
                     {
                         Drawing.DrawCircle(minion.Position, minion.BoundingRadius * 2f, Color.FromArgb(255, 0, 255, 0));
