@@ -22,12 +22,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System.Linq;
     using System.Security.Permissions;
     using System.Text;
+
     using Enumerations;
     using Events;
+    using Utils;
+    using Properties;
+
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using Properties;
-    using Utils;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -40,7 +42,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         ///     The damage version files.
         /// </summary>
         private static readonly IDictionary<string, byte[]> DamageFiles = new Dictionary<string, byte[]>
-                                                                              { { "5.20", Resources._5_20 } };
+                                                                              { { "5.24", Resources._5_24 } };
 
         #endregion
 
