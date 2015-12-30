@@ -95,6 +95,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// </summary>
         private static Dictionary<string, List<InterruptableSpellData>> InterruptableSpellsDictionary { get; }
 
+        private static List<InterruptableSpellData> GlobalInterruptableSpellsList { get; } 
         #endregion
 
         #region Public Methods and Operators
@@ -199,6 +200,10 @@ namespace LeagueSharp.SDK.Core.Events
             RegisterSpell("Warwick", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Xerath", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Varus", new InterruptableSpellData(SpellSlot.Q, DangerLevel.Low, false));
+
+            GlobalInterruptableSpellsList.Add(new InterruptableSpellData("OdinChannel", DangerLevel.Low));
+            GlobalInterruptableSpellsList.Add(new InterruptableSpellData("OdinChannelBomb", DangerLevel.Low));
+            GlobalInterruptableSpellsList.Add(new InterruptableSpellData("summonerteleport", DangerLevel.Medium));
         }
 
         /// <summary>
@@ -211,6 +216,14 @@ namespace LeagueSharp.SDK.Core.Events
             var target = sender as Obj_AI_Hero;
             if (target == null || CastingInterruptableSpellDictionary.ContainsKey(target.NetworkId))
             {
+                return;
+            }
+
+            var globalInterruptSpell = GlobalInterruptableSpellsList.FirstOrDefault(s => s.Name.Equals(args.SData.Name));
+
+            if (globalInterruptSpell != null)
+            {
+                CastingInterruptableSpellDictionary.Add(target.NetworkId, globalInterruptSpell);
                 return;
             }
 
@@ -296,6 +309,24 @@ namespace LeagueSharp.SDK.Core.Events
                 this.MovementInterrupts = movementInterrupts;
             }
 
+            /// <summary>
+            ///     Initializes a new instance of the <see cref="InterruptableSpellData" /> class.
+            /// </summary>
+            /// <param name="name">
+            ///     Spell Name
+            /// </param>
+            /// <param name="dangerLevel">
+            ///     Danger Level
+            /// </param>
+            /// <param name="movementInterrupts">
+            ///     Does movement interrupt the spell
+            /// </param>
+            public InterruptableSpellData(string name, DangerLevel dangerLevel, bool movementInterrupts = true)
+            {
+                this.Name = name;
+                this.DangerLevel = dangerLevel;
+                this.MovementInterrupts = movementInterrupts;
+            }
             #endregion
 
             #region Public Properties
@@ -309,6 +340,11 @@ namespace LeagueSharp.SDK.Core.Events
             ///     Gets a value indicating whether movement interrupts.
             /// </summary>
             public bool MovementInterrupts { get; }
+
+            /// <summary>
+            ///     Gets the name.
+            /// </summary>
+            public string Name { get; }
 
             /// <summary>
             ///     Gets the slot.
