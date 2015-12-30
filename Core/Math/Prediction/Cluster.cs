@@ -114,7 +114,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                                          {
                                              new PossibleTarget
                                                  {
-                                                     Position = mainTargetPrediction.UnitPosition.ToVector2(), 
+                                                     Position = mainTargetPrediction.UnitPosition.ToVector2(),
                                                      Unit = input.Unit
                                                  }
                                          };
@@ -130,15 +130,14 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                     var mecCircle = ConvexHull.GetMec(posibleTargets.Select(h => h.Position).ToList());
 
                     if (mecCircle.Radius <= input.RealRadius - 10
-                        && Vector2.DistanceSquared(mecCircle.Center, input.RangeCheckFrom.ToVector2())
-                        < input.Range * input.Range)
+                        && mecCircle.Center.DistanceSquared(input.RangeCheckFrom) < input.Range * input.Range)
                     {
                         return new PredictionOutput
                                    {
-                                       AoeTargetsHit = posibleTargets.Select(h => (Obj_AI_Hero)h.Unit).ToList(), 
-                                       CastPosition = mecCircle.Center.ToVector3(), 
-                                       UnitPosition = mainTargetPrediction.UnitPosition, 
-                                       Hitchance = mainTargetPrediction.Hitchance, Input = input, 
+                                       AoeTargetsHit = posibleTargets.Select(h => (Obj_AI_Hero)h.Unit).ToList(),
+                                       CastPosition = mecCircle.Center.ToVector3(),
+                                       UnitPosition = mainTargetPrediction.UnitPosition,
+                                       Hitchance = mainTargetPrediction.Hitchance, Input = input,
                                        AoeHitCount = posibleTargets.Count
                                    };
                     }
@@ -147,7 +146,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                     var maxdistindex = 1;
                     for (var i = 1; i < posibleTargets.Count; i++)
                     {
-                        var distance = Vector2.DistanceSquared(posibleTargets[i].Position, posibleTargets[0].Position);
+                        var distance = posibleTargets[i].Position.DistanceSquared(posibleTargets[0].Position);
                         if (distance > maxdist || maxdist.CompareTo(-1) == 0)
                         {
                             maxdistindex = i;
@@ -187,7 +186,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                                          {
                                              new PossibleTarget
                                                  {
-                                                     Position = mainTargetPrediction.UnitPosition.ToVector2(), 
+                                                     Position = mainTargetPrediction.UnitPosition.ToVector2(),
                                                      Unit = input.Unit
                                                  }
                                          };
@@ -236,12 +235,12 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                         }
                     }
 
-                    if (bestCandidateHits > 1 && input.From.ToVector2().DistanceSquared(bestCandidate) > 50 * 50)
+                    if (bestCandidateHits > 1 && input.From.DistanceSquared(bestCandidate) > 50 * 50)
                     {
                         return new PredictionOutput
                                    {
-                                       Hitchance = mainTargetPrediction.Hitchance, AoeHitCount = bestCandidateHits, 
-                                       UnitPosition = mainTargetPrediction.UnitPosition, 
+                                       Hitchance = mainTargetPrediction.Hitchance, AoeHitCount = bestCandidateHits,
+                                       UnitPosition = mainTargetPrediction.UnitPosition,
                                        CastPosition = bestCandidate.ToVector3(), Input = input
                                    };
                     }
@@ -299,7 +298,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                                          {
                                              new PossibleTarget
                                                  {
-                                                     Position = mainTargetPrediction.UnitPosition.ToVector2(), 
+                                                     Position = mainTargetPrediction.UnitPosition.ToVector2(),
                                                      Unit = input.Unit
                                                  }
                                          };
@@ -329,9 +328,9 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                     {
                         if (
                             GetHits(
-                                input.From.ToVector2(), 
-                                candidate, 
-                                input.Radius + (input.Unit.BoundingRadius / 3) - 10, 
+                                input.From.ToVector2(),
+                                candidate,
+                                input.Radius + (input.Unit.BoundingRadius / 3) - 10,
                                 new List<Vector2> { posibleTargets[0].Position }).Count() == 1)
                         {
                             var hits = GetHits(input.From.ToVector2(), candidate, input.Radius, positionsList).ToList();
@@ -359,8 +358,8 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                                 var endP = bestCandidate;
                                 var proj1 = positionsList[i].ProjectOn(startP, endP);
                                 var proj2 = positionsList[j].ProjectOn(startP, endP);
-                                var dist = Vector2.DistanceSquared(bestCandidateHitPoints[i], proj1.LinePoint)
-                                           + Vector2.DistanceSquared(bestCandidateHitPoints[j], proj2.LinePoint);
+                                var dist = bestCandidateHitPoints[i].DistanceSquared(proj1.LinePoint)
+                                           + bestCandidateHitPoints[j].DistanceSquared(proj2.LinePoint);
                                 if (dist >= maxDistance
                                     && (proj1.LinePoint - positionsList[i]).AngleBetween(
                                         proj2.LinePoint - positionsList[j]) > 90)
@@ -374,8 +373,8 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
 
                         return new PredictionOutput
                                    {
-                                       Hitchance = mainTargetPrediction.Hitchance, AoeHitCount = bestCandidateHits, 
-                                       UnitPosition = mainTargetPrediction.UnitPosition, 
+                                       Hitchance = mainTargetPrediction.Hitchance, AoeHitCount = bestCandidateHits,
+                                       UnitPosition = mainTargetPrediction.UnitPosition,
                                        CastPosition = ((p1 + p2) * 0.5f).ToVector3(), Input = input
                                    };
                     }

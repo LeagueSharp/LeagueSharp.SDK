@@ -38,18 +38,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Angle between two vectors in float-units</returns>
         public static float AngleBetween(this Vector3 vector3, Vector3 toVector3)
         {
-            var theta = vector3.Polar() - toVector3.Polar();
-            if (theta < 0)
-            {
-                theta = theta + 360;
-            }
-
-            if (theta > 180)
-            {
-                theta = 360 - theta;
-            }
-
-            return theta;
+            return vector3.ToVector2().AngleBetween(toVector3);
         }
 
         /// <summary>
@@ -60,7 +49,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Angle between two vectors in float-units</returns>
         public static float AngleBetween(this Vector3 vector3, Vector2 toVector2)
         {
-            return AngleBetween(vector3, toVector2.ToVector3());
+            return vector3.ToVector2().AngleBetween(toVector2);
         }
 
         /// <summary>
@@ -71,7 +60,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Angle between two vectors in float-units</returns>
         public static float AngleBetween(this Vector3 vector3, Vector4 toVector4)
         {
-            return AngleBetween(vector3, toVector4.ToVector3());
+            return vector3.ToVector2().AngleBetween(toVector4);
         }
 
         /// <summary>
@@ -82,20 +71,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Closest Vector3</returns>
         public static Vector3 Closest(this Vector3 vector3, IEnumerable<Vector3> array)
         {
-            var result = Vector3.Zero;
-            var distance = float.MaxValue;
-
-            foreach (var vector in array)
-            {
-                var temporaryDistance = vector3.Distance(vector);
-                if (distance < temporaryDistance)
-                {
-                    distance = temporaryDistance;
-                    result = vector;
-                }
-            }
-
-            return result;
+            return vector3.ToVector2().Closest(array);
         }
 
         /// <summary>
@@ -106,20 +82,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Closest Vector2</returns>
         public static Vector2 Closest(this Vector3 vector3, IEnumerable<Vector2> array)
         {
-            var result = Vector2.Zero;
-            var distance = float.MaxValue;
-
-            foreach (var vector in array)
-            {
-                var temporaryDistance = vector3.Distance(vector);
-                if (distance < temporaryDistance)
-                {
-                    distance = temporaryDistance;
-                    result = vector;
-                }
-            }
-
-            return result;
+            return vector3.ToVector2().Closest(array);
         }
 
         /// <summary>
@@ -130,20 +93,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Closest Vector4</returns>
         public static Vector4 Closest(this Vector3 vector3, IEnumerable<Vector4> array)
         {
-            var result = Vector4.Zero;
-            var distance = float.MaxValue;
-
-            foreach (var vector in array)
-            {
-                var temporaryDistance = vector3.Distance(vector);
-                if (distance < temporaryDistance)
-                {
-                    distance = temporaryDistance;
-                    result = vector;
-                }
-            }
-
-            return result;
+            return vector3.ToVector2().Closest(array);
         }
 
         /// <summary>
@@ -178,7 +128,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Float Units</returns>
         public static float Distance(this Vector3 vector3, Vector3 toVector3)
         {
-            return Vector3.Distance(vector3, toVector3);
+            return vector3.ToVector2().Distance(toVector3);
         }
 
         /// <summary>
@@ -189,7 +139,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Float Units</returns>
         public static float Distance(this Vector3 vector3, Vector2 toVector2)
         {
-            return Vector3.Distance(vector3, toVector2.ToVector3());
+            return vector3.ToVector2().Distance(toVector2);
         }
 
         /// <summary>
@@ -200,7 +150,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Float Units</returns>
         public static float Distance(this Vector3 vector3, Vector4 toVector4)
         {
-            return Vector3.Distance(vector3, toVector4.ToVector3());
+            return vector3.ToVector2().Distance(toVector4);
         }
 
         /// <summary>
@@ -211,7 +161,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>The squared distance between the two vectors.</returns>
         public static float DistanceSquared(this Vector3 vector3, Vector3 toVector3)
         {
-            return Vector3.DistanceSquared(vector3, toVector3);
+            return vector3.ToVector2().DistanceSquared(toVector3);
         }
 
         /// <summary>
@@ -222,7 +172,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>The squared distance between the two vectors.</returns>
         public static float DistanceSquared(this Vector3 vector3, Vector2 toVector2)
         {
-            return Vector3.DistanceSquared(vector3, toVector2.ToVector3());
+            return vector3.ToVector2().DistanceSquared(toVector2);
         }
 
         /// <summary>
@@ -233,7 +183,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>The squared distance between the two vectors.</returns>
         public static float DistanceSquared(this Vector3 vector3, Vector4 toVector4)
         {
-            return Vector3.DistanceSquared(vector3, toVector4.ToVector3());
+            return vector3.ToVector2().DistanceSquared(toVector4);
         }
 
         /// <summary>
@@ -311,7 +261,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Returns if the angle is orthogonal</returns>
         public static bool IsOrthogonal(Vector3 vector3, Vector3 toVector3)
         {
-            return Math.Abs((vector3.X * toVector3.X) + (vector3.Y * toVector3.Y)) < float.Epsilon;
+            return vector3.ToVector2().IsOrthogonal(toVector3);
         }
 
         /// <summary>
@@ -322,7 +272,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Returns if the angle is orthogonal</returns>
         public static bool IsOrthogonal(Vector3 vector3, Vector2 toVector2)
         {
-            return IsOrthogonal(vector3, toVector2.ToVector3());
+            return vector3.ToVector2().IsOrthogonal(toVector2);
         }
 
         /// <summary>
@@ -333,7 +283,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Returns if the angle is orthogonal</returns>
         public static bool IsOrthogonal(Vector3 vector3, Vector4 toVector4)
         {
-            return IsOrthogonal(vector3, toVector4.ToVector3());
+            return vector3.ToVector2().IsOrthogonal(toVector4);
         }
 
         /// <summary>
@@ -343,7 +293,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Is Position under a turret</returns>
         public static bool IsUnderAllyTurret(this Vector3 position)
         {
-            return GameObjects.AllyTurrets.Any(turret => !turret.IsDead && turret.Distance(position) < 950);
+            return position.ToVector2().IsUnderAllyTurret();
         }
 
         /// <summary>
@@ -353,7 +303,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Is Position under a turret</returns>
         public static bool IsUnderEnemyTurret(this Vector3 position)
         {
-            return GameObjects.EnemyTurrets.Any(turret => !turret.IsDead && turret.Distance(position) < 950);
+            return position.ToVector2().IsUnderEnemyTurret();
         }
 
         /// <summary>
@@ -441,23 +391,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>Polar for Vector Angle (Degrees)</returns>
         public static float Polar(this Vector3 vector3)
         {
-            if (Math.Abs(vector3.X - 0) <= (float)1e-9)
-            {
-                return (vector3.Y > 0) ? 90 : (vector3.Y < 0) ? 270 : 0;
-            }
-
-            var theta = (float)(Math.Atan(vector3.Y / vector3.X) * (180 / Math.PI));
-            if (vector3.X < 0)
-            {
-                theta += 180;
-            }
-
-            if (theta < 0)
-            {
-                theta += 360;
-            }
-
-            return theta;
+            return vector3.ToVector2().Polar();
         }
 
         /// <summary>

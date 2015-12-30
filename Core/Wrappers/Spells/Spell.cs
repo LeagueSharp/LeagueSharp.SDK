@@ -809,7 +809,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// </returns>
         public bool IsInRange(Vector2 point, float otherRange = -1)
         {
-            return this.RangeCheckFrom.ToVector2().DistanceSquared(point)
+            return this.RangeCheckFrom.DistanceSquared(point)
                    < (otherRange < 0 ? this.RangeSqr : otherRange * otherRange);
         }
 
@@ -1063,7 +1063,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
             switch (this.Type)
             {
                 case SkillshotType.SkillshotCircle:
-                    if (point.ToVector2().DistanceSquared(castPosition) < this.WidthSqr)
+                    if (point.DistanceSquared(castPosition) < this.WidthSqr)
                     {
                         return true;
                     }
@@ -1082,7 +1082,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
                     var edge1 = (castPosition.ToVector2() - this.From.ToVector2()).Rotated(-this.Width / 2);
                     var edge2 = edge1.Rotated(this.Width);
                     var v = point.ToVector2() - this.From.ToVector2();
-                    if (point.ToVector2().DistanceSquared(this.From) < this.RangeSqr && edge1.CrossProduct(v) > 0
+                    if (point.DistanceSquared(this.From) < this.RangeSqr && edge1.CrossProduct(v) > 0
                         && v.CrossProduct(edge2) > 0)
                     {
                         return true;
