@@ -24,6 +24,7 @@ namespace LeagueSharp.SDK.Core.Extensions
 
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Wrappers;
 
     /// <summary>
     ///     Provides helpful extensions to Units.
@@ -342,6 +343,47 @@ namespace LeagueSharp.SDK.Core.Extensions
         public static bool IsRecalling(this Obj_AI_Hero unit)
         {
             return unit.Buffs.Any(buff => buff.Name.ToLower().Contains("recall") && buff.Type == BuffType.Aura);
+        }
+
+        /// <summary>
+        /// Determines whether a unit has a spell shield.
+        /// </summary>
+        /// <param name="unit">The unit.</param>
+        /// <returns><c>true</c> if the unit has a spell shield; else <c>false</c>.</returns>
+        public static bool IsSpellShielded(this Obj_AI_Hero unit)
+        {
+            if (ObjectManager.Player.HasBuffOfType(BuffType.SpellShield))
+            {
+                return true;
+            }
+
+            if (ObjectManager.Player.HasBuffOfType(BuffType.SpellImmunity))
+            {
+                return true;
+            }
+
+            //Sivir E
+            if (unit.GetLastCastedSpell().Name == "SivirE"
+                && Variables.TickCount - unit.GetLastCastedSpell().StartTime < 300)
+            {
+                return true;
+            }
+
+            //Morganas E
+            if (unit.GetLastCastedSpell().Name == "BlackShield"
+                && Variables.TickCount - unit.GetLastCastedSpell().StartTime < 300)
+            {
+                return true;
+            }
+
+            //Nocturnes E
+            if (unit.GetLastCastedSpell().Name == "NocturneShit"
+                && Variables.TickCount - unit.GetLastCastedSpell().StartTime < 300)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
