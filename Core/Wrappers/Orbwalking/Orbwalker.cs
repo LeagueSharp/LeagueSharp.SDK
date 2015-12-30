@@ -224,31 +224,28 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 return;
             }
 
-            if (this.CanAttack())
+            var gTarget = target ?? this.Selector.GetTarget(this.ActiveMode);
+            if (gTarget.IsValidTarget())
             {
-                var gTarget = target ?? this.Selector.GetTarget(this.ActiveMode);
-                if (gTarget.IsValidTarget())
-                {
-                    var eventArgs = new OrbwalkingActionArgs
-                                        {
-                                            Target = gTarget, Position = gTarget.Position, Process = true,
-                                            Type = OrbwalkingType.BeforeAttack
-                                        };
-                    this.InvokeAction(eventArgs);
+                var eventArgs = new OrbwalkingActionArgs
+                                    {
+                                        Target = gTarget, Position = gTarget.Position, Process = true,
+                                        Type = OrbwalkingType.BeforeAttack
+                                    };
+                this.InvokeAction(eventArgs);
 
-                    if (eventArgs.Process)
+                if (eventArgs.Process)
+                {
+                    if (GameObjects.Player.CanCancelAutoAttack())
                     {
-                        if (GameObjects.Player.CanCancelAutoAttack())
-                        {
-                            this.MissileLaunched = false;
-                        }
-                        if (GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, gTarget))
-                        {
-                            this.LastAutoAttackCommandTick = Variables.TickCount;
-                            this.LastTarget = gTarget;
-                        }
-                        this.BlockOrdersUntilTick = Variables.TickCount + 70 + Math.Min(60, Game.Ping);
+                        this.MissileLaunched = false;
                     }
+                    if (GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, gTarget))
+                    {
+                        this.LastAutoAttackCommandTick = Variables.TickCount;
+                        this.LastTarget = gTarget;
+                    }
+                    this.BlockOrdersUntilTick = Variables.TickCount + 70 + Math.Min(60, Game.Ping);
                 }
             }
         }
@@ -338,91 +335,88 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 return;
             }
 
-            if (this.CanMove())
+            if (position.Distance(GameObjects.Player.Position)
+                < GameObjects.Player.BoundingRadius
+                + this.Menu["advanced"]["movementExtraHold"].GetValue<MenuSlider>().Value)
             {
-                if (position.Distance(GameObjects.Player.Position)
-                    < GameObjects.Player.BoundingRadius
-                    + this.Menu["advanced"]["movementExtraHold"].GetValue<MenuSlider>().Value)
+                if (GameObjects.Player.Path.Length > 0)
                 {
-                    if (GameObjects.Player.Path.Length > 0)
+                    var eventStopArgs = new OrbwalkingActionArgs
+                                            {
+                                                Position = GameObjects.Player.ServerPosition, Process = true,
+                                                Type = OrbwalkingType.StopMovement
+                                            };
+                    this.InvokeAction(eventStopArgs);
+                    if (eventStopArgs.Process)
                     {
-                        var eventStopArgs = new OrbwalkingActionArgs
-                                                {
-                                                    Position = GameObjects.Player.ServerPosition, Process = true,
-                                                    Type = OrbwalkingType.StopMovement
-                                                };
-                        this.InvokeAction(eventStopArgs);
-                        if (eventStopArgs.Process)
-                        {
-                            GameObjects.Player.IssueOrder(GameObjectOrder.Stop, eventStopArgs.Position);
-                            this.LastMovementOrderTick = Variables.TickCount - 70;
-                        }
-                    }
-                    return;
-                }
-
-                if (position.Distance(GameObjects.Player.ServerPosition) < GameObjects.Player.BoundingRadius)
-                {
-                    position = GameObjects.Player.ServerPosition.Extend(
-                        position,
-                        GameObjects.Player.BoundingRadius + this.random.Next(0, 51));
-                }
-
-                var maximumDistance = this.Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value;
-                if (position.Distance(GameObjects.Player.ServerPosition) > maximumDistance)
-                {
-                    position = GameObjects.Player.ServerPosition.Extend(
-                        position,
-                        maximumDistance + 25 - this.random.Next(0, 51));
-                }
-
-                if (this.Menu["advanced"]["movementRandomize"].GetValue<MenuBool>().Value
-                    && GameObjects.Player.Distance(position) > 350f)
-                {
-                    var rAngle = 2D * Math.PI * this.random.NextDouble();
-                    var radius = GameObjects.Player.BoundingRadius / 2f;
-                    var x = (float)(position.X + radius * Math.Cos(rAngle));
-                    var y = (float)(position.Y + radius * Math.Sin(rAngle));
-                    position = new Vector3(x, y, NavMesh.GetHeightForPosition(x, y));
-                }
-
-                var angle = 0f;
-                var currentPath = GameObjects.Player.GetWaypoints();
-                if (currentPath.Count > 1 && currentPath.PathLength() > 100)
-                {
-                    var movePath = GameObjects.Player.GetPath(position);
-                    if (movePath.Length > 1)
-                    {
-                        var v1 = currentPath[1] - currentPath[0];
-                        var v2 = movePath[1] - movePath[0];
-                        angle = v1.AngleBetween(v2);
-                        var distance = movePath.Last().DistanceSquared(currentPath.Last());
-                        if ((angle < 10 && distance < 500 * 500) || distance < 50 * 50)
-                        {
-                            return;
-                        }
+                        GameObjects.Player.IssueOrder(GameObjectOrder.Stop, eventStopArgs.Position);
+                        this.LastMovementOrderTick = Variables.TickCount - 70;
                     }
                 }
+                return;
+            }
 
-                if (Variables.TickCount - this.LastMovementOrderTick < 70 + Math.Min(60, Game.Ping) && angle < 60)
+            if (position.Distance(GameObjects.Player.ServerPosition) < GameObjects.Player.BoundingRadius)
+            {
+                position = GameObjects.Player.ServerPosition.Extend(
+                    position,
+                    GameObjects.Player.BoundingRadius + this.random.Next(0, 51));
+            }
+
+            var maximumDistance = this.Menu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value;
+            if (position.Distance(GameObjects.Player.ServerPosition) > maximumDistance)
+            {
+                position = GameObjects.Player.ServerPosition.Extend(
+                    position,
+                    maximumDistance + 25 - this.random.Next(0, 51));
+            }
+
+            if (this.Menu["advanced"]["movementRandomize"].GetValue<MenuBool>().Value
+                && GameObjects.Player.Distance(position) > 350f)
+            {
+                var rAngle = 2D * Math.PI * this.random.NextDouble();
+                var radius = GameObjects.Player.BoundingRadius / 2f;
+                var x = (float)(position.X + radius * Math.Cos(rAngle));
+                var y = (float)(position.Y + radius * Math.Sin(rAngle));
+                position = new Vector3(x, y, NavMesh.GetHeightForPosition(x, y));
+            }
+
+            var angle = 0f;
+            var currentPath = GameObjects.Player.GetWaypoints();
+            if (currentPath.Count > 1 && currentPath.PathLength() > 100)
+            {
+                var movePath = GameObjects.Player.GetPath(position);
+                if (movePath.Length > 1)
                 {
-                    return;
+                    var v1 = currentPath[1] - currentPath[0];
+                    var v2 = movePath[1] - movePath[0];
+                    angle = v1.AngleBetween(v2);
+                    var distance = movePath.Last().DistanceSquared(currentPath.Last());
+                    if ((angle < 10 && distance < 500 * 500) || distance < 50 * 50)
+                    {
+                        return;
+                    }
                 }
+            }
 
-                if (angle >= 60 && Variables.TickCount - this.LastMovementOrderTick < 60)
-                {
-                    return;
-                }
+            if (Variables.TickCount - this.LastMovementOrderTick < 70 + Math.Min(60, Game.Ping) && angle < 60)
+            {
+                return;
+            }
 
-                var eventArgs = new OrbwalkingActionArgs
-                                    { Position = position, Process = true, Type = OrbwalkingType.Movement };
-                this.InvokeAction(eventArgs);
+            if (angle >= 60 && Variables.TickCount - this.LastMovementOrderTick < 60)
+            {
+                return;
+            }
 
-                if (eventArgs.Process)
-                {
-                    GameObjects.Player.IssueOrder(GameObjectOrder.MoveTo, eventArgs.Position);
-                    this.LastMovementOrderTick = Variables.TickCount;
-                }
+            var eventArgs = new OrbwalkingActionArgs
+                                { Position = position, Process = true, Type = OrbwalkingType.Movement };
+            this.InvokeAction(eventArgs);
+
+            if (eventArgs.Process)
+            {
+                GameObjects.Player.IssueOrder(GameObjectOrder.MoveTo, eventArgs.Position);
+                this.LastMovementOrderTick = Variables.TickCount;
             }
         }
 
@@ -494,8 +488,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                         this.Selector.GetEnemyMinions(GameObjects.Player.GetRealAutoAttackRange() * 2f)
                             .Where(
                                 m =>
-                                m.Position.IsOnScreen()
-                                && m.Health < GameObjects.Player.GetAutoAttackDamage(m, true) * 2f);
+                                m.Position.IsOnScreen() && m.Health < GameObjects.Player.GetAutoAttackDamage(m) * 2f);
                     foreach (var minion in minions)
                     {
                         var value = 255 - (minion.Health * 2);
@@ -511,9 +504,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 {
                     var minions =
                         this.Selector.GetEnemyMinions(GameObjects.Player.GetRealAutoAttackRange() * 2f)
-                            .Where(
-                                m =>
-                                m.Position.IsOnScreen() && m.Health < GameObjects.Player.GetAutoAttackDamage(m, true));
+                            .Where(m => m.Position.IsOnScreen() && m.Health < GameObjects.Player.GetAutoAttackDamage(m));
                     foreach (var minion in minions)
                     {
                         Drawing.DrawCircle(minion.Position, minion.BoundingRadius * 2f, Color.FromArgb(255, 0, 255, 0));

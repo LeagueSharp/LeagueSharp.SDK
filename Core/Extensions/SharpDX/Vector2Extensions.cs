@@ -448,20 +448,10 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         ///     Returns if the Vector2 is on the screen.
         /// </summary>
         /// <param name="vector2">Extended SharpDX Vector2</param>
-        /// <returns>Is Vector2 on screen</returns>
-        public static bool IsOnScreen(this Vector2 vector2)
-        {
-            return vector2.ToVector3().IsOnScreen();
-        }
-
-        /// <summary>
-        ///     Returns if the Vector2 is on the screen.
-        /// </summary>
-        /// <param name="vector2">Extended SharpDX Vector2</param>
         /// ///
         /// <param name="radius">Radius</param>
         /// <returns>Is Vector2 on screen</returns>
-        public static bool IsOnScreen(this Vector2 vector2, float radius)
+        public static bool IsOnScreen(this Vector2 vector2, float radius = 0f)
         {
             return vector2.ToVector3().IsOnScreen(radius);
         }
@@ -543,16 +533,6 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         public static bool IsUnderRectangle(this Vector2 point, float x, float y, float width, float height)
         {
             return point.X > x && point.X < x + width && point.Y > y && point.Y < y + height;
-        }
-
-        /// <summary>
-        ///     Returns whether the given position is under a turret
-        /// </summary>
-        /// <param name="position">Extended SharpDX Vector2</param>
-        /// <returns>Is Position under a turret</returns>
-        public static bool IsUnderTurret(this Vector2 position)
-        {
-            return position.ToVector3().IsUnderTurret();
         }
 
         /// <summary>
@@ -714,7 +694,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>The <see cref="Vector3" /></returns>
         public static Vector3 ToVector3(this Vector2 vector2, float z = 0f)
         {
-            return new Vector3(vector2, z);
+            return new Vector3(vector2, z.Equals(0f) ? GameObjects.Player.ServerPosition.Z : z);
         }
 
         /// <summary>

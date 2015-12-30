@@ -5,8 +5,8 @@
     using System.Collections.Generic;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
+    using Enumerations;
+    using Extensions;
 
     /// <summary>
     ///     Queues actions.
