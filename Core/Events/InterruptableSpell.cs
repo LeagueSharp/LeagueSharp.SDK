@@ -37,6 +37,7 @@ namespace LeagueSharp.SDK.Core.Events
         {
             InterruptableSpellsDictionary = new Dictionary<string, List<InterruptableSpellData>>();
             CastingInterruptableSpellDictionary = new Dictionary<int, InterruptableSpellData>();
+            GlobalInterruptableSpellsList = new List<InterruptableSpellData>();
 
             InitializeSpells();
 
