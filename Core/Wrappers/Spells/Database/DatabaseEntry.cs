@@ -15,14 +15,14 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
+namespace LeagueSharp.SDK.Core.Wrappers.Spells.Database
 {
     using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
     ///     The spell database entry.
     /// </summary>
-    public class SpellDatabaseEntry
+    public class DatabaseEntry
     {
         #region Fields
 
@@ -196,14 +196,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="SpellDatabaseEntry" /> class.
+        ///     Initializes a new instance of the <see cref="DatabaseEntry" /> class.
         /// </summary>
-        public SpellDatabaseEntry()
+        public DatabaseEntry()
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="SpellDatabaseEntry" /> class.
+        ///     Initializes a new instance of the <see cref="DatabaseEntry" /> class.
         /// </summary>
         /// <param name="championName">
         ///     The champion name.
@@ -247,7 +247,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
         /// <param name="defaultDangerValue">
         ///     The default danger value.
         /// </param>
-        public SpellDatabaseEntry(
+        public DatabaseEntry(
             string championName,
             string spellName,
             SpellSlot slot,

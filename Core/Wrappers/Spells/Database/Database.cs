@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
+namespace LeagueSharp.SDK.Core.Wrappers.Spells.Database
 {
     using System;
     using System.Collections.Generic;
@@ -26,28 +26,28 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
     /// <summary>
     ///     The spell database.
     /// </summary>
-    public static class SpellDatabase
+    public static class Database
     {
         #region Static Fields
 
         /// <summary>
         ///     A list of all the entries in the SpellDatabase.
         /// </summary>
-        public static List<SpellDatabaseEntry> Spells = new List<SpellDatabaseEntry>();
+        public static List<DatabaseEntry> Spells = new List<DatabaseEntry>();
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes static members of the <see cref="SpellDatabase" /> class.
+        ///     Initializes static members of the <see cref="Database" /> class.
         /// </summary>
-        static SpellDatabase()
+        static Database()
         {
             #region Aatrox
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Aatrox", SpellName = "AatroxQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -58,7 +58,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Aatrox", SpellName = "AatroxW", Slot = SpellSlot.W, SpellType = SpellType.Toggled,
                         CastType = new[] { CastType.Toggle },
@@ -68,7 +68,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Aatrox", SpellName = "AatroxWPower", Slot = SpellSlot.W,
                         SpellType = SpellType.Toggled, CastType = new[] { CastType.Toggle },
@@ -78,7 +78,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Aatrox", SpellName = "AatroxWHeal", Slot = SpellSlot.W,
                         SpellType = SpellType.Toggled, CastType = new[] { CastType.Toggle },
@@ -87,7 +87,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Aatrox", SpellName = "AatroxE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -96,7 +96,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Aatrox", SpellName = "AatroxR", Slot = SpellSlot.R,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -114,7 +114,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Akali
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Akali", SpellName = "AkaliMota", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle,
@@ -125,7 +125,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Akali", SpellName = "AkaliSmokeBomb", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -137,7 +137,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Akali", SpellName = "AkaliShadowSwipe", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted,
@@ -147,7 +147,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Akali", SpellName = "AkaliShadowDance", Slot = SpellSlot.R,
                         SpellType = SpellType.Targeted,
@@ -162,7 +162,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Alistar
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Alistar", SpellName = "Pulverize", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -173,7 +173,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Alistar", SpellName = "Headbutt", Slot = SpellSlot.W,
                         SpellType = SpellType.Targeted,
@@ -185,7 +185,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Alistar", SpellName = "TriumphantRoar", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.Activate },
@@ -194,7 +194,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Alistar", SpellName = "FerociousHowl", Slot = SpellSlot.R,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -208,7 +208,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Ahri
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ahri", SpellName = "AhriOrbofDeception", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -220,7 +220,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ahri", SpellName = "AhriOrbReturn", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.ImpossibleToCast },
@@ -231,7 +231,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ahri", SpellName = "AhriFoxFire", Slot = SpellSlot.W,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.Activate },
@@ -248,7 +248,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ahri", SpellName = "AhriSeduce", Slot = SpellSlot.E,
                         CastType = new[] { CastType.Position }, SpellType = SpellType.SkillshotMissileLine,
@@ -264,7 +264,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ahri", SpellName = "AhriTumble", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -278,7 +278,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Amumu
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Amumu", SpellName = "BandageToss", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -295,7 +295,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Amumu", SpellName = "AuraofDespair", Slot = SpellSlot.W,
                         SpellType = SpellType.Toggled, CastType = new[] { CastType.Toggle },
@@ -304,7 +304,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Amumu", SpellName = "Tantrum", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCone, CastType = new[] { CastType.Activate },
@@ -313,7 +313,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Amumu", SpellName = "CurseoftheSadMummy", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -327,7 +327,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Anivia
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Anivia", SpellName = "FlashFrost", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -338,7 +338,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Anivia", SpellName = "Crystalize", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -349,7 +349,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Anivia", SpellName = "Frostbite", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted,
@@ -360,7 +360,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Anivia", SpellName = "GlacialStorm", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -375,7 +375,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Annie
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Annie", SpellName = "Disintegrate", Slot = SpellSlot.Q,
                         SpellType = SpellType.Targeted,
@@ -386,7 +386,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Annie", SpellName = "Incinerate", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCone, CastType = new[] { CastType.Direction },
@@ -395,7 +395,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Annie", SpellName = "MoltenShield", Slot = SpellSlot.E,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -405,7 +405,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Annie", SpellName = "InfernalGuardian", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -418,7 +418,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Ashe
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ashe", SpellName = "AsheQ", Slot = SpellSlot.Q, SpellType = SpellType.Activated,
                         CastType = new[] { CastType.Activate },
@@ -429,7 +429,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ashe", SpellName = "Volley", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Direction },
@@ -446,7 +446,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ashe", SpellName = "AsheSpiritOfTheHawk", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -456,7 +456,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ashe", SpellName = "EnchantedCrystalArrow", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -472,7 +472,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Azir
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Azir", SpellName = "AzirQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -483,7 +483,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Azir", SpellName = "AzirW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -494,7 +494,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Azir", SpellName = "AzirE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -504,7 +504,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Azir", SpellName = "AzirR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCone, CastType = new[] { CastType.Position },
@@ -519,7 +519,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Bard
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Bard", SpellName = "BardQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -531,7 +531,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Bard", SpellName = "BardW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -541,7 +541,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Bard", SpellName = "BardE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -551,7 +551,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Bard", SpellName = "BardR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -566,7 +566,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Blitzcrank
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Blitzcrank", SpellName = "RocketGrab", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -583,7 +583,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Blitzcrank", SpellName = "Overdrive", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -593,7 +593,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Blitzcrank", SpellName = "PowerFist", Slot = SpellSlot.E,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -604,7 +604,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Blitzcrank", SpellName = "StaticField", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -618,7 +618,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Brand
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Brand", SpellName = "BrandBlaze", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -634,7 +634,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Brand", SpellName = "BrandFissure", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -643,7 +643,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Brand", SpellName = "BrandConflagration", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted,
@@ -653,7 +653,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Brand", SpellName = "BrandWildfire", Slot = SpellSlot.R,
                         SpellType = SpellType.Targeted,
@@ -668,7 +668,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Braum
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Braum", SpellName = "BraumQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -685,7 +685,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Braum", SpellName = "BraumW", Slot = SpellSlot.W, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.AllyChampions, CastType.AllyMinions },
@@ -694,7 +694,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Braum", SpellName = "BraumE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Direction },
@@ -703,7 +703,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Braum", SpellName = "BraumRWrapper", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -718,7 +718,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Caitlyn
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Caitlyn", SpellName = "CaitlynPiltoverPeacemaker", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -729,7 +729,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Caitlyn", SpellName = "CaitlynYordleTrap", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -739,7 +739,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Caitlyn", SpellName = "CaitlynEntrapment", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -756,7 +756,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Caitlyn", SpellName = "CaitlynAceintheHole", Slot = SpellSlot.R,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.EnemyChampions },
@@ -775,7 +775,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Cassiopeia
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Cassiopeia", SpellName = "CassiopeiaNoxiousBlast", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -786,7 +786,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Cassiopeia", SpellName = "CassiopeiaMiasma", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -798,7 +798,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Cassiopeia", SpellName = "CassiopeiaTwinFang", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted,
@@ -808,7 +808,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Cassiopeia", SpellName = "CassiopeiaPetrifyingGaze", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCone, CastType = new[] { CastType.Position },
@@ -823,7 +823,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Chogath
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Chogath", SpellName = "Rupture", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -833,7 +833,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Chogath", SpellName = "FeralScream", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCone, CastType = new[] { CastType.Position },
@@ -843,7 +843,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Chogath", SpellName = "VorpalSpikes", Slot = SpellSlot.E,
                         SpellType = SpellType.Toggled, CastType = new[] { CastType.Toggle },
@@ -852,7 +852,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Chogath", SpellName = "Feast", Slot = SpellSlot.R, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.EnemyChampions, CastType.EnemyMinions },
@@ -865,7 +865,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Corki
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Corki", SpellName = "PhosphorusBomb", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -876,7 +876,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Corki", SpellName = "CarpetBomb", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -885,7 +885,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Corki", SpellName = "CarpetBombMega", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -895,7 +895,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Corki", SpellName = "GGun", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCone, CastType = new[] { CastType.Activate },
@@ -904,7 +904,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Corki", SpellName = "MissileBarrage", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 200, Range = 1300, Radius = 40,
@@ -919,7 +919,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Corki", SpellName = "MissileBarrage2", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 200, Range = 1500, Radius = 40,
@@ -938,7 +938,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Darius
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Darius", SpellName = "DariusCleave", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -948,7 +948,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Darius", SpellName = "DariusNoxianTacticsONH", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -962,7 +962,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Darius", SpellName = "DariusAxeGrabCone", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCone, CastType = new[] { CastType.Activate },
@@ -973,7 +973,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Darius", SpellName = "DariusExecute", Slot = SpellSlot.R,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.EnemyChampions },
@@ -986,7 +986,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Diana
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Diana", SpellName = "DianaArc", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -996,7 +996,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Diana", SpellName = "DianaOrbs", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -1005,7 +1005,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Diana", SpellName = "DianaVortex", Slot = SpellSlot.E,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -1015,7 +1015,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Diana", SpellName = "DianaTeleport", Slot = SpellSlot.R,
                         SpellType = SpellType.Targeted,
@@ -1029,7 +1029,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region DrMundo
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "DrMundo", SpellName = "InfectedCleaverMissileCast", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1046,7 +1046,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "DrMundo", SpellName = "BurningAgony", Slot = SpellSlot.W,
                         SpellType = SpellType.Toggled, CastType = new[] { CastType.Toggle },
@@ -1055,7 +1055,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "DrMundo", SpellName = "Masochism", Slot = SpellSlot.E,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -1064,7 +1064,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "DrMundo", SpellName = "Sadism", Slot = SpellSlot.R,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -1077,7 +1077,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Draven
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Draven", SpellName = "DravenSpinning", Slot = SpellSlot.Q,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -1085,7 +1085,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Draven", SpellName = "DravenFury", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -1094,7 +1094,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Draven", SpellName = "DravenDoubleShot", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1106,7 +1106,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Draven", SpellName = "DravenRCast", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1120,7 +1120,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Ekko
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ekko", SpellName = "EkkoQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1132,7 +1132,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ekko", SpellName = "EkkoW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1143,7 +1143,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ekko", SpellName = "EkkoE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Direction },
@@ -1152,7 +1152,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ekko", SpellName = "EkkoR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -1166,7 +1166,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Elise
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Elise", SpellName = "EliseHumanQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.Targeted,
@@ -1175,7 +1175,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Elise", SpellName = "EliseSpiderQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.Targeted,
@@ -1184,7 +1184,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Elise", SpellName = "EliseHumanW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1192,7 +1192,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Elise", SpellName = "EliseSpiderW", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -1201,7 +1201,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Elise", SpellName = "EliseHumanE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1218,7 +1218,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Elise", SpellName = "EliseSpiderE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle,
@@ -1234,7 +1234,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Elise", SpellName = "EliseR", Slot = SpellSlot.R, SpellType = SpellType.Toggled,
                         CastType = new[] { CastType.Toggle }, SpellTags = new[] { SpellTags.Transformation }, Delay = 1000,
@@ -1246,7 +1246,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Evelynn
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Evelynn", SpellName = "EvelynnQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.Targeted,
@@ -1255,7 +1255,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Evelynn", SpellName = "EvelynnW", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -1263,7 +1263,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Evelynn", SpellName = "EvelynnE", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.EnemyChampions },
@@ -1272,7 +1272,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Evelynn", SpellName = "EvelynnR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1286,7 +1286,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Ezreal
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ezreal", SpellName = "EzrealMysticShot", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1303,7 +1303,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ezreal", SpellName = "EzrealEssenceFlux", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1314,7 +1314,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ezreal", SpellName = "EzrealArcaneShift", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -1323,7 +1323,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ezreal", SpellName = "EzrealTrueshotBarrage", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1338,7 +1338,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region FiddleSticks
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "FiddleSticks", SpellName = "Terrify", Slot = SpellSlot.Q,
                         SpellType = SpellType.Targeted,
@@ -1348,7 +1348,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "FiddleSticks", SpellName = "Drain", Slot = SpellSlot.W,
                         SpellType = SpellType.Targeted,
@@ -1357,7 +1357,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "FiddleSticks", SpellName = "FiddlesticksDarkWind", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted,
@@ -1367,7 +1367,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "FiddleSticks", SpellName = "Crowstorm", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1379,7 +1379,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Fiora
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Fiora", SpellName = "FioraQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -1388,7 +1388,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Fiora", SpellName = "FioraW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1399,7 +1399,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Fiora", SpellName = "FioraE", Slot = SpellSlot.E, SpellType = SpellType.Activated,
                         CastType = new[] { CastType.Activate },
@@ -1410,7 +1410,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Fiora", SpellName = "FioraR", Slot = SpellSlot.R, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.EnemyChampions },
@@ -1423,7 +1423,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Fizz
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Fizz", SpellName = "FizzPiercingStrike", Slot = SpellSlot.Q,
                         SpellType = SpellType.Targeted,
@@ -1432,7 +1432,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Fizz", SpellName = "FizzSeastonePassive", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -1440,7 +1440,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Fizz", SpellName = "FizzJump", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1449,7 +1449,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Fizz", SpellName = "FizzJumpTwo", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1457,7 +1457,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Fizz", SpellName = "FizzMarinerDoom", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1473,7 +1473,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Galio
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Galio", SpellName = "GalioResoluteSmite", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1482,7 +1482,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Galio", SpellName = "GalioBulwark", Slot = SpellSlot.W,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.AllyChampions },
@@ -1490,7 +1490,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Galio", SpellName = "GalioRighteousGust", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1500,7 +1500,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Galio", SpellName = "GalioIdolOfDurand", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -1514,7 +1514,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Gangplank
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Gangplank", SpellName = "GangplankQWrapper", Slot = SpellSlot.Q,
                         SpellType = SpellType.Targeted,
@@ -1523,7 +1523,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Gangplank", SpellName = "GangplankW", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -1532,7 +1532,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Gangplank", SpellName = "GangplankE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1541,7 +1541,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Gangplank", SpellName = "GangplankR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1554,7 +1554,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Gnar
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Gnar", SpellName = "GnarQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1566,7 +1566,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Gnar", SpellName = "GnarBigQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1577,7 +1577,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Gnar", SpellName = "GnarW", Slot = SpellSlot.W, SpellType = SpellType.Passive,
                         CastType = new[] { CastType.ImpossibleToCast },
@@ -1585,7 +1585,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Gnar", SpellName = "GnarBigW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -1595,7 +1595,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Gnar", SpellName = "GnarE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1604,7 +1604,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Gnar", SpellName = "GnarBigE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1613,7 +1613,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Gnar", SpellName = "GnarR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1627,7 +1627,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Gragas
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Gragas", SpellName = "GragasQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1638,7 +1638,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Gragas", SpellName = "GragasW", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Channel },
@@ -1646,7 +1646,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Gragas", SpellName = "GragasE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1658,7 +1658,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Gragas", SpellName = "GragasR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1673,7 +1673,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Graves
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Graves", SpellName = "GravesQLineSpell", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1683,7 +1683,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Graves", SpellName = "GravesClusterShot", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCone, CastType = new[] { CastType.Position },
@@ -1691,7 +1691,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Graves", SpellName = "GravesSmokeGrenade", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1700,7 +1700,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Graves", SpellName = "GravesMove", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -1709,7 +1709,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Graves", SpellName = "GravesChargeShot", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1729,7 +1729,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Hecarim
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Hecarim", SpellName = "HecarimRapidSlash", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -1737,7 +1737,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Hecarim", SpellName = "HecarimW", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -1745,7 +1745,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Hecarim", SpellName = "HecarimRamp", Slot = SpellSlot.E,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -1755,7 +1755,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Hecarim", SpellName = "HecarimUlt", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -1769,7 +1769,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Heimerdinger
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Heimerdinger", SpellName = "HeimerdingerQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1777,7 +1777,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Heimerdinger", SpellName = "HeimerdingerW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1787,7 +1787,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Heimerdinger", SpellName = "HeimerdingerE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1799,7 +1799,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Heimerdinger", SpellName = "HeimerdingerR", Slot = SpellSlot.R,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate }, Delay = 250,
@@ -1811,7 +1811,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Illaoi
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Illaoi", SpellName = "IllaoiQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -1821,7 +1821,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Illaoi", SpellName = "IllaoiW", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -1835,7 +1835,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Illaoi", SpellName = "IllaoiE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1846,7 +1846,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Illaoi", SpellName = "IllaoiR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, Delay = 500, Range = 0, Radius = 450,
@@ -1858,7 +1858,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Irelia
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Irelia", SpellName = "IreliaGatotsu", Slot = SpellSlot.Q,
                         SpellType = SpellType.Targeted,
@@ -1867,7 +1867,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Irelia", SpellName = "IreliaHitenStyle", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -1875,7 +1875,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Irelia", SpellName = "IreliaEquilibriumStrike", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted,
@@ -1886,7 +1886,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Irelia", SpellName = "IreliaTranscendentBlades", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1901,7 +1901,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Janna
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Janna", SpellName = "HowlingGale", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -1912,7 +1912,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Janna", SpellName = "SowTheWind", Slot = SpellSlot.W,
                         SpellType = SpellType.Targeted,
@@ -1922,7 +1922,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Janna", SpellName = "EyeOfTheStorm", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted,
@@ -1931,7 +1931,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Janna", SpellName = "ReapTheWhirlwind", Slot = SpellSlot.R,
                         CastType = new[] { CastType.Channel },
@@ -1944,7 +1944,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region JarvanIV
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "JarvanIV", SpellName = "JarvanIVDragonStrike", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -1953,7 +1953,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "JarvanIV", SpellName = "JarvanIVEQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 880, Radius = 70,
@@ -1961,7 +1961,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "JarvanIV", SpellName = "JarvanIVGoldenAegis", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -1969,7 +1969,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "JarvanIV", SpellName = "JarvanIVDemacianStandard", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -1979,7 +1979,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "JarvanIV", SpellName = "JarvanIVCataclysm", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.EnemyChampions },
@@ -1992,7 +1992,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Jayce
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Jayce", SpellName = "JayceToTheSkies", Slot = SpellSlot.Q,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.EnemyChampions },
@@ -2001,7 +2001,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Jayce", SpellName = "JayceShockBlast", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -2017,7 +2017,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Jayce", SpellName = "JayceStaticField", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -2025,7 +2025,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Jayce", SpellName = "JayceHyperCharge", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -2033,7 +2033,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Jayce", SpellName = "JayceThunderingBlow", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.EnemyChampions },
@@ -2042,7 +2042,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Jayce", SpellName = "JayceAccelerationGate", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -2050,7 +2050,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Jayce", SpellName = "JayceStanceHtG", Slot = SpellSlot.R,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -2058,7 +2058,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Jayce", SpellName = "JayceStanceGtH", Slot = SpellSlot.R,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -2070,7 +2070,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Jinx
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Jinx", SpellName = "JinxQ", Slot = SpellSlot.Q, SpellType = SpellType.Toggled,
                         CastType = new[] { CastType.Toggle },
@@ -2078,7 +2078,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Jinx", SpellName = "JinxW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -2095,7 +2095,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Jinx", SpellName = "JinxE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -2105,7 +2105,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Jinx", SpellName = "JinxR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 600, Range = 20000, Radius = 140,
@@ -2119,7 +2119,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Kalista
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kalista", SpellName = "KalistaMysticShot", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -2136,7 +2136,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kalista", SpellName = "KalistaW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -2144,7 +2144,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kalista", SpellName = "KalistaExpungeWrapper", Slot = SpellSlot.E,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -2152,7 +2152,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kalista", SpellName = "KalistaRx", Slot = SpellSlot.R,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -2164,7 +2164,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Karma
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Karma", SpellName = "KarmaQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -2181,7 +2181,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
 
             //TODO: add the circle at the end.
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Karma", SpellName = "KarmaQMantra", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -2198,7 +2198,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Karma", SpellName = "KarmaSpiritBind", Slot = SpellSlot.W,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.EnemyChampions },
@@ -2207,7 +2207,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Karma", SpellName = "KarmaWMantra", Slot = SpellSlot.W,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.EnemyChampions },
@@ -2216,7 +2216,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Karma", SpellName = "KarmaSolKimShield", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.AllyChampions, CastType.Self },
@@ -2224,7 +2224,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Karma", SpellName = "KarmaSolKimShieldLocket", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.AllyChampions, CastType.Self },
@@ -2232,7 +2232,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Karma", SpellName = "KarmaMantra", Slot = SpellSlot.R,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -2243,7 +2243,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Karthus
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Karthus", SpellName = "KarthusLayWasteA2",
                         ExtraSpellNames =
@@ -2259,7 +2259,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Karthus", SpellName = "KarthusWallOfPain", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -2269,7 +2269,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Karthus", SpellName = "KarthusDefile", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Toggle },
@@ -2278,7 +2278,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Karthus", SpellName = "KarthusFallenOne",
                         ExtraSpellNames = new[] { "KarthusFallenOne2", "KarthusFallenOneExtra", "KarthusFallenOneExtra2" },
@@ -2291,7 +2291,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Kassadin
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kassadin", SpellName = "NullLance", Slot = SpellSlot.Q,
                         SpellType = SpellType.Targeted,
@@ -2301,7 +2301,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kassadin", SpellName = "NetherBlade", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -2310,7 +2310,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kassadin", SpellName = "ForcePulse", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCone, CastType = new[] { CastType.Position },
@@ -2320,7 +2320,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kassadin", SpellName = "RiftWalk", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -2333,7 +2333,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Katarina
 
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "Katarina",
                     "KatarinaQ",
                     SpellSlot.Q,
@@ -2343,7 +2343,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     false,
                     675));
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "Katarina",
                     "KatarinaW",
                     SpellSlot.W,
@@ -2353,7 +2353,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     false,
                     375));
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "Katarina",
                     "KatarinaE",
                     SpellSlot.E,
@@ -2364,7 +2364,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     true,
                     700));
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "Katarina",
                     "KatarinaR",
                     SpellSlot.R,
@@ -2381,7 +2381,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Kennen
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kennen", SpellName = "KennenShurikenHurlMissile1",
                         ExtraSpellNames = new[] { "KennenShurikenHurl1" }, Slot = SpellSlot.Q,
@@ -2398,7 +2398,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kennen", SpellName = "KennenBringTheLight", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -2406,7 +2406,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kennen", SpellName = "KennenLightningRush", Slot = SpellSlot.E,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -2416,7 +2416,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kennen", SpellName = "KennenShurikenStorm", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -2429,7 +2429,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Khazix
 
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "Khazix",
                     "KhazixQ",
                     SpellSlot.Q,
@@ -2440,7 +2440,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     325));
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Khazix", SpellName = "KhazixW", ExtraSpellNames = new[] { "khazixwlong" },
                         Slot = SpellSlot.W, SpellType = SpellType.SkillshotMissileLine,
@@ -2458,7 +2458,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Khazix", SpellName = "KhazixE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -2467,7 +2467,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Khazix", SpellName = "KhazixR", Slot = SpellSlot.R,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -2480,7 +2480,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Kindred
 
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "Kindred",
                     "KindredQ",
                     SpellSlot.Q,
@@ -2492,7 +2492,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     250,
                     500));
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "Kindred",
                     "KindredW",
                     SpellSlot.W,
@@ -2504,7 +2504,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     250,
                     800));
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kindred", SpellName = "KindredEWrapper", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted,
@@ -2513,7 +2513,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                         AppliedBuffsOnEnemies = new[] { BuffType.Slow }, Range = 500
                     });
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kindred", SpellName = "KindredR", Slot = SpellSlot.R,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.Self, CastType.EnemyChampions },
@@ -2525,7 +2525,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Kogmaw
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kogmaw", SpellName = "KogMawQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -2541,7 +2541,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "Kogmaw",
                     "KogMawBioArcaneBarrage",
                     SpellSlot.W,
@@ -2550,7 +2550,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     new[] { SpellTags.AttackRangeModifier, SpellTags.AttackSpeedAmplifier }));
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kogmaw", SpellName = "KogMawVoidOoze", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -2562,7 +2562,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Kogmaw", SpellName = "KogMawLivingArtillery", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -2576,7 +2576,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Leblanc
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Leblanc", SpellName = "LeblancChaosOrb", Slot = SpellSlot.Q,
                         SpellType = SpellType.Targeted,
@@ -2586,7 +2586,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Leblanc", SpellName = "LeblancChaosOrbM", Slot = SpellSlot.R,
                         SpellType = SpellType.Targeted,
@@ -2595,7 +2595,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Leblanc", SpellName = "LeblancSlide", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -2605,7 +2605,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Leblanc", SpellName = "LeblancSlideM", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -2615,7 +2615,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Leblanc", SpellName = "LeblancSoulShackle", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -2632,7 +2632,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Leblanc", SpellName = "LeblancSoulShackleM", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -2653,7 +2653,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region LeeSin
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "LeeSin", SpellName = "BlindMonkQOne", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 1100, Radius = 65,
@@ -2667,7 +2667,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                                 },
                     });
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "LeeSin",
                     "BlindMonkQTwo",
                     SpellSlot.Q,
@@ -2676,7 +2676,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     new[] { SpellTags.Dash }));
 
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "LeeSin",
                     "BlindMonkWOne",
                     SpellSlot.W,
@@ -2686,7 +2686,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     false,
                     700));
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "LeeSin",
                     "BlindMonkWTwo",
                     SpellSlot.W,
@@ -2695,7 +2695,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     new[] { SpellTags.DefensiveBuff }));
 
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "LeeSin",
                     "BlindMonkEOne",
                     SpellSlot.E,
@@ -2707,7 +2707,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     250,
                     125));
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "LeeSin", SpellName = "BlindMonkETwo", Slot = SpellSlot.E,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -2715,7 +2715,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "LeeSin", SpellName = "BlindMonkRKick", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.EnemyChampions },
@@ -2728,7 +2728,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Leona
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Leona", SpellName = "LeonaShieldOfDaybreak", Slot = SpellSlot.Q,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -2738,7 +2738,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Leona", SpellName = "LeonaSolarBarrier", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -2746,7 +2746,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Leona", SpellName = "LeonaZenithBlade", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -2758,7 +2758,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Leona", SpellName = "LeonaSolarFlare", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -2773,7 +2773,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Lissandra
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lissandra", SpellName = "LissandraQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 700, Radius = 75,
@@ -2782,7 +2782,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lissandra", SpellName = "LissandraQShards", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 700, Radius = 90,
@@ -2791,7 +2791,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lissandra", SpellName = "LissandraW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Activate },
@@ -2800,7 +2800,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lissandra", SpellName = "LissandraE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 1025, Radius = 125,
@@ -2809,7 +2809,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lissandra", SpellName = "LissandraR", Slot = SpellSlot.R,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.Self, CastType.EnemyChampions },
@@ -2823,7 +2823,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Lucian
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lucian", SpellName = "LucianQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotLine,
@@ -2833,7 +2833,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lucian", SpellName = "LucianW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -2842,7 +2842,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lucian", SpellName = "LucianE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -2850,7 +2850,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lucian", SpellName = "LucianR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Direction },
@@ -2860,7 +2860,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lucian", SpellName = "LucianRMis", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Direction },
@@ -2874,7 +2874,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Lulu
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lulu", SpellName = "LuluQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -2885,7 +2885,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lulu", SpellName = "LuluQPix", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 950, Radius = 60,
@@ -2894,7 +2894,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lulu", SpellName = "LuluW", Slot = SpellSlot.W, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.EnemyChampions, CastType.AllyChampions, CastType.Self },
@@ -2903,7 +2903,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lulu", SpellName = "LuluE", Slot = SpellSlot.E, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.AllyChampions, CastType.Self }, SpellTags = new[] { SpellTags.Shield },
@@ -2911,7 +2911,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lulu", SpellName = "LuluR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.AllyChampions, CastType.Self },
@@ -2924,7 +2924,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Lux
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lux", SpellName = "LuxLightBinding", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -2940,7 +2940,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lux", SpellName = "LuxPrismaticWave", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -2948,7 +2948,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lux", SpellName = "LuxLightStrikeKugel", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -2960,7 +2960,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Lux", SpellName = "LuxMaliceCannon", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -2974,7 +2974,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Malphite
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Malphite", SpellName = "SeismicShard", Slot = SpellSlot.Q,
                         SpellType = SpellType.Targeted,
@@ -2984,7 +2984,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Malphite", SpellName = "Obduracy", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -2992,7 +2992,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Malphite", SpellName = "Landslide", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -3000,7 +3000,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Malphite", SpellName = "UFSlash", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, Delay = 0, Range = 1000, Radius = 270, MissileSpeed = 1500,
@@ -3012,7 +3012,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Malzahar
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Malzahar", SpellName = "AlZaharCalloftheVoid", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -3023,7 +3023,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Malzahar", SpellName = "AlzaharNullZone", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -3031,7 +3031,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Malzahar", SpellName = "AlzaharMaleficVisions", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted,
@@ -3040,7 +3040,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Malzahar", SpellName = "AlzaharNetherGrasp", Slot = SpellSlot.R,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.EnemyChampions },
@@ -3053,7 +3053,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Maokai
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Maokai", SpellName = "MaokaiTrunkLine", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -3063,7 +3063,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Maokai", SpellName = "MaokaiUnstableGrowth", Slot = SpellSlot.W,
                         SpellType = SpellType.Targeted,
@@ -3073,7 +3073,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Maokai", SpellName = "MaokaiSapling2", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -3082,7 +3082,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Maokai", SpellName = "MaokaiDrain3", Slot = SpellSlot.R,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3094,7 +3094,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region MasterYi
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "MasterYi", SpellName = "AlphaStrike", Slot = SpellSlot.Q,
                         SpellType = SpellType.Targeted,
@@ -3103,7 +3103,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "MasterYi", SpellName = "Meditate", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3111,7 +3111,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "MasterYi", SpellName = "WujuStyle", Slot = SpellSlot.E,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3119,7 +3119,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "MasterYi", SpellName = "Highlander", Slot = SpellSlot.R,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3131,7 +3131,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region MissFortune
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "MissFortune", SpellName = "MissFortuneRichochetShot", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCone,
@@ -3140,7 +3140,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "MissFortune", SpellName = "MissFortuneViciousStrikes", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3148,7 +3148,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "MissFortune", SpellName = "MissFortuneScattershot", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -3157,7 +3157,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "MissFortune", SpellName = "MissFortuneBulletTime", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCone, CastType = new[] { CastType.Position },
@@ -3169,7 +3169,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Wukong
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "MonkeyKing", SpellName = "MonkeyKingDoubleAttack", Slot = SpellSlot.Q,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3177,7 +3177,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "MonkeyKing", SpellName = "MonkeyKingDecoy", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3185,7 +3185,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "MonkeyKing", SpellName = "MonkeyKingNimbus", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted,
@@ -3194,7 +3194,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "MonkeyKing", SpellName = "MonkeyKingSpinToWin", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -3207,7 +3207,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Morgana
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Morgana", SpellName = "DarkBindingMissile", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position }, Delay = 250,
@@ -3222,7 +3222,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Morgana", SpellName = "TormentedSoil", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -3230,7 +3230,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Morgana", SpellName = "BlackShield", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.Self, CastType.AllyChampions },
@@ -3238,7 +3238,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Morgana", SpellName = "SoulShackles", Slot = SpellSlot.R,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3251,7 +3251,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Nami
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nami", SpellName = "NamiQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -3262,7 +3262,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nami", SpellName = "NamiW", Slot = SpellSlot.W, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.Self, CastType.AllyChampions, CastType.EnemyChampions },
@@ -3270,7 +3270,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nami", SpellName = "NamiE", Slot = SpellSlot.E, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.Self, CastType.AllyChampions },
@@ -3278,7 +3278,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nami", SpellName = "NamiR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -3293,7 +3293,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Nasus
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nasus", SpellName = "NasusQ", Slot = SpellSlot.Q, SpellType = SpellType.Activated,
                         CastType = new[] { CastType.Activate },
@@ -3301,7 +3301,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nasus", SpellName = "NasusW", Slot = SpellSlot.W, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.EnemyChampions }, SpellTags = new[] { SpellTags.CrowdControl },
@@ -3309,7 +3309,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nasus", SpellName = "NasusE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -3317,7 +3317,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nasus", SpellName = "NasusR", Slot = SpellSlot.R, SpellType = SpellType.Activated,
                         CastType = new[] { CastType.Activate }, SpellTags = new[] { SpellTags.DefensiveBuff }
@@ -3328,7 +3328,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Nautilus
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nautilus", SpellName = "NautilusAnchorDrag", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -3345,7 +3345,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nautilus", SpellName = "NautilusPiercingGaze", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3353,7 +3353,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nautilus", SpellName = "NautilusSplashZone", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -3361,7 +3361,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nautilus", SpellName = "NautilusGrandLine", Slot = SpellSlot.R,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.EnemyChampions },
@@ -3374,7 +3374,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Nocturne
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nocturne", SpellName = "NocturneDuskbringer", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -3385,7 +3385,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nocturne", SpellName = "NocturneShroudofDarkness", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3393,7 +3393,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nocturne", SpellName = "NocturneUnspeakableHorror", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -3402,7 +3402,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nocturne", SpellName = "NocturneParanoia", Slot = SpellSlot.R,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.Charging, CastType.EnemyChampions },
@@ -3414,7 +3414,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Nidalee
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nidalee", SpellName = "JavelinToss", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -3430,7 +3430,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nidalee", SpellName = "Takedown", Slot = SpellSlot.Q,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3438,7 +3438,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nidalee", SpellName = "Bushwhack", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -3447,7 +3447,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nidalee", SpellName = "Pounce", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -3456,7 +3456,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nidalee", SpellName = "PrimalSurge", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.Self, CastType.AllyChampions },
@@ -3464,7 +3464,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nidalee", SpellName = "Swipe", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCone, CastType = new[] { CastType.Direction },
@@ -3472,7 +3472,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Nidalee", SpellName = "AspectOfTheCougar", Slot = SpellSlot.R,
                         SpellType = SpellType.Toggled, CastType = new[] { CastType.Toggle },
@@ -3484,7 +3484,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Olaf
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Olaf", SpellName = "OlafAxeThrowCast", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -3495,7 +3495,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Olaf", SpellName = "OlafFrenziedStrikes", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3503,7 +3503,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Olaf", SpellName = "OlafRecklessStrike", Slot = SpellSlot.E,
                         SpellType = SpellType.Targeted,
@@ -3512,7 +3512,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Olaf", SpellName = "OlafRagnarok", Slot = SpellSlot.R,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3524,7 +3524,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Orianna
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Orianna", SpellName = "OriannasQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -3534,7 +3534,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Orianna", SpellName = "OrianaDissonanceCommand-", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -3547,7 +3547,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Orianna", SpellName = "OriannasE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine,
@@ -3558,7 +3558,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Orianna", SpellName = "OrianaDetonateCommand-", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -3574,7 +3574,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Quinn
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Quinn", SpellName = "QuinnQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -3591,7 +3591,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Quinn", SpellName = "QuinnW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -3599,7 +3599,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Quinn", SpellName = "QuinnE", Slot = SpellSlot.E, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.EnemyChampions, CastType.EnemyMinions },
@@ -3607,7 +3607,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Quinn", SpellName = "QuinnR", Slot = SpellSlot.R, SpellType = SpellType.Activated,
                         CastType = new[] { CastType.Activate }, SpellTags = new[] { SpellTags.Transformation }
@@ -3618,7 +3618,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Pantheon
 
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "Pantheon",
                     "PantheonQ",
                     SpellSlot.Q,
@@ -3628,7 +3628,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     false,
                     600));
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "Pantheon",
                     "PantheonW",
                     SpellSlot.W,
@@ -3638,7 +3638,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     false,
                     600));
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "Pantheon",
                     "PantheonE",
                     SpellSlot.E,
@@ -3653,7 +3653,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     1400,
                     35));
             Spells.Add(
-                new SpellDatabaseEntry(
+                new DatabaseEntry(
                     "Pantheon",
                     "PantheonRJump",
                     SpellSlot.R,
@@ -3670,7 +3670,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Poppy
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Poppy", SpellName = "PoppyQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Direction },
@@ -3679,7 +3679,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Poppy", SpellName = "PoppyW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -3687,7 +3687,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Poppy", SpellName = "PoppyE", Slot = SpellSlot.E, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.EnemyChampions, CastType.EnemyMinions },
@@ -3696,7 +3696,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Poppy", SpellName = "PoppyRSpell", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 300, Range = 1200, Radius = 100,
@@ -3715,7 +3715,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Rengar
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Rengar", SpellName = "RengarQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3723,7 +3723,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Rengar", SpellName = "RengarW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -3732,7 +3732,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Rengar", SpellName = "RengarE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -3749,7 +3749,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Rengar", SpellName = "RengarR", Slot = SpellSlot.R,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3762,7 +3762,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region RekSai
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "RekSai", SpellName = "RekSaiQBurrowed", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -3777,7 +3777,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "RekSai", SpellName = "RekSaiQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3785,7 +3785,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "RekSai", SpellName = "RekSaiW", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3793,7 +3793,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "RekSai", SpellName = "RekSaiWBurrowed", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -3802,7 +3802,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "RekSai", SpellName = "RekSaiE", Slot = SpellSlot.E, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.EnemyChampions, CastType.EnemyMinions },
@@ -3810,7 +3810,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "RekSai", SpellName = "RekSaiEBurrowed", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position }, Range = 750,
@@ -3818,7 +3818,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "RekSai", SpellName = "RekSaiR", ExtraSpellNames = new[] { "RekSaiR2" },
                         Slot = SpellSlot.R, SpellType = SpellType.Activated, CastType = new[] { CastType.HeroPets },
@@ -3830,7 +3830,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Riven
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Riven", SpellName = "RivenTriCleave", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -3839,7 +3839,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Riven", SpellName = "RivenMartyr", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -3848,7 +3848,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Riven", SpellName = "RivenFeint", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotLine, CastType = new[] { CastType.Position },
@@ -3856,7 +3856,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Riven", SpellName = "RivenFengShuiEngine", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine,
@@ -3871,7 +3871,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Rumble
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Rumble", SpellName = "RumbleFlameThrower", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCone, CastType = new[] { CastType.Activate },
@@ -3879,7 +3879,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Rumble", SpellName = "RumbleShield", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -3887,7 +3887,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Rumble", SpellName = "RumbleGrenade", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -3904,7 +3904,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Rumble", SpellName = "RumbleCarpetBomb", CastType = new[] { CastType.Position },
                         SpellTags = new[] { SpellTags.Damage, SpellTags.CrowdControl },
@@ -3920,7 +3920,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Ryze
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ryze", SpellName = "RyzeQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -3935,7 +3935,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ryze", SpellName = "RyzeW", Slot = SpellSlot.W, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.EnemyChampions },
@@ -3944,7 +3944,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ryze", SpellName = "RyzeE", Slot = SpellSlot.E, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.EnemyChampions, CastType.EnemyMinions },
@@ -3952,7 +3952,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ryze", SpellName = "RyzeR", Slot = SpellSlot.R, SpellType = SpellType.Activated,
                         CastType = new[] { CastType.Activate },
@@ -3961,7 +3961,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ryze", SpellName = "RyzeRQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -3976,7 +3976,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ryze", SpellName = "RyzeRW", Slot = SpellSlot.W, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.EnemyChampions },
@@ -3985,7 +3985,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ryze", SpellName = "RyzeRE", Slot = SpellSlot.E, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.EnemyChampions, CastType.EnemyMinions },
@@ -3997,7 +3997,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Sejuani
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Sejuani", SpellName = "SejuaniArcticAssault", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -4013,7 +4013,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Sejuani", SpellName = "SejuaniNorthernWinds", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -4021,7 +4021,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Sejuani", SpellName = "SejuaniWintersClaw", Slot = SpellSlot.E,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -4030,7 +4030,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
             //TODO: fix?
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Sejuani", SpellName = "SejuaniGlacialPrisonStart", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -4046,7 +4046,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Sion
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Sion", SpellName = "SionQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCone, CastType = new[] { CastType.Direction },
@@ -4056,7 +4056,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Sion", SpellName = "SionW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -4064,7 +4064,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Sion", SpellName = "SionE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -4075,7 +4075,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Sion", SpellName = "SionR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Direction },
@@ -4090,7 +4090,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Soraka
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Soraka", SpellName = "SorakaQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -4100,14 +4100,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Soraka", SpellName = "SorakaW", Slot = SpellSlot.W, SpellType = SpellType.Targeted,
                         CastType = new[] { CastType.AllyChampions }, SpellTags = new[] { SpellTags.Heal }, Range = 550
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Soraka", SpellName = "SorakaE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Position },
@@ -4118,7 +4118,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Soraka", SpellName = "SorakaR", Slot = SpellSlot.R,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -4130,7 +4130,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Shen
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Shen", SpellName = "ShenVorpalStar", Slot = SpellSlot.Q,
                         SpellType = SpellType.Targeted,
@@ -4139,7 +4139,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Shen", SpellName = "ShenFeint", Slot = SpellSlot.W,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -4147,7 +4147,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Shen", SpellName = "ShenShadowDash", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -4163,7 +4163,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Shen", SpellName = "ShenStandUnited", Slot = SpellSlot.R,
                         SpellType = SpellType.Targeted, CastType = new[] { CastType.AllyChampions },
@@ -4175,7 +4175,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Shyvana
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Shyvana", SpellName = "ShyvanaDoubleAttack", Slot = SpellSlot.Q,
                         SpellType = SpellType.Activated, CastType = new[] { CastType.Activate },
@@ -4183,7 +4183,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Shyvana", SpellName = "ShyvanaImmolationAura", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, CastType = new[] { CastType.Activate },
@@ -4191,7 +4191,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Shyvana", SpellName = "ShyvanaFireball", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -4206,7 +4206,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Shyvana", SpellName = "ShyvanaTransformCast", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -4221,7 +4221,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Sivir
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Sivir", SpellName = "SivirQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, CastType = new[] { CastType.Position },
@@ -4231,7 +4231,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Sivir", SpellName = "SivirW", Slot = SpellSlot.W, SpellType = SpellType.Activated,
                         CastType = new[] { CastType.Activate },
@@ -4239,14 +4239,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Sivir", SpellName = "SivirE", Slot = SpellSlot.E, SpellType = SpellType.Activated,
                         CastType = new[] { CastType.Activate }, SpellTags = new[] { SpellTags.SpellShield }
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Sivir", SpellName = "SivirR", Slot = SpellSlot.R, SpellType = SpellType.Activated,
                         CastType = new[] { CastType.Activate },
@@ -4258,7 +4258,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Skarner
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Skarner", SpellName = "SkarnerFracture", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 1000, Radius = 70,
@@ -4272,7 +4272,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Sona
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Sona", SpellName = "SonaR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 1000, Radius = 140,
@@ -4285,7 +4285,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Swain
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Swain", SpellName = "SwainShadowGrasp", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, Delay = 1100, Range = 900, Radius = 180,
@@ -4298,7 +4298,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Syndra
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Syndra", SpellName = "SyndraQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, Delay = 600, Range = 800, Radius = 150,
@@ -4306,7 +4306,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Syndra", SpellName = "syndrawcast", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, Delay = 250, Range = 950, Radius = 210, MissileSpeed = 1450,
@@ -4314,7 +4314,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Syndra", SpellName = "syndrae5", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 0, Range = 950, Radius = 100,
@@ -4322,7 +4322,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Syndra", SpellName = "SyndraE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 0, Range = 950, Radius = 100,
@@ -4334,7 +4334,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Talon
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Talon", SpellName = "TalonRake", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 800, Radius = 80,
@@ -4342,7 +4342,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Talon", SpellName = "TalonRakeReturn", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 800, Radius = 80,
@@ -4354,7 +4354,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Tahm Kench
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "TahmKench", SpellName = "TahmKenchQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 951, Radius = 90,
@@ -4373,7 +4373,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Thresh
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Thresh", SpellName = "ThreshQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 500, Range = 1100, Radius = 70,
@@ -4388,7 +4388,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Thresh", SpellName = "ThreshEFlay", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 125, Range = 1075, Radius = 110,
@@ -4400,7 +4400,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Tristana
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Tristana", SpellName = "RocketJump", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, Delay = 500, Range = 900, Radius = 270, MissileSpeed = 1500,
@@ -4412,7 +4412,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Tryndamere
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Tryndamere", SpellName = "slashCast", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 0, Range = 660, Radius = 93,
@@ -4424,7 +4424,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region TwistedFate
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "TwistedFate", SpellName = "WildCards", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 1450, Radius = 40,
@@ -4437,7 +4437,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Twitch
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Twitch", SpellName = "TwitchVenomCask", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, Delay = 250, Range = 900, Radius = 275, MissileSpeed = 1400,
@@ -4450,7 +4450,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Urgot
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Urgot", SpellName = "UrgotHeatseekingLineMissile", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 125, Range = 1000, Radius = 60,
@@ -4459,7 +4459,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Urgot", SpellName = "UrgotPlasmaGrenade", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, Delay = 250, Range = 1100, Radius = 210,
@@ -4472,7 +4472,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Varus
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Varus", SpellName = "VarusQMissilee", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 1800, Radius = 70,
@@ -4481,7 +4481,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Varus", SpellName = "VarusE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, Delay = 1000, Range = 925, Radius = 235,
@@ -4489,7 +4489,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Varus", SpellName = "VarusR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 1200, Radius = 120,
@@ -4503,7 +4503,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Veigar
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Veigar", SpellName = "VeigarBalefulStrike", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 950, Radius = 70,
@@ -4513,7 +4513,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Veigar", SpellName = "VeigarDarkMatter", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, Delay = 1350, Range = 900, Radius = 225,
@@ -4521,7 +4521,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Veigar", SpellName = "VeigarEventHorizon", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotRing, Delay = 500, Range = 700, Radius = 80,
@@ -4533,7 +4533,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Velkoz
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Velkoz", SpellName = "VelkozQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 1100, Radius = 50,
@@ -4548,7 +4548,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Velkoz", SpellName = "VelkozQSplit", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 1100, Radius = 55,
@@ -4563,7 +4563,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Velkoz", SpellName = "VelkozW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 1200, Radius = 88,
@@ -4571,7 +4571,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Velkoz", SpellName = "VelkozE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, Delay = 500, Range = 800, Radius = 225, MissileSpeed = 1500,
@@ -4583,7 +4583,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Vi
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Vi", SpellName = "Vi-q", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 1000, Radius = 90,
@@ -4595,7 +4595,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Viktor
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Viktor", SpellName = "Laser", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 1500, Radius = 80,
@@ -4609,7 +4609,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Xerath
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Xerath", SpellName = "xeratharcanopulse2", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotLine, Delay = 600, Range = 1600, Radius = 100,
@@ -4618,7 +4618,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Xerath", SpellName = "XerathArcaneBarrage2", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, Delay = 700, Range = 1000, Radius = 200,
@@ -4627,7 +4627,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Xerath", SpellName = "XerathMageSpear", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 200, Range = 1150, Radius = 60,
@@ -4642,7 +4642,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Xerath", SpellName = "xerathrmissilewrapper", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, Delay = 700, Range = 5600, Radius = 120,
@@ -4655,7 +4655,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Yasuo
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Yasuo", SpellName = "yasuoq2", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotLine, Delay = 400, Range = 550, Radius = 20,
@@ -4663,7 +4663,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Yasuo", SpellName = "yasuoq3w", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 500, Range = 1150, Radius = 90,
@@ -4672,7 +4672,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Yasuo", SpellName = "yasuoq", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotLine, Delay = 400, Range = 550, Radius = 20,
@@ -4684,7 +4684,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Zac
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Zac", SpellName = "ZacQ", Slot = SpellSlot.Q, SpellType = SpellType.SkillshotLine,
                         Delay = 500, Range = 550, Radius = 120, MissileSpeed = int.MaxValue, DangerValue = 2,
@@ -4696,7 +4696,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Zed
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Zed", SpellName = "ZedQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 925, Radius = 50,
@@ -4711,7 +4711,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Ziggs
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ziggs", SpellName = "ZiggsQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, Delay = 250, Range = 850, Radius = 140, MissileSpeed = 1700,
@@ -4719,7 +4719,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ziggs", SpellName = "ZiggsQBounce1", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, Delay = 250, Range = 850, Radius = 140, MissileSpeed = 1700,
@@ -4728,7 +4728,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ziggs", SpellName = "ZiggsQBounce2", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, Delay = 250, Range = 850, Radius = 160, MissileSpeed = 1700,
@@ -4737,7 +4737,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ziggs", SpellName = "ZiggsW", Slot = SpellSlot.W,
                         SpellType = SpellType.SkillshotCircle, Delay = 250, Range = 1000, Radius = 275,
@@ -4746,7 +4746,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ziggs", SpellName = "ZiggsE", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotCircle, Delay = 500, Range = 900, Radius = 235, MissileSpeed = 1750,
@@ -4754,7 +4754,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Ziggs", SpellName = "ZiggsR", Slot = SpellSlot.R,
                         SpellType = SpellType.SkillshotCircle, Delay = 0, Range = 5300, Radius = 500,
@@ -4766,7 +4766,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Zilean
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Zilean", SpellName = "ZileanQ", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, Delay = 300, Range = 900, Radius = 210, MissileSpeed = 2000,
@@ -4779,7 +4779,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
             #region Zyra
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Zyra", SpellName = "ZyraQFissure", Slot = SpellSlot.Q,
                         SpellType = SpellType.SkillshotCircle, Delay = 850, Range = 800, Radius = 220,
@@ -4788,7 +4788,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Zyra", SpellName = "ZyraGraspingRoots", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 250, Range = 1150, Radius = 70,
@@ -4797,7 +4797,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
                     });
 
             Spells.Add(
-                new SpellDatabaseEntry
+                new DatabaseEntry
                     {
                         ChampionName = "Zyra", SpellName = "zyrapassivedeathmanager", Slot = SpellSlot.E,
                         SpellType = SpellType.SkillshotMissileLine, Delay = 500, Range = 1474, Radius = 70,
@@ -4820,9 +4820,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
         ///     The predicate function.
         /// </param>
         /// <returns>
-        ///     The <see cref="IEnumerable{T}" /> collection of <see cref="SpellDatabaseEntry" />.
+        ///     The <see cref="IEnumerable{T}" /> collection of <see cref="DatabaseEntry" />.
         /// </returns>
-        public static IEnumerable<SpellDatabaseEntry> Get(Func<SpellDatabaseEntry, bool> predicate = null)
+        public static IEnumerable<DatabaseEntry> Get(Func<DatabaseEntry, bool> predicate = null)
         {
             return predicate == null ? Spells : Spells.Where(predicate);
         }
@@ -4832,9 +4832,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
         /// </summary>
         /// <param name="missileSpellName">The missile spell name.</param>
         /// <returns>
-        ///     The <see cref="SpellDatabaseEntry" />
+        ///     The <see cref="DatabaseEntry" />
         /// </returns>
-        public static SpellDatabaseEntry GetByMissileName(string missileSpellName)
+        public static DatabaseEntry GetByMissileName(string missileSpellName)
         {
             missileSpellName = missileSpellName.ToLower();
             return
@@ -4849,9 +4849,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.SpellDatabase
         /// </summary>
         /// <param name="spellName">The spell name.</param>
         /// <returns>
-        ///     The <see cref="SpellDatabaseEntry" />
+        ///     The <see cref="DatabaseEntry" />
         /// </returns>
-        public static SpellDatabaseEntry GetByName(string spellName)
+        public static DatabaseEntry GetByName(string spellName)
         {
             spellName = spellName.ToLower();
             return
