@@ -155,7 +155,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                 if (dashData.Path.PathLength() > 200)
                 {
                     var endP = dashData.Path.Last();
-                    var timeToPoint = input.Delay + (input.From.ToVector2().Distance(endP) / input.Speed);
+                    var timeToPoint = input.Delay + (input.From.Distance(endP) / input.Speed);
                     if (timeToPoint
                         <= (input.Unit.Distance(endP) / dashData.Speed) + (input.RealRadius / input.Unit.MoveSpeed))
                     {
