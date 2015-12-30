@@ -200,6 +200,7 @@ namespace LeagueSharp.SDK.Core.Events
             RegisterSpell("Warwick", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Xerath", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Varus", new InterruptableSpellData(SpellSlot.Q, DangerLevel.Low, false));
+            RegisterSpell("Zilean", new InterruptableSpellData((SpellSlot) 52, DangerLevel.Low));
 
             GlobalInterruptableSpellsList.Add(new InterruptableSpellData("OdinChannel", DangerLevel.Low, (SpellSlot) 62));
             GlobalInterruptableSpellsList.Add(new InterruptableSpellData("OdinChannelBomb", DangerLevel.Low, (SpellSlot) 62));
