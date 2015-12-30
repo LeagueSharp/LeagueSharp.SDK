@@ -28,6 +28,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
     using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Core.Wrappers.Spells;
 
     using SharpDX;
 

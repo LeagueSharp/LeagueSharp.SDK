@@ -22,7 +22,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
     /// <summary>
     ///     Extension for getting the last casted spell of an <see cref="Obj_AI_Hero" />
     /// </summary>
-    public static class LastCastedSpell
+    public static class LastCast
     {
         #region Static Fields
 
@@ -37,10 +37,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes static members of the <see cref="LastCastedSpell" /> class.
+        ///     Initializes static members of the <see cref="LastCast" /> class.
         ///     Static constructor
         /// </summary>
-        static LastCastedSpell()
+        static LastCast()
         {
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
             Spellbook.OnCastSpell += OnCastSpell;

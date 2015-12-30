@@ -17,6 +17,8 @@
 
 namespace LeagueSharp.SDK.Core.Extensions
 {
+    using LeagueSharp.SDK.Core.Wrappers.Spells;
+
     using Wrappers;
 
     /// <summary>

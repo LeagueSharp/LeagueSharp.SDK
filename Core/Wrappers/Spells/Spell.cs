@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers
+namespace LeagueSharp.SDK.Core.Wrappers.Spells
 {
     using System;
     using System.Collections.Generic;
@@ -69,26 +69,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
         #endregion
 
         #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="Spell" /> class.
-        /// </summary>
-        /// <param name="spellDataWrapper">
-        ///     SpellSlot Wrapper
-        /// </param>
-        /// <param name="hitChance">
-        ///     Minimum Hit Chance
-        /// </param>
-        public Spell(SpellDataWrapper spellDataWrapper, HitChance hitChance = HitChance.Medium)
-        {
-            this.Slot = spellDataWrapper.Slot;
-            this.Range = spellDataWrapper.Range;
-            this.Width = spellDataWrapper.Width;
-            this.Speed = spellDataWrapper.Speed;
-            this.Delay = spellDataWrapper.Delay;
-
-            this.MinHitChance = hitChance;
-        }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Spell" /> class.

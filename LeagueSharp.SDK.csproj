@@ -277,15 +277,14 @@
     <Compile Include="Core\Wrappers\Damages\DamageMastery.cs" />
     <Compile Include="Core\Wrappers\Damages\DamagePassives.cs" />
     <Compile Include="Core\Wrappers\Items.cs" />
-    <Compile Include="Core\Wrappers\LastCastedSpell.cs" />
+    <Compile Include="Core\Wrappers\Spells\LastCast.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
     <Compile Include="Core\Wrappers\Orbwalking\Base.cs" />
     <Compile Include="Core\Wrappers\Orbwalking\Orbwalker.cs" />
     <Compile Include="Core\Wrappers\Orbwalking\Selector.cs" />
-    <Compile Include="Core\Wrappers\Spell.cs" />
-    <Compile Include="Core\Wrappers\SpellDatabase\SpellDatabase.cs" />
-    <Compile Include="Core\Wrappers\SpellDatabase\SpellDatabaseEntry.cs" />
-    <Compile Include="Core\Wrappers\SpellDataWrapper.cs" />
+    <Compile Include="Core\Wrappers\Spells\Spell.cs" />
+    <Compile Include="Core\Wrappers\Spells\Database\Database.cs" />
+    <Compile Include="Core\Wrappers\Spells\Database\DatabaseEntry.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\Drawing.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\Humanizer.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\Mode.cs" />
@@ -384,6 +383,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <!--<ItemGroup>
     <Analyzer Include="packages\StyleCop.Analyzers.1.0.0-rc2\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
     <Analyzer Include="packages\StyleCop.Analyzers.1.0.0-rc2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
