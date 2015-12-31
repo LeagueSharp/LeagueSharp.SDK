@@ -17,7 +17,10 @@
 
 namespace LeagueSharp.SDK.Core
 {
+    using System;
+    using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using System.Security.Permissions;
     using System.Threading;
 
@@ -27,9 +30,13 @@ namespace LeagueSharp.SDK.Core
     using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
     using LeagueSharp.SDK.Core.UI.INotifications;
     using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Core.Wrappers;
     using LeagueSharp.SDK.Core.Wrappers.Damages;
     using LeagueSharp.SDK.Core.Wrappers.Orbwalking;
+    using LeagueSharp.SDK.Core.Wrappers.Spells.Database;
     using LeagueSharp.SDK.Core.Wrappers.TargetSelector;
+    using LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes;
+    using LeagueSharp.SDK.Properties;
 
     /// <summary>
     ///     Bootstrap is an initialization pointer for the AppDomainManager to initialize the library correctly once loaded in
@@ -72,6 +79,10 @@ namespace LeagueSharp.SDK.Core
             // Initial notification.
             Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");
 
+            // Load Resource Content.
+            ResourceLoader.Initialize();
+            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Resources Initialized.");
+
             // Load GameObjects.
             GameObjects.Initialize();
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] GameObjects Initialized.");
@@ -96,10 +107,6 @@ namespace LeagueSharp.SDK.Core
             // Load Damages.
             Damage.Initialize(Variables.GameVersion);
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Damage Library Initialized.");
-
-            // Load Gapcloser.
-            Gapcloser.Initialize();
-            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Gapcloser Library Initialized.");
 
             // Final notification.
             Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");

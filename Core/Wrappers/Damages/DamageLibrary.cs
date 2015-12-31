@@ -51,7 +51,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         /// <summary>
         ///     Gets the Damage Collection.
         /// </summary>
-        private static IDictionary<string, ChampionDamage> DamageCollection { get; } =
+        internal static IDictionary<string, ChampionDamage> DamageCollection { get; } =
             new Dictionary<string, ChampionDamage>();
 
         #endregion

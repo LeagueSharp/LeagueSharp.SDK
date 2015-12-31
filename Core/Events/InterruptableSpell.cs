@@ -23,9 +23,12 @@ namespace LeagueSharp.SDK.Core.Events
 
     using Enumerations;
 
+    using LeagueSharp.SDK.Core.Utils;
+
     /// <summary>
     ///     Provides events for interrupting spells.
     /// </summary>
+    [ResourceImport]
     public class InterruptableSpell
     {
         #region Constructors and Destructors
@@ -38,8 +41,6 @@ namespace LeagueSharp.SDK.Core.Events
             InterruptableSpellsDictionary = new Dictionary<string, List<InterruptableSpellData>>();
             CastingInterruptableSpellDictionary = new Dictionary<int, InterruptableSpellData>();
             GlobalInterruptableSpellsList = new List<InterruptableSpellData>();
-
-            InitializeSpells();
 
             Game.OnUpdate += Game_OnGameUpdate;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
@@ -94,9 +95,11 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     Gets or sets the interrupt-able spells.
         /// </summary>
+        [ResourceImport("Data.InterruptableSpells.json")]
         private static Dictionary<string, List<InterruptableSpellData>> InterruptableSpellsDictionary { get; }
 
-        private static List<InterruptableSpellData> GlobalInterruptableSpellsList { get; } 
+        [ResourceImport("Data.GlobalInterruptableSpellsList.json")]
+        public static List<InterruptableSpellData> GlobalInterruptableSpellsList { get; } 
         #endregion
 
         #region Public Methods and Operators
@@ -169,43 +172,6 @@ namespace LeagueSharp.SDK.Core.Events
             {
                 OnInterruptableTarget(newArgs.Sender, newArgs);
             }
-        }
-
-        /// <summary>
-        ///     Initializer for the spells
-        /// </summary>
-        private static void InitializeSpells()
-        {
-            RegisterSpell("Caitlyn", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("FiddleSticks", new InterruptableSpellData(SpellSlot.W, DangerLevel.Medium));
-            RegisterSpell("FiddleSticks", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Galio", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Janna", new InterruptableSpellData(SpellSlot.R, DangerLevel.Low));
-            RegisterSpell("Karthus", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Katarina", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Lucian", new InterruptableSpellData(SpellSlot.R, DangerLevel.High, false));
-            RegisterSpell("Malzahar", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("MasterYi", new InterruptableSpellData(SpellSlot.W, DangerLevel.Low));
-            RegisterSpell("MissFortune", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Nunu", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Pantheon", new InterruptableSpellData(SpellSlot.E, DangerLevel.Low));
-            RegisterSpell("Quinn", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Pantheon", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("RekSai", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Sion", new InterruptableSpellData(SpellSlot.R, DangerLevel.Low));
-            RegisterSpell("Shen", new InterruptableSpellData(SpellSlot.R, DangerLevel.Low));
-            RegisterSpell("TahmKench", new InterruptableSpellData(SpellSlot.R, DangerLevel.Medium));
-            RegisterSpell("TwistedFate", new InterruptableSpellData(SpellSlot.R, DangerLevel.Medium));
-            RegisterSpell("Urgot", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Velkoz", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Warwick", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Xerath", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Varus", new InterruptableSpellData(SpellSlot.Q, DangerLevel.Low, false));
-            RegisterSpell("Zilean", new InterruptableSpellData((SpellSlot) 52, DangerLevel.Low));
-
-            GlobalInterruptableSpellsList.Add(new InterruptableSpellData("OdinChannel", DangerLevel.Low, (SpellSlot) 62));
-            GlobalInterruptableSpellsList.Add(new InterruptableSpellData("OdinChannelBomb", DangerLevel.Low, (SpellSlot) 62));
-            GlobalInterruptableSpellsList.Add(new InterruptableSpellData("summonerteleport", DangerLevel.Medium));
         }
 
         /// <summary>
@@ -291,6 +257,10 @@ namespace LeagueSharp.SDK.Core.Events
         public class InterruptableSpellData
         {
             #region Constructors and Destructors
+
+            public InterruptableSpellData()
+            {
+            }
 
             /// <summary>
             ///     Initializes a new instance of the <see cref="InterruptableSpellData" /> class.

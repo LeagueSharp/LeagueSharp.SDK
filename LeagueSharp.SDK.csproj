@@ -14,14 +14,15 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <PreBuildEvent />
-    <PostBuildEvent />
+    <PostBuildEvent>
+    </PostBuildEvent>
     <OutputPath>bin\Release</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -259,13 +260,18 @@
     <Compile Include="Core\Utils\Cursor.cs" />
     <Compile Include="Core\Utils\DelayAction.cs" />
     <Compile Include="Core\Utils\DynamicInitializer.cs" />
+    <Compile Include="Core\Utils\IFilter.cs" />
     <Compile Include="Core\Utils\Invulnerable.cs" />
+    <Compile Include="Core\Utils\JsonFactory.cs" />
     <Compile Include="Core\Utils\Jungle.cs" />
     <Compile Include="Core\Utils\Logging.cs" />
     <Compile Include="Core\Utils\MathUtils.cs" />
     <Compile Include="Core\Utils\Minion.cs" />
     <Compile Include="Core\Utils\NetworkUtils.cs" />
     <Compile Include="Core\Utils\Performance.cs" />
+    <Compile Include="Core\Utils\ResourceFactory.cs" />
+    <Compile Include="Core\Utils\ResourceImportAttribute.cs" />
+    <Compile Include="Core\Utils\ResourceLoader.cs" />
     <Compile Include="Core\Utils\Storage.cs" />
     <Compile Include="Core\Utils\TickOperation.cs" />
     <Compile Include="Core\Utils\WeightedRandom.cs" />
@@ -360,8 +366,13 @@
   <ItemGroup>
     <None Include="LeagueSharp.SDK.snk" />
     <None Include="packages.config" />
-    <None Include="Resources\Damage\5.24.json" />
-    <None Include="Resources\Data\Gapclosers.json" />
+    <EmbeddedResource Include="Resources\Data\5.24.json" />
+    <EmbeddedResource Include="Resources\Data\Gapclosers.json" />
+    <EmbeddedResource Include="Resources\Data\Database.json" />
+    <EmbeddedResource Include="Resources\Data\GlobalInterruptableSpellsList.json" />
+    <EmbeddedResource Include="Resources\Data\InterruptableSpells.json" />
+    <EmbeddedResource Include="Resources\Data\Map.json" />
+    <EmbeddedResource Include="Resources\Data\Priority.json" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
@@ -381,6 +392,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

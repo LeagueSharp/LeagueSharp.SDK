@@ -25,12 +25,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
 
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
 
     #endregion
 
     /// <summary>
     ///     The priority Mode.
     /// </summary>
+    [ResourceImport]
     public class Priority : ITargetSelectorMode
     {
         #region Constants
@@ -52,78 +54,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         /// <summary>
         ///     The priority categories
         /// </summary>
-        private readonly List<PriorityCategory> priorityCategories = new List<PriorityCategory>();
+        [ResourceImport("Data.Priority.json")]
+        public static List<PriorityCategory> priorityCategories = new List<PriorityCategory>();
 
         /// <summary>
         ///     The menu
         /// </summary>
         private Menu menu;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="Priority" /> class.
-        /// </summary>
-        public Priority()
-        {
-            this.priorityCategories.AddRange(
-                new List<PriorityCategory>
-                    {
-                        new PriorityCategory
-                            {
-                                Champions =
-                                    new HashSet<string>
-                                        {
-                                            "Ahri", "Anivia", "Annie", "Ashe", "Azir", "Brand", "Caitlyn", "Cassiopeia",
-                                            "Corki", "Draven", "Ezreal", "Graves", "Jinx", "Kalista", "Karma", "Karthus",
-                                            "Katarina", "Kennen", "KogMaw", "Leblanc", "Kindred", "Lucian", "Lux",
-                                            "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra",
-                                            "Talon", "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne",
-                                            "Veigar", "Velkoz", "Viktor", "Xerath", "Zed", "Ziggs", "Soraka"
-                                        },
-                                Value = 4
-                            },
-                        new PriorityCategory
-                            {
-                                Champions =
-                                    new HashSet<string>
-                                        {
-                                            "Akali", "Diana", "Ekko", "Fiddlesticks", "Fiora", "Fizz", "Heimerdinger",
-                                            "Illaoi", "Jayce", "Kassadin", "Kayle", "KhaZix", "Kindred", "Lissandra",
-                                            "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo", "Zilean"
-                                        },
-                                Value = 3
-                            },
-                        new PriorityCategory
-                            {
-                                Champions =
-                                    new HashSet<string>
-                                        {
-                                            "Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas",
-                                            "Irelia", "Jax", "LeeSin", "Maokai", "Morgana", "Nocturne", "Pantheon",
-                                            "Poppy", "Rengar", "Rumble", "Ryze", "Swain", "Trundle", "Tryndamere", "Udyr",
-                                            "Urgot", "Vi", "XinZhao", "RekSai"
-                                        },
-                                Value = 2
-                            },
-                        new PriorityCategory
-                            {
-                                Champions =
-                                    new HashSet<string>
-                                        {
-                                            "Alistar", "Amumu", "Bard", "Blitzcrank", "Braum", "ChoGath", "DrMundo",
-                                            "Garen", "Gnar", "Hecarim", "Janna", "JarvanIV", "Leona", "Lulu", "Malphite",
-                                            "Nami", "Nasus", "Nautilus", "Nunu", "Olaf", "Rammus", "Renekton", "Sejuani",
-                                            "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona", "TahmKench", "Taric",
-                                            "TahmKench", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac",
-                                            "Zyra"
-                                        },
-                                Value = 1
-                            }
-                    });
-        }
 
         #endregion
 
@@ -194,7 +131,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         /// <returns></returns>
         public int GetDefaultPriority(Obj_AI_Hero hero)
         {
-            return this.priorityCategories.FirstOrDefault(i => i.Champions.Contains(hero.ChampionName))?.Value
+            return priorityCategories.FirstOrDefault(i => i.Champions.Contains(hero.ChampionName))?.Value
                    ?? MinPriority;
         }
 
@@ -238,7 +175,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
     /// <summary>
     ///     Category class for Priorities
     /// </summary>
-    internal class PriorityCategory
+    public class PriorityCategory
     {
         #region Public Properties
 

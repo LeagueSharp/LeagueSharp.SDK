@@ -20,18 +20,17 @@ namespace LeagueSharp.SDK.Core.Events
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Permissions;
-    using System.Text;
     using Enumerations;
     using Extensions;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-    using Properties;
+
+    using LeagueSharp.SDK.Core.Utils;
+
     using SharpDX;
 
     /// <summary>
     ///     Detection of Gap-closers and fires the OnGapCloser event.
     /// </summary>
+    [ResourceImport]
     public class Gapcloser
     {
         #region Static Fields
@@ -44,7 +43,8 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     Gets or sets the spells.
         /// </summary>
-        private static readonly List<GapCloser> SpellsList = new List<GapCloser>();
+        [ResourceImport("Data.Gapclosers.json")]
+        private static readonly Dictionary<string, GapCloser> SpellsList = new Dictionary<string, GapCloser>();
 
         #endregion
 
@@ -78,7 +78,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     Gets the spells.
         /// </summary>
-        public static IEnumerable<GapCloser> Spells => SpellsList;
+        public static IEnumerable<GapCloser> Spells => SpellsList.Values;
 
         #endregion
 
@@ -92,35 +92,9 @@ namespace LeagueSharp.SDK.Core.Events
         {
             Load.OnLoad += (sender, args) =>
                 {
-                    var dataFile =
-                        (IDictionary<string, JToken>)JObject.Parse(Encoding.Default.GetString(Resources.Gapclosers));
-                    var champions = GameObjects.Heroes.Select(champion => champion.ChampionName).ToArray();
-                    foreach (var entry in dataFile.Where(entry => champions.Contains(entry.Key)))
-                    {
-                        LoadGapcloser(entry.Key, entry.Value.ToString());
-                    }
-
                     Game.OnUpdate += OnUpdate;
                     Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
                 };
-        }
-
-        /// <summary>
-        ///     Loads the <c>gapcloser</c> data.
-        /// </summary>
-        /// <param name="championName">
-        ///     The champion name
-        /// </param>
-        /// <param name="value">
-        ///     The value
-        /// </param>
-        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        private static void LoadGapcloser(string championName, string value)
-        {
-            var gapcloser = JsonConvert.DeserializeObject<GapCloser>(value);
-            gapcloser.ChampionName = championName;
-
-            SpellsList.Add(gapcloser);
         }
 
         /// <summary>
@@ -130,7 +104,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <param name="args">Process Spell Cast Data</param>
         private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (SpellsList.All(spell => spell.SpellName != args.SData.Name.ToLower()))
+            if (SpellsList.All(spell => spell.Value.SpellName != args.SData.Name.ToLower()))
             {
                 return;
             }
