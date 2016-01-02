@@ -15,14 +15,12 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.Spells.Database
+namespace LeagueSharp.SDK
 {
-    using LeagueSharp.SDK.Core.Enumerations;
-
     /// <summary>
     ///     The spell database entry.
     /// </summary>
-    public class DatabaseEntry
+    public class SpellDatabaseEntry
     {
         #region Fields
 
@@ -45,7 +43,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells.Database
         ///     The buffs applied by the spell on my hero
         /// </summary>
         public BuffType[] AppliedBuffsOnSelf;
-        
+
         /// <summary>
         ///     Indicates whether the spell can be removed.
         /// </summary>
@@ -196,14 +194,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells.Database
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="DatabaseEntry" /> class.
+        ///     Initializes a new instance of the <see cref="SpellDatabaseEntry" /> class.
         /// </summary>
-        public DatabaseEntry()
+        public SpellDatabaseEntry()
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="DatabaseEntry" /> class.
+        ///     Initializes a new instance of the <see cref="SpellDatabaseEntry" /> class.
         /// </summary>
         /// <param name="championName">
         ///     The champion name.
@@ -247,7 +245,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells.Database
         /// <param name="defaultDangerValue">
         ///     The default danger value.
         /// </param>
-        public DatabaseEntry(
+        public SpellDatabaseEntry(
             string championName,
             string spellName,
             SpellSlot slot,

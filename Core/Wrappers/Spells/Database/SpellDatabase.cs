@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.Spells.Database
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
@@ -27,7 +27,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells.Database
     ///     The spell database.
     /// </summary>
     [ResourceImport]
-    public static class Database
+    public static class SpellDatabase
     {
         #region Static Fields
 
@@ -35,7 +35,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells.Database
         ///     A list of all the entries in the SpellDatabase.
         /// </summary>
         [ResourceImport("Data.Database.json")]
-        public static List<DatabaseEntry> Spells = new List<DatabaseEntry>();
+        public static List<SpellDatabaseEntry> Spells = new List<SpellDatabaseEntry>();
 
         #endregion
 
@@ -48,9 +48,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells.Database
         ///     The predicate function.
         /// </param>
         /// <returns>
-        ///     The <see cref="IEnumerable{T}" /> collection of <see cref="DatabaseEntry" />.
+        ///     The <see cref="IEnumerable{T}" /> collection of <see cref="SpellDatabaseEntry" />.
         /// </returns>
-        public static IEnumerable<DatabaseEntry> Get(Func<DatabaseEntry, bool> predicate = null)
+        public static IEnumerable<SpellDatabaseEntry> Get(Func<SpellDatabaseEntry, bool> predicate = null)
         {
             return predicate == null ? Spells : Spells.Where(predicate);
         }
@@ -60,9 +60,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells.Database
         /// </summary>
         /// <param name="missileSpellName">The missile spell name.</param>
         /// <returns>
-        ///     The <see cref="DatabaseEntry" />
+        ///     The <see cref="SpellDatabaseEntry" />
         /// </returns>
-        public static DatabaseEntry GetByMissileName(string missileSpellName)
+        public static SpellDatabaseEntry GetByMissileName(string missileSpellName)
         {
             missileSpellName = missileSpellName.ToLower();
             return
@@ -77,9 +77,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells.Database
         /// </summary>
         /// <param name="spellName">The spell name.</param>
         /// <returns>
-        ///     The <see cref="DatabaseEntry" />
+        ///     The <see cref="SpellDatabaseEntry" />
         /// </returns>
-        public static DatabaseEntry GetByName(string spellName)
+        public static SpellDatabaseEntry GetByName(string spellName)
         {
             spellName = spellName.ToLower();
             return

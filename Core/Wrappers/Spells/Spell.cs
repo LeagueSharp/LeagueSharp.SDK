@@ -15,16 +15,12 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.Spells
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math.Prediction;
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
@@ -320,8 +316,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Returns if a spell can be cast and the target is in range.
         /// </summary>
-        /// <param name="unit">The Target</param>
-        /// <returns>Can spell be casted and target is in range</returns>
+        /// <param name="unit">
+        ///     The Target
+        /// </param>
+        /// <returns>
+        ///     Can spell be casted and target is in range
+        /// </returns>
         public bool CanCast(Obj_AI_Base unit)
         {
             return this.Slot.IsReady() && unit.IsValidTarget(this.Range);
@@ -331,11 +331,21 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         ///     Casts the spell.
         /// </summary>
         /// <param name="unit">Unit to cast on</param>
-        /// <param name="exactHitChance">Is exact hit chance</param>
-        /// <param name="areaOfEffect">Is Area of Effect</param>
-        /// <param name="minTargets">Minimum of Targets</param>
-        /// <param name="tempHitChance">Temporary HitChance Override</param>
-        /// <returns>The <see cref="CastStates" /></returns>
+        /// <param name="exactHitChance">
+        ///     Is exact hit chance
+        /// </param>
+        /// <param name="areaOfEffect">
+        ///     Is Area of Effect
+        /// </param>
+        /// <param name="minTargets">
+        ///     Minimum of Targets
+        /// </param>
+        /// <param name="tempHitChance">
+        ///     Temporary HitChance Override
+        /// </param>
+        /// <returns>
+        ///     The <see cref="CastStates" />
+        /// </returns>
         public CastStates Cast(
             Obj_AI_Base unit,
             bool exactHitChance = false,
@@ -423,7 +433,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Cast Spell onto self
         /// </summary>
-        /// <returns>Was Spell Casted</returns>
+        /// <returns>
+        ///     Was Spell Casted
+        /// </returns>
         public bool Cast()
         {
             return this.CastOnUnit(GameObjects.Player);
@@ -432,9 +444,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Cast Spell from a Vector2 to another Vector2 boundaries
         /// </summary>
-        /// <param name="fromPosition">From Position</param>
-        /// <param name="toPosition">To Position</param>
-        /// <returns>Was Spell Casted</returns>
+        /// <param name="fromPosition">
+        ///     From Position
+        /// </param>
+        /// <param name="toPosition">
+        ///     To Position
+        /// </param>
+        /// <returns>
+        ///     Was Spell Casted
+        /// </returns>
         public bool Cast(Vector2 fromPosition, Vector2 toPosition)
         {
             return this.Cast(fromPosition.ToVector3(), toPosition.ToVector3());
@@ -443,9 +461,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Cast Spell from a Vector3 to another Vector3 boundaries
         /// </summary>
-        /// <param name="fromPosition">From Position</param>
-        /// <param name="toPosition">To Position</param>
-        /// <returns>Was Spell Casted</returns>
+        /// <param name="fromPosition">
+        ///     From Position
+        /// </param>
+        /// <param name="toPosition">
+        ///     To Position
+        /// </param>
+        /// <returns>
+        ///     Was Spell Casted
+        /// </returns>
         public bool Cast(Vector3 fromPosition, Vector3 toPosition)
         {
             return this.Slot.IsReady() && GameObjects.Player.Spellbook.CastSpell(this.Slot, fromPosition, toPosition);
@@ -454,8 +478,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Cast Spell to a Vector2
         /// </summary>
-        /// <param name="position">The Position</param>
-        /// <returns>Was Spell Casted</returns>
+        /// <param name="position">
+        ///     The Position
+        /// </param>
+        /// <returns>
+        ///     Was Spell Casted
+        /// </returns>
         public bool Cast(Vector2 position)
         {
             return this.Cast(position.ToVector3());
@@ -464,8 +492,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Cast Spell to a Vector3
         /// </summary>
-        /// <param name="position">The Position</param>
-        /// <returns>Was Spell Casted</returns>
+        /// <param name="position">
+        ///     The Position
+        /// </param>
+        /// <returns>
+        ///     Was Spell Casted
+        /// </returns>
         public bool Cast(Vector3 position)
         {
             if (!this.Slot.IsReady())
@@ -497,9 +529,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Cast Spell if HitChance equals to input HitChance
         /// </summary>
-        /// <param name="unit">The Target</param>
-        /// <param name="hitChance">The HitChance</param>
-        /// <returns>Was Spell Casted</returns>
+        /// <param name="unit">
+        ///     The Target
+        /// </param>
+        /// <param name="hitChance">
+        ///     The HitChance
+        /// </param>
+        /// <returns>
+        ///     Was Spell Casted
+        /// </returns>
         public CastStates CastIfHitchanceEquals(Obj_AI_Base unit, HitChance hitChance)
         {
             return this.Cast(unit, true, false, -1, hitChance);
@@ -508,9 +546,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Cast Spell if HitChance is more than the minimum to input HitChance
         /// </summary>
-        /// <param name="unit">The Target</param>
-        /// <param name="hitChance">The HitChance</param>
-        /// <returns>Was Spell Casted</returns>
+        /// <param name="unit">
+        ///     The Target
+        /// </param>
+        /// <param name="hitChance">
+        ///     The HitChance
+        /// </param>
+        /// <returns>
+        ///     Was Spell Casted
+        /// </returns>
         public CastStates CastIfHitchanceMinimum(Obj_AI_Base unit, HitChance hitChance)
         {
             return this.Cast(unit, false, false, -1, hitChance);
@@ -519,9 +563,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Cast Spell if will hit Minimum input targets counts.
         /// </summary>
-        /// <param name="unit">Main Target</param>
-        /// <param name="minTargets">Minimum Targets</param>
-        /// <returns>Was Spell Casted</returns>
+        /// <param name="unit">
+        ///     Main Target
+        /// </param>
+        /// <param name="minTargets">
+        ///     Minimum Targets
+        /// </param>
+        /// <returns>
+        ///     Was Spell Casted
+        /// </returns>
         public CastStates CastIfWillHit(Obj_AI_Base unit, int minTargets = 5)
         {
             return this.Cast(unit, false, true, minTargets);
@@ -530,10 +580,18 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Cast Spell on best Target.
         /// </summary>
-        /// <param name="extraRange">Extra Range</param>
-        /// <param name="areaOfEffect">Area of Effect</param>
-        /// <param name="minTargets">Minimum Area-of-Effect targets</param>
-        /// <returns>CastState. <seealso cref="CastStates" /></returns>
+        /// <param name="extraRange">
+        ///     Extra Range
+        /// </param>
+        /// <param name="areaOfEffect">
+        ///     Area of Effect
+        /// </param>
+        /// <param name="minTargets">
+        ///     Minimum Area-of-Effect targets
+        /// </param>
+        /// <returns>
+        ///     CastState. <seealso cref="CastStates" />
+        /// </returns>
         public CastStates CastOnBestTarget(float extraRange = 0, bool areaOfEffect = false, int minTargets = -1)
         {
             return this.Cast(this.GetTarget(extraRange), false, areaOfEffect, minTargets);
@@ -542,8 +600,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Cast Spell directly onto a unit
         /// </summary>
-        /// <param name="unit">The Target</param>
-        /// <returns>Was Spell Casted</returns>
+        /// <param name="unit">
+        ///     The Target
+        /// </param>
+        /// <returns>
+        ///     Was Spell Casted
+        /// </returns>
         public bool CastOnUnit(Obj_AI_Base unit)
         {
             if (!this.Slot.IsReady() || this.From.DistanceSquared(unit.ServerPosition) > this.RangeSqr)
@@ -559,9 +621,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Returns the spell counted hits.
         /// </summary>
-        /// <param name="units">The Minions</param>
-        /// <param name="castPosition">Cast Position Vector3 Source</param>
-        /// <returns>The hits</returns>
+        /// <param name="units">
+        ///     The Minions
+        /// </param>
+        /// <param name="castPosition">
+        ///     Cast Position Vector3 Source
+        /// </param>
+        /// <returns>
+        ///     The hits
+        /// </returns>
         public int CountHits(List<Obj_AI_Base> units, Vector3 castPosition)
         {
             var points = units.Select(unit => this.GetPrediction(unit).UnitPosition).ToList();
@@ -571,9 +639,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Returns the spell counted hits.
         /// </summary>
-        /// <param name="points">Minion Positions</param>
-        /// <param name="castPosition">Cast Position Vector3 Source</param>
-        /// <returns>The hits</returns>
+        /// <param name="points">
+        ///     Minion Positions
+        /// </param>
+        /// <param name="castPosition">
+        ///     Cast Position Vector3 Source
+        /// </param>
+        /// <returns>
+        ///     The hits
+        /// </returns>
         public int CountHits(List<Vector3> points, Vector3 castPosition)
         {
             return points.Count(point => this.WillHit(point, castPosition));
@@ -582,9 +656,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Get Circular Farm Location
         /// </summary>
-        /// <param name="minions">The Minions</param>
-        /// <param name="overrideWidth">Override Width</param>
-        /// <returns>Farm Location. <seealso cref="FarmLocation" /></returns>
+        /// <param name="minions">
+        ///     The Minions
+        /// </param>
+        /// <param name="overrideWidth">
+        ///     Override Width
+        /// </param>
+        /// <returns>
+        ///     Farm Location. <seealso cref="FarmLocation" />
+        /// </returns>
         public FarmLocation GetCircularFarmLocation(List<Obj_AI_Base> minions, float overrideWidth = -1)
         {
             var positions = Minion.GetMinionsPredictedPositions(
@@ -603,9 +683,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Get Circular Farm Location
         /// </summary>
-        /// <param name="minionPositions">Minion Positions</param>
-        /// <param name="overrideWidth">Override Width</param>
-        /// <returns>Farm Location. <seealso cref="FarmLocation" /></returns>
+        /// <param name="minionPositions">
+        ///     Minion Positions
+        /// </param>
+        /// <param name="overrideWidth">
+        ///     Override Width
+        /// </param>
+        /// <returns>
+        ///     Farm Location. <seealso cref="FarmLocation" />
+        /// </returns>
         public FarmLocation GetCircularFarmLocation(List<Vector2> minionPositions, float overrideWidth = -1)
         {
             return Minion.GetBestCircularFarmLocation(
@@ -617,13 +703,21 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Returns Collision List
         /// </summary>
-        /// <param name="fromVector2">From Vector3 Source</param>
-        /// <param name="to">To Vector3 Source</param>
-        /// <param name="delayOverride">Delay Override</param>
-        /// <returns>Collision List</returns>
+        /// <param name="fromVector2">
+        ///     From Vector3 Source
+        /// </param>
+        /// <param name="to">
+        ///     To Vector3 Source
+        /// </param>
+        /// <param name="delayOverride">
+        ///     Delay Override
+        /// </param>
+        /// <returns>
+        ///     Collision List
+        /// </returns>
         public List<Obj_AI_Base> GetCollision(Vector2 fromVector2, List<Vector2> to, float delayOverride = -1)
         {
-            return Core.Math.Collision.GetCollision(
+            return SDK.Collision.GetCollision(
                 to.Select(h => h.ToVector3()).ToList(),
                 new PredictionInput
                     {
@@ -635,8 +729,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Returns health prediction on a unit.
         /// </summary>
-        /// <param name="unit">The Unit</param>
-        /// <returns>Unit's predicted health</returns>
+        /// <param name="unit">
+        ///     The Unit
+        /// </param>
+        /// <returns>
+        ///     Unit's predicted health
+        /// </returns>
         public float GetHealthPrediction(Obj_AI_Base unit)
         {
             var time = (int)((this.Delay * 1000) + (this.From.Distance(unit.ServerPosition) / this.Speed) - 100);
@@ -646,8 +744,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Returns Hit Count
         /// </summary>
-        /// <param name="hitChance">The HitChance</param>
-        /// <returns>Hit Count</returns>
+        /// <param name="hitChance">
+        ///     The HitChance
+        /// </param>
+        /// <returns>
+        ///     Hit Count
+        /// </returns>
         public float GetHitCount(HitChance hitChance = HitChance.High)
         {
             return GameObjects.EnemyHeroes.Select(e => this.GetPrediction(e)).Count(p => p.Hitchance >= hitChance);
@@ -656,9 +758,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Get Line Farm Location
         /// </summary>
-        /// <param name="minionPositions">The Minions</param>
-        /// <param name="overrideWidth">Override Width</param>
-        /// <returns>Farm Location. <seealso cref="FarmLocation" /></returns>
+        /// <param name="minionPositions">
+        ///     The Minions
+        /// </param>
+        /// <param name="overrideWidth">
+        ///     Override Width
+        /// </param>
+        /// <returns>
+        ///     Farm Location. <seealso cref="FarmLocation" />
+        /// </returns>
         public FarmLocation GetLineFarmLocation(List<Obj_AI_Base> minionPositions, float overrideWidth = -1)
         {
             var positions = Minion.GetMinionsPredictedPositions(
@@ -677,9 +785,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Get Line Farm Location
         /// </summary>
-        /// <param name="minionPositions">Minion Positions</param>
-        /// <param name="overrideWidth">Override Width</param>
-        /// <returns>Farm Location. <seealso cref="FarmLocation" /></returns>
+        /// <param name="minionPositions">
+        ///     Minion Positions
+        /// </param>
+        /// <param name="overrideWidth">
+        ///     Override Width
+        /// </param>
+        /// <returns>
+        ///     Farm Location. <seealso cref="FarmLocation" />
+        /// </returns>
         public FarmLocation GetLineFarmLocation(List<Vector2> minionPositions, float overrideWidth = -1)
         {
             return Minion.GetBestLineFarmLocation(
@@ -691,10 +805,18 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Returns Spell Prediction
         /// </summary>
-        /// <param name="unit">Predicted Unit</param>
-        /// <param name="aoe">Is Area of effect</param>
-        /// <param name="overrideRange">Override Range</param>
-        /// <param name="collisionable">Collision-able Flags</param>
+        /// <param name="unit">
+        ///     Predicted Unit
+        /// </param>
+        /// <param name="aoe">
+        ///     Is Area of effect
+        /// </param>
+        /// <param name="overrideRange">
+        ///     Override Range
+        /// </param>
+        /// <param name="collisionable">
+        ///     Collision-able Flags
+        /// </param>
         /// <returns>
         ///     <see cref="PredictionOutput" /> output
         /// </returns>
@@ -770,7 +892,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         ///     The <see cref="GameObject" />
         /// </param>
         /// <param name="otherRange">The Range</param>
-        /// <returns>Is GameObject in range of spell</returns>
+        /// <returns>
+        ///     Is GameObject in range of spell
+        /// </returns>
         public bool IsInRange(GameObject obj, float otherRange = -1)
         {
             return this.IsInRange(
@@ -1022,8 +1146,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Update Source Position
         /// </summary>
-        /// <param name="fromVector3">From Vector3 Source</param>
-        /// <param name="rangeCheckFromVector3">Range Check From Vector3 Source</param>
+        /// <param name="fromVector3">
+        ///     From Vector3 Source
+        /// </param>
+        /// <param name="rangeCheckFromVector3">
+        ///     Range Check From Vector3 Source
+        /// </param>
         public void UpdateSourcePosition(
             Vector3 fromVector3 = default(Vector3),
             Vector3 rangeCheckFromVector3 = default(Vector3))
@@ -1035,11 +1163,21 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Returns if the spell will hit the unit when casted.
         /// </summary>
-        /// <param name="unit">The Target</param>
-        /// <param name="castPosition">Cast Position</param>
-        /// <param name="extraWidth">Extra Width</param>
-        /// <param name="minHitChance">Minimum Hit Chance</param>
-        /// <returns>Will Spell Hit</returns>
+        /// <param name="unit">
+        ///     The Target
+        /// </param>
+        /// <param name="castPosition">
+        ///     Cast Position
+        /// </param>
+        /// <param name="extraWidth">
+        ///     Extra Width
+        /// </param>
+        /// <param name="minHitChance">
+        ///     Minimum Hit Chance
+        /// </param>
+        /// <returns>
+        ///     Will Spell Hit
+        /// </returns>
         public bool WillHit(
             Obj_AI_Base unit,
             Vector3 castPosition,
@@ -1054,10 +1192,18 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Returns if the spell will hit the point when casted
         /// </summary>
-        /// <param name="point">Vector3 Target</param>
-        /// <param name="castPosition">Cast Position</param>
-        /// <param name="extraWidth">Extra Width</param>
-        /// <returns>Will Spell Hit</returns>
+        /// <param name="point">
+        ///     Vector3 Target
+        /// </param>
+        /// <param name="castPosition">
+        ///     Cast Position
+        /// </param>
+        /// <param name="extraWidth">
+        ///     Extra Width
+        /// </param>
+        /// <returns>
+        ///     Will Spell Hit
+        /// </returns>
         public bool WillHit(Vector3 point, Vector3 castPosition, int extraWidth = 0)
         {
             switch (this.Type)
@@ -1101,9 +1247,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Shoot Charged Spell
         /// </summary>
-        /// <param name="slot">The SpellSlot</param>
-        /// <param name="position">Vector3 Position</param>
-        /// <param name="releaseCast">Release Cast</param>
+        /// <param name="slot">
+        ///     The SpellSlot
+        /// </param>
+        /// <param name="position">
+        ///     Vector3 Position
+        /// </param>
+        /// <param name="releaseCast">
+        ///     Release Cast
+        /// </param>
         private static void ShootChargedSpell(SpellSlot slot, Vector3 position, bool releaseCast = true)
         {
             position.Z = NavMesh.GetHeightForPosition(position.X, position.Y);
@@ -1114,8 +1266,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     On Process Spell Cast event catch.
         /// </summary>
-        /// <param name="sender"><see cref="Obj_AI_Base" /> sender</param>
-        /// <param name="args">Process Spell Cast Data</param>
+        /// <param name="sender">
+        ///     <see cref="Obj_AI_Base" /> sender
+        /// </param>
+        /// <param name="args">
+        ///     Process Spell Cast Data
+        /// </param>
         private void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsMe && args.SData.Name == this.ChargedSpellName)
@@ -1127,8 +1283,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     On Charged Spell Update subscribed event function.
         /// </summary>
-        /// <param name="sender"><see cref="Spellbook" /> sender</param>
-        /// <param name="args">Spell-book Update Charged Spell Data</param>
+        /// <param name="sender">
+        ///     <see cref="Spellbook" /> sender
+        /// </param>
+        /// <param name="args">
+        ///     Spell-book Update Charged Spell Data
+        /// </param>
         private void Spellbook_OnUpdateChargedSpell(Spellbook sender, SpellbookUpdateChargedSpellEventArgs args)
         {
             if (sender.Owner.IsMe && Variables.TickCount - this.chargedReqSentT < 3000 && args.ReleaseCast)
@@ -1140,8 +1300,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// <summary>
         ///     Spell-book On Cast Spell subscribed event function.
         /// </summary>
-        /// <param name="spellbook"><see cref="Spellbook" /> sender</param>
-        /// <param name="args">Spell-book Cast Spell Data</param>
+        /// <param name="spellbook">
+        ///     <see cref="Spellbook" /> sender
+        /// </param>
+        /// <param name="args">
+        ///     Spell-book Cast Spell Data
+        /// </param>
         private void SpellbookOnCastSpell(Spellbook spellbook, SpellbookCastSpellEventArgs args)
         {
             if (args.Slot != this.Slot)

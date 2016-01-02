@@ -15,12 +15,11 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
+namespace LeagueSharp.SDK.Modes
 {
     using System.Collections.Generic;
     using System.Linq;
-
-    using LeagueSharp.SDK.Core.Extensions;
+    
     using LeagueSharp.SDK.Core.UI.IMenu;
 
     /// <summary>
@@ -30,31 +29,22 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
     {
         #region Public Properties
 
-        /// <summary>
-        ///     The display name
-        /// </summary>
+        /// <inheritdoc />
         public string DisplayName => "Closest";
 
-        /// <summary>
-        ///     The name
-        /// </summary>
+        /// <inheritdoc />
         public string Name => "closest";
 
         #endregion
 
         #region Public Methods and Operators
 
-        /// <summary>
-        ///     Adds to menu.
-        /// </summary>
-        /// <param name="menu">The menu.</param>
-        public void AddToMenu(Menu menu) {}
+        /// <inheritdoc />
+        public void AddToMenu(Menu menu)
+        {
+        }
 
-        /// <summary>
-        ///     Orders the champions.
-        /// </summary>
-        /// <param name="heroes">The heroes.</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public List<Obj_AI_Hero> OrderChampions(List<Obj_AI_Hero> heroes)
         {
             return heroes.OrderBy(x => x.Distance(GameObjects.Player)).ToList();

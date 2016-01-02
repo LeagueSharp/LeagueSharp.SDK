@@ -1,4 +1,4 @@
-﻿// <copyright file="Drawing.cs" company="LeagueSharp">
+﻿// <copyright file="TargetSelectorDrawing.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
 // 
 //    This program is free software: you can redistribute it and/or modify
@@ -15,17 +15,15 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes;
+    using LeagueSharp.SDK.Modes;
 
     using SharpDX;
 
@@ -34,7 +32,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
     /// <summary>
     ///     Drawings for TargetSelector
     /// </summary>
-    internal class Drawing
+    internal class TargetSelectorDrawing
     {
         #region Fields
 
@@ -46,12 +44,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         /// <summary>
         ///     The mode instance.
         /// </summary>
-        private readonly Mode mode;
+        private readonly TargetSelectorMode mode;
 
         /// <summary>
         ///     The selected instance.
         /// </summary>
-        private readonly Selected selected;
+        private readonly TargetSelectorSelected selected;
 
         /// <summary>
         ///     The weight
@@ -78,12 +76,18 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Drawing" /> class.
+        ///     Initializes a new instance of the <see cref="TargetSelectorDrawing" /> class.
         /// </summary>
-        /// <param name="menu">The menu.</param>
-        /// <param name="selected">The selected.</param>
-        /// <param name="mode">The mode.</param>
-        public Drawing(Menu menu, Selected selected, Mode mode)
+        /// <param name="menu">
+        ///     The menu.
+        /// </param>
+        /// <param name="selected">
+        ///     The selected.
+        /// </param>
+        /// <param name="mode">
+        ///     The mode.
+        /// </param>
+        public TargetSelectorDrawing(Menu menu, TargetSelectorSelected selected, TargetSelectorMode mode)
         {
             this.selected = selected;
             this.mode = mode;
@@ -115,7 +119,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
 
             menu.Add(this.menu);
 
-            LeagueSharp.Drawing.OnDraw += this.OnDrawingDraw;
+            Drawing.OnDraw += this.OnDrawingDraw;
 
             if (this.weight != null)
             {
@@ -130,7 +134,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         /// <summary>
         ///     Raises the <see cref="E:DrawingDraw" /> event.
         /// </summary>
-        /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
+        /// <param name="args">
+        ///     The <see cref="EventArgs" /> instance containing the event data.
+        /// </param>
         private void OnDrawingDraw(EventArgs args)
         {
             if (this.menu["selected"]["enabled"].GetValue<MenuBool>().Value)
@@ -138,7 +144,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
                 if (this.selected.Focus && this.selected.Target.IsValidTarget()
                     && this.selected.Target.Position.IsOnScreen())
                 {
-                    LeagueSharp.Drawing.DrawCircle(
+                    Drawing.DrawCircle(
                         this.selected.Target.Position,
                         this.selected.Target.BoundingRadius
                         + this.menu["selected"]["radius"].GetValue<MenuSlider>().Value,
@@ -153,17 +159,18 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
                     foreach (var target in
                         this.weightTargets.Where(t => t.Item1.IsValidTarget() && t.Item1.Position.IsOnScreen()))
                     {
-                        LeagueSharp.Drawing.DrawText(
+                        Drawing.DrawText(
                             target.Item1.HPBarPosition.X + 55f,
                             target.Item1.HPBarPosition.Y - 20f,
                             Color.White,
                             target.Item2.ToString("0.0").Replace(",", "."));
                     }
                 }
+
                 if (this.menu["weight"]["bestTarget"]["enabled"].GetValue<MenuBool>().Value
                     && this.weightBestTarget.IsValidTarget() && this.weightBestTarget.Position.IsOnScreen())
                 {
-                    LeagueSharp.Drawing.DrawCircle(
+                    Drawing.DrawCircle(
                         this.weightBestTarget.Position,
                         this.weightBestTarget.BoundingRadius
                         + this.menu["weight"]["bestTarget"]["radius"].GetValue<MenuSlider>().Value,
@@ -175,7 +182,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         /// <summary>
         ///     Raises the <see cref="E:GameUpdate" /> event.
         /// </summary>
-        /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
+        /// <param name="args">
+        ///     The <see cref="EventArgs" /> instance containing the event data.
+        /// </param>
         private void OnGameUpdate(EventArgs args)
         {
             if (this.weight == null || !this.mode.Current.Equals(this.weight))
@@ -188,6 +197,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
             {
                 return;
             }
+
             var weightRange = this.menu["weight"]["range"].GetValue<MenuSlider>().Value;
             var enemies = GameObjects.EnemyHeroes.Where(e => e.IsValidTarget(weightRange)).ToList();
             foreach (var w in this.weight.Items)

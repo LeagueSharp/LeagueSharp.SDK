@@ -15,28 +15,16 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core
+namespace LeagueSharp.SDK
 {
-    using System;
-    using System.Collections.Generic;
     using System.Globalization;
-    using System.Linq;
     using System.Security.Permissions;
     using System.Threading;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Events;
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
-    using LeagueSharp.SDK.Core.UI.INotifications;
     using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Core.Wrappers;
     using LeagueSharp.SDK.Core.Wrappers.Damages;
-    using LeagueSharp.SDK.Core.Wrappers.Orbwalking;
-    using LeagueSharp.SDK.Core.Wrappers.Spells.Database;
-    using LeagueSharp.SDK.Core.Wrappers.TargetSelector;
-    using LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes;
-    using LeagueSharp.SDK.Properties;
 
     /// <summary>
     ///     Bootstrap is an initialization pointer for the AppDomainManager to initialize the library correctly once loaded in

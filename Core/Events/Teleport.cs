@@ -15,18 +15,16 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Events
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
 
-    using Enumerations;
-
     /// <summary>
-    ///     Teleport class, contains Teleport even which is triggered on recalls, teleports and <c>shen</c> or twisted fate
-    ///     <c>ultimates</c>.
+    ///     Teleport class, contains Teleport even which is triggered on recalls, teleports and shen or twisted fate
+    ///     ultimates.
     /// </summary>
-    public class Teleport
+    public static partial class Events
     {
         #region Constants
 
@@ -62,53 +60,16 @@ namespace LeagueSharp.SDK.Core.Events
 
         #endregion
 
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes static members of the <see cref="Teleport" /> class.
-        /// </summary>
-        static Teleport()
-        {
-            Obj_AI_Base.OnTeleport += OnTeleportEvent;
-        }
-
-        #endregion
-
-        #region Delegates
-
-        /// <summary>
-        ///     Teleport <c>eventhandler</c>
-        /// </summary>
-        /// <param name="sender">The sender</param>
-        /// <param name="e">Teleport arguments</param>
-        public delegate void TeleportHandler(object sender, TeleportEventArgs e);
-
-        #endregion
-
         #region Public Events
 
         /// <summary>
         ///     This event is triggered on recalls, teleports and <c>shen</c> or twisted fate <c>ultimates</c>.
         /// </summary>
-        public static event TeleportHandler OnTeleport;
+        public static event EventHandler<TeleportEventArgs> OnTeleport;
 
         #endregion
 
         #region Methods
-
-        /// <summary>
-        ///     Fires the event.
-        /// </summary>
-        /// <param name="sender">
-        ///     The sender
-        /// </param>
-        /// <param name="args">
-        ///     The event data
-        /// </param>
-        private static void FireEvent(Obj_AI_Base sender, TeleportEventArgs args)
-        {
-            OnTeleport?.Invoke(sender, args);
-        }
 
         /// <summary>
         ///     OnTeleport event.
@@ -119,7 +80,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <param name="args">
         ///     The event data
         /// </param>
-        private static void OnTeleportEvent(Obj_AI_Base sender, GameObjectTeleportEventArgs args)
+        private static void EventTeleport(Obj_AI_Base sender, GameObjectTeleportEventArgs args)
         {
             var eventArgs = new TeleportEventArgs { Status = TeleportStatus.Unknown, Type = TeleportType.Unknown };
 
@@ -165,6 +126,20 @@ namespace LeagueSharp.SDK.Core.Events
             }
 
             FireEvent(sender, eventArgs);
+        }
+
+        /// <summary>
+        ///     Fires the event.
+        /// </summary>
+        /// <param name="sender">
+        ///     The sender
+        /// </param>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        private static void FireEvent(Obj_AI_Base sender, TeleportEventArgs args)
+        {
+            OnTeleport?.Invoke(sender, args);
         }
 
         #endregion

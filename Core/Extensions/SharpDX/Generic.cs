@@ -15,14 +15,14 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Extensions.SharpDX
+namespace LeagueSharp.SDK
 {
     using global::SharpDX;
 
     /// <summary>
     ///     The generic SharpDX extensions.
     /// </summary>
-    public static class Generic
+    public static partial class Extensions
     {
         #region Public Methods and Operators
 

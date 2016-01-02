@@ -15,11 +15,9 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers
+namespace LeagueSharp.SDK
 {
     using System.Collections.Generic;
-
-    using Enumerations;
 
     using LeagueSharp.SDK.Core.Utils;
 
@@ -49,6 +47,11 @@ namespace LeagueSharp.SDK.Core.Wrappers
         public Vector2 Grid { get; private set; }
 
         /// <summary>
+        ///     Gets the MapType
+        /// </summary>
+        public GameMapId MapId { get; private set; }
+
+        /// <summary>
         ///     Gets the name of the map
         /// </summary>
         public string Name { get; private set; }
@@ -63,19 +66,16 @@ namespace LeagueSharp.SDK.Core.Wrappers
         /// </summary>
         public int StartingLevel { get; private set; }
 
-        /// <summary>
-        ///     Gets the MapType
-        /// </summary>
-        public GameMapId MapId { get; private set; }
-
         #endregion
 
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Returns the current map.
+        ///     Gets the current game map.
         /// </summary>
-        /// <returns>The current map</returns>
+        /// <returns>
+        ///     The current map information.
+        /// </returns>
         public static Map GetMap()
         {
             if (MapById.ContainsKey((int)Game.MapId))
@@ -85,8 +85,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
 
             return new Map
                        {
-                           Name = "Unknown", ShortName = "unknown", MapId = (GameMapId) 0, Grid = new Vector2(0, 0),
-                           StartingLevel = 1
+                           Name = "Unknown", ShortName = "unknown", MapId = 0, Grid = new Vector2(0, 0), StartingLevel = 1
                        };
         }
 

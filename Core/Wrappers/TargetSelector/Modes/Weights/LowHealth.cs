@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
+namespace LeagueSharp.SDK.Modes.Weights
 {
     /// <summary>
     ///     Low Health
@@ -24,18 +24,23 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
     {
         #region Public Properties
 
+        /// <inheritdoc />
         public int DefaultWeight => 20;
 
+        /// <inheritdoc />
         public string DisplayName => "Low Health";
 
+        /// <inheritdoc />
         public bool Inverted => true;
 
+        /// <inheritdoc />
         public string Name => "low-health";
 
         #endregion
 
         #region Public Methods and Operators
 
+        /// <inheritdoc />
         public float GetValue(Obj_AI_Hero hero) => hero.Health;
 
         #endregion

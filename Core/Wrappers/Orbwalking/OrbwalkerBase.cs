@@ -1,4 +1,4 @@
-﻿// <copyright file="Base.cs" company="LeagueSharp">
+﻿// <copyright file="OrbwalkerBase.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
 // 
 //    This program is free software: you can redistribute it and/or modify
@@ -15,15 +15,11 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Reflection;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Events;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
@@ -31,9 +27,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
     /// <summary>
     ///     Base class for Orbwalker
     /// </summary>
-    /// <typeparam name="TK">The type of the k.</typeparam>
-    /// <typeparam name="T"></typeparam>
-    public abstract class Base<TK, T>
+    /// <typeparam name="TK">
+    ///     The type of the orbwalker modes.
+    /// </typeparam>
+    /// <typeparam name="T">
+    ///     The type of the units.
+    /// </typeparam>
+    public abstract class OrbwalkerBase<TK, T>
         where TK : struct, IConvertible where T : AttackableUnit
     {
         #region Fields
@@ -45,20 +45,22 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Base{TK, T}" /> class.
+        ///     Initializes a new instance of the <see cref="OrbwalkerBase{TK, T}" /> class.
         /// </summary>
         /// <exception cref="ArgumentException">TK must be an enumerated type.</exception>
-        internal Base()
+        internal OrbwalkerBase()
         {
             if (!typeof(TK).IsEnum)
             {
                 throw new ArgumentException("TK must be an enumerated type.");
             }
+
             var enumValues = Enum.GetValues(typeof(TK));
             if (enumValues.Length <= 0)
             {
                 throw new ArgumentException("TK must contain at least one value.");
             }
+
             this.InActiveMode = (TK)enumValues.GetValue(0);
         }
 
@@ -69,8 +71,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// <summary>
         ///     The<see cref="OnAction" /> event delegate.
         /// </summary>
-        /// <param name="sender">The sender</param>
-        /// <param name="e">The event data</param>
+        /// <param name="sender">
+        ///     The sender
+        /// </param>
+        /// <param name="e">
+        ///     The event data
+        /// </param>
         public delegate void OnActionDelegate(object sender, OrbwalkingActionArgs e);
 
         #endregion
@@ -87,17 +93,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         #region Public Properties
 
         /// <summary>
-        ///     Gets or sets a value indicating whether this <see cref="Base{TK, T}" /> is enabled.
+        ///     Gets or sets a value indicating whether this <see cref="OrbwalkerBase{TK, T}" /> is enabled.
         /// </summary>
-        /// <value>
-        ///     <c>true</c> if enabled; otherwise, <c>false</c>.
-        /// </value>
         public virtual bool Enabled
         {
             get
             {
                 return this.enabled;
             }
+
             set
             {
                 if (this.enabled != value)
@@ -117,32 +121,33 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                         Game.OnUpdate -= this.OnGameUpdate;
                     }
                 }
+
                 this.enabled = value;
             }
         }
 
         /// <summary>
-        ///     Gets the last auto attack command tick.
+        ///     Gets or sets the last auto attack command tick.
         /// </summary>
         public int LastAutoAttackCommandTick { get; protected set; }
 
         /// <summary>
-        ///     Gets the last auto attack tick.
+        ///     Gets or sets the last auto attack tick.
         /// </summary>
         public int LastAutoAttackTick { get; protected set; }
 
         /// <summary>
-        ///     Gets the last movement order tick.
+        ///     Gets or sets the last movement order tick.
         /// </summary>
         public int LastMovementOrderTick { get; protected set; }
 
         /// <summary>
-        ///     Gets the last target.
+        ///     Gets or sets the last target.
         /// </summary>
         public AttackableUnit LastTarget { get; protected set; }
 
         /// <summary>
-        ///     Value indicating the amount of executed auto attacks.
+        ///     Gets or sets value indicating the amount of executed auto attacks.
         /// </summary>
         public int TotalAutoAttacks { get; protected set; }
 
@@ -161,7 +166,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         protected bool AttackState { get; set; } = true;
 
         /// <summary>
-        ///     Value indication in which mode Orbwalk should not run
+        ///     Gets or sets value indication in which mode Orbwalk should not run
         /// </summary>
         protected TK InActiveMode { get; set; }
 
@@ -213,8 +218,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
             {
                 return false;
             }
-            return Variables.TickCount + Game.Ping / 2 + 25
-                   >= this.LastAutoAttackTick + GameObjects.Player.AttackDelay * 1000 + extraWindup;
+
+            return Variables.TickCount + (Game.Ping / 2) + 25
+                   >= this.LastAutoAttackTick + (GameObjects.Player.AttackDelay * 1000) + extraWindup;
         }
 
         /// <summary>
@@ -253,8 +259,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
             }
 
             return !GameObjects.Player.CanCancelAutoAttack()
-                   || (Variables.TickCount + Game.Ping / 2
-                       >= this.LastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000 + extraWindup);
+                   || (Variables.TickCount + (Game.Ping / 2)
+                       >= this.LastAutoAttackTick + (GameObjects.Player.AttackCastDelay * 1000) + extraWindup);
         }
 
         /// <summary>
@@ -331,7 +337,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// <summary>
         ///     Issue the move order.
         /// </summary>
-        /// <param name="position">The position.</param>
+        /// <param name="position">
+        ///     The position.
+        /// </param>
         public abstract void Move(Vector3 position);
 
         /// <summary>
@@ -353,6 +361,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                     this.Attack(gTarget);
                 }
             }
+
             if (this.CanMove())
             {
                 this.Move(position.HasValue && position.Value.IsValid() ? position.Value : Game.CursorPos);
@@ -421,10 +430,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         private void OnGameUpdate(EventArgs args)
         {
             if (GameObjects.Player == null || !GameObjects.Player.IsValid || GameObjects.Player.IsDead
-                || InterruptableSpell.IsCastingInterruptableSpell(GameObjects.Player, true))
+                || Events.IsCastingInterruptableSpell(GameObjects.Player, true))
             {
                 return;
             }
+
             if (!this.InActiveMode.Equals(this.ActiveMode))
             {
                 this.Orbwalk();
@@ -472,6 +482,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 {
                     this.ResetSwingTimer();
                 }
+
                 if (AutoAttack.IsAutoAttack(args.SData.Name))
                 {
                     this.MissileLaunched = true;
@@ -502,7 +513,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
 
                 if (target != null && target.IsValid && AutoAttack.IsAutoAttack(spellName))
                 {
-                    this.LastAutoAttackTick = Variables.TickCount - Game.Ping / 2;
+                    this.LastAutoAttackTick = Variables.TickCount - (Game.Ping / 2);
                     this.MissileLaunched = false;
                     this.LastMovementOrderTick = 0;
                     this.TotalAutoAttacks++;
@@ -546,7 +557,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
     }
 
     /// <summary>
-    ///     The <c>orbwalking</c> action event data.
+    ///     The orbwalking action event data.
     /// </summary>
     public class OrbwalkingActionArgs : EventArgs
     {
@@ -568,7 +579,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         public Obj_AI_Base Sender { get; set; }
 
         /// <summary>
-        ///     Gets or sets the target.
+        ///     Gets the target.
         /// </summary>
         public AttackableUnit Target { get; internal set; }
 

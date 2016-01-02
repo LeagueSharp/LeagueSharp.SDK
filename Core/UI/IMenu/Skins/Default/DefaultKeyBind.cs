@@ -19,9 +19,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
     using System.Windows.Forms;
     using Core.Utils;
-    using Enumerations;
-    using Extensions.SharpDX;
-    using Math;
+    using LeagueSharp.SDK;
     using SharpDX;
     using SharpDX.Direct3D9;
     using Values;

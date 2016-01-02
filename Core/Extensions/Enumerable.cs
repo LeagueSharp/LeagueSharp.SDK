@@ -15,20 +15,20 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Extensions
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-    using Enumerations;
-    using global::SharpDX;
-    using Utils;
+    using LeagueSharp.SDK.Core.Utils;
+
+    using SharpDX;
 
     /// <summary>
     ///     Enumerable Extensions.
     /// </summary>
-    public static class Enumerable
+    public static partial class Extensions
     {
         #region Public Methods and Operators
 

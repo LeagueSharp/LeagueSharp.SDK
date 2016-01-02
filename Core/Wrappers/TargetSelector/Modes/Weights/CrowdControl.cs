@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
+namespace LeagueSharp.SDK.Modes.Weights
 {
     #region
 
@@ -51,23 +51,25 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
         /// <summary>
         ///     Gets or sets the buff types.
         /// </summary>
-        /// <value>
-        ///     The buff types.
-        /// </value>
         public List<BuffType> BuffTypes { get; set; }
 
+        /// <inheritdoc />
         public int DefaultWeight => 0;
 
+        /// <inheritdoc />
         public string DisplayName => "Crowd Control";
 
+        /// <inheritdoc />
         public bool Inverted => false;
 
+        /// <inheritdoc />
         public string Name => "crowd-control";
 
         #endregion
 
         #region Public Methods and Operators
 
+        /// <inheritdoc />
         public float GetValue(Obj_AI_Hero hero)
         {
             var buffs = hero.Buffs.Where(b => this.BuffTypes.Contains(b.Type)).ToList();

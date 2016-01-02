@@ -15,18 +15,18 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Extensions.SharpDX
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using global::SharpDX;
+    using SharpDX;
 
     /// <summary>
     ///     SharpDX/Vector2 Extensions.
     /// </summary>
-    public static class Vector2Extensions
+    public static partial class Extensions
     {
         #region Public Methods and Operators
 
@@ -61,17 +61,6 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         public static float AngleBetween(this Vector2 vector2, Vector3 toVector3)
         {
             return AngleBetween(vector2, toVector3.ToVector2());
-        }
-
-        /// <summary>
-        ///     Returns the angle between two vectors.
-        /// </summary>
-        /// <param name="vector2">Extended SharpDX Vector2</param>
-        /// <param name="toVector4">SharpDX Vector4</param>
-        /// <returns>Angle between two vectors in float-units</returns>
-        public static float AngleBetween(this Vector2 vector2, Vector4 toVector4)
-        {
-            return AngleBetween(vector2, toVector4.ToVector2());
         }
 
         /// <summary>
@@ -153,36 +142,14 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         }
 
         /// <summary>
-        ///     Seeks for the closest Vector4 to the extended Vector2.
-        /// </summary>
-        /// <param name="vector2">Extended SharpDX Vector2</param>
-        /// <param name="array">Vector4 Collection</param>
-        /// <returns>Closest Vector4</returns>
-        public static Vector4 Closest(this Vector2 vector2, IEnumerable<Vector4> array)
-        {
-            var result = Vector4.Zero;
-            var distance = float.MaxValue;
-
-            foreach (var vector in array)
-            {
-                var temporaryDistance = vector2.Distance(vector);
-                if (distance < temporaryDistance)
-                {
-                    distance = temporaryDistance;
-                    result = vector;
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
         ///     Counts the ally heroes in range.
         /// </summary>
         /// <param name="vector2">The vector2.</param>
         /// <param name="range">The range.</param>
         /// <param name="originalUnit">The original unit.</param>
-        /// <returns></returns>
+        /// <returns>
+        ///     The count.
+        /// </returns>
         public static int CountAllyHeroesInRange(this Vector2 vector2, float range, Obj_AI_Base originalUnit = null)
         {
             return vector2.ToVector3().CountAllyHeroesInRange(range, originalUnit);
@@ -194,7 +161,9 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <param name="vector2">The vector2.</param>
         /// <param name="range">The range.</param>
         /// <param name="originalUnit">The original unit.</param>
-        /// <returns></returns>
+        /// <returns>
+        ///     The count.
+        /// </returns>
         public static int CountEnemyHeroesInRange(this Vector2 vector2, float range, Obj_AI_Base originalUnit = null)
         {
             return vector2.ToVector3().CountEnemyHeroesInRange(range, originalUnit);
@@ -237,17 +206,6 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         public static float Distance(this Vector2 vector2, Vector3 toVector3)
         {
             return Vector2.Distance(vector2, toVector3.ToVector2());
-        }
-
-        /// <summary>
-        ///     Calculates the distance between the extended Vector2 and a Vector4.
-        /// </summary>
-        /// <param name="vector2">SharpDX Vector2 (From)</param>
-        /// <param name="toVector4">SharpDX Vector4 (To)</param>
-        /// <returns>Float Units</returns>
-        public static float Distance(this Vector2 vector2, Vector4 toVector4)
-        {
-            return Vector2.Distance(vector2, toVector4.ToVector2());
         }
 
         /// <summary>
@@ -294,17 +252,6 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         }
 
         /// <summary>
-        ///     Calculates the squared distance between two vectors.
-        /// </summary>
-        /// <param name="vector2">Extended SharpDX Vector2</param>
-        /// <param name="toVector4">SharpDX Vector4</param>
-        /// <returns>The squared distance between the two vectors.</returns>
-        public static float DistanceSquared(this Vector2 vector2, Vector4 toVector4)
-        {
-            return Vector2.DistanceSquared(vector2, toVector4.ToVector2());
-        }
-
-        /// <summary>
         ///     Returns the squared distance to the line segment.
         /// </summary>
         /// <param name="point">Extended SharpDX Vector2</param>
@@ -347,18 +294,6 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         public static Vector2 Extend(this Vector2 vector2, Vector3 toVector3, float distance)
         {
             return vector2 + (distance * (toVector3.ToVector2() - vector2).Normalized());
-        }
-
-        /// <summary>
-        ///     Extends a Vector2 to a Vector4.
-        /// </summary>
-        /// <param name="vector2">Extended SharpDX Vector2 (From)</param>
-        /// <param name="toVector4">SharpDX Vector4 (To)</param>
-        /// <param name="distance">Distance (float units)</param>
-        /// <returns>Extended Vector2</returns>
-        public static Vector2 Extend(this Vector2 vector2, Vector4 toVector4, float distance)
-        {
-            return vector2 + (distance * (toVector4.ToVector2() - vector2).Normalized());
         }
 
         /// <summary>
@@ -476,17 +411,6 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         public static bool IsOrthogonal(this Vector2 vector2, Vector3 toVector3)
         {
             return IsOrthogonal(vector2, toVector3.ToVector2());
-        }
-
-        /// <summary>
-        ///     Returns if the angle is orthogonal.
-        /// </summary>
-        /// <param name="vector2">Extended SharpDX Vector2</param>
-        /// <param name="toVector4">SharpDX Vector2</param>
-        /// <returns>The <see cref="bool" />.</returns>
-        public static bool IsOrthogonal(this Vector2 vector2, Vector4 toVector4)
-        {
-            return IsOrthogonal(vector2, toVector4.ToVector2());
         }
 
         /// <summary>
@@ -891,7 +815,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
     }
 
     /// <summary>
-    ///     Holds info for the <see cref="Vector2Extensions.ProjectOn" /> method.
+    ///     Holds info for the ProjectOn method.
     /// </summary>
     public struct ProjectionInfo
     {
@@ -993,7 +917,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
     }
 
     /// <summary>
-    ///     Holds info for the <see cref="Vector2Extensions.Intersection" /> method.
+    ///     Holds info for the <see cref="Extensions.Intersection" /> method.
     /// </summary>
     public struct IntersectionResult
     {

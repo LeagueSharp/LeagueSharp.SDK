@@ -23,7 +23,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     using System.Linq;
     using System.Windows.Forms;
     using Core.Utils;
-    using Enumerations;
+    using LeagueSharp.SDK;
     using SharpDX.Direct3D9;
     using Skins;
 
@@ -39,7 +39,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         public static readonly DirectoryInfo ConfigFolder =
             Directory.CreateDirectory(
-                Path.Combine(
+                System.IO.Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                     "LS" + Environment.UserName.GetHashCode().ToString("X"),
                     "MenuConfigSDK"));

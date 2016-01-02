@@ -21,8 +21,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
-    using System.Collections.Generic;
-    using System.ComponentModel;
 
     using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
 

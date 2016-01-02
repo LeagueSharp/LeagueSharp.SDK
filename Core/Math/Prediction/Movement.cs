@@ -15,18 +15,14 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Math.Prediction
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Enumerations;
-    using Events;
-    using Extensions;
-    using Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Utils;
+
     using SharpDX;
-    using Utils;
-    using Collision = Collision;
 
     /// <summary>
     ///     Calculates a prediction based off data values given by the source input and converts it into a output prediction
@@ -255,7 +251,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                                    {
                                        Input = input, CastPosition = cp.ToVector3(), UnitPosition = p.ToVector3(),
                                        Hitchance =
-                                           Path.PathTracker.GetCurrentPath(input.Unit).Time < 0.1d
+                                           GamePath.PathTracker.GetCurrentPath(input.Unit).Time < 0.1d
                                                ? HitChance.VeryHigh
                                                : HitChance.High
                                    };
@@ -303,7 +299,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                                    {
                                        Input = input, CastPosition = pos.ToVector3(), UnitPosition = p.ToVector3(),
                                        Hitchance =
-                                           Path.PathTracker.GetCurrentPath(input.Unit).Time < 0.1d
+                                           GamePath.PathTracker.GetCurrentPath(input.Unit).Time < 0.1d
                                                ? HitChance.VeryHigh
                                                : HitChance.High
                                    };

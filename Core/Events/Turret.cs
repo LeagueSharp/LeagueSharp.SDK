@@ -15,18 +15,16 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Events
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using Extensions;
-
     /// <summary>
     ///     Turret tracker and event handler.
     /// </summary>
-    public class Turret
+    public static partial class Events
     {
         #region Static Fields
 
@@ -38,48 +36,12 @@ namespace LeagueSharp.SDK.Core.Events
 
         #endregion
 
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes static members of the <see cref="Turret" /> class.
-        /// </summary>
-        static Turret()
-        {
-            GameObject.OnCreate += OnCreate;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
-
-            Load.OnLoad += (sender, args) =>
-                {
-                    foreach (var turret in GameObjects.Turrets)
-                    {
-                        Turrets.Add(turret, new TurretArgs { Turret = turret });
-                    }
-                };
-        }
-
-        #endregion
-
-        #region Delegates
-
-        /// <summary>
-        ///     On turret attack event delegate.
-        /// </summary>
-        /// <param name="sender">
-        ///     The sender
-        /// </param>
-        /// <param name="e">
-        ///     The event data
-        /// </param>
-        public delegate void OnTurretAttackDelegate(object sender, TurretArgs e);
-
-        #endregion
-
         #region Public Events
 
         /// <summary>
         ///     On turret attack event.
         /// </summary>
-        public static event OnTurretAttackDelegate OnTurretAttack;
+        public static event EventHandler<TurretArgs> OnTurretAttack;
 
         #endregion
 
@@ -91,10 +53,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <param name="sender">
         ///     The sender
         /// </param>
-        /// <param name="args">
-        ///     The event data
-        /// </param>
-        private static void OnCreate(GameObject sender, EventArgs args)
+        private static void EventTurret(GameObject sender)
         {
             if (sender.Type == GameObjectType.obj_GeneralParticleEmitter && sender.Name.Contains("Turret"))
             {
@@ -112,10 +71,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <param name="sender">
         ///     The sender
         /// </param>
-        /// <param name="args">
-        ///     The event data
-        /// </param>
-        private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private static void EventTurret(Obj_AI_Base sender)
         {
             Obj_AI_Turret[] turret = { sender as Obj_AI_Turret };
             if (turret[0] != null)
@@ -154,11 +110,22 @@ namespace LeagueSharp.SDK.Core.Events
             }
         }
 
+        private static void EventTurretConstruct()
+        {
+            OnLoad += (sender, args) =>
+                {
+                    foreach (var turret in GameObjects.Turrets)
+                    {
+                        Turrets.Add(turret, new TurretArgs { Turret = turret });
+                    }
+                };
+        }
+
         #endregion
     }
 
     /// <summary>
-    ///     Turret event data which are passed with <see cref="SDK.Core.Events.Turret.OnTurretAttack" />
+    ///     Turret event data which are passed with <see cref="Events.OnTurretAttack" />
     /// </summary>
     public class TurretArgs : EventArgs
     {

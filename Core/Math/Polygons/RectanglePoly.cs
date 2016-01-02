@@ -1,35 +1,33 @@
-﻿// <copyright file="Rectangle.cs" company="LeagueSharp">
+﻿// <copyright file="RectanglePoly.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
-// 
+//
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
-// 
+//
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
-// 
+//
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Math.Polygons
+namespace LeagueSharp.SDK
 {
-    using Extensions.SharpDX;
-
     using SharpDX;
 
     /// <summary>
     ///     Represents a Rectangle <see cref="Polygon" />
     /// </summary>
-    public class Rectangle : Polygon
+    public class RectanglePoly : Polygon
     {
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Rectangle" /> class.
+        ///     Initializes a new instance of the <see cref="RectanglePoly" /> class.
         /// </summary>
         /// <param name="start">
         ///     The Start
@@ -40,13 +38,13 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         /// <param name="width">
         ///     The Width
         /// </param>
-        public Rectangle(Vector3 start, Vector3 end, float width)
+        public RectanglePoly(Vector3 start, Vector3 end, float width)
             : this(start.ToVector2(), end.ToVector2(), width)
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Rectangle" /> class.
+        ///     Initializes a new instance of the <see cref="RectanglePoly" /> class.
         /// </summary>
         /// <param name="start">
         ///     The Start
@@ -57,7 +55,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         /// <param name="width">
         ///     The Width
         /// </param>
-        public Rectangle(Vector2 start, Vector2 end, float width)
+        public RectanglePoly(Vector2 start, Vector2 end, float width)
         {
             this.Start = start;
             this.End = end;
@@ -76,7 +74,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         public Vector2 Direction => (this.End - this.Start).Normalized();
 
         /// <summary>
-        /// Gets or sets the end.
+        ///     Gets or sets the end.
         /// </summary>
         public Vector2 End { get; set; }
 
@@ -86,12 +84,12 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         public Vector2 Perpendicular => this.Direction.Perpendicular();
 
         /// <summary>
-        /// Gets or sets the start.
+        ///     Gets or sets the start.
         /// </summary>
         public Vector2 Start { get; set; }
 
         /// <summary>
-        /// Gets or sets the width.
+        ///     Gets or sets the width.
         /// </summary>
         public float Width { get; set; }
 

@@ -15,13 +15,11 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.UI.INotifications
+namespace LeagueSharp.SDK
 {
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
-
-    using Enumerations;
     using Properties;
 
     using SharpDX.Direct3D9;

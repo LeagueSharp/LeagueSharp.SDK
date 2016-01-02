@@ -15,21 +15,20 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.UI.INotifications
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Drawing;
-    using Core.Utils;
-    using Enumerations;
-    using Extensions.SharpDX;
-    using Math;
-    using Properties;
+
+    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Properties;
+
     using SharpDX;
     using SharpDX.Direct3D9;
+
     using Color = SharpDX.Color;
     using Font = SharpDX.Direct3D9.Font;
-    using Rectangle = SharpDX.Rectangle;
 
     /// <summary>
     ///     The notification.
@@ -56,57 +55,55 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         ///     The body font.
         /// </summary>
         private static readonly Font BodyFont = new Font(
-            Drawing.Direct3DDevice, 
-            13, 
-            0, 
-            FontWeight.DoNotCare, 
-            5, 
-            false, 
-            FontCharacterSet.Default, 
-            FontPrecision.Character, 
-            FontQuality.Antialiased, 
-            FontPitchAndFamily.Mono | FontPitchAndFamily.Decorative, 
+            Drawing.Direct3DDevice,
+            13,
+            0,
+            FontWeight.DoNotCare,
+            5,
+            false,
+            FontCharacterSet.Default,
+            FontPrecision.Character,
+            FontQuality.Antialiased,
+            FontPitchAndFamily.Mono | FontPitchAndFamily.Decorative,
             "Tahoma");
 
         /// <summary>
         ///     The header font.
         /// </summary>
         private static readonly Font HeaderFont = new Font(
-            Drawing.Direct3DDevice, 
-            16, 
-            0, 
-            FontWeight.Bold, 
-            5, 
-            false, 
-            FontCharacterSet.Default, 
-            FontPrecision.Character, 
-            FontQuality.Antialiased, 
-            FontPitchAndFamily.Mono | FontPitchAndFamily.Decorative, 
+            Drawing.Direct3DDevice,
+            16,
+            0,
+            FontWeight.Bold,
+            5,
+            false,
+            FontCharacterSet.Default,
+            FontPrecision.Character,
+            FontQuality.Antialiased,
+            FontPitchAndFamily.Mono | FontPitchAndFamily.Decorative,
             "Tahoma");
 
         /// <summary>
         ///     The hide icon texture.
         /// </summary>
         private static readonly Texture HideTexture = Texture.FromMemory(
-            Drawing.Direct3DDevice, 
-            (byte[])new ImageConverter().ConvertTo(Resources.notifications_arrow, typeof(byte[])), 
-            Resources.notifications_arrow.Width, 
-            Resources.notifications_arrow.Height, 
-            0, 
-            Usage.None, 
-            Format.A1, 
-            Pool.Managed, 
-            Filter.Default, 
-            Filter.Default, 
+            Drawing.Direct3DDevice,
+            (byte[])new ImageConverter().ConvertTo(Resources.notifications_arrow, typeof(byte[])),
+            Resources.notifications_arrow.Width,
+            Resources.notifications_arrow.Height,
+            0,
+            Usage.None,
+            Format.A1,
+            Pool.Managed,
+            Filter.Default,
+            Filter.Default,
             0);
 
         /// <summary>
         ///     The line.
         /// </summary>
-        private static readonly Line Line = new Line(Drawing.Direct3DDevice)
-                                                {
-                                                   Antialias = true, GLLines = true, Width = 300f 
-                                                };
+        private static readonly SharpDX.Direct3D9.Line Line = new SharpDX.Direct3D9.Line(Drawing.Direct3DDevice)
+                                                                  { Antialias = true, GLLines = true, Width = 300f };
 
         /// <summary>
         ///     The sprite.
@@ -405,6 +402,11 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         #region Properties
 
         /// <summary>
+        ///     Gets the hide icon bitmap.
+        /// </summary>
+        private static Bitmap HideBitmap => Resources.notifications_arrow;
+
+        /// <summary>
         ///     Gets or sets the body height.
         /// </summary>
         private float BodyHeight { get; set; }
@@ -423,11 +425,6 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         ///     Gets or sets the icon texture.
         /// </summary>
         private Texture IconTexture { get; set; }
-
-        /// <summary>
-        ///     Gets the hide icon bitmap.
-        /// </summary>
-        private static Bitmap HideBitmap => Resources.notifications_arrow;
 
         #endregion
 
@@ -464,7 +461,7 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
                     formatLines.Add(!string.IsNullOrEmpty(breakLine) ? breakLine : string.Empty);
 
                     valueCopy = valueCopy.Substring(
-                        valueCopy.IndexOf("</br>", StringComparison.Ordinal) + 5, 
+                        valueCopy.IndexOf("</br>", StringComparison.Ordinal) + 5,
                         valueCopy.Length - valueCopy.IndexOf("</br>", StringComparison.Ordinal) - 5);
                 }
 
@@ -536,7 +533,7 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         }
 
         /// <summary>
-        /// Gets the notification reserved height.
+        ///     Gets the notification reserved height.
         /// </summary>
         /// <returns>
         ///     The reserved height in float units.
@@ -547,7 +544,7 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         }
 
         /// <summary>
-        /// Gets the notification reserved width.
+        ///     Gets the notification reserved width.
         /// </summary>
         /// <returns>
         ///     The reserved width in float units.
@@ -577,9 +574,9 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
                 Line.Draw(
                     new[]
                         {
-                            new Vector2(basePosition.X - (this.Width / 2f), basePosition.Y), 
+                            new Vector2(basePosition.X - (this.Width / 2f), basePosition.Y),
                             new Vector2(basePosition.X - (this.Width / 2f), basePosition.Y + this.HeaderHeight)
-                        }, 
+                        },
                     new ColorBGRA(0, 0, 0, 255 / 2));
 
                 if (this.IsOpen || this.DrawBodyHeight > 0 || this.DrawFooterHeight > 0)
@@ -587,22 +584,22 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
                     Line.Draw(
                         new[]
                             {
-                                new Vector2(basePosition.X - (this.Width / 2f), basePosition.Y + this.HeaderHeight), 
+                                new Vector2(basePosition.X - (this.Width / 2f), basePosition.Y + this.HeaderHeight),
                                 new Vector2(
-                                    basePosition.X - (this.Width / 2f), 
+                                    basePosition.X - (this.Width / 2f),
                                     basePosition.Y + this.HeaderHeight + this.DrawBodyHeight)
-                            }, 
+                            },
                         new ColorBGRA(0, 0, 0, (byte)(255 / 1.5f)));
                     Line.Draw(
                         new[]
                             {
                                 new Vector2(
-                                    basePosition.X - (this.Width / 2f), 
-                                    basePosition.Y + this.HeaderHeight + this.DrawBodyHeight), 
+                                    basePosition.X - (this.Width / 2f),
+                                    basePosition.Y + this.HeaderHeight + this.DrawBodyHeight),
                                 new Vector2(
-                                    basePosition.X - (this.Width / 2f), 
+                                    basePosition.X - (this.Width / 2f),
                                     basePosition.Y + this.HeaderHeight + this.DrawFooterHeight + this.DrawBodyHeight)
-                            }, 
+                            },
                         new ColorBGRA(0, 0, 0, (byte)(255 / 1.25f)));
                 }
 
@@ -635,13 +632,13 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
                 {
                     Sprite.Transform = Matrix.Scaling(0.7f, 0.7f, 0f)
                                        * Matrix.Translation(
-                                           basePosition.X - this.Width + 5f, 
-                                           basePosition.Y + this.HeaderHeight + this.BodyHeight + 1.5f, 
+                                           basePosition.X - this.Width + 5f,
+                                           basePosition.Y + this.HeaderHeight + this.BodyHeight + 1.5f,
                                            0f);
                     Sprite.Draw(
-                        HideTexture, 
-                        Color.White, 
-                        new Rectangle(0, 0, HideBitmap.Width, (int)this.DrawFooterHeight));
+                        HideTexture,
+                        Color.White,
+                        new SharpDX.Rectangle(0, 0, HideBitmap.Width, (int)this.DrawFooterHeight));
                 }
 
                 Sprite.Transform = matrix;
@@ -708,16 +705,16 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         }
 
         /// <summary>
-        /// <c>OnWndProc</c> event, occurs on a windows process message to the thread.
+        ///     <c>OnWndProc</c> event, occurs on a windows process message to the thread.
         /// </summary>
         /// <param name="basePosition">
-        /// The base position
+        ///     The base position
         /// </param>
         /// <param name="windowsKeys">
-        /// The windows keys
+        ///     The windows keys
         /// </param>
         /// <param name="isEdit">
-        /// Indicates whether it's an edit message.
+        ///     Indicates whether it's an edit message.
         /// </param>
         public override void OnWndProc(Vector2 basePosition, WindowsKeys windowsKeys, bool isEdit)
         {
@@ -763,14 +760,14 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         /// <returns>
         ///     The <see cref="SharpDX.Rectangle" />.
         /// </returns>
-        private Rectangle GetBodyRectangle(Vector2 basePosition)
+        private SharpDX.Rectangle GetBodyRectangle(Vector2 basePosition)
         {
             const int BaseLeftPosition = 144;
 
             var x = basePosition.X - (this.Width / 2f) - BaseLeftPosition;
             var y = basePosition.Y + this.HeaderHeight + 2f;
 
-            return new Rectangle((int)x, (int)y, (int)this.Width, (int)this.DrawBodyHeight);
+            return new SharpDX.Rectangle((int)x, (int)y, (int)this.Width, (int)this.DrawBodyHeight);
         }
 
         /// <summary>
@@ -782,18 +779,18 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         /// <returns>
         ///     The <see cref="Rectangle" />.
         /// </returns>
-        private Rectangle GetHeaderRectangle(Vector2 basePosition)
+        private SharpDX.Rectangle GetHeaderRectangle(Vector2 basePosition)
         {
             const int BaseLeftPosition = 140;
 
             var x = basePosition.X - (this.Width / 2f) - BaseLeftPosition;
             var y = basePosition.Y
-                    + new Rectangle(0, 0, 0, (int)this.HeaderHeight).GetCenteredText(
-                        Sprite, 
-                        this.Header, 
+                    + new SharpDX.Rectangle(0, 0, 0, (int)this.HeaderHeight).GetCenteredText(
+                        Sprite,
+                        this.Header,
                         CenteredFlags.VerticalCenter).Y;
 
-            return new Rectangle((int)x, (int)y, (int)this.Width, (int)this.HeaderHeight);
+            return new SharpDX.Rectangle((int)x, (int)y, (int)this.Width, (int)this.HeaderHeight);
         }
 
         #endregion

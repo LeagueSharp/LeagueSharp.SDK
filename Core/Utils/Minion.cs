@@ -20,11 +20,7 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Collections.Generic;
     using System.Linq;
 
-    using Enumerations;
-    using Extensions;
-    using Extensions.SharpDX;
-    using Math;
-    using Math.Prediction;
+    using LeagueSharp.SDK;
 
     using SharpDX;
 

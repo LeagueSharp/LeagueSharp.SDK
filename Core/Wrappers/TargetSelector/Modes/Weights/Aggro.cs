@@ -15,15 +15,11 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
+namespace LeagueSharp.SDK.Modes.Weights
 {
-    #region
-
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
-
-    #endregion
 
     /// <summary>
     ///     Aggro tracking
@@ -39,7 +35,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes the <see cref="Aggro" /> class.
+        ///     Initializes static members of the <see cref="Aggro" /> class.
         /// </summary>
         static Aggro()
         {
@@ -51,7 +47,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
         #region Public Properties
 
         /// <summary>
-        ///     The entries
+        ///     Gets the entries
         /// </summary>
         public static ReadOnlyDictionary<int, AggroEntry> Entries => new ReadOnlyDictionary<int, AggroEntry>(PEntries);
 
@@ -62,8 +58,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
         /// <summary>
         ///     Gets the sender items.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <returns></returns>
+        /// <param name="sender">The sender.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="IEnumerable{T}" /> of <see cref="AggroEntry" />.
+        /// </returns>
         public static IEnumerable<AggroEntry> GetSenderItems(Obj_AI_Base sender)
         {
             return PEntries.Where(i => i.Key.Equals(sender.NetworkId)).Select(i => i.Value);
@@ -72,9 +71,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
         /// <summary>
         ///     Gets the sender target item.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="target">The target.</param>
-        /// <returns></returns>
+        /// <param name="sender">The sender.
+        /// </param>
+        /// <param name="target">The target.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="AggroEntry" />.
+        /// </returns>
         public static AggroEntry GetSenderTargetItem(Obj_AI_Base sender, Obj_AI_Base target)
         {
             return GetSenderItems(sender).FirstOrDefault(entry => entry.Target.Compare(target));
@@ -83,8 +86,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
         /// <summary>
         ///     Gets the target items.
         /// </summary>
-        /// <param name="target">The target.</param>
-        /// <returns></returns>
+        /// <param name="target">The target.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="IEnumerable{T}" /> of <see cref="AggroEntry" />.
+        /// </returns>
         public static IEnumerable<AggroEntry> GetTargetItems(Obj_AI_Base target)
         {
             return PEntries.Where(i => i.Value.Target.Compare(target)).Select(i => i.Value);
@@ -95,16 +101,21 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
         #region Methods
 
         /// <summary>
-        ///     Called when [object ai base aggro].
+        ///     Called when aggro is changed.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="args">The <see cref="LeagueSharp.GameObjectAggroEventArgs" /> instance containing the event data.</param>
+        /// <param name="sender">
+        ///     The sender.
+        /// </param>
+        /// <param name="args">
+        ///     The <see cref="LeagueSharp.GameObjectAggroEventArgs" /> instance containing the event data.
+        /// </param>
         private static void OnObjAiBaseAggro(Obj_AI_Base sender, GameObjectAggroEventArgs args)
         {
             if (!sender.IsEnemy)
             {
                 return;
             }
+
             var hero = sender as Obj_AI_Hero;
             var target = GameObjects.EnemyHeroes.FirstOrDefault(h => h.NetworkId == args.NetworkId);
             if (hero != null && target != null)
@@ -131,8 +142,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
     {
         #region Fields
 
+        /// <summary>
+        ///     The sender.
+        /// </summary>
         private Obj_AI_Hero sender;
 
+        /// <summary>
+        ///     The target.
+        /// </summary>
         private Obj_AI_Hero target;
 
         #endregion
@@ -142,8 +159,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
         /// <summary>
         ///     Initializes a new instance of the <see cref="AggroEntry" /> class.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="hero">The hero.</param>
+        /// <param name="sender">
+        ///     The sender.
+        /// </param>
+        /// <param name="hero">
+        ///     The hero.
+        /// </param>
         public AggroEntry(Obj_AI_Hero sender, Obj_AI_Hero hero)
         {
             this.Sender = sender;
@@ -157,15 +178,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
         /// <summary>
         ///     Gets or sets the sender.
         /// </summary>
-        /// <value>
-        ///     The sender.
-        /// </value>
         public Obj_AI_Hero Sender
         {
             get
             {
                 return this.sender;
             }
+
             set
             {
                 this.sender = value;
@@ -176,15 +195,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
         /// <summary>
         ///     Gets or sets the target.
         /// </summary>
-        /// <value>
-        ///     The target.
-        /// </value>
         public Obj_AI_Hero Target
         {
             get
             {
                 return this.target;
             }
+
             set
             {
                 this.target = value;
@@ -195,9 +212,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
         /// <summary>
         ///     Gets the tick count.
         /// </summary>
-        /// <value>
-        ///     The tick count.
-        /// </value>
         public int TickCount { get; private set; }
 
         #endregion

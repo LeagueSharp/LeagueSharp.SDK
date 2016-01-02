@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
+namespace LeagueSharp.SDK.Modes.Weights
 {
     using System;
     using System.Linq;
@@ -27,29 +27,28 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
     {
         #region Public Properties
 
-        /// <summary>
-        ///     The default weight
-        /// </summary>
+        /// <inheritdoc />
         public int DefaultWeight => 0;
 
+        /// <inheritdoc />
         public string DisplayName => "Team Focus";
 
         /// <summary>
         ///     Gets or sets the fade time.
         /// </summary>
-        /// <value>
-        ///     The fade time.
-        /// </value>
         public int FadeTime { get; set; } = 10000;
 
+        /// <inheritdoc />
         public bool Inverted => false;
 
+        /// <inheritdoc />
         public string Name => "team-focus";
 
         #endregion
 
         #region Public Methods and Operators
 
+        /// <inheritdoc />
         public float GetValue(Obj_AI_Hero hero)
             =>
                 Aggro.Entries.Where(a => a.Value.Target.Compare(hero))

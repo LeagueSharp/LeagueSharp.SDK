@@ -15,13 +15,11 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using Extensions.SharpDX;
 
     using SharpDX;
 
@@ -248,10 +246,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 this.Range = range;
                 this.BasePrice = item.Price;
                 this.SellPrice = (int)(item.Price * item.SellBackModifier);
-                //this.TotalPrice = item.Price
-                //                  + ItemData.Entries.Where(i => item.RecipeItem.Any(j => j == i.Id)).Sum(i => i.Price);
                 this.Purchaseable = item.CanBeSold;
-                //this.From = item.RecipeItem.Cast<int>().ToArray();
                 this.Stacks = item.MaxStack;
                 this.HideFromAll = !item.UsableInStore;
             }
@@ -275,10 +270,7 @@ namespace LeagueSharp.SDK.Core.Wrappers
                 this.Range = range;
                 this.BasePrice = item.Price;
                 this.SellPrice = (int)(item.Price * item.SellBackModifier);
-                //this.TotalPrice = item.Price
-                //                  + ItemData.Entries.Where(i => item.RecipeItem.Any(j => j == i.Id)).Sum(i => i.Price);
                 this.Purchaseable = item.CanBeSold;
-                //this.From = item.RecipeItem.Cast<int>().ToArray();
                 this.Stacks = item.MaxStack;
                 this.HideFromAll = !item.UsableInStore;
             }
@@ -291,11 +283,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
             ///     Gets the base price.
             /// </summary>
             public int BasePrice { get; private set; }
-
-            /// <summary>
-            ///     Gets the Id's of the included Items.
-            /// </summary>
-            public int[] From { get; private set; }
 
             /// <summary>
             ///     Gets a value indicating whether hide from all.
@@ -367,11 +354,6 @@ namespace LeagueSharp.SDK.Core.Wrappers
             ///     Gets the maximum stacks.
             /// </summary>
             public int Stacks { get; private set; }
-
-            /// <summary>
-            ///     Gets the total price.
-            /// </summary>
-            public int TotalPrice { get; private set; }
 
             #endregion
 

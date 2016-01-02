@@ -1,52 +1,46 @@
-﻿// <copyright file="Selected.cs" company="LeagueSharp">
+﻿// <copyright file="TargetSelectorSelected.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
-// 
+//
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
-// 
+//
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
-// 
+//
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
+namespace LeagueSharp.SDK
 {
-    #region
-
     using System.Linq;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
+    
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
-
-    #endregion
 
     /// <summary>
     ///     Manages the selection of targets
     /// </summary>
-    public class Selected
+    public class TargetSelectorSelected
     {
         #region Fields
 
         /// <summary>
-        ///     The menu
+        ///     The menu.
         /// </summary>
         private readonly Menu menu;
 
         /// <summary>
-        ///     The focus
+        ///     The focus.
         /// </summary>
         private bool focus = true;
 
         /// <summary>
-        ///     The force
+        ///     The force.
         /// </summary>
         private bool force;
 
@@ -55,10 +49,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Selected" /> class.
+        ///     Initializes a new instance of the <see cref="TargetSelectorSelected" /> class.
         /// </summary>
-        /// <param name="menu">The menu.</param>
-        public Selected(Menu menu)
+        /// <param name="menu">
+        ///     The menu.
+        /// </param>
+        public TargetSelectorSelected(Menu menu)
         {
             this.menu = menu;
             this.menu.Add(new MenuBool("focus", "Focus Selected Target", this.focus));
@@ -93,23 +89,18 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         /// <summary>
         ///     Gets or sets the click buffer.
         /// </summary>
-        /// <value>
-        ///     The click buffer.
-        /// </value>
         public float ClickBuffer { get; set; } = 100f;
 
         /// <summary>
-        ///     Gets or sets a value indicating whether this <see cref="Selected" /> is focus.
+        ///     Gets or sets a value indicating whether this <see cref="TargetSelectorSelected" /> is focus.
         /// </summary>
-        /// <value>
-        ///     <c>true</c> if focus; otherwise, <c>false</c>.
-        /// </value>
         public bool Focus
         {
             get
             {
                 return this.focus;
             }
+
             set
             {
                 this.focus = value;
@@ -118,17 +109,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         }
 
         /// <summary>
-        ///     Gets or sets a value indicating whether this <see cref="Selected" /> is force.
+        ///     Gets or sets a value indicating whether this <see cref="TargetSelectorSelected" /> is force.
         /// </summary>
-        /// <value>
-        ///     <c>true</c> if force; otherwise, <c>false</c>.
-        /// </value>
         public bool Force
         {
             get
             {
                 return this.force;
             }
+
             set
             {
                 this.force = value;
@@ -139,9 +128,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         /// <summary>
         ///     Gets or sets the target.
         /// </summary>
-        /// <value>
-        ///     The target.
-        /// </value>
         public Obj_AI_Hero Target { get; set; }
 
         #endregion
@@ -151,7 +137,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         /// <summary>
         ///     Raises the <see cref="E:GameWndProc" /> event.
         /// </summary>
-        /// <param name="args">The <see cref="LeagueSharp.WndEventArgs" /> instance containing the event data.</param>
+        /// <param name="args">
+        ///     The <see cref="LeagueSharp.WndEventArgs" /> instance containing the event data.
+        /// </param>
         private void OnGameWndProc(WndEventArgs args)
         {
             if (args.Msg != (ulong)WindowsMessages.LBUTTONDOWN)

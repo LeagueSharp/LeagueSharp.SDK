@@ -15,14 +15,11 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Math.Prediction
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers.Damages;
 
@@ -66,7 +63,9 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
         /// <summary>
         ///     Return the Attacking turret.
         /// </summary>
-        /// <param name="minion"></param>
+        /// <param name="minion">
+        ///     The minion.
+        /// </param>
         /// <returns>
         ///     The <see cref="bool" />
         /// </returns>
@@ -126,7 +125,9 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
         /// <summary>
         ///     Return the starttick of the attacking turret.
         /// </summary>
-        /// <param name="minion"></param>
+        /// <param name="minion">
+        ///     The minion.
+        /// </param>
         /// <returns>
         ///     The <see cref="bool" />
         /// </returns>
@@ -167,15 +168,17 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                     && attack.Target.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
                 {
                     var landTime = attack.StartTick + attack.Delay
-                                   + 1000 * Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
-                                   / attack.ProjectileSpeed + delay;
+                                   + (1000 * Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
+                                      / attack.ProjectileSpeed) + delay;
                     if (landTime < Variables.TickCount + time)
                     {
                         attackDamage = attack.Damage;
                     }
                 }
+
                 predictedDamage += attackDamage;
             }
+
             return unit.Health - predictedDamage;
         }
 
@@ -207,16 +210,19 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                     {
                         if (fromT >= Variables.TickCount
                             && (fromT + attack.Delay
-                                + Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
-                                / attack.ProjectileSpeed < toT))
+                                + (Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
+                                   / attack.ProjectileSpeed) < toT))
                         {
                             n++;
                         }
+
                         fromT += (int)attack.AnimationTime;
                     }
                 }
+
                 predictedDamage += n * attack.Damage;
             }
+
             return unit.Health - predictedDamage;
         }
 
@@ -235,6 +241,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
             {
                 return;
             }
+
             var missile = sender as MissileClient;
             if (missile?.SpellCaster != null)
             {
@@ -306,9 +313,9 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
             var attackData = new PredictedDamage(
                 sender,
                 target,
-                Variables.TickCount - Game.Ping / 2,
+                Variables.TickCount - (Game.Ping / 2),
                 sender.AttackCastDelay * 1000,
-                sender.AttackDelay * 1000 - (sender is Obj_AI_Turret ? 70 : 0),
+                (sender.AttackDelay * 1000) - (sender is Obj_AI_Turret ? 70 : 0),
                 sender.IsMelee ? int.MaxValue : (int)args.SData.MissileSpeed,
                 (float)sender.GetAutoAttackDamage(target));
             ActiveAttacks.Add(sender.NetworkId, attackData);

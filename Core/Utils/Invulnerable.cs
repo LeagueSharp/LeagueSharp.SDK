@@ -24,8 +24,7 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Collections.ObjectModel;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
+    using LeagueSharp.SDK;
 
     #endregion
 

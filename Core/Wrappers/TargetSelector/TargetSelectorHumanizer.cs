@@ -1,4 +1,4 @@
-﻿// <copyright file="Humanizer.cs" company="LeagueSharp">
+﻿// <copyright file="TargetSelectorHumanizer.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
 // 
 //    This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
+namespace LeagueSharp.SDK
 {
     #region
 
@@ -31,7 +31,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
     /// <summary>
     ///     Humanize the target selector process
     /// </summary>
-    public class Humanizer
+    public class TargetSelectorHumanizer
     {
         #region Constants
 
@@ -69,10 +69,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Humanizer" /> class.
+        ///     Initializes a new instance of the <see cref="TargetSelectorHumanizer" /> class.
         /// </summary>
-        /// <param name="menu">The menu.</param>
-        public Humanizer(Menu menu)
+        /// <param name="menu">
+        ///     The menu.
+        /// </param>
+        public TargetSelectorHumanizer(Menu menu)
         {
             this.menu = menu;
             this.menu.Add(new MenuSlider("fowDelay", "Target Acquire Delay", this.fowDelay, MinDelay, MaxDelay));
@@ -110,6 +112,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
             {
                 return this.fowDelay;
             }
+
             set
             {
                 this.fowDelay = Math.Min(MaxDelay, Math.Max(MinDelay, value));
@@ -124,8 +127,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         /// <summary>
         ///     Filters the targets.
         /// </summary>
-        /// <param name="heroes">The heroes.</param>
-        /// <returns></returns>
+        /// <param name="heroes">
+        ///     The heroes.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="List{T}" /> of <see cref="Obj_AI_Hero" />.
+        /// </returns>
         public List<Obj_AI_Hero> FilterTargets(List<Obj_AI_Hero> heroes)
         {
             var finalHeroes = heroes;
@@ -140,6 +147,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
                     }
                 }
             }
+
             return finalHeroes;
         }
 
@@ -150,7 +158,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         /// <summary>
         ///     Raises the <see cref="E:GameUpdate" /> event.
         /// </summary>
-        /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
+        /// <param name="args">
+        ///     The <see cref="EventArgs" /> instance containing the event data.
+        /// </param>
         private void OnGameUpdate(EventArgs args)
         {
             foreach (var entry in this.entries.Where(e => e.Visible != !e.Hero.IsVisible))
@@ -159,51 +169,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
                 entry.LastVisibleChangeTick = Variables.TickCount;
             }
         }
-
-        #endregion
-    }
-
-    internal class HeroVisibleEntry
-    {
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="HeroVisibleEntry" /> class.
-        /// </summary>
-        /// <param name="hero">The hero.</param>
-        public HeroVisibleEntry(Obj_AI_Hero hero)
-        {
-            this.Hero = hero;
-            this.LastVisibleChangeTick = Variables.TickCount;
-        }
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        ///     Gets the hero.
-        /// </summary>
-        /// <value>
-        ///     The hero.
-        /// </value>
-        public Obj_AI_Hero Hero { get; }
-
-        /// <summary>
-        ///     Gets or sets the last visible change tick.
-        /// </summary>
-        /// <value>
-        ///     The last visible change.
-        /// </value>
-        public int LastVisibleChangeTick { get; set; }
-
-        /// <summary>
-        ///     Gets or sets a value indicating whether this hero is visible.
-        /// </summary>
-        /// <value>
-        ///     <c>true</c> if visible; otherwise, <c>false</c>.
-        /// </value>
-        public bool Visible { get; set; }
 
         #endregion
     }
