@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LeagueSharp.SDK.Core.UI.IMenu
 {
     using System.Drawing;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK;
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
@@ -952,7 +947,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     The line.
         /// </summary>
-        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
+        private static readonly SharpDX.Direct3D9.Line Line = new SharpDX.Direct3D9.Line(Drawing.Direct3DDevice) { GLLines = true };
 
         #endregion
 
@@ -1615,7 +1610,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     The line.
         /// </summary>
-        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
+        private static readonly SharpDX.Direct3D9.Line Line = new SharpDX.Direct3D9.Line(Drawing.Direct3DDevice) { GLLines = true };
 
         #endregion
 

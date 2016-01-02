@@ -15,14 +15,11 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Events;
     using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
@@ -428,7 +425,7 @@ namespace LeagueSharp.SDK.Core
 
             initialized = true;
 
-            Load.OnLoad += (sender, args) =>
+            Events.OnLoad += (sender, args) =>
                 {
                     Player = ObjectManager.Player;
 

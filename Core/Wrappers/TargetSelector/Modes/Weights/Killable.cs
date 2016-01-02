@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
+namespace LeagueSharp.SDK.Modes.Weights
 {
     using LeagueSharp.SDK.Core.Wrappers.Damages;
 
@@ -26,18 +26,23 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
     {
         #region Public Properties
 
+        /// <inheritdoc />
         public int DefaultWeight => 20;
 
+        /// <inheritdoc />
         public string DisplayName => "AA Killable";
 
+        /// <inheritdoc />
         public bool Inverted => false;
 
+        /// <inheritdoc />
         public string Name => "aa-killable";
 
         #endregion
 
         #region Public Methods and Operators
 
+        /// <inheritdoc />
         public float GetValue(Obj_AI_Hero hero) => hero.Health < GameObjects.Player.GetAutoAttackDamage(hero) ? 1 : 0;
 
         #endregion

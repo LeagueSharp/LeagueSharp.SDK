@@ -15,10 +15,8 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
+namespace LeagueSharp.SDK.Modes
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -26,8 +24,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
-
-    #endregion
 
     /// <summary>
     ///     The priority Mode.
@@ -49,16 +45,20 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
 
         #endregion
 
-        #region Fields
+        #region Static Fields
 
         /// <summary>
         ///     The priority categories
         /// </summary>
         [ResourceImport("Data.Priority.json")]
-        public static List<PriorityCategory> priorityCategories = new List<PriorityCategory>();
+        public static List<PriorityCategory> PriorityCategories = new List<PriorityCategory>();
+
+        #endregion
+
+        #region Fields
 
         /// <summary>
-        ///     The menu
+        ///     The menu.
         /// </summary>
         private Menu menu;
 
@@ -66,24 +66,17 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
 
         #region Public Properties
 
-        /// <summary>
-        ///     The display name
-        /// </summary>
+        /// <inheritdoc />
         public string DisplayName => "Priorities";
 
-        /// <summary>
-        ///     The name
-        /// </summary>
+        /// <inheritdoc />
         public string Name => "priorities";
 
         #endregion
 
         #region Public Methods and Operators
 
-        /// <summary>
-        ///     Adds to menu.
-        /// </summary>
-        /// <param name="tsMenu">The ts menu.</param>
+        /// <inheritdoc />
         public void AddToMenu(Menu tsMenu)
         {
             this.menu = tsMenu;
@@ -127,29 +120,32 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         /// <summary>
         ///     Gets the default priority.
         /// </summary>
-        /// <param name="hero">The hero.</param>
-        /// <returns></returns>
+        /// <param name="hero">
+        ///     The hero.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="int" />.
+        /// </returns>
         public int GetDefaultPriority(Obj_AI_Hero hero)
         {
-            return priorityCategories.FirstOrDefault(i => i.Champions.Contains(hero.ChampionName))?.Value
-                   ?? MinPriority;
+            return PriorityCategories.FirstOrDefault(i => i.Champions.Contains(hero.ChampionName))?.Value ?? MinPriority;
         }
 
         /// <summary>
         ///     Gets the priority.
         /// </summary>
-        /// <param name="hero">The hero.</param>
-        /// <returns></returns>
+        /// <param name="hero">
+        ///     The hero.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="int" />.
+        /// </returns>
         public int GetPriority(Obj_AI_Hero hero)
         {
             return this.menu?["priority"][hero.ChampionName]?.GetValue<MenuSlider>().Value ?? MinPriority;
         }
 
-        /// <summary>
-        ///     Orders the champions.
-        /// </summary>
-        /// <param name="heroes">The heroes.</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public List<Obj_AI_Hero> OrderChampions(List<Obj_AI_Hero> heroes)
         {
             return heroes.OrderByDescending(this.GetPriority).ToList();
@@ -158,8 +154,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         /// <summary>
         ///     Sets the priority.
         /// </summary>
-        /// <param name="hero">The hero.</param>
-        /// <param name="value">The value.</param>
+        /// <param name="hero">
+        ///     The hero.
+        /// </param>
+        /// <param name="value">
+        ///     The value.
+        /// </param>
         public void SetPriority(Obj_AI_Hero hero, int value)
         {
             var item = this.menu?["priority"][hero.ChampionName];
@@ -168,32 +168,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
                 item.GetValue<MenuSlider>().Value = Math.Max(MinPriority, Math.Min(MaxPriority, value));
             }
         }
-
-        #endregion
-    }
-
-    /// <summary>
-    ///     Category class for Priorities
-    /// </summary>
-    public class PriorityCategory
-    {
-        #region Public Properties
-
-        /// <summary>
-        ///     Gets or sets the champions.
-        /// </summary>
-        /// <value>
-        ///     The champions.
-        /// </value>
-        public HashSet<string> Champions { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the value.
-        /// </summary>
-        /// <value>
-        ///     The value.
-        /// </value>
-        public int Value { get; set; }
 
         #endregion
     }

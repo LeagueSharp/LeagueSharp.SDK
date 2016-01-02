@@ -15,20 +15,17 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.UI.INotifications
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Core.Utils;
-    using Enumerations;
-    using Events;
-    using Extensions;
-    using Extensions.SharpDX;
-    using IMenu;
-    using IMenu.Values;
+
+    using LeagueSharp.SDK.Core.UI.IMenu;
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
+
     using SharpDX;
-    using SharpDX.Direct3D9;
 
     /// <summary>
     ///     The notifications main handler.
@@ -45,7 +42,7 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         /// <summary>
         ///     The line.
         /// </summary>
-        private static Line line;
+        private static SharpDX.Direct3D9.Line line;
 
         #endregion
 
@@ -68,7 +65,7 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         /// <summary>
         ///     Gets the line.
         /// </summary>
-        private static Line Line
+        private static SharpDX.Direct3D9.Line Line
         {
             get
             {
@@ -77,7 +74,7 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
                     return line;
                 }
 
-                return line = new Line(Drawing.Direct3DDevice) { Antialias = false, GLLines = true };
+                return line = new SharpDX.Direct3D9.Line(Drawing.Direct3DDevice) { Antialias = false, GLLines = true };
             }
         }
 
@@ -127,7 +124,7 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         /// </param>
         public static void Initialize(Menu menu)
         {
-            Load.OnLoad += (sender, args) =>
+            Events.OnLoad += (sender, args) =>
                 {
                     Menu = new Menu("notifications", "Notifications");
 
@@ -199,9 +196,9 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
                 Line.Draw(
                     new[]
                         {
-                            new Vector2(Position.X - (line.Width / 2f), Position.Y), 
+                            new Vector2(Position.X - (line.Width / 2f), Position.Y),
                             new Vector2(Position.X - (line.Width / 2f), height)
-                        }, 
+                        },
                     new ColorBGRA(255, 0, 0, 255 / 2));
                 Line.End();
             }
@@ -254,9 +251,9 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
 
                 EditButtonDown = value
                                  && windowsKeys.Cursor.IsUnderRectangle(
-                                     Position.X - widthRectangle, 
-                                     Position.Y, 
-                                     widthRectangle, 
+                                     Position.X - widthRectangle,
+                                     Position.Y,
+                                     widthRectangle,
                                      heightRectangle);
 
                 if (!value)

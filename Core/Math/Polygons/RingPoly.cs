@@ -1,32 +1,30 @@
-﻿// <copyright file="Ring.cs" company="LeagueSharp">
+﻿// <copyright file="RingPoly.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
-// 
+//
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
-// 
+//
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
-// 
+//
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Math.Polygons
+namespace LeagueSharp.SDK
 {
     using System;
-
-    using Extensions.SharpDX;
 
     using SharpDX;
 
     /// <summary>
     ///     Represents a Ring <see cref="Polygon" />
     /// </summary>
-    public class Ring : Polygon
+    public class RingPoly : Polygon
     {
         #region Fields
 
@@ -40,7 +38,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Ring" /> class.
+        ///     Initializes a new instance of the <see cref="RingPoly" /> class.
         /// </summary>
         /// <param name="center">
         ///     The Center
@@ -54,13 +52,13 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         /// <param name="quality">
         ///     The Quality
         /// </param>
-        public Ring(Vector3 center, float innerRadius, float outerRadius, int quality = 20)
+        public RingPoly(Vector3 center, float innerRadius, float outerRadius, int quality = 20)
             : this(center.ToVector2(), innerRadius, outerRadius, quality)
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Ring" /> class.
+        ///     Initializes a new instance of the <see cref="RingPoly" /> class.
         /// </summary>
         /// <param name="center">
         ///     The Center
@@ -74,7 +72,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         /// <param name="quality">
         ///     The Quality
         /// </param>
-        public Ring(Vector2 center, float innerRadius, float outerRadius, int quality = 20)
+        public RingPoly(Vector2 center, float innerRadius, float outerRadius, int quality = 20)
         {
             this.Center = center;
             this.InnerRadius = innerRadius;
@@ -89,17 +87,17 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the center.
+        ///     Gets or sets the center.
         /// </summary>
         public Vector2 Center { get; set; }
 
         /// <summary>
-        /// Gets or sets the inner radius.
+        ///     Gets or sets the inner radius.
         /// </summary>
         public float InnerRadius { get; set; }
 
         /// <summary>
-        /// Gets or sets the outer radius.
+        ///     Gets or sets the outer radius.
         /// </summary>
         public float OuterRadius { get; set; }
 
@@ -122,7 +120,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
             {
                 var angle = i * 2 * Math.PI / this.quality;
                 var point = new Vector2(
-                    this.Center.X - (outRadius * (float)Math.Cos(angle)), 
+                    this.Center.X - (outRadius * (float)Math.Cos(angle)),
                     this.Center.Y - (outRadius * (float)Math.Sin(angle)));
 
                 this.Points.Add(point);
@@ -132,7 +130,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
             {
                 var angle = i * 2 * Math.PI / this.quality;
                 var point = new Vector2(
-                    this.Center.X + (innerRadius * (float)Math.Cos(angle)), 
+                    this.Center.X + (innerRadius * (float)Math.Cos(angle)),
                     this.Center.Y - (innerRadius * (float)Math.Sin(angle)));
 
                 this.Points.Add(point);

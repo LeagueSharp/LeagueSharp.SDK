@@ -15,13 +15,9 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
+namespace LeagueSharp.SDK.Modes.Weights
 {
-    #region
-
     using System.Linq;
-
-    #endregion
 
     /// <summary>
     ///     Ability Power
@@ -44,12 +40,16 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
 
         #region Public Properties
 
+        /// <inheritdoc />
         public int DefaultWeight => 15;
 
+        /// <inheritdoc />
         public string DisplayName => "Ability Power";
 
+        /// <inheritdoc />
         public bool Inverted => false;
 
+        /// <inheritdoc />
         public string Name => "ability-power";
 
         /// <summary>
@@ -64,6 +64,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
 
         #region Public Methods and Operators
 
+        /// <inheritdoc />
         public float GetValue(Obj_AI_Hero hero)
         {
             if (Variables.TickCount - this.lastUpdate > this.UpdateInterval)
@@ -71,8 +72,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
                 this.averageMr = GameObjects.AllyHeroes.Select(a => a.SpellBlock).DefaultIfEmpty(0).Average();
                 this.lastUpdate = Variables.TickCount;
             }
+
             return hero.FlatMagicDamageMod
-                   * (100 / (100 + this.averageMr * hero.PercentMagicPenetrationMod - hero.FlatMagicPenetrationMod));
+                   * (100 / (100 + (this.averageMr * hero.PercentMagicPenetrationMod) - hero.FlatMagicPenetrationMod));
         }
 
         #endregion

@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Events
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Reflection;
@@ -23,63 +23,29 @@ namespace LeagueSharp.SDK.Core.Events
     /// <summary>
     ///     Provides events for OnStealth
     /// </summary>
-    public class Stealth
+    public static partial class Events
     {
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes static members of the <see cref="Stealth" /> class.
-        ///     Static constructor.
-        /// </summary>
-        static Stealth()
-        {
-            GameObject.OnIntegerPropertyChange += GameObject_OnIntegerPropertyChange;
-        }
-
-        #endregion
-
-        #region Delegates
-
-        /// <summary>
-        ///     OnStealth Delegate.
-        /// </summary>
-        /// <param name="sender">The sender</param>
-        /// <param name="e">OnStealth Event Arguments Container</param>
-        public delegate void OnStealthDelegate(object sender, OnStealthEventArgs e);
-
-        #endregion
-
         #region Public Events
 
         /// <summary>
         ///     Gets fired when any hero is invisible.
         /// </summary>
-        public static event OnStealthDelegate OnStealth;
+        public static event EventHandler<OnStealthEventArgs> OnStealth;
 
         #endregion
 
         #region Methods
 
         /// <summary>
-        ///     Attempts to fire the <see cref="OnStealth" /> event.
-        /// </summary>
-        /// <param name="args">OnStealthEventArgs <see cref="OnStealthEventArgs" /></param>
-        private static void FireOnStealth(OnStealthEventArgs args)
-        {
-            if (OnStealth != null)
-            {
-                OnStealth(MethodBase.GetCurrentMethod().DeclaringType, args);
-            }
-        }
-
-        /// <summary>
         ///     Function is called when a <see cref="GameObject" /> gets an integer property change and is called by an event.
         /// </summary>
-        /// <param name="sender">GameObject sender</param>
-        /// <param name="args">Integer Property Change Data</param>
-        private static void GameObject_OnIntegerPropertyChange(
-            GameObject sender,
-            GameObjectIntegerPropertyChangeEventArgs args)
+        /// <param name="sender">
+        ///     GameObject sender
+        /// </param>
+        /// <param name="args">
+        ///     Integer Property Change Data
+        /// </param>
+        private static void EventStealth(GameObject sender, GameObjectIntegerPropertyChangeEventArgs args)
         {
             var hero = sender as Obj_AI_Hero;
             if (hero == null || !args.Property.Equals("ActionState"))
@@ -100,6 +66,17 @@ namespace LeagueSharp.SDK.Core.Events
             {
                 FireOnStealth(new OnStealthEventArgs { Sender = hero, IsStealthed = false });
             }
+        }
+
+        /// <summary>
+        ///     Attempts to fire the <see cref="OnStealth" /> event.
+        /// </summary>
+        /// <param name="args">
+        ///     OnStealthEventArgs <see cref="OnStealthEventArgs" />
+        /// </param>
+        private static void FireOnStealth(OnStealthEventArgs args)
+        {
+            OnStealth?.Invoke(MethodBase.GetCurrentMethod().DeclaringType, args);
         }
 
         #endregion

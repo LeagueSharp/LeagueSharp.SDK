@@ -21,11 +21,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 {
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Math;
+    using LeagueSharp.SDK;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.

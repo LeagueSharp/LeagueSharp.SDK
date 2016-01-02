@@ -15,20 +15,17 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Extensions
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Linq;
 
-    using global::SharpDX;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using SharpDX;
 
     /// <summary>
     ///     Provides helpful extensions to Units.
     /// </summary>
-    public static class Unit
+    public static partial class Extensions
     {
         #region Public Methods and Operators
 
@@ -37,7 +34,9 @@ namespace LeagueSharp.SDK.Core.Extensions
         /// </summary>
         /// <param name="unit">The unit.</param>
         /// <param name="range">The range.</param>
-        /// <returns></returns>
+        /// <returns>
+        ///     The count.
+        /// </returns>
         public static int CountAllyHeroesInRange(this Obj_AI_Base unit, float range)
         {
             return unit.ServerPosition.CountAllyHeroesInRange(range, unit);
@@ -48,7 +47,9 @@ namespace LeagueSharp.SDK.Core.Extensions
         /// </summary>
         /// <param name="unit">The unit.</param>
         /// <param name="range">The range.</param>
-        /// <returns></returns>
+        /// <returns>
+        ///     The count.
+        /// </returns>
         public static int CountEnemyHeroesInRange(this Obj_AI_Base unit, float range)
         {
             return unit.ServerPosition.CountEnemyHeroesInRange(range, unit);

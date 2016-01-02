@@ -1,4 +1,4 @@
-﻿// <copyright file="Selector.cs" company="LeagueSharp">
+﻿// <copyright file="OrbwalkerSelector.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
 // 
 //    This program is free software: you can redistribute it and/or modify
@@ -15,16 +15,12 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math.Prediction;
+    
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers.Damages;
@@ -32,7 +28,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
     /// <summary>
     ///     The target selecting system for <c>Orbwalker</c>.
     /// </summary>
-    internal class Selector
+    internal class OrbwalkerSelector
     {
         #region Constants
 
@@ -75,7 +71,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
 
         #region Constructors and Destructors
 
-        public Selector(Orbwalker orbwalker)
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="OrbwalkerSelector" /> class.
+        /// </summary>
+        /// <param name="orbwalker">
+        ///     The orbwalker.
+        /// </param>
+        public OrbwalkerSelector(Orbwalker orbwalker)
         {
             this.orbwalker = orbwalker;
         }
@@ -85,7 +87,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         #region Public Properties
 
         /// <summary>
-        ///     Forces the system to select the set target if valid and in range.
+        ///     Gets or sets the forced target.
         /// </summary>
         public AttackableUnit ForceTarget { get; set; }
 
@@ -94,12 +96,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         #region Properties
 
         /// <summary>
-        ///     The farm delay
+        ///     Gets the farm delay
         /// </summary>
         private int FarmDelay => this.orbwalker.Menu["advanced"]["delayFarm"].GetValue<MenuSlider>().Value;
 
         /// <summary>
-        ///     Gets the last minion used for lane clear.
+        ///     Gets or sets the last minion used for lane clear.
         /// </summary>
         private Obj_AI_Base LaneClearMinion { get; set; }
 
@@ -110,8 +112,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// <summary>
         ///     Gets the enemy minions.
         /// </summary>
-        /// <param name="range">The range.</param>
-        /// <returns></returns>
+        /// <param name="range">
+        ///     The range.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="List{T}" /> of <see cref="Obj_AI_Minion" />.
+        /// </returns>
         public List<Obj_AI_Minion> GetEnemyMinions(float range = 0)
         {
             return
@@ -123,6 +129,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// <summary>
         ///     Gets the target.
         /// </summary>
+        /// <param name="mode">
+        ///     The mode.
+        /// </param>
         /// <returns>
         ///     Returns the filtered target.
         /// </returns>
@@ -151,9 +160,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 {
                     var time =
                         (int)
-                        (GameObjects.Player.AttackCastDelay * 1000 - 100 + Game.Ping / 2f
-                         + 1000 * Math.Max(0, GameObjects.Player.Distance(minion) - GameObjects.Player.BoundingRadius)
-                         / GameObjects.Player.GetProjectileSpeed());
+                        ((GameObjects.Player.AttackCastDelay * 1000) - 100 + (Game.Ping / 2f)
+                         + (1000 * Math.Max(0, GameObjects.Player.Distance(minion) - GameObjects.Player.BoundingRadius)
+                            / GameObjects.Player.GetProjectileSpeed()));
                     if (minion.MaxHealth <= 10)
                     {
                         if (minion.Health <= 1)
@@ -173,6 +182,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                                         Type = OrbwalkingType.NonKillableMinion
                                     });
                         }
+
                         if (predHealth > 0 && predHealth <= GameObjects.Player.GetAutoAttackDamage(minion))
                         {
                             return minion;
@@ -195,11 +205,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 {
                     return turret;
                 }
+
                 foreach (var inhib in
                     GameObjects.EnemyInhibitors.Where(i => i.IsValidTarget() && i.InAutoAttackRange()))
                 {
                     return inhib;
                 }
+
                 if (GameObjects.EnemyNexus != null && GameObjects.EnemyNexus.IsValidTarget()
                     && GameObjects.EnemyNexus.InAutoAttackRange())
                 {
@@ -232,6 +244,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
             {
                 Obj_AI_Minion farmUnderTurretMinion = null;
                 Obj_AI_Minion noneKillableMinion = null;
+
                 // return all the minions under turret
                 var turretMinions = minions.Where(m => m.IsMinion() && m.Position.IsUnderAllyTurret()).ToList();
                 if (turretMinions.Any())
@@ -247,19 +260,21 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                         if (turret != null)
                         {
                             var turretStarTick = Health.TurretAggroStartTick(turretMinion);
-                            // from healthprediction (don't blame me :S)
+
+                            // from healthprediction (blame Lizzaran)
                             var turretLandTick = turretStarTick + (int)(turret.AttackCastDelay * 1000)
-                                                 + 1000
-                                                 * Math.Max(
-                                                     0,
-                                                     (int)(turretMinion.Distance(turret) - turret.BoundingRadius))
-                                                 / (int)(turret.BasicAttack.MissileSpeed + 70);
+                                                 + (1000
+                                                    * Math.Max(
+                                                        0,
+                                                        (int)(turretMinion.Distance(turret) - turret.BoundingRadius))
+                                                    / (int)(turret.BasicAttack.MissileSpeed + 70));
+
                             // calculate the HP before try to balance it
                             for (float i = turretLandTick + 50;
-                                 i < turretLandTick + 3 * turret.AttackDelay * 1000 + 50;
-                                 i = i + turret.AttackDelay * 1000)
+                                 i < turretLandTick + (3 * turret.AttackDelay * 1000) + 50;
+                                 i = i + (turret.AttackDelay * 1000))
                             {
-                                var time = (int)i - Variables.TickCount + Game.Ping / 2;
+                                var time = (int)i - Variables.TickCount + (Game.Ping / 2);
                                 var predHp =
                                     (int)
                                     Health.GetPrediction(
@@ -273,42 +288,44 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                                     turretAttackCount += 1;
                                     continue;
                                 }
+
                                 hpLeftBeforeDie = hpLeft;
                                 hpLeft = 0;
                                 break;
                             }
+
                             // calculate the hits is needed and possibilty to balance
                             if (hpLeft == 0 && turretAttackCount != 0 && hpLeftBeforeDie != 0)
                             {
                                 var damage = (int)GameObjects.Player.GetAutoAttackDamage(turretMinion);
                                 var hits = hpLeftBeforeDie / damage;
                                 var timeBeforeDie = turretLandTick
-                                                    + (turretAttackCount + 1) * (int)(turret.AttackDelay * 1000)
+                                                    + ((turretAttackCount + 1) * (int)(turret.AttackDelay * 1000))
                                                     - Variables.TickCount;
                                 var timeUntilAttackReady = this.orbwalker.LastAutoAttackTick
                                                            + (int)(GameObjects.Player.AttackDelay * 1000)
-                                                           > (Variables.TickCount + Game.Ping / 2 + 25)
+                                                           > (Variables.TickCount + (Game.Ping / 2) + 25)
                                                                ? this.orbwalker.LastAutoAttackTick
                                                                  + (int)(GameObjects.Player.AttackDelay * 1000)
-                                                                 - (Variables.TickCount + Game.Ping / 2 + 25)
+                                                                 - (Variables.TickCount + (Game.Ping / 2) + 25)
                                                                : 0;
                                 var timeToLandAttack = GameObjects.Player.IsMelee
                                                            ? GameObjects.Player.AttackCastDelay * 1000
-                                                           : GameObjects.Player.AttackCastDelay * 1000
-                                                             + 1000
-                                                             * Math.Max(
-                                                                 0,
-                                                                 (turretMinion.Distance(GameObjects.Player)
-                                                                  - GameObjects.Player.BoundingRadius))
-                                                             / GameObjects.Player.BasicAttack.MissileSpeed;
+                                                           : (GameObjects.Player.AttackCastDelay * 1000)
+                                                             + (1000
+                                                                * Math.Max(
+                                                                    0,
+                                                                    turretMinion.Distance(GameObjects.Player)
+                                                                    - GameObjects.Player.BoundingRadius)
+                                                                / GameObjects.Player.BasicAttack.MissileSpeed);
                                 if (hits >= 1
-                                    && hits * GameObjects.Player.AttackDelay * 1000 + timeUntilAttackReady
+                                    && (hits * GameObjects.Player.AttackDelay * 1000) + timeUntilAttackReady
                                     + timeToLandAttack < timeBeforeDie)
                                 {
                                     farmUnderTurretMinion = turretMinion;
                                 }
                                 else if (hits >= 1
-                                         && hits * GameObjects.Player.AttackDelay * 1000 + timeUntilAttackReady
+                                         && (hits * GameObjects.Player.AttackDelay * 1000) + timeUntilAttackReady
                                          + timeToLandAttack > timeBeforeDie)
                                 {
                                     noneKillableMinion = turretMinion;
@@ -318,15 +335,18 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                             {
                                 noneKillableMinion = turretMinion;
                             }
+
                             // should wait before attacking a minion.
                             if (this.ShouldWaitUnderTurret(noneKillableMinion))
                             {
                                 return null;
                             }
+
                             if (farmUnderTurretMinion != null)
                             {
                                 return farmUnderTurretMinion;
                             }
+
                             // balance other minions
                             return
                                 (from minion in
@@ -344,6 +364,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                         {
                             return null;
                         }
+
                         // balance other minions
                         return (from minion in turretMinions.Where(x => !Health.HasMinionAggro(x))
                                 let turret =
@@ -355,6 +376,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                                     > (int)GameObjects.Player.GetAutoAttackDamage(minion)
                                 select minion).FirstOrDefault();
                     }
+
                     return null;
                 }
             }
@@ -370,6 +392,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                         {
                             return this.LaneClearMinion;
                         }
+
                         var predHealth = Health.GetPrediction(
                             this.LaneClearMinion,
                             (int)(GameObjects.Player.AttackDelay * 1000 * LaneClearWaitTime),
@@ -381,6 +404,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                             return this.LaneClearMinion;
                         }
                     }
+
                     foreach (var minion in minions.Where(m => m.Team != GameObjectTeam.Neutral))
                     {
                         if (minion.MaxHealth <= 10)
@@ -388,6 +412,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                             this.LaneClearMinion = minion;
                             return minion;
                         }
+
                         var predHealth = Health.GetPrediction(
                             minion,
                             (int)(GameObjects.Player.AttackDelay * 1000 * LaneClearWaitTime),
@@ -439,7 +464,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// <summary>
         ///     Determines if the orbwalker should wait before attacking a minion under turret.
         /// </summary>
-        /// <param name="noneKillableMinion"></param>
+        /// <param name="noneKillableMinion">
+        ///     The non killable minion.
+        /// </param>
         /// <returns>
         ///     The <see cref="bool" />.
         /// </returns>
@@ -453,7 +480,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                         && m.InAutoAttackRange()
                         && Health.GetPrediction(
                             m,
-                            (int)(GameObjects.Player.AttackDelay * 1000 + m.GetTimeToHit()),
+                            (int)((GameObjects.Player.AttackDelay * 1000) + m.GetTimeToHit()),
                             this.FarmDelay,
                             HealthPredictionType.Simulated) <= GameObjects.Player.GetAutoAttackDamage(m));
         }
@@ -502,18 +529,21 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                     cloneList.Add(minion);
                 }
             }
+
             if (minions)
             {
-                minionList = this.OrderEnemyMinions(minionList);
+                minionList = OrderEnemyMinions(minionList);
                 minionList.AddRange(
                     this.OrderJungleMinions(
                         GameObjects.Jungle.Where(
                             j => this.IsValidUnit(j) && !j.CharData.BaseSkinName.Equals("gangplankbarrel")).ToList()));
             }
+
             if (attackWards)
             {
                 wardList.AddRange(GameObjects.EnemyWards.Where(w => this.IsValidUnit(w)));
             }
+
             var finalMinionList = new List<Obj_AI_Minion>();
             if (attackWards && prioritizeWards && attackSpecialMinions && prioritizeSpecialMinions)
             {
@@ -539,6 +569,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 finalMinionList.AddRange(specialList);
                 finalMinionList.AddRange(wardList);
             }
+
             if (this.orbwalker.Menu["advanced"]["attackBarrels"].GetValue<MenuBool>().Value)
             {
                 finalMinionList.AddRange(
@@ -546,19 +577,27 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                         j => this.IsValidUnit(j) && j.Health <= 1 && j.CharData.BaseSkinName.Equals("gangplankbarrel"))
                         .ToList());
             }
+
             if (attackClones)
             {
                 finalMinionList.AddRange(cloneList);
             }
+
             return finalMinionList.Where(m => !this.ignoreMinions.Any(b => b.Equals(m.CharData.BaseSkinName))).ToList();
         }
 
         /// <summary>
         ///     Determines whether the unit is valid.
         /// </summary>
-        /// <param name="unit">The unit.</param>
-        /// <param name="range">The range.</param>
-        /// <returns></returns>
+        /// <param name="unit">
+        ///     The unit.
+        /// </param>
+        /// <param name="range">
+        ///     The range.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
         private bool IsValidUnit(AttackableUnit unit, float range = 0f)
         {
             var minion = unit as Obj_AI_Minion;
@@ -569,9 +608,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// <summary>
         ///     Orders the enemy minions.
         /// </summary>
-        /// <param name="minions">The minions.</param>
-        /// <returns></returns>
-        private List<Obj_AI_Minion> OrderEnemyMinions(List<Obj_AI_Minion> minions)
+        /// <param name="minions">
+        ///     The minions.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="List{T}" /> of <see cref="Obj_AI_Minion" />.
+        /// </returns>
+        private static List<Obj_AI_Minion> OrderEnemyMinions(IEnumerable<Obj_AI_Minion> minions)
         {
             return
                 minions?.OrderByDescending(minion => minion.GetMinionType().HasFlag(MinionTypes.Siege))
@@ -584,9 +627,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         /// <summary>
         ///     Orders the jungle minions.
         /// </summary>
-        /// <param name="minions">The minions.</param>
-        /// <returns></returns>
-        private List<Obj_AI_Minion> OrderJungleMinions(List<Obj_AI_Minion> minions)
+        /// <param name="minions">
+        ///     The minions.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="IEnumerable{T}" /> of <see cref="Obj_AI_Minion" />.
+        /// </returns>
+        private IEnumerable<Obj_AI_Minion> OrderJungleMinions(List<Obj_AI_Minion> minions)
         {
             return minions != null
                        ? (this.orbwalker.Menu["advanced"]["prioritizeSmallJungle"].GetValue<MenuBool>().Value

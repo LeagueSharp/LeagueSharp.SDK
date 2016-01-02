@@ -15,17 +15,12 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Math
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
-
-    using Enumerations;
-    using Extensions;
-    using Extensions.SharpDX;
-    using Prediction;
 
     using SharpDX;
 
@@ -87,8 +82,8 @@ namespace LeagueSharp.SDK.Core.Math
                         GameObjects.EnemyMinions.Where(
                             minion =>
                             minion.IsValidTarget(
-                                Math.Min(input.Range + input.Radius + 100, 2000), 
-                                true, 
+                                Math.Min(input.Range + input.Radius + 100, 2000),
+                                true,
                                 input.RangeCheckFrom)))
                     {
                         input.Unit = minion;
@@ -108,8 +103,8 @@ namespace LeagueSharp.SDK.Core.Math
                         GameObjects.EnemyHeroes.Where(
                             hero =>
                             hero.IsValidTarget(
-                                Math.Min(input.Range + input.Radius + 100, 2000), 
-                                true, 
+                                Math.Min(input.Range + input.Radius + 100, 2000),
+                                true,
                                 input.RangeCheckFrom)))
                     {
                         input.Unit = hero;
@@ -169,7 +164,7 @@ namespace LeagueSharp.SDK.Core.Math
                     {
                         var t = Variables.TickCount
                                 + (((wallStart.Intersection(wallEnd, position.ToVector2(), input.From.ToVector2())
-                                       .Point.Distance(input.From) / input.Speed) + input.Delay) * 1000);
+                                         .Point.Distance(input.From) / input.Speed) + input.Delay) * 1000);
                         if (t < wallCastT + 4000)
                         {
                             result.Add(GameObjects.Player);

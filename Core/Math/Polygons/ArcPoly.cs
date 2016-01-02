@@ -1,32 +1,30 @@
-﻿// <copyright file="Arc.cs" company="LeagueSharp">
+﻿// <copyright file="ArcPoly.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
-// 
+//
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
-// 
+//
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
-// 
+//
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Math.Polygons
+namespace LeagueSharp.SDK
 {
     using System;
-
-    using Extensions.SharpDX;
 
     using SharpDX;
 
     /// <summary>
     ///     Represents an Arc <see cref="Polygon" />
     /// </summary>
-    public class Arc : Polygon
+    public class ArcPoly : Polygon
     {
         #region Fields
 
@@ -40,7 +38,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Arc" /> class, after converting the points to 2D.
+        ///     Initializes a new instance of the <see cref="ArcPoly" /> class, after converting the points to 2D.
         /// </summary>
         /// <param name="start">
         ///     Start of the Arc
@@ -57,13 +55,13 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         /// <param name="quality">
         ///     Quality of the Arc
         /// </param>
-        public Arc(Vector3 start, Vector3 direction, float angle, float radius, int quality = 20)
+        public ArcPoly(Vector3 start, Vector3 direction, float angle, float radius, int quality = 20)
             : this(start.ToVector2(), direction.ToVector2(), angle, radius, quality)
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Arc" /> class.
+        ///     Initializes a new instance of the <see cref="ArcPoly" /> class.
         /// </summary>
         /// <param name="start">
         ///     Start of the Arc
@@ -80,7 +78,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         /// <param name="quality">
         ///     Quality of the Arc
         /// </param>
-        public Arc(Vector2 start, Vector2 direction, float angle, float radius, int quality = 20)
+        public ArcPoly(Vector2 start, Vector2 direction, float angle, float radius, int quality = 20)
         {
             this.StartPos = start;
             this.EndPos = (direction - start).Normalized();
@@ -134,7 +132,9 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
             {
                 var cDirection = side1.Rotated(i * this.Angle / this.quality).Normalized();
                 this.Points.Add(
-                    new Vector2(this.StartPos.X + (outRadius * cDirection.X), this.StartPos.Y + (outRadius * cDirection.Y)));
+                    new Vector2(
+                        this.StartPos.X + (outRadius * cDirection.X),
+                        this.StartPos.Y + (outRadius * cDirection.Y)));
             }
         }
 

@@ -15,15 +15,12 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Linq;
     using System.Windows.Forms;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers.Damages;
@@ -36,20 +33,23 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
     /// <summary>
     ///     The <c>Orbwalker</c> system.
     /// </summary>
-    public sealed class Orbwalker : Base<OrbwalkingMode, AttackableUnit>
+    public sealed class Orbwalker : OrbwalkerBase<OrbwalkingMode, AttackableUnit>
     {
         #region Fields
 
         /// <summary>
-        ///     The <c>orbwalker</c> menu.
+        ///     The orbwalker menu.
         /// </summary>
         internal readonly Menu Menu = new Menu("orbwalker", "Orbwalker");
 
         /// <summary>
         ///     The <see cref="Selector" /> class.
         /// </summary>
-        internal readonly Selector Selector;
-
+        internal readonly OrbwalkerSelector Selector;
+        
+        /// <summary>
+        ///     The random.
+        /// </summary>
         private readonly Random random = new Random(DateTime.Now.Millisecond);
 
         #endregion
@@ -146,7 +146,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 };
 
             menu.Add(this.Menu);
-            this.Selector = new Selector(this);
+            this.Selector = new OrbwalkerSelector(this);
             this.Enabled = this.Menu["enabledOption"].GetValue<MenuBool>().Value;
         }
 
@@ -155,22 +155,18 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         #region Public Properties
 
         /// <summary>
-        ///     Block Attack & Move methods until tick
+        ///     Gets the tick until the orders Movement and Attack are blocked.
         /// </summary>
         public int BlockOrdersUntilTick { get; private set; }
 
-        /// <summary>
-        ///     Gets or sets a value indicating whether this <see cref="Base{TK, T}" /> is enabled.
-        /// </summary>
-        /// <value>
-        ///     <c>true</c> if enabled; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc />
         public override bool Enabled
         {
             get
             {
                 return base.Enabled;
             }
+
             set
             {
                 if (base.Enabled != value)
@@ -184,6 +180,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                         Drawing.OnDraw -= this.OnDrawingDraw;
                     }
                 }
+
                 base.Enabled = value;
                 if (this.Menu != null)
                 {
@@ -193,7 +190,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         }
 
         /// <summary>
-        ///     Forces the orbwalker to select the set target if valid and in range.
+        ///     Gets or sets the orbwalker's forced target.
         /// </summary>
         public AttackableUnit ForceTarget
         {
@@ -201,6 +198,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
             {
                 return this.Selector.ForceTarget;
             }
+
             set
             {
                 this.Selector.ForceTarget = value;
@@ -211,12 +209,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
 
         #region Public Methods and Operators
 
-        /// <summary>
-        ///     Issues the attack order.
-        /// </summary>
-        /// <param name="target">
-        ///     The target to attack.
-        /// </param>
+        /// <inheritdoc />
         public override void Attack(AttackableUnit target)
         {
             if (this.BlockOrdersUntilTick - Variables.TickCount > 0)
@@ -240,25 +233,19 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                     {
                         this.MissileLaunched = false;
                     }
+
                     if (GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, gTarget))
                     {
                         this.LastAutoAttackCommandTick = Variables.TickCount;
                         this.LastTarget = gTarget;
                     }
+
                     this.BlockOrdersUntilTick = Variables.TickCount + 70 + Math.Min(60, Game.Ping);
                 }
             }
         }
 
-        /// <summary>
-        ///     Indicates whether the orbwalker can issue attacking.
-        /// </summary>
-        /// <param name="extraWindup">
-        ///     The extra windup.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="bool" />.
-        /// </returns>
+        /// <inheritdoc />
         public override bool CanAttack(float extraWindup)
         {
             var extraAttackDelay = 0f;
@@ -268,24 +255,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                 {
                     return false;
                 }
+
                 var attackDelay = GameObjects.Player.AttackDelay * 1000f;
-                extraAttackDelay = attackDelay * 1.0740296828f - 716.2381256175f - attackDelay;
+                extraAttackDelay = (attackDelay * 1.0740296828f) - 716.2381256175f - attackDelay;
             }
+
             return base.CanAttack(extraWindup + extraAttackDelay);
         }
 
-        /// <summary>
-        ///     Indicates whether the orbwalker can issue moving.
-        /// </summary>
-        /// <param name="extraWindup">
-        ///     The extra windup.
-        /// </param>
-        /// <param name="disableMissileCheck">
-        ///     If set to <c>true</c> [disable missile check].
-        /// </param>
-        /// <returns>
-        ///     The <see cref="bool" />.
-        /// </returns>
+        /// <inheritdoc />
         public override bool CanMove(float extraWindup, bool disableMissileCheck)
         {
             var localExtraWindup = 0;
@@ -294,27 +272,20 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
             {
                 localExtraWindup = 200;
             }
+
             return
                 base.CanMove(
                     extraWindup + localExtraWindup + this.Menu["advanced"]["delayWindup"].GetValue<MenuSlider>().Value,
                     disableMissileCheck || !this.Menu["advanced"]["miscMissile"].GetValue<MenuBool>().Value);
         }
 
-        /// <summary>
-        ///     Gets the target.
-        /// </summary>
-        /// <returns>
-        ///     Returns the target filtered by the selector and/or by the target selector if available.
-        /// </returns>
+        /// <inheritdoc />
         public override AttackableUnit GetTarget()
         {
             return this.Selector.GetTarget(this.ActiveMode);
         }
 
-        /// <summary>
-        ///     Issue the move order.
-        /// </summary>
-        /// <param name="position">The position.</param>
+        /// <inheritdoc />
         public override void Move(Vector3 position)
         {
             if (this.BlockOrdersUntilTick - Variables.TickCount > 0)
@@ -353,6 +324,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
                         this.LastMovementOrderTick = Variables.TickCount - 70;
                     }
                 }
+
                 return;
             }
 
@@ -376,8 +348,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
             {
                 var rAngle = 2D * Math.PI * this.random.NextDouble();
                 var radius = GameObjects.Player.BoundingRadius / 2f;
-                var x = (float)(position.X + radius * Math.Cos(rAngle));
-                var y = (float)(position.Y + radius * Math.Sin(rAngle));
+                var x = (float)(position.X + (radius * Math.Cos(rAngle)));
+                var y = (float)(position.Y + (radius * Math.Sin(rAngle)));
                 position = new Vector3(x, y, NavMesh.GetHeightForPosition(x, y));
             }
 
@@ -420,12 +392,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
             }
         }
 
-        /// <summary>
-        ///     Indicates whether the depended process should wait before executing.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="bool" />.
-        /// </returns>
+        /// <inheritdoc />
         public override bool ShouldWait()
         {
             return this.Selector.ShouldWait();

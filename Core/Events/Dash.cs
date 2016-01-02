@@ -15,21 +15,19 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Events
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
 
-    using Extensions.SharpDX;
-
     using SharpDX;
 
     /// <summary>
     ///     Dash class, contains the OnDash event for tracking for Dash events of a champion.
     /// </summary>
-    public static class Dash
+    public static partial class Events
     {
         #region Static Fields
 
@@ -40,35 +38,12 @@ namespace LeagueSharp.SDK.Core.Events
 
         #endregion
 
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes static members of the <see cref="Dash" /> class.
-        /// </summary>
-        static Dash()
-        {
-            Obj_AI_Base.OnNewPath += ObjAiHeroOnOnNewPath;
-        }
-
-        #endregion
-
-        #region Delegates
-
-        /// <summary>
-        ///     OnDash Delegate.
-        /// </summary>
-        /// <param name="sender">The Sender</param>
-        /// <param name="e">Dash Arguments Container</param>
-        public delegate void OnDashDelegate(object sender, DashArgs e);
-
-        #endregion
-
         #region Public Events
 
         /// <summary>
         ///     OnDash Event.
         /// </summary>
-        public static event OnDashDelegate OnDash;
+        public static event EventHandler<DashArgs> OnDash;
 
         #endregion
 
@@ -118,7 +93,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// </summary>
         /// <param name="sender"><see cref="Obj_AI_Base" /> sender</param>
         /// <param name="args">New Path event data</param>
-        private static void ObjAiHeroOnOnNewPath(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
+        private static void EventDash(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
         {
             var hero = sender as Obj_AI_Hero;
             if (hero != null && hero.IsValid)
@@ -127,6 +102,7 @@ namespace LeagueSharp.SDK.Core.Events
                 {
                     DetectedDashes.Add(hero.NetworkId, new DashArgs());
                 }
+
                 if (args.IsDash)
                 {
                     var path = new List<Vector2> { hero.ServerPosition.ToVector2() };
@@ -137,8 +113,7 @@ namespace LeagueSharp.SDK.Core.Events
                                                              StartTick = Variables.TickCount - (Game.Ping / 2),
                                                              Speed = args.Speed,
                                                              StartPos = hero.ServerPosition.ToVector2(), Unit = sender,
-                                                             Path = path,
-                                                             EndPos = path.Last(),
+                                                             Path = path, EndPos = path.Last(),
                                                              EndTick =
                                                                  DetectedDashes[hero.NetworkId].StartTick
                                                                  + (int)
