@@ -65,6 +65,12 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     Spell Low Mana
         /// </summary>
-        LowMana
+        LowMana,
+
+        /// <summary>
+        ///     Failed Condition
+        /// </summary>
+        FailedCondition
+
     }
 }

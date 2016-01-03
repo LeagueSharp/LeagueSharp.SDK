@@ -65,12 +65,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         ///     The Width
         /// </summary>
         private float width;
-
-
+        
         /// <summary>
         ///     The Minimum Mana Percentage
         /// </summary>
-        private float minManaPercent;
+        private float minManaPercent;      
         #endregion
 
         #region Constructors and Destructors
@@ -124,6 +123,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         #endregion
 
         #region Public Properties
+        /// <summary>
+        ///     Cast Condition Delegate
+        /// </summary>
+        public delegate bool CastConditionDelegate();
+
+        /// <summary>
+        ///     Condition to Cast Spell
+        /// </summary>
+        public CastConditionDelegate CastCondition { get; set; }
 
         /// <summary>
         ///     Gets or sets the charged buff name.
@@ -361,6 +369,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
             if (!this.minManaPercent.Equals(0) && ObjectManager.Player.ManaPercent < this.minManaPercent)
             {
                 return CastStates.LowMana;
+            }
+
+            if (this.CastCondition != null && !this.CastCondition())
+            {
+                return CastStates.FailedCondition;
             }
 
             if (!areaOfEffect && minTargets != -1)
