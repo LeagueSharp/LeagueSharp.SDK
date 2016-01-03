@@ -60,6 +60,11 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     Spell Invalid Target
         /// </summary>
-        InvalidTarget
+        InvalidTarget,
+
+        /// <summary>
+        ///     Spell Low Mana
+        /// </summary>
+        LowMana
     }
 }
