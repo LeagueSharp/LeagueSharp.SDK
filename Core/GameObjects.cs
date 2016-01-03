@@ -163,6 +163,11 @@ namespace LeagueSharp.SDK.Core
         private static readonly List<Obj_HQ> NexusList = new List<Obj_HQ>();
 
         /// <summary>
+        ///     The general particle emitters list.
+        /// </summary>
+        private static readonly List<Obj_GeneralParticleEmitter> ParticleEmittersList = new List<Obj_GeneralParticleEmitter>();
+
+        /// <summary>
         ///     The shops list.
         /// </summary>
         private static readonly List<Obj_Shop> ShopsList = new List<Obj_Shop>();
@@ -344,6 +349,11 @@ namespace LeagueSharp.SDK.Core
         public static IEnumerable<Obj_HQ> Nexuses => NexusList;
 
         /// <summary>
+        ///     Gets the general particle emitters.
+        /// </summary>
+        public static IEnumerable<Obj_GeneralParticleEmitter> ParticleEmitters => ParticleEmittersList;
+
+        /// <summary>
         ///     Gets or sets the player.
         /// </summary>
         public static Obj_AI_Hero Player { get; set; }
@@ -447,6 +457,7 @@ namespace LeagueSharp.SDK.Core
                     GameObjectsList.AddRange(ObjectManager.Get<GameObject>());
                     NexusList.AddRange(ObjectManager.Get<Obj_HQ>());
                     AttackableUnitsList.AddRange(ObjectManager.Get<AttackableUnit>());
+                    ParticleEmittersList.AddRange(ObjectManager.Get<Obj_GeneralParticleEmitter>());
 
                     EnemyHeroesList.AddRange(HeroesList.Where(o => o.IsEnemy));
                     EnemyMinionsList.AddRange(MinionsList.Where(o => o.IsEnemy));
@@ -569,6 +580,13 @@ namespace LeagueSharp.SDK.Core
                     JungleList.Add(minion);
                 }
 
+                return;
+            }
+
+            var particle = sender as Obj_GeneralParticleEmitter;
+            if (particle != null)
+            {
+                ParticleEmittersList.Add(particle);
                 return;
             }
 
@@ -750,6 +768,13 @@ namespace LeagueSharp.SDK.Core
                     }
                 }
 
+                return;
+            }
+
+            var particle = sender as Obj_GeneralParticleEmitter;
+            if (particle != null)
+            {
+                ParticleEmittersList.Remove(particle);
                 return;
             }
 
