@@ -66,6 +66,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// </summary>
         private float width;
 
+
+        /// <summary>
+        ///     The Minimum Mana Percentage
+        /// </summary>
+        private float minManaPercent;
         #endregion
 
         #region Constructors and Destructors
@@ -351,6 +356,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
             if (!this.Slot.IsReady())
             {
                 return CastStates.NotReady;
+            }
+
+            if (!this.minManaPercent.Equals(0) && ObjectManager.Player.ManaPercent < this.minManaPercent)
+            {
+                return CastStates.LowMana;
             }
 
             if (!areaOfEffect && minTargets != -1)
@@ -849,6 +859,16 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
             Spellbook.OnCastSpell += this.SpellbookOnCastSpell;
 
             return this;
+        }
+        /// <summary>
+        ///     Sets the minimum mana percentage to cast the spell.
+        /// </summary>
+        /// <param name="percentage">
+        ///     Mana Percentage
+        /// </param>
+        public void SetMinimumManaPercentage(float percentage)
+        {
+            this.minManaPercent = percentage;
         }
 
         /// <summary>
