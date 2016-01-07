@@ -20,8 +20,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    using Core.Utils;
-    using Skins;
+
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     Menu Slider.
@@ -67,11 +68,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     String used in saving settings
         /// </param>
         public MenuSlider(
-            string name, 
-            string displayName, 
-            int value = 0, 
-            int minValue = 0, 
-            int maxValue = 100, 
+            string name,
+            string displayName,
+            int value = 0,
+            int minValue = 0,
+            int maxValue = 100,
             string uniqueString = "")
             : base(name, displayName, uniqueString)
         {

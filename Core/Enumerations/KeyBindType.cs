@@ -25,7 +25,7 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     Toggle Key Bind.
         /// </summary>
-        Toggle, 
+        Toggle,
 
         /// <summary>
         ///     Press Key Bind

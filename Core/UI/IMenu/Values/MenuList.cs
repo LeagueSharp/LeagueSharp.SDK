@@ -46,7 +46,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuList" /> class.
         /// </summary>
-        internal MenuList() {}
+        internal MenuList()
+        {
+        }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuList" /> class.
@@ -55,7 +57,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="displayName">Display name of the component</param>
         /// <param name="uniqueString">String to make this component unique</param>
         protected MenuList(string name, string displayName, string uniqueString = "")
-            : base(name, displayName, uniqueString) {}
+            : base(name, displayName, uniqueString)
+        {
+        }
 
         #endregion
 
@@ -219,7 +223,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     The unique String.
         /// </param>
         public MenuList(string name, string displayName, string uniqueString = "")
-            : this(name, displayName, Enum.GetValues(typeof(T)).Cast<T>(), uniqueString) {}
+            : this(name, displayName, Enum.GetValues(typeof(T)).Cast<T>(), uniqueString)
+        {
+        }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuList{T}" /> class.

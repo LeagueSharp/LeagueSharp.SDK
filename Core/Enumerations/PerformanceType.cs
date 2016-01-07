@@ -25,12 +25,12 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     Logs the Tick Count(CPU Ticks).
         /// </summary>
-        TickCount, 
+        TickCount,
 
         /// <summary>
         ///     Logs the number of milliseconds.
         /// </summary>
-        Milliseconds, 
+        Milliseconds,
 
         /// <summary>
         ///     Logs the time spanned in TimeSpam format.

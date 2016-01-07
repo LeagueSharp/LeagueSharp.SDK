@@ -21,9 +21,11 @@ namespace LeagueSharp.SDK.Core.Extensions
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-    using Enumerations;
+
     using global::SharpDX;
-    using Utils;
+
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     Enumerable Extensions.

@@ -21,10 +21,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using System.Windows.Forms;
-    using Core.Utils;
-    using Enumerations;
-    using Skins;
-    using MenuItem = MenuItem;
+
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
+    using LeagueSharp.SDK.Core.Utils;
+
+    using MenuItem = LeagueSharp.SDK.Core.UI.IMenu.MenuItem;
 
     /// <summary>
     ///     Menu KeyBind.
@@ -78,11 +80,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
             this.Type = type;
             this.original = key;
             Game.OnWndProc += this.Game_OnWndProc;
-        }
-
-        private void Game_OnWndProc(WndEventArgs args)
-        {
-            this.Handler.OnWndProc(new WindowsKeys(args));
         }
 
         /// <summary>
@@ -263,6 +260,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
             info.AddValue("key", this.Key, typeof(Keys));
             info.AddValue("original", this.original, typeof(Keys));
             info.AddValue("active", this.active, typeof(bool));
+        }
+
+        private void Game_OnWndProc(WndEventArgs args)
+        {
+            this.Handler.OnWndProc(new WindowsKeys(args));
         }
 
         #endregion

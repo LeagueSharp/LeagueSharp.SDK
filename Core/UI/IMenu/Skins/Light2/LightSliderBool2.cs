@@ -19,17 +19,15 @@
 //   A custom implementation of an <see cref="ADrawable{MenuSliderButton}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
 {
-    using System;
     using System.Globalization;
 
     using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins.Light;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -37,7 +35,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
     /// <summary>
     ///     A default implementation of an <see cref="ADrawable{MenuSliderButton}" />
     /// </summary>
-    public class LightSliderButton2 : LightSliderButton
+    public class LightSliderBool2 : LightSliderBool
     {
         #region Static Fields
 
@@ -56,12 +54,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="LightSliderButton2" /> class.
+        ///     Initializes a new instance of the <see cref="LightSliderBool2" /> class.
         /// </summary>
         /// <param name="component">
         ///     The menu component
         /// </param>
-        public LightSliderButton2(MenuSliderButton component)
+        public LightSliderBool2(MenuSliderBool component)
             : base(component)
         {
         }
@@ -71,7 +69,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Draws a <see cref="MenuSliderButton" />
+        ///     Draws a <see cref="MenuSliderBool" />
         /// </summary>
         public override void Draw()
         {
@@ -83,9 +81,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                 LightUtilities.GetContainerRectangle(this.Component)
                     .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
-            var percent = (this.Component.SValue - this.Component.MinValue)
-                          / (float)(this.Component.MaxValue - this.Component.MinValue);
-            var x = position.X + Offset + (percent * (this.Component.MenuWidth - Offset * 2 - MenuSettings.ContainerHeight / 2));
+            var percent = (this.Component.SliderValue - this.Component.SliderMinValue)
+                          / (float)(this.Component.SliderMaxValue - this.Component.SliderMinValue);
+            var x = position.X + Offset
+                    + (percent * (this.Component.MenuWidth - Offset * 2 - MenuSettings.ContainerHeight / 2));
 
             Line.Width = 3;
             Line.Begin();
@@ -95,20 +94,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
             Line.End();
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)(position.X + MenuSettings.ContainerTextOffset), 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
+                (int)(position.X + MenuSettings.ContainerTextOffset),
                 centeredY,
                 MenuSettings.TextColor);
 
             var measureText = MenuSettings.Font.MeasureText(
-                null, 
-                this.Component.SValue.ToString(CultureInfo.InvariantCulture), 
+                null,
+                this.Component.SliderValue.ToString(CultureInfo.InvariantCulture),
                 0);
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.SValue.ToString(CultureInfo.InvariantCulture), 
-                (int)(position.X + this.Component.MenuWidth - 5 - measureText.Width - MenuSettings.ContainerHeight), 
+                MenuManager.Instance.Sprite,
+                this.Component.SliderValue.ToString(CultureInfo.InvariantCulture),
+                (int)(position.X + this.Component.MenuWidth - 5 - measureText.Width - MenuSettings.ContainerHeight),
                 centeredY,
                 MenuSettings.TextColor);
 
@@ -139,7 +138,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                             + MenuSettings.ContainerHeight / 2f,
                             this.Component.Position.Y + MenuSettings.ContainerHeight - 3)
                     },
-                this.Component.BValue ? new ColorBGRA(68, 160, 255, 255) : new ColorBGRA(151, 151, 151, 255));
+                this.Component.BoolValue ? new ColorBGRA(68, 160, 255, 255) : new ColorBGRA(151, 151, 151, 255));
             Line.End();
 
             var centerX =
@@ -151,11 +150,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
                     MenuSettings.ContainerHeight).GetCenteredText(
                         null,
                         MenuSettings.Font,
-                        this.Component.BValue ? "On" : "Off",
+                        this.Component.BoolValue ? "On" : "Off",
                         CenteredFlags.HorizontalCenter).X;
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.BValue ? "On" : "Off",
+                this.Component.BoolValue ? "On" : "Off",
                 centerX,
                 centeredY,
                 new ColorBGRA(221, 233, 255, 255));

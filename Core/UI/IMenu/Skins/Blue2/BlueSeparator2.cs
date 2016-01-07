@@ -19,13 +19,13 @@
 //   Implements <see cref="ADrawable{MenuSeperator}" /> as a custom skin.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 {
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.
@@ -57,15 +57,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
             var centerY = BlueUtilities.GetContainerRectangle(this.Component)
                 .GetCenteredText(
                     null,
-                    BlueMenuSettings.FontCaption, 
-                    this.Component.DisplayName.ToUpper(), 
+                    BlueMenuSettings.FontCaption,
+                    this.Component.DisplayName.ToUpper(),
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
             BlueMenuSettings.FontCaption.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName.ToUpper(), 
-                (int)centerY.X, 
-                (int)centerY.Y, 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName.ToUpper(),
+                (int)centerY.X,
+                (int)centerY.Y,
                 BlueMenuSettings.TextCaptionColor);
         }
 

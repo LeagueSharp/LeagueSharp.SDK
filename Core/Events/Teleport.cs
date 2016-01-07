@@ -20,7 +20,7 @@ namespace LeagueSharp.SDK.Core.Events
     using System;
     using System.Collections.Generic;
 
-    using Enumerations;
+    using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
     ///     Teleport class, contains Teleport even which is triggered on recalls, teleports and <c>shen</c> or twisted fate

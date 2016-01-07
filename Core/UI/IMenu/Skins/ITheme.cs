@@ -17,7 +17,7 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
-    using Values;
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
 
     /// <summary>
     ///     Defines a Theme used to draw components of the menu.
@@ -76,18 +76,18 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         ADrawable<MenuSeparator> BuildSeparatorHandler(MenuSeparator component);
 
         /// <summary>
-        ///     Builds a new handler for the given <see cref="MenuSlider" />.
+        ///     Builds a new handler for the given <see cref="MenuSliderBool" />.
         /// </summary>
-        /// <param name="component">The <see cref="MenuSlider" /> where this handler is responsible for.</param>
+        /// <param name="component">The <see cref="MenuSliderBool" /> where this handler is responsible for.</param>
         /// <returns>The handler</returns>
-        ADrawable<MenuSlider> BuildSliderHandler(MenuSlider component);
+        ADrawable<MenuSliderBool> BuildSliderBoolHandler(MenuSliderBool component);
 
         /// <summary>
         ///     Builds a new handler for the given <see cref="MenuSlider" />.
         /// </summary>
         /// <param name="component">The <see cref="MenuSlider" /> where this handler is responsible for.</param>
         /// <returns>The handler</returns>
-        ADrawable<MenuSliderButton> BuildSliderButtonHandler(MenuSliderButton component);
+        ADrawable<MenuSlider> BuildSliderHandler(MenuSlider component);
 
         /// <summary>
         ///     Draws the list of root menus on the given position.

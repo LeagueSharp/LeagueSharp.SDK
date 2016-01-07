@@ -17,7 +17,7 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
 {
-    using Default;
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Default;
 
     /// <summary>
     ///     Manages themes.

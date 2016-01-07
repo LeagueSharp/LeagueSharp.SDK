@@ -19,6 +19,7 @@
 //   A custom implementation of a <see cref="ADrawable{MenuBool}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 {
     using LeagueSharp.SDK.Core.Enumerations;
@@ -69,7 +70,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
         public Rectangle ButtonBoundaries(MenuBool component)
         {
             return new Rectangle(
-                (int)(component.Position.X + component.MenuWidth - MenuSettings.ContainerHeight), 
+                (int)(component.Position.X + component.MenuWidth - MenuSettings.ContainerHeight),
                 (int)component.Position.Y,
                 MenuSettings.ContainerHeight,
                 MenuSettings.ContainerHeight);
@@ -95,29 +96,45 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                     .Y;
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset), 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
+                (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
                 centerY,
                 MenuSettings.TextColor);
 
             var centerX =
                 (int)
                 new Rectangle(
-                    (int)(this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight), 
+                    (int)(this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight),
                     (int)this.Component.Position.Y,
                     MenuSettings.ContainerHeight,
                     MenuSettings.ContainerHeight).GetCenteredText(
-                        null, 
-                        MenuSettings.Font, 
-                        this.Component.Value ? "On" : "Off", 
+                        null,
+                        MenuSettings.Font,
+                        this.Component.Value ? "On" : "Off",
                         CenteredFlags.HorizontalCenter).X - 5;
 
             //Left
-            Utils.DrawCircle(centerX, this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 7, 270, Utils.CircleType.Half, true, 32, MenuSettings.TextColor);
+            Utils.DrawCircle(
+                centerX,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                7,
+                270,
+                Utils.CircleType.Half,
+                true,
+                32,
+                MenuSettings.TextColor);
 
             //Right
-            Utils.DrawCircle(centerX + 15, this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 7, 90, Utils.CircleType.Half, true, 32, MenuSettings.TextColor);
+            Utils.DrawCircle(
+                centerX + 15,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                7,
+                90,
+                Utils.CircleType.Half,
+                true,
+                32,
+                MenuSettings.TextColor);
 
             //Top
             Line.Width = 1;
@@ -144,8 +161,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             Line.End();
 
             //FullCircle
-            Utils.DrawCircleFilled(this.Component.Value ? centerX + 14 : centerX + 1, 
-                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 6, 0, Utils.CircleType.Full, true, 32,
+            Utils.DrawCircleFilled(
+                this.Component.Value ? centerX + 14 : centerX + 1,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                6,
+                0,
+                Utils.CircleType.Full,
+                true,
+                32,
                 this.Component.Value ? MenuSettings.ContainerSelectedColor : MenuSettings.TextColor);
         }
 

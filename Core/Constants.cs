@@ -19,8 +19,10 @@ namespace LeagueSharp.SDK.Core
 {
     using System;
     using System.IO;
+
+    using LeagueSharp.SDK.Core.Utils;
+
     using SharpDX.Direct3D9;
-    using Utils;
 
     /// <summary>
     ///     Constant values of LeagueSharp.SDK

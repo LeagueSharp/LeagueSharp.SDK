@@ -25,22 +25,22 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     No Icon.
         /// </summary>
-        None = 0, 
+        None = 0,
 
         /// <summary>
         ///     Error Icon.
         /// </summary>
-        Error = 1, 
+        Error = 1,
 
         /// <summary>
         ///     Warning Icon.
         /// </summary>
-        Warning = 2, 
+        Warning = 2,
 
         /// <summary>
         ///     Check Icon.
         /// </summary>
-        Check = 3, 
+        Check = 3,
 
         /// <summary>
         ///     Select Icon.

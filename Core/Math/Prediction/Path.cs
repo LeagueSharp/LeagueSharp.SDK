@@ -21,7 +21,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
     using System.Collections.Generic;
     using System.Linq;
 
-    using Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
 
     using SharpDX;
 
@@ -104,7 +104,7 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
                         if (currentPath.WaypointCount > 0)
                         {
                             distance += Math.Min(
-                                (currentPath.Time - nextPath.Time) * unit.MoveSpeed, 
+                                (currentPath.Time - nextPath.Time) * unit.MoveSpeed,
                                 currentPath.Path.PathLength());
                         }
                     }
@@ -179,22 +179,22 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
             #region Public Properties
 
             /// <summary>
-            /// Gets the end point.
+            ///     Gets the end point.
             /// </summary>
             public Vector2 EndPoint => this.Path.LastOrDefault();
 
             /// <summary>
-            /// Gets or sets the path.
+            ///     Gets or sets the path.
             /// </summary>
             public List<Vector2> Path { get; set; }
 
             /// <summary>
-            /// Gets the start point.
+            ///     Gets the start point.
             /// </summary>
             public Vector2 StartPoint => this.Path.FirstOrDefault();
 
             /// <summary>
-            /// Gets or sets the tick.
+            ///     Gets or sets the tick.
             /// </summary>
             public int Tick { get; set; }
 

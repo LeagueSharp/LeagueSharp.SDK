@@ -142,11 +142,13 @@ namespace LeagueSharp.SDK.Core.Network
         /// <summary>
         ///     Gets the Collection of all known packets.
         /// </summary>
-        public static PacketWrapper PacketList => new PacketWrapper
-                                                      {
-                                                          BuyItem, CastSpell, Chat, Emote, HeartBeat, IssueOrder, LevelSpell, LockCamera, PauseGame, 
-                                                          Ping, ResumeGame, ScoreScreen, SetTarget, UndoBuy, InteractObject
-                                                      };
+        public static PacketWrapper PacketList
+            =>
+                new PacketWrapper
+                    {
+                        BuyItem, CastSpell, Chat, Emote, HeartBeat, IssueOrder, LevelSpell, LockCamera, PauseGame, Ping,
+                        ResumeGame, ScoreScreen, SetTarget, UndoBuy, InteractObject
+                    };
 
         /// <summary>
         ///     Gets or sets the channel of the packet.

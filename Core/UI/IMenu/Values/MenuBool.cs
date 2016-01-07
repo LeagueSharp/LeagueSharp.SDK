@@ -20,8 +20,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    using Core.Utils;
-    using Skins;
+
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     Menu boolean.

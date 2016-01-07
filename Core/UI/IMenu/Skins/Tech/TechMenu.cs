@@ -19,10 +19,9 @@
 //   Provides a custom implementation of <see cref="ADrawable{Menu}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
 {
-    using System;
-    using System.Drawing;
     using System.Linq;
 
     using LeagueSharp.SDK.Core.Enumerations;
@@ -31,22 +30,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
     using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Properties;
 
     using SharpDX;
     using SharpDX.Direct3D9;
-
-    using Color = SharpDX.Color;
 
     /// <summary>
     ///     Provides a default implementation of <see cref="ADrawable{Menu}" />
     /// </summary>
     public class TechMenu : ADrawable<Menu>
     {
-        #region Constants
-
-        #endregion
-
         #region Static Fields
 
         /// <summary>
@@ -57,7 +49,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
         #endregion
 
         #region Fields
-        
+
         /// <summary>
         ///     Gets or sets a value indicating whether the user is dragging the menu.
         /// </summary>
@@ -99,12 +91,179 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
         public TechMenu(Menu component)
             : base(component)
         {
-            
         }
 
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        ///     Draws a rounded Box. If Smoothing is true it will draw also a border.
+        /// </summary>
+        /// <param name="x">Position X</param>
+        /// <param name="y">Position Y</param>
+        /// <param name="w">Width</param>
+        /// <param name="h">Height</param>
+        /// <param name="radius">Radius</param>
+        /// <param name="color">Color</param>
+        /// <param name="bcolor">Border Color</param>
+        public static void DrawBoxBotRounded(
+            float x,
+            float y,
+            float w,
+            float h,
+            float radius,
+            Color color,
+            Color bcolor)
+        {
+            Utils.DrawBoxFilled(x + radius, y + radius, w - 2 * radius - 1, h - 2 * radius - 1, color); // Center rect.
+            Utils.DrawBoxFilled(x + radius, y + 1, w - 2 * radius - 1, radius - 1, color); // Top rect.
+            Utils.DrawBoxFilled(x + radius, y + h - radius - 1, w - 2 * radius - 1, radius, color); // Bottom rect.
+            Utils.DrawBoxFilled(x + 1, y + radius, radius - 1, h - 2 * radius - 1, color); // Left rect.
+            Utils.DrawBoxFilled(x + w - radius - 1, y + radius, radius, h - 2 * radius - 1, color); // Right rect.
+
+            Utils.DrawCircleFilled(x + radius, y + radius, radius - 1, 0, Utils.CircleType.Quarter, true, 16, color);
+            // Top-left corner
+            Utils.DrawCircleFilled(
+                x + w - radius - 1,
+                y + radius,
+                radius - 1,
+                90,
+                Utils.CircleType.Quarter,
+                true,
+                16,
+                color); // Top-right corner
+            Utils.DrawCircleFilled(
+                x + w - radius - 1,
+                y + h - radius - 1,
+                radius - 1,
+                180,
+                Utils.CircleType.Quarter,
+                true,
+                16,
+                color); // Bottom-right corner
+            Utils.DrawCircleFilled(
+                x + radius,
+                y + h - radius - 1,
+                radius - 1,
+                270,
+                Utils.CircleType.Quarter,
+                true,
+                16,
+                color); // Bottom-left corner
+
+            Utils.DrawCircle(x + radius + 1, y + radius + 1, radius, 0, Utils.CircleType.Quarter, true, 16, bcolor);
+            // Top-left corner
+            Utils.DrawCircle(x + w - radius - 1, y + radius + 1, radius, 90, Utils.CircleType.Quarter, true, 16, bcolor);
+            // Top-right corner
+            Utils.DrawCircle(
+                x + w - radius - 1,
+                y + h - radius - 1,
+                radius,
+                180,
+                Utils.CircleType.Quarter,
+                true,
+                16,
+                bcolor); // Bottom-right corner
+            Utils.DrawCircle(
+                x + radius + 1,
+                y + h - radius - 1,
+                radius,
+                270,
+                Utils.CircleType.Quarter,
+                true,
+                16,
+                bcolor); // Bottom-left corner
+
+            Utils.DrawLine(x + radius, y + 1, x + w - radius - 1, y + 1, 1, bcolor); // Top line
+            Utils.DrawLine(x + radius, y + h - 2, x + w - radius - 1, y + h - 2, 1, bcolor); // Bottom line
+            Utils.DrawLine(x + 1, y + radius, x + 1, y + h - radius - 1, 1, bcolor); // Left line
+            Utils.DrawLine(x + w - 2, y + radius, x + w - 2, y + h - radius - 1, 1, bcolor); // Right line
+        }
+
+        /// <summary>
+        ///     Draws a rounded Box. If Smoothing is true it will draw also a border.
+        /// </summary>
+        /// <param name="x">Position X</param>
+        /// <param name="y">Position Y</param>
+        /// <param name="w">Width</param>
+        /// <param name="h">Height</param>
+        /// <param name="radius">Radius</param>
+        /// <param name="color">Color</param>
+        /// <param name="bcolor">Border Color</param>
+        public static void DrawBoxTopRounded(
+            float x,
+            float y,
+            float w,
+            float h,
+            float radius,
+            Color color,
+            Color bcolor)
+        {
+            Utils.DrawBoxFilled(x + radius, y + radius, w - 2 * radius - 1, h - 2 * radius - 1, color); // Center rect.
+            Utils.DrawBoxFilled(x + radius, y + 1, w - 2 * radius - 1, radius - 1, color); // Top rect.
+            Utils.DrawBoxFilled(x + radius, y + h - radius - 1, w - 2 * radius - 1, radius, color); // Bottom rect.
+            Utils.DrawBoxFilled(x + 1, y + radius, radius - 1, h - 2 * radius - 1, color); // Left rect.
+            Utils.DrawBoxFilled(x + w - radius - 1, y + radius, radius, h - 2 * radius - 1, color); // Right rect.
+
+            Utils.DrawCircleFilled(x + radius, y + radius, radius - 1, 0, Utils.CircleType.Quarter, true, 16, color);
+            // Top-left corner
+            Utils.DrawCircleFilled(
+                x + w - radius - 1,
+                y + radius,
+                radius - 1,
+                90,
+                Utils.CircleType.Quarter,
+                true,
+                16,
+                color); // Top-right corner
+            Utils.DrawCircleFilled(
+                x + w - radius - 1,
+                y + h - radius - 1,
+                radius - 1,
+                180,
+                Utils.CircleType.Quarter,
+                true,
+                16,
+                color); // Bottom-right corner
+            Utils.DrawCircleFilled(
+                x + radius,
+                y + h - radius - 1,
+                radius - 1,
+                270,
+                Utils.CircleType.Quarter,
+                true,
+                16,
+                color); // Bottom-left corner
+
+            Utils.DrawCircle(x + radius + 1, y + radius + 1, radius, 0, Utils.CircleType.Quarter, true, 16, bcolor);
+            // Top-left corner
+            Utils.DrawCircle(x + w - radius - 1, y + radius + 1, radius, 90, Utils.CircleType.Quarter, true, 16, bcolor);
+            // Top-right corner
+            Utils.DrawCircle(
+                x + w - radius - 1,
+                y + h - radius - 1,
+                radius,
+                180,
+                Utils.CircleType.Quarter,
+                true,
+                16,
+                bcolor); // Bottom-right corner
+            Utils.DrawCircle(
+                x + radius + 1,
+                y + h - radius - 1,
+                radius,
+                270,
+                Utils.CircleType.Quarter,
+                true,
+                16,
+                bcolor); // Bottom-left corner
+
+            Utils.DrawLine(x + radius, y + 1, x + w - radius - 1, y + 1, 1, bcolor); // Top line
+            Utils.DrawLine(x + radius, y + h - 2, x + w - radius - 1, y + h - 2, 1, bcolor); // Bottom line
+            Utils.DrawLine(x + 1, y + radius, x + 1, y + h - radius - 1, 1, bcolor); // Left line
+            Utils.DrawLine(x + w - 2, y + radius, x + w - 2, y + h - radius - 1, 1, bcolor); // Right line
+        }
 
         /// <summary>
         ///     Disposes any resources used in this handler.
@@ -126,9 +285,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
                 Line.Draw(
                     new[]
                         {
-                            new Vector2(position.X, position.Y + MenuSettings.ContainerHeight / 2f), 
+                            new Vector2(position.X, position.Y + MenuSettings.ContainerHeight / 2f),
                             new Vector2(
-                                position.X + this.Component.MenuWidth, 
+                                position.X + this.Component.MenuWidth,
                                 position.Y + MenuSettings.ContainerHeight / 2f)
                         },
                     MenuSettings.HoverColor);
@@ -152,19 +311,25 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
                 delegate
                     {
                         var symbolCenterY =
-                                        (int)
-                                        TechUtilities.GetContainerRectangle(this.Component)
-                                            .GetCenteredText(null, TechMenuSettings.FontMenuSymbol, this.Component.DisplayName, CenteredFlags.VerticalCenter)
-                                            .Y;
+                            (int)
+                            TechUtilities.GetContainerRectangle(this.Component)
+                                .GetCenteredText(
+                                    null,
+                                    TechMenuSettings.FontMenuSymbol,
+                                    this.Component.DisplayName,
+                                    CenteredFlags.VerticalCenter)
+                                .Y;
 
                         TechMenuSettings.FontMenuSymbol.DrawText(
                             MenuManager.Instance.Sprite,
                             "›",
                             (int)
                             (position.X + this.Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
-                                - MenuSettings.ContainerTextMarkOffset) + 1,
+                             - MenuSettings.ContainerTextMarkOffset) + 1,
                             symbolCenterY,
-                            this.Component.Components.Count > 0 ? TechMenuSettings.TextCaptionColor : MenuSettings.ContainerSeparatorColor);
+                            this.Component.Components.Count > 0
+                                ? TechMenuSettings.TextCaptionColor
+                                : MenuSettings.ContainerSeparatorColor);
                     });
 
             if (this.Component.Toggled)
@@ -189,8 +354,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
                     width = this.Component.Components.First().Value.MenuWidth;
                 }
 
-                Utils.DrawBoxRounded(position.X + this.Component.MenuWidth, position.Y, width, height + 1, 4, true, 
-                    MenuSettings.RootContainerColor, MenuSettings.TextColor);
+                Utils.DrawBoxRounded(
+                    position.X + this.Component.MenuWidth,
+                    position.Y,
+                    width,
+                    height + 1,
+                    4,
+                    true,
+                    MenuSettings.RootContainerColor,
+                    MenuSettings.TextColor);
 
                 for (var i = 0; i < this.Component.Components.Count; ++i)
                 {
@@ -198,7 +370,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
                     if (childComponent != null)
                     {
                         var childPos = new Vector2(
-                            position.X + this.Component.MenuWidth, 
+                            position.X + this.Component.MenuWidth,
                             position.Y + i * MenuSettings.ContainerHeight);
 
                         childComponent.OnDraw(childPos);
@@ -215,37 +387,37 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
                                 Line.Draw(
                                     new[]
                                         {
-                                        new Vector2(rec.Left + 1, rec.Bottom - 2),
-                                        new Vector2(rec.Right - 2, rec.Bottom - 2)
+                                            new Vector2(rec.Left + 1, rec.Bottom - 2),
+                                            new Vector2(rec.Right - 2, rec.Bottom - 2)
                                         },
                                     TechMenuSettings.TextCaptionColor);
-
                             }
-                            else if (childComponent is MenuBool || childComponent is MenuButton || childComponent is MenuColor || childComponent is MenuKeyBind
-                                || childComponent is MenuList || childComponent is MenuSlider)
+                            else if (childComponent is MenuBool || childComponent is MenuButton
+                                     || childComponent is MenuColor || childComponent is MenuKeyBind
+                                     || childComponent is MenuList || childComponent is MenuSlider)
                             {
                                 Line.Begin();
                                 Line.Draw(
                                     new[]
                                         {
-                                    new Vector2(rec.Left + 1, rec.Bottom),
-                                    new Vector2(rec.Right - 2, rec.Bottom)
+                                            new Vector2(rec.Left + 1, rec.Bottom),
+                                            new Vector2(rec.Right - 2, rec.Bottom)
                                         },
                                     new Color(13, 34, 37, 255));
 
                                 Line.Draw(
                                     new[]
                                         {
-                                    new Vector2(rec.Left + 1, rec.Bottom),
-                                    new Vector2(rec.Left + 5, rec.Bottom)
+                                            new Vector2(rec.Left + 1, rec.Bottom),
+                                            new Vector2(rec.Left + 5, rec.Bottom)
                                         },
                                     TechMenuSettings.TextCaptionColor);
 
                                 Line.Draw(
                                     new[]
                                         {
-                                    new Vector2(rec.Right - 6, rec.Bottom),
-                                    new Vector2(rec.Right - 2, rec.Bottom)
+                                            new Vector2(rec.Right - 6, rec.Bottom),
+                                            new Vector2(rec.Right - 2, rec.Bottom)
                                         },
                                     TechMenuSettings.TextCaptionColor);
                             }
@@ -255,8 +427,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
                                 Line.Draw(
                                     new[]
                                         {
-                                        new Vector2(rec.Left + 1, rec.Bottom),
-                                        new Vector2(rec.Right - 2, rec.Bottom)
+                                            new Vector2(rec.Left + 1, rec.Bottom),
+                                            new Vector2(rec.Right - 2, rec.Bottom)
                                         },
                                     TechMenuSettings.TextCaptionColor);
                             }
@@ -283,9 +455,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
                 Line.Draw(
                     new[]
                         {
-                            new Vector2(x - 1, y + 1), new Vector2(x - 1 + dragTexture.Width, y + 1), 
-                            new Vector2(x - 1 + dragTexture.Width, y + dragTexture.Width + 2), 
-                            new Vector2(x - 2, y + dragTexture.Width + 2), new Vector2(x - 2, y), 
+                            new Vector2(x - 1, y + 1), new Vector2(x - 1 + dragTexture.Width, y + 1),
+                            new Vector2(x - 1 + dragTexture.Width, y + dragTexture.Width + 2),
+                            new Vector2(x - 2, y + dragTexture.Width + 2), new Vector2(x - 2, y),
                         },
                     MenuSettings.ContainerSeparatorColor);
                 Line.End();
@@ -302,13 +474,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
         {
             if (this.Component.Visible)
             {
-                if (args.Msg == WindowsMessages.MOUSEMOVE && this.dragging && !MenuCustomizer.Instance.LockPosition.Value)
+                if (args.Msg == WindowsMessages.MOUSEMOVE && this.dragging
+                    && !MenuCustomizer.Instance.LockPosition.Value)
                 {
                     MenuSettings.Position = new Vector2(args.Cursor.X - this.xd, args.Cursor.Y - this.yd);
                     this.hasDragged = true;
                 }
 
-                if (args.Cursor.IsUnderRectangle(this.Component.Position.X, this.Component.Position.Y, this.Component.MenuWidth,
+                if (args.Cursor.IsUnderRectangle(
+                    this.Component.Position.X,
+                    this.Component.Position.Y,
+                    this.Component.MenuWidth,
                     MenuSettings.ContainerHeight))
                 {
                     if (args.Msg == WindowsMessages.LBUTTONDOWN && this.Component.Root)
@@ -336,74 +512,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
                 this.hasDragged = false;
                 this.dragging = false;
             }
-        }
-
-        /// <summary>
-        /// Draws a rounded Box. If Smoothing is true it will draw also a border.
-        /// </summary>
-        /// <param name="x">Position X</param>
-        /// <param name="y">Position Y</param>
-        /// <param name="w">Width</param>
-        /// <param name="h">Height</param>
-        /// <param name="radius">Radius</param>
-        /// <param name="color">Color</param>
-        /// <param name="bcolor">Border Color</param>
-        public static void DrawBoxTopRounded(float x, float y, float w, float h, float radius, Color color, Color bcolor)
-        {
-            Utils.DrawBoxFilled(x + radius, y + radius, w - 2 * radius - 1, h - 2 * radius - 1, color);   // Center rect.
-            Utils.DrawBoxFilled(x + radius, y + 1, w - 2 * radius - 1, radius - 1, color);            // Top rect.
-            Utils.DrawBoxFilled(x + radius, y + h - radius - 1, w - 2 * radius - 1, radius, color);     // Bottom rect.
-            Utils.DrawBoxFilled(x + 1, y + radius, radius - 1, h - 2 * radius - 1, color);            // Left rect.
-            Utils.DrawBoxFilled(x + w - radius - 1, y + radius, radius, h - 2 * radius - 1, color);     // Right rect.
-
-            Utils.DrawCircleFilled(x + radius, y + radius, radius - 1, 0, Utils.CircleType.Quarter, true, 16, color);             // Top-left corner
-            Utils.DrawCircleFilled(x + w - radius - 1, y + radius, radius - 1, 90, Utils.CircleType.Quarter, true, 16, color);        // Top-right corner
-            Utils.DrawCircleFilled(x + w - radius - 1, y + h - radius - 1, radius - 1, 180, Utils.CircleType.Quarter, true, 16, color);   // Bottom-right corner
-            Utils.DrawCircleFilled(x + radius, y + h - radius - 1, radius - 1, 270, Utils.CircleType.Quarter, true, 16, color);       // Bottom-left corner
-
-            Utils.DrawCircle(x + radius + 1, y + radius + 1, radius, 0, Utils.CircleType.Quarter, true, 16, bcolor);          // Top-left corner
-            Utils.DrawCircle(x + w - radius - 1, y + radius + 1, radius, 90, Utils.CircleType.Quarter, true, 16, bcolor);       // Top-right corner
-            Utils.DrawCircle(x + w - radius - 1, y + h - radius - 1, radius, 180, Utils.CircleType.Quarter, true, 16, bcolor);    // Bottom-right corner
-            Utils.DrawCircle(x + radius + 1, y + h - radius - 1, radius, 270, Utils.CircleType.Quarter, true, 16, bcolor);      // Bottom-left corner
-
-            Utils.DrawLine(x + radius, y + 1, x + w - radius - 1, y + 1, 1, bcolor);       // Top line
-            Utils.DrawLine(x + radius, y + h - 2, x + w - radius - 1, y + h - 2, 1, bcolor);   // Bottom line
-            Utils.DrawLine(x + 1, y + radius, x + 1, y + h - radius - 1, 1, bcolor);       // Left line
-            Utils.DrawLine(x + w - 2, y + radius, x + w - 2, y + h - radius - 1, 1, bcolor);   // Right line
-        }
-
-        /// <summary>
-        /// Draws a rounded Box. If Smoothing is true it will draw also a border.
-        /// </summary>
-        /// <param name="x">Position X</param>
-        /// <param name="y">Position Y</param>
-        /// <param name="w">Width</param>
-        /// <param name="h">Height</param>
-        /// <param name="radius">Radius</param>
-        /// <param name="color">Color</param>
-        /// <param name="bcolor">Border Color</param>
-        public static void DrawBoxBotRounded(float x, float y, float w, float h, float radius, Color color, Color bcolor)
-        {
-            Utils.DrawBoxFilled(x + radius, y + radius, w - 2 * radius - 1, h - 2 * radius - 1, color);   // Center rect.
-            Utils.DrawBoxFilled(x + radius, y + 1, w - 2 * radius - 1, radius - 1, color);            // Top rect.
-            Utils.DrawBoxFilled(x + radius, y + h - radius - 1, w - 2 * radius - 1, radius, color);     // Bottom rect.
-            Utils.DrawBoxFilled(x + 1, y + radius, radius - 1, h - 2 * radius - 1, color);            // Left rect.
-            Utils.DrawBoxFilled(x + w - radius - 1, y + radius, radius, h - 2 * radius - 1, color);     // Right rect.
-
-            Utils.DrawCircleFilled(x + radius, y + radius, radius - 1, 0, Utils.CircleType.Quarter, true, 16, color);             // Top-left corner
-            Utils.DrawCircleFilled(x + w - radius - 1, y + radius, radius - 1, 90, Utils.CircleType.Quarter, true, 16, color);        // Top-right corner
-            Utils.DrawCircleFilled(x + w - radius - 1, y + h - radius - 1, radius - 1, 180, Utils.CircleType.Quarter, true, 16, color);   // Bottom-right corner
-            Utils.DrawCircleFilled(x + radius, y + h - radius - 1, radius - 1, 270, Utils.CircleType.Quarter, true, 16, color);       // Bottom-left corner
-
-            Utils.DrawCircle(x + radius + 1, y + radius + 1, radius, 0, Utils.CircleType.Quarter, true, 16, bcolor);          // Top-left corner
-            Utils.DrawCircle(x + w - radius - 1, y + radius + 1, radius, 90, Utils.CircleType.Quarter, true, 16, bcolor);       // Top-right corner
-            Utils.DrawCircle(x + w - radius - 1, y + h - radius - 1, radius, 180, Utils.CircleType.Quarter, true, 16, bcolor);    // Bottom-right corner
-            Utils.DrawCircle(x + radius + 1, y + h - radius - 1, radius, 270, Utils.CircleType.Quarter, true, 16, bcolor);      // Bottom-left corner
-
-            Utils.DrawLine(x + radius, y + 1, x + w - radius - 1, y + 1, 1, bcolor);       // Top line
-            Utils.DrawLine(x + radius, y + h - 2, x + w - radius - 1, y + h - 2, 1, bcolor);   // Bottom line
-            Utils.DrawLine(x + 1, y + radius, x + 1, y + h - radius - 1, 1, bcolor);       // Left line
-            Utils.DrawLine(x + w - 2, y + radius, x + w - 2, y + h - radius - 1, 1, bcolor);   // Right line
         }
 
         /// <summary>

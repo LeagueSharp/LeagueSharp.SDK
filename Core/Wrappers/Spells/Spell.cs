@@ -52,6 +52,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         private Vector3 @from;
 
         /// <summary>
+        ///     The Minimum Mana Percentage
+        /// </summary>
+        private float minManaPercent;
+
+        /// <summary>
         ///     The Range
         /// </summary>
         private float range;
@@ -66,11 +71,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         /// </summary>
         private float width;
 
-
-        /// <summary>
-        ///     The Minimum Mana Percentage
-        /// </summary>
-        private float minManaPercent;
         #endregion
 
         #region Constructors and Destructors
@@ -860,6 +860,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
 
             return this;
         }
+
         /// <summary>
         ///     Sets the minimum mana percentage to cast the spell.
         /// </summary>

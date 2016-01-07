@@ -22,7 +22,7 @@ namespace LeagueSharp.SDK.Core.Network
     using System.Linq;
     using System.Text;
 
-    using Utils;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     This class makes easier to handle packets.

@@ -25,17 +25,17 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     The start status.
         /// </summary>
-        Start, 
+        Start,
 
         /// <summary>
         ///     The abort status.
         /// </summary>
-        Abort, 
+        Abort,
 
         /// <summary>
         ///     The finish status.
         /// </summary>
-        Finish, 
+        Finish,
 
         /// <summary>
         ///     The unknown status.

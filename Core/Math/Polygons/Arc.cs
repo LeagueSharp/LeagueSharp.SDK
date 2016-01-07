@@ -19,7 +19,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
 {
     using System;
 
-    using Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
 
     using SharpDX;
 
@@ -134,7 +134,9 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
             {
                 var cDirection = side1.Rotated(i * this.Angle / this.quality).Normalized();
                 this.Points.Add(
-                    new Vector2(this.StartPos.X + (outRadius * cDirection.X), this.StartPos.Y + (outRadius * cDirection.Y)));
+                    new Vector2(
+                        this.StartPos.X + (outRadius * cDirection.X),
+                        this.StartPos.Y + (outRadius * cDirection.Y)));
             }
         }
 

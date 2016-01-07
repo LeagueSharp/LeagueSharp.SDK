@@ -19,6 +19,7 @@
 //   Implements <see cref="ADrawable{MenuSeperator}" /> as a custom skin.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 {
     using System;
@@ -27,6 +28,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
     using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
 
@@ -35,7 +37,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
     /// </summary>
     public class ColoredSeparator : ADrawable<MenuSeparator>
     {
-
         #region Static Fields
 
         /// <summary>
@@ -99,16 +100,28 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             Line.Draw(
                 new[]
                     {
-                            new Vector2(this.Component.Position.X + Offset, ColoredUtilities.GetContainerRectangle(this.Component).Center.Y),
-                            new Vector2(Math.Max(this.Component.Position.X + Offset, centerY.X - 5), ColoredUtilities.GetContainerRectangle(this.Component).Center.Y)
+                        new Vector2(
+                            this.Component.Position.X + Offset,
+                            ColoredUtilities.GetContainerRectangle(this.Component).Center.Y),
+                        new Vector2(
+                            Math.Max(this.Component.Position.X + Offset, centerY.X - 5),
+                            ColoredUtilities.GetContainerRectangle(this.Component).Center.Y)
                     },
                 MenuSettings.ContainerSelectedColor);
-            int newX = ColoredMenuSettings.FontCaption.MeasureText(MenuManager.Instance.Sprite, this.Component.DisplayName.ToUpper(), 0).Width;
+            var newX =
+                ColoredMenuSettings.FontCaption.MeasureText(
+                    MenuManager.Instance.Sprite,
+                    this.Component.DisplayName.ToUpper(),
+                    0).Width;
             Line.Draw(
                 new[]
                     {
-                            new Vector2(centerY.X + newX + 5, ColoredUtilities.GetContainerRectangle(this.Component).Center.Y),
-                            new Vector2(Math.Max(centerY.X + newX + 5, ColoredUtilities.GetContainerRectangle(this.Component).Right - Offset), ColoredUtilities.GetContainerRectangle(this.Component).Center.Y)
+                        new Vector2(centerY.X + newX + 5, ColoredUtilities.GetContainerRectangle(this.Component).Center.Y),
+                        new Vector2(
+                            Math.Max(
+                                centerY.X + newX + 5,
+                                ColoredUtilities.GetContainerRectangle(this.Component).Right - Offset),
+                            ColoredUtilities.GetContainerRectangle(this.Component).Center.Y)
                     },
                 MenuSettings.ContainerSelectedColor);
             Line.End();

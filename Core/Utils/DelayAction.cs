@@ -21,7 +21,7 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Collections.Generic;
     using System.Threading;
 
-    using Signals;
+    using LeagueSharp.SDK.Core.Signals;
 
     /// <summary>
     ///     Delays actions by a set time.

@@ -25,22 +25,22 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     The recall type.
         /// </summary>
-        Recall, 
+        Recall,
 
         /// <summary>
         ///     The teleport type.
         /// </summary>
-        Teleport, 
+        Teleport,
 
         /// <summary>
         ///     The twisted fate type.
         /// </summary>
-        TwistedFate, 
+        TwistedFate,
 
         /// <summary>
         ///     The <c>shen</c> type.
         /// </summary>
-        Shen, 
+        Shen,
 
         /// <summary>
         ///     The unknown type.

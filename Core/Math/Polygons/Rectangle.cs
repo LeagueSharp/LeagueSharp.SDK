@@ -17,7 +17,7 @@
 
 namespace LeagueSharp.SDK.Core.Math.Polygons
 {
-    using Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
 
     using SharpDX;
 
@@ -76,7 +76,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         public Vector2 Direction => (this.End - this.Start).Normalized();
 
         /// <summary>
-        /// Gets or sets the end.
+        ///     Gets or sets the end.
         /// </summary>
         public Vector2 End { get; set; }
 
@@ -86,12 +86,12 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         public Vector2 Perpendicular => this.Direction.Perpendicular();
 
         /// <summary>
-        /// Gets or sets the start.
+        ///     Gets or sets the start.
         /// </summary>
         public Vector2 Start { get; set; }
 
         /// <summary>
-        /// Gets or sets the width.
+        ///     Gets or sets the width.
         /// </summary>
         public float Width { get; set; }
 

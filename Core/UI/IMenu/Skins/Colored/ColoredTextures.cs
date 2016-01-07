@@ -19,19 +19,15 @@
 //   A custom implementation of <see cref="ADrawable{MenuTexture}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 {
+    using System.Collections.Generic;
     using System.Drawing;
+    using System.Linq;
 
     using LeagueSharp.SDK.Properties;
 
-    using SharpDX;
     using SharpDX.Direct3D9;
 
     internal enum ColoredTexture
@@ -41,22 +37,37 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 
     internal class ColoredTextures
     {
-
-        private readonly Dictionary<ColoredTexture, ColoredTextureWrapper> textures = new Dictionary<ColoredTexture, ColoredTextureWrapper>();
+        #region Static Fields
 
         public static readonly ColoredTextures Instance = new ColoredTextures();
 
+        #endregion
+
+        #region Fields
+
+        private readonly Dictionary<ColoredTexture, ColoredTextureWrapper> textures =
+            new Dictionary<ColoredTexture, ColoredTextureWrapper>();
+
+        #endregion
+
+        #region Constructors and Destructors
+
         private ColoredTextures()
         {
-            this.textures[ColoredTexture.Dragging] = BuildTexture(Resources.cursor_drag, 16, 16);
+            this.textures[ColoredTexture.Dragging] = this.BuildTexture(Resources.cursor_drag, 16, 16);
         }
 
         ~ColoredTextures()
         {
-            foreach (var entry in this.textures.Where(entry => !entry.Value.Texture.IsDisposed)) {
+            foreach (var entry in this.textures.Where(entry => !entry.Value.Texture.IsDisposed))
+            {
                 entry.Value.Texture.Dispose();
             }
         }
+
+        #endregion
+
+        #region Public Indexers
 
         public ColoredTextureWrapper this[ColoredTexture textureType]
         {
@@ -66,10 +77,24 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             }
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        public ColoredTextureWrapper AddTexture(Image bmp, int width, int height, ColoredTexture textureType)
+        {
+            this.textures[textureType] = this.BuildTexture(bmp, height, width);
+            return this.textures[textureType];
+        }
+
+        #endregion
+
+        #region Methods
+
         private ColoredTextureWrapper BuildTexture(Image bmp, int height, int width)
         {
             var resized = new Bitmap(bmp, width, height);
-            var texture =  Texture.FromMemory(
+            var texture = Texture.FromMemory(
                 Drawing.Direct3DDevice,
                 (byte[])new ImageConverter().ConvertTo(resized, typeof(byte[])),
                 resized.Width,
@@ -86,19 +111,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             return new ColoredTextureWrapper(texture, width, height);
         }
 
-        public ColoredTextureWrapper AddTexture(Image bmp, int width, int height, ColoredTexture textureType)
-        {
-            this.textures[textureType] = BuildTexture(bmp, height, width);
-            return this.textures[textureType];
-        }
-        
+        #endregion
     }
 
     internal class ColoredTextureWrapper
     {
-        public Texture Texture { get; private set; }
-        public int Width { get; private set; }
-        public int Height { get; private set; }
+        #region Constructors and Destructors
 
         public ColoredTextureWrapper(Texture texture, int width, int height)
         {
@@ -106,6 +124,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             this.Width = width;
             this.Height = height;
         }
-        
+
+        #endregion
+
+        #region Public Properties
+
+        public int Height { get; private set; }
+
+        public Texture Texture { get; private set; }
+
+        public int Width { get; private set; }
+
+        #endregion
     }
 }

@@ -28,12 +28,12 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     The OnBeginScene drawing type.
         /// </summary>
-        OnBeginScene, 
+        OnBeginScene,
 
         /// <summary>
         ///     The OnDraw drawing type.
         /// </summary>
-        OnDraw, 
+        OnDraw,
 
         /// <summary>
         ///     The OnEndScene drawing type.

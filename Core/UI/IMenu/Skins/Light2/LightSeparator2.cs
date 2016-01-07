@@ -19,13 +19,13 @@
 //   Implements <see cref="ADrawable{MenuSeperator}" /> as a custom skin.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
 {
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins.Light;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
 
@@ -59,14 +59,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
             var centerY = LightUtilities.GetContainerRectangle(this.Component)
                 .GetCenteredText(
                     null,
-                    LightMenuSettings.FontCaption, 
-                    this.Component.DisplayName.ToUpper(), 
+                    LightMenuSettings.FontCaption,
+                    this.Component.DisplayName.ToUpper(),
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
             LightMenuSettings.FontCaption.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName.ToUpper(), 
-                (int)centerY.X, 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName.ToUpper(),
+                (int)centerY.X,
                 (int)centerY.Y,
                 new ColorBGRA(40, 40, 40, 255));
         }

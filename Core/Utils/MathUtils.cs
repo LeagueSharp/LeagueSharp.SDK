@@ -21,9 +21,9 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Collections.Generic;
     using System.Linq;
 
-    using Clipper;
-    using Extensions.SharpDX;
-    using Math.Polygons;
+    using LeagueSharp.SDK.Clipper;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Math.Polygons;
 
     using SharpDX;
 

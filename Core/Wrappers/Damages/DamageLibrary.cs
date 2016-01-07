@@ -23,10 +23,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System.Security.Permissions;
     using System.Text;
 
-    using Enumerations;
-    using Events;
-    using Utils;
-    using Properties;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Events;
+    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Properties;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;

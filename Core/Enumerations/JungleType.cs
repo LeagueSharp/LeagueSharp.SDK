@@ -25,17 +25,17 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     The unknown type.
         /// </summary>
-        Unknown, 
+        Unknown,
 
         /// <summary>
         ///     The small type.
         /// </summary>
-        Small, 
+        Small,
 
         /// <summary>
         ///     The large type.
         /// </summary>
-        Large, 
+        Large,
 
         /// <summary>
         ///     The legendary type.

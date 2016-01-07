@@ -18,9 +18,11 @@
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
     using System.Linq;
+
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using Values;
 
     /// <summary>
     ///     Implements a default ITheme.
@@ -109,6 +111,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         }
 
         /// <summary>
+        ///     Builds a new handler for the given <see cref="MenuSliderBool" />.
+        /// </summary>
+        /// <param name="component">The <see cref="MenuSliderBool" /> where this handler is responsible for.</param>
+        /// <returns>The handler</returns>
+        public ADrawable<MenuSliderBool> BuildSliderBoolHandler(MenuSliderBool component)
+        {
+            return new DefaultSliderBool(component);
+        }
+
+        /// <summary>
         ///     Builds a new handler for the given <see cref="MenuSlider" />.
         /// </summary>
         /// <param name="component">The <see cref="MenuSlider" /> where this handler is responsible for.</param>
@@ -116,16 +128,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         public ADrawable<MenuSlider> BuildSliderHandler(MenuSlider component)
         {
             return new DefaultSlider(component);
-        }
-
-        /// <summary>
-        ///     Builds a new handler for the given <see cref="MenuSliderButton" />.
-        /// </summary>
-        /// <param name="component">The <see cref="MenuSliderButton" /> where this handler is responsible for.</param>
-        /// <returns>The handler</returns>
-        public ADrawable<MenuSliderButton> BuildSliderButtonHandler(MenuSliderButton component)
-        {
-            return new DefaultSliderButton(component);
         }
 
         /// <summary>

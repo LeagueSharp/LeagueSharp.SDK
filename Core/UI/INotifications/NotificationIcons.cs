@@ -21,8 +21,8 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
     using System.Drawing;
     using System.Linq;
 
-    using Enumerations;
-    using Properties;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Properties;
 
     using SharpDX.Direct3D9;
 
@@ -39,9 +39,9 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
         private static readonly IDictionary<NotificationIconType, Bitmap> IconBitmaps =
             new Dictionary<NotificationIconType, Bitmap>
                 {
-                    { NotificationIconType.Error, Resources.notifications_error }, 
-                    { NotificationIconType.Warning, Resources.notifications_warning }, 
-                    { NotificationIconType.Check, Resources.notifications_check }, 
+                    { NotificationIconType.Error, Resources.notifications_error },
+                    { NotificationIconType.Warning, Resources.notifications_warning },
+                    { NotificationIconType.Check, Resources.notifications_check },
                     { NotificationIconType.Select, Resources.notifications_select }
                 };
 
@@ -63,18 +63,18 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
             foreach (var bitmap in IconBitmaps.Where(bitmap => !IconTextures.ContainsKey(bitmap.Key)))
             {
                 IconTextures.Add(
-                    bitmap.Key, 
+                    bitmap.Key,
                     Texture.FromMemory(
-                        Drawing.Direct3DDevice, 
-                        (byte[])new ImageConverter().ConvertTo(bitmap.Value, typeof(byte[])), 
-                        bitmap.Value.Width, 
-                        bitmap.Value.Height, 
-                        0, 
-                        Usage.None, 
-                        Format.A1, 
-                        Pool.Managed, 
-                        Filter.Default, 
-                        Filter.Default, 
+                        Drawing.Direct3DDevice,
+                        (byte[])new ImageConverter().ConvertTo(bitmap.Value, typeof(byte[])),
+                        bitmap.Value.Width,
+                        bitmap.Value.Height,
+                        0,
+                        Usage.None,
+                        Format.A1,
+                        Pool.Managed,
+                        Filter.Default,
+                        Filter.Default,
                         0));
             }
         }

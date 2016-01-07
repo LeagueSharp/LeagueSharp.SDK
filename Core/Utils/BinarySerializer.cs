@@ -44,7 +44,7 @@ namespace LeagueSharp.SDK.Core.Utils
         {
             using (
                 var reader = XmlDictionaryReader.CreateBinaryReader(
-                    new MemoryStream(data), 
+                    new MemoryStream(data),
                     XmlDictionaryReaderQuotas.Max))
             {
                 return (T)new DataContractSerializer(typeof(T)).ReadObject(reader);

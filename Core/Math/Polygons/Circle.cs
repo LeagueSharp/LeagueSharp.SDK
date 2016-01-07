@@ -19,7 +19,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
 {
     using System;
 
-    using Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
 
     using SharpDX;
 
@@ -112,7 +112,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
             {
                 var angle = i * 2 * Math.PI / this.quality;
                 var point = new Vector2(
-                    this.Center.X + (outRadius * (float)Math.Cos(angle)), 
+                    this.Center.X + (outRadius * (float)Math.Cos(angle)),
                     this.Center.Y + (outRadius * (float)Math.Sin(angle)));
 
                 this.Points.Add(point);

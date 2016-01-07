@@ -155,7 +155,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Orbwalking
         #region Public Properties
 
         /// <summary>
-        ///     Block Attack & Move methods until tick
+        ///     Block Attack and Move methods until tick
         /// </summary>
         public int BlockOrdersUntilTick { get; private set; }
 

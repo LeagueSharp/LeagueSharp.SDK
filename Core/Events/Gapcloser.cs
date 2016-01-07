@@ -22,11 +22,14 @@ namespace LeagueSharp.SDK.Core.Events
     using System.Linq;
     using System.Security.Permissions;
     using System.Text;
-    using Enumerations;
-    using Extensions;
+
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions;
+    using LeagueSharp.SDK.Properties;
+
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using Properties;
+
     using SharpDX;
 
     /// <summary>
@@ -142,14 +145,14 @@ namespace LeagueSharp.SDK.Core.Events
                 ActiveSpellsList.Add(
                     new GapCloserEventArgs
                         {
-                            Start = args.Start, End = args.End, Sender = hero, TickCount = Variables.TickCount, 
+                            Start = args.Start, End = args.End, Sender = hero, TickCount = Variables.TickCount,
                             SkillType =
                                 (args.Target != null && args.Target.IsValid)
                                     ? GapcloserType.Targeted
-                                    : GapcloserType.Skillshot, 
-                            Slot = hero.GetSpellSlot(args.SData.Name), 
+                                    : GapcloserType.Skillshot,
+                            Slot = hero.GetSpellSlot(args.SData.Name),
                             IsDirectedToPlayer =
-                                player.Distance(args.End) < player.Distance(args.Start) || sender.IsFacing(player), 
+                                player.Distance(args.End) < player.Distance(args.Start) || sender.IsFacing(player),
                             SpellName = args.SData.Name
                         });
             }

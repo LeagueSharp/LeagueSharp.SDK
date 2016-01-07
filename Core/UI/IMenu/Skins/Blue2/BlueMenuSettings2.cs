@@ -24,15 +24,9 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 {
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
-
-    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue;
 
     using SharpDX;
-    using SharpDX.Direct3D9;
 
     /// <summary>
     ///     Default Skin Settings.
@@ -52,22 +46,25 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 
         #endregion
 
+        #region Public Properties
+
         /// <summary>
         ///     Gets or sets the Global Container Selected Color.
         /// </summary>
-        public static ColorBGRA ContainerSelectedColor { get; set; }
+        public new static ColorBGRA ContainerSelectedColor { get; set; }
+
+        #endregion
 
         #region Public Methods and Operators
 
         /// <summary>
         ///     Used to load the menu settings.
         /// </summary>
-        public static void LoadSettings()
+        public new static void LoadSettings()
         {
             BlueMenuSettings.LoadSettings();
         }
 
         #endregion
-
     }
 }

@@ -40,10 +40,28 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
         /// </value>
         public float Champion { get; set; } = 300f;
 
+        /// <summary>
+        ///     Gets the default weight.
+        /// </summary>
+        /// <value>
+        ///     The default weight.
+        /// </value>
         public int DefaultWeight => 0;
 
+        /// <summary>
+        ///     Gets the display name.
+        /// </summary>
+        /// <value>
+        ///     The display name.
+        /// </value>
         public string DisplayName => "Acquired Gold";
 
+        /// <summary>
+        ///     Gets a value indicating whether this <see cref="IWeightItem" /> is inverted.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if inverted; otherwise, <c>false</c>.
+        /// </value>
         public bool Inverted => false;
 
         /// <summary>
@@ -54,6 +72,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
         /// </value>
         public float Minion { get; set; } = 27.35f;
 
+        /// <summary>
+        ///     Gets the name.
+        /// </summary>
+        /// <value>
+        ///     The name.
+        /// </value>
         public string Name => "acquired-gold";
 
         /// <summary>
@@ -68,6 +92,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
 
         #region Public Methods and Operators
 
+        /// <summary>
+        ///     Gets the value.
+        /// </summary>
+        /// <param name="hero">The hero.</param>
+        /// <returns></returns>
         public float GetValue(Obj_AI_Hero hero)
             =>
                 hero.MinionsKilled * this.Minion + hero.NeutralMinionsKilled * this.NeutralMinion

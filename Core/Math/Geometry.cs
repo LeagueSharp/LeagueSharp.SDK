@@ -17,7 +17,7 @@
 
 namespace LeagueSharp.SDK.Core.Math
 {
-    using Enumerations;
+    using LeagueSharp.SDK.Core.Enumerations;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -38,9 +38,9 @@ namespace LeagueSharp.SDK.Core.Math
         /// <param name="flags">Centered Flags</param>
         /// <returns>Vector2 center position of the rendering object on the rectangle.</returns>
         public static Vector2 GetCenter(
-            this Rectangle rectangle, 
-            Sprite sprite, 
-            Rectangle dimensions, 
+            this Rectangle rectangle,
+            Sprite sprite,
+            Rectangle dimensions,
             CenteredFlags flags)
         {
             var x = 0;
@@ -98,10 +98,10 @@ namespace LeagueSharp.SDK.Core.Math
         /// <param name="flags">Centered Flags</param>
         /// <returns>Returns the center position of the text on the rectangle.</returns>
         public static Vector2 GetCenteredText(
-            this Rectangle rectangle, 
-            Sprite sprite, 
-            Font font, 
-            string text, 
+            this Rectangle rectangle,
+            Sprite sprite,
+            Font font,
+            string text,
             CenteredFlags flags)
         {
             return font == null

@@ -45,7 +45,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells.Database
         ///     The buffs applied by the spell on my hero
         /// </summary>
         public BuffType[] AppliedBuffsOnSelf;
-        
+
         /// <summary>
         ///     Indicates whether the spell can be removed.
         /// </summary>

@@ -17,7 +17,7 @@
 
 namespace LeagueSharp.SDK.Core.Utils
 {
-    using Network;
+    using LeagueSharp.SDK.Core.Network;
 
     /// <summary>
     ///     Utilities for Packets.

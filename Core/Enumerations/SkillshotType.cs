@@ -25,12 +25,12 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     Determines that the <c>skillshot</c> is a linear <c>skillshot</c>.
         /// </summary>
-        SkillshotLine, 
+        SkillshotLine,
 
         /// <summary>
         ///     Determines that the <c>skillshot</c> is a circle <c>skillshot</c>.
         /// </summary>
-        SkillshotCircle, 
+        SkillshotCircle,
 
         /// <summary>
         ///     Determines that the <c>skillshot</c> is a cone <c>skillshot</c>.

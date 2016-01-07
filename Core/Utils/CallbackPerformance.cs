@@ -21,7 +21,7 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Diagnostics;
     using System.Runtime.CompilerServices;
 
-    using Enumerations;
+    using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
     ///     Performance class, measures how much time does a function takes to execute.
@@ -42,8 +42,8 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <param name="memberName">Member name of the function that called the measurement request.</param>
         /// <returns>Elapsed Milliseconds the function took (long-units)</returns>
         public static long MeasureMilliseconds(
-            Action funcCallback, 
-            int iterations = 1, 
+            Action funcCallback,
+            int iterations = 1,
             [CallerMemberName] string memberName = "")
         {
             try
@@ -58,9 +58,9 @@ namespace LeagueSharp.SDK.Core.Utils
                 stopwatch.Stop();
 
                 Logging.Write()(
-                    LogLevel.Info, 
-                    "{0} has taken {1} elapsed milliseconds to execute, and was executed successfuly.", 
-                    memberName, 
+                    LogLevel.Info,
+                    "{0} has taken {1} elapsed milliseconds to execute, and was executed successfuly.",
+                    memberName,
                     stopwatch.ElapsedMilliseconds);
 
                 return stopwatch.ElapsedMilliseconds;
@@ -68,8 +68,8 @@ namespace LeagueSharp.SDK.Core.Utils
             catch (Exception)
             {
                 Logging.Write()(
-                    LogLevel.Error, 
-                    "{0} had an error during execution and was unable to be measured.", 
+                    LogLevel.Error,
+                    "{0} had an error during execution and was unable to be measured.",
                     memberName);
                 return -1L;
             }
@@ -84,8 +84,8 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <param name="memberName">Member name of the function that called the measurement request.</param>
         /// <returns>Elapsed Ticks the function took (long-units)</returns>
         public static long MeasureTicks(
-            Action funcCallback, 
-            int iterations = 1, 
+            Action funcCallback,
+            int iterations = 1,
             [CallerMemberName] string memberName = "")
         {
             try
@@ -100,9 +100,9 @@ namespace LeagueSharp.SDK.Core.Utils
                 stopwatch.Stop();
 
                 Logging.Write()(
-                    LogLevel.Info, 
-                    "{0} has taken {1} elapsed ticks to execute, and was executed successfuly.", 
-                    memberName, 
+                    LogLevel.Info,
+                    "{0} has taken {1} elapsed ticks to execute, and was executed successfuly.",
+                    memberName,
                     stopwatch.ElapsedTicks);
 
                 return stopwatch.ElapsedTicks;
@@ -110,8 +110,8 @@ namespace LeagueSharp.SDK.Core.Utils
             catch (Exception)
             {
                 Logging.Write()(
-                    LogLevel.Error, 
-                    "{0} had an error during execution and was unable to be measured.", 
+                    LogLevel.Error,
+                    "{0} had an error during execution and was unable to be measured.",
                     memberName);
                 return -1L;
             }
@@ -126,8 +126,8 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <param name="memberName">Member name of the function that called the measurement request.</param>
         /// <returns>Elapsed Time Span the function took (long-units)</returns>
         public static TimeSpan MeasureTimeSpan(
-            Action funcCallback, 
-            int iterations = 1, 
+            Action funcCallback,
+            int iterations = 1,
             [CallerMemberName] string memberName = "")
         {
             try
@@ -142,9 +142,9 @@ namespace LeagueSharp.SDK.Core.Utils
                 stopwatch.Stop();
 
                 Logging.Write()(
-                    LogLevel.Info, 
-                    "{0} has taken {1} elapsed time span to execute, and was executed successfuly.", 
-                    memberName, 
+                    LogLevel.Info,
+                    "{0} has taken {1} elapsed time span to execute, and was executed successfuly.",
+                    memberName,
                     stopwatch.Elapsed);
 
                 return stopwatch.Elapsed;
@@ -152,8 +152,8 @@ namespace LeagueSharp.SDK.Core.Utils
             catch (Exception)
             {
                 Logging.Write()(
-                    LogLevel.Error, 
-                    "{0} had an error during execution and was unable to be measured.", 
+                    LogLevel.Error,
+                    "{0} had an error during execution and was unable to be measured.",
                     memberName);
                 return TimeSpan.Zero;
             }

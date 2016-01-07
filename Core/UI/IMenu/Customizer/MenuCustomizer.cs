@@ -17,10 +17,11 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Customizer
 {
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using Skins;
-    using Values;
 
     /// <summary>
     ///     This menu allows the user to modify several properties in <see cref="MenuSettings" />.

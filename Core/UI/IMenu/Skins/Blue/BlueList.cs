@@ -19,6 +19,7 @@
 //   A custom implementation of a <see cref="ADrawable{MenuList}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
 {
     using System.Collections.Generic;
@@ -107,24 +108,24 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)(position.X + MenuSettings.ContainerTextOffset), 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
+                (int)(position.X + MenuSettings.ContainerTextOffset),
                 (int)rectangleName.Y,
                 MenuSettings.TextColor);
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                "\u23EC", 
-                (int)(position.X + this.Component.MenuWidth - this.dropDownButtonWidth + ArrowSpacing), 
+                "\u23EC",
+                (int)(position.X + this.Component.MenuWidth - this.dropDownButtonWidth + ArrowSpacing),
                 (int)rectangleName.Y,
                 MenuSettings.TextColor);
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.SelectedValueAsObject.ToString(), 
+                MenuManager.Instance.Sprite,
+                this.Component.SelectedValueAsObject.ToString(),
                 (int)position.X + this.Component.MenuWidth - this.dropDownButtonWidth - TextSpacing
-                - this.Component.MaxStringWidth, 
+                - this.Component.MaxStringWidth,
                 (int)rectangleName.Y,
                 this.Component.Active ? new ColorBGRA(0, 186, 255, 255) : MenuSettings.TextColor);
             Line.Width = 1f;
@@ -159,22 +160,23 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                                 new[]
                                     {
                                         new Vector2(
-                                            position.X + Component.MenuWidth - (Line.Width / 2), 
-                                            position.Y + MenuSettings.ContainerHeight), 
+                                            position.X + this.Component.MenuWidth - (Line.Width / 2),
+                                            position.Y + MenuSettings.ContainerHeight),
                                         new Vector2(
-                                            position.X + Component.MenuWidth - (Line.Width / 2), 
+                                            position.X + this.Component.MenuWidth - (Line.Width / 2),
                                             position.Y + MenuSettings.ContainerHeight + dropdownMenuHeight)
-                                    }, dropdownColor);
+                                    },
+                                dropdownColor);
                             Line.End();
 
                             var x =
                                 (int)
-                                (position.X + Component.MenuWidth - dropDownButtonWidth - TextSpacing
-                                 - Component.MaxStringWidth);
+                                (position.X + this.Component.MenuWidth - this.dropDownButtonWidth - TextSpacing
+                                 - this.Component.MaxStringWidth);
                             var y = (int)rectangleName.Y;
                             for (var i = 0; i < valueStrings.Length; i++)
                             {
-                                if (i == Component.HoveringIndex)
+                                if (i == this.Component.HoveringIndex)
                                 {
                                     Line.Width = MenuSettings.ContainerHeight;
                                     Line.Begin();
@@ -182,11 +184,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                                         new[]
                                             {
                                                 new Vector2(
-                                                    position.X + Component.MenuWidth - dropdownMenuWidth, 
+                                                    position.X + this.Component.MenuWidth - dropdownMenuWidth,
                                                     position.Y + ((i + 1) * MenuSettings.ContainerHeight)
-                                                    + MenuSettings.ContainerHeight / 2f), 
+                                                    + MenuSettings.ContainerHeight / 2f),
                                                 new Vector2(
-                                                    position.X + Component.MenuWidth, 
+                                                    position.X + this.Component.MenuWidth,
                                                     position.Y + ((i + 1) * MenuSettings.ContainerHeight)
                                                     + MenuSettings.ContainerHeight / 2f)
                                             },
@@ -200,49 +202,49 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                                     new[]
                                         {
                                             new Vector2(
-                                                position.X + Component.MenuWidth - dropdownMenuWidth + 10, 
-                                                position.Y + (MenuSettings.ContainerHeight * (i + 1))), 
+                                                position.X + this.Component.MenuWidth - dropdownMenuWidth + 10,
+                                                position.Y + (MenuSettings.ContainerHeight * (i + 1))),
                                             new Vector2(
-                                                position.X + Component.MenuWidth - 10, 
+                                                position.X + this.Component.MenuWidth - 10,
                                                 position.Y + (MenuSettings.ContainerHeight * (i + 1)))
                                         },
                                     MenuSettings.ContainerSeparatorColor);
                                 Line.End();
                                 y += MenuSettings.ContainerHeight;
                                 MenuSettings.Font.DrawText(
-                                    MenuManager.Instance.Sprite, 
-                                    valueStrings[i], 
-                                    x, 
+                                    MenuManager.Instance.Sprite,
+                                    valueStrings[i],
+                                    x,
                                     y,
                                     MenuSettings.TextColor);
-                                if (Component.Index == i)
+                                if (this.Component.Index == i)
                                 {
                                     var checkmarkWidth = MenuSettings.Font.MeasureText(null, "\u2713", 0).Width;
                                     MenuSettings.Font.DrawText(
                                         MenuManager.Instance.Sprite,
-                                        "\u2713", 
-                                        (int)(position.X + Component.MenuWidth - checkmarkWidth - TextSpacing), 
+                                        "\u2713",
+                                        (int)(position.X + this.Component.MenuWidth - checkmarkWidth - TextSpacing),
                                         y,
                                         new ColorBGRA(1, 165, 226, 255));
                                 }
                             }
 
-                             Line.Width = 1f;
-                             Line.Begin();
-                             Line.Draw(
+                            Line.Width = 1f;
+                            Line.Begin();
+                            Line.Draw(
                                 new[]
                                     {
                                         new Vector2(
-                                            position.X + Component.MenuWidth - dropdownMenuWidth, 
-                                            position.Y + MenuSettings.ContainerHeight), 
+                                            position.X + this.Component.MenuWidth - dropdownMenuWidth,
+                                            position.Y + MenuSettings.ContainerHeight),
                                         new Vector2(
-                                            position.X + Component.MenuWidth - dropdownMenuWidth, 
-                                            position.Y + MenuSettings.ContainerHeight * (valueStrings.Length + 1)), 
+                                            position.X + this.Component.MenuWidth - dropdownMenuWidth,
+                                            position.Y + MenuSettings.ContainerHeight * (valueStrings.Length + 1)),
                                         new Vector2(
-                                            position.X + Component.MenuWidth, 
-                                            position.Y + MenuSettings.ContainerHeight * (valueStrings.Length + 1)), 
+                                            position.X + this.Component.MenuWidth,
+                                            position.Y + MenuSettings.ContainerHeight * (valueStrings.Length + 1)),
                                         new Vector2(
-                                            position.X + Component.MenuWidth, 
+                                            position.X + this.Component.MenuWidth,
                                             position.Y + MenuSettings.ContainerHeight)
                                     },
                                 MenuSettings.ContainerSeparatorColor);
@@ -262,8 +264,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 new Rectangle(
                     (int)
                     (component.Position.X + component.MenuWidth - this.dropDownButtonWidth - (2 * TextSpacing)
-                     - component.MaxStringWidth), 
-                    (int)component.Position.Y, 
+                     - component.MaxStringWidth),
+                    (int)component.Position.Y,
                     this.dropDownButtonWidth + (2 * TextSpacing) + component.MaxStringWidth,
                     MenuSettings.ContainerHeight);
         }
@@ -279,9 +281,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 new Rectangle(
                     (int)
                     (component.Position.X + component.MenuWidth - this.dropDownButtonWidth - (2 * TextSpacing)
-                     - component.MaxStringWidth), 
-                    (int)component.Position.Y, 
-                    this.dropDownButtonWidth + (2 * TextSpacing) + component.MaxStringWidth, 
+                     - component.MaxStringWidth),
+                    (int)component.Position.Y,
+                    this.dropDownButtonWidth + (2 * TextSpacing) + component.MaxStringWidth,
                     (component.Count + 1) * MenuSettings.ContainerHeight);
         }
 
@@ -299,8 +301,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                     new Rectangle(
                         (int)
                         (component.Position.X + component.MenuWidth - this.dropDownButtonWidth - (2 * TextSpacing)
-                         - component.MaxStringWidth), 
-                        (int)(component.Position.Y + ((i + 1) * MenuSettings.ContainerHeight)), 
+                         - component.MaxStringWidth),
+                        (int)(component.Position.Y + ((i + 1) * MenuSettings.ContainerHeight)),
                         this.dropDownButtonWidth + (2 * TextSpacing) + component.MaxStringWidth,
                         MenuSettings.ContainerHeight + 1));
             }
@@ -339,9 +341,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             const int Buffer = 20;
             if (this.Component.Active
                 && !args.Cursor.IsUnderRectangle(
-                    entireDropdownRect.X - Buffer, 
-                    entireDropdownRect.Y - Buffer, 
-                    entireDropdownRect.Width + (2 * Buffer), 
+                    entireDropdownRect.X - Buffer,
+                    entireDropdownRect.Y - Buffer,
+                    entireDropdownRect.Width + (2 * Buffer),
                     entireDropdownRect.Height + (2 * Buffer)))
             {
                 this.Component.Active = false;
@@ -354,9 +356,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 for (var i = 0; i < dropdownRectangles.Count; i++)
                 {
                     if (args.Cursor.IsUnderRectangle(
-                        dropdownRectangles[i].X, 
-                        dropdownRectangles[i].Y, 
-                        dropdownRectangles[i].Width, 
+                        dropdownRectangles[i].X,
+                        dropdownRectangles[i].Y,
+                        dropdownRectangles[i].Width,
                         dropdownRectangles[i].Height))
                     {
                         this.Component.HoveringIndex = i;

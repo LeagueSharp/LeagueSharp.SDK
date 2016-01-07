@@ -17,7 +17,7 @@
 
 namespace LeagueSharp.SDK.Core.UI.INotifications
 {
-    using Core.Utils;
+    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
 

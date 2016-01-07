@@ -24,12 +24,6 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 {
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
-
-    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
-
     using SharpDX;
     using SharpDX.Direct3D9;
 
@@ -132,11 +126,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
         }
 
         /// <summary>
-        ///     Gets or sets the Global Text Caption Color.
-        /// </summary>
-        public static ColorBGRA TextCaptionColor { get; set; }
-
-        /// <summary>
         ///     Gets or sets the Global KeyBind Color.
         /// </summary>
         public static ColorBGRA KeyBindColor { get; set; }
@@ -145,6 +134,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
         ///     Gets or sets the Global Slider Color.
         /// </summary>
         public static ColorBGRA SliderColor { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the Global Text Caption Color.
+        /// </summary>
+        public static ColorBGRA TextCaptionColor { get; set; }
 
         #endregion
 
@@ -155,7 +149,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
         /// </summary>
         public static void LoadSettings()
         {
-            
         }
 
         #endregion
