@@ -19,6 +19,7 @@
 //   Implements a custom ITheme.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 {
     using System.Linq;
@@ -128,6 +129,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
         }
 
         /// <summary>
+        ///     Builds a new handler for the given <see cref="MenuSliderBool" />.
+        /// </summary>
+        /// <param name="component">The <see cref="MenuSliderBool" /> where this handler is responsible for.</param>
+        /// <returns>The handler</returns>
+        public ADrawable<MenuSliderBool> BuildSliderBoolHandler(MenuSliderBool component)
+        {
+            return new ColoredSliderBool(component);
+        }
+
+        /// <summary>
         ///     Builds a new handler for the given <see cref="MenuSlider" />.
         /// </summary>
         /// <param name="component">The <see cref="MenuSlider" /> where this handler is responsible for.</param>
@@ -135,16 +146,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
         public ADrawable<MenuSlider> BuildSliderHandler(MenuSlider component)
         {
             return new ColoredSlider(component);
-        }
-
-        /// <summary>
-        ///     Builds a new handler for the given <see cref="MenuSliderButton" />.
-        /// </summary>
-        /// <param name="component">The <see cref="MenuSliderButton" /> where this handler is responsible for.</param>
-        /// <returns>The handler</returns>
-        public ADrawable<MenuSliderButton> BuildSliderButtonHandler(MenuSliderButton component)
-        {
-            return new ColoredSliderButton(component);
         }
 
         /// <summary>
@@ -161,8 +162,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                 width = menuManager.Menus.First().MenuWidth;
             }
 
-            Utils.DrawBoxRounded(position.X, position.Y, width, height, 4, true,
-                    MenuSettings.RootContainerColor, new ColorBGRA(55, 76, 95, 255));
+            Utils.DrawBoxRounded(
+                position.X,
+                position.Y,
+                width,
+                height,
+                4,
+                true,
+                MenuSettings.RootContainerColor,
+                new ColorBGRA(55, 76, 95, 255));
 
             for (var i = 0; i < menuManager.Menus.Count; ++i)
             {

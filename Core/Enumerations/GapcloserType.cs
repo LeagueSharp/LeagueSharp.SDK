@@ -25,7 +25,7 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     <c>Skillshot</c> Spell
         /// </summary>
-        Skillshot, 
+        Skillshot,
 
         /// <summary>
         ///     Targeted Spell

@@ -25,7 +25,8 @@ namespace LeagueSharp.SDK.Core.Enumerations
     ///     Defined in <![CDATA[winuser.h]]> from Windows SDK v6.1
     ///     Documentation pulled from MSDN.
     /// </summary>
-    [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Official names from the winuser.h of the Windows SDK v6.1")]
+    [SuppressMessage("ReSharper", "InconsistentNaming",
+        Justification = "Official names from the winuser.h of the Windows SDK v6.1")]
     public enum WindowsMessages : uint
     {
         /// <summary>

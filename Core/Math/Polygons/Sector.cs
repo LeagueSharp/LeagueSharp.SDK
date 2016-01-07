@@ -19,7 +19,7 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
 {
     using System;
 
-    using Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
 
     using SharpDX;
 
@@ -96,22 +96,22 @@ namespace LeagueSharp.SDK.Core.Math.Polygons
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the angle.
+        ///     Gets or sets the angle.
         /// </summary>
         public float Angle { get; set; }
 
         /// <summary>
-        /// Gets or sets the center.
+        ///     Gets or sets the center.
         /// </summary>
         public Vector2 Center { get; set; }
 
         /// <summary>
-        /// Gets or sets the direction.
+        ///     Gets or sets the direction.
         /// </summary>
         public Vector2 Direction { get; set; }
 
         /// <summary>
-        /// Gets or sets the radius.
+        ///     Gets or sets the radius.
         /// </summary>
         public float Radius { get; set; }
 

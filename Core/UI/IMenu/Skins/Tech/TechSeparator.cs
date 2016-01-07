@@ -19,37 +19,19 @@
 //   Implements <see cref="ADrawable{MenuSeperator}" /> as a custom skin.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
 {
-    using System;
-
     using LeagueSharp.SDK.Core.Enumerations;
     using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
-    using SharpDX;
-    using SharpDX.Direct3D9;
 
     /// <summary>
     ///     Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.
     /// </summary>
     public class TechSeparator : ADrawable<MenuSeparator>
     {
-
-        #region Static Fields
-
-        /// <summary>
-        ///     The line.
-        /// </summary>
-        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
-
-        /// <summary>
-        ///     Offset.
-        /// </summary>
-        private static readonly int Offset = 15;
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>

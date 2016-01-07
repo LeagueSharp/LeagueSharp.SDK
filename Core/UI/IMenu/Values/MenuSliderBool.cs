@@ -20,36 +20,34 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    using Core.Utils;
-    using Skins;
+
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     Menu Slider.
     /// </summary>
     [Serializable]
-    public class MenuSliderButton : MenuItem, ISerializable
+    public class MenuSliderBool : MenuItem, ISerializable
     {
         #region Fields
 
         /// <summary>
-        ///     The original.
-        /// </summary>
-        private readonly int original;
-
-        /// <summary>
         ///     The boriginal.
         /// </summary>
-        private readonly bool bOriginal;
+        private readonly bool originalBoolValue;
+
+        /// <summary>
+        ///     The original.
+        /// </summary>
+        private readonly int originalSliderValue;
+
+        private bool boolValue;
 
         /// <summary>
         ///     The value.
         /// </summary>
-        private int value;
-
-        /// <summary>
-        ///     The Button value.
-        /// </summary>
-        private bool bValue;
+        private int sliderValue;
 
         #endregion
 
@@ -73,38 +71,39 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="maxValue">
         ///     Maximum Value Boundary
         /// </param>
-        /// <param name="bValue">
-        ///     The Button Value
+        /// <param name="boolean">
+        ///     The Bool Value
         /// </param>
         /// <param name="uniqueString">
         ///     String used in saving settings
         /// </param>
-        public MenuSliderButton(
-            string name, 
-            string displayName, 
-            int value = 0, 
-            int minValue = 0, 
+        public MenuSliderBool(
+            string name,
+            string displayName,
+            int value = 0,
+            int minValue = 0,
             int maxValue = 100,
-            bool bValue = false,
+            bool boolean = false,
             string uniqueString = "")
             : base(name, displayName, uniqueString)
         {
-            this.MinValue = minValue;
-            this.MaxValue = maxValue;
-            this.SValue = value;
-            this.original = value;
-            this.bOriginal = bValue;
+            this.SliderMinValue = minValue;
+            this.SliderMaxValue = maxValue;
+            this.SliderValue = value;
+            this.BoolValue = boolean;
+            this.originalSliderValue = value;
+            this.originalBoolValue = boolean;
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MenuSlider" /> class.
+        ///     Initializes a new instance of the <see cref="MenuSliderBool" /> class.
         /// </summary>
         /// <param name="info">The information.</param>
         /// <param name="context">The context.</param>
-        protected MenuSliderButton(SerializationInfo info, StreamingContext context)
+        protected MenuSliderBool(SerializationInfo info, StreamingContext context)
         {
-            this.value = (int)info.GetValue("value", typeof(int));
-            this.bValue = (bool)info.GetValue("bValue", typeof(bool));
+            this.sliderValue = (int)info.GetValue("sliderValue", typeof(int));
+            this.boolValue = (bool)info.GetValue("boolValue", typeof(bool));
         }
 
         #endregion
@@ -112,7 +111,22 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         #region Public Properties
 
         /// <summary>
-        ///     Gets or sets a value indicating whether this <see cref="MenuSlider" /> is interacting.
+        ///     Gets or sets a value indicating whether the boolean value is true or false.
+        /// </summary>
+        public bool BoolValue
+        {
+            get
+            {
+                return this.boolValue;
+            }
+            set
+            {
+                this.boolValue = value;
+            }
+        }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether this <see cref="MenuSliderBool" /> is interacting.
         /// </summary>
         /// <value>
         ///     <c>true</c> if interacting; otherwise, <c>false</c>.
@@ -122,55 +136,39 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Gets or sets the Slider Maximum Value.
         /// </summary>
-        public int MaxValue { get; set; }
+        public int SliderMaxValue { get; set; }
 
         /// <summary>
         ///     Gets or sets the Slider Minimum Value.
         /// </summary>
-        public int MinValue { get; set; }
-
-        /// <summary>
-        ///     Gets the Slider Value if Button is active.
-        /// </summary>
-        public int Value
-        {
-            get
-            {
-                return this.SValue != this.MinValue && this.BValue ? this.value : -1;
-            }
-        }
+        public int SliderMinValue { get; set; }
 
         /// <summary>
         ///     Gets or sets the Slider Current Value.
         /// </summary>
-        public int SValue
+        public int SliderValue
         {
             get
             {
-                return this.value;
+                return this.sliderValue;
             }
 
             set
             {
-                if (value < this.MinValue)
+                if (value < this.SliderMinValue)
                 {
-                    this.value = this.MinValue;
+                    this.sliderValue = this.SliderMinValue;
                 }
-                else if (value > this.MaxValue)
+                else if (value > this.SliderMaxValue)
                 {
-                    this.value = this.MaxValue;
+                    this.sliderValue = this.SliderMaxValue;
                 }
                 else
                 {
-                    this.value = value;
+                    this.sliderValue = value;
                 }
             }
         }
-
-        /// <summary>
-        ///     Gets or sets a value indicating whether the boolean value is true or false.
-        /// </summary>
-        public bool BValue { get; set; }
 
         /// <summary>
         ///     Slider Item Width.
@@ -195,8 +193,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <param name="menuValue">The value.</param>
         public override void Extract(MenuItem menuValue)
         {
-            this.SValue = ((MenuSliderButton)menuValue).value;
-            this.BValue = ((MenuSliderButton)menuValue).bValue;
+            this.SliderValue = ((MenuSliderBool)menuValue).sliderValue;
+            this.BoolValue = ((MenuSliderBool)menuValue).boolValue;
         }
 
         /// <summary>
@@ -204,8 +202,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </summary>
         public override void RestoreDefault()
         {
-            this.SValue = this.original;
-            this.BValue = this.bOriginal;
+            this.SliderValue = this.originalSliderValue;
+            this.BoolValue = this.originalBoolValue;
         }
 
         /// <summary>
@@ -241,8 +239,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
                 throw new ArgumentNullException(nameof(info));
             }
 
-            info.AddValue("value", this.SValue, typeof(int));
-            info.AddValue("bValue", this.BValue, typeof(bool));
+            info.AddValue("sliderValue", this.SliderValue, typeof(int));
+            info.AddValue("boolValue", this.BoolValue, typeof(bool));
         }
 
         #endregion
@@ -260,7 +258,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// </returns>
         protected override ADrawable BuildHandler(ITheme theme)
         {
-            return theme.BuildSliderButtonHandler(this);
+            return theme.BuildSliderBoolHandler(this);
         }
 
         /// <summary>
@@ -276,8 +274,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("value", this.SValue, typeof(int));
-            info.AddValue("bValue", this.BValue, typeof(bool));
+            info.AddValue("sliderValue", this.SliderValue, typeof(int));
+            info.AddValue("boolValue", this.BoolValue, typeof(bool));
         }
 
         #endregion

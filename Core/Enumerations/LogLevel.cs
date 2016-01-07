@@ -25,27 +25,27 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     Debug Information
         /// </summary>
-        Debug = 2, 
+        Debug = 2,
 
         /// <summary>
         ///     An error occurred somewhere in the code (exception)
         /// </summary>
-        Error = 5, 
+        Error = 5,
 
         /// <summary>
         ///     An error occurred and the program is unable to proceed
         /// </summary>
-        Fatal = 6, 
+        Fatal = 6,
 
         /// <summary>
         ///     General information
         /// </summary>
-        Info = 1, 
+        Info = 1,
 
         /// <summary>
         ///     Current location of the program
         /// </summary>
-        Trace = 3, 
+        Trace = 3,
 
         /// <summary>
         ///     Warning level

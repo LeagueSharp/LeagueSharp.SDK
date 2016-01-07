@@ -22,10 +22,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     using System.IO;
     using System.Linq;
     using System.Windows.Forms;
-    using Core.Utils;
-    using Enumerations;
+
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
+    using LeagueSharp.SDK.Core.Utils;
+
     using SharpDX.Direct3D9;
-    using Skins;
 
     /// <summary>
     ///     Menu Interface class, used to control the menu.

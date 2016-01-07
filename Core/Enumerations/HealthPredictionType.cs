@@ -25,7 +25,7 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     Default Prediction
         /// </summary>
-        Default, 
+        Default,
 
         /// <summary>
         ///     Simulated Prediction

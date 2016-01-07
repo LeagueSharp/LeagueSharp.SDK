@@ -21,9 +21,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System.Linq;
     using System.Text.RegularExpressions;
 
-    using Enumerations;
-    using Extensions;
-    using Utils;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -116,9 +116,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         /// <returns>
         ///     The estimated auto attack damage.
         /// </returns>
-        public static double GetAutoAttackDamage(
-            this Obj_AI_Base source,
-            Obj_AI_Base target)
+        public static double GetAutoAttackDamage(this Obj_AI_Base source, Obj_AI_Base target)
         {
             double result = source.TotalAttackDamage;
             var damageModifier = 1d;

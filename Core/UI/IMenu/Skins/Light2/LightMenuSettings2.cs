@@ -24,11 +24,6 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
 {
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
-
-    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins.Light;
 
     using SharpDX;
@@ -39,6 +34,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
     /// </summary>
     public class LightMenuSettings2 : MenuSettings
     {
+        #region Static Fields
+
+        /// <summary>
+        ///     Local Caption Font.
+        /// </summary>
+        private static Font fontCaption;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -72,19 +76,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
 
         #endregion
 
-        #region Static Fields
-
-        /// <summary>
-        ///     Local Caption Font.
-        /// </summary>
-        private static Font fontCaption;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
@@ -104,11 +95,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
         }
 
         /// <summary>
-        ///     Gets or sets the Global Text Caption Color.
-        /// </summary>
-        public static ColorBGRA TextCaptionColor { get; set; }
-
-        /// <summary>
         ///     Gets or sets the Global KeyBind Color.
         /// </summary>
         public static ColorBGRA KeyBindColor { get; set; }
@@ -117,6 +103,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
         ///     Gets or sets the Global Slider Color.
         /// </summary>
         public static ColorBGRA SliderColor { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the Global Text Caption Color.
+        /// </summary>
+        public static ColorBGRA TextCaptionColor { get; set; }
 
         #endregion
 
@@ -131,6 +122,5 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
         }
 
         #endregion
-
     }
 }

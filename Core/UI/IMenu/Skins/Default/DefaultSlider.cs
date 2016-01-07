@@ -19,13 +19,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
     using System;
     using System.Globalization;
-    using Core.Utils;
-    using Enumerations;
-    using Extensions.SharpDX;
-    using Math;
+
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Math;
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using Values;
 
     /// <summary>
     ///     A default implementation of an <see cref="ADrawable{MenuSlider}" />
@@ -104,26 +106,26 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             Line.Width = 2;
             Line.Begin();
             Line.Draw(
-                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) }, 
+                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) },
                 this.Component.Interacting ? new ColorBGRA(255, 0, 0, 255) : new ColorBGRA(50, 154, 205, 255));
             Line.End();
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)(position.X + MenuSettings.ContainerTextOffset), 
-                centeredY, 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
+                (int)(position.X + MenuSettings.ContainerTextOffset),
+                centeredY,
                 MenuSettings.TextColor);
 
             var measureText = MenuSettings.Font.MeasureText(
-                null, 
-                this.Component.Value.ToString(CultureInfo.InvariantCulture), 
+                null,
+                this.Component.Value.ToString(CultureInfo.InvariantCulture),
                 0);
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.Value.ToString(CultureInfo.InvariantCulture), 
-                (int)(position.X + this.Component.MenuWidth - 5 - measureText.Width), 
-                centeredY, 
+                MenuManager.Instance.Sprite,
+                this.Component.Value.ToString(CultureInfo.InvariantCulture),
+                (int)(position.X + this.Component.MenuWidth - 5 - measureText.Width),
+                centeredY,
                 MenuSettings.TextColor);
 
             Line.Width = MenuSettings.ContainerHeight;
@@ -131,9 +133,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             Line.Draw(
                 new[]
                     {
-                        new Vector2(position.X, position.Y + (MenuSettings.ContainerHeight / 2f)), 
+                        new Vector2(position.X, position.Y + (MenuSettings.ContainerHeight / 2f)),
                         new Vector2(x, position.Y + (MenuSettings.ContainerHeight / 2f))
-                    }, 
+                    },
                 MenuSettings.HoverColor);
             Line.End();
         }
@@ -198,7 +200,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 Math.Round(
                     component.MinValue
                     + (((args.Cursor.X - component.Position.X) * (component.MaxValue - component.MinValue))
-                    / component.MenuWidth));
+                       / component.MenuWidth));
             if (newValue < component.MinValue)
             {
                 newValue = component.MinValue;

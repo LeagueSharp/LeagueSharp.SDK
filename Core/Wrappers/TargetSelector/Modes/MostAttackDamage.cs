@@ -47,7 +47,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         ///     Adds to menu.
         /// </summary>
         /// <param name="menu">The menu.</param>
-        public void AddToMenu(Menu menu) {}
+        public void AddToMenu(Menu menu)
+        {
+        }
 
         /// <summary>
         ///     Orders the champions.

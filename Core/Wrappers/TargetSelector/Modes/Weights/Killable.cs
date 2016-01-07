@@ -26,18 +26,47 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
     {
         #region Public Properties
 
+        /// <summary>
+        ///     Gets the default weight.
+        /// </summary>
+        /// <value>
+        ///     The default weight.
+        /// </value>
         public int DefaultWeight => 20;
 
+        /// <summary>
+        ///     Gets the display name.
+        /// </summary>
+        /// <value>
+        ///     The display name.
+        /// </value>
         public string DisplayName => "AA Killable";
 
+        /// <summary>
+        ///     Gets a value indicating whether this <see cref="IWeightItem" /> is inverted.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if inverted; otherwise, <c>false</c>.
+        /// </value>
         public bool Inverted => false;
 
+        /// <summary>
+        ///     Gets the name.
+        /// </summary>
+        /// <value>
+        ///     The name.
+        /// </value>
         public string Name => "aa-killable";
 
         #endregion
 
         #region Public Methods and Operators
 
+        /// <summary>
+        ///     Gets the value.
+        /// </summary>
+        /// <param name="hero">The hero.</param>
+        /// <returns></returns>
         public float GetValue(Obj_AI_Hero hero) => hero.Health < GameObjects.Player.GetAutoAttackDamage(hero) ? 1 : 0;
 
         #endregion

@@ -51,7 +51,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>
         ///     The <see cref="int" /> in 0xRRGGBBAA format.
         /// </returns>
-        public static int ToRgba(this System.Drawing.Color color)
+        public static int ToRgba(this global::System.Drawing.Color color)
         {
             var x = color.ToArgb();
             return (int)((x & 0xFF000000) >> 0x18) | ((x & 0x00FF0000) << 0x8) | ((x & 0x0000FF00) << 0x8)
@@ -67,7 +67,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>
         ///     The SharpDX Color instance.
         /// </returns>
-        public static Color ToSharpDxColor(this System.Drawing.Color color)
+        public static Color ToSharpDxColor(this global::System.Drawing.Color color)
         {
             return new Color(color.R, color.G, color.B, color.A);
         }
@@ -81,9 +81,9 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>
         ///     The System Color instance.
         /// </returns>
-        public static System.Drawing.Color ToSystemColor(this Color color)
+        public static global::System.Drawing.Color ToSystemColor(this Color color)
         {
-            return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+            return global::System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 
         /// <summary>
@@ -95,9 +95,9 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
         /// <returns>
         ///     The System Color instance.
         /// </returns>
-        public static System.Drawing.Color ToSystemColor(this ColorBGRA color)
+        public static global::System.Drawing.Color ToSystemColor(this ColorBGRA color)
         {
-            return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+            return global::System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 
         #endregion

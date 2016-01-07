@@ -19,6 +19,7 @@
 //   Implements a custom ITheme.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
 {
     using System.Linq;
@@ -128,6 +129,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         }
 
         /// <summary>
+        ///     Builds a new handler for the given <see cref="MenuSliderBool" />.
+        /// </summary>
+        /// <param name="component">The <see cref="MenuSliderBool" /> where this handler is responsible for.</param>
+        /// <returns>The handler</returns>
+        public ADrawable<MenuSliderBool> BuildSliderBoolHandler(MenuSliderBool component)
+        {
+            return new BlueSliderBool(component);
+        }
+
+        /// <summary>
         ///     Builds a new handler for the given <see cref="MenuSlider" />.
         /// </summary>
         /// <param name="component">The <see cref="MenuSlider" /> where this handler is responsible for.</param>
@@ -135,16 +146,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         public ADrawable<MenuSlider> BuildSliderHandler(MenuSlider component)
         {
             return new BlueSlider(component);
-        }
-
-        /// <summary>
-        ///     Builds a new handler for the given <see cref="MenuSliderButton" />.
-        /// </summary>
-        /// <param name="component">The <see cref="MenuSliderButton" /> where this handler is responsible for.</param>
-        /// <returns>The handler</returns>
-        public ADrawable<MenuSliderButton> BuildSliderButtonHandler(MenuSliderButton component)
-        {
-            return new BlueSliderButton(component);
         }
 
         /// <summary>
@@ -166,7 +167,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             Line.Draw(
                 new[]
                     {
-                        new Vector2(position.X + (width / 2f), position.Y), 
+                        new Vector2(position.X + (width / 2f), position.Y),
                         new Vector2(position.X + (width / 2), position.Y + height)
                     },
                 MenuSettings.RootContainerColor);
@@ -200,13 +201,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             Line.Draw(
                 new[]
                     {
-                        new Vector2(position.X, position.Y), new Vector2(position.X + width, position.Y), 
-                        new Vector2(position.X + width, position.Y + height), new Vector2(position.X, position.Y + height), 
+                        new Vector2(position.X, position.Y), new Vector2(position.X + width, position.Y),
+                        new Vector2(position.X + width, position.Y + height), new Vector2(position.X, position.Y + height),
                         new Vector2(position.X, position.Y)
                     },
                 new ColorBGRA(21, 26, 45, 255));
             Line.End();
-            
         }
 
         #endregion

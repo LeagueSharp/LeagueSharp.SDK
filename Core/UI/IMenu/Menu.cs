@@ -22,10 +22,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using Abstracts;
-    using Core.Utils;
+
+    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
+    using LeagueSharp.SDK.Core.Utils;
+
     using SharpDX;
-    using Skins;
 
     /// <summary>
     ///     Menu Value Changed delegate
@@ -136,7 +138,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     Returns if the menu has been toggled.
         /// </summary>
-        public override sealed bool Toggled
+        public sealed override bool Toggled
         {
             get
             {
@@ -162,7 +164,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     Returns the menu visibility.
         /// </summary>
-        public override sealed bool Visible
+        public sealed override bool Visible
         {
             get
             {

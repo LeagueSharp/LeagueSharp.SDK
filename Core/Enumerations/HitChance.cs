@@ -25,47 +25,47 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     Target is immobile, <c>skillshot</c> will hit.
         /// </summary>
-        Immobile = 8, 
+        Immobile = 8,
 
         /// <summary>
         ///     Target is dashing to a known location, <c>skillshot</c> will hit.
         /// </summary>
-        Dashing = 7, 
+        Dashing = 7,
 
         /// <summary>
         ///     Very High Prediction output, <c>skillshot</c> will probably hit.
         /// </summary>
-        VeryHigh = 6, 
+        VeryHigh = 6,
 
         /// <summary>
         ///     High Prediction output, <c>skillshot</c> will probably hit.
         /// </summary>
-        High = 5, 
+        High = 5,
 
         /// <summary>
         ///     Medium Prediction output, accuracy considered low.
         /// </summary>
-        Medium = 4, 
+        Medium = 4,
 
         /// <summary>
         ///     Low Prediction output, accuracy considered low.
         /// </summary>
-        Low = 3, 
+        Low = 3,
 
         /// <summary>
         ///     Impossible Hit.
         /// </summary>
-        Impossible = 2, 
+        Impossible = 2,
 
         /// <summary>
         ///     <c>skillshot</c> is out of range.
         /// </summary>
-        OutOfRange = 1, 
+        OutOfRange = 1,
 
         /// <summary>
         ///     Collision before hit onto target.
         /// </summary>
-        Collision = 0, 
+        Collision = 0,
 
         /// <summary>
         ///     No HitChance.

@@ -26,10 +26,6 @@ namespace LeagueSharp.SDK.Core.Utils
     /// </summary>
     public static class WeightedRandom
     {
-        #region Static Fields
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>

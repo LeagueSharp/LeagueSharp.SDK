@@ -65,9 +65,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
         public static Rectangle GetContainerRectangle(AMenuComponent component)
         {
             return new Rectangle(
-                (int)component.Position.X, 
-                (int)component.Position.Y, 
-                component.MenuWidth, 
+                (int)component.Position.X,
+                (int)component.Position.Y,
+                component.MenuWidth,
                 MenuSettings.ContainerHeight);
         }
 

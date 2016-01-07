@@ -19,6 +19,7 @@
 //   Implements <see cref="ADrawable{MenuSeperator}" /> as a custom skin.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
 {
     using LeagueSharp.SDK.Core.Enumerations;

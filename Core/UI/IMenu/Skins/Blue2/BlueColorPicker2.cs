@@ -19,24 +19,11 @@
 //   A custom implementation of <see cref="ADrawable{MenuColorPicker}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 {
-    using System.Drawing;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math;
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
-
-    using SharpDX;
-    using SharpDX.Direct3D9;
-
-    using Color = SharpDX.Color;
-    using Rectangle = SharpDX.Rectangle;
-    using Utilities = LeagueSharp.SDK.Core.UI.IMenu.Utilities;
 
     internal class BlueColorPicker2 : BlueColorPicker
     {
@@ -51,7 +38,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
         public BlueColorPicker2(MenuColor component)
             : base(component)
         {
-
         }
 
         #endregion

@@ -25,12 +25,12 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     Low danger level
         /// </summary>
-        Low, 
+        Low,
 
         /// <summary>
         ///     Medium danger level, should be interrupted
         /// </summary>
-        Medium, 
+        Medium,
 
         /// <summary>
         ///     High danger level, definitely should be interrupted

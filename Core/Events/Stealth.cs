@@ -66,10 +66,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <param name="args">OnStealthEventArgs <see cref="OnStealthEventArgs" /></param>
         private static void FireOnStealth(OnStealthEventArgs args)
         {
-            if (OnStealth != null)
-            {
-                OnStealth(MethodBase.GetCurrentMethod().DeclaringType, args);
-            }
+            OnStealth?.Invoke(MethodBase.GetCurrentMethod().DeclaringType, args);
         }
 
         /// <summary>

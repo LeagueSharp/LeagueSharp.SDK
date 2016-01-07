@@ -21,7 +21,7 @@ namespace LeagueSharp.SDK.Core.Events
     using System.Collections.Generic;
     using System.Linq;
 
-    using Enumerations;
+    using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
     ///     Provides events for interrupting spells.
@@ -91,12 +91,13 @@ namespace LeagueSharp.SDK.Core.Events
         /// </summary>
         private static Dictionary<int, InterruptableSpellData> CastingInterruptableSpellDictionary { get; }
 
+        private static List<InterruptableSpellData> GlobalInterruptableSpellsList { get; }
+
         /// <summary>
         ///     Gets or sets the interrupt-able spells.
         /// </summary>
         private static Dictionary<string, List<InterruptableSpellData>> InterruptableSpellsDictionary { get; }
 
-        private static List<InterruptableSpellData> GlobalInterruptableSpellsList { get; } 
         #endregion
 
         #region Public Methods and Operators
@@ -201,10 +202,11 @@ namespace LeagueSharp.SDK.Core.Events
             RegisterSpell("Warwick", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Xerath", new InterruptableSpellData(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Varus", new InterruptableSpellData(SpellSlot.Q, DangerLevel.Low, false));
-            RegisterSpell("Zilean", new InterruptableSpellData((SpellSlot) 52, DangerLevel.Low));
+            RegisterSpell("Zilean", new InterruptableSpellData((SpellSlot)52, DangerLevel.Low));
 
-            GlobalInterruptableSpellsList.Add(new InterruptableSpellData("OdinChannel", DangerLevel.Low, (SpellSlot) 62));
-            GlobalInterruptableSpellsList.Add(new InterruptableSpellData("OdinChannelBomb", DangerLevel.Low, (SpellSlot) 62));
+            GlobalInterruptableSpellsList.Add(new InterruptableSpellData("OdinChannel", DangerLevel.Low, (SpellSlot)62));
+            GlobalInterruptableSpellsList.Add(
+                new InterruptableSpellData("OdinChannelBomb", DangerLevel.Low, (SpellSlot)62));
             GlobalInterruptableSpellsList.Add(new InterruptableSpellData("summonerteleport", DangerLevel.Medium));
         }
 
@@ -314,22 +316,22 @@ namespace LeagueSharp.SDK.Core.Events
             /// <summary>
             ///     Initializes a new instance of the <see cref="InterruptableSpellData" /> class.
             /// </summary>
-            /// <param name="name">
-            ///     Spell Name
-            /// </param>
-            /// <param name="dangerLevel">
-            ///     Danger Level
-            /// </param>
-            /// <param name="movementInterrupts">
-            ///     Does movement interrupt the spell
-            /// </param>
-            public InterruptableSpellData(string name, DangerLevel dangerLevel, SpellSlot slot = SpellSlot.Unknown, bool movementInterrupts = true)
+            /// <param name="name">Spell Name</param>
+            /// <param name="dangerLevel">Danger Level</param>
+            /// <param name="slot">The slot.</param>
+            /// <param name="movementInterrupts">Does movement interrupt the spell</param>
+            public InterruptableSpellData(
+                string name,
+                DangerLevel dangerLevel,
+                SpellSlot slot = SpellSlot.Unknown,
+                bool movementInterrupts = true)
             {
                 this.Name = name;
                 this.DangerLevel = dangerLevel;
                 this.Slot = slot;
                 this.MovementInterrupts = movementInterrupts;
             }
+
             #endregion
 
             #region Public Properties

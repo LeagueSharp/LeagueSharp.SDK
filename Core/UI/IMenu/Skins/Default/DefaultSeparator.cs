@@ -17,10 +17,10 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
-    using Core.Utils;
-    using Enumerations;
-    using Math;
-    using Values;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Math;
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.
@@ -59,16 +59,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         {
             var centerY = DefaultUtilities.GetContainerRectangle(this.Component)
                 .GetCenteredText(
-                    null, 
-                    MenuSettings.Font, 
-                    this.Component.DisplayName, 
+                    null,
+                    MenuSettings.Font,
+                    this.Component.DisplayName,
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)centerY.X, 
-                (int)centerY.Y, 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
+                (int)centerY.X,
+                (int)centerY.Y,
                 MenuSettings.TextColor);
         }
 

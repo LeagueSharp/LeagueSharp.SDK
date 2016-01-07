@@ -19,6 +19,7 @@
 //   A custom implementation of an <see cref="ADrawable{MenuSlider}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
 {
     using System;
@@ -128,20 +129,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
                     });
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
                 (int)(position.X + MenuSettings.ContainerTextOffset),
                 (int)(position.Y + (centeredY - position.Y) / 2),
                 MenuSettings.TextColor);
 
             var measureText = MenuSettings.Font.MeasureText(
-                null, 
-                this.Component.Value.ToString(CultureInfo.InvariantCulture), 
+                null,
+                this.Component.Value.ToString(CultureInfo.InvariantCulture),
                 0);
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.Value.ToString(CultureInfo.InvariantCulture), 
-                (int)(position.X +   this.Component.MenuWidth - measureText.Width - Offset),
+                MenuManager.Instance.Sprite,
+                this.Component.Value.ToString(CultureInfo.InvariantCulture),
+                (int)(position.X + this.Component.MenuWidth - measureText.Width - Offset),
                 (int)(position.Y + (centeredY - position.Y) / 2),
                 MenuSettings.TextColor);
 

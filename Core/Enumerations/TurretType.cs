@@ -25,22 +25,22 @@ namespace LeagueSharp.SDK.Core.Enumerations
         /// <summary>
         ///     The unknown tier.
         /// </summary>
-        Unknown, 
+        Unknown,
 
         /// <summary>
         ///     The tier one.
         /// </summary>
-        TierOne, 
+        TierOne,
 
         /// <summary>
         ///     The tier two.
         /// </summary>
-        TierTwo, 
+        TierTwo,
 
         /// <summary>
         ///     The tier three.
         /// </summary>
-        TierThree, 
+        TierThree,
 
         /// <summary>
         ///     The tier four.

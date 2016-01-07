@@ -19,6 +19,7 @@
 //   A custom implementation of <see cref="ADrawable{MenuButton}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
 {
     using LeagueSharp.SDK.Core.Enumerations;
@@ -96,8 +97,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
             var buttonTextWidth =
                 MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, component.ButtonText, 0).Width;
             return new Rectangle(
-                (int)(component.Position.X + component.MenuWidth - buttonTextWidth - (2 * TextGap)), 
-                (int)component.Position.Y, 
+                (int)(component.Position.X + component.MenuWidth - buttonTextWidth - (2 * TextGap)),
+                (int)component.Position.Y,
                 (2 * TextGap) + buttonTextWidth,
                 MenuSettings.ContainerHeight);
         }
@@ -119,9 +120,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
                 .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset), 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
+                (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
                 (int)rectangleName.Y,
                 MenuSettings.TextColor);
 
@@ -140,9 +141,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
                 this.Component.Hovering ? new ColorBGRA(17, 65, 65, 255) : this.buttonColor);
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.ButtonText, 
-                (int)(this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - TextGap), 
+                MenuManager.Instance.Sprite,
+                this.Component.ButtonText,
+                (int)(this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - TextGap),
                 (int)rectangleName.Y,
                 MenuSettings.TextColor);
         }

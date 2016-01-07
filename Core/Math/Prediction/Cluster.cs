@@ -20,9 +20,9 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
     using System.Collections.Generic;
     using System.Linq;
 
-    using Enumerations;
-    using Extensions;
-    using Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
 
     using SharpDX;
 
@@ -423,9 +423,9 @@ namespace LeagueSharp.SDK.Core.Math.Prediction
             /// <param name="points">Vector2 points</param>
             /// <returns>Number of Hits</returns>
             internal static IEnumerable<Vector2> GetHits(
-                Vector2 start, 
-                Vector2 end, 
-                double radius, 
+                Vector2 start,
+                Vector2 end,
+                double radius,
                 List<Vector2> points)
             {
                 return points.Where(p => p.DistanceSquared(start, end, true) <= radius * radius);

@@ -20,13 +20,15 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Core.Utils;
-    using Enumerations;
-    using Events;
-    using Extensions;
-    using Extensions.SharpDX;
-    using IMenu;
-    using IMenu.Values;
+
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Events;
+    using LeagueSharp.SDK.Core.Extensions;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.UI.IMenu;
+    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
 
@@ -199,9 +201,9 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
                 Line.Draw(
                     new[]
                         {
-                            new Vector2(Position.X - (line.Width / 2f), Position.Y), 
+                            new Vector2(Position.X - (line.Width / 2f), Position.Y),
                             new Vector2(Position.X - (line.Width / 2f), height)
-                        }, 
+                        },
                     new ColorBGRA(255, 0, 0, 255 / 2));
                 Line.End();
             }
@@ -254,9 +256,9 @@ namespace LeagueSharp.SDK.Core.UI.INotifications
 
                 EditButtonDown = value
                                  && windowsKeys.Cursor.IsUnderRectangle(
-                                     Position.X - widthRectangle, 
-                                     Position.Y, 
-                                     widthRectangle, 
+                                     Position.X - widthRectangle,
+                                     Position.Y,
+                                     widthRectangle,
                                      heightRectangle);
 
                 if (!value)

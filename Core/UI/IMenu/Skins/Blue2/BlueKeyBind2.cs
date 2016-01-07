@@ -22,17 +22,8 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 {
-    using System.Windows.Forms;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
-
-    using SharpDX;
-    using SharpDX.Direct3D9;
 
     /// <summary>
     ///     A default implementation of <see cref="ADrawable{MenuKeyBind}" />

@@ -19,6 +19,7 @@
 //   A custom implementation of an <see cref="ADrawable{MenuSliderButton}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 {
     using System;
@@ -36,7 +37,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
     /// <summary>
     ///     A default implementation of an <see cref="ADrawable{MenuSliderButton}" />
     /// </summary>
-    public class ColoredSliderButton : ADrawable<MenuSliderButton>
+    public class ColoredSliderBool : ADrawable<MenuSliderBool>
     {
         #region Static Fields
 
@@ -55,12 +56,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ColoredSliderButton" /> class.
+        ///     Initializes a new instance of the <see cref="ColoredSliderBool" /> class.
         /// </summary>
         /// <param name="component">
         ///     The menu component
         /// </param>
-        public ColoredSliderButton(MenuSliderButton component)
+        public ColoredSliderBool(MenuSliderBool component)
             : base(component)
         {
         }
@@ -70,25 +71,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Returns the Rectangle that defines the Slider
-        /// </summary>
-        /// <param name="component">The <see cref="MenuSliderButton" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        public Rectangle SliderBoundaries(MenuSliderButton component)
-        {
-            return new Rectangle(
-                (int)component.Position.X + Offset,
-                (int)component.Position.Y,
-                component.MenuWidth - MenuSettings.ContainerHeight - Offset,
-                MenuSettings.ContainerHeight);
-        }
-
-        /// <summary>
         ///     Returns the Rectangle that defines the on/off Button
         /// </summary>
-        /// <param name="component">The <see cref="MenuSliderButton" /></param>
+        /// <param name="component">The <see cref="MenuSliderBool" /></param>
         /// <returns>The <see cref="Rectangle" /></returns>
-        public Rectangle ButtonBoundaries(MenuSliderButton component)
+        public Rectangle ButtonBoundaries(MenuSliderBool component)
         {
             return new Rectangle(
                 (int)(component.Position.X + component.MenuWidth - MenuSettings.ContainerHeight * 1.2),
@@ -118,9 +105,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                 ColoredUtilities.GetContainerRectangle(this.Component)
                     .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
-            var percent = (this.Component.SValue - this.Component.MinValue)
-                          / (float)(this.Component.MaxValue - this.Component.MinValue);
-            var x = position.X + Offset + (percent * (this.Component.MenuWidth - Offset * 2 - MenuSettings.ContainerHeight));
+            var percent = (this.Component.SliderValue - this.Component.SliderMinValue)
+                          / (float)(this.Component.SliderMaxValue - this.Component.SliderMinValue);
+            var x = position.X + Offset
+                    + (percent * (this.Component.MenuWidth - Offset * 2 - MenuSettings.ContainerHeight));
             var maxX = position.X + Offset + ((this.Component.MenuWidth - Offset * 2 - MenuSettings.ContainerHeight));
 
             MenuManager.Instance.DrawDelayed(
@@ -138,20 +126,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                     });
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
                 (int)(position.X + MenuSettings.ContainerTextOffset),
                 (int)(position.Y + (centeredY - position.Y) / 2),
                 MenuSettings.TextColor);
 
             var measureText = MenuSettings.Font.MeasureText(
-                null, 
-                this.Component.SValue.ToString(CultureInfo.InvariantCulture), 
+                null,
+                this.Component.SliderValue.ToString(CultureInfo.InvariantCulture),
                 0);
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.SValue.ToString(CultureInfo.InvariantCulture), 
-                (int)(position.X +   this.Component.MenuWidth - measureText.Width - Offset - MenuSettings.ContainerHeight),
+                MenuManager.Instance.Sprite,
+                this.Component.SliderValue.ToString(CultureInfo.InvariantCulture),
+                (int)(position.X + this.Component.MenuWidth - measureText.Width - Offset - MenuSettings.ContainerHeight),
                 (int)(position.Y + (centeredY - position.Y) / 2),
                 MenuSettings.TextColor);
 
@@ -188,14 +176,30 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                     MenuSettings.ContainerHeight).GetCenteredText(
                         null,
                         MenuSettings.Font,
-                        this.Component.BValue ? "On" : "Off",
+                        this.Component.BoolValue ? "On" : "Off",
                         CenteredFlags.HorizontalCenter).X - 5;
 
             //Left
-            Utils.DrawCircle(centerX, this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 7, 270, Utils.CircleType.Half, true, 32, MenuSettings.TextColor);
+            Utils.DrawCircle(
+                centerX,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                7,
+                270,
+                Utils.CircleType.Half,
+                true,
+                32,
+                MenuSettings.TextColor);
 
             //Right
-            Utils.DrawCircle(centerX + 15, this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 7, 90, Utils.CircleType.Half, true, 32, MenuSettings.TextColor);
+            Utils.DrawCircle(
+                centerX + 15,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                7,
+                90,
+                Utils.CircleType.Half,
+                true,
+                32,
+                MenuSettings.TextColor);
 
             //Top
             Line.Width = 1;
@@ -222,9 +226,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             Line.End();
 
             //FullCircle
-            Utils.DrawCircleFilled(this.Component.BValue ? centerX + 14 : centerX + 1,
-                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 6, 0, Utils.CircleType.Full, true, 32,
-                this.Component.BValue ? MenuSettings.ContainerSelectedColor : MenuSettings.TextColor);
+            Utils.DrawCircleFilled(
+                this.Component.BoolValue ? centerX + 14 : centerX + 1,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                6,
+                0,
+                Utils.CircleType.Full,
+                true,
+                32,
+                this.Component.BoolValue ? MenuSettings.ContainerSelectedColor : MenuSettings.TextColor);
         }
 
         /// <summary>
@@ -248,7 +258,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 
                 if (args.Cursor.IsUnderRectangle(rect.X, rect.Y, rect.Width, rect.Height))
                 {
-                    this.Component.BValue = !this.Component.BValue;
+                    this.Component.BoolValue = !this.Component.BoolValue;
                     this.Component.FireEvent();
                 }
 
@@ -267,6 +277,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             {
                 this.Component.Interacting = false;
             }
+        }
+
+        /// <summary>
+        ///     Returns the Rectangle that defines the Slider
+        /// </summary>
+        /// <param name="component">The <see cref="MenuSliderBool" /></param>
+        /// <returns>The <see cref="Rectangle" /></returns>
+        public Rectangle SliderBoundaries(MenuSliderBool component)
+        {
+            return new Rectangle(
+                (int)component.Position.X + Offset,
+                (int)component.Position.Y,
+                component.MenuWidth - MenuSettings.ContainerHeight - Offset,
+                MenuSettings.ContainerHeight);
         }
 
         /// <summary>
@@ -291,26 +315,27 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
         /// <param name="args">
         ///     <see cref="WindowsKeys" /> data
         /// </param>
-        private void CalculateNewValue(MenuSliderButton component, WindowsKeys args)
+        private void CalculateNewValue(MenuSliderBool component, WindowsKeys args)
         {
             var newValue =
                 (int)
                 Math.Round(
-                    component.MinValue
-                    + ((args.Cursor.X - component.Position.X - Offset) * (component.MaxValue - component.MinValue))
+                    component.SliderMinValue
+                    + ((args.Cursor.X - component.Position.X - Offset)
+                       * (component.SliderMaxValue - component.SliderMinValue))
                     / (component.MenuWidth - Offset * 2 - MenuSettings.ContainerHeight));
-            if (newValue < component.MinValue)
+            if (newValue < component.SliderMinValue)
             {
-                newValue = component.MinValue;
+                newValue = component.SliderMinValue;
             }
-            else if (newValue > component.MaxValue)
+            else if (newValue > component.SliderMaxValue)
             {
-                newValue = component.MaxValue;
+                newValue = component.SliderMaxValue;
             }
 
-            if (newValue != component.Value)
+            if (newValue != component.SliderValue)
             {
-                component.SValue = newValue;
+                component.SliderValue = newValue;
                 component.FireEvent();
             }
         }

@@ -30,8 +30,20 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
     {
         #region Public Properties
 
+        /// <summary>
+        ///     Gets the default weight.
+        /// </summary>
+        /// <value>
+        ///     The default weight.
+        /// </value>
         public int DefaultWeight => 0;
 
+        /// <summary>
+        ///     Gets the display name.
+        /// </summary>
+        /// <value>
+        ///     The display name.
+        /// </value>
         public string DisplayName => "Focus Me";
 
         /// <summary>
@@ -42,14 +54,31 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
         /// </value>
         public int FadeTime { get; set; } = 10000;
 
+        /// <summary>
+        ///     Gets a value indicating whether this <see cref="IWeightItem" /> is inverted.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if inverted; otherwise, <c>false</c>.
+        /// </value>
         public bool Inverted => false;
 
+        /// <summary>
+        ///     Gets the name.
+        /// </summary>
+        /// <value>
+        ///     The name.
+        /// </value>
         public string Name => "focus-me";
 
         #endregion
 
         #region Public Methods and Operators
 
+        /// <summary>
+        ///     Gets the value.
+        /// </summary>
+        /// <param name="hero">The hero.</param>
+        /// <returns></returns>
         public float GetValue(Obj_AI_Hero hero)
         {
             var entry = Aggro.GetSenderTargetItem(hero, ObjectManager.Player);

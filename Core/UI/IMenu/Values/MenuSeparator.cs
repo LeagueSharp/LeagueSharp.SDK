@@ -17,8 +17,8 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Values
 {
-    using Core.Utils;
-    using Skins;
+    using LeagueSharp.SDK.Core.UI.IMenu.Skins;
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     A menu separator.
