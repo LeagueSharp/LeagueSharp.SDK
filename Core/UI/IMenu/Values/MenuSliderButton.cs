@@ -80,10 +80,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     String used in saving settings
         /// </param>
         public MenuSliderButton(
-            string name, 
-            string displayName, 
-            int value = 0, 
-            int minValue = 0, 
+            string name,
+            string displayName,
+            int value = 0,
+            int minValue = 0,
             int maxValue = 100,
             bool bValue = false,
             string uniqueString = "")
@@ -92,6 +92,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
             this.MinValue = minValue;
             this.MaxValue = maxValue;
             this.SValue = value;
+            this.BValue = bValue;
             this.original = value;
             this.bOriginal = bValue;
         }
