@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
+namespace LeagueSharp.SDK.Modes.Weights
 {
     #region
 
@@ -30,26 +30,28 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
     {
         #region Public Properties
 
+        /// <inheritdoc />
         public int DefaultWeight => 0;
 
+        /// <inheritdoc />
         public string DisplayName => "Focus Me";
 
         /// <summary>
         ///     Gets or sets the fade time.
         /// </summary>
-        /// <value>
-        ///     The fade time.
-        /// </value>
         public int FadeTime { get; set; } = 10000;
 
+        /// <inheritdoc />
         public bool Inverted => false;
 
+        /// <inheritdoc />
         public string Name => "focus-me";
 
         #endregion
 
         #region Public Methods and Operators
 
+        /// <inheritdoc />
         public float GetValue(Obj_AI_Hero hero)
         {
             var entry = Aggro.GetSenderTargetItem(hero, ObjectManager.Player);

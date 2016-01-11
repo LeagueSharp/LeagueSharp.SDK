@@ -19,19 +19,14 @@
 //   A custom implementation of <see cref="ADrawable{MenuTexture}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
 {
     using System.Drawing;
 
     using LeagueSharp.SDK.Properties;
-
-    using SharpDX;
     using SharpDX.Direct3D9;
 
     internal enum TechTexture

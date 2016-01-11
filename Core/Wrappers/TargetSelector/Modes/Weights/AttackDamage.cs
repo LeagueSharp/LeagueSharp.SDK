@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
+namespace LeagueSharp.SDK.Modes.Weights
 {
     #region
 
@@ -47,12 +47,16 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
 
         #region Public Properties
 
+        /// <inheritdoc />
         public int DefaultWeight => 15;
 
+        /// <inheritdoc />
         public string DisplayName => "Attack Damage";
 
+        /// <inheritdoc />
         public bool Inverted => false;
 
+        /// <inheritdoc />
         public string Name => "attack-damage";
 
         /// <summary>
@@ -67,6 +71,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
 
         #region Public Methods and Operators
 
+        /// <inheritdoc />
         public float GetValue(Obj_AI_Hero hero)
         {
             if (Variables.TickCount - this.lastUpdate > this.UpdateInterval)
@@ -79,7 +84,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
             var ad = hero.FlatPhysicalDamageMod / 100 * (hero.Crit * 100)
                      * (this.infinity.ContainsKey(hero.NetworkId) && this.infinity[hero.NetworkId] ? 2.5f : 2);
             return ad
-                   * (100 / (100 + this.averageArmor * hero.PercentArmorPenetrationMod - hero.FlatArmorPenetrationMod))
+                   * (100 / (100 + (this.averageArmor * hero.PercentArmorPenetrationMod) - hero.FlatArmorPenetrationMod))
                    * (1f / ObjectManager.Player.AttackDelay);
         }
 

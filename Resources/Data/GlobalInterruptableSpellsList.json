@@ -1,0 +1,18 @@
+[
+  {
+    "MovementInterrupts": true,
+    "Name": "OdinChannel",
+    "Slot": 62
+  },
+  {
+    "MovementInterrupts": true,
+    "Name": "OdinChannelBomb",
+    "Slot": 62
+  },
+  {
+    "DangerLevel": 1,
+    "MovementInterrupts": true,
+    "Name": "summonerteleport",
+    "Slot": -1
+  }
+]

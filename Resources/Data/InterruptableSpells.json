@@ -1,0 +1,169 @@
+{
+  "Caitlyn": [
+    {
+      "DangerLevel": 2,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "FiddleSticks": [
+    {
+      "DangerLevel": 1,
+      "MovementInterrupts": true,
+      "Slot": 1
+    },
+    {
+      "DangerLevel": 2,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "Galio": [
+    {
+      "DangerLevel": 2,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "Janna": [
+    {
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "Karthus": [
+    {
+      "DangerLevel": 2,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "Katarina": [
+    {
+      "DangerLevel": 2,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "Lucian": [
+    {
+      "DangerLevel": 2,
+      "Slot": 3
+    }
+  ],
+  "Malzahar": [
+    {
+      "DangerLevel": 2,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "MasterYi": [
+    {
+      "MovementInterrupts": true,
+      "Slot": 1
+    }
+  ],
+  "MissFortune": [
+    {
+      "DangerLevel": 2,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "Nunu": [
+    {
+      "DangerLevel": 2,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "Pantheon": [
+    {
+      "MovementInterrupts": true,
+      "Slot": 2
+    },
+    {
+      "DangerLevel": 2,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "Quinn": [
+    {
+      "DangerLevel": 2,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "RekSai": [
+    {
+      "DangerLevel": 2,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "Sion": [
+    {
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "Shen": [
+    {
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "TahmKench": [
+    {
+      "DangerLevel": 1,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "TwistedFate": [
+    {
+      "DangerLevel": 1,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "Urgot": [
+    {
+      "DangerLevel": 2,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "Velkoz": [
+    {
+      "DangerLevel": 2,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "Warwick": [
+    {
+      "DangerLevel": 2,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "Xerath": [
+    {
+      "DangerLevel": 2,
+      "MovementInterrupts": true,
+      "Slot": 3
+    }
+  ],
+  "Varus": [
+    {}
+  ],
+  "Zilean": [
+    {
+      "MovementInterrupts": true,
+      "Slot": 52
+    }
+  ]
+}

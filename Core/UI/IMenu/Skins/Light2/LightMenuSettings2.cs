@@ -24,11 +24,6 @@
 
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
 {
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
-
-    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins.Light;
 
     using SharpDX;

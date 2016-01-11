@@ -15,34 +15,26 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
+namespace LeagueSharp.SDK
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Events;
-    using LeagueSharp.SDK.Core.Extensions;
+    
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Core.Wrappers.Spells;
 
     using SharpDX;
 
-    #endregion
-
     /// <summary>
-    ///     The <c>TargetSelector</c> system.
+    ///     The TargetSelector system.
     /// </summary>
     public sealed class TargetSelector
     {
         #region Fields
 
         /// <summary>
-        ///     The menu
+        ///     The menu.
         /// </summary>
         private readonly Menu menu = new Menu("targetselector", "TargetSelector");
 
@@ -53,17 +45,19 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         /// <summary>
         ///     Initializes a new instance of the <see cref="TargetSelector" /> class.
         /// </summary>
-        /// <param name="menu">The menu.</param>
+        /// <param name="menu">
+        ///     The menu.
+        /// </param>
         public TargetSelector(Menu menu)
         {
-            Load.OnLoad += delegate
+            Events.OnLoad += (sender, args) =>
                 {
                     menu.Add(this.menu);
 
-                    this.Selected = new Selected(this.menu);
-                    this.Humanizer = new Humanizer(this.menu);
-                    this.Mode = new Mode(this.menu);
-                    this.Drawing = new Drawing(this.menu, this.Selected, this.Mode);
+                    this.Selected = new TargetSelectorSelected(this.menu);
+                    this.Humanizer = new TargetSelectorHumanizer(this.menu);
+                    this.Mode = new TargetSelectorMode(this.menu);
+                    this.Drawing = new TargetSelectorDrawing(this.menu, this.Selected, this.Mode);
 
                     // Keep submenus at top
                     this.menu.Components =
@@ -80,26 +74,17 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         /// <summary>
         ///     Gets the humanizer instance.
         /// </summary>
-        /// <value>
-        ///     The humanizer instance.
-        /// </value>
-        public Humanizer Humanizer { get; private set; }
+        public TargetSelectorHumanizer Humanizer { get; private set; }
 
         /// <summary>
         ///     Gets the mode instance.
         /// </summary>
-        /// <value>
-        ///     The mode instance.
-        /// </value>
-        public Mode Mode { get; private set; }
+        public TargetSelectorMode Mode { get; private set; }
 
         /// <summary>
         ///     Gets the selected instance.
         /// </summary>
-        /// <value>
-        ///     The selected instance.
-        /// </value>
-        public Selected Selected { get; private set; }
+        public TargetSelectorSelected Selected { get; private set; }
 
         #endregion
 
@@ -108,10 +93,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         /// <summary>
         ///     Gets the drawing instance.
         /// </summary>
-        /// <value>
-        ///     The drawing instance.
-        /// </value>
-        internal Drawing Drawing { get; private set; }
+        internal TargetSelectorDrawing Drawing { get; private set; }
 
         #endregion
 
@@ -121,7 +103,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         ///     Gets the Selected target.
         /// </summary>
         /// <returns>
-        ///     The Selected target.
+        ///     The <see cref="Obj_AI_Hero" />.
         /// </returns>
         public Obj_AI_Hero GetSelectedTarget()
         {
@@ -131,10 +113,18 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         /// <summary>
         ///     Gets the target.
         /// </summary>
-        /// <param name="spell">The spell.</param>
-        /// <param name="ignoreShields">if set to <c>true</c> [ignore shields].</param>
-        /// <param name="ignoreChampions">The ignore champions.</param>
-        /// <returns></returns>
+        /// <param name="spell">
+        ///     The spell.
+        /// </param>
+        /// <param name="ignoreShields">
+        ///     Indicates whether to ignore shields.
+        /// </param>
+        /// <param name="ignoreChampions">
+        ///     Indicates whether to ignore champions.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Obj_AI_Hero" />.
+        /// </returns>
         public Obj_AI_Hero GetTarget(
             Spell spell,
             bool ignoreShields = true,
@@ -153,12 +143,24 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         /// <summary>
         ///     Gets the target.
         /// </summary>
-        /// <param name="range">The range.</param>
-        /// <param name="damageType">Type of the damage.</param>
-        /// <param name="ignoreShields">if set to <c>true</c> [ignore shields].</param>
-        /// <param name="from">From.</param>
-        /// <param name="ignoreChampions">The ignore champions.</param>
-        /// <returns></returns>
+        /// <param name="range">
+        ///     The range.
+        /// </param>
+        /// <param name="damageType">
+        ///     Type of the damage.
+        /// </param>
+        /// <param name="ignoreShields">
+        ///     Indicates whether to ignore shields.
+        /// </param>
+        /// <param name="from">
+        ///     The from location.
+        /// </param>
+        /// <param name="ignoreChampions">
+        ///     Indicates whether to ignore champions.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Obj_AI_Hero" />.
+        /// </returns>
         public Obj_AI_Hero GetTarget(
             float range,
             DamageType damageType = DamageType.True,
@@ -171,12 +173,20 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         }
 
         /// <summary>
-        ///     Gets the target no collision.
+        ///     Gets the target without collision checking.
         /// </summary>
-        /// <param name="spell">The spell.</param>
-        /// <param name="ignoreShields">if set to <c>true</c> [ignore shields].</param>
-        /// <param name="ignoreChampions">The ignore champions.</param>
-        /// <returns></returns>
+        /// <param name="spell">
+        ///     The spell.
+        /// </param>
+        /// <param name="ignoreShields">
+        ///     Indicates whether to ignore shields.
+        /// </param>
+        /// <param name="ignoreChampions">
+        ///     Indicates whether to ignore champions.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Obj_AI_Hero" />.
+        /// </returns>
         public Obj_AI_Hero GetTargetNoCollision(
             Spell spell,
             bool ignoreShields = true,
@@ -190,12 +200,24 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         /// <summary>
         ///     Gets the targets.
         /// </summary>
-        /// <param name="range">The range.</param>
-        /// <param name="damageType">Type of the damage.</param>
-        /// <param name="ignoreShields">if set to <c>true</c> [ignore shields].</param>
-        /// <param name="from">From.</param>
-        /// <param name="ignoreChampions">The ignore champions.</param>
-        /// <returns></returns>
+        /// <param name="range">
+        ///     The range.
+        /// </param>
+        /// <param name="damageType">
+        ///     Type of the damage.
+        /// </param>
+        /// <param name="ignoreShields">
+        ///     Indicates whether to ignore shields.
+        /// </param>
+        /// <param name="from">
+        ///     The from location.
+        /// </param>
+        /// <param name="ignoreChampions">
+        ///     Indicates whether to ignore champions.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="Obj_AI_Hero" />.
+        /// </returns>
         public List<Obj_AI_Hero> GetTargets(
             float range,
             DamageType damageType = DamageType.True,
@@ -205,7 +227,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         {
             if (this.Selected.Focus && this.Selected.Force)
             {
-                if (this.IsValidTarget(this.Selected.Target, float.MaxValue, damageType, ignoreShields, from))
+                if (IsValidTarget(this.Selected.Target, float.MaxValue, damageType, ignoreShields, from))
                 {
                     return new List<Obj_AI_Hero> { this.Selected.Target };
                 }
@@ -214,7 +236,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
             var targets =
                 this.Humanizer.FilterTargets(GameObjects.EnemyHeroes.ToList())
                     .Where(h => ignoreChampions == null || ignoreChampions.All(i => !i.Compare(h)))
-                    .Where(h => this.IsValidTarget(h, range, damageType, ignoreShields, from))
+                    .Where(h => IsValidTarget(h, range, damageType, ignoreShields, from))
                     .ToList();
 
             targets = this.Mode.OrderChampions(targets);
@@ -245,13 +267,23 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector
         /// <summary>
         ///     Determines whether [is valid target] [the specified hero].
         /// </summary>
-        /// <param name="hero">The hero.</param>
-        /// <param name="range">The range.</param>
-        /// <param name="damageType">Type of the damage.</param>
-        /// <param name="ignoreShields">if set to <c>true</c> [ignore shields].</param>
-        /// <param name="from">From.</param>
-        /// <returns></returns>
-        private bool IsValidTarget(
+        /// <param name="hero">
+        ///     The hero.
+        /// </param>
+        /// <param name="range">
+        ///     The range.
+        /// </param>
+        /// <param name="damageType">
+        ///     Type of the damage.
+        /// </param>
+        /// <param name="ignoreShields">
+        ///     Indicates whether to ignore shields.
+        /// </param>
+        /// <param name="from">The from location.</param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
+        private static bool IsValidTarget(
             Obj_AI_Hero hero,
             float range,
             DamageType damageType,

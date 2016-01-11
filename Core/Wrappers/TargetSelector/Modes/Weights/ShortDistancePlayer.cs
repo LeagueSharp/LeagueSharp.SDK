@@ -15,10 +15,8 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
+namespace LeagueSharp.SDK.Modes.Weights
 {
-    using LeagueSharp.SDK.Core.Extensions;
-
     /// <summary>
     ///     Short Distance to Player
     /// </summary>
@@ -26,18 +24,23 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes.Weights
     {
         #region Public Properties
 
+        /// <inheritdoc />
         public int DefaultWeight => 5;
 
+        /// <inheritdoc />
         public string DisplayName => "Short Distance to Player";
 
+        /// <inheritdoc />
         public bool Inverted => true;
 
+        /// <inheritdoc />
         public string Name => "short-distance-player";
 
         #endregion
 
         #region Public Methods and Operators
 
+        /// <inheritdoc />
         public float GetValue(Obj_AI_Hero hero) => hero.Distance(GameObjects.Player);
 
         #endregion

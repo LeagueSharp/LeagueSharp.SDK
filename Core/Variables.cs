@@ -15,23 +15,21 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core
+namespace LeagueSharp.SDK
 {
     using System;
 
     using LeagueSharp.SDK.Core.UI.IMenu;
-    using LeagueSharp.SDK.Core.Wrappers.Orbwalking;
-    using LeagueSharp.SDK.Core.Wrappers.TargetSelector;
 
     /// <summary>
-    ///     Class that contains helpful variables.
+    ///     Variables of the LeagueSharp development kit.
     /// </summary>
     public class Variables
     {
         #region Static Fields
 
         /// <summary>
-        ///     The league version.
+        ///     The game version.
         /// </summary>
         public static readonly Version GameVersion = new Version(Game.Version);
 
@@ -45,23 +43,17 @@ namespace LeagueSharp.SDK.Core
         #region Public Properties
 
         /// <summary>
-        ///     Gets or sets the Orbwalker instance.
+        ///     Gets the Orbwalker instance.
         /// </summary>
-        /// <value>
-        ///     The orbwalker.
-        /// </value>
         public static Orbwalker Orbwalker { get; internal set; }
 
         /// <summary>
         ///     Gets the TargetSelector instance.
         /// </summary>
-        /// <value>
-        ///     The targetselector.
-        /// </value>
         public static TargetSelector TargetSelector { get; internal set; }
 
         /// <summary>
-        ///     Gets the Safe TickCount.
+        ///     Gets the TickCount based on the game runtime clock.
         /// </summary>
         public static int TickCount => (int)(Game.ClockTime * 1000);
 
@@ -72,9 +64,6 @@ namespace LeagueSharp.SDK.Core
         /// <summary>
         ///     Gets or sets the LeagueSharp menu.
         /// </summary>
-        /// <value>
-        ///     The LeagueSharp menu.
-        /// </value>
         internal static Menu LeagueSharpMenu { get; set; }
 
         #endregion

@@ -15,10 +15,8 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
+namespace LeagueSharp.SDK.Modes
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -31,61 +29,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
 
     using Menu = LeagueSharp.SDK.Core.UI.IMenu.Menu;
 
-    #endregion
-
-    /// <summary>
-    ///     Interface for weight item
-    /// </summary>
-    public interface IWeightItem
-    {
-        #region Public Properties
-
-        /// <summary>
-        ///     Gets the default weight.
-        /// </summary>
-        /// <value>
-        ///     The default weight.
-        /// </value>
-        int DefaultWeight { get; }
-
-        /// <summary>
-        ///     Gets the display name.
-        /// </summary>
-        /// <value>
-        ///     The display name.
-        /// </value>
-        string DisplayName { get; }
-
-        /// <summary>
-        ///     Gets a value indicating whether this <see cref="IWeightItem" /> is inverted.
-        /// </summary>
-        /// <value>
-        ///     <c>true</c> if inverted; otherwise, <c>false</c>.
-        /// </value>
-        bool Inverted { get; }
-
-        /// <summary>
-        ///     Gets the name.
-        /// </summary>
-        /// <value>
-        ///     The name.
-        /// </value>
-        string Name { get; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        ///     Gets the value.
-        /// </summary>
-        /// <param name="hero">The hero.</param>
-        /// <returns></returns>
-        float GetValue(Obj_AI_Hero hero);
-
-        #endregion
-    }
-
     /// <summary>
     ///     The weight Mode.
     /// </summary>
@@ -93,14 +36,29 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
     {
         #region Constants
 
+        /// <summary>
+        ///     The default percentage const.
+        /// </summary>
         private const int DefaultPercentage = 100;
 
+        /// <summary>
+        ///     The max percentage const.
+        /// </summary>
         private const int MaxPercentage = 200;
 
+        /// <summary>
+        ///     The max weight const.
+        /// </summary>
         private const int MaxWeight = 20;
 
+        /// <summary>
+        ///     THe min percentage const.
+        /// </summary>
         private const int MinPercentage = 0;
 
+        /// <summary>
+        ///     The min weight const.
+        /// </summary>
         private const int MinWeight = 0;
 
         #endregion
@@ -108,12 +66,18 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         #region Fields
 
         /// <summary>
-        ///     The weight items
+        ///     The weight items.
         /// </summary>
         private readonly List<WeightItemWrapper> pItems = new List<WeightItemWrapper>();
 
+        /// <summary>
+        ///     The menu.
+        /// </summary>
         private Menu menu;
 
+        /// <summary>
+        ///     The weights menu.
+        /// </summary>
         private Menu weightsMenu;
 
         #endregion
@@ -131,13 +95,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
                     .Where(t => t.IsClass && !t.IsAbstract && typeof(IWeightItem).IsAssignableFrom(t))
                     .ToList();
 
-            foreach (var weight in weights)
+            foreach (var instance in weights.Select(DynamicInitializer.NewInstance).OfType<IWeightItem>())
             {
-                var instance = DynamicInitializer.NewInstance(weight) as IWeightItem;
-                if (instance != null)
-                {
-                    this.pItems.Add(new WeightItemWrapper(instance));
-                }
+                this.pItems.Add(new WeightItemWrapper(instance));
             }
 
             this.pItems = this.pItems.OrderBy(p => p.DisplayName).ToList();
@@ -147,29 +107,22 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
 
         #region Public Properties
 
-        /// <summary>
-        ///     The display name
-        /// </summary>
+        /// <inheritdoc />
         public string DisplayName => "Weight";
 
         /// <summary>
-        ///     The items
+        ///     Gets the items.
         /// </summary>
         public ReadOnlyCollection<WeightItemWrapper> Items => this.pItems.AsReadOnly();
 
-        /// <summary>
-        ///     The name
-        /// </summary>
+        /// <inheritdoc />
         public string Name => "weight";
 
         #endregion
 
         #region Public Methods and Operators
 
-        /// <summary>
-        ///     Adds to menu.
-        /// </summary>
-        /// <param name="tsMenu">The menu.</param>
+        /// <inheritdoc />
         public void AddToMenu(Menu tsMenu)
         {
             this.menu = tsMenu;
@@ -187,6 +140,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
                         MinPercentage,
                         MaxPercentage));
             }
+
             this.weightsMenu.Add(heroPercentMenu);
 
             this.weightsMenu.Add(
@@ -211,12 +165,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
                     var slider = sender as MenuSlider;
                     if (slider != null)
                     {
-                        foreach (var weight in this.pItems)
+                        foreach (var weight in this.pItems.Where(weight => slider.Name.Equals(weight.Name)))
                         {
-                            if (slider.Name.Equals(weight.Name))
-                            {
-                                weight.Weight = slider.Value;
-                            }
+                            weight.Weight = slider.Value;
                         }
                     }
                 };
@@ -237,10 +188,16 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         /// <summary>
         ///     Calculates the weight.
         /// </summary>
-        /// <param name="item">The item.</param>
-        /// <param name="hero">The hero.</param>
-        /// <param name="simulation">if set to <c>true</c> [simulation].</param>
-        /// <returns></returns>
+        /// <param name="item">
+        ///     The item.
+        /// </param>
+        /// <param name="hero">
+        ///     The hero.
+        /// </param>
+        /// <param name="simulation">Indicates whether to enable simulation.</param>
+        /// <returns>
+        ///     The <see cref="float" />.
+        /// </returns>
         public float Calculate(WeightItemWrapper item, Obj_AI_Hero hero, bool simulation = false)
         {
             var minValue = simulation ? item.SimulationMinValue : item.MinValue;
@@ -249,9 +206,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
             {
                 return MinWeight;
             }
+
             var minWeight = minValue > 0 ? item.Weight / (maxValue / minValue) : MinWeight;
             var weight = item.Inverted
-                             ? item.Weight - item.Weight * item.GetValue(hero) / maxValue + minWeight
+                             ? item.Weight - (item.Weight * item.GetValue(hero) / maxValue) + minWeight
                              : item.Weight * item.GetValue(hero) / maxValue;
             return float.IsNaN(weight) || float.IsInfinity(weight)
                        ? MinWeight
@@ -261,7 +219,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         /// <summary>
         ///     Deregisters the specified weight.
         /// </summary>
-        /// <param name="weight">The weight.</param>
+        /// <param name="weight">
+        ///     The weight.
+        /// </param>
         public void Deregister(IWeightItem weight)
         {
             if (this.pItems.Select(p => p.Item).Contains(weight))
@@ -274,8 +234,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         /// <summary>
         ///     Gets the hero percent.
         /// </summary>
-        /// <param name="hero">The hero.</param>
-        /// <returns></returns>
+        /// <param name="hero">
+        ///     The hero.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="int" />.
+        /// </returns>
         public int GetHeroPercent(Obj_AI_Hero hero)
         {
             var item = this.weightsMenu["heroPercentage"][hero.ChampionName];
@@ -283,14 +247,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
             {
                 return item.GetValue<MenuSlider>().Value;
             }
+
             return DefaultPercentage;
         }
 
-        /// <summary>
-        ///     Orders the champions.
-        /// </summary>
-        /// <param name="heroes">The heroes.</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public List<Obj_AI_Hero> OrderChampions(List<Obj_AI_Hero> heroes)
         {
             foreach (var item in this.pItems.Where(w => w.Weight > 0))
@@ -311,8 +272,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         /// <summary>
         ///     Overwrites the specified old weight.
         /// </summary>
-        /// <param name="oldWeight">The old weight.</param>
-        /// <param name="newWeight">The new weight.</param>
+        /// <param name="oldWeight">
+        ///     The old weight.
+        /// </param>
+        /// <param name="newWeight">
+        ///     The new weight.
+        /// </param>
         public void Overwrite(IWeightItem oldWeight, IWeightItem newWeight)
         {
             var index = this.Items.Select(p => p.Item).ToList().IndexOf(oldWeight);
@@ -329,7 +294,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         /// <summary>
         ///     Registers the specified weight.
         /// </summary>
-        /// <param name="weight">The weight.</param>
+        /// <param name="weight">
+        ///     The weight.
+        /// </param>
         public void Register(IWeightItem weight)
         {
             if (!this.Items.Any(m => m.Name.Equals(weight.Name)) && !string.IsNullOrEmpty(weight.DisplayName))
@@ -348,8 +315,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         /// <summary>
         ///     Sets the hero percent.
         /// </summary>
-        /// <param name="hero">The hero.</param>
-        /// <param name="percent">The percent.</param>
+        /// <param name="hero">
+        ///     The hero.
+        /// </param>
+        /// <param name="percent">
+        ///     The percent.
+        /// </param>
         public void SetHeroPercent(Obj_AI_Hero hero, int percent)
         {
             var item = this.weightsMenu["heroPercentage"][hero.ChampionName];
@@ -362,8 +333,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         /// <summary>
         ///     Sets the weight.
         /// </summary>
-        /// <param name="weightItem">The weight item.</param>
-        /// <param name="weight">The weight.</param>
+        /// <param name="weightItem">
+        ///     The weight item.
+        /// </param>
+        /// <param name="weight">
+        ///     The weight.
+        /// </param>
         public void SetMenuWeight(WeightItemWrapper weightItem, int weight)
         {
             var item = this.weightsMenu[weightItem.Name];
@@ -377,9 +352,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         /// <summary>
         ///     Updates the maximum minimum value.
         /// </summary>
-        /// <param name="item">The item.</param>
-        /// <param name="heroes">The heroes.</param>
-        /// <param name="simulation">if set to <c>true</c> [simulation].</param>
+        /// <param name="item">
+        ///     The item.
+        /// </param>
+        /// <param name="heroes">
+        ///     The heroes.
+        /// </param>
+        /// <param name="simulation">
+        ///     Indicates whether to use simluation.
+        /// </param>
         public void UpdateMaxMinValue(WeightItemWrapper item, List<Obj_AI_Hero> heroes, bool simulation = false)
         {
             var min = float.MaxValue;
@@ -391,11 +372,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
                 {
                     min = value;
                 }
+
                 if (value > max)
                 {
                     max = value;
                 }
             }
+
             if (!simulation)
             {
                 item.MinValue = Math.Min(max, min);
@@ -464,111 +447,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
             {
                 this.SetMenuWeight(item, item.DefaultWeight);
             }
+
             Game.PrintChat("Weights: Reseted to default.");
         }
-
-        #endregion
-    }
-
-    /// <summary>
-    ///     Wrapper for IWeightItem
-    /// </summary>
-    public class WeightItemWrapper
-    {
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="WeightItemWrapper" /> class.
-        /// </summary>
-        /// <param name="item">The item.</param>
-        public WeightItemWrapper(IWeightItem item)
-        {
-            this.Item = item;
-            this.Weight = item.DefaultWeight;
-        }
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        ///     The default weight
-        /// </summary>
-        public int DefaultWeight => this.Item.DefaultWeight;
-
-        /// <summary>
-        ///     The display name
-        /// </summary>
-        public string DisplayName => this.Item.DisplayName;
-
-        /// <summary>
-        ///     The inverted
-        /// </summary>
-        public bool Inverted => this.Item.Inverted;
-
-        /// <summary>
-        ///     Gets the item.
-        /// </summary>
-        /// <value>
-        ///     The item.
-        /// </value>
-        public IWeightItem Item { get; internal set; }
-
-        /// <summary>
-        ///     Gets the maximum value.
-        /// </summary>
-        /// <value>
-        ///     The maximum value.
-        /// </value>
-        public float MaxValue { get; internal set; }
-
-        /// <summary>
-        ///     Gets the minimum value.
-        /// </summary>
-        /// <value>
-        ///     The minimum value.
-        /// </value>
-        public float MinValue { get; internal set; }
-
-        /// <summary>
-        ///     The name
-        /// </summary>
-        public string Name => this.Item.Name;
-
-        /// <summary>
-        ///     Gets the simulation maximum value.
-        /// </summary>
-        /// <value>
-        ///     The simulation maximum value.
-        /// </value>
-        public float SimulationMaxValue { get; internal set; }
-
-        /// <summary>
-        ///     Gets the simulation minimum value.
-        /// </summary>
-        /// <value>
-        ///     The simulation minimum value.
-        /// </value>
-        public float SimulationMinValue { get; internal set; }
-
-        /// <summary>
-        ///     Gets the weight.
-        /// </summary>
-        /// <value>
-        ///     The weight.
-        /// </value>
-        public int Weight { get; internal set; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        ///     Gets the value.
-        /// </summary>
-        /// <param name="hero">The hero.</param>
-        /// <returns></returns>
-        public float GetValue(Obj_AI_Hero hero) => Math.Max(0, this.Item.GetValue(hero));
 
         #endregion
     }

@@ -23,10 +23,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System.Security.Permissions;
     using System.Text;
 
-    using Enumerations;
-    using Events;
-    using Utils;
-    using Properties;
+    using LeagueSharp.SDK;
+    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Properties;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -51,7 +50,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         /// <summary>
         ///     Gets the Damage Collection.
         /// </summary>
-        private static IDictionary<string, ChampionDamage> DamageCollection { get; } =
+        internal static IDictionary<string, ChampionDamage> DamageCollection { get; } =
             new Dictionary<string, ChampionDamage>();
 
         #endregion
@@ -66,7 +65,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         /// </param>
         internal static void Initialize(Version gameVersion)
         {
-            Load.OnLoad += (sender, args) =>
+            Events.OnLoad += (sender, args) =>
                 {
                     OnLoad(gameVersion);
                     CreatePassives();
@@ -189,12 +188,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         spellBonus.ScalingBuff);
                 dmg = buffCount != 0 ? dmg * (buffCount + spellBonus.ScalingBuffOffset) : 0d;
             }
+
             if (dmg > 0)
             {
                 if (spellBonus.MinDamage?.Count > 0)
                 {
                     dmg = Math.Max(dmg, spellBonus.MinDamage[Math.Min(index, spellBonus.MinDamage.Count - 1)]);
                 }
+
                 if (target is Obj_AI_Minion && spellBonus.MaxDamageOnMinion?.Count > 0)
                 {
                     dmg = Math.Min(

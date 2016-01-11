@@ -15,22 +15,20 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
+namespace LeagueSharp.SDK.Modes
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
-
-    #endregion
+    using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
     ///     The priority Mode.
     /// </summary>
+    [ResourceImport]
     public class Priority : ITargetSelectorMode
     {
         #region Constants
@@ -47,106 +45,38 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
 
         #endregion
 
-        #region Fields
+        #region Static Fields
 
         /// <summary>
         ///     The priority categories
         /// </summary>
-        private readonly List<PriorityCategory> priorityCategories = new List<PriorityCategory>();
+        [ResourceImport("Data.Priority.json")]
+        public static List<PriorityCategory> PriorityCategories = new List<PriorityCategory>();
+
+        #endregion
+
+        #region Fields
 
         /// <summary>
-        ///     The menu
+        ///     The menu.
         /// </summary>
         private Menu menu;
 
         #endregion
 
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="Priority" /> class.
-        /// </summary>
-        public Priority()
-        {
-            this.priorityCategories.AddRange(
-                new List<PriorityCategory>
-                    {
-                        new PriorityCategory
-                            {
-                                Champions =
-                                    new HashSet<string>
-                                        {
-                                            "Ahri", "Anivia", "Annie", "Ashe", "Azir", "Brand", "Caitlyn", "Cassiopeia",
-                                            "Corki", "Draven", "Ezreal", "Graves", "Jinx", "Kalista", "Karma", "Karthus",
-                                            "Katarina", "Kennen", "KogMaw", "Leblanc", "Kindred", "Lucian", "Lux",
-                                            "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra",
-                                            "Talon", "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne",
-                                            "Veigar", "Velkoz", "Viktor", "Xerath", "Zed", "Ziggs", "Soraka"
-                                        },
-                                Value = 4
-                            },
-                        new PriorityCategory
-                            {
-                                Champions =
-                                    new HashSet<string>
-                                        {
-                                            "Akali", "Diana", "Ekko", "Fiddlesticks", "Fiora", "Fizz", "Heimerdinger",
-                                            "Illaoi", "Jayce", "Kassadin", "Kayle", "KhaZix", "Kindred", "Lissandra",
-                                            "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo", "Zilean"
-                                        },
-                                Value = 3
-                            },
-                        new PriorityCategory
-                            {
-                                Champions =
-                                    new HashSet<string>
-                                        {
-                                            "Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas",
-                                            "Irelia", "Jax", "LeeSin", "Maokai", "Morgana", "Nocturne", "Pantheon",
-                                            "Poppy", "Rengar", "Rumble", "Ryze", "Swain", "Trundle", "Tryndamere", "Udyr",
-                                            "Urgot", "Vi", "XinZhao", "RekSai"
-                                        },
-                                Value = 2
-                            },
-                        new PriorityCategory
-                            {
-                                Champions =
-                                    new HashSet<string>
-                                        {
-                                            "Alistar", "Amumu", "Bard", "Blitzcrank", "Braum", "ChoGath", "DrMundo",
-                                            "Garen", "Gnar", "Hecarim", "Janna", "JarvanIV", "Leona", "Lulu", "Malphite",
-                                            "Nami", "Nasus", "Nautilus", "Nunu", "Olaf", "Rammus", "Renekton", "Sejuani",
-                                            "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona", "TahmKench", "Taric",
-                                            "TahmKench", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac",
-                                            "Zyra"
-                                        },
-                                Value = 1
-                            }
-                    });
-        }
-
-        #endregion
-
         #region Public Properties
 
-        /// <summary>
-        ///     The display name
-        /// </summary>
+        /// <inheritdoc />
         public string DisplayName => "Priorities";
 
-        /// <summary>
-        ///     The name
-        /// </summary>
+        /// <inheritdoc />
         public string Name => "priorities";
 
         #endregion
 
         #region Public Methods and Operators
 
-        /// <summary>
-        ///     Adds to menu.
-        /// </summary>
-        /// <param name="tsMenu">The ts menu.</param>
+        /// <inheritdoc />
         public void AddToMenu(Menu tsMenu)
         {
             this.menu = tsMenu;
@@ -190,29 +120,32 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         /// <summary>
         ///     Gets the default priority.
         /// </summary>
-        /// <param name="hero">The hero.</param>
-        /// <returns></returns>
+        /// <param name="hero">
+        ///     The hero.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="int" />.
+        /// </returns>
         public int GetDefaultPriority(Obj_AI_Hero hero)
         {
-            return this.priorityCategories.FirstOrDefault(i => i.Champions.Contains(hero.ChampionName))?.Value
-                   ?? MinPriority;
+            return PriorityCategories.FirstOrDefault(i => i.Champions.Contains(hero.ChampionName))?.Value ?? MinPriority;
         }
 
         /// <summary>
         ///     Gets the priority.
         /// </summary>
-        /// <param name="hero">The hero.</param>
-        /// <returns></returns>
+        /// <param name="hero">
+        ///     The hero.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="int" />.
+        /// </returns>
         public int GetPriority(Obj_AI_Hero hero)
         {
             return this.menu?["priority"][hero.ChampionName]?.GetValue<MenuSlider>().Value ?? MinPriority;
         }
 
-        /// <summary>
-        ///     Orders the champions.
-        /// </summary>
-        /// <param name="heroes">The heroes.</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public List<Obj_AI_Hero> OrderChampions(List<Obj_AI_Hero> heroes)
         {
             return heroes.OrderByDescending(this.GetPriority).ToList();
@@ -221,8 +154,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
         /// <summary>
         ///     Sets the priority.
         /// </summary>
-        /// <param name="hero">The hero.</param>
-        /// <param name="value">The value.</param>
+        /// <param name="hero">
+        ///     The hero.
+        /// </param>
+        /// <param name="value">
+        ///     The value.
+        /// </param>
         public void SetPriority(Obj_AI_Hero hero, int value)
         {
             var item = this.menu?["priority"][hero.ChampionName];
@@ -231,32 +168,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.TargetSelector.Modes
                 item.GetValue<MenuSlider>().Value = Math.Max(MinPriority, Math.Min(MaxPriority, value));
             }
         }
-
-        #endregion
-    }
-
-    /// <summary>
-    ///     Category class for Priorities
-    /// </summary>
-    internal class PriorityCategory
-    {
-        #region Public Properties
-
-        /// <summary>
-        ///     Gets or sets the champions.
-        /// </summary>
-        /// <value>
-        ///     The champions.
-        /// </value>
-        public HashSet<string> Champions { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the value.
-        /// </summary>
-        /// <value>
-        ///     The value.
-        /// </value>
-        public int Value { get; set; }
 
         #endregion
     }

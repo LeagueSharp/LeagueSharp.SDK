@@ -15,24 +15,19 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Events
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Permissions;
-    using System.Text;
-    using Enumerations;
-    using Extensions;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-    using Properties;
+    using LeagueSharp.SDK.Core.Utils;
+
     using SharpDX;
 
     /// <summary>
     ///     Detection of Gap-closers and fires the OnGapCloser event.
     /// </summary>
-    public class Gapcloser
+    public static partial class Events
     {
         #region Static Fields
 
@@ -44,7 +39,8 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     Gets or sets the spells.
         /// </summary>
-        private static readonly List<GapCloser> SpellsList = new List<GapCloser>();
+        [ResourceImport("Data.Gapclosers.json")]
+        private static readonly Dictionary<string, GapCloser> SpellsList = new Dictionary<string, GapCloser>();
 
         #endregion
 
@@ -64,7 +60,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     OnGapCloser Event.
         /// </summary>
-        public static event OnGapCloserDelegate OnGapCloser;
+        public static event EventHandler<GapCloserEventArgs> OnGapCloser;
 
         #endregion
 
@@ -78,59 +74,20 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     Gets the spells.
         /// </summary>
-        public static IEnumerable<GapCloser> Spells => SpellsList;
+        public static IEnumerable<GapCloser> Spells => SpellsList.Values;
 
         #endregion
 
         #region Methods
 
         /// <summary>
-        ///     Initializes static members of the <see cref="Gapcloser" /> class.
-        ///     Static Constructor
-        /// </summary>
-        internal static void Initialize()
-        {
-            Load.OnLoad += (sender, args) =>
-                {
-                    var dataFile =
-                        (IDictionary<string, JToken>)JObject.Parse(Encoding.Default.GetString(Resources.Gapclosers));
-                    var champions = GameObjects.Heroes.Select(champion => champion.ChampionName).ToArray();
-                    foreach (var entry in dataFile.Where(entry => champions.Contains(entry.Key)))
-                    {
-                        LoadGapcloser(entry.Key, entry.Value.ToString());
-                    }
-
-                    Game.OnUpdate += OnUpdate;
-                    Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
-                };
-        }
-
-        /// <summary>
-        ///     Loads the <c>gapcloser</c> data.
-        /// </summary>
-        /// <param name="championName">
-        ///     The champion name
-        /// </param>
-        /// <param name="value">
-        ///     The value
-        /// </param>
-        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        private static void LoadGapcloser(string championName, string value)
-        {
-            var gapcloser = JsonConvert.DeserializeObject<GapCloser>(value);
-            gapcloser.ChampionName = championName;
-
-            SpellsList.Add(gapcloser);
-        }
-
-        /// <summary>
         ///     On Process Spell Cast subscribed event function
         /// </summary>
         /// <param name="sender"><see cref="Obj_AI_Base" /> sender</param>
         /// <param name="args">Process Spell Cast Data</param>
-        private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private static void EventGapcloser(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (SpellsList.All(spell => spell.SpellName != args.SData.Name.ToLower()))
+            if (SpellsList.All(spell => spell.Value.SpellName != args.SData.Name.ToLower()))
             {
                 return;
             }
@@ -142,14 +99,14 @@ namespace LeagueSharp.SDK.Core.Events
                 ActiveSpellsList.Add(
                     new GapCloserEventArgs
                         {
-                            Start = args.Start, End = args.End, Sender = hero, TickCount = Variables.TickCount, 
+                            Start = args.Start, End = args.End, Sender = hero, TickCount = Variables.TickCount,
                             SkillType =
                                 (args.Target != null && args.Target.IsValid)
                                     ? GapcloserType.Targeted
-                                    : GapcloserType.Skillshot, 
-                            Slot = hero.GetSpellSlot(args.SData.Name), 
+                                    : GapcloserType.Skillshot,
+                            Slot = hero.GetSpellSlot(args.SData.Name),
                             IsDirectedToPlayer =
-                                player.Distance(args.End) < player.Distance(args.Start) || sender.IsFacing(player), 
+                                player.Distance(args.End) < player.Distance(args.Start) || sender.IsFacing(player),
                             SpellName = args.SData.Name
                         });
             }
@@ -158,10 +115,7 @@ namespace LeagueSharp.SDK.Core.Events
         /// <summary>
         ///     On game tick update subscribed event function.
         /// </summary>
-        /// <param name="args">
-        ///     <see cref="System.EventArgs" /> containing event data
-        /// </param>
-        private static void OnUpdate(EventArgs args)
+        private static void EventGapcloser()
         {
             ActiveSpellsList.RemoveAll(entry => Variables.TickCount > entry.TickCount + 900);
             if (OnGapCloser == null)

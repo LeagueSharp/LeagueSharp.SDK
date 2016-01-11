@@ -14,14 +14,15 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <PreBuildEvent />
-    <PostBuildEvent />
+    <PostBuildEvent>
+    </PostBuildEvent>
     <OutputPath>bin\Release</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -102,37 +103,34 @@
     <Compile Include="Core\Enumerations\TurretType.cs" />
     <Compile Include="Core\Enumerations\WindowsMessages.cs" />
     <Compile Include="Core\Events\Dash.cs" />
+    <Compile Include="Core\Events\Events.cs" />
+    <Compile Include="Core\Events\Load.cs" />
     <Compile Include="Core\Events\Gapcloser.cs" />
     <Compile Include="Core\Events\InterruptableSpell.cs" />
-    <Compile Include="Core\Events\Load.cs" />
     <Compile Include="Core\Events\Stealth.cs" />
     <Compile Include="Core\Events\Teleport.cs" />
     <Compile Include="Core\Events\Turret.cs" />
     <Compile Include="Core\Extensions\Enumerable.cs" />
-    <Compile Include="Core\Extensions\GameRuntime.cs" />
-    <Compile Include="Core\Extensions\Runtime.cs" />
+    <Compile Include="Core\Extensions\Extensions.cs" />
     <Compile Include="Core\Extensions\SharpDX\Generic.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector2Extensions.cs" />
     <Compile Include="Core\Extensions\SharpDX\Vector3Extensions.cs" />
-    <Compile Include="Core\Extensions\SharpDX\Vector4Extensions.cs" />
     <Compile Include="Core\Extensions\Unit.cs" />
     <Compile Include="Core\GameObjects.cs" />
     <Compile Include="Core\Math\Collision.cs" />
     <Compile Include="Core\Math\ConvexHull.cs" />
     <Compile Include="Core\Math\Geometry.cs" />
-    <Compile Include="Core\Math\Polygons\Arc.cs" />
-    <Compile Include="Core\Math\Polygons\Circle.cs" />
-    <Compile Include="Core\Math\Polygons\Line.cs" />
+    <Compile Include="Core\Math\Polygons\ArcPoly.cs" />
+    <Compile Include="Core\Math\Polygons\CirclePoly.cs" />
+    <Compile Include="Core\Math\Polygons\LinePoly.cs" />
     <Compile Include="Core\Math\Polygons\Polygon.cs" />
-    <Compile Include="Core\Math\Polygons\Rectangle.cs" />
-    <Compile Include="Core\Math\Polygons\Ring.cs" />
-    <Compile Include="Core\Math\Polygons\Sector.cs" />
+    <Compile Include="Core\Math\Polygons\RectanglePoly.cs" />
+    <Compile Include="Core\Math\Polygons\RingPoly.cs" />
+    <Compile Include="Core\Math\Polygons\SectorPoly.cs" />
     <Compile Include="Core\Math\Prediction\Cluster.cs" />
     <Compile Include="Core\Math\Prediction\Health.cs" />
     <Compile Include="Core\Math\Prediction\Movement.cs" />
-    <Compile Include="Core\Math\Prediction\Path.cs" />
-    <Compile Include="Core\Network\GamePacket.cs" />
-    <Compile Include="Core\Network\Packet.cs" />
+    <Compile Include="Core\Math\Prediction\GamePath.cs" />
     <Compile Include="Core\Signals\Signal.cs" />
     <Compile Include="Core\Signals\SignalManager.cs" />
     <Compile Include="Core\UI\IMenu\Abstracts\AMenuComponent.cs" />
@@ -246,10 +244,10 @@
     <Compile Include="Core\UI\IMenu\Values\MenuSeparator.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuSliderButton.cs" />
     <Compile Include="Core\UI\IMenu\Values\MenuSlider.cs" />
-    <Compile Include="Core\UI\INotifications\ANotification.cs" />
-    <Compile Include="Core\UI\INotifications\Notification.cs" />
-    <Compile Include="Core\UI\INotifications\NotificationIcons.cs" />
-    <Compile Include="Core\UI\INotifications\Notifications.cs" />
+    <Compile Include="Core\UI\Notifications\ANotification.cs" />
+    <Compile Include="Core\UI\Notifications\Notification.cs" />
+    <Compile Include="Core\UI\Notifications\NotificationIcons.cs" />
+    <Compile Include="Core\UI\Notifications\Notifications.cs" />
     <Compile Include="Core\UI\Utils.cs" />
     <Compile Include="Core\Utils\ActionQueue.cs" />
     <Compile Include="Core\Utils\AutoAttack.cs" />
@@ -259,13 +257,17 @@
     <Compile Include="Core\Utils\Cursor.cs" />
     <Compile Include="Core\Utils\DelayAction.cs" />
     <Compile Include="Core\Utils\DynamicInitializer.cs" />
+    <Compile Include="Core\Utils\IFilter.cs" />
     <Compile Include="Core\Utils\Invulnerable.cs" />
+    <Compile Include="Core\Utils\JsonFactory.cs" />
     <Compile Include="Core\Utils\Jungle.cs" />
     <Compile Include="Core\Utils\Logging.cs" />
     <Compile Include="Core\Utils\MathUtils.cs" />
     <Compile Include="Core\Utils\Minion.cs" />
-    <Compile Include="Core\Utils\NetworkUtils.cs" />
     <Compile Include="Core\Utils\Performance.cs" />
+    <Compile Include="Core\Utils\ResourceFactory.cs" />
+    <Compile Include="Core\Utils\ResourceImportAttribute.cs" />
+    <Compile Include="Core\Utils\ResourceLoader.cs" />
     <Compile Include="Core\Utils\Storage.cs" />
     <Compile Include="Core\Utils\TickOperation.cs" />
     <Compile Include="Core\Utils\WeightedRandom.cs" />
@@ -279,15 +281,22 @@
     <Compile Include="Core\Wrappers\Items.cs" />
     <Compile Include="Core\Wrappers\Spells\LastCast.cs" />
     <Compile Include="Core\Wrappers\Map.cs" />
-    <Compile Include="Core\Wrappers\Orbwalking\Base.cs" />
+    <Compile Include="Core\Wrappers\Orbwalking\OrbwalkerBase.cs" />
     <Compile Include="Core\Wrappers\Orbwalking\Orbwalker.cs" />
-    <Compile Include="Core\Wrappers\Orbwalking\Selector.cs" />
+    <Compile Include="Core\Wrappers\Orbwalking\OrbwalkerSelector.cs" />
+    <Compile Include="Core\Wrappers\Spells\LastCastedSpellEntry.cs" />
+    <Compile Include="Core\Wrappers\Spells\LastCastPacketSentEntry.cs" />
     <Compile Include="Core\Wrappers\Spells\Spell.cs" />
-    <Compile Include="Core\Wrappers\Spells\Database\Database.cs" />
-    <Compile Include="Core\Wrappers\Spells\Database\DatabaseEntry.cs" />
-    <Compile Include="Core\Wrappers\TargetSelector\Drawing.cs" />
-    <Compile Include="Core\Wrappers\TargetSelector\Humanizer.cs" />
-    <Compile Include="Core\Wrappers\TargetSelector\Mode.cs" />
+    <Compile Include="Core\Wrappers\Spells\Database\SpellDatabase.cs" />
+    <Compile Include="Core\Wrappers\Spells\Database\SpellDatabaseEntry.cs" />
+    <Compile Include="Core\Wrappers\TargetSelector\HeroVisibleEntry.cs" />
+    <Compile Include="Core\Wrappers\TargetSelector\ITargetSelectorMode.cs" />
+    <Compile Include="Core\Wrappers\TargetSelector\Modes\IWeightItem.cs" />
+    <Compile Include="Core\Wrappers\TargetSelector\Modes\PriorityCategory.cs" />
+    <Compile Include="Core\Wrappers\TargetSelector\Modes\WeightItemWrapper.cs" />
+    <Compile Include="Core\Wrappers\TargetSelector\TargetSelectorDrawing.cs" />
+    <Compile Include="Core\Wrappers\TargetSelector\TargetSelectorHumanizer.cs" />
+    <Compile Include="Core\Wrappers\TargetSelector\TargetSelectorMode.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\Modes\Closest.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\Modes\LeastHealth.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\Modes\LessAttacksToKill.cs" />
@@ -309,7 +318,7 @@
     <Compile Include="Core\Wrappers\TargetSelector\Modes\Weights\ShortDistanceCursor.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\Modes\Weights\ShortDistancePlayer.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\Modes\Weights\TeamFocus.cs" />
-    <Compile Include="Core\Wrappers\TargetSelector\Selected.cs" />
+    <Compile Include="Core\Wrappers\TargetSelector\TargetSelectorSelected.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\TargetSelector.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -360,8 +369,13 @@
   <ItemGroup>
     <None Include="LeagueSharp.SDK.snk" />
     <None Include="packages.config" />
-    <None Include="Resources\Damage\5.24.json" />
-    <None Include="Resources\Data\Gapclosers.json" />
+    <EmbeddedResource Include="Resources\Data\5.24.json" />
+    <EmbeddedResource Include="Resources\Data\Gapclosers.json" />
+    <EmbeddedResource Include="Resources\Data\Database.json" />
+    <EmbeddedResource Include="Resources\Data\GlobalInterruptableSpellsList.json" />
+    <EmbeddedResource Include="Resources\Data\InterruptableSpells.json" />
+    <EmbeddedResource Include="Resources\Data\Map.json" />
+    <EmbeddedResource Include="Resources\Data\Priority.json" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
@@ -381,9 +395,14 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0-rc3\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0-rc3\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0-rc3\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
   <!--<ItemGroup>
     <Analyzer Include="packages\StyleCop.Analyzers.1.0.0-rc2\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
     <Analyzer Include="packages\StyleCop.Analyzers.1.0.0-rc2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />

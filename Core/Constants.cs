@@ -15,45 +15,46 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core
+namespace LeagueSharp.SDK
 {
     using System;
     using System.IO;
+
     using SharpDX.Direct3D9;
-    using Utils;
 
     /// <summary>
-    ///     Constant values of LeagueSharp.SDK
+    ///     Constant values of the LeagueSharp development kit.
     /// </summary>
     public static class Constants
     {
         #region Static Fields
 
         /// <summary>
-        ///     The league sharp font.
+        ///     LeagueSharp Application Data folder.
+        /// </summary>
+        public static readonly string LeagueSharpAppData =
+            Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "LS" + Environment.UserName.GetHashCode().ToString("X"));
+
+        /// <summary>
+        ///     LeagueSharp SDK Log directory.
+        /// </summary>
+        public static readonly string LogDirectory = Path.Combine(LeagueSharpAppData, "Logs", "SDK");
+
+        /// <summary>
+        ///     LeagueSharp SDK Session Log file name.
+        /// </summary>
+        public static readonly string LogFileName = DateTime.Now.ToString("d").Replace('/', '-') + ".log";
+
+        /// <summary>
+        ///     LeagueSharp SDK Font.
         /// </summary>
         private static Font leagueSharpFont;
 
         #endregion
 
         #region Public Properties
-
-        /// <summary>
-        ///     Gets the LeagueSharp AppData directory.
-        /// </summary>
-        public static string LeagueSharpAppData
-        {
-            get
-            {
-                return
-                    Cache.Instance.AddOrGetExisting(
-                        "LeagueSharpDir",
-                        () =>
-                        Path.Combine(
-                            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                            "LS" + Environment.UserName.GetHashCode().ToString("X"))).ToString();
-            }
-        }
 
         /// <summary>
         ///     Gets the league sharp font.
@@ -81,34 +82,6 @@ namespace LeagueSharp.SDK.Core
                         FontQuality.Antialiased,
                         FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative,
                         "Tahoma");
-            }
-        }
-
-        /// <summary>
-        ///     Gets the directory where logs will be created.
-        /// </summary>
-        public static string LogDirectory
-        {
-            get
-            {
-                return
-                    Cache.Instance.AddOrGetExisting(
-                        "LogDirectory",
-                        () => Path.Combine(LeagueSharpAppData, "Logs", "SDK")).ToString();
-            }
-        }
-
-        /// <summary>
-        ///     Gets the current filename that the logger will write to.
-        /// </summary>
-        public static string LogFileName
-        {
-            get
-            {
-                return
-                    Cache.Instance.AddOrGetExisting(
-                        "LogFileName",
-                        () => DateTime.Now.ToString("d").Replace('/', '-') + ".log").ToString();
             }
         }
 

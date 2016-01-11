@@ -26,10 +26,6 @@ namespace LeagueSharp.SDK.Core.Utils
     /// </summary>
     public static class WeightedRandom
     {
-        #region Static Fields
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
@@ -53,7 +49,7 @@ namespace LeagueSharp.SDK.Core.Utils
             list.AddRange(Enumerable.Range(min, max));
 
             var mean = list.Average();
-            var stdDev = Extensions.Enumerable.StandardDeviation(list);
+            var stdDev = list.StandardDeviation();
 
             var v1 = Random.NextDouble();
             var v2 = Random.NextDouble();
