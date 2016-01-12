@@ -1,4 +1,4 @@
-﻿// <copyright file="SpellDatabaseEntry.cs" company="LeagueSharp">
+// <copyright file="SpellDatabaseEntry.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
 // 
 //    This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The angle which the skillshot makes.
         /// </summary>
-        public int Angle = 30;
+        public int Angle = 45;
 
         /// <summary>
         ///     The buffs applied by the spell on allies
@@ -44,6 +44,16 @@ namespace LeagueSharp.SDK
         /// </summary>
         public BuffType[] AppliedBuffsOnSelf;
 
+        /// <summary>
+        ///     The name of the buff that the spell applies on the target.
+        /// </summary>
+        public string AppliedBuffName;
+
+        /// <summary>
+        ///     Indicates wether the spell has a varying range
+        /// </summary>
+        public bool FixedRange = true;
+        
         /// <summary>
         ///     Indicates whether the spell can be removed.
         /// </summary>
@@ -140,6 +150,16 @@ namespace LeagueSharp.SDK
         public string MissileSpellName = string.Empty;
 
         /// <summary>
+        ///     The Arc Skillshot Angle.
+        /// </summary>
+        public int ArcAngle;
+
+        /// <summary>
+        ///     The Ring Skillshot Radius.
+        /// </summary>
+        public int RingRadius;
+
+        /// <summary>
         ///     The raw radius of the spell (skillshots only)
         /// </summary>
         public int Radius;
@@ -188,6 +208,16 @@ namespace LeagueSharp.SDK
         ///     The width of the skillshot.
         /// </summary>
         public int Width = 50;
+
+        /// <summary>
+        ///     The minimum timeframe taken to channel the spell.
+        /// </summary>
+        public int MinChannelDuration = 0;
+
+        /// <summary>
+        ///     The maximum timeframe the spell can be channeled for.
+        /// </summary>
+        public int MaxChannelDuration = 0;
 
         #endregion
 
