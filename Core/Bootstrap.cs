@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core
+namespace LeagueSharp.SDK
 {
     using System.Globalization;
     using System.Security.Permissions;

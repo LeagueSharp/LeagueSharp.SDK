@@ -60,10 +60,10 @@ namespace LeagueSharp.SDK
             => CastingInterruptableSpellDictionary;
 
         /// <summary>
-        ///     Gets the global interruptable spells list.
+        ///     Gets the interruptible spells dictionary.
         /// </summary>
-        [ResourceImport("Data.GlobalInterruptableSpellsList.json")]
-        public static List<InterruptableSpellData> GlobalInterruptableSpellsList { get; private set; }
+        public static IReadOnlyList<InterruptableSpellData> GlobalInterruptableSpells
+            => GlobalInterruptableSpellsList;
 
         /// <summary>
         ///     Gets the interruptible spells dictionary.
@@ -78,13 +78,19 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Gets or sets the casting interrupt-able spell.
         /// </summary>
-        private static Dictionary<int, InterruptableSpellData> CastingInterruptableSpellDictionary { get; set; }
+        private static Dictionary<int, InterruptableSpellData> CastingInterruptableSpellDictionary { get; set; } = new Dictionary<int, InterruptableSpellData>();
 
         /// <summary>
         ///     Gets or sets the interrupt-able spells.
         /// </summary>
         [ResourceImport("Data.InterruptableSpells.json")]
-        private static Dictionary<string, List<InterruptableSpellData>> InterruptableSpellsDictionary { get; set; }
+        private static Dictionary<string, List<InterruptableSpellData>> InterruptableSpellsDictionary { get; set; } = new Dictionary<string, List<InterruptableSpellData>>();
+
+        /// <summary>
+        ///     Gets the global interruptable spells list.
+        /// </summary>
+        [ResourceImport("Data.GlobalInterruptableSpellsList.json")]
+        private static List<InterruptableSpellData> GlobalInterruptableSpellsList { get; set; } = new List<InterruptableSpellData>();
 
         #endregion
 
@@ -184,8 +190,7 @@ namespace LeagueSharp.SDK
                 return;
             }
 
-            var globalInterruptSpell = GlobalInterruptableSpellsList.FirstOrDefault(s => s.Name.Equals(args.SData.Name));
-
+            var globalInterruptSpell = GlobalInterruptableSpells.FirstOrDefault(s => s.Name.Equals(args.SData.Name));
             if (globalInterruptSpell != null)
             {
                 CastingInterruptableSpellDictionary.Add(target.NetworkId, globalInterruptSpell);
@@ -230,13 +235,6 @@ namespace LeagueSharp.SDK
             {
                 CastingInterruptableSpellDictionary.Remove(target.NetworkId);
             }
-        }
-
-        private static void EventInterruptableSpellConstruct()
-        {
-            InterruptableSpellsDictionary = new Dictionary<string, List<InterruptableSpellData>>();
-            CastingInterruptableSpellDictionary = new Dictionary<int, InterruptableSpellData>();
-            GlobalInterruptableSpellsList = new List<InterruptableSpellData>();
         }
 
         #endregion
@@ -308,22 +306,22 @@ namespace LeagueSharp.SDK
             /// <summary>
             ///     Gets the danger level.
             /// </summary>
-            public DangerLevel DangerLevel { get; }
+            public DangerLevel DangerLevel { get; set; }
 
             /// <summary>
             ///     Gets a value indicating whether movement interrupts.
             /// </summary>
-            public bool MovementInterrupts { get; }
+            public bool MovementInterrupts { get; set; }
 
             /// <summary>
             ///     Gets the name.
             /// </summary>
-            public string Name { get; }
+            public string Name { get; set; }
 
             /// <summary>
             ///     Gets the slot.
             /// </summary>
-            public SpellSlot Slot { get; }
+            public SpellSlot Slot { get; set; }
 
             #endregion
         }

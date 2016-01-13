@@ -31,11 +31,13 @@ namespace LeagueSharp.SDK
     {
         #region Static Fields
 
+        [ResourceImport("Data.Map.json")]
+        private static Dictionary<int, Map> MapById = new Dictionary<int, Map>();
+
         /// <summary>
         ///     Map by ID list.
         /// </summary>
-        [ResourceImport("Data.Map.json")]
-        public static IDictionary<int, Map> MapById = new Dictionary<int, Map>();
+        public static IReadOnlyDictionary<int, Map> Maps => MapById;
 
         #endregion
 
@@ -44,27 +46,27 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Gets the Grid of the Map
         /// </summary>
-        public Vector2 Grid { get; private set; }
+        public Vector2 Grid { get; set; }
 
         /// <summary>
         ///     Gets the MapType
         /// </summary>
-        public GameMapId MapId { get; private set; }
+        public GameMapId MapId { get; set; }
 
         /// <summary>
         ///     Gets the name of the map
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         /// <summary>
         ///     Gets the short name of the map.
         /// </summary>
-        public string ShortName { get; private set; }
+        public string ShortName { get; set; }
 
         /// <summary>
         ///     Gets the level the players start at
         /// </summary>
-        public int StartingLevel { get; private set; }
+        public int StartingLevel { get; set; }
 
         #endregion
 

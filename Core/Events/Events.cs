@@ -42,7 +42,6 @@ namespace LeagueSharp.SDK
             GameObject.OnIntegerPropertyChange += OnIntegerPropertyChange;
             Obj_AI_Base.OnTeleport += OnTeleportEvent;
 
-            EventInterruptableSpellConstruct();
             EventTurretConstruct();
         }
 

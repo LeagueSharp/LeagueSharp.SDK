@@ -27,197 +27,197 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The angle which the skillshot makes.
         /// </summary>
-        public int Angle = 45;
+        public int Angle { get; set; } = 45;
 
         /// <summary>
         ///     The buffs applied by the spell on allies
         /// </summary>
-        public BuffType[] AppliedBuffsOnAllies;
+        public BuffType[] AppliedBuffsOnAllies { get; set; }
 
         /// <summary>
         ///     The buffs applied by the spell on the target enemy champion/s
         /// </summary>
-        public BuffType[] AppliedBuffsOnEnemies;
+        public BuffType[] AppliedBuffsOnEnemies { get; set; }
 
         /// <summary>
         ///     The buffs applied by the spell on my hero
         /// </summary>
-        public BuffType[] AppliedBuffsOnSelf;
+        public BuffType[] AppliedBuffsOnSelf { get; set; }
 
         /// <summary>
         ///     The name of the buff that the spell applies on the target.
         /// </summary>
-        public string AppliedBuffName;
+        public string AppliedBuffName { get; set; }
 
         /// <summary>
         ///     Indicates wether the spell has a varying range
         /// </summary>
-        public bool FixedRange = true;
+        public bool FixedRange { get; set; } = true;
         
         /// <summary>
         ///     Indicates whether the spell can be removed.
         /// </summary>
-        public bool CanBeRemoved = false;
+        public bool CanBeRemoved { get; set; } = false;
 
         /// <summary>
         ///     Array indicating the possible cast types (on enemy champion, on self, on a position)
         /// </summary>
-        public CastType[] CastType;
+        public CastType[] CastType { get; set; }
 
         /// <summary>
         ///     SpellData Entry's Champion Name
         /// </summary>
-        public string ChampionName;
+        public string ChampionName { get; set; }
 
         /// <summary>
         ///     What the spell missile (if any) can collide with.
         /// </summary>
-        public CollisionableObjects[] CollisionObjects = { };
+        public CollisionableObjects[] CollisionObjects { get; set; } = { };
 
         /// <summary>
         ///     Specifies on a scale from 1 to 5 how dangerous our spell is
         /// </summary>
-        public int DangerValue = 1;
+        public int DangerValue { get; set; } = 1;
 
         /// <summary>
         ///     The Spell Delay
         /// </summary>
-        public int Delay = 250;
+        public int Delay { get; set; } = 250;
 
         /// <summary>
         ///     Extra missile names
         /// </summary>
-        public string[] ExtraMissileNames = { };
+        public string[] ExtraMissileNames { get; set; } = { };
 
         /// <summary>
         ///     Extra spell names
         /// </summary>
-        public string[] ExtraSpellNames = { };
+        public string[] ExtraSpellNames { get; set; } = { };
 
         /// <summary>
         ///     Indicates whether the spell is forcefully removed.
         /// </summary>
-        public bool ForceRemove = false;
+        public bool ForceRemove { get; set; } = false;
 
         /// <summary>
         ///     Source object name
         /// </summary>
-        public string FromObject = string.Empty;
+        public string FromObject { get; set; } = string.Empty;
 
         /// <summary>
         ///     Source objects' names
         /// </summary>
-        public string[] FromObjects = { };
+        public string[] FromObjects { get; set; } = { };
 
         /// <summary>
         ///     Is our spell dangerous?
         /// </summary>
-        public bool IsDangerous = false;
+        public bool IsDangerous { get; set; } = false;
 
         /// <summary>
         ///     The spell's missile acceleration
         /// </summary>
-        public int MissileAccel = 0;
+        public int MissileAccel { get; set; } = 0;
 
         /// <summary>
         ///     Is the missile delayed?
         /// </summary>
-        public bool MissileDelayed;
+        public bool MissileDelayed { get; set; }
 
         /// <summary>
         ///     Does the missile follow the target?
         /// </summary>
-        public bool MissileFollowsUnit;
+        public bool MissileFollowsUnit { get; set; }
 
         /// <summary>
         ///     The max speed the spell missile can reach
         /// </summary>
-        public int MissileMaxSpeed = 0;
+        public int MissileMaxSpeed { get; set; } = 0;
 
         /// <summary>
         ///     The min speed you can find the missile at
         /// </summary>
-        public int MissileMinSpeed = 0;
+        public int MissileMinSpeed { get; set; } = 0;
 
         /// <summary>
         ///     Our spell missile average travel speed
         /// </summary>
-        public int MissileSpeed = 1000;
+        public int MissileSpeed { get; set; } = 1000;
 
         /// <summary>
         ///     The spell's missile name
         /// </summary>
-        public string MissileSpellName = string.Empty;
+        public string MissileSpellName { get; set; } = string.Empty;
 
         /// <summary>
         ///     The Arc Skillshot Angle.
         /// </summary>
-        public int ArcAngle;
+        public int ArcAngle { get; set; }
 
         /// <summary>
         ///     The Ring Skillshot Radius.
         /// </summary>
-        public int RingRadius;
+        public int RingRadius { get; set; }
 
         /// <summary>
         ///     The raw radius of the spell (skillshots only)
         /// </summary>
-        public int Radius;
+        public int Radius { get; set; }
 
         /// <summary>
         ///     The Raw Spell Range
         /// </summary>
-        public int Range = int.MaxValue;
+        public int Range { get; set; } = int.MaxValue;
 
         /// <summary>
         ///     Does the spell reset the autoattack timer?
         /// </summary>
-        public bool ResetsAutoAttackTimer;
+        public bool ResetsAutoAttackTimer { get; set; }
 
         /// <summary>
         ///     The SpellSlot
         /// </summary>
-        public SpellSlot Slot;
+        public SpellSlot Slot { get; set; }
 
         /// <summary>
         ///     Source object name
         /// </summary>
-        public string SourceObjectName = string.Empty;
+        public string SourceObjectName { get; set; } = string.Empty;
 
         /// <summary>
         ///     The SData Spell Name
         /// </summary>
-        public string SpellName = string.Empty;
+        public string SpellName { get; set; } = string.Empty;
 
         /// <summary>
         ///     Tags which define the spell (is it a heal? does it deal damage? etc. see <see cref="SpellTags" />.
         /// </summary>
-        public SpellTags[] SpellTags;
+        public SpellTags[] SpellTags { get; set; }
 
         /// <summary>
         ///     The Spell Type (skillshotline, skillshotcircle, targeted and so on)
         /// </summary>
-        public SpellType SpellType;
+        public SpellType SpellType { get; set; }
 
         /// <summary>
         ///     Particle name on toggle
         /// </summary>
-        public string ToggleParticleName = string.Empty;
+        public string ToggleParticleName { get; set; } = string.Empty;
 
         /// <summary>
         ///     The width of the skillshot.
         /// </summary>
-        public int Width = 50;
+        public int Width { get; set; } = 50;
 
         /// <summary>
         ///     The minimum timeframe taken to channel the spell.
         /// </summary>
-        public int MinChannelDuration = 0;
+        public int MinChannelDuration { get; set; } = 0;
 
         /// <summary>
         ///     The maximum timeframe the spell can be channeled for.
         /// </summary>
-        public int MaxChannelDuration = 0;
+        public int MaxChannelDuration { get; set; } = 0;
 
         #endregion
 

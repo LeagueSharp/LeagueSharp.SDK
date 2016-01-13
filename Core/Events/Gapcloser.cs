@@ -74,7 +74,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Gets the spells.
         /// </summary>
-        public static IEnumerable<GapCloser> Spells => SpellsList.Values;
+        public static IEnumerable<GapCloser> GapCloserSpells => SpellsList.Values;
 
         #endregion
 
@@ -147,22 +147,22 @@ namespace LeagueSharp.SDK
             /// <summary>
             ///     Champion Name
             /// </summary>
-            public string ChampionName;
+            public string ChampionName { get; set; }
 
             /// <summary>
             ///     Spell Type
             /// </summary>
-            public GapcloserType SkillType;
+            public GapcloserType SkillType { get; set; }
 
             /// <summary>
             ///     Spell Slot
             /// </summary>
-            public SpellSlot Slot;
+            public SpellSlot Slot { get; set; }
 
             /// <summary>
             ///     Spell Name
             /// </summary>
-            public string SpellName;
+            public string SpellName { get; set; }
 
             #endregion
         }

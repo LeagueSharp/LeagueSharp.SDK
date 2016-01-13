@@ -34,8 +34,10 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     A list of all the entries in the SpellDatabase.
         /// </summary>
+        public static IReadOnlyList<SpellDatabaseEntry> Spells => SpellsList;
+
         [ResourceImport("Data.Database.json")]
-        public static List<SpellDatabaseEntry> Spells = new List<SpellDatabaseEntry>();
+        private static List<SpellDatabaseEntry> SpellsList = new List<SpellDatabaseEntry>();
 
         #endregion
 

@@ -50,8 +50,10 @@ namespace LeagueSharp.SDK.Modes
         /// <summary>
         ///     The priority categories
         /// </summary>
+        public static IReadOnlyList<PriorityCategory> PriorityCategories => PriorityCategoriesList;
+
         [ResourceImport("Data.Priority.json")]
-        public static List<PriorityCategory> PriorityCategories = new List<PriorityCategory>();
+        private static List<PriorityCategory> PriorityCategoriesList = new List<PriorityCategory>();
 
         #endregion
 
