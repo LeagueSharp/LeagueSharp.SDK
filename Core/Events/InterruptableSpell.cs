@@ -137,7 +137,7 @@ namespace LeagueSharp.SDK
         /// <returns>
         ///     If the unit is casting an interrupt-able spellData.
         /// </returns>
-        public static bool IsCastingInterruptableSpell(Obj_AI_Hero target, bool checkMovementInterruption = false)
+        public static bool IsCastingInterruptableSpell(this Obj_AI_Hero target, bool checkMovementInterruption = false)
         {
             var data = GetInterruptableTargetData(target);
             return data != null && (!checkMovementInterruption || data.MovementInterrupts);
