@@ -145,11 +145,6 @@ namespace LeagueSharp.SDK
             #region Fields
 
             /// <summary>
-            ///     Champion Name
-            /// </summary>
-            public string ChampionName { get; set; }
-
-            /// <summary>
             ///     Spell Type
             /// </summary>
             public GapcloserType SkillType { get; set; }

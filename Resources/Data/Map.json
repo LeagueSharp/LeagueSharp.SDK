@@ -2,7 +2,9 @@
   "8": {
     "Grid": {
       "X": 6947.0,
-      "Y": 6609.0
+      "Y": 6609.0,
+      "IsNormalized": false,
+      "IsZero": false
     },
     "MapId": "CrystalScar",
     "Name": "The Crystal Scar",
@@ -12,7 +14,9 @@
   "10": {
     "Grid": {
       "X": 7718.0,
-      "Y": 7237.0
+      "Y": 7237.0,
+      "IsNormalized": false,
+      "IsZero": false
     },
     "MapId": "TwistedTreeline",
     "Name": "The Twisted Treeline",
@@ -22,7 +26,9 @@
   "11": {
     "Grid": {
       "X": 6991.0,
-      "Y": 7223.0
+      "Y": 7223.0,
+      "IsNormalized": false,
+      "IsZero": false
     },
     "MapId": "SummonersRift",
     "Name": "Summoner's Rift",
@@ -32,7 +38,9 @@
   "12": {
     "Grid": {
       "X": 6560.0,
-      "Y": 6309.0
+      "Y": 6309.0,
+      "IsNormalized": false,
+      "IsZero": false
     },
     "MapId": "HowlingAbyss",
     "Name": "Howling Abyss",

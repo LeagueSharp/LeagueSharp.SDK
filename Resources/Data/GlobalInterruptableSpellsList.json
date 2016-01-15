@@ -1,10 +1,12 @@
 [
   {
+    "DangerLevel": "Low",
     "MovementInterrupts": true,
     "Name": "OdinChannel",
     "Slot": 62
   },
   {
+    "DangerLevel": "Low",
     "MovementInterrupts": true,
     "Name": "OdinChannelBomb",
     "Slot": 62

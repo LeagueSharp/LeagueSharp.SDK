@@ -3,6 +3,7 @@
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
@@ -10,11 +11,13 @@
     {
       "DangerLevel": "Medium",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "W"
     },
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
@@ -22,12 +25,15 @@
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
   "Janna": [
     {
+      "DangerLevel": "Low",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
@@ -35,6 +41,7 @@
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
@@ -42,12 +49,15 @@
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
   "Lucian": [
     {
       "DangerLevel": "High",
+      "MovementInterrupts": false,
+      "Name": null,
       "Slot": "R"
     }
   ],
@@ -55,12 +65,15 @@
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
   "MasterYi": [
     {
+      "DangerLevel": "Low",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "W"
     }
   ],
@@ -68,6 +81,7 @@
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
@@ -75,17 +89,21 @@
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
   "Pantheon": [
     {
+      "DangerLevel": "Low",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "E"
     },
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
@@ -93,6 +111,7 @@
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
@@ -100,18 +119,23 @@
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
   "Sion": [
     {
+      "DangerLevel": "Low",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
   "Shen": [
     {
+      "DangerLevel": "Low",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
@@ -119,6 +143,7 @@
     {
       "DangerLevel": "Medium",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
@@ -126,6 +151,7 @@
     {
       "DangerLevel": "Medium",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
@@ -133,6 +159,7 @@
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
@@ -140,6 +167,7 @@
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
@@ -147,6 +175,7 @@
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
@@ -154,15 +183,23 @@
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": "R"
     }
   ],
   "Varus": [
-    {}
+    {
+      "DangerLevel": "Low",
+      "MovementInterrupts": false,
+      "Name": null,
+      "Slot": "Q"
+    }
   ],
   "Zilean": [
     {
+      "DangerLevel": "Low",
       "MovementInterrupts": true,
+      "Name": null,
       "Slot": 52
     }
   ]

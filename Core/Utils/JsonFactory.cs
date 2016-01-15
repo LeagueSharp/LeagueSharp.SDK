@@ -49,8 +49,8 @@ namespace LeagueSharp.SDK.Core.Utils
             {
                 Formatting = Formatting.Indented,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                DefaultValueHandling = DefaultValueHandling.Ignore,
-                NullValueHandling = NullValueHandling.Ignore
+                DefaultValueHandling = DefaultValueHandling.Include,
+                NullValueHandling = NullValueHandling.Include
             };
             DefaultSettings.Converters.Add(new StringEnumConverter());
             DefaultSettings.Converters.Add(new VersionConverter());
