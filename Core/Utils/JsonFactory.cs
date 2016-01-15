@@ -23,88 +23,159 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Security.Permissions;
 
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
+    /// <summary>
+    ///     JSON.NET "secure" :roto: Wrapper
+    /// </summary>
+    /// <remarks>
+    ///     Default Settings
+    ///     Formatting = Formatting.Indented
+    ///     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+    ///     DefaultValueHandling = DefaultValueHandling.Ignore
+    ///     NullValueHandling = NullValueHandling.Ignore
+    ///     Converters = StringEnumConverter
+    /// </remarks>
     public static class JsonFactory
     {
+        /// <summary>
+        ///     Default JsonSerializerSettings
+        /// </summary>
+        public static JsonSerializerSettings DefaultSettings { get; set; }
+
         static JsonFactory()
         {
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            DefaultSettings = new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 DefaultValueHandling = DefaultValueHandling.Ignore,
                 NullValueHandling = NullValueHandling.Ignore
             };
+            DefaultSettings.Converters.Add(new StringEnumConverter());
+            DefaultSettings.Converters.Add(new VersionConverter());
+
+            JsonConvert.DefaultSettings = () => DefaultSettings;
         }
 
+        /// <summary>
+        /// Deserialize Object from Resource
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="file"></param>
+        /// <param name="assembly"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
         [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        public static T JsonResource<T>(string file, Assembly assembly = null)
+        public static T JsonResource<T>(string file, Assembly assembly = null, JsonSerializerSettings settings = null)
         {
             if (file == null)
             {
                 throw new ArgumentNullException(nameof(file));
             }
 
-            return JsonConvert.DeserializeObject<T>(ResourceFactory.StringResource(file, assembly));
+            return JsonConvert.DeserializeObject<T>(ResourceFactory.StringResource(file, assembly), settings);
         }
 
+        /// <summary>
+        /// Deserialize Object from Resource
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="type"></param>
+        /// <param name="assembly"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
         [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        public static object JsonResource(string file, Type type = null, Assembly assembly = null)
+        public static object JsonResource(string file, Type type = null, Assembly assembly = null, JsonSerializerSettings settings = null)
         {
             if (file == null)
             {
                 throw new ArgumentNullException(nameof(file));
             }
 
-            return JsonConvert.DeserializeObject(ResourceFactory.StringResource(file, assembly), type);
+            return JsonConvert.DeserializeObject(ResourceFactory.StringResource(file, assembly), type, settings);
         }
 
+        /// <summary>
+        /// Deserialize Object from File
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="file"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
         [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        public static T JsonFile<T>(string file)
+        public static T JsonFile<T>(string file, JsonSerializerSettings settings = null)
         {
             if (file == null)
             {
                 throw new ArgumentNullException(nameof(file));
             }
 
-            return JsonConvert.DeserializeObject<T>(File.ReadAllText(file));
+            return JsonConvert.DeserializeObject<T>(File.ReadAllText(file), settings);
         }
 
+        /// <summary>
+        /// Deserialize Object from File
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="type"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
         [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        public static object JsonFile(string file, Type type = null)
+        public static object JsonFile(string file, Type type = null, JsonSerializerSettings settings = null)
         {
             if (file == null)
             {
                 throw new ArgumentNullException(nameof(file));
             }
 
-            return JsonConvert.DeserializeObject(File.ReadAllText(file), type);
+            return JsonConvert.DeserializeObject(File.ReadAllText(file), type, settings);
         }
 
+        /// <summary>
+        /// Deserialize Object from String
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="s"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
         [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        public static T JsonString<T>(string s)
+        public static T JsonString<T>(string s, JsonSerializerSettings settings = null)
         {
             if (s == null)
             {
                 throw new ArgumentNullException(nameof(s));
             }
 
-            return JsonConvert.DeserializeObject<T>(s);
+            return JsonConvert.DeserializeObject<T>(s, settings);
         }
 
+        /// <summary>
+        /// Deserialize Object from String
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="type"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
         [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        public static object JsonString(string s, Type type = null)
+        public static object JsonString(string s, Type type = null, JsonSerializerSettings settings = null)
         {
             if (s == null)
             {
                 throw new ArgumentNullException(nameof(s));
             }
 
-            return JsonConvert.DeserializeObject(s, type);
+            return JsonConvert.DeserializeObject(s, type, settings);
         }
 
+        /// <summary>
+        /// Serialize Object to File
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="obj"></param>
+        /// <param name="settings"></param>
         [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        public static void ToFile(string file, object obj)
+        public static void ToFile(string file, object obj, JsonSerializerSettings settings = null)
         {
             if (file == null)
             {
@@ -116,18 +187,24 @@ namespace LeagueSharp.SDK.Core.Utils
                 throw new ArgumentNullException(nameof(obj));
             }
 
-            File.WriteAllText(file, JsonConvert.SerializeObject(obj, Formatting.Indented));
+            File.WriteAllText(file, JsonConvert.SerializeObject(obj, settings));
         }
 
+        /// <summary>
+        /// Serialize Object to String
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
         [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        public static string ToString(object obj)
+        public static string ToString(object obj, JsonSerializerSettings settings = null)
         {
             if (obj == null)
             {
                 throw new ArgumentNullException(nameof(obj));
             }
 
-            return JsonConvert.SerializeObject(obj, Formatting.Indented);
+            return JsonConvert.SerializeObject(obj, settings);
         }
     }
 }

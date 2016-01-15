@@ -57,7 +57,7 @@ namespace LeagueSharp.SDK.Core.Utils
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                        Logging.Write()(LogLevel.Error, e);
                     }
                 }
             }

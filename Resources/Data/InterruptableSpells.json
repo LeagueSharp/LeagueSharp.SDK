@@ -1,160 +1,160 @@
 {
   "Caitlyn": [
     {
-      "DangerLevel": 2,
+      "DangerLevel": "High",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "FiddleSticks": [
     {
-      "DangerLevel": 1,
+      "DangerLevel": "Medium",
       "MovementInterrupts": true,
-      "Slot": 1
+      "Slot": "W"
     },
     {
-      "DangerLevel": 2,
+      "DangerLevel": "High",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "Galio": [
     {
-      "DangerLevel": 2,
+      "DangerLevel": "High",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "Janna": [
     {
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "Karthus": [
     {
-      "DangerLevel": 2,
+      "DangerLevel": "High",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "Katarina": [
     {
-      "DangerLevel": 2,
+      "DangerLevel": "High",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "Lucian": [
     {
-      "DangerLevel": 2,
-      "Slot": 3
+      "DangerLevel": "High",
+      "Slot": "R"
     }
   ],
   "Malzahar": [
     {
-      "DangerLevel": 2,
+      "DangerLevel": "High",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "MasterYi": [
     {
       "MovementInterrupts": true,
-      "Slot": 1
+      "Slot": "W"
     }
   ],
   "MissFortune": [
     {
-      "DangerLevel": 2,
+      "DangerLevel": "High",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "Nunu": [
     {
-      "DangerLevel": 2,
+      "DangerLevel": "High",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "Pantheon": [
     {
       "MovementInterrupts": true,
-      "Slot": 2
+      "Slot": "E"
     },
     {
-      "DangerLevel": 2,
+      "DangerLevel": "High",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "Quinn": [
     {
-      "DangerLevel": 2,
+      "DangerLevel": "High",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "RekSai": [
     {
-      "DangerLevel": 2,
+      "DangerLevel": "High",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "Sion": [
     {
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "Shen": [
     {
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "TahmKench": [
     {
-      "DangerLevel": 1,
+      "DangerLevel": "Medium",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "TwistedFate": [
     {
-      "DangerLevel": 1,
+      "DangerLevel": "Medium",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "Urgot": [
     {
-      "DangerLevel": 2,
+      "DangerLevel": "High",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "Velkoz": [
     {
-      "DangerLevel": 2,
+      "DangerLevel": "High",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "Warwick": [
     {
-      "DangerLevel": 2,
+      "DangerLevel": "High",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "Xerath": [
     {
-      "DangerLevel": 2,
+      "DangerLevel": "High",
       "MovementInterrupts": true,
-      "Slot": 3
+      "Slot": "R"
     }
   ],
   "Varus": [

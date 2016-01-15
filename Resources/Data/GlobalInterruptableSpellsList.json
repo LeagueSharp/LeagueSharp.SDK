@@ -10,9 +10,9 @@
     "Slot": 62
   },
   {
-    "DangerLevel": 1,
+    "DangerLevel": "Medium",
     "MovementInterrupts": true,
     "Name": "summonerteleport",
-    "Slot": -1
+    "Slot": "Unknown"
   }
 ]

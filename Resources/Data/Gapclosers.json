@@ -1,252 +1,176 @@
 {
-    "Aatrox": {
-        "Slot": "Q",
-        "SpellName": "aatroxq",
-        "SkillType": "Skillshot"
-    },
-    "Akali": {
-        "Slot": "R",
-        "SpellName": "akalishadowdance",
-        "SkillType": "Targeted"
-    },
-    "Alistar": {
-        "Slot": "W",
-        "SpellName": "headbutt",
-        "SkillType": "Targeted"
-    },
-    "Corki": {
-        "Slot": "W",
-        "SpellName": "carpetbomb",
-        "SkillType": "Skillshot"
-    },
-    "Diana": {
-        "Slot": "R",
-        "SpellName": "dianateleport",
-        "SkillType": "Targeted"
-    },
-    "Ekko": {
-        "Slot": "E",
-        "SpellName": "ekkoe",
-        "SkillType": "Skillshot"
-    },
-    "Ekko": {
-        "Slot": "E",
-        "SpellName": "ekkoeattack",
-        "SkillType": "Targeted"
-    },
-    "Elise": {
-        "Slot": "Q",
-        "SpellName": "elisespiderqcast",
-        "SkillType": "Targeted"
-    },
-    "Elise": {
-        "Slot": "E",
-        "SpellName": "elisespideredescent",
-        "SkillType": "Targeted"
-    },
-    "Fiora": {
-        "Slot": "Q",
-        "SpellName": "fioraq",
-        "SkillType": "Skillshot"
-    },
-    "Fizz": {
-        "Slot": "Q",
-        "SpellName": "fizzpiercingstrike",
-        "SkillType": "Targeted"
-    },
-    "Gnar": {
-        "Slot": "E",
-        "SpellName": "gnarbige",
-        "SkillType": "Skillshot"
-    },
-    "Gnar": {
-        "Slot": "E",
-        "SpellName": "gnare",
-        "SkillType": "Skillshot"
-    },
-    "Gragas": {
-        "Slot": "E",
-        "SpellName": "gragase",
-        "SkillType": "Skillshot"
-    },
-    "Graves": {
-        "Slot": "E",
-        "SpellName": "gravesmove",
-        "SkillType": "Skillshot"
-    },
-    "Hecarim": {
-        "Slot": "R",
-        "SpellName": "hecarimult",
-        "SkillType": "Skillshot"
-    },
-    "Illaoi": {
-        "Slot": "W",
-        "SpellName": "illaoiwattack",
-        "SkillType": "Targeted"
-    },
-    "Irelia": {
-        "Slot": "Q",
-        "SpellName": "ireliagatotsu",
-        "SkillType": "Targeted"
-    },
-    "JarvanIV": {
-        "Slot": "Q",
-        "SpellName": "jarvanivdragonstrike",
-        "SkillType": "Skillshot"
-    },
-    "Jax": {
-        "Slot": "Q",
-        "SpellName": "jaxleapstrike",
-        "SkillType": "Targeted"
-    },
-    "Jayce": {
-        "Slot": "Q",
-        "SpellName": "jaycetotheskies",
-        "SkillType": "Targeted"
-    },
-    "Kassadin": {
-        "Slot": "R",
-        "SpellName": "riftwalk",
-        "SkillType": "Skillshot"
-    },
-    "Khazix": {
-        "Slot": "E",
-        "SpellName": "khazixe",
-        "SkillType": "Skillshot"
-    },
-    "Khazix": {
-        "Slot": "E",
-        "SpellName": "khazixelong",
-        "SkillType": "Skillshot"
-    },
-    "LeBlanc": {
-        "Slot": "W",
-        "SpellName": "leblancslide",
-        "SkillType": "Skillshot"
-    },
-    "LeBlanc": {
-        "Slot": "R",
-        "SpellName": "leblancslidem",
-        "SkillType": "Skillshot"
-    },
-    "LeeSin": {
-        "Slot": "Q",
-        "SpellName": "blindmonkqtwo",
-        "SkillType": "Targeted"
-    },
-    "Leona": {
-        "Slot": "E",
-        "SpellName": "leonazenithblade",
-        "SkillType": "Skillshot"
-    },
-    "Lucian": {
-        "Slot": "E",
-        "SpellName": "luciane",
-        "SkillType": "Skillshot"
-    },
-    "Malphite": {
-        "Slot": "R",
-        "SpellName": "ufslash",
-        "SkillType": "Skillshot"
-    },
-    "MasterYi": {
-        "Slot": "Q",
-        "SpellName": "alphastrike",
-        "SkillType": "Targeted"
-    },
-    "MonkeyKing": {
-        "Slot": "E",
-        "SpellName": "monkeykingnimbus",
-        "SkillType": "Targeted"
-    },
-    "Pantheon": {
-        "Slot": "W",
-        "SpellName": "pantheon_leapbash",
-        "SkillType": "Targeted"
-    },
-    "Pantheon": {
-        "Slot": "R",
-        "SpellName": "pantheonrjump",
-        "SkillType": "Skillshot"
-    },
-    "Pantheon": {
-        "Slot": "R",
-        "SpellName": "pantheonrfall",
-        "SkillType": "Skillshot"
-    },
-    "Poppy": {
-        "Slot": "E",
-        "SpellName": "poppyheroiccharge",
-        "SkillType": "Targeted"
-    },
-    "Renekton": {
-        "Slot": "E",
-        "SpellName": "renektonsliceanddice",
-        "SkillType": "Skillshot"
-    },
-    "Riven": {
-        "Slot": "Q",
-        "SpellName": "riventricleave",
-        "SkillType": "Skillshot"
-    },
-    "Riven": {
-        "Slot": "E",
-        "SpellName": "rivenfeint",
-        "SkillType": "Skillshot"
-    },
-    "Sejuani": {
-        "Slot": "Q",
-        "SpellName": "sejuaniarcticassault",
-        "SkillType": "Skillshot"
-    },
-    "Shen": {
-        "Slot": "E",
-        "SpellName": "shenshadowdash",
-        "SkillType": "Skillshot"
-    },
-    "Shyvana": {
-        "Slot": "R",
-        "SpellName": "shyvanatransformcast",
-        "SkillType": "Skillshot"
-    },
-    "Talon": {
-        "Slot": "E",
-        "SpellName": "taloncutthroat",
-        "SkillType": "Targeted"
-    },
-    "Tristana": {
-        "Slot": "W",
-        "SpellName": "rocketjump",
-        "SkillType": "Skillshot"
-    },
-    "Tryndamere": {
-        "Slot": "E",
-        "SpellName": "slashcast",
-        "SkillType": "Skillshot"
-    },
-    "Vi": {
-        "Slot": "Q",
-        "SpellName": "viq",
-        "SkillType": "Skillshot"
-    },
-    "XinZhao": {
-        "Slot": "E",
-        "SpellName": "xenzhaosweep",
-        "SkillType": "Targeted"
-    },
-    "Yasuo": {
-        "Slot": "E",
-        "SpellName": "yasuodashwrapper",
-        "SkillType": "Targeted"
-    },
-    "Zac": {
-        "Slot": "E",
-        "SpellName": "zace",
-        "SkillType": "Skillshot"
-    },
-    "Ziggs": {
-        "Slot": "W",
-        "SpellName": "ziggswtoggle",
-        "SkillType": "Skillshot"
-    }
+  "Aatrox": {
+    "SpellName": "aatroxq"
+  },
+  "Akali": {
+    "SkillType": "Targeted",
+    "Slot": "R",
+    "SpellName": "akalishadowdance"
+  },
+  "Alistar": {
+    "SkillType": "Targeted",
+    "Slot": "W",
+    "SpellName": "headbutt"
+  },
+  "Corki": {
+    "Slot": "W",
+    "SpellName": "carpetbomb"
+  },
+  "Diana": {
+    "SkillType": "Targeted",
+    "Slot": "R",
+    "SpellName": "dianateleport"
+  },
+  "Ekko": {
+    "SkillType": "Targeted",
+    "Slot": "E",
+    "SpellName": "ekkoeattack"
+  },
+  "Elise": {
+    "SkillType": "Targeted",
+    "Slot": "E",
+    "SpellName": "elisespideredescent"
+  },
+  "Fiora": {
+    "SpellName": "fioraq"
+  },
+  "Fizz": {
+    "SkillType": "Targeted",
+    "SpellName": "fizzpiercingstrike"
+  },
+  "Gnar": {
+    "Slot": "E",
+    "SpellName": "gnare"
+  },
+  "Gragas": {
+    "Slot": "E",
+    "SpellName": "gragase"
+  },
+  "Graves": {
+    "Slot": "E",
+    "SpellName": "gravesmove"
+  },
+  "Hecarim": {
+    "Slot": "R",
+    "SpellName": "hecarimult"
+  },
+  "Illaoi": {
+    "SkillType": "Targeted",
+    "Slot": "W",
+    "SpellName": "illaoiwattack"
+  },
+  "Irelia": {
+    "SkillType": "Targeted",
+    "SpellName": "ireliagatotsu"
+  },
+  "JarvanIV": {
+    "SpellName": "jarvanivdragonstrike"
+  },
+  "Jax": {
+    "SkillType": "Targeted",
+    "SpellName": "jaxleapstrike"
+  },
+  "Jayce": {
+    "SkillType": "Targeted",
+    "SpellName": "jaycetotheskies"
+  },
+  "Kassadin": {
+    "Slot": "R",
+    "SpellName": "riftwalk"
+  },
+  "Khazix": {
+    "Slot": "E",
+    "SpellName": "khazixelong"
+  },
+  "LeBlanc": {
+    "Slot": "R",
+    "SpellName": "leblancslidem"
+  },
+  "LeeSin": {
+    "SkillType": "Targeted",
+    "SpellName": "blindmonkqtwo"
+  },
+  "Leona": {
+    "Slot": "E",
+    "SpellName": "leonazenithblade"
+  },
+  "Lucian": {
+    "Slot": "E",
+    "SpellName": "luciane"
+  },
+  "Malphite": {
+    "Slot": "R",
+    "SpellName": "ufslash"
+  },
+  "MasterYi": {
+    "SkillType": "Targeted",
+    "SpellName": "alphastrike"
+  },
+  "MonkeyKing": {
+    "SkillType": "Targeted",
+    "Slot": "E",
+    "SpellName": "monkeykingnimbus"
+  },
+  "Pantheon": {
+    "Slot": "R",
+    "SpellName": "pantheonrfall"
+  },
+  "Poppy": {
+    "SkillType": "Targeted",
+    "Slot": "E",
+    "SpellName": "poppyheroiccharge"
+  },
+  "Renekton": {
+    "Slot": "E",
+    "SpellName": "renektonsliceanddice"
+  },
+  "Riven": {
+    "Slot": "E",
+    "SpellName": "rivenfeint"
+  },
+  "Sejuani": {
+    "SpellName": "sejuaniarcticassault"
+  },
+  "Shen": {
+    "Slot": "E",
+    "SpellName": "shenshadowdash"
+  },
+  "Shyvana": {
+    "Slot": "R",
+    "SpellName": "shyvanatransformcast"
+  },
+  "Talon": {
+    "SkillType": "Targeted",
+    "Slot": "E",
+    "SpellName": "taloncutthroat"
+  },
+  "Tristana": {
+    "Slot": "W",
+    "SpellName": "rocketjump"
+  },
+  "Tryndamere": {
+    "Slot": "E",
+    "SpellName": "slashcast"
+  },
+  "Vi": {
+    "SpellName": "viq"
+  },
+  "XinZhao": {
+    "SkillType": "Targeted",
+    "Slot": "E",
+    "SpellName": "xenzhaosweep"
+  },
+  "Yasuo": {
+    "SkillType": "Targeted",
+    "Slot": "E",
+    "SpellName": "yasuodashwrapper"
+  },
+  "Zac": {
+    "Slot": "E",
+    "SpellName": "zace"
+  },
+  "Ziggs": {
+    "Slot": "W",
+    "SpellName": "ziggswtoggle"
+  }
 }
