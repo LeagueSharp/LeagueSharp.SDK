@@ -31,8 +31,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The Turrets list.
         /// </summary>
-        private static readonly IDictionary<Obj_AI_Turret, TurretArgs> Turrets =
-            new Dictionary<Obj_AI_Turret, TurretArgs>();
+        private static readonly IDictionary<int, TurretArgs> Turrets = new Dictionary<int, TurretArgs>();
 
         #endregion
 
@@ -57,7 +56,10 @@ namespace LeagueSharp.SDK
         {
             if (sender.Type == GameObjectType.obj_GeneralParticleEmitter && sender.Name.Contains("Turret"))
             {
-                var turret = Turrets.OrderBy(t => t.Key.Distance(sender.Position)).FirstOrDefault().Value;
+                var turret =
+                    Turrets.Values.Where(t => t.Turret.IsValid())
+                        .OrderBy(t => t.Turret.Distance(sender))
+                        .FirstOrDefault();
                 if (turret != null)
                 {
                     turret.TurretBoltObject = sender;
@@ -73,41 +75,26 @@ namespace LeagueSharp.SDK
         /// </param>
         private static void EventTurret(Obj_AI_Base sender)
         {
-            Obj_AI_Turret[] turret = { sender as Obj_AI_Turret };
-            if (turret[0] != null)
+            var turret = sender as Obj_AI_Turret;
+            if (turret == null)
             {
-                if (Turrets.Count == 0)
-                {
-                    foreach (var gameObjectTurret in
-                        GameObjects.Turrets)
-                    {
-                        Turrets.Add(gameObjectTurret, new TurretArgs { Turret = gameObjectTurret });
-                        if (gameObjectTurret.NetworkId == turret[0].NetworkId)
-                        {
-                            turret[0] = gameObjectTurret;
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (var gameObjectTurret in
-                        Turrets.Where(gameObjectTurret => gameObjectTurret.Key.NetworkId == turret[0].NetworkId))
-                    {
-                        turret[0] = gameObjectTurret.Key;
-                    }
-                }
-
-                Turrets[turret[0]].AttackStart = Variables.TickCount;
-                if (Turrets[turret[0]].Target != null && Turrets[turret[0]].Target.IsValid)
-                {
-                    Turrets[turret[0]].AttackDelay = (turret[0].AttackCastDelay * 1000)
-                                                     + (turret[0].Distance(Turrets[turret[0]].Target)
-                                                        / turret[0].BasicAttack.MissileSpeed * 1000);
-                    Turrets[turret[0]].AttackEnd = (int)(Variables.TickCount + Turrets[turret[0]].AttackDelay);
-                }
-
-                OnTurretAttack?.Invoke(turret[0], Turrets[turret[0]]);
+                return;
             }
+            var turNetworkId = turret.NetworkId;
+            if (!Turrets.ContainsKey(turNetworkId))
+            {
+                Turrets.Add(turNetworkId, new TurretArgs { Turret = turret });
+            }
+
+            Turrets[turNetworkId].AttackStart = Variables.TickCount;
+            if (Turrets[turNetworkId].Target != null && Turrets[turNetworkId].Target.IsValid)
+            {
+                Turrets[turNetworkId].AttackDelay = (turret.AttackCastDelay * 1000)
+                                                    + (turret.Distance(Turrets[turNetworkId].Target)
+                                                       / turret.BasicAttack.MissileSpeed * 1000);
+                Turrets[turNetworkId].AttackEnd = (int)(Variables.TickCount + Turrets[turNetworkId].AttackDelay);
+            }
+            OnTurretAttack?.Invoke(turret, Turrets[turNetworkId]);
         }
 
         private static void EventTurretConstruct()
@@ -116,7 +103,7 @@ namespace LeagueSharp.SDK
                 {
                     foreach (var turret in GameObjects.Turrets)
                     {
-                        Turrets.Add(turret, new TurretArgs { Turret = turret });
+                        Turrets.Add(turret.NetworkId, new TurretArgs { Turret = turret });
                     }
                 };
         }
