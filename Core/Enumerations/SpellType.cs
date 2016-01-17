@@ -28,6 +28,11 @@ namespace LeagueSharp.SDK
         SkillshotCircle,
 
         /// <summary>
+        ///     The spell is a Circle Skillshot that creates a Missile.
+        /// </summary>
+        SkillshotMissileCircle,
+
+        /// <summary>
         ///     The spell is a Line Skillshot
         /// </summary>
         SkillshotLine,
@@ -43,24 +48,24 @@ namespace LeagueSharp.SDK
         SkillshotCone,
 
         /// <summary>
-        ///     The spell is a Cone Skillshot that leaves a Missile
-        /// </summary>
-        SkillshotMissileCone,
-
-        /// <summary>
         ///     The spell is a Ring Skillshot (Veigar E)
         /// </summary>
         SkillshotRing,
 
         /// <summary>
-        ///     The spell is an Arc Skillshot (Diana Q)
+        ///     The spell is an Arc Skillshot that creates a Missile (Diana Q)
         /// </summary>
-        SkillshotArc,
+        SkillshotMissileArc,
 
         /// <summary>
         ///     The spell is Targeted
         /// </summary>
         Targeted,
+
+        /// <summary>
+        ///     The spell is Targeted that creates a Missile.
+        /// </summary>
+        TargetedMissile,
 
         /// <summary>
         ///     The spell can be toggled on/off

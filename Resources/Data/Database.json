@@ -21952,7 +21952,7 @@
     "SpellTags": [
       "SpellShield"
     ],
-    "SpellType": "SkillshotArc",
+    "SpellType": "SkillshotMissileArc",
     "ToggleParticleName": "",
     "Width": 50,
     "MinChannelDuration": 0,

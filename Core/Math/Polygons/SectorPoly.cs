@@ -66,8 +66,8 @@ namespace LeagueSharp.SDK
         /// <param name="center">
         ///     The Center
         /// </param>
-        /// <param name="direction">
-        ///     The Direction
+        /// <param name="endPosition">
+        ///     The end position
         /// </param>
         /// <param name="angle">
         ///     The Angle
@@ -78,10 +78,10 @@ namespace LeagueSharp.SDK
         /// <param name="quality">
         ///     The Quality
         /// </param>
-        public SectorPoly(Vector2 center, Vector2 direction, float angle, float radius, int quality = 20)
+        public SectorPoly(Vector2 center, Vector2 endPosition, float angle, float radius, int quality = 20)
         {
             this.Center = center;
-            this.Direction = (direction - center).Normalized();
+            this.Direction = (endPosition - center).Normalized();
             this.Angle = angle;
             this.Radius = radius;
             this.quality = quality;

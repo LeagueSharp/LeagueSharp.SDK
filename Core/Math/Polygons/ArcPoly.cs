@@ -66,8 +66,8 @@ namespace LeagueSharp.SDK
         /// <param name="start">
         ///     Start of the Arc
         /// </param>
-        /// <param name="direction">
-        ///     Direction of the Arc
+        /// <param name="end">
+        ///     End of the Arc
         /// </param>
         /// <param name="angle">
         ///     Angle of the Arc
@@ -78,10 +78,10 @@ namespace LeagueSharp.SDK
         /// <param name="quality">
         ///     Quality of the Arc
         /// </param>
-        public ArcPoly(Vector2 start, Vector2 direction, float angle, float radius, int quality = 20)
+        public ArcPoly(Vector2 start, Vector2 end, float angle, float radius, int quality = 20)
         {
             this.StartPos = start;
-            this.EndPos = (direction - start).Normalized();
+            this.EndPos = (end - start).Normalized();
             this.Angle = angle;
             this.Radius = radius;
             this.quality = quality;

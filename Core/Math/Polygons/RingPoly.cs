@@ -43,8 +43,8 @@ namespace LeagueSharp.SDK
         /// <param name="center">
         ///     The Center
         /// </param>
-        /// <param name="innerRadius">
-        ///     Inner Radius
+        /// <param name="width">
+        ///     The ring width
         /// </param>
         /// <param name="outerRadius">
         ///     Outer Radius
@@ -52,8 +52,8 @@ namespace LeagueSharp.SDK
         /// <param name="quality">
         ///     The Quality
         /// </param>
-        public RingPoly(Vector3 center, float innerRadius, float outerRadius, int quality = 20)
-            : this(center.ToVector2(), innerRadius, outerRadius, quality)
+        public RingPoly(Vector3 center, float width, float outerRadius, int quality = 20)
+            : this(center.ToVector2(), width, outerRadius, quality)
         {
         }
 
@@ -63,8 +63,8 @@ namespace LeagueSharp.SDK
         /// <param name="center">
         ///     The Center
         /// </param>
-        /// <param name="innerRadius">
-        ///     Inner Radius
+        /// <param name="width">
+        ///     The ring width
         /// </param>
         /// <param name="outerRadius">
         ///     Outer Radius
@@ -72,10 +72,10 @@ namespace LeagueSharp.SDK
         /// <param name="quality">
         ///     The Quality
         /// </param>
-        public RingPoly(Vector2 center, float innerRadius, float outerRadius, int quality = 20)
+        public RingPoly(Vector2 center, float width, float outerRadius, int quality = 20)
         {
             this.Center = center;
-            this.InnerRadius = innerRadius;
+            this.Width = width;
             this.OuterRadius = outerRadius;
             this.quality = quality;
 
@@ -92,9 +92,9 @@ namespace LeagueSharp.SDK
         public Vector2 Center { get; set; }
 
         /// <summary>
-        ///     Gets or sets the inner radius.
+        ///     Gets or sets the ring width
         /// </summary>
-        public float InnerRadius { get; set; }
+        public float Width { get; set; }
 
         /// <summary>
         ///     Gets or sets the outer radius.
@@ -113,8 +113,8 @@ namespace LeagueSharp.SDK
         {
             this.Points.Clear();
 
-            var outRadius = (offset + this.InnerRadius + this.OuterRadius) / (float)Math.Cos(2 * Math.PI / this.quality);
-            var innerRadius = this.InnerRadius - this.OuterRadius - offset;
+            var outRadius = (offset + this.Width + this.OuterRadius) / (float)Math.Cos(2 * Math.PI / this.quality);
+            var innerRadius = this.Width - this.OuterRadius - offset;
 
             for (var i = 0; i <= this.quality; i++)
             {
