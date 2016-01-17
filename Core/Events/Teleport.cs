@@ -19,6 +19,7 @@ namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
 
     /// <summary>
     ///     Teleport class, contains Teleport even which is triggered on recalls, teleports and shen or twisted fate
@@ -86,7 +87,7 @@ namespace LeagueSharp.SDK
 
             if (sender == null || !sender.IsValid)
             {
-                FireEvent(sender, eventArgs);
+                FireEvent(eventArgs);
                 return;
             }
 
@@ -107,6 +108,7 @@ namespace LeagueSharp.SDK
                     eventArgs.Type = teleportMethod.Type;
                     eventArgs.Start = Variables.TickCount;
                     eventArgs.IsTarget = teleportMethod.IsTarget(args);
+                    eventArgs.Object = sender;
 
                     TeleportDataByNetworkId[sender.NetworkId] = eventArgs;
                 }
@@ -125,21 +127,18 @@ namespace LeagueSharp.SDK
                 eventArgs.Status = shorter ? TeleportStatus.Abort : TeleportStatus.Finish;
             }
 
-            FireEvent(sender, eventArgs);
+            FireEvent(eventArgs);
         }
 
         /// <summary>
         ///     Fires the event.
         /// </summary>
-        /// <param name="sender">
-        ///     The sender
-        /// </param>
         /// <param name="args">
         ///     The event data
         /// </param>
-        private static void FireEvent(Obj_AI_Base sender, TeleportEventArgs args)
+        private static void FireEvent(TeleportEventArgs args)
         {
-            OnTeleport?.Invoke(sender, args);
+            OnTeleport?.Invoke(MethodBase.GetCurrentMethod().DeclaringType, args);
         }
 
         #endregion

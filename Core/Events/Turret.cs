@@ -20,6 +20,7 @@ namespace LeagueSharp.SDK
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
 
     /// <summary>
     ///     Turret tracker and event handler.
@@ -94,7 +95,7 @@ namespace LeagueSharp.SDK
                                                        / turret.BasicAttack.MissileSpeed * 1000);
                 Turrets[turNetworkId].AttackEnd = (int)(Variables.TickCount + Turrets[turNetworkId].AttackDelay);
             }
-            OnTurretAttack?.Invoke(turret, Turrets[turNetworkId]);
+            OnTurretAttack?.Invoke(MethodBase.GetCurrentMethod().DeclaringType, Turrets[turNetworkId]);
         }
 
         private static void EventTurretConstruct()

@@ -20,6 +20,8 @@ namespace LeagueSharp.SDK
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
+
     using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
@@ -27,27 +29,12 @@ namespace LeagueSharp.SDK
     /// </summary>
     public static partial class Events
     {
-        #region Delegates
-
-        /// <summary>
-        ///     Interrupt-able Target Delegate.
-        /// </summary>
-        /// <param name="sender">
-        ///     The sender
-        /// </param>
-        /// <param name="e">
-        ///     Interrupt-able Target Event Arguments Container
-        /// </param>
-        public delegate void OnInterruptableTargetDelegate(object sender, InterruptableTargetEventArgs e);
-
-        #endregion
-
         #region Public Events
 
         /// <summary>
         ///     Gets fired when an enemy is casting a spellData that should be interrupted.
         /// </summary>
-        public static event OnInterruptableTargetDelegate OnInterruptableTarget;
+        public static event EventHandler<InterruptableTargetEventArgs> OnInterruptableTarget;
 
         #endregion
 
@@ -62,8 +49,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Gets the interruptible spells dictionary.
         /// </summary>
-        public static IReadOnlyList<InterruptableSpellData> GlobalInterruptableSpells
-            => GlobalInterruptableSpellsList;
+        public static IReadOnlyList<InterruptableSpellData> GlobalInterruptableSpells => GlobalInterruptableSpellsList;
 
         /// <summary>
         ///     Gets the interruptible spells dictionary.
@@ -78,19 +64,22 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Gets or sets the casting interrupt-able spell.
         /// </summary>
-        private static Dictionary<int, InterruptableSpellData> CastingInterruptableSpellDictionary { get; set; } = new Dictionary<int, InterruptableSpellData>();
+        private static Dictionary<int, InterruptableSpellData> CastingInterruptableSpellDictionary { get; set; } =
+            new Dictionary<int, InterruptableSpellData>();
 
         /// <summary>
         ///     Gets or sets the interrupt-able spells.
         /// </summary>
         [ResourceImport("Data.InterruptableSpells.json")]
-        private static Dictionary<string, List<InterruptableSpellData>> InterruptableSpellsDictionary { get; set; } = new Dictionary<string, List<InterruptableSpellData>>();
+        private static Dictionary<string, List<InterruptableSpellData>> InterruptableSpellsDictionary { get; set; } =
+            new Dictionary<string, List<InterruptableSpellData>>();
 
         /// <summary>
         ///     Gets the global interruptable spells list.
         /// </summary>
         [ResourceImport("Data.GlobalInterruptableSpellsList.json")]
-        private static List<InterruptableSpellData> GlobalInterruptableSpellsList { get; set; } = new List<InterruptableSpellData>();
+        private static List<InterruptableSpellData> GlobalInterruptableSpellsList { get; set; } =
+            new List<InterruptableSpellData>();
 
         #endregion
 
@@ -169,7 +158,7 @@ namespace LeagueSharp.SDK
             foreach (var newArgs in
                 GameObjects.EnemyHeroes.Select(GetInterruptableTargetData).Where(newArgs => newArgs != null))
             {
-                OnInterruptableTarget(newArgs.Sender, newArgs);
+                OnInterruptableTarget(MethodBase.GetCurrentMethod().DeclaringType, newArgs);
             }
         }
 

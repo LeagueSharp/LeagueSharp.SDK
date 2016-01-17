@@ -20,6 +20,8 @@ namespace LeagueSharp.SDK
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
+
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
@@ -41,17 +43,6 @@ namespace LeagueSharp.SDK
         /// </summary>
         [ResourceImport("Data.Gapclosers.json")]
         private static readonly Dictionary<string, GapCloser> SpellsList = new Dictionary<string, GapCloser>();
-
-        #endregion
-
-        #region Delegates
-
-        /// <summary>
-        ///     OnGapCloser Delegate.
-        /// </summary>
-        /// <param name="sender">The sender</param>
-        /// <param name="e">GapCloserEvent Arguments Container</param>
-        public delegate void OnGapCloserDelegate(object sender, GapCloserEventArgs e);
 
         #endregion
 
@@ -106,7 +97,8 @@ namespace LeagueSharp.SDK
                                     : GapcloserType.Skillshot,
                             Slot = hero.GetSpellSlot(args.SData.Name),
                             IsDirectedToPlayer =
-                                player.Distance(args.End) < player.Distance(args.Start) || sender.IsFacing(player),
+                                (args.Target != null && args.Target.IsValid && args.Target.IsMe)
+                                || player.Distance(args.End) < player.Distance(args.Start) || sender.IsFacing(player),
                             SpellName = args.SData.Name
                         });
             }
@@ -131,7 +123,7 @@ namespace LeagueSharp.SDK
                         || (gapcloser.SkillType == GapcloserType.Skillshot
                             && GameObjects.Player.DistanceSquared(gapcloser.Sender) < 250000)))
             {
-                OnGapCloser(gapcloser.Sender, gapcloser);
+                OnGapCloser(MethodBase.GetCurrentMethod().DeclaringType, gapcloser);
             }
         }
 
