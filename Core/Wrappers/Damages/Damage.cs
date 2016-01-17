@@ -778,12 +778,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     }
 
                     // Assassin
-                    /*if (hero.GetCunning(DamageMastery.Cunning.Assassin).IsValid()
-                        && !GameObjects.Heroes.Any(
-                            h => h.Team == hero.Team && h.NetworkId != hero.NetworkId && h.Distance(hero) <= 800))
+                    if (hero.GetCunning(DamageMastery.Cunning.Assassin).IsValid()
+                        && !GameObjects.Heroes.Where(h => h.Team == hero.Team && !h.Compare(hero))
+                                .Any(h => h.Distance(hero) <= 800))
                     {
                         amount *= 1.015;
-                    }*/
+                    }
 
                     // Merciless
                     var merciless = hero.GetCunning(DamageMastery.Cunning.Merciless);

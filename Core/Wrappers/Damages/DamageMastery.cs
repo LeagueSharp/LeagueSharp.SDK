@@ -16,6 +16,8 @@
 
             SecretStash = 82,
 
+            Assassin = 83,
+
             Merciless = 97,
 
             Meditation = 98,
