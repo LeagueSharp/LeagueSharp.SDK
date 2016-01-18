@@ -11661,7 +11661,7 @@
 		"MissileFollowsCaster": false,
 		"MissileMaxSpeed": 0,
 		"MissileMinSpeed": 0,
-		"MissileSpeed": 1700,
+		"MissileSpeed": 2400,
 		"MissileSpellName": "kalistamysticshotmis",
 		"ArcAngle": 0,
 		"RingRadius": 0,
