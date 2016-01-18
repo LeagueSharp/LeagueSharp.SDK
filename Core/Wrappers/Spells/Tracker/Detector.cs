@@ -19,6 +19,7 @@
         {
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             MissileClient.OnCreate +=MissileClient_OnCreate;
+            GameObject.OnCreate +=GameObject_OnCreate;
         }
 
         #endregion
@@ -49,7 +50,24 @@
             TriggerOnDetectSkillshot(spellDatabaseEntry, sender, SkillshotDetectionType.ProcessSpell, args.Start.ToVector2(), args.End.ToVector2(),  Variables.TickCount - Game.Ping / 2);
         }
 
-        
+        static void GameObject_OnCreate(GameObject sender, EventArgs args)
+        {
+ 	       var spellDatabaseEntry = SpellDatabase.GetBySourceObjectName(sender.Name);
+
+            if (spellDatabaseEntry == null)
+            {
+                return;
+            }
+
+            TriggerOnDetectSkillshot(
+                spellDatabaseEntry,
+                GameObjects.Heroes.MinOrDefault(h => h.IsAlly || h.ChampionName != spellDatabaseEntry.ChampionName ? 1 : 0), //Since we can't really know the owner of the object we just assume is enemy :kappa:
+                SkillshotDetectionType.CreateObject,
+                sender.Position.ToVector2(),
+                sender.Position.ToVector2(),
+                Variables.TickCount - Game.Ping / 2);
+        }
+
         static void MissileClient_OnCreate(GameObject sender, EventArgs args)
         {
             var missile = sender as MissileClient;
@@ -80,7 +98,7 @@
             }
 
             var castTime = Variables.TickCount - Game.Ping / 2 - (spellDatabaseEntry.MissileDelayed ? 0 : spellDatabaseEntry.Delay) -
-                           (int)(1000f * missile.Position.Distance(missile.SpellCaster.ServerPosition) / spellDatabaseEntry.MissileSpeed);
+                           (int)(1000f * missile.Position.Distance(missile.StartPosition) / spellDatabaseEntry.MissileSpeed);
 
             TriggerOnDetectSkillshot(spellDatabaseEntry, missile.SpellCaster, SkillshotDetectionType.MissileCreate, missile.StartPosition.ToVector2(), missile.EndPosition.ToVector2(), castTime, missile);
         }

@@ -90,6 +90,12 @@ namespace LeagueSharp.SDK
                     spellData.SpellName.ToLower() == spellName || spellData.ExtraSpellNames.Contains(spellName));
         }
 
+        public static SpellDatabaseEntry GetBySourceObjectName(string objectName)
+        {
+            objectName = objectName.ToLowerInvariant();
+            return Spells.Where(spellData => spellData.SourceObjectName.Length != 0).FirstOrDefault(spellData => objectName.Contains(spellData.SourceObjectName));
+        }
+
         #endregion
     }
 }

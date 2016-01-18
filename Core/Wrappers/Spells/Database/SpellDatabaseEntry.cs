@@ -50,9 +50,14 @@ namespace LeagueSharp.SDK
         public string AppliedBuffName { get; set; }
 
         /// <summary>
+        ///     Indicates if the spell can be cast further than the range. For example that's True for Oriannas Q.
+        /// </summary>
+        public bool AvoidMaxRangeReduction { get; set; }
+
+        /// <summary>
         ///     Indicates wether the spell has a varying range
         /// </summary>
-        public bool FixedRange { get; set; } = true;
+        public bool FixedRange { get; set; } = false;
         
         /// <summary>
         ///     Indicates whether the spell can be removed.
@@ -90,6 +95,11 @@ namespace LeagueSharp.SDK
         public string[] ExtraMissileNames { get; set; } = { };
 
         /// <summary>
+        ///     The extra range of the Spell, used on skillshots.
+        /// </summary>
+        public int ExtraRange { get; set; } = 0;
+
+        /// <summary>
         ///     Extra spell names
         /// </summary>
         public string[] ExtraSpellNames { get; set; } = { };
@@ -125,9 +135,9 @@ namespace LeagueSharp.SDK
         public bool MissileDelayed { get; set; }
 
         /// <summary>
-        ///     Does the missile follow the target?
+        ///     Does the missile follow the caster?
         /// </summary>
-        public bool MissileFollowsUnit { get; set; }
+        public bool MissileFollowsCaster { get; set; }
 
         /// <summary>
         ///     The max speed the spell missile can reach

@@ -6,7 +6,7 @@
 
     using Color = System.Drawing.Color;
 
-    public class BaseSpell
+    public abstract class BaseSpell
     {
         #region Constructors and Destructors
 
@@ -24,7 +24,7 @@
 
         #region Public Properties
 
-        internal SpellDatabaseEntry SData;
+        public SpellDatabaseEntry SData;
 
         public virtual SkillshotDetectionType DetectionType { get; set; }
 
@@ -54,7 +54,7 @@
             var properties = new[]
                                  {
                                      "ChampionName", "SpellType", "SpellName", "Range", "Radius", "Delay", "MissileSpeed",
-                                     "CanBeRemoved"
+                                     "CanBeRemoved", "Angle", "FixedRange"
                                  };
             properties.ForEach(
                 property =>
@@ -70,7 +70,7 @@
         {
             if (this.SData.MissileAccel != 0)
             {
-                return Variables.TickCount <= this.StartTime + 5000;
+                return Variables.TickCount >= this.StartTime + 5000;
             }
 
             return Variables.TickCount

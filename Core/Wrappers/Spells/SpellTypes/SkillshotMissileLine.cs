@@ -40,6 +40,12 @@
 
         internal override void Game_OnUpdate()
         {
+            if (this.SData.MissileFollowsCaster && this.Caster.IsVisible)
+            {
+                this.EndPosition = this.Caster.ServerPosition.ToVector2();
+                this.Direction = (this.EndPosition - this.StartPosition).Normalized();
+            }
+
             this.UpdatePolygon();
         }
 

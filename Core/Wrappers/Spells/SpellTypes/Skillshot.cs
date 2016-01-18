@@ -82,19 +82,17 @@
 
             //Calculate the real end Point:
             this.Direction = (this.EndPosition - this.StartPosition).Normalized();
-            if (this.StartPosition.DistanceSquared(this.EndPosition) > this.SData.Range * this.SData.Range || this.SData.FixedRange)
+            if (!this.SData.AvoidMaxRangeReduction && this.StartPosition.DistanceSquared(this.EndPosition) > this.SData.Range * this.SData.Range || this.SData.FixedRange)
             {
                 this.EndPosition = this.StartPosition + this.Direction * this.SData.Range;
             }
 
-            /* TODO: Add ExtraRange to the SpellDatabase
-            if (this.ExtraRange != -1)
+            if (this.SData.ExtraRange != 0)
             {
                 this.EndPosition = this.EndPosition +
-                         Math.Min(this.ExtraRange, this.Range - this.EndPosition.Distance(this.StartPosition)) * this.Direction;
+                         Math.Min(this.SData.ExtraRange, this.SData.Range - this.EndPosition.Distance(this.StartPosition)) * this.Direction;
             }
-            */
-
+            
             this.UpdatePolygon();
 
             return true;
