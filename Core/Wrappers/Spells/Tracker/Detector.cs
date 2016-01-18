@@ -135,7 +135,6 @@
             
             if (skillshot == null)
             {
-                Console.WriteLine(new BaseSpell(spellDatabaseEntry) + " is not a skillshot!");
                 return;
             }
 
