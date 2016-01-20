@@ -248,11 +248,6 @@ namespace LeagueSharp.SDK
         /// </returns>
         public virtual bool CanMove(float extraWindup, bool disableMissileCheck)
         {
-            if (!this.MovementState)
-            {
-                return false;
-            }
-
             if (this.MissileLaunched && !disableMissileCheck)
             {
                 return true;
@@ -362,7 +357,7 @@ namespace LeagueSharp.SDK
                 }
             }
 
-            if (this.CanMove())
+            if (this.CanMove() && this.MovementState)
             {
                 this.Move(position.HasValue && position.Value.IsValid() ? position.Value : Game.CursorPos);
             }
