@@ -163,7 +163,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     var fervorofBattle = hero.GetFerocity(DamageMastery.Ferocity.FervorofBattle);
                     if (fervorofBattle.IsValid())
                     {
-                        result += (0.9 + (0.42 * hero.Level)) * hero.GetBuffCount("MasteryOnHitDamageStacker");
+                        result += (0.9 + (0.73 * hero.Level)) * hero.GetBuffCount("MasteryOnHitDamageStacker");
                     }
                 }
 
@@ -546,15 +546,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             if (targetHero != null)
             {
                 // Bond Of Stone
-                if (hero != null && targetHero.GetResolve(DamageMastery.Resolve.BondofStone).IsValid())
+                if (targetHero.GetResolve(DamageMastery.Resolve.BondofStone).IsValid())
                 {
-                    amount *=
-                        GameObjects.Heroes.Any(
-                            x =>
-                            x.Team == targetHero.Team && x.NetworkId != targetHero.NetworkId
-                            && x.Distance(targetHero) <= 1000)
-                            ? 0.94
-                            : 0.97;
+                    amount *= 0.96;
                 }
 
                 // Alistar R
