@@ -152,7 +152,7 @@ namespace LeagueSharp.SDK
         public int TotalAutoAttacks { get; protected set; }
         
         /// <summary>
-        ///     Gets or sets a value indicating whether movement.
+        ///     Gets or sets value indication in which mode Orbwalk should run.
         /// </summary>
         public TK ActiveMode { get; set; }
 
