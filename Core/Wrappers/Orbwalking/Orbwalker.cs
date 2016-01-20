@@ -20,7 +20,7 @@ namespace LeagueSharp.SDK
     using System;
     using System.Linq;
     using System.Windows.Forms;
-    
+
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers.Damages;
@@ -46,7 +46,7 @@ namespace LeagueSharp.SDK
         ///     The <see cref="Selector" /> class.
         /// </summary>
         internal readonly OrbwalkerSelector Selector;
-        
+
         /// <summary>
         ///     The random.
         /// </summary>
@@ -221,10 +221,12 @@ namespace LeagueSharp.SDK
             if (gTarget.IsValidTarget())
             {
                 var eventArgs = new OrbwalkingActionArgs
-                                    {
-                                        Target = gTarget, Position = gTarget.Position, Process = true,
-                                        Type = OrbwalkingType.BeforeAttack
-                                    };
+                {
+                    Target = gTarget,
+                    Position = gTarget.Position,
+                    Process = true,
+                    Type = OrbwalkingType.BeforeAttack
+                };
                 this.InvokeAction(eventArgs);
 
                 if (eventArgs.Process)
@@ -301,7 +303,7 @@ namespace LeagueSharp.SDK
 
             if (this.Menu["advanced"]["miscAttackSpeed"].GetValue<MenuBool>().Value
                 && (GameObjects.Player.AttackDelay < 1 / 2.6f) && this.TotalAutoAttacks % 3 != 0
-                && !this.CanMove(500, true))
+                && !this.CanMove(500, true) && !this.MovementState)
             {
                 return;
             }
@@ -313,10 +315,11 @@ namespace LeagueSharp.SDK
                 if (GameObjects.Player.Path.Length > 0)
                 {
                     var eventStopArgs = new OrbwalkingActionArgs
-                                            {
-                                                Position = GameObjects.Player.ServerPosition, Process = true,
-                                                Type = OrbwalkingType.StopMovement
-                                            };
+                    {
+                        Position = GameObjects.Player.ServerPosition,
+                        Process = true,
+                        Type = OrbwalkingType.StopMovement
+                    };
                     this.InvokeAction(eventStopArgs);
                     if (eventStopArgs.Process)
                     {
@@ -382,7 +385,7 @@ namespace LeagueSharp.SDK
             }
 
             var eventArgs = new OrbwalkingActionArgs
-                                { Position = position, Process = true, Type = OrbwalkingType.Movement };
+            { Position = position, Process = true, Type = OrbwalkingType.Movement };
             this.InvokeAction(eventArgs);
 
             if (eventArgs.Process)
