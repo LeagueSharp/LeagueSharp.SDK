@@ -150,15 +150,15 @@ namespace LeagueSharp.SDK
         ///     Gets or sets value indicating the amount of executed auto attacks.
         /// </summary>
         public int TotalAutoAttacks { get; protected set; }
+        
+        /// <summary>
+        ///     Gets or sets a value indicating whether movement.
+        /// </summary>
+        public TK ActiveMode { get; set; }
 
         #endregion
 
         #region Properties
-
-        /// <summary>
-        ///     Gets or sets a value indicating whether movement.
-        /// </summary>
-        protected TK ActiveMode { get; set; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether movement.
