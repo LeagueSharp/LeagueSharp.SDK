@@ -49,10 +49,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                   IgnoreCalculation = ignoreCalculation
                               };
 
-            List<PassiveDamage> value;
-            if (PassiveDamages.TryGetValue(championName, out value))
+            if (PassiveDamages.ContainsKey(championName))
             {
-                value.Add(passive);
+                PassiveDamages[championName].Add(passive);
                 return;
             }
 
@@ -77,7 +76,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 (hero, @base) =>
                     {
                         var d = Math.Max(0.06 * @base.Health, 10);
-                        return @base is Obj_AI_Minion ? Math.Min(d, 60) : d;
+                        return @base.Type == GameObjectType.obj_AI_Minion ? Math.Min(d, 60) : d;
                     });
             AddPassiveAttack(
                 string.Empty,
@@ -118,12 +117,19 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     {
                         var d1 = Items.HasItem(2015, hero) ? 30 : 0;
                         var d2 = Items.HasItem(3087, hero)
-                                     ? (30 + (hero.Level - 1) * 70 / 17) * (@base is Obj_AI_Minion ? 1.75 : 1)
+                                     ? new[] { 30, 30, 30, 30, 30, 36, 41, 47, 52, 57, 63, 68, 74, 79, 84, 90, 95, 100 }
+                                           [hero.Level - 1] * (@base.Type == GameObjectType.obj_AI_Minion ? 2.2 : 1)
                                        * (Math.Abs(hero.Crit - 1) < float.Epsilon
-                                              ? (2 + (Items.HasItem((int)ItemId.Infinity_Edge, hero) ? 0.5 : 0))
+                                              ? 2 + (Items.HasItem((int)ItemId.Infinity_Edge, hero) ? 0.5 : 0)
                                               : 1)
                                      : 0;
-                        var d3 = Items.HasItem(3094, hero) ? 50 + (hero.Level - 1) * 150 / 17 : 0;
+                        var d3 = Items.HasItem(3094, hero)
+                                     ? new[]
+                                           {
+                                               50, 50, 50, 50, 50, 62, 74, 85, 97, 108, 120, 131, 143, 154, 166, 177, 189,
+                                               200
+                                           }[hero.Level - 1]
+                                     : 0;
                         return Math.Max(d1, Math.Max(d2, d3));
                     });
             AddPassiveAttack(
@@ -147,7 +153,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 string.Empty,
                 (hero, @base) => hero.GetBuffCount("s5test_dragonslayerbuff") == 5,
                 DamageType.True,
-                (hero, @base) => 150 / (@base is Obj_AI_Minion ? 5d : 1));
+                (hero, @base) => 150 / (@base.Type == GameObjectType.obj_AI_Minion ? 5d : 1));
 
             var excluded = new List<string>();
             foreach (var name in GameObjects.Heroes.Select(h => h.ChampionName).Where(name => !excluded.Contains(name)))
@@ -187,7 +193,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             (hero, @base) => hero.HasBuff("alistartrample"),
                             DamageType.Magical,
                             (hero, @base) =>
-                            (6 + hero.Level + (0.1 * hero.TotalMagicalDamage)) * (@base is Obj_AI_Minion ? 2 : 1));
+                            (6 + hero.Level + (0.1 * hero.TotalMagicalDamage))
+                            * (@base.Type == GameObjectType.obj_AI_Minion ? 2 : 1));
                         break;
                     case "Ashe":
                         AddPassiveAttack(
@@ -195,7 +202,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             (hero, @base) => @base.HasBuff("ashepassiveslow"),
                             DamageType.Physical,
                             (hero, @base) =>
-                            hero.TotalAttackDamage * (0.1 + (hero.FlatCritChanceMod * (1 + hero.FlatCritDamageMod))));
+                            hero.TotalAttackDamage * (0.1 + (hero.Crit * (1 + hero.CritDamageMultiplier))));
                         AddPassiveAttack(
                             "Ashe",
                             (hero, @base) => hero.HasBuff("asheqattack"),
@@ -251,17 +258,17 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             (hero, @base) =>
                                 {
                                     var dmg = 0d;
-                                    if (@base is Obj_AI_Minion)
+                                    if (@base.Type == GameObjectType.obj_AI_Minion)
                                     {
                                         dmg = (hero.TotalAttackDamage * 1.5)
                                               * (Math.Abs(hero.Crit - 1) < float.Epsilon
-                                                     ? 1 + (Items.HasItem((int)ItemId.Infinity_Edge, hero) ? 0.5 : 0)
+                                                     ? 2 + (Items.HasItem((int)ItemId.Infinity_Edge, hero) ? 0.5 : 0)
                                                      : 1);
                                     }
-                                    else if (@base is Obj_AI_Hero)
+                                    else if (@base.Type == GameObjectType.obj_AI_Hero)
                                     {
                                         dmg = hero.TotalAttackDamage
-                                              * (0.5 + (hero.FlatCritChanceMod * (1 + 0.5 * hero.FlatCritDamageMod)));
+                                              * (0.5 + (hero.Crit * (1 + 0.5 * hero.CritDamageMultiplier)));
                                         if (@base.HasBuff("caitlynyordletrapsight"))
                                         {
                                             dmg *= 1 + hero.Spellbook.GetSpell(SpellSlot.W).Level / 10;
@@ -309,7 +316,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             DamageType.Physical,
                             (hero, @base) =>
                             ((9 + hero.Level + (hero.FlatPhysicalDamageMod * 0.3))
-                             * Math.Min(@base.GetBuffCount("dariushemo") + 1, 5)) * (@base is Obj_AI_Minion ? 0.25 : 1));
+                             * Math.Min(@base.GetBuffCount("dariushemo") + 1, 5))
+                            * (@base.Type == GameObjectType.obj_AI_Minion ? 0.25 : 1));
                         AddPassiveAttack(
                             "Darius",
                             (hero, @base) => hero.HasBuff("DariusNoxianTacticsONH"),
@@ -418,8 +426,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             (hero, @base) => hero.HasBuff("gangplankpassiveattack"),
                             DamageType.True,
                             (hero, @base) =>
-                            ((10 + (5 * hero.Level)) + (hero.FlatPhysicalDamageMod * 0.6))
-                            * (@base is Obj_AI_Turret ? 1 : 2));
+                            (20 + (10 * hero.Level) + hero.FlatPhysicalDamageMod)
+                            / (@base.Type == GameObjectType.obj_AI_Turret ? 2 : 1));
                         break;
                     case "Garen":
                         AddPassiveAttack(
@@ -609,7 +617,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     case "KhaZix":
                         AddPassiveAttack(
                             "KhaZix",
-                            (hero, @base) => hero.HasBuff("khazixpdamage") && @base is Obj_AI_Hero,
+                            (hero, @base) => hero.HasBuff("khazixpdamage") && @base.Type == GameObjectType.obj_AI_Hero,
                             DamageType.Magical,
                             (hero, @base) =>
                             10
@@ -669,7 +677,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             (hero, @base) => hero.HasBuff("lucianpassivebuff"),
                             DamageType.Physical,
                             (hero, @base) =>
-                            (@base is Obj_AI_Minion
+                            (@base.Type == GameObjectType.obj_AI_Minion
                                  ? 1
                                  : (hero.Level < 6 ? 0.3 : (hero.Level < 11 ? 0.4 : (hero.Level < 16 ? 0.5 : 0.6))))
                             * hero.TotalAttackDamage
@@ -761,7 +769,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             "Nautilus",
                             (hero, @base) => hero.HasBuff("nautiluspiercinggazeshield"),
                             DamageType.Magical,
-                            (hero, @base) => hero.GetSpellDamage(@base, SpellSlot.W) / (@base is Obj_AI_Hero ? 1 : 2),
+                            (hero, @base) =>
+                            hero.GetSpellDamage(@base, SpellSlot.W) / (@base.Type == GameObjectType.obj_AI_Hero ? 1 : 2),
                             false,
                             true);
                         break;
@@ -886,14 +895,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             DamageType.Physical,
                             (hero, @base) =>
                             (hero.Level < 3
-                                 ? 0.2
+                                 ? 0.25
                                  : (hero.Level < 6
-                                        ? 0.25
+                                        ? 0.29167
                                         : (hero.Level < 9
-                                               ? 0.3
+                                               ? 0.3333
                                                : (hero.Level < 12
-                                                      ? 0.35
-                                                      : (hero.Level < 15 ? 0.4 : (hero.Level < 18 ? 0.45 : 0.5))))))
+                                                      ? 0.375
+                                                      : (hero.Level < 15 ? 0.4167 : (hero.Level < 18 ? 0.4583 : 0.5))))))
                             * hero.TotalAttackDamage);
                         break;
                     case "Rumble":
@@ -974,7 +983,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             (hero, @base) => hero.HasBuff("sionpassivezombie"),
                             DamageType.Physical,
                             (hero, @base) =>
-                            Math.Min(0.1 * @base.MaxHealth, @base is Obj_AI_Minion ? 75 : @base.MaxHealth));
+                            Math.Min(
+                                0.1 * @base.MaxHealth,
+                                @base.Type == GameObjectType.obj_AI_Minion ? 75 : @base.MaxHealth));
                         break;
                     case "Skarner":
                         AddPassiveAttack(
@@ -1123,7 +1134,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             (hero.Level < 5
                                  ? 12
                                  : (hero.Level < 9 ? 18 : (hero.Level < 13 ? 24 : (hero.Level < 17 ? 30 : 36))))
-                            * Math.Min(@base.GetBuffCount("twitchdeadlyvenom") + 1, 6) / (@base is Obj_AI_Hero ? 1 : 6d));
+                            * Math.Min(@base.GetBuffCount("twitchdeadlyvenom") + 1, 6)
+                            / (@base.Type == GameObjectType.obj_AI_Minion ? 1 : 6d));
                         break;
                     case "Udyr":
                         AddPassiveAttack(
@@ -1139,7 +1151,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             DamageType.Physical,
                             (hero, @base) =>
                             hero.GetSpellDamage(@base, SpellSlot.Q, DamageStage.DamagePerSecond)
-                            / (@base is Obj_AI_Hero ? 1 : 2),
+                            / (@base.Type == GameObjectType.obj_AI_Hero ? 1 : 2),
                             false,
                             true);
                         break;
@@ -1282,7 +1294,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                     var amount = (16 + (level < 7 ? 4 : (level < 13 ? 8 : 12)) * level)
                                                  + (hero.TotalMagicalDamage
                                                     * (level < 7 ? 0.25 : (level < 13 ? 0.3 : 0.35)));
-                                    return @base is Obj_AI_Turret ? amount * 2 : amount;
+                                    return @base.Type == GameObjectType.obj_AI_Turret ? amount * 2 : amount;
                                 });
                         break;
                 }
@@ -1311,26 +1323,30 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             if (PassiveDamages.TryGetValue(string.Empty, out value))
             {
                 // This should fix something that should never happen.
-                @double +=
+                value =
                     value.Where(i => (i.Condition?.Invoke(source, target)).GetValueOrDefault() && i.Func != null)
-                        .Sum(
-                            item =>
-                            item.IgnoreCalculation
-                                ? item.Func(source, target)
-                                : source.CalculateDamage(target, item.DamageType, item.Func(source, target)));
+                        .ToList();
+                @double +=
+                    value.Sum(
+                        item =>
+                        item.IgnoreCalculation
+                            ? item.Func(source, target)
+                            : source.CalculateDamage(target, item.DamageType, item.Func(source, target)));
 
                 @override = value.Any(i => i.Override);
             }
 
             if (PassiveDamages.TryGetValue(source.ChampionName, out value))
             {
-                @double +=
+                value =
                     value.Where(i => (i.Condition?.Invoke(source, target)).GetValueOrDefault() && i.Func != null)
-                        .Sum(
-                            item =>
-                            item.IgnoreCalculation
-                                ? item.Func(source, target)
-                                : source.CalculateDamage(target, item.DamageType, item.Func(source, target)));
+                        .ToList();
+                @double +=
+                    value.Sum(
+                        item =>
+                        item.IgnoreCalculation
+                            ? item.Func(source, target)
+                            : source.CalculateDamage(target, item.DamageType, item.Func(source, target)));
 
                 if (!@override)
                 {

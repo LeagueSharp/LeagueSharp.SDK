@@ -13054,7 +13054,7 @@
 			"YasuoWall"
 		],
 		"DangerValue": 2,
-		"Delay": 125,
+		"Delay": 200,
 		"ExtraMissileNames": 
 		[
 
@@ -13448,7 +13448,7 @@
 		"ArcAngle": 0,
 		"RingRadius": 0,
 		"Radius": 300,
-		"Range": 600,
+		"Range": 700,
 		"ResetsAutoAttackTimer": false,
 		"Slot": "E",
 		"SourceObjectName": "",
@@ -14303,7 +14303,7 @@
 		"MissileFollowsCaster": false,
 		"MissileMaxSpeed": 0,
 		"MissileMinSpeed": 0,
-		"MissileSpeed": 1600,
+		"MissileSpeed": 1750,
 		"MissileSpellName": "LeblancSoulShackle",
 		"ArcAngle": 0,
 		"RingRadius": 0,
@@ -14369,7 +14369,7 @@
 		"MissileFollowsCaster": false,
 		"MissileMaxSpeed": 0,
 		"MissileMinSpeed": 0,
-		"MissileSpeed": 1600,
+		"MissileSpeed": 1750,
 		"MissileSpellName": "LeblancSoulShackleM",
 		"ArcAngle": 0,
 		"RingRadius": 0,
@@ -28480,7 +28480,7 @@
 			"YasuoWall"
 		],
 		"DangerValue": 2,
-		"Delay": 250,
+		"Delay": 300,
 		"ExtraMissileNames": 
 		[
 
@@ -28540,7 +28540,7 @@
 
 		],
 		"DangerValue": 1,
-		"Delay": 250,
+		"Delay": 0,
 		"ExtraMissileNames": 
 		[
 
@@ -28561,7 +28561,7 @@
 		"MissileFollowsCaster": false,
 		"MissileMaxSpeed": 0,
 		"MissileMinSpeed": 0,
-		"MissileSpeed": 1000,
+		"MissileSpeed": 1750,
 		"MissileSpellName": "",
 		"ArcAngle": 0,
 		"RingRadius": 0,

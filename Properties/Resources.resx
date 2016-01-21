@@ -145,4 +145,7 @@
   <data name="_5_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Data\5.24.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="_6_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Data\6.1.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
