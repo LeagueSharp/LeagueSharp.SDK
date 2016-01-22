@@ -345,10 +345,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         ///     Returns if a spell can kill a target.
         /// </summary>
         /// <param name="unit">The Target</param>
+        /// <param name="stage">
+        ///     The <see cref="Damage.DamageStage" /> of the spell.
+        /// </param>
         /// <returns>Can spell kill target</returns>
-        public bool CanKill(Obj_AI_Base unit)
+        public bool CanKill(Obj_AI_Base unit, Damage.DamageStage stage = Damage.DamageStage.Default)
         {
-            return unit.IsValidTarget() && this.GetDamage(unit) > unit.Health;
+            return unit.IsValidTarget() && this.GetDamage(unit, stage) > unit.Health;
         }
 
         /// <summary>
