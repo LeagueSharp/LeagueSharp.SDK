@@ -26,7 +26,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
     using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Math.Prediction;
     using LeagueSharp.SDK.Core.Utils;
-
+    using LeagueSharp.SDK.Core.Wrappers.Damages;
+    
     using SharpDX;
 
     /// <summary>
@@ -338,6 +339,16 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
         public bool CanCast(Obj_AI_Base unit)
         {
             return this.Slot.IsReady() && unit.IsValidTarget(this.Range);
+        }
+
+        /// <summary>
+        ///     Returns if a spell can kill a target.
+        /// </summary>
+        /// <param name="unit">The Target</param>
+        /// <returns>Can spell kill target</returns>
+        public bool CanKill(Obj_AI_Base unit)
+        {
+            return unit.IsValidTarget() && this.GetDamage(unit) > unit.Health;
         }
 
         /// <summary>
@@ -736,6 +747,23 @@ namespace LeagueSharp.SDK.Core.Wrappers.Spells
                             Type = this.Type, RangeCheckFrom = this.RangeCheckFrom, AoE = aoe,
                             CollisionObjects = collisionable
                         });
+        }
+
+        /// <summary>
+        ///     Returns the damage a spell will deal to target.
+        /// </summary>
+        /// <param name="target">
+        ///     The <see cref="Obj_AI_Hero" /> target.
+        /// </param>
+        /// <param name="stage">
+        ///     The <see cref="Damage.DamageStage" /> of the spell.
+        /// </param>
+        /// <returns>
+        ///     The damage value to target unit.
+        /// </returns>
+        public float GetDamage(Obj_AI_Base target, Damage.DamageStage stage = Damage.DamageStage.Default)
+        {
+            return (float) GameObjects.Player.GetSpellDamage(target, this.Slot, stage);
         }
 
         /// <summary>
