@@ -203,7 +203,7 @@ namespace LeagueSharp.SDK
         {
             get
             {
-                if (!this.Slot.IsReady())
+                if (!this.IsReady())
                 {
                     return false;
                 }
@@ -338,7 +338,7 @@ namespace LeagueSharp.SDK
         /// </returns>
         public bool CanCast(Obj_AI_Base unit)
         {
-            return this.Slot.IsReady() && unit.IsValidTarget(this.Range);
+            return this.IsReady() && unit.IsValidTarget(this.Range);
         }
 
         /// <summary>
@@ -385,7 +385,7 @@ namespace LeagueSharp.SDK
                 return CastStates.InvalidTarget;
             }
 
-            if (!this.Slot.IsReady())
+            if (!this.IsReady())
             {
                 return CastStates.NotReady;
             }
@@ -509,7 +509,7 @@ namespace LeagueSharp.SDK
         /// </returns>
         public bool Cast(Vector3 fromPosition, Vector3 toPosition)
         {
-            return this.Slot.IsReady() && GameObjects.Player.Spellbook.CastSpell(this.Slot, fromPosition, toPosition);
+            return this.IsReady() && GameObjects.Player.Spellbook.CastSpell(this.Slot, fromPosition, toPosition);
         }
 
         /// <summary>
@@ -537,7 +537,7 @@ namespace LeagueSharp.SDK
         /// </returns>
         public bool Cast(Vector3 position)
         {
-            if (!this.Slot.IsReady())
+            if (!this.IsReady())
             {
                 return false;
             }
@@ -645,7 +645,7 @@ namespace LeagueSharp.SDK
         /// </returns>
         public bool CastOnUnit(Obj_AI_Base unit)
         {
-            if (!this.Slot.IsReady() || this.From.DistanceSquared(unit.ServerPosition) > this.RangeSqr)
+            if (!this.IsReady() || this.From.DistanceSquared(unit.ServerPosition) > this.RangeSqr)
             {
                 return false;
             }
@@ -989,6 +989,16 @@ namespace LeagueSharp.SDK
         {
             return this.RangeCheckFrom.DistanceSquared(point)
                    < (otherRange < 0 ? this.RangeSqr : otherRange * otherRange);
+        }
+
+        /// <summary>
+        ///     Returns if the Spell is ready to use.
+        /// </summary>
+        /// <param name="t">Time Left</param>
+        /// <returns>Is Spell Ready to use</returns>
+        public bool IsReady(int t = 0)
+        {
+            return this.Slot.IsReady(t);
         }
 
         /// <summary>
