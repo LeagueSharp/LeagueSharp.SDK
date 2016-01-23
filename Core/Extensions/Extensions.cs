@@ -63,17 +63,6 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Returns if the spell is ready to use.
         /// </summary>
-        /// <param name="spell">The Spell</param>
-        /// <param name="t">Time Left</param>
-        /// <returns>Is Spell Ready to use</returns>
-        public static bool IsReady(this Spell spell, int t = 0)
-        {
-            return IsReady(spell.Instance, t);
-        }
-
-        /// <summary>
-        ///     Returns if the spell is ready to use.
-        /// </summary>
         /// <param name="slot">The SpellSlot</param>
         /// <param name="t">Time Left</param>
         /// <returns>Is Spell Ready to use</returns>

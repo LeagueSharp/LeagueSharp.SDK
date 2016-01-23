@@ -177,7 +177,7 @@ namespace LeagueSharp.SDK
         }
 
         /// <summary>
-        ///     Gets the distance squared between two <c>Obj_AI_Base</c>s using ServerPosition
+        ///     Gets the distance between <c>Obj_AI_Base</c> source and Player
         /// </summary>
         /// <param name="source">The Source</param>
         /// <returns>The distance between a <see cref="Obj_AI_Base" /> and the Player</returns>
@@ -187,11 +187,11 @@ namespace LeagueSharp.SDK
         }
 
         /// <summary>
-        ///     Gets the distance to Player
+        ///     Gets the distance between the point and the Player
         /// </summary>
         /// <param name="position">The Position</param>
-        /// <returns>The distance between a <see cref="Vector3" /> and the Player</returns>
-        public static float DistanceSquared(this Vector3 position)
+        /// <returns>The distance between the position and the Player</returns>
+        public static float DistanceToPlayer(this Vector3 position)
         {
             return position.Distance(GameObjects.Player.ServerPosition);
         }
