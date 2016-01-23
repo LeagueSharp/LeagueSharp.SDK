@@ -63,7 +63,7 @@ namespace LeagueSharp.SDK
         /// <returns>The distance between the two objects</returns>
         public static float Distance(this GameObject source, GameObject target)
         {
-            return source.Position.Distance(target.Position);
+            return source.Distance(target.Position);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace LeagueSharp.SDK
         /// <returns>The distance between a <see cref="GameObject" /> and a <see cref="Vector3" /></returns>
         public static float Distance(this GameObject source, Vector3 position)
         {
-            return source.Position.Distance(position);
+            return source.Distance(position.ToVector2());
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace LeagueSharp.SDK
         /// <returns>The Distance</returns>
         public static float Distance(this Obj_AI_Base source, Obj_AI_Base target)
         {
-            return source.ServerPosition.Distance(target.ServerPosition);
+            return source.Distance(target.ServerPosition);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace LeagueSharp.SDK
         /// <returns>The distance between a <see cref="Obj_AI_Base" /> and a <see cref="Vector3" /></returns>
         public static float Distance(this Obj_AI_Base source, Vector3 position)
         {
-            return source.ServerPosition.Distance(position);
+            return source.Distance(position.ToVector2());
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace LeagueSharp.SDK
         /// <returns>The squared distance between the two objects</returns>
         public static float DistanceSquared(this GameObject source, GameObject target)
         {
-            return source.Position.DistanceSquared(target.Position);
+            return source.DistanceSquared(target.Position);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace LeagueSharp.SDK
         /// <returns>The distance squared between a <see cref="GameObject" /> and a <see cref="Vector3" /></returns>
         public static float DistanceSquared(this GameObject source, Vector3 position)
         {
-            return source.Position.DistanceSquared(position);
+            return source.DistanceSquared(position.ToVector2());
         }
 
         /// <summary>
@@ -155,6 +155,17 @@ namespace LeagueSharp.SDK
         }
 
         /// <summary>
+        ///     Gets the distance squared between two Obj_AI_Base
+        /// </summary>
+        /// <param name="source">The Source</param>
+        /// <param name="target">The Target</param>
+        /// <returns>The squared distance between the two Obj_AI_Base</returns>
+        public static float DistanceSquared(this Obj_AI_Base source, Obj_AI_Base target)
+        {
+            return source.DistanceSquared(target.ServerPosition);
+        }
+
+        /// <summary>
         ///     Gets the distance squared between a <see cref="Obj_AI_Base" /> and a <see cref="Vector3" />
         /// </summary>
         /// <param name="source">The Source</param>
@@ -162,7 +173,7 @@ namespace LeagueSharp.SDK
         /// <returns>The distance squared between a <see cref="Obj_AI_Base" /> and a <see cref="Vector3" /></returns>
         public static float DistanceSquared(this Obj_AI_Base source, Vector3 position)
         {
-            return source.ServerPosition.DistanceSquared(position);
+            return source.DistanceSquared(position.ToVector2());
         }
 
         /// <summary>
@@ -183,7 +194,7 @@ namespace LeagueSharp.SDK
         /// <returns>The distance between a <see cref="Obj_AI_Base" /> and the Player</returns>
         public static float DistanceToPlayer(this Obj_AI_Base source)
         {
-            return source.ServerPosition.Distance(GameObjects.Player.ServerPosition);
+            return GameObjects.Player.Distance(source);
         }
 
         /// <summary>
@@ -193,7 +204,17 @@ namespace LeagueSharp.SDK
         /// <returns>The distance between the position and the Player</returns>
         public static float DistanceToPlayer(this Vector3 position)
         {
-            return position.Distance(GameObjects.Player.ServerPosition);
+            return position.ToVector2().DistanceToPlayer();
+        }
+
+        /// <summary>
+        ///     Gets the distance between the point and the Player
+        /// </summary>
+        /// <param name="position">The Position</param>
+        /// <returns>The distance between the position and the Player</returns>
+        public static float DistanceToPlayer(this Vector2 position)
+        {
+            return GameObjects.Player.Distance(position);
         }
 
         /// <summary>

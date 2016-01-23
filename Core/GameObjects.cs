@@ -20,6 +20,7 @@ namespace LeagueSharp.SDK
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using LeagueSharp.SDK.Core.Utils;
 
     /// <summary>
@@ -162,7 +163,8 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The general particle emitters list.
         /// </summary>
-        private static readonly List<Obj_GeneralParticleEmitter> ParticleEmittersList = new List<Obj_GeneralParticleEmitter>();
+        private static readonly List<Obj_GeneralParticleEmitter> ParticleEmittersList =
+            new List<Obj_GeneralParticleEmitter>();
 
         /// <summary>
         ///     The shops list.
@@ -446,7 +448,9 @@ namespace LeagueSharp.SDK
                                 o => o.Team != GameObjectTeam.Neutral && !o.GetMinionType().HasFlag(MinionTypes.Ward)));
                     TurretsList.AddRange(ObjectManager.Get<Obj_AI_Turret>());
                     InhibitorsList.AddRange(ObjectManager.Get<Obj_BarracksDampener>());
-                    JungleList.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(o => o.Team == GameObjectTeam.Neutral));
+                    JungleList.AddRange(
+                        ObjectManager.Get<Obj_AI_Minion>()
+                            .Where(o => o.Team == GameObjectTeam.Neutral && o.Name != "WardCorpse"));
                     WardsList.AddRange(
                         ObjectManager.Get<Obj_AI_Minion>().Where(o => o.GetMinionType().HasFlag(MinionTypes.Ward)));
                     ShopsList.AddRange(ObjectManager.Get<Obj_Shop>());
@@ -559,7 +563,7 @@ namespace LeagueSharp.SDK
                         }
                     }
                 }
-                else
+                else if (minion.Name != "WardCorpse")
                 {
                     switch (minion.GetJungleType())
                     {
