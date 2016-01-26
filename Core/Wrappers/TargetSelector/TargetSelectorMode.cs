@@ -66,7 +66,7 @@ namespace LeagueSharp.SDK
 
             this.pEntries = this.pEntries.OrderBy(p => p.DisplayName).ToList();
 
-            this.menu.Add(new MenuList<string>("mode", "Mode", this.pEntries.Select(e => e.DisplayName)));
+            this.menu.Add(new MenuList<string>("mode", "Mode", this.pEntries.Select(e => e.DisplayName)) { SelectedValue = "Weight" });
 
             this.menu.MenuValueChanged += (sender, args) =>
                 {
