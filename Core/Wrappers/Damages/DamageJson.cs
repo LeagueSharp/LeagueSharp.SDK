@@ -253,6 +253,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         {
             #region Public Properties
 
+            public List<double> BonusDamageOnMinion { get; set; }
+
             /// <summary>
             ///     Gets the Damage Percentages.
             /// </summary>
@@ -307,6 +309,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         internal class ChampionDamageSpellData
         {
             #region Public Properties
+
+            public List<double> BonusDamageOnMinion { get; set; }
 
             /// <summary>
             ///     Gets the Bonus Damages.

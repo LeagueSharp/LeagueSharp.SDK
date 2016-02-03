@@ -23,9 +23,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System.Security.Permissions;
     using System.Text;
 
-    using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Properties;
+    using Utils;
+    using Properties;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -42,8 +41,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         /// </summary>
         private static readonly IDictionary<string, byte[]> DamageFiles = new Dictionary<string, byte[]>
                                                                               {
-                                                                                  { "5.24", Resources._5_24 },
-                                                                                  { "6.1", Resources._6_1 }
+                                                                                  { "6.1", Resources._6_1 },
+                                                                                  { "6.2", Resources._6_2 }
                                                                               };
 
         #endregion
@@ -184,6 +183,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                       ? Math.Abs(source.TotalAttackDamage / 100) * spellBonus.ScalePer100Ad
                                       : 0)
                              : 0);
+
+            if (target.Type == GameObjectType.obj_AI_Minion && spellBonus.BonusDamageOnMinion?.Count > 0)
+            {
+                dmg += spellBonus.BonusDamageOnMinion[Math.Min(index, spellBonus.BonusDamageOnMinion.Count - 1)];
+            }
+
             if (!string.IsNullOrEmpty(spellBonus.ScalingBuff))
             {
                 var buffCount =
@@ -199,7 +204,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     dmg = Math.Max(dmg, spellBonus.MinDamage[Math.Min(index, spellBonus.MinDamage.Count - 1)]);
                 }
 
-                if (target is Obj_AI_Minion && spellBonus.MaxDamageOnMinion?.Count > 0)
+                if (target.Type == GameObjectType.obj_AI_Minion && spellBonus.MaxDamageOnMinion?.Count > 0)
                 {
                     dmg = Math.Min(
                         dmg,

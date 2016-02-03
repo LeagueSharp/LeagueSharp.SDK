@@ -19,7 +19,7 @@ namespace LeagueSharp.SDK
 {
     using System;
     using System.Reflection;
-    
+
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
@@ -93,6 +93,11 @@ namespace LeagueSharp.SDK
         #region Public Properties
 
         /// <summary>
+        ///     Gets or sets value indication in which mode Orbwalk should run.
+        /// </summary>
+        public TK ActiveMode { get; set; }
+
+        /// <summary>
         ///     Gets or sets a value indicating whether this <see cref="OrbwalkerBase{TK, T}" /> is enabled.
         /// </summary>
         public virtual bool Enabled
@@ -110,6 +115,7 @@ namespace LeagueSharp.SDK
                     {
                         Obj_AI_Base.OnProcessSpellCast += this.OnObjAiBaseProcessSpellCast;
                         Obj_AI_Base.OnDoCast += this.OnObjAiBaseDoCast;
+                        Obj_AI_Base.OnBuffAdd += this.ObjAiBaseOnOnBuffAdd;
                         Spellbook.OnStopCast += this.OnSpellbookStopCast;
                         Game.OnUpdate += this.OnGameUpdate;
                     }
@@ -117,6 +123,7 @@ namespace LeagueSharp.SDK
                     {
                         Obj_AI_Base.OnProcessSpellCast -= this.OnObjAiBaseProcessSpellCast;
                         Obj_AI_Base.OnDoCast -= this.OnObjAiBaseDoCast;
+                        Obj_AI_Base.OnBuffAdd -= this.ObjAiBaseOnOnBuffAdd;
                         Spellbook.OnStopCast -= this.OnSpellbookStopCast;
                         Game.OnUpdate -= this.OnGameUpdate;
                     }
@@ -150,11 +157,6 @@ namespace LeagueSharp.SDK
         ///     Gets or sets value indicating the amount of executed auto attacks.
         /// </summary>
         public int TotalAutoAttacks { get; protected set; }
-        
-        /// <summary>
-        ///     Gets or sets value indication in which mode Orbwalk should run.
-        /// </summary>
-        public TK ActiveMode { get; set; }
 
         #endregion
 
@@ -214,11 +216,6 @@ namespace LeagueSharp.SDK
         /// </returns>
         public virtual bool CanAttack(float extraWindup)
         {
-            if (!this.AttackState)
-            {
-                return false;
-            }
-
             return Variables.TickCount + (Game.Ping / 2) + 25
                    >= this.LastAutoAttackTick + (GameObjects.Player.AttackDelay * 1000) + extraWindup;
         }
@@ -348,10 +345,10 @@ namespace LeagueSharp.SDK
         /// </param>
         public virtual void Orbwalk(T target = null, Vector3? position = null)
         {
-            var gTarget = target ?? this.GetTarget();
-            if (gTarget != null && gTarget.IsValidTarget(gTarget.GetRealAutoAttackRange()))
+            if (this.CanAttack() && this.AttackState)
             {
-                if (this.CanAttack())
+                var gTarget = target ?? this.GetTarget();
+                if (gTarget.InAutoAttackRange())
                 {
                     this.Attack(gTarget);
                 }
@@ -417,6 +414,27 @@ namespace LeagueSharp.SDK
         }
 
         /// <summary>
+        ///     OnBuffAdd event.
+        /// </summary>
+        /// <param name="sender">
+        ///     The sender
+        /// </param>
+        /// <param name="args">
+        ///     The event data
+        /// </param>
+        private void ObjAiBaseOnOnBuffAdd(Obj_AI_Base sender, Obj_AI_BaseBuffAddEventArgs args)
+        {
+            if (!sender.IsMe)
+            {
+                return;
+            }
+            if (args.Buff.DisplayName == "PoppyPassiveBuff" || args.Buff.DisplayName == "SonaPassiveReady")
+            {
+                this.ResetSwingTimer();
+            }
+        }
+
+        /// <summary>
         ///     OnUpdate event.
         /// </summary>
         /// <param name="args">
@@ -425,7 +443,7 @@ namespace LeagueSharp.SDK
         private void OnGameUpdate(EventArgs args)
         {
             if (GameObjects.Player == null || !GameObjects.Player.IsValid || GameObjects.Player.IsDead
-                || Events.IsCastingInterruptableSpell(GameObjects.Player, true))
+                || GameObjects.Player.IsCastingInterruptableSpell(true))
             {
                 return;
             }
@@ -471,22 +489,16 @@ namespace LeagueSharp.SDK
         /// </param>
         private void OnObjAiBaseDoCastDelayed(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsValid && sender.IsMe)
+            if (AutoAttack.IsAutoAttackReset(args.SData.Name))
             {
-                if (AutoAttack.IsAutoAttackReset(args.SData.Name))
-                {
-                    this.ResetSwingTimer();
-                }
-
-                if (AutoAttack.IsAutoAttack(args.SData.Name))
-                {
-                    this.MissileLaunched = true;
-                    this.InvokeAction(
-                        new OrbwalkingActionArgs
-                            {
-                                Target = args.Target as AttackableUnit, Sender = sender, Type = OrbwalkingType.AfterAttack
-                            });
-                }
+                this.ResetSwingTimer();
+            }
+            else if (AutoAttack.IsAutoAttack(args.SData.Name))
+            {
+                this.MissileLaunched = true;
+                this.InvokeAction(
+                    new OrbwalkingActionArgs
+                        { Target = args.Target as AttackableUnit, Sender = sender, Type = OrbwalkingType.AfterAttack });
             }
         }
 
