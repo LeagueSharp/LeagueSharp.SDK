@@ -21,7 +21,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System.Linq;
     using System.Text.RegularExpressions;
 
-    using LeagueSharp.SDK;
     using Utils;
 
     /// <summary>
@@ -115,9 +114,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         /// <returns>
         ///     The estimated auto attack damage.
         /// </returns>
-        public static double GetAutoAttackDamage(
-            this Obj_AI_Base source,
-            Obj_AI_Base target)
+        public static double GetAutoAttackDamage(this Obj_AI_Base source, Obj_AI_Base target)
         {
             double result = source.TotalAttackDamage;
             var damageModifier = 1d;
@@ -125,13 +122,19 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
 
             var hero = source as Obj_AI_Hero;
             var targetHero = target as Obj_AI_Hero;
-            var targetMinion = target as Obj_AI_Minion;
 
             if (hero != null)
             {
                 if (hero.ChampionName == "Kalista")
                 {
                     result *= 0.9;
+                }
+                else if (hero.ChampionName == "Jhin")
+                {
+                    result *= 1
+                              + (new[] { 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40 }[
+                                  hero.Level - 1] + (Math.Floor(hero.Crit * 100 / 10) * 4)
+                                 + (Math.Floor((hero.AttackSpeedMod - 1) * 100 / 10) * 2.5)) / 100;
                 }
 
                 if (hero.HasBuff("Serrated"))
@@ -140,10 +143,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 }
 
                 // Spoils Of War
-                if (hero.IsMelee && targetMinion != null && targetMinion.Team != hero.Team
-                    && targetMinion.Team != GameObjectTeam.Neutral && hero.GetBuffCount("TalentReaper") > 0
+                if (hero.IsMelee && target.Type == GameObjectType.obj_AI_Minion && target.Team != GameObjectTeam.Neutral
+                    && hero.GetBuffCount("TalentReaper") > 0
                     && GameObjects.Heroes.Any(
-                        h => h.Team == hero.Team && h.NetworkId != hero.NetworkId && h.Distance(targetMinion) < 1100))
+                        h => h.Team == hero.Team && h.NetworkId != hero.NetworkId && h.Distance(target) < 1100))
                 {
                     return result
                            + (Items.HasItem((int)ItemId.Relic_Shield, hero)
@@ -168,8 +171,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 }
 
                 // RiftHerald P
-                if (targetMinion != null && hero.IsRanged && targetMinion.Team == GameObjectTeam.Neutral
-                    && Regex.IsMatch(targetMinion.Name, "SRU_RiftHerald"))
+                if (hero.IsRanged && target.Type == GameObjectType.obj_AI_Minion
+                    && target.Team == GameObjectTeam.Neutral && Regex.IsMatch(target.Name, "SRU_RiftHerald"))
                 {
                     damageModifier *= 0.65;
                 }
@@ -288,7 +291,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 baseDamage = source.CalculateDamage(
                     target,
                     spellData.DamageType,
-                    spellData.Damages[Math.Min(source.Level - 1, spellData.DamagesPerLvl.Count - 1)]);
+                    spellData.DamagesPerLvl[Math.Min(source.Level - 1, spellData.DamagesPerLvl.Count - 1)]);
+            }
+            if (target.Type == GameObjectType.obj_AI_Minion && spellData.BonusDamageOnMinion?.Count > 0)
+            {
+                baseDamage += source.CalculateDamage(
+                    target,
+                    spellData.DamageType,
+                    spellData.BonusDamageOnMinion[Math.Min(source.Level - 1, spellData.BonusDamageOnMinion.Count - 1)]);
             }
             if (spellData.BonusDamages?.Count > 0)
             {
@@ -320,13 +330,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     totalDamage *= (target.MaxHealth - target.Health) / target.MaxHealth
                                    * spellData.ScalePerTargetMissHealth + 1;
                 }
-                if (target is Obj_AI_Minion && spellData.MaxDamageOnMinion?.Count > 0)
+                if (target.Type == GameObjectType.obj_AI_Minion && spellData.MaxDamageOnMinion?.Count > 0)
                 {
                     totalDamage = Math.Min(
                         totalDamage,
                         spellData.MaxDamageOnMinion[Math.Min(spellLevel - 1, spellData.MaxDamageOnMinion.Count - 1)]);
                 }
-                if (spellData.SpellEffectType == SpellEffectType.Single && target is Obj_AI_Minion)
+                if (spellData.SpellEffectType == SpellEffectType.Single && target.Type == GameObjectType.obj_AI_Minion)
                 {
                     var savagery = source.GetCunning(DamageMastery.Cunning.Savagery);
                     if (savagery.IsValid())
@@ -436,7 +446,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             double bonusArmorPenetrationMod = source.PercentBonusArmorPenetrationMod;
 
             // Minions return wrong percent values.
-            if (source is Obj_AI_Minion)
+            if (source.Type == GameObjectType.obj_AI_Minion)
             {
                 armorPenetrationFlat = 0;
                 armorPenetrationPercent = 1;
@@ -516,12 +526,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             double amount,
             DamageType damageType)
         {
-            var hero = source as Obj_AI_Hero;
             var targetHero = target as Obj_AI_Hero;
-            if (hero != null)
+            if (source.Type == GameObjectType.obj_AI_Hero)
             {
                 // Exhaust
-                if (hero.HasBuff("Exhaust"))
+                if (source.HasBuff("Exhaust"))
                 {
                     amount *= 0.6;
                 }
@@ -529,14 +538,14 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 if (targetHero != null)
                 {
                     // Phantom Dancer
-                    if (hero.HasBuff("itemphantomdancerdebuff")
-                        && hero.GetBuff("itemphantomdancerdebuff").Caster.NetworkId == targetHero.NetworkId)
+                    if (source.HasBuff("itemphantomdancerdebuff")
+                        && source.GetBuff("itemphantomdancerdebuff").Caster.Compare(targetHero))
                     {
                         amount *= 0.88;
                     }
 
                     // Urgot P
-                    if (hero.HasBuff("urgotentropypassive"))
+                    if (source.HasBuff("urgotentropypassive"))
                     {
                         amount *= 0.85;
                     }
@@ -604,7 +613,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 }
 
                 // Maokai R
-                if (targetHero.HasBuff("MaokaiDrainDefense") && !(source is Obj_AI_Turret))
+                if (targetHero.HasBuff("MaokaiDrainDefense") && source.Type != GameObjectType.obj_AI_Turret)
                 {
                     amount *= 0.8;
                 }
@@ -615,14 +624,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     amount *= (1
                                - new[] { 0.5, 0.55, 0.6, 0.65, 0.7 }[
                                    targetHero.Spellbook.GetSpell(SpellSlot.W).Level - 1])
-                              / (source is Obj_AI_Turret ? 2 : 1);
-                }
-
-                // Shen E
-                if (targetHero.HasBuff("Shen Shadow Dash") && hero != null && hero.HasBuff("Taunt")
-                    && damageType == DamageType.Physical)
-                {
-                    amount *= 0.5;
+                              / (source.Type == GameObjectType.obj_AI_Turret ? 2 : 1);
                 }
 
                 // Yorick P
@@ -667,7 +669,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             var hero = source as Obj_AI_Hero;
             var targetHero = target as Obj_AI_Hero;
 
-            if (hero != null && target is Obj_AI_Minion)
+            if (hero != null && target.Type == GameObjectType.obj_AI_Minion)
             {
                 // Savagery
                 var savagery = hero.GetCunning(DamageMastery.Cunning.Savagery);
@@ -679,7 +681,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
 
             // ToughSkin
             if (targetHero != null
-                && (hero != null || (source is Obj_AI_Minion && source.Team == GameObjectTeam.Neutral))
+                && (source.Type == GameObjectType.obj_AI_Hero
+                    || (source.Type == GameObjectType.obj_AI_Minion && source.Team == GameObjectTeam.Neutral))
                 && targetHero.GetResolve(DamageMastery.Resolve.ToughSkin).IsValid())
             {
                 value -= 2;
@@ -719,7 +722,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             double amount,
             DamageType damageType)
         {
-            if (source is Obj_AI_Turret)
+            if (source.Type == GameObjectType.obj_AI_Turret)
             {
                 var minion = target as Obj_AI_Minion;
                 if (minion != null)
@@ -747,11 +750,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 {
                     var buffCount = hero.GetBuffCount("s5test_dragonslayerbuff");
                     var bonusPercent = 1.15 * (buffCount == 5 ? 2 : 1);
-                    if (buffCount >= 2 && target is Obj_AI_Turret)
+                    if (buffCount >= 2 && target.Type == GameObjectType.obj_AI_Turret)
                     {
                         amount *= bonusPercent;
                     }
-                    if (buffCount >= 4 && target is Obj_AI_Minion)
+                    if (buffCount >= 4 && target.Type == GameObjectType.obj_AI_Minion)
                     {
                         amount *= bonusPercent;
                     }
@@ -776,7 +779,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         && !GameObjects.Heroes.Where(h => h.Team == hero.Team && !h.Compare(hero))
                                 .Any(h => h.Distance(hero) <= 800))
                     {
-                        amount *= 1.015;
+                        amount *= 1.02;
                     }
 
                     // Merciless

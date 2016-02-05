@@ -217,33 +217,33 @@ namespace LeagueSharp.SDK
                 return;
             }
 
-            var gTarget = target ?? this.Selector.GetTarget(this.ActiveMode);
-            if (gTarget.IsValidTarget())
+            var gTarget = target ?? this.GetTarget();
+            if (!gTarget.InAutoAttackRange())
             {
-                var eventArgs = new OrbwalkingActionArgs
+                return;
+            }
+
+            var eventArgs = new OrbwalkingActionArgs
+                                {
+                                    Target = gTarget, Position = gTarget.Position, Process = true,
+                                    Type = OrbwalkingType.BeforeAttack
+                                };
+            this.InvokeAction(eventArgs);
+
+            if (eventArgs.Process)
+            {
+                if (GameObjects.Player.CanCancelAutoAttack())
                 {
-                    Target = gTarget,
-                    Position = gTarget.Position,
-                    Process = true,
-                    Type = OrbwalkingType.BeforeAttack
-                };
-                this.InvokeAction(eventArgs);
-
-                if (eventArgs.Process)
-                {
-                    if (GameObjects.Player.CanCancelAutoAttack())
-                    {
-                        this.MissileLaunched = false;
-                    }
-
-                    if (GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, gTarget))
-                    {
-                        this.LastAutoAttackCommandTick = Variables.TickCount;
-                        this.LastTarget = gTarget;
-                    }
-
-                    this.BlockOrdersUntilTick = Variables.TickCount + 70 + Math.Min(60, Game.Ping);
+                    this.MissileLaunched = false;
                 }
+
+                if (GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, gTarget))
+                {
+                    this.LastAutoAttackCommandTick = Variables.TickCount;
+                    this.LastTarget = gTarget;
+                }
+
+                this.BlockOrdersUntilTick = Variables.TickCount + 70 + Math.Min(60, Game.Ping);
             }
         }
 
@@ -260,6 +260,10 @@ namespace LeagueSharp.SDK
 
                 var attackDelay = GameObjects.Player.AttackDelay * 1000f;
                 extraAttackDelay = (attackDelay * 1.0740296828f) - 716.2381256175f - attackDelay;
+            }
+            else if (GameObjects.Player.ChampionName.Equals("Jhin") && GameObjects.Player.HasBuff("JhinPassiveReload"))
+            {
+                return false;
             }
 
             return base.CanAttack(extraWindup + extraAttackDelay);
@@ -295,6 +299,11 @@ namespace LeagueSharp.SDK
                 return;
             }
 
+            if (!position.IsValid())
+            {
+                return;
+            }
+
             if (Variables.TickCount - this.LastMovementOrderTick
                 < this.Menu["advanced"]["delayMovement"].GetValue<MenuSlider>().Value)
             {
@@ -315,11 +324,10 @@ namespace LeagueSharp.SDK
                 if (GameObjects.Player.Path.Length > 0)
                 {
                     var eventStopArgs = new OrbwalkingActionArgs
-                    {
-                        Position = GameObjects.Player.ServerPosition,
-                        Process = true,
-                        Type = OrbwalkingType.StopMovement
-                    };
+                                            {
+                                                Position = GameObjects.Player.ServerPosition, Process = true,
+                                                Type = OrbwalkingType.StopMovement
+                                            };
                     this.InvokeAction(eventStopArgs);
                     if (eventStopArgs.Process)
                     {
@@ -385,7 +393,7 @@ namespace LeagueSharp.SDK
             }
 
             var eventArgs = new OrbwalkingActionArgs
-            { Position = position, Process = true, Type = OrbwalkingType.Movement };
+                                { Position = position, Process = true, Type = OrbwalkingType.Movement };
             this.InvokeAction(eventArgs);
 
             if (eventArgs.Process)

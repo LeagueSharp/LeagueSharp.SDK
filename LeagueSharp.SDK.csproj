@@ -385,7 +385,6 @@
   <ItemGroup>
     <None Include="LeagueSharp.SDK.snk" />
     <None Include="packages.config" />
-    <EmbeddedResource Include="Resources\Data\5.24.json" />
     <EmbeddedResource Include="Resources\Data\Gapclosers.json" />
     <EmbeddedResource Include="Resources\Data\Database.json" />
     <EmbeddedResource Include="Resources\Data\GlobalInterruptableSpellsList.json" />
@@ -393,6 +392,7 @@
     <EmbeddedResource Include="Resources\Data\Map.json" />
     <EmbeddedResource Include="Resources\Data\Priority.json" />
     <None Include="Resources\Data\6.1.json" />
+    <None Include="Resources\Data\6.2.json" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />

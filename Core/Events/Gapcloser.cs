@@ -95,7 +95,7 @@ namespace LeagueSharp.SDK
                                 (args.Target != null && args.Target.IsValid)
                                     ? GapcloserType.Targeted
                                     : GapcloserType.Skillshot,
-                            Slot = hero.GetSpellSlot(args.SData.Name),
+                            Slot = args.Slot,
                             IsDirectedToPlayer =
                                 (args.Target != null && args.Target.IsValid && args.Target.IsMe)
                                 || player.Distance(args.End) < player.Distance(args.Start) || sender.IsFacing(player),

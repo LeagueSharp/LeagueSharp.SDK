@@ -37,6 +37,14 @@
       "Slot": "R"
     }
   ],
+  "Jhin": [
+    {
+      "DangerLevel": "High",
+      "MovementInterrupts": true,
+      "Name": null,
+      "Slot": "R"
+    }
+  ],
   "Karthus": [
     {
       "DangerLevel": "High",
