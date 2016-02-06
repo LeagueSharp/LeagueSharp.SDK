@@ -53,12 +53,17 @@ namespace LeagueSharp.SDK
         SkillshotMissileCone,
 
         /// <summary>
+        ///     The spell is an Arc Skillshot (Diana Q)
+        /// </summary>
+        SkillshotMissileArc,
+
+        /// <summary>
         ///     The spell is a Ring Skillshot (Veigar E)
         /// </summary>
         SkillshotRing,
 
         /// <summary>
-        ///     The spell is an Arc Skillshot (Diana Q)
+        ///     The spell is an Arc Skillshot
         /// </summary>
         SkillshotArc,
 
