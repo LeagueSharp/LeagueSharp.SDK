@@ -1,21 +1,16 @@
 ﻿namespace LeagueSharp.SDK.Core.Wrappers.Spells.Tracker.Skillshots
 {
-    public class _ZiggsR : Skillshot
+    public class _UFSlash : Skillshot
     {
         private CirclePoly Circle;
 
         #region Constructors and Destructors
 
-        public _ZiggsR()
-            : base("ZiggsR")
+        public _UFSlash()
+            : base("UFSlash")
         {
+            this.SData.MissileSpeed += (int)this.Caster.MoveSpeed;
         }
-
-        #endregion
-
-        #region Public Properties
-
-        public new int Delay => (int)(1500 + 1500 * this.EndPosition.Distance(this.StartPosition) / this.SData.Range);
 
         #endregion
 
