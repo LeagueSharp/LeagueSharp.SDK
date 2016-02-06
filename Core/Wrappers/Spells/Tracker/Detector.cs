@@ -110,7 +110,7 @@
 
             switch (spellDatabaseEntry.SpellType)
             {
-                case SpellType.SkillshotMissileArc:
+                case SpellType.SkillshotArc:
                     skillshot = new SkillshotMissileArc(spellDatabaseEntry);
                     break;
                 case SpellType.SkillshotMissileCircle:
