@@ -125,6 +125,11 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The spell grants vision of the target area.
         /// </summary>
-        GrantsVision
+        GrantsVision,
+
+        /// <summary>
+        ///     The spell can be interrupted
+        /// </summary>
+        Interruptable
     }
 }

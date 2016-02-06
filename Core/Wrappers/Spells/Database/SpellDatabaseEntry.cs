@@ -45,6 +45,21 @@ namespace LeagueSharp.SDK
         public BuffType[] AppliedBuffsOnSelf { get; set; }
 
         /// <summary>
+        ///     The name of the buff that the spell applies on the caster.
+        /// </summary>
+        public string AppliedBuffOnSelfName { get; set; }
+
+        /// <summary>
+        ///     The name of the buff applied on an ally.
+        /// </summary>
+        public string AppliedBuffOnAllyName {  get; set; }
+
+        /// <summary>
+        ///     The name of the buff applied on an enemy.
+        /// </summary>
+        public string AppliedBuffOnEnemyName { get; set; }
+
+        /// <summary>
         ///     The name of the buff that the spell applies on the target.
         /// </summary>
         public string AppliedBuffName { get; set; }
