@@ -90,6 +90,11 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The spell does nothing else but contain a passive (Vayne W, Mini Gnar W)
         /// </summary>
-        Passive
+        Passive,
+
+        /// <summary>
+        ///     The spell is casted to a position like a skillshot but does undodgeable / random damage. Ezreal E, Ahri R...
+        /// </summary>
+        Position
     }
 }

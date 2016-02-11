@@ -391,8 +391,7 @@
     <EmbeddedResource Include="Resources\Data\InterruptableSpells.json" />
     <EmbeddedResource Include="Resources\Data\Map.json" />
     <EmbeddedResource Include="Resources\Data\Priority.json" />
-    <None Include="Resources\Data\6.1.json" />
-    <None Include="Resources\Data\6.2.json" />
+    <None Include="Resources\Data\6.3.json" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
