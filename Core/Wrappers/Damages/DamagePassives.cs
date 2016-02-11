@@ -114,17 +114,19 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 DamageType.Magical,
                 (hero, @base) =>
                     {
-                        var d1 = Items.HasItem(2015, hero) ? 30 : 0;
+                        var d1 = Items.HasItem(2015, hero) ? 40 : 0;
                         var d2 = Items.HasItem(3087, hero)
-                                     ? new[] { 30, 30, 30, 30, 30, 36, 41, 47, 52, 57, 63, 68, 74, 79, 84, 90, 95, 100 }
-                                           [hero.Level - 1] * (@base.Type == GameObjectType.obj_AI_Minion ? 2.2 : 1)
+                                     ? new[]
+                                           {
+                                               50, 50, 50, 50, 50, 56, 61, 67, 72, 77, 83, 88, 94, 99, 104, 110, 115, 120
+                                           }[hero.Level - 1] * (@base.Type == GameObjectType.obj_AI_Minion ? 2.2 : 1)
                                        * hero.GetCritMultiplier(true)
                                      : 0;
                         var d3 = Items.HasItem(3094, hero)
                                      ? new[]
                                            {
-                                               50, 50, 50, 50, 50, 62, 74, 85, 97, 108, 120, 131, 143, 154, 166, 177, 189,
-                                               200
+                                               50, 50, 50, 50, 50, 58, 66, 75, 83, 92, 100, 109, 117, 126, 134, 143, 151,
+                                               160
                                            }[hero.Level - 1]
                                      : 0;
                         return Math.Max(d1, Math.Max(d2, d3));

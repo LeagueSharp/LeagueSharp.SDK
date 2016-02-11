@@ -587,7 +587,7 @@
 		"MissileFollowsCaster": false,
 		"MissileMaxSpeed": 0,
 		"MissileMinSpeed": 0,
-		"MissileSpeed": 2200,
+		"MissileSpeed": 2000,
 		"MissileSpellName": "AkaliShadowDanceKick",
 		"ArcAngle": 0,
 		"RingRadius": 0,
@@ -20661,7 +20661,7 @@
 			"YasuoWall"
 		],
 		"DangerValue": 3,
-		"Delay": 250,
+		"Delay": 125,
 		"ExtraMissileNames": 
 		[
 

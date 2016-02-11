@@ -108,23 +108,20 @@ namespace LeagueSharp.SDK
                     var path = new List<Vector2> { hero.ServerPosition.ToVector2() };
                     path.AddRange(args.Path.ToList().ToVector2());
 
-                    DetectedDashes[hero.NetworkId] = new DashArgs
-                                                         {
-                                                             StartTick = Variables.TickCount - (Game.Ping / 2),
-                                                             Speed = args.Speed,
-                                                             StartPos = hero.ServerPosition.ToVector2(), Unit = sender,
-                                                             Path = path, EndPos = path.Last(),
-                                                             EndTick =
-                                                                 DetectedDashes[hero.NetworkId].StartTick
-                                                                 + (int)
-                                                                   (1000
-                                                                    * (DetectedDashes[hero.NetworkId].EndPos.Distance(
-                                                                        DetectedDashes[hero.NetworkId].StartPos)
-                                                                       / DetectedDashes[hero.NetworkId].Speed)),
-                                                             Duration =
-                                                                 DetectedDashes[hero.NetworkId].EndTick
-                                                                 - DetectedDashes[hero.NetworkId].StartTick
-                                                         };
+                    DetectedDashes[hero.NetworkId].Unit = sender;
+                    DetectedDashes[hero.NetworkId].Path = path;
+                    DetectedDashes[hero.NetworkId].Speed = args.Speed;
+                    DetectedDashes[hero.NetworkId].StartPos = hero.ServerPosition.ToVector2();
+                    DetectedDashes[hero.NetworkId].StartTick = Variables.TickCount - (Game.Ping / 2);
+                    DetectedDashes[hero.NetworkId].EndPos = path.Last();
+                    DetectedDashes[hero.NetworkId].EndTick = DetectedDashes[hero.NetworkId].StartTick
+                                                             + (int)
+                                                               (1000
+                                                                * (DetectedDashes[hero.NetworkId].EndPos.Distance(
+                                                                    DetectedDashes[hero.NetworkId].StartPos)
+                                                                   / DetectedDashes[hero.NetworkId].Speed));
+                    DetectedDashes[hero.NetworkId].Duration = DetectedDashes[hero.NetworkId].EndTick
+                                                              - DetectedDashes[hero.NetworkId].StartTick;
 
                     OnDash?.Invoke(MethodBase.GetCurrentMethod().DeclaringType, DetectedDashes[hero.NetworkId]);
                 }
