@@ -330,7 +330,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     case "DrMundo":
                         AddPassiveAttack(
                             "DrMundo",
-                            (hero, @base) => hero.HasBuff("Masochism"),
+                            (hero, @base) => hero.HasBuff("Masochism") && hero.AttackRange >= 150,
                             DamageType.Physical,
                             (hero, @base) => hero.GetSpellDamage(@base, SpellSlot.E),
                             true);
