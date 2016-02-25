@@ -467,9 +467,9 @@ namespace LeagueSharp.SDK
         {
             if (sender.IsValid && sender.IsMe)
             {
-                if (Game.Ping <= 30)
+                if (Game.Ping < 30)
                 {
-                    DelayAction.Add(30, () => this.OnObjAiBaseDoCastDelayed(sender, args));
+                    DelayAction.Add(30 - Game.Ping, () => this.OnObjAiBaseDoCastDelayed(sender, args));
                 }
                 else
                 {
