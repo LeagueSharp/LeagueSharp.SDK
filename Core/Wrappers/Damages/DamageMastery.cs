@@ -47,6 +47,8 @@
 
             Feast = 82,
 
+            ExposeWeakness = 83,
+
             Vampirism = 97,
 
             NaturalTalent = 100,
@@ -63,7 +65,7 @@
 
             FervorofBattle = 146,
 
-            DeathfireTouch = 137
+            DeathfireTouch = 148
         }
 
         public enum Resolve
@@ -74,7 +76,7 @@
 
             Explorer = 81,
 
-            ToughSkin = 82,
+            ToughSkin = 83,
 
             RunicArmor = 97,
 
