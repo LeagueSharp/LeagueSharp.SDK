@@ -40,7 +40,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         ///     The damage version files.
         /// </summary>
         private static readonly IDictionary<string, byte[]> DamageFiles = new Dictionary<string, byte[]>
-                                                                              { { "6.3", Resources._6_3 } };
+                                                                              { { "6.4", Resources._6_4 } };
 
         #endregion
 

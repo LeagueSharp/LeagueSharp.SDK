@@ -105,7 +105,8 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 (hero, @base) => 40);
             AddPassiveAttack(
                 string.Empty,
-                (hero, @base) => hero.HasBuff("Muramana") && hero.ManaPercent >= 3,
+                (hero, @base) =>
+                hero.HasBuff("Muramana") && hero.ManaPercent >= 20 && @base.Type == GameObjectType.obj_AI_Hero,
                 DamageType.Physical,
                 (hero, @base) => 0.06 * hero.Mana);
             AddPassiveAttack(
@@ -264,7 +265,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                               * (0.5 + (hero.Crit * (1 + 0.5 * hero.CritDamageMultiplier)));
                                         if (@base.HasBuff("caitlynyordletrapsight"))
                                         {
-                                            dmg *= 1 + hero.Spellbook.GetSpell(SpellSlot.W).Level / 10;
+                                            dmg +=
+                                                new[] { 30, 70, 110, 150, 190 }[
+                                                    hero.Spellbook.GetSpell(SpellSlot.W).Level - 1]
+                                                + (hero.TotalAttackDamage * 0.7);
                                         }
                                     }
                                     return dmg;
@@ -664,7 +668,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     case "Lux":
                         AddPassiveAttack(
                             "Lux",
-                            (hero, @base) => hero.HasBuff("LuxIlluminatingFraulein"),
+                            (hero, @base) => @base.HasBuff("LuxIlluminatingFraulein"),
                             DamageType.Magical,
                             (hero, @base) => 10 + (8 * hero.Level) + (0.2 * hero.TotalMagicalDamage));
                         break;

@@ -35,8 +35,8 @@ namespace LeagueSharp.SDK.Core.Utils
             {
                 "powerfist", "dariusnoxiantacticsonh", "masochism", "fiorae",
                 "gangplankqwrapper", "garenq", "gravesmove", "hecarimramp",
-                "illaoiw", "jaxempowertwo", "jaycehypercharge", "jhinq",
-                "netherblade", "leonashieldofdaybreak", "luciane", "meditate",
+                "illaoiw", "jaxempowertwo", "jaycehypercharge", "netherblade",
+                "leonashieldofdaybreak", "luciane", "meditate",
                 "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze",
                 "takedown", "reksaiq", "renektonpreexecute", "rengarq",
                 "riventricleave", "sejuaninorthernwinds",
