@@ -19787,7 +19787,7 @@
       "Damage",
       "CrowdControl"
     ],
-    "SpellType": "SkillshotMissileLine",
+    "SpellType": "Vector",
     "ToggleParticleName": "",
     "Width": 50,
     "MinChannelDuration": 0,
@@ -26018,7 +26018,7 @@
     "SpellTags": [
       "Damage"
     ],
-    "SpellType": "SkillshotMissileLine",
+    "SpellType": "Vector",
     "ToggleParticleName": "",
     "Width": 50,
     "MinChannelDuration": 0,
