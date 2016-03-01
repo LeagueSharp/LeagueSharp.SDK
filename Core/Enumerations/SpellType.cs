@@ -95,6 +95,11 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The spell is casted to a position like a skillshot but does undodgeable / random damage. Ezreal E, Ahri R...
         /// </summary>
-        Position
+        Position,
+
+        /// <summary>
+        ///     The spell must specify a start point and an end point (Viktor E, Rumble R)
+        /// </summary>
+        Vector
     }
 }
