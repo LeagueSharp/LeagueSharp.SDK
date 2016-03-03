@@ -57,14 +57,14 @@ namespace LeagueSharp.SDK.Core.Utils
                                 ChampionName = "Alistar",
                                 CheckFunction =
                                     (target, type) =>
-                                    GameObjects.Player.CountEnemyHeroesInRange(target.GetRealAutoAttackRange()) >= 1
+                                    GameObjects.Player.CountEnemyHeroesInRange(GameObjects.Player.GetRealAutoAttackRange()) > 1
                             },
                         new InvulnerableEntry("Meditate")
                             {
                                 ChampionName = "MasterYi",
                                 CheckFunction =
                                     (target, type) =>
-                                    GameObjects.Player.CountEnemyHeroesInRange(target.GetRealAutoAttackRange()) >= 1
+                                    GameObjects.Player.CountEnemyHeroesInRange(GameObjects.Player.GetRealAutoAttackRange()) > 1
                             },
                         new InvulnerableEntry("UndyingRage")
                             {
