@@ -81,6 +81,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
         /// </summary>
         public override void Draw()
         {
+			
             var centerY =
                 (int)
                 DefaultUtilities.GetContainerRectangle(this.Component)
@@ -88,8 +89,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                     .Y;
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
+                MenuManager.Instance.Sprite,
+				MultiLanguage._(this.Component.DisplayName), 
                 (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset), 
                 centerY, 
                 MenuSettings.TextColor);
@@ -123,8 +124,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         this.Component.Value ? "ON" : "OFF", 
                         CenteredFlags.HorizontalCenter).X;
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.Value ? "ON" : "OFF", 
+                MenuManager.Instance.Sprite,
+				MultiLanguage._(this.Component.Value ? "ON" : "OFF"),
                 centerX, 
                 centerY, 
                 MenuSettings.TextColor);

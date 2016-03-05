@@ -112,9 +112,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset), 
+                MenuManager.Instance.Sprite,
+				MultiLanguage._(this.Component.DisplayName),
+				(int)(this.Component.Position.X + MenuSettings.ContainerTextOffset + 20), 
                 (int)rectangleName.Y, 
                 MenuSettings.TextColor);
 
@@ -151,8 +151,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             Line.End();
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.ButtonText, 
+                MenuManager.Instance.Sprite,
+				MultiLanguage._(this.Component.ButtonText),
                 (int)(this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - TextGap), 
                 (int)rectangleName.Y, 
                 MenuSettings.TextColor);

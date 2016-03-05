@@ -64,9 +64,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)centerY.X, 
+                MenuManager.Instance.Sprite,
+				MultiLanguage._(this.Component.DisplayName),
+				(int)centerY.X, 
                 (int)centerY.Y, 
                 MenuSettings.TextColor);
         }
