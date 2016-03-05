@@ -100,8 +100,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
-                (int)(position.X + MenuSettings.ContainerTextOffset),
+				MultiLanguage._(this.Component.DisplayName),
+				(int)(position.X + MenuSettings.ContainerTextOffset),
                 (int)rectangleName.Y,
                 MenuSettings.TextColor);
 
@@ -155,7 +155,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             Line.End();
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.SelectedValueAsObject.ToString(),
+                MultiLanguage._(this.Component.SelectedValueAsObject.ToString()),
                 (int)position.X + this.Component.MenuWidth - this.dropDownButtonWidth - TextSpacing
                 - this.Component.MaxStringWidth,
                 (int)rectangleName.Y,
@@ -245,7 +245,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                 y += MenuSettings.ContainerHeight;
                                 MenuSettings.Font.DrawText(
                                     MenuManager.Instance.Sprite,
-                                    valueStrings[i],
+									MultiLanguage._(valueStrings[i]),
                                     x,
                                     y,
                                     MenuSettings.TextColor);

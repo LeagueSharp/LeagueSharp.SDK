@@ -38,7 +38,7 @@ namespace LeagueSharp.SDK
         ///     Indicates whether the bootstrap has been initialized.
         /// </summary>
         private static bool initialized;
-
+        public static string SelectedLanguage;
         #endregion
 
         #region Public Methods and Operators
@@ -96,8 +96,16 @@ namespace LeagueSharp.SDK
             Damage.Initialize(Variables.GameVersion);
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Damage Library Initialized.");
 
-            // Final notification.
-            Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");
+            // Menu MultiLanguage Init User MultiLanguage
+            SelectedLanguage = Sandbox.SandboxConfig.SelectedLanguage;
+            MultiLanguage.LoadLanguage(SelectedLanguage);
+            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] MultiLanguage Initialized. Your Selected Language is : " + SelectedLanguage);
+
+
+			// Final notification.
+			Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");
+
+			
         }
 
         #endregion

@@ -137,8 +137,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
-                (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
+				MultiLanguage._(this.Component.DisplayName),
+				(int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
                 (int)rectangleName.Y,
                 MenuSettings.TextColor);
 
@@ -222,7 +222,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                                         CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
                             MenuSettings.Font.DrawText(
                                 MenuManager.Instance.Sprite,
-                                detail,
+								MultiLanguage._(detail),
                                 (int)rectanglePreview.X,
                                 (int)rectanglePreview.Y,
                                 new ColorBGRA(
@@ -249,7 +249,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                             {
                                 MenuSettings.Font.DrawText(
                                     MenuManager.Instance.Sprite,
-                                    lineNames[i],
+									MultiLanguage._(lineNames[i]),
                                     this.pickerX + BorderOffset,
                                     textY + (i * (SliderOffset + SliderHeight)),
                                     Color.White);

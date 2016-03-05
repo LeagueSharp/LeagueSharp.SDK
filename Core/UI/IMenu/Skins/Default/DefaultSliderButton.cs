@@ -117,9 +117,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             Line.End();
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)(position.X + MenuSettings.ContainerTextOffset), 
+                MenuManager.Instance.Sprite,
+				MultiLanguage._(this.Component.DisplayName),
+				(int)(position.X + MenuSettings.ContainerTextOffset), 
                 centeredY, 
                 MenuSettings.TextColor);
 
@@ -177,8 +177,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                         CenteredFlags.HorizontalCenter).X;
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.BValue ? "ON" : "OFF",
-                centerX,
+                MultiLanguage._(this.Component.BValue ? "ON" : "OFF"),
+                centerX + 5,
                 centeredY,
                 MenuSettings.TextColor);
         }

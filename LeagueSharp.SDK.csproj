@@ -49,17 +49,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>D:\LeagueSharp1\System\LeagueSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="LeagueSharp.Sandbox">
+      <HintPath>D:\LeagueSharp1\System\LeagueSharp.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>packages\Newtonsoft.Json.8.0.1-beta4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>D:\LeagueSharp1\System\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>D:\LeagueSharp1\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>D:\LeagueSharp1\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -141,6 +144,7 @@
     <Compile Include="Core\UI\IMenu\MenuItem.cs" />
     <Compile Include="Core\UI\IMenu\MenuManager.cs" />
     <Compile Include="Core\UI\IMenu\MenuValueChangedEventArgs.cs" />
+    <Compile Include="Core\UI\IMenu\MultiLanguage.cs" />
     <Compile Include="Core\UI\IMenu\RadioMenu.cs" />
     <Compile Include="Core\UI\IMenu\Skins\ADrawable.cs" />
     <Compile Include="Core\UI\IMenu\Skins\ADrawableAdapter.cs" />

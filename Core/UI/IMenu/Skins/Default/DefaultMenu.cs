@@ -124,12 +124,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
-                (int)(position.X + MenuSettings.ContainerTextOffset),
+				MultiLanguage._(this.Component.DisplayName),
+				(int)(position.X + MenuSettings.ContainerTextOffset),
                 centerY,
                 MenuSettings.TextColor);
-
-            MenuSettings.Font.DrawText(
+			
+			MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
                 "»",
                 (int)

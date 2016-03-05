@@ -107,9 +107,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             Line.End();
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)(position.X + MenuSettings.ContainerTextOffset), 
+                MenuManager.Instance.Sprite,
+				MultiLanguage._(this.Component.DisplayName),
+				(int)(position.X + MenuSettings.ContainerTextOffset), 
                 centeredY, 
                 MenuSettings.TextColor);
 
