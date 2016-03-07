@@ -66,7 +66,8 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The Minimum Mana Percentage
         /// </summary>
-        private float minManaPercent;      
+        private float minManaPercent;
+
         #endregion
 
         #region Constructors and Destructors
@@ -120,6 +121,7 @@ namespace LeagueSharp.SDK
         #endregion
 
         #region Public Properties
+
         /// <summary>
         ///     Cast Condition Delegate
         /// </summary>
@@ -772,7 +774,7 @@ namespace LeagueSharp.SDK
         /// <returns>
         ///     Unit's predicted health
         /// </returns>
-        public float GetHealthPrediction(Obj_AI_Base unit)
+        public virtual float GetHealthPrediction(Obj_AI_Base unit)
         {
             var time = (int)((this.Delay * 1000) + (this.From.Distance(unit.ServerPosition) / this.Speed) - 100);
             return Health.GetPrediction(unit, time);
@@ -857,7 +859,7 @@ namespace LeagueSharp.SDK
         /// <returns>
         ///     <see cref="PredictionOutput" /> output
         /// </returns>
-        public PredictionOutput GetPrediction(
+        public virtual PredictionOutput GetPrediction(
             Obj_AI_Base unit,
             bool aoe = false,
             float overrideRange = -1,
@@ -868,7 +870,7 @@ namespace LeagueSharp.SDK
                     new PredictionInput
                         {
                             Unit = unit, Delay = this.Delay, Radius = this.Width, Speed = this.Speed, From = this.From,
-                            Range = (overrideRange > 0) ? overrideRange : this.Range, Collision = this.Collision,
+                            Range = overrideRange > 0 ? overrideRange : this.Range, Collision = this.Collision,
                             Type = this.Type, RangeCheckFrom = this.RangeCheckFrom, AoE = aoe,
                             CollisionObjects = collisionable
                         });
