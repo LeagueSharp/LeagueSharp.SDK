@@ -18,6 +18,7 @@
 namespace LeagueSharp.SDK
 {
     using System.Globalization;
+    using System.Runtime.CompilerServices;
     using System.Security.Permissions;
     using System.Threading;
 
@@ -72,7 +73,7 @@ namespace LeagueSharp.SDK
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Resources Initialized.");
 
             // Load GameObjects.
-            GameObjects.Initialize();
+            RuntimeHelpers.RunClassConstructor(typeof(GameObjects).TypeHandle);
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] GameObjects Initialized.");
 
             // Create L# menu
