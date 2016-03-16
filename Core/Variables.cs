@@ -31,7 +31,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The game version.
         /// </summary>
-        public static readonly Version GameVersion = new Version(Game.Version.Substring(8, 9));
+        public static readonly Version GameVersion = new Version("6.5");
 
         /// <summary>
         ///     The kit version.
