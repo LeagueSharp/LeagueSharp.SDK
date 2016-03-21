@@ -568,7 +568,8 @@
     "SpellName": "Headbutt",
     "SpellTags": [
       "CrowdControl",
-      "Damage"
+      "Damage",
+	  "Dash"
     ],
     "SpellType": "Targeted",
     "ToggleParticleName": "",
@@ -4804,7 +4805,7 @@
     "SpellTags": [
       "DamageAmplifier",
       "AppliesOnHitEffects",
-      "Dash"
+      "Blink"
     ],
     "SpellType": "SkillshotLine",
     "ToggleParticleName": "",
@@ -5170,7 +5171,7 @@
     "SourceObjectName": "",
     "SpellName": "EliseSpiderE",
     "SpellTags": [
-      "Dash",
+      "Blink",
       "DamageAmplifier",
       "AppliesOnHitEffects",
       "DefensiveBuff"
@@ -5590,7 +5591,7 @@
     "SpellName": "EzrealArcaneShift",
     "SpellTags": [
       "Damage",
-      "Dash"
+      "Blink"
     ],
     "SpellType": "SkillshotLine",
     "ToggleParticleName": "",
@@ -5855,7 +5856,9 @@
     "SpellName": "Crowstorm",
     "SpellTags": [
       "Damage",
-      "Interruptable"
+      "Interruptable",
+	  "Blink",
+	  "AoE"
     ],
     "SpellType": "SkillshotCircle",
     "ToggleParticleName": "",
@@ -6121,7 +6124,8 @@
     "SpellName": "FizzPiercingStrike",
     "SpellTags": [
       "AppliesOnHitEffects",
-      "Damage"
+      "Damage",
+	  "Dash"
     ],
     "SpellType": "Targeted",
     "ToggleParticleName": "",
@@ -6224,7 +6228,8 @@
     "SpellName": "FizzJump",
     "SpellTags": [
       "Damage",
-      "CrowdControl"
+      "CrowdControl",
+	  "Dash"
     ],
     "SpellType": "SkillshotCircle",
     "ToggleParticleName": "",
@@ -11130,7 +11135,7 @@
     "SpellName": "RiftWalk",
     "SpellTags": [
       "Damage",
-      "Dash"
+      "Blink"
     ],
     "SpellType": "SkillshotMissileCircle",
     "ToggleParticleName": "",
@@ -11287,7 +11292,7 @@
     "SpellName": "KatarinaE",
     "SpellTags": [
       "CanDetonateMark",
-      "Dash"
+      "Blink"
     ],
     "SpellType": "Targeted",
     "ToggleParticleName": "",
@@ -12546,7 +12551,7 @@
     "SpellName": "LeblancSlide",
     "SpellTags": [
       "CanDetonateMark",
-      "Dash",
+      "Blink",
       "Damage"
     ],
     "SpellType": "SkillshotMissileCircle",
@@ -12598,7 +12603,7 @@
     "SpellName": "LeblancSlideM",
     "SpellTags": [
       "CanDetonateMark",
-      "Dash",
+      "Blink",
       "Damage"
     ],
     "SpellType": "SkillshotMissileCircle",
@@ -14484,7 +14489,9 @@
     "Slot": "R",
     "SourceObjectName": "",
     "SpellName": "UFSlash",
-    "SpellTags": null,
+    "SpellTags": [
+      "Dash"
+    ],
     "SpellType": "SkillshotMissileCircle",
     "ToggleParticleName": "",
     "Width": 50,
@@ -14957,7 +14964,8 @@
     "SpellName": "AlphaStrike",
     "SpellTags": [
       "Damage",
-      "Stasis"
+      "Stasis",
+	  "Blink"
     ],
     "SpellType": "Targeted",
     "ToggleParticleName": "",
