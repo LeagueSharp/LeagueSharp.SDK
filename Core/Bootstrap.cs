@@ -98,6 +98,9 @@ namespace LeagueSharp.SDK
 
             // Final notification.
             Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");
+            
+            // Another one so we are sure that everything is loaded
+            Console.Beep();
         }
 
         #endregion
