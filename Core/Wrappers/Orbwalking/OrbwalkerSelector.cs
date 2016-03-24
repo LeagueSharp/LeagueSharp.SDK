@@ -1,4 +1,4 @@
-﻿// <copyright file="OrbwalkerSelector.cs" company="LeagueSharp">
+// <copyright file="OrbwalkerSelector.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
 // 
 //    This program is free software: you can redistribute it and/or modify
@@ -156,11 +156,15 @@ namespace LeagueSharp.SDK
             // Killable Minion
             if (mode == OrbwalkingMode.LaneClear || mode == OrbwalkingMode.Hybrid || mode == OrbwalkingMode.LastHit)
             {
-                foreach (var minion in minions)
+                foreach (var minion in minions.OrderBy(m => m.Health))
                 {
+                    if (minion.IsHPBarRendered && minion.Health < GameObjects.Player.GetAutoAttackDamage(minion))
+                    {
+                        return minion;
+                    }
                     var time =
                         (int)
-                        ((GameObjects.Player.AttackCastDelay * 1000) - 100 + (Game.Ping / 2f)
+                        ((GameObjects.Player.AttackCastDelay * 1000) + (Game.Ping / 2f)
                          + (1000 * Math.Max(0, GameObjects.Player.Distance(minion) - GameObjects.Player.BoundingRadius)
                             / GameObjects.Player.GetProjectileSpeed()));
                     if (minion.MaxHealth <= 10)
