@@ -125,7 +125,7 @@
 
         #region Methods
 
-        internal static bool IsMoveImpaired(this Obj_AI_Hero hero)
+        internal static bool IsMoveImpaired(this Obj_AI_Base hero)
         {
             return hero.HasBuffOfType(BuffType.Knockback) || hero.HasBuffOfType(BuffType.Knockup)
                    || hero.HasBuffOfType(BuffType.Charm) || hero.HasBuffOfType(BuffType.Slow)
