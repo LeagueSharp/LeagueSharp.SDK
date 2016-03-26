@@ -163,8 +163,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The general particle emitters list.
         /// </summary>
-        private static readonly List<Obj_GeneralParticleEmitter> ParticleEmittersList =
-            new List<Obj_GeneralParticleEmitter>();
+        private static readonly List<Obj_GeneralParticleEmitter> ParticleEmittersList = new List<Obj_GeneralParticleEmitter>();
 
         /// <summary>
         ///     The shops list.
@@ -186,11 +185,6 @@ namespace LeagueSharp.SDK
         /// </summary>
         private static readonly List<Obj_AI_Minion> WardsList = new List<Obj_AI_Minion>();
 
-        /// <summary>
-        ///     Indicates whether the <see cref="GameObjects" /> stack was initialized and saved required instances.
-        /// </summary>
-        private static bool initialized;
-
         #endregion
 
         #region Constructors and Destructors
@@ -200,7 +194,61 @@ namespace LeagueSharp.SDK
         /// </summary>
         static GameObjects()
         {
-            Initialize();
+            Events.OnLoad += (sender, args) =>
+            {
+                Player = ObjectManager.Player;
+
+                HeroesList.AddRange(ObjectManager.Get<Obj_AI_Hero>());
+                MinionsList.AddRange(
+                    ObjectManager.Get<Obj_AI_Minion>()
+                        .Where(
+                            o => o.Team != GameObjectTeam.Neutral && !o.GetMinionType().HasFlag(MinionTypes.Ward)));
+                TurretsList.AddRange(ObjectManager.Get<Obj_AI_Turret>());
+                InhibitorsList.AddRange(ObjectManager.Get<Obj_BarracksDampener>());
+                JungleList.AddRange(
+                    ObjectManager.Get<Obj_AI_Minion>()
+                        .Where(o => o.Team == GameObjectTeam.Neutral && o.Name != "WardCorpse"));
+                WardsList.AddRange(
+                    ObjectManager.Get<Obj_AI_Minion>().Where(o => o.GetMinionType().HasFlag(MinionTypes.Ward)));
+                ShopsList.AddRange(ObjectManager.Get<Obj_Shop>());
+                SpawnPointsList.AddRange(ObjectManager.Get<Obj_SpawnPoint>());
+                GameObjectsList.AddRange(ObjectManager.Get<GameObject>());
+                NexusList.AddRange(ObjectManager.Get<Obj_HQ>());
+                AttackableUnitsList.AddRange(ObjectManager.Get<AttackableUnit>());
+                ParticleEmittersList.AddRange(ObjectManager.Get<Obj_GeneralParticleEmitter>());
+
+                EnemyHeroesList.AddRange(HeroesList.Where(o => o.IsEnemy));
+                EnemyMinionsList.AddRange(MinionsList.Where(o => o.IsEnemy));
+                EnemyTurretsList.AddRange(TurretsList.Where(o => o.IsEnemy));
+                EnemyInhibitorsList.AddRange(InhibitorsList.Where(o => o.IsEnemy));
+                EnemyList.AddRange(
+                    EnemyHeroesList.Cast<Obj_AI_Base>().Concat(EnemyMinionsList).Concat(EnemyTurretsList));
+                EnemyNexus = NexusList.SingleOrDefault(n => n.IsEnemy);
+
+                AllyHeroesList.AddRange(HeroesList.Where(o => o.IsAlly));
+                AllyMinionsList.AddRange(MinionsList.Where(o => o.IsAlly));
+                AllyTurretsList.AddRange(TurretsList.Where(o => o.IsAlly));
+                AllyInhibitorsList.AddRange(InhibitorsList.Where(o => o.IsAlly));
+                AllyList.AddRange(
+                    AllyHeroesList.Cast<Obj_AI_Base>().Concat(AllyMinionsList).Concat(AllyTurretsList));
+                AllyNexus = NexusList.SingleOrDefault(n => n.IsAlly);
+
+                JungleSmallList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Small));
+                JungleLargeList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Large));
+                JungleLegendaryList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Legendary));
+
+                AllyWardsList.AddRange(WardsList.Where(o => o.IsAlly));
+                EnemyWardsList.AddRange(WardsList.Where(o => o.IsEnemy));
+
+                AllyShopsList.AddRange(ShopsList.Where(o => o.IsAlly));
+                EnemyShopsList.AddRange(ShopsList.Where(o => o.IsEnemy));
+
+                AllySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsAlly));
+                EnemySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsEnemy));
+
+                GameObject.OnCreate += OnCreate;
+                GameObject.OnDelete += OnDelete;
+            };
         }
 
         #endregion
@@ -210,172 +258,172 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Gets the game objects.
         /// </summary>
-        public static IEnumerable<GameObject> AllGameObjects => GameObjectsList;
+        public static IReadOnlyCollection<GameObject> AllGameObjects => GameObjectsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the ally.
         /// </summary>
-        public static IEnumerable<Obj_AI_Base> Ally => AllyList;
+        public static IReadOnlyCollection<Obj_AI_Base> Ally => AllyList.AsReadOnly();
 
         /// <summary>
         ///     Gets the ally heroes.
         /// </summary>
-        public static IEnumerable<Obj_AI_Hero> AllyHeroes => AllyHeroesList;
+        public static IReadOnlyCollection<Obj_AI_Hero> AllyHeroes => AllyHeroesList.AsReadOnly();
 
         /// <summary>
         ///     Gets the ally inhibitors.
         /// </summary>
-        public static IEnumerable<Obj_BarracksDampener> AllyInhibitors => AllyInhibitorsList;
+        public static IReadOnlyCollection<Obj_BarracksDampener> AllyInhibitors => AllyInhibitorsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the ally minions.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> AllyMinions => AllyMinionsList;
+        public static IReadOnlyCollection<Obj_AI_Minion> AllyMinions => AllyMinionsList.AsReadOnly();
 
         /// <summary>
         ///     Gets or sets the ally nexus.
         /// </summary>
-        public static Obj_HQ AllyNexus { get; set; }
+        public static Obj_HQ AllyNexus { get; private set; }
 
         /// <summary>
         ///     Gets the ally shops.
         /// </summary>
-        public static IEnumerable<Obj_Shop> AllyShops => AllyShopsList;
+        public static IReadOnlyCollection<Obj_Shop> AllyShops => AllyShopsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the ally spawn points.
         /// </summary>
-        public static IEnumerable<Obj_SpawnPoint> AllySpawnPoints => AllySpawnPointsList;
+        public static IReadOnlyCollection<Obj_SpawnPoint> AllySpawnPoints => AllySpawnPointsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the ally turrets.
         /// </summary>
-        public static IEnumerable<Obj_AI_Turret> AllyTurrets => AllyTurretsList;
+        public static IReadOnlyCollection<Obj_AI_Turret> AllyTurrets => AllyTurretsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the ally wards.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> AllyWards => AllyWardsList;
+        public static IReadOnlyCollection<Obj_AI_Minion> AllyWards => AllyWardsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the attackable units.
         /// </summary>
-        public static IEnumerable<AttackableUnit> AttackableUnits => AttackableUnitsList;
+        public static IReadOnlyCollection<AttackableUnit> AttackableUnits => AttackableUnitsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the enemy.
         /// </summary>
-        public static IEnumerable<Obj_AI_Base> Enemy => EnemyList;
+        public static IReadOnlyCollection<Obj_AI_Base> Enemy => EnemyList.AsReadOnly();
 
         /// <summary>
         ///     Gets the enemy heroes.
         /// </summary>
-        public static IEnumerable<Obj_AI_Hero> EnemyHeroes => EnemyHeroesList;
+        public static IReadOnlyCollection<Obj_AI_Hero> EnemyHeroes => EnemyHeroesList.AsReadOnly();
 
         /// <summary>
         ///     Gets the enemy inhibitors.
         /// </summary>
-        public static IEnumerable<Obj_BarracksDampener> EnemyInhibitors => EnemyInhibitorsList;
+        public static IReadOnlyCollection<Obj_BarracksDampener> EnemyInhibitors => EnemyInhibitorsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the enemy minions.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> EnemyMinions => EnemyMinionsList;
+        public static IEnumerable<Obj_AI_Minion> EnemyMinions => EnemyMinionsList.AsReadOnly();
 
         /// <summary>
         ///     Gets or sets the enemy nexus.
         /// </summary>
-        public static Obj_HQ EnemyNexus { get; set; }
+        public static Obj_HQ EnemyNexus { get; private set; }
 
         /// <summary>
         ///     Gets the enemy shops.
         /// </summary>
-        public static IEnumerable<Obj_Shop> EnemyShops => EnemyShopsList;
+        public static IReadOnlyCollection<Obj_Shop> EnemyShops => EnemyShopsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the enemy spawn points.
         /// </summary>
-        public static IEnumerable<Obj_SpawnPoint> EnemySpawnPoints => EnemySpawnPointsList;
+        public static IReadOnlyCollection<Obj_SpawnPoint> EnemySpawnPoints => EnemySpawnPointsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the enemy turrets.
         /// </summary>
-        public static IEnumerable<Obj_AI_Turret> EnemyTurrets => EnemyTurretsList;
+        public static IReadOnlyCollection<Obj_AI_Turret> EnemyTurrets => EnemyTurretsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the enemy wards.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> EnemyWards => EnemyWardsList;
+        public static IReadOnlyCollection<Obj_AI_Minion> EnemyWards => EnemyWardsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the heroes.
         /// </summary>
-        public static IEnumerable<Obj_AI_Hero> Heroes => HeroesList;
+        public static IReadOnlyCollection<Obj_AI_Hero> Heroes => HeroesList.AsReadOnly();
 
         /// <summary>
         ///     Gets the inhibitors.
         /// </summary>
-        public static IEnumerable<Obj_BarracksDampener> Inhibitors => InhibitorsList;
+        public static IReadOnlyCollection<Obj_BarracksDampener> Inhibitors => InhibitorsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the jungle.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> Jungle => JungleList;
+        public static IReadOnlyCollection<Obj_AI_Minion> Jungle => JungleList.AsReadOnly();
 
         /// <summary>
         ///     Gets the jungle large.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> JungleLarge => JungleLargeList;
+        public static IReadOnlyCollection<Obj_AI_Minion> JungleLarge => JungleLargeList.AsReadOnly();
 
         /// <summary>
         ///     Gets the jungle legendary.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> JungleLegendary => JungleLegendaryList;
+        public static IReadOnlyCollection<Obj_AI_Minion> JungleLegendary => JungleLegendaryList.AsReadOnly();
 
         /// <summary>
         ///     Gets the jungle small.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> JungleSmall => JungleSmallList;
+        public static IReadOnlyCollection<Obj_AI_Minion> JungleSmall => JungleSmallList.AsReadOnly();
 
         /// <summary>
         ///     Gets the minions.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> Minions => MinionsList;
+        public static IReadOnlyCollection<Obj_AI_Minion> Minions => MinionsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the nexuses.
         /// </summary>
-        public static IEnumerable<Obj_HQ> Nexuses => NexusList;
+        public static IReadOnlyCollection<Obj_HQ> Nexuses => NexusList.AsReadOnly();
 
         /// <summary>
         ///     Gets the general particle emitters.
         /// </summary>
-        public static IEnumerable<Obj_GeneralParticleEmitter> ParticleEmitters => ParticleEmittersList;
+        public static IReadOnlyCollection<Obj_GeneralParticleEmitter> ParticleEmitters => ParticleEmittersList.AsReadOnly();
 
         /// <summary>
         ///     Gets or sets the player.
         /// </summary>
-        public static Obj_AI_Hero Player { get; set; }
+        public static Obj_AI_Hero Player { get; private set; }
 
         /// <summary>
         ///     Gets the shops.
         /// </summary>
-        public static IEnumerable<Obj_Shop> Shops => ShopsList;
+        public static IReadOnlyCollection<Obj_Shop> Shops => ShopsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the spawn points.
         /// </summary>
-        public static IEnumerable<Obj_SpawnPoint> SpawnPoints => SpawnPointsList;
+        public static IReadOnlyCollection<Obj_SpawnPoint> SpawnPoints => SpawnPointsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the turrets.
         /// </summary>
-        public static IEnumerable<Obj_AI_Turret> Turrets => TurretsList;
+        public static IReadOnlyCollection<Obj_AI_Turret> Turrets => TurretsList.AsReadOnly();
 
         /// <summary>
         ///     Gets the wards.
         /// </summary>
-        public static IEnumerable<Obj_AI_Minion> Wards => WardsList;
+        public static IReadOnlyCollection<Obj_AI_Minion> Wards => WardsList.AsReadOnly();
 
         #endregion
 
@@ -402,7 +450,7 @@ namespace LeagueSharp.SDK
         /// <returns>
         ///     The List containing the requested type.
         /// </returns>
-        public static IEnumerable<T> Get<T>() where T : GameObject, new()
+        public static IEnumerable<T> Get<T>() where T : GameObject
         {
             return AllGameObjects.OfType<T>();
         }
@@ -424,75 +472,6 @@ namespace LeagueSharp.SDK
         #endregion
 
         #region Methods
-
-        /// <summary>
-        ///     The initialize method.
-        /// </summary>
-        internal static void Initialize()
-        {
-            if (initialized)
-            {
-                return;
-            }
-
-            initialized = true;
-
-            Events.OnLoad += (sender, args) =>
-                {
-                    Player = ObjectManager.Player;
-
-                    HeroesList.AddRange(ObjectManager.Get<Obj_AI_Hero>());
-                    MinionsList.AddRange(
-                        ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(
-                                o => o.Team != GameObjectTeam.Neutral && !o.GetMinionType().HasFlag(MinionTypes.Ward)));
-                    TurretsList.AddRange(ObjectManager.Get<Obj_AI_Turret>());
-                    InhibitorsList.AddRange(ObjectManager.Get<Obj_BarracksDampener>());
-                    JungleList.AddRange(
-                        ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(o => o.Team == GameObjectTeam.Neutral && o.Name != "WardCorpse"));
-                    WardsList.AddRange(
-                        ObjectManager.Get<Obj_AI_Minion>().Where(o => o.GetMinionType().HasFlag(MinionTypes.Ward)));
-                    ShopsList.AddRange(ObjectManager.Get<Obj_Shop>());
-                    SpawnPointsList.AddRange(ObjectManager.Get<Obj_SpawnPoint>());
-                    GameObjectsList.AddRange(ObjectManager.Get<GameObject>());
-                    NexusList.AddRange(ObjectManager.Get<Obj_HQ>());
-                    AttackableUnitsList.AddRange(ObjectManager.Get<AttackableUnit>());
-                    ParticleEmittersList.AddRange(ObjectManager.Get<Obj_GeneralParticleEmitter>());
-
-                    EnemyHeroesList.AddRange(HeroesList.Where(o => o.IsEnemy));
-                    EnemyMinionsList.AddRange(MinionsList.Where(o => o.IsEnemy));
-                    EnemyTurretsList.AddRange(TurretsList.Where(o => o.IsEnemy));
-                    EnemyInhibitorsList.AddRange(InhibitorsList.Where(o => o.IsEnemy));
-                    EnemyList.AddRange(
-                        EnemyHeroesList.Cast<Obj_AI_Base>().Concat(EnemyMinionsList).Concat(EnemyTurretsList));
-                    EnemyNexus = NexusList.FirstOrDefault(n => n.IsEnemy);
-
-                    AllyHeroesList.AddRange(HeroesList.Where(o => o.IsAlly));
-                    AllyMinionsList.AddRange(MinionsList.Where(o => o.IsAlly));
-                    AllyTurretsList.AddRange(TurretsList.Where(o => o.IsAlly));
-                    AllyInhibitorsList.AddRange(InhibitorsList.Where(o => o.IsAlly));
-                    AllyList.AddRange(
-                        AllyHeroesList.Cast<Obj_AI_Base>().Concat(AllyMinionsList).Concat(AllyTurretsList));
-                    AllyNexus = NexusList.FirstOrDefault(n => n.IsAlly);
-
-                    JungleSmallList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Small));
-                    JungleLargeList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Large));
-                    JungleLegendaryList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Legendary));
-
-                    AllyWardsList.AddRange(WardsList.Where(o => o.IsAlly));
-                    EnemyWardsList.AddRange(WardsList.Where(o => o.IsEnemy));
-
-                    AllyShopsList.AddRange(ShopsList.Where(o => o.IsAlly));
-                    EnemyShopsList.AddRange(ShopsList.Where(o => o.IsEnemy));
-
-                    AllySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsAlly));
-                    EnemySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsEnemy));
-
-                    GameObject.OnCreate += OnCreate;
-                    GameObject.OnDelete += OnDelete;
-                };
-        }
 
         /// <summary>
         ///     OnCreate event.
