@@ -154,6 +154,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 (hero, @base) => hero.GetBuffCount("s5test_dragonslayerbuff") == 5,
                 DamageType.True,
                 (hero, @base) => 150 / (@base.Type == GameObjectType.obj_AI_Minion ? 5d : 1));
+            AddPassiveAttack(
+                string.Empty,
+                (hero, @base) => hero.HasBuff("Mastery6261") && @base.Type == GameObjectType.obj_AI_Hero,
+                DamageType.Magical,
+                (hero, @base) => (hero.IsMelee ? 0.03 : 0.015) * hero.MaxHealth);
 
             var excluded = new List<string>();
             foreach (var name in GameObjects.Heroes.Select(h => h.ChampionName).Where(name => !excluded.Contains(name)))

@@ -137,6 +137,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                  + (Math.Floor((hero.AttackSpeedMod - 1) * 100 / 10) * 2.5)) / 100;
                 }
 
+                // Serrated Dirk
                 if (hero.HasBuff("Serrated"))
                 {
                     result += 15;
@@ -144,14 +145,27 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
 
                 // Spoils Of War
                 if (hero.IsMelee && target.Type == GameObjectType.obj_AI_Minion && target.Team != GameObjectTeam.Neutral
-                    && hero.GetBuffCount("TalentReaper") > 0
-                    && GameObjects.Heroes.Any(
-                        h => h.Team == hero.Team && h.NetworkId != hero.NetworkId && h.Distance(target) < 1100))
+                    && hero.GetBuffCount("TalentReaper") > 0)
                 {
-                    return result
-                           + (Items.HasItem((int)ItemId.Relic_Shield, hero)
-                                  ? 200
-                                  : (Items.HasItem((int)ItemId.Targons_Brace, hero) ? 240 : 400));
+                    var eyeEquinox = Items.HasItem(2303, hero);
+                    if (
+                        GameObjects.Heroes.Any(
+                            h => h.Team == hero.Team && !h.Compare(hero) && h.Distance(hero) < (eyeEquinox ? 850 : 1050)))
+                    {
+                        var spoilwarDmg = 200;
+                        if (Items.HasItem((int)ItemId.Targons_Brace, hero))
+                        {
+                            spoilwarDmg = 240;
+                        }
+                        else if (Items.HasItem((int)ItemId.Face_of_the_Mountain, hero) || eyeEquinox)
+                        {
+                            spoilwarDmg = 400;
+                        }
+                        if (target.Health < spoilwarDmg)
+                        {
+                            return float.MaxValue;
+                        }
+                    }
                 }
 
                 if (targetHero != null)
@@ -166,7 +180,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     var fervorofBattle = hero.GetFerocity(DamageMastery.Ferocity.FervorofBattle);
                     if (fervorofBattle.IsValid())
                     {
-                        result += (0.9 + (0.73 * hero.Level)) * hero.GetBuffCount("MasteryOnHitDamageStacker");
+                        var fervorBuffCount = hero.GetBuffCount("MasteryOnHitDamageStacker");
+                        if (fervorBuffCount > 0)
+                        {
+                            result += (0.235 + (0.765 * hero.Level)) * fervorBuffCount;
+                        }
                     }
                 }
 
@@ -529,10 +547,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             var targetHero = target as Obj_AI_Hero;
 
             // Dragon Buff
-            if (source.Type == GameObjectType.obj_AI_Turret && targetHero != null
-                && targetHero.GetBuffCount("s5test_dragonslayerbuff") >= 4)
+            if (source.Type == GameObjectType.obj_AI_Turret && targetHero != null)
             {
-                amount *= targetHero.GetBuffCount("s5test_dragonslayerbuff") == 5 ? 0.6 : 0.8;
+                var dragonBuff = targetHero.GetBuffCount("s5test_dragonslayerbuff");
+                if (dragonBuff >= 4)
+                {
+                    amount *= dragonBuff == 5 ? 0.6 : 0.8;
+                }
             }
 
             if (source.Type == GameObjectType.obj_AI_Hero)
@@ -545,9 +566,16 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
 
                 if (targetHero != null)
                 {
+                    // Bond Of Stone
+                    var bondofstoneBuffCount = targetHero.GetBuffCount("MasteryWardenOfTheDawn");
+                    if (bondofstoneBuffCount > 0)
+                    {
+                        amount *= 1 - (0.06 * bondofstoneBuffCount);
+                    }
+
                     // Phantom Dancer
-                    if (source.HasBuff("itemphantomdancerdebuff")
-                        && source.GetBuff("itemphantomdancerdebuff").Caster.Compare(targetHero))
+                    var phantomdancerBuff = source.GetBuff("itemphantomdancerdebuff");
+                    if (phantomdancerBuff != null && phantomdancerBuff.Caster.Compare(targetHero))
                     {
                         amount *= 0.88;
                     }
@@ -644,8 +672,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                   g.Team == targetHero.Team
                                   && (g.Name.Equals("Clyde") || g.Name.Equals("Inky") || g.Name.Equals("Blinky")
                                       || (g.HasBuff("yorickunholysymbiosis")
-                                          && g.GetBuff("yorickunholysymbiosis").Caster.NetworkId == targetHero.NetworkId)))
-                                 * 0.05);
+                                          && g.GetBuff("yorickunholysymbiosis").Caster.Compare(targetHero)))) * 0.05);
                 }
 
                 // Urgot R
@@ -687,19 +714,21 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 }
             }
 
-            // ToughSkin
-            if (targetHero != null
-                && (source.Type == GameObjectType.obj_AI_Hero
-                    || (source.Type == GameObjectType.obj_AI_Minion && source.Team == GameObjectTeam.Neutral))
-                && targetHero.GetResolve(DamageMastery.Resolve.ToughSkin).IsValid())
+            if (targetHero != null)
             {
-                value -= 2;
-            }
+                // ToughSkin
+                if (targetHero.GetResolve(DamageMastery.Resolve.ToughSkin).IsValid()
+                    && (source.Type == GameObjectType.obj_AI_Hero
+                        || (source.Type == GameObjectType.obj_AI_Minion && source.Team == GameObjectTeam.Neutral)))
+                {
+                    value -= 2;
+                }
 
-            // Fizz P
-            if (targetHero != null && targetHero.ChampionName == "Fizz")
-            {
-                value -= new[] { 4, 6, 8, 10, 12, 14 }[(targetHero.Level - 1) / 3];
+                // Fizz P
+                if (targetHero.ChampionName == "Fizz")
+                {
+                    value -= new[] { 4, 6, 8, 10, 12, 14 }[(targetHero.Level - 1) / 3];
+                }
             }
 
             return value;
@@ -759,18 +788,26 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     amount *= hero.IsMelee ? 1.03 : 1.02;
                 }
 
+                // Oppressor
+                if (hero.GetFerocity(DamageMastery.Ferocity.Oppressor).IsValid() && target.IsMoveImpaired())
+                {
+                    amount *= 1.025;
+                }
+
                 if (targetHero != null)
                 {
-                    // Oppressor
-                    if (hero.GetFerocity(DamageMastery.Ferocity.Oppressor).IsValid() && targetHero.IsMoveImpaired())
+                    // Expose Weakness
+                    var exposeweakBuff = targetHero.GetBuff("ExposeWeaknessDebuff");
+                    if (exposeweakBuff != null && hero.Team == exposeweakBuff.Caster.Team
+                        && !exposeweakBuff.Caster.Compare(hero))
                     {
-                        amount *= 1.025;
+                        amount *= 1.03;
                     }
 
                     // Assassin
                     if (hero.GetCunning(DamageMastery.Cunning.Assassin).IsValid()
-                        && !GameObjects.Heroes.Where(h => h.Team == hero.Team && !h.Compare(hero))
-                                .Any(h => h.Distance(hero) <= 800))
+                        && !GameObjects.Heroes.Any(
+                            h => h.Team == hero.Team && !h.Compare(hero) && h.Distance(hero) < 800))
                     {
                         amount *= 1.02;
                     }
