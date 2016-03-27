@@ -181,7 +181,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                       : 0)
                              : 0);
 
-            if (target.Type == GameObjectType.obj_AI_Minion && spellBonus.BonusDamageOnMinion?.Count > 0)
+            if (target is Obj_AI_Minion && spellBonus.BonusDamageOnMinion?.Count > 0)
             {
                 dmg += spellBonus.BonusDamageOnMinion[Math.Min(index, spellBonus.BonusDamageOnMinion.Count - 1)];
             }
@@ -191,7 +191,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 var buffCount =
                     (spellBonus.ScalingBuffTarget == DamageScalingTarget.Source ? source : target).GetBuffCount(
                         spellBonus.ScalingBuff);
-                dmg = buffCount != 0 ? dmg * (buffCount + spellBonus.ScalingBuffOffset) : 0d;
+                dmg = buffCount > 0 ? dmg * (buffCount + spellBonus.ScalingBuffOffset) : 0d;
             }
 
             if (dmg > 0)
@@ -201,7 +201,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     dmg = Math.Max(dmg, spellBonus.MinDamage[Math.Min(index, spellBonus.MinDamage.Count - 1)]);
                 }
 
-                if (target.Type == GameObjectType.obj_AI_Minion && spellBonus.MaxDamageOnMinion?.Count > 0)
+                if (target is Obj_AI_Minion && spellBonus.MaxDamageOnMinion?.Count > 0)
                 {
                     dmg = Math.Min(
                         dmg,
