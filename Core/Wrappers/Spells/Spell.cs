@@ -23,7 +23,7 @@ namespace LeagueSharp.SDK
 
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers.Damages;
-    
+
     using SharpDX;
 
     /// <summary>
@@ -49,6 +49,11 @@ namespace LeagueSharp.SDK
         private Vector3 @from;
 
         /// <summary>
+        ///     The Minimum Mana Percentage
+        /// </summary>
+        private float minManaPercent;
+
+        /// <summary>
         ///     The Range
         /// </summary>
         private float range;
@@ -62,11 +67,7 @@ namespace LeagueSharp.SDK
         ///     The Width
         /// </summary>
         private float width;
-        
-        /// <summary>
-        ///     The Minimum Mana Percentage
-        /// </summary>
-        private float minManaPercent;      
+
         #endregion
 
         #region Constructors and Destructors
@@ -119,11 +120,16 @@ namespace LeagueSharp.SDK
 
         #endregion
 
-        #region Public Properties
+        #region Delegates
+
         /// <summary>
         ///     Cast Condition Delegate
         /// </summary>
         public delegate bool CastConditionDelegate();
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         ///     Condition to Cast Spell
@@ -764,6 +770,23 @@ namespace LeagueSharp.SDK
         }
 
         /// <summary>
+        ///     Returns the damage a spell will deal to target.
+        /// </summary>
+        /// <param name="target">
+        ///     The <see cref="Obj_AI_Hero" /> target.
+        /// </param>
+        /// <param name="stage">
+        ///     The <see cref="Damage.DamageStage" /> of the spell.
+        /// </param>
+        /// <returns>
+        ///     The damage value to target unit.
+        /// </returns>
+        public float GetDamage(Obj_AI_Base target, Damage.DamageStage stage = Damage.DamageStage.Default)
+        {
+            return (float)GameObjects.Player.GetSpellDamage(target, this.Slot, stage);
+        }
+
+        /// <summary>
         ///     Returns health prediction on a unit.
         /// </summary>
         /// <param name="unit">
@@ -774,7 +797,11 @@ namespace LeagueSharp.SDK
         /// </returns>
         public float GetHealthPrediction(Obj_AI_Base unit)
         {
-            var time = (int)((this.Delay * 1000) + (this.From.Distance(unit.ServerPosition) / this.Speed) - 100);
+            var time =
+                (int)
+                ((this.Delay * 1000)
+                 + (Math.Abs(this.Speed - float.MaxValue) < float.Epsilon ? 0 : unit.Distance(this.From) / this.Speed)
+                 - 100);
             return Health.GetPrediction(unit, time);
         }
 
@@ -872,23 +899,6 @@ namespace LeagueSharp.SDK
                             Type = this.Type, RangeCheckFrom = this.RangeCheckFrom, AoE = aoe,
                             CollisionObjects = collisionable
                         });
-        }
-
-        /// <summary>
-        ///     Returns the damage a spell will deal to target.
-        /// </summary>
-        /// <param name="target">
-        ///     The <see cref="Obj_AI_Hero" /> target.
-        /// </param>
-        /// <param name="stage">
-        ///     The <see cref="Damage.DamageStage" /> of the spell.
-        /// </param>
-        /// <returns>
-        ///     The damage value to target unit.
-        /// </returns>
-        public float GetDamage(Obj_AI_Base target, Damage.DamageStage stage = Damage.DamageStage.Default)
-        {
-            return (float) GameObjects.Player.GetSpellDamage(target, this.Slot, stage);
         }
 
         /// <summary>
@@ -1038,6 +1048,7 @@ namespace LeagueSharp.SDK
 
             return this;
         }
+
         /// <summary>
         ///     Sets the minimum mana percentage to cast the spell.
         /// </summary>
