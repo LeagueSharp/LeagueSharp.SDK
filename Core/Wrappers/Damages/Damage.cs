@@ -215,7 +215,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         {
                             dmgPassive += hero.CalculatePhysicalDamage(
                                 target,
-                                (0.235 + (0.765 * hero.Level)) * fervorBuffCount);
+                                (0.13 + (0.77 * hero.Level)) * fervorBuffCount);
                         }
                     }
                 }
@@ -446,7 +446,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                 dmgPassive += source.CalculateDamage(
                                     target,
                                     DamageType.Physical,
-                                    (0.235 + (0.765 * source.Level)) * fervorBuffCount);
+                                    (0.13 + (0.77 * source.Level)) * fervorBuffCount);
                             }
                         }
                     }

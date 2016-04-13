@@ -168,7 +168,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>The <see cref="float" /></returns>
         public static float GetTimeToHit(this AttackableUnit target)
         {
-            var time = (GameObjects.Player.AttackCastDelay * 1000) + (Game.Ping / 2f);
+            var time = (GameObjects.Player.AttackCastDelay * 1000) - 100 + (Game.Ping / 2f);
             if (Math.Abs(GameObjects.Player.GetProjectileSpeed() - float.MaxValue) > float.Epsilon)
             {
                 var aiBaseTarget = target as Obj_AI_Base;
