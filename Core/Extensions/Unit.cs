@@ -366,6 +366,16 @@ namespace LeagueSharp.SDK
         }
 
         /// <summary>
+        ///     Return whether the specific unit is melee
+        /// </summary>
+        /// <param name="unit">Extended unit</param>
+        /// <returns>Returns if the unit is melee</returns>
+        public static bool IsMelee(this Obj_AI_Base unit)
+        {
+            return unit.IsMelee && unit.AttackRange < 500;
+        }
+
+        /// <summary>
         ///     Returns if the unit is recalling.
         /// </summary>
         /// <param name="unit">Extended unit</param>

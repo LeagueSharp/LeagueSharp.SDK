@@ -17,6 +17,7 @@
 
 namespace LeagueSharp.SDK.Core.Utils
 {
+    using System;
     using System.Linq;
 
     using SharpDX;
@@ -108,8 +109,10 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static float GetProjectileSpeed(this Obj_AI_Hero hero)
         {
-            return hero.IsMelee || hero.ChampionName.Equals("Azir") || hero.ChampionName.Equals("Velkoz")
-                   || hero.ChampionName.Equals("Viktor") && hero.HasBuff("ViktorPowerTransferReturn")
+            return hero.IsMelee() || hero.ChampionName.Equals("Azir") || hero.ChampionName.Equals("Velkoz")
+                   || hero.ChampionName.Equals("Thresh")
+                   || (hero.ChampionName.Equals("Viktor") && hero.HasBuff("ViktorPowerTransferReturn"))
+                   || (hero.ChampionName.Equals("Kayle") && hero.HasBuff("JudicatorRighteousFury"))
                        ? float.MaxValue
                        : hero.BasicAttack.MissileSpeed;
         }
@@ -165,8 +168,17 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>The <see cref="float" /></returns>
         public static float GetTimeToHit(this AttackableUnit target)
         {
-            return GameObjects.Player.AttackCastDelay * 1000 - 100 + Game.Ping / 2f
-                   + 1000 * GameObjects.Player.Distance(target) / GameObjects.Player.GetProjectileSpeed();
+            var time = (GameObjects.Player.AttackCastDelay * 1000) + (Game.Ping / 2f);
+            if (Math.Abs(GameObjects.Player.GetProjectileSpeed() - float.MaxValue) > float.Epsilon)
+            {
+                var aiBaseTarget = target as Obj_AI_Base;
+                time += 1000
+                        * Math.Max(
+                            0,
+                            GameObjects.Player.Distance(aiBaseTarget?.ServerPosition ?? target.Position)
+                            - GameObjects.Player.BoundingRadius) / GameObjects.Player.BasicAttack.MissileSpeed;
+            }
+            return time;
         }
 
         /// <summary>
