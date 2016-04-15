@@ -31,7 +31,7 @@
   ],
   "Janna": [
     {
-      "DangerLevel": "Low",
+      "DangerLevel": "Medium",
       "MovementInterrupts": true,
       "Name": null,
       "Slot": "R"
@@ -117,7 +117,7 @@
   ],
   "Quinn": [
     {
-      "DangerLevel": "High",
+      "DangerLevel": "Medium",
       "MovementInterrupts": true,
       "Name": null,
       "Slot": "R"
@@ -125,13 +125,19 @@
   ],
   "RekSai": [
     {
-      "DangerLevel": "High",
+      "DangerLevel": "Low",
       "MovementInterrupts": true,
       "Name": null,
       "Slot": "R"
     }
   ],
   "Sion": [
+	{
+      "DangerLevel": "High",
+      "MovementInterrupts": true,
+      "Name": null,
+      "Slot": "Q"
+    },
     {
       "DangerLevel": "Low",
       "MovementInterrupts": true,
@@ -188,6 +194,12 @@
     }
   ],
   "Xerath": [
+	{
+      "DangerLevel": "Medium",
+      "MovementInterrupts": false,
+      "Name": null,
+      "Slot": "Q"
+    },
     {
       "DangerLevel": "High",
       "MovementInterrupts": true,
@@ -197,7 +209,15 @@
   ],
   "Varus": [
     {
-      "DangerLevel": "Low",
+      "DangerLevel": "Medium",
+      "MovementInterrupts": false,
+      "Name": null,
+      "Slot": "Q"
+    }
+  ],
+  "Vi": [
+    {
+      "DangerLevel": "Medium",
       "MovementInterrupts": false,
       "Name": null,
       "Slot": "Q"

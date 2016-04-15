@@ -266,6 +266,7 @@
     <Compile Include="Core\Utils\MathUtils.cs" />
     <Compile Include="Core\Utils\Minion.cs" />
     <Compile Include="Core\Utils\Performance.cs" />
+    <Compile Include="Core\Utils\Render.cs" />
     <Compile Include="Core\Utils\ResourceFactory.cs" />
     <Compile Include="Core\Utils\ResourceImportAttribute.cs" />
     <Compile Include="Core\Utils\ResourceLoader.cs" />

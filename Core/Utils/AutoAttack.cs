@@ -20,8 +20,6 @@ namespace LeagueSharp.SDK.Core.Utils
     using System;
     using System.Linq;
 
-    using SharpDX;
-
     /// <summary>
     ///     AutoAttack utility class.
     /// </summary>
@@ -40,7 +38,7 @@ namespace LeagueSharp.SDK.Core.Utils
                 "leonashieldofdaybreak", "luciane", "meditate",
                 "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze",
                 "takedown", "reksaiq", "renektonpreexecute", "rengarq",
-                "riventricleave", "sejuaninorthernwinds",
+                "rengarqemp", "riventricleave", "sejuaninorthernwinds",
                 "shyvanadoubleattack", "shyvanadoubleattackdragon", "sivirw",
                 "talonnoxiandiplomacy", "blindingdart", "trundletrollsmash",
                 "vaynetumble", "vie", "volibearq", "monkeykingdoubleattack",
@@ -109,10 +107,10 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static float GetProjectileSpeed(this Obj_AI_Hero hero)
         {
-            return hero.IsMelee() || hero.ChampionName.Equals("Azir") || hero.ChampionName.Equals("Velkoz")
-                   || hero.ChampionName.Equals("Thresh")
-                   || (hero.ChampionName.Equals("Viktor") && hero.HasBuff("ViktorPowerTransferReturn"))
-                   || (hero.ChampionName.Equals("Kayle") && hero.HasBuff("JudicatorRighteousFury"))
+            var name = hero.ChampionName;
+            return hero.IsMelee() || name == "Azir" || name == "Velkoz" || name == "Thresh"
+                   || (name == "Viktor" && hero.HasBuff("ViktorPowerTransferReturn"))
+                   || (name == "Kayle" && hero.HasBuff("JudicatorRighteousFury"))
                        ? float.MaxValue
                        : hero.BasicAttack.MissileSpeed;
         }
@@ -143,20 +141,21 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>
         ///     The <see cref="float" />.
         /// </returns>
-        public static float GetRealAutoAttackRange(this Obj_AI_Hero sender, AttackableUnit target)
+        public static float GetRealAutoAttackRange(this Obj_AI_Base sender, AttackableUnit target)
         {
-            var result = sender != null && sender.IsValid ? sender.AttackRange + sender.BoundingRadius : 0f;
-            if (target != null && target.IsValid)
+            if (sender == null)
             {
-                var aiBase = target as Obj_AI_Base;
-                if (aiBase != null && GameObjects.Player.ChampionName.Equals("Caitlyn"))
+                return 0;
+            }
+            var result = sender.AttackRange + sender.BoundingRadius + (target?.BoundingRadius ?? 0);
+            var heroSource = sender as Obj_AI_Hero;
+            if (heroSource != null && heroSource.ChampionName == "Caitlyn")
+            {
+                var aiBaseTarget = target as Obj_AI_Base;
+                if (aiBaseTarget != null && aiBaseTarget.HasBuff("caitlynyordletrapinternal"))
                 {
-                    if (aiBase.HasBuff("caitlynyordletrapinternal"))
-                    {
-                        result += 650;
-                    }
+                    result += 650;
                 }
-                return result + target.BoundingRadius;
             }
             return result;
         }
@@ -192,17 +191,7 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static bool InAutoAttackRange(this AttackableUnit target)
         {
-            if (!target.IsValidTarget())
-            {
-                return false;
-            }
-
-            var myRange = GetRealAutoAttackRange(target);
-
-            return
-                Vector2.DistanceSquared(
-                    (target as Obj_AI_Base)?.ServerPosition.ToVector2() ?? target.Position.ToVector2(),
-                    GameObjects.Player.ServerPosition.ToVector2()) <= myRange * myRange;
+            return target.IsValidTarget(target.GetRealAutoAttackRange());
         }
 
         /// <summary>
@@ -212,8 +201,8 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <returns>The <see cref="bool" /></returns>
         public static bool IsAutoAttack(string name)
         {
-            return (name.ToLower().Contains("attack") && !NoAttacks.Contains(name.ToLower()))
-                   || Attacks.Contains(name.ToLower());
+            name = name.ToLower();
+            return (name.Contains("attack") && !NoAttacks.Contains(name)) || Attacks.Contains(name);
         }
 
         /// <summary>

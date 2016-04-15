@@ -27,6 +27,36 @@ namespace LeagueSharp.SDK
     /// </summary>
     public static partial class Extensions
     {
+        #region Static Fields
+
+        /// <summary>
+        ///     Turrets Tier Four
+        /// </summary>
+        private static readonly string[] TurretsTierFour = { "SRUAP_Turret_Order4", "SRUAP_Turret_Chaos4" };
+
+        /// <summary>
+        ///     Turrets Tier One
+        /// </summary>
+        private static readonly string[] TurretsTierOne =
+            {
+                "SRUAP_Turret_Order1", "SRUAP_Turret_Chaos1",
+                "ha_ap_orderturret", "HA_AP_OrderTurret2",
+                "HA_AP_OrderTurret3", "HA_AP_ChaosTurret",
+                "HA_AP_ChaosTurret2", "HA_AP_ChaosTurret3"
+            };
+
+        /// <summary>
+        ///     Turrets Tier Three
+        /// </summary>
+        private static readonly string[] TurretsTierThree = { "SRUAP_Turret_Order3", "SRUAP_Turret_Chaos3" };
+
+        /// <summary>
+        ///     Turrets Tier Two
+        /// </summary>
+        private static readonly string[] TurretsTierTwo = { "SRUAP_Turret_Order2", "SRUAP_Turret_Chaos2" };
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -286,33 +316,24 @@ namespace LeagueSharp.SDK
         /// </returns>
         public static TurretType GetTurretType(this Obj_AI_Turret turret)
         {
-            switch (turret.CharData.BaseSkinName)
+            var name = turret.CharData.BaseSkinName;
+            if (TurretsTierOne.Contains(name))
             {
-                case "SRUAP_Turret_Order1":
-                case "SRUAP_Turret_Chaos1":
-                case "ha_ap_orderturret":
-                case "HA_AP_OrderTurret2":
-                case "HA_AP_OrderTurret3":
-                case "HA_AP_ChaosTurret":
-                case "HA_AP_ChaosTurret2":
-                case "HA_AP_ChaosTurret3":
-                    return TurretType.TierOne;
-
-                case "SRUAP_Turret_Order2":
-                case "SRUAP_Turret_Chaos2":
-                    return TurretType.TierTwo;
-
-                case "SRUAP_Turret_Order3":
-                case "SRUAP_Turret_Chaos3":
-                    return TurretType.TierThree;
-
-                case "SRUAP_Turret_Order4":
-                case "SRUAP_Turret_Chaos4":
-                    return TurretType.TierFour;
-
-                default:
-                    return TurretType.Unknown;
+                return TurretType.TierOne;
             }
+            if (TurretsTierTwo.Contains(name))
+            {
+                return TurretType.TierOne;
+            }
+            if (TurretsTierThree.Contains(name))
+            {
+                return TurretType.TierOne;
+            }
+            if (TurretsTierFour.Contains(name))
+            {
+                return TurretType.TierOne;
+            }
+            return TurretType.Unknown;
         }
 
         /// <summary>
@@ -455,11 +476,17 @@ namespace LeagueSharp.SDK
             }
 
             var @base = unit as Obj_AI_Base;
+
+            if (@base != null && !@base.IsHPBarRendered)
+            {
+                return false;
+            }
+
             var unitPosition = @base?.ServerPosition ?? unit.Position;
 
             return @from.IsValid()
                        ? @from.DistanceSquared(unitPosition) < range * range
-                       : GameObjects.Player.ServerPosition.DistanceSquared(unitPosition) < range * range;
+                       : GameObjects.Player.DistanceSquared(unitPosition) < range * range;
         }
 
         #endregion

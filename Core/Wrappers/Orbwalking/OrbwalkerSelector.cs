@@ -422,9 +422,7 @@ namespace LeagueSharp.SDK
             // Special Minions if no enemy is near
             if (mode == OrbwalkingMode.Combo)
             {
-                if (minions.Any()
-                    && !GameObjects.EnemyHeroes.Any(
-                        e => e.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange(e) * 2f)))
+                if (minions.Any() && !GameObjects.EnemyHeroes.Any(e => e.IsValidTarget(e.GetRealAutoAttackRange() * 2f)))
                 {
                     return minions.FirstOrDefault();
                 }
