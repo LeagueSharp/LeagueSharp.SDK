@@ -20,9 +20,10 @@ namespace LeagueSharp.SDK
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    
+
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Modes;
 
     using SharpDX;
@@ -144,7 +145,7 @@ namespace LeagueSharp.SDK
                 if (this.selected.Focus && this.selected.Target.IsValidTarget()
                     && this.selected.Target.Position.IsOnScreen())
                 {
-                    Drawing.DrawCircle(
+                    Render.Circle.DrawCircle(
                         this.selected.Target.Position,
                         this.selected.Target.BoundingRadius
                         + this.menu["selected"]["radius"].GetValue<MenuSlider>().Value,
@@ -170,7 +171,7 @@ namespace LeagueSharp.SDK
                 if (this.menu["weight"]["bestTarget"]["enabled"].GetValue<MenuBool>().Value
                     && this.weightBestTarget.IsValidTarget() && this.weightBestTarget.Position.IsOnScreen())
                 {
-                    Drawing.DrawCircle(
+                    Render.Circle.DrawCircle(
                         this.weightBestTarget.Position,
                         this.weightBestTarget.BoundingRadius
                         + this.menu["weight"]["bestTarget"]["radius"].GetValue<MenuSlider>().Value,

@@ -63,8 +63,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 case DamageType.Physical:
                     damage = source.CalculatePhysicalDamage(target, amount);
                     break;
+                case DamageType.Mixed:
+                    damage = source.CalculateMixedDamage(target, damage / 2, damage / 2);
+                    break;
                 case DamageType.True:
-                    damage = Math.Max(damage, 0);
+                    damage = Math.Floor(source.PassivePercentMod(target, Math.Max(amount, 0), DamageType.True));
                     break;
             }
 
@@ -113,35 +116,18 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         /// </returns>
         public static double GetAutoAttackDamage(this Obj_AI_Base source, Obj_AI_Base target)
         {
-            double result = source.TotalAttackDamage;
-            var damageModifier = 1d;
-            var passive = 0d;
+            double dmgPhysical = source.TotalAttackDamage, dmgMagical = 0, dmgPassive = 0;
+            var dmgReduce = 1d;
 
             var hero = source as Obj_AI_Hero;
             var targetHero = target as Obj_AI_Hero;
 
+            var isMixDmg = false;
+
             if (hero != null)
             {
-                if (hero.ChampionName == "Kalista")
-                {
-                    result *= 0.9;
-                }
-                else if (hero.ChampionName == "Jhin")
-                {
-                    result *= 1
-                              + (new[] { 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40 }[
-                                  hero.Level - 1] + (Math.Floor(hero.Crit * 100 / 10) * 4)
-                                 + (Math.Floor((hero.AttackSpeedMod - 1) * 100 / 10) * 2.5)) / 100;
-                }
-
-                // Serrated Dirk
-                if (hero.HasBuff("Serrated"))
-                {
-                    result += 15;
-                }
-
                 // Spoils Of War
-                if (hero.IsMelee && target is Obj_AI_Minion && target.Team != GameObjectTeam.Neutral
+                if (hero.IsMelee() && target is Obj_AI_Minion && target.Team != GameObjectTeam.Neutral
                     && hero.GetBuffCount("TalentReaper") > 0)
                 {
                     var eyeEquinox = Items.HasItem(2303, hero);
@@ -165,58 +151,112 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     }
                 }
 
+                // Bonus Damage (Passive)
+                var passiveInfo = hero.GetPassiveDamageInfo(target);
+                dmgPassive += passiveInfo.Value;
+                if (passiveInfo.Override)
+                {
+                    return dmgPassive;
+                }
+
+                switch (hero.ChampionName)
+                {
+                    case "Kalista":
+                        dmgPhysical *= 0.9;
+                        break;
+                    case "Jhin":
+                        dmgPhysical +=
+                            Math.Round(
+                                (new[] { 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40 }[
+                                    hero.Level - 1] + (Math.Round((hero.Crit * 100 / 10) * 4))
+                                 + (Math.Round(((hero.AttackSpeedMod - 1) * 100 / 10) * 2.5))) / 100 * dmgPhysical);
+                        break;
+                    case "Corki":
+                        dmgPhysical /= 2;
+                        dmgMagical = dmgPhysical;
+                        isMixDmg = true;
+                        break;
+                    case "Quinn":
+                        if (target.HasBuff("quinnw"))
+                        {
+                            dmgPhysical += 10 + (5 * hero.Level) + (0.14 + (0.02 * hero.Level)) * hero.TotalAttackDamage;
+                        }
+                        break;
+                }
+
+                // Serrated Dirk
+                if (hero.HasBuff("Serrated"))
+                {
+                    if (!isMixDmg)
+                    {
+                        dmgPhysical += 15;
+                    }
+                    else
+                    {
+                        dmgPhysical += 7.5;
+                        dmgMagical += 7.5;
+                    }
+                }
+
                 if (targetHero != null)
                 {
                     // Dorans Shield
                     if (Items.HasItem((int)ItemId.Dorans_Shield, targetHero))
                     {
-                        result -= 8;
+                        var subDmg = (dmgPhysical + dmgMagical) - 8;
+                        dmgPhysical = !isMixDmg ? subDmg : (dmgMagical = subDmg / 2);
                     }
 
                     // Fervor Of Battle
-                    var fervorofBattle = hero.GetFerocity(DamageMastery.Ferocity.FervorofBattle);
-                    if (fervorofBattle.IsValid())
+                    if (hero.GetFerocity(DamageMastery.Ferocity.FervorofBattle).IsValid())
                     {
                         var fervorBuffCount = hero.GetBuffCount("MasteryOnHitDamageStacker");
                         if (fervorBuffCount > 0)
                         {
-                            result += (0.235 + (0.765 * hero.Level)) * fervorBuffCount;
+                            dmgPassive += hero.CalculatePhysicalDamage(
+                                target,
+                                (0.13 + (0.77 * hero.Level)) * fervorBuffCount);
                         }
                     }
                 }
-
-                // RiftHerald P
-                if (hero.IsRanged && target is Obj_AI_Minion && target.Team == GameObjectTeam.Neutral
-                    && Regex.IsMatch(target.Name, "SRU_RiftHerald"))
+                else if (target is Obj_AI_Minion)
                 {
-                    damageModifier *= 0.65;
+                    // Savagery
+                    var savagery = hero.GetCunning(DamageMastery.Cunning.Savagery);
+                    if (savagery.IsValid())
+                    {
+                        dmgPhysical += savagery.Points;
+                    }
+
+                    // RiftHerald P
+                    if (!hero.IsMelee() && target.Team == GameObjectTeam.Neutral
+                        && Regex.IsMatch(target.Name, "SRU_RiftHerald"))
+                    {
+                        dmgReduce *= 0.65;
+                    }
                 }
             }
 
             // Ninja Tabi
-            if (targetHero != null && new[] { 3047, 1316, 1318, 1315, 1317 }.Any(i => Items.HasItem(i, targetHero))
-                && !(source is Obj_AI_Turret))
+            if (targetHero != null && !(source is Obj_AI_Turret)
+                && new[] { 3047, 1316, 1318, 1315, 1317 }.Any(i => Items.HasItem(i, targetHero)))
             {
-                damageModifier *= 0.9;
+                dmgReduce *= 0.9;
             }
 
-            // Bonus Damage (Passive)
-            if (hero != null)
-            {
-                var passiveInfo = hero.GetPassiveDamageInfo(target);
-                if (passiveInfo.Override)
-                {
-                    return passiveInfo.Value + source.PassiveFlatMod(target);
-                }
+            dmgPhysical = source.CalculatePhysicalDamage(target, dmgPhysical);
+            dmgMagical = source.CalculateMagicDamage(target, dmgMagical);
 
-                passive += passiveInfo.Value;
+            // Fizz P
+            if (targetHero != null && targetHero.ChampionName == "Fizz")
+            {
+                dmgPhysical -= 4 + (2 * Math.Floor((targetHero.Level - 1) / 3d));
             }
 
             // This formula is right, work out the math yourself if you don't believe me
             return
                 Math.Max(
-                    source.CalculatePhysicalDamage(target, result) * damageModifier + passive
-                    + source.PassiveFlatMod(target),
+                    Math.Floor((dmgPhysical + dmgMagical) * dmgReduce + source.PassiveFlatMod(target) + dmgPassive),
                     0);
         }
 
@@ -269,74 +309,111 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 return 0;
             }
 
-            var baseDamage = 0d;
-            var bonusDamage = 0d;
+            bool alreadyAdd1 = false, alreadyAdd2 = false;
+            var targetHero = target as Obj_AI_Hero;
+            var targetMinion = target as Obj_AI_Minion;
 
-            if (spellData.Damages?.Count > 0)
-            {
-                if (spellData.DamageType == DamageType.Mixed)
-                {
-                    var oriDamage = spellData.Damages[Math.Min(spellLevel - 1, spellData.Damages.Count - 1)];
-                    baseDamage = source.CalculateMixedDamage(target, oriDamage / 2, oriDamage / 2);
-                    if (!string.IsNullOrEmpty(spellData.ScalingBuff))
-                    {
-                        var buffCount =
-                            (spellData.ScalingBuffTarget == DamageScalingTarget.Source ? source : target).GetBuffCount(
-                                spellData.ScalingBuff);
-                        baseDamage = buffCount > 0 ? baseDamage * (buffCount + spellData.ScalingBuffOffset) : 0;
-                    }
-                }
-                else
-                {
-                    baseDamage = source.CalculateDamage(
-                        target,
-                        spellData.DamageType,
-                        spellData.Damages[Math.Min(spellLevel - 1, spellData.Damages.Count - 1)]);
-                    if (!string.IsNullOrEmpty(spellData.ScalingBuff))
-                    {
-                        var buffCount =
-                            (spellData.ScalingBuffTarget == DamageScalingTarget.Source ? source : target).GetBuffCount(
-                                spellData.ScalingBuff);
-                        baseDamage = buffCount > 0 ? baseDamage * (buffCount + spellData.ScalingBuffOffset) : 0;
-                    }
-                }
-            }
+            double dmgBase = 0, dmgBonus = 0, dmgPassive = 0;
+            var dmgReduce = 1d;
+
             if (spellData.DamagesPerLvl?.Count > 0)
             {
-                baseDamage = source.CalculateDamage(
-                    target,
-                    spellData.DamageType,
-                    spellData.DamagesPerLvl[Math.Min(source.Level - 1, spellData.DamagesPerLvl.Count - 1)]);
+                dmgBase = spellData.DamagesPerLvl[Math.Min(source.Level - 1, spellData.DamagesPerLvl.Count - 1)];
             }
-            if (target is Obj_AI_Minion && spellData.BonusDamageOnMinion?.Count > 0)
+            else if (spellData.Damages?.Count > 0)
             {
-                baseDamage += source.CalculateDamage(
-                    target,
-                    spellData.DamageType,
-                    spellData.BonusDamageOnMinion[Math.Min(source.Level - 1, spellData.BonusDamageOnMinion.Count - 1)]);
+                dmgBase = spellData.Damages[Math.Min(spellLevel - 1, spellData.Damages.Count - 1)];
+                if (!string.IsNullOrEmpty(spellData.ScalingBuff))
+                {
+                    var buffCount =
+                        (spellData.ScalingBuffTarget == DamageScalingTarget.Source ? source : target).GetBuffCount(
+                            spellData.ScalingBuff);
+                    dmgBase = buffCount > 0 ? dmgBase * (buffCount + spellData.ScalingBuffOffset) : 0;
+                }
+            }
+            if (dmgBase > 0)
+            {
+                if (targetMinion != null && spellData.BonusDamageOnMinion?.Count > 0)
+                {
+                    dmgBase +=
+                        spellData.BonusDamageOnMinion[Math.Min(spellLevel - 1, spellData.BonusDamageOnMinion.Count - 1)];
+                }
+                if (spellData.IsApplyOnHit || spellData.IsModifiedDamage
+                    || spellData.SpellEffectType == SpellEffectType.Single)
+                {
+                    if (source.HasBuff("Serrated"))
+                    {
+                        dmgBase += 15;
+                    }
+                    if (targetHero != null)
+                    {
+                        if (!spellData.IsApplyOnHit && Items.HasItem((int)ItemId.Dorans_Shield, targetHero))
+                        {
+                            dmgBase -= 8;
+                        }
+                    }
+                    else if (targetMinion != null)
+                    {
+                        var savagery = source.GetCunning(DamageMastery.Cunning.Savagery);
+                        if (savagery.IsValid())
+                        {
+                            dmgBase += savagery.Points;
+                        }
+                    }
+                    alreadyAdd1 = true;
+                }
+                dmgBase = source.CalculateDamage(target, spellData.DamageType, dmgBase);
+                if (spellData.IsModifiedDamage && spellData.DamageType == DamageType.Physical && targetHero != null
+                    && targetHero.ChampionName == "Fizz")
+                {
+                    dmgBase -= 4 + (2 * Math.Floor((targetHero.Level - 1) / 3d));
+                    alreadyAdd2 = true;
+                }
             }
             if (spellData.BonusDamages?.Count > 0)
             {
-                foreach (var bonusDmg in
-                    spellData.BonusDamages.Where(i => source.ResolveBonusSpellDamage(target, i, spellLevel - 1) > 0))
+                foreach (var bonusDmg in spellData.BonusDamages)
                 {
-                    if (bonusDmg.DamageType == DamageType.Mixed)
+                    var dmg = source.ResolveBonusSpellDamage(target, bonusDmg, spellLevel - 1);
+                    if (dmg <= 0)
                     {
-                        var oriDamage = source.ResolveBonusSpellDamage(target, bonusDmg, spellLevel - 1);
-                        bonusDamage += source.CalculateMixedDamage(target, oriDamage / 2, oriDamage / 2);
+                        continue;
                     }
-                    else
+                    if (!alreadyAdd1
+                        && (spellData.IsModifiedDamage || spellData.SpellEffectType == SpellEffectType.Single))
                     {
-                        bonusDamage += source.CalculateDamage(
-                            target,
-                            bonusDmg.DamageType,
-                            source.ResolveBonusSpellDamage(target, bonusDmg, spellLevel - 1));
+                        if (source.HasBuff("Serrated"))
+                        {
+                            dmg += 15;
+                        }
+                        if (targetHero != null)
+                        {
+                            if (Items.HasItem((int)ItemId.Dorans_Shield, targetHero))
+                            {
+                                dmg -= 8;
+                            }
+                        }
+                        else if (targetMinion == null)
+                        {
+                            var savagery = source.GetCunning(DamageMastery.Cunning.Savagery);
+                            if (savagery.IsValid())
+                            {
+                                dmg += savagery.Points;
+                            }
+                        }
+                        alreadyAdd1 = true;
+                    }
+                    dmgBonus += source.CalculateDamage(target, bonusDmg.DamageType, dmg);
+                    if (!alreadyAdd2 && spellData.IsModifiedDamage && bonusDmg.DamageType == DamageType.Physical
+                        && targetHero != null && targetHero.ChampionName == "Fizz")
+                    {
+                        dmgBonus -= 4 + (2 * Math.Floor((targetHero.Level - 1) / 3d));
+                        alreadyAdd2 = true;
                     }
                 }
             }
 
-            var totalDamage = baseDamage + bonusDamage;
-            var passiveDamage = 0d;
+            var totalDamage = dmgBase + dmgBonus;
 
             if (totalDamage > 0)
             {
@@ -345,26 +422,44 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     totalDamage *= (target.MaxHealth - target.Health) / target.MaxHealth
                                    * spellData.ScalePerTargetMissHealth + 1;
                 }
-                if (target is Obj_AI_Minion)
+                if (target is Obj_AI_Minion && spellData.MaxDamageOnMinion?.Count > 0)
                 {
-                    if (spellData.MaxDamageOnMinion?.Count > 0)
+                    totalDamage = Math.Min(
+                        totalDamage,
+                        spellData.MaxDamageOnMinion[Math.Min(spellLevel - 1, spellData.MaxDamageOnMinion.Count - 1)]);
+                }
+                if (spellData.IsApplyOnHit || spellData.IsModifiedDamage)
+                {
+                    dmgPassive += source.GetPassiveDamageInfo(target, false).Value;
+                    if (targetHero != null)
                     {
-                        totalDamage = Math.Min(
-                            totalDamage,
-                            spellData.MaxDamageOnMinion[Math.Min(spellLevel - 1, spellData.MaxDamageOnMinion.Count - 1)]);
-                    }
-                    if (spellData.SpellEffectType == SpellEffectType.Single)
-                    {
-                        var savagery = source.GetCunning(DamageMastery.Cunning.Savagery);
-                        if (savagery.IsValid())
+                        if (spellData.IsModifiedDamage
+                            && new[] { 3047, 1316, 1318, 1315, 1317 }.Any(i => Items.HasItem(i, targetHero)))
                         {
-                            passiveDamage += savagery.Points;
+                            dmgReduce *= 0.9;
+                        }
+                        if (source.GetFerocity(DamageMastery.Ferocity.FervorofBattle).IsValid())
+                        {
+                            var fervorBuffCount = source.GetBuffCount("MasteryOnHitDamageStacker");
+                            if (fervorBuffCount > 0)
+                            {
+                                dmgPassive += source.CalculateDamage(
+                                    target,
+                                    DamageType.Physical,
+                                    (0.13 + (0.77 * source.Level)) * fervorBuffCount);
+                            }
                         }
                     }
                 }
             }
 
-            return totalDamage + passiveDamage;
+            return
+                Math.Max(
+                    Math.Floor(
+                        totalDamage * dmgReduce
+                        + (spellData.IsApplyOnHit || spellData.IsModifiedDamage ? source.PassiveFlatMod(target) : 0)
+                        + dmgPassive),
+                    0);
         }
 
         #endregion
@@ -442,10 +537,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
 
             return
                 Math.Max(
-                    source.DamageReductionMod(
-                        target,
-                        source.PassivePercentMod(target, value, DamageType.Magical) * amount,
-                        DamageType.Magical),
+                    Math.Floor(
+                        source.DamageReductionMod(
+                            target,
+                            source.PassivePercentMod(target, value, DamageType.Magical) * amount,
+                            DamageType.Magical)),
                     0);
         }
 
@@ -528,10 +624,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             // Take into account the percent passives, flat passives and damage reduction.
             return
                 Math.Max(
-                    source.DamageReductionMod(
-                        target,
-                        source.PassivePercentMod(target, value, DamageType.Physical) * amount,
-                        DamageType.Physical),
+                    Math.Floor(
+                        source.DamageReductionMod(
+                            target,
+                            source.PassivePercentMod(target, value, DamageType.Physical) * amount,
+                            DamageType.Physical)),
                     0);
         }
 
@@ -580,6 +677,12 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     amount *= 0.6;
                 }
 
+                // Urgot P
+                if (source.HasBuff("urgotentropypassive"))
+                {
+                    amount *= 0.85;
+                }
+
                 if (targetHero != null)
                 {
                     // Bond Of Stone
@@ -594,12 +697,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     if (phantomdancerBuff != null && phantomdancerBuff.Caster.Compare(targetHero))
                     {
                         amount *= 0.88;
-                    }
-
-                    // Urgot P
-                    if (source.HasBuff("urgotentropypassive"))
-                    {
-                        amount *= 0.85;
                     }
                 }
             }
@@ -673,10 +770,15 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 // MasterYi W
                 if (targetHero.HasBuff("Meditate"))
                 {
-                    amount *= (1
-                               - new[] { 0.5, 0.55, 0.6, 0.65, 0.7 }[
-                                   targetHero.Spellbook.GetSpell(SpellSlot.W).Level - 1])
-                              / (source is Obj_AI_Turret ? 2 : 1);
+                    amount *= 1
+                              - new[] { 0.5, 0.55, 0.6, 0.65, 0.7 }[targetHero.Spellbook.GetSpell(SpellSlot.W).Level - 1
+                                    ] / (source is Obj_AI_Turret ? 2 : 1);
+                }
+
+                // Urgot R
+                if (targetHero.HasBuff("urgotswapdef"))
+                {
+                    amount *= 1 - new[] { 0.3, 0.4, 0.5 }[targetHero.Spellbook.GetSpell(SpellSlot.R).Level - 1];
                 }
 
                 // Yorick P
@@ -689,12 +791,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                                   && (g.Name.Equals("Clyde") || g.Name.Equals("Inky") || g.Name.Equals("Blinky")
                                       || (g.HasBuff("yorickunholysymbiosis")
                                           && g.GetBuff("yorickunholysymbiosis").Caster.Compare(targetHero)))) * 0.05);
-                }
-
-                // Urgot R
-                if (targetHero.HasBuff("urgotswapdef"))
-                {
-                    amount *= 1 - new[] { 0.3, 0.4, 0.5 }[targetHero.Spellbook.GetSpell(SpellSlot.R).Level - 1];
                 }
             }
 
@@ -717,33 +813,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         private static double PassiveFlatMod(this GameObject source, Obj_AI_Base target)
         {
             var value = 0d;
-            var hero = source as Obj_AI_Hero;
             var targetHero = target as Obj_AI_Hero;
 
-            if (hero != null && target is Obj_AI_Minion)
+            // ToughSkin
+            if (targetHero != null && targetHero.GetResolve(DamageMastery.Resolve.ToughSkin).IsValid()
+                && (source is Obj_AI_Hero || (source is Obj_AI_Minion && source.Team == GameObjectTeam.Neutral)))
             {
-                // Savagery
-                var savagery = hero.GetCunning(DamageMastery.Cunning.Savagery);
-                if (savagery.IsValid())
-                {
-                    value += savagery.Points;
-                }
-            }
-
-            if (targetHero != null)
-            {
-                // ToughSkin
-                if (targetHero.GetResolve(DamageMastery.Resolve.ToughSkin).IsValid()
-                    && (hero != null || (source is Obj_AI_Minion && source.Team == GameObjectTeam.Neutral)))
-                {
-                    value -= 2;
-                }
-
-                // Fizz P
-                if (targetHero.ChampionName == "Fizz")
-                {
-                    value -= new[] { 4, 6, 8, 10, 12, 14 }[(targetHero.Level - 1) / 3];
-                }
+                value -= 2;
             }
 
             return value;
@@ -780,7 +856,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 if (minion != null)
                 {
                     var minionType = minion.GetMinionType();
-                    if (minionType.HasFlag(MinionTypes.Siege) || minionType.HasFlag(MinionTypes.Super))
+                    if (minionType.HasFlag(MinionTypes.Siege))
                     {
                         // Siege minions and super minions receive 70% damage from turrets.
                         amount *= 0.7;
@@ -798,9 +874,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             if (hero != null)
             {
                 // DoubleEdgedSword
-                if (hero.GetFerocity(DamageMastery.Ferocity.DoubleEdgedSword).IsValid())
+                if (damageType != DamageType.True && hero.GetFerocity(DamageMastery.Ferocity.DoubleEdgedSword).IsValid())
                 {
-                    amount *= hero.IsMelee ? 1.03 : 1.02;
+                    amount *= hero.IsMelee() ? 1.03 : 1.02;
                 }
 
                 // Oppressor
@@ -845,13 +921,11 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 }
             }
 
-            if (targetHero != null)
+            // DoubleEdgedSword
+            if (targetHero != null && damageType != DamageType.True
+                && targetHero.GetFerocity(DamageMastery.Ferocity.DoubleEdgedSword).IsValid())
             {
-                // DoubleEdgedSword
-                if (targetHero.GetFerocity(DamageMastery.Ferocity.DoubleEdgedSword).IsValid())
-                {
-                    amount *= targetHero.IsMelee ? 1.015 : 1.02;
-                }
+                amount *= targetHero.IsMelee() ? 1.015 : 1.02;
             }
 
             return amount;

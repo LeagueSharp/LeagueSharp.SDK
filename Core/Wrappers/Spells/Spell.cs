@@ -797,12 +797,12 @@ namespace LeagueSharp.SDK
         /// </returns>
         public float GetHealthPrediction(Obj_AI_Base unit)
         {
-            var time =
-                (int)
-                ((this.Delay * 1000)
-                 + (Math.Abs(this.Speed - float.MaxValue) < float.Epsilon ? 0 : unit.Distance(this.From) / this.Speed)
-                 - 100);
-            return Health.GetPrediction(unit, time);
+            var time = (this.Delay * 1000) - 100 + (Game.Ping / 2f);
+            if (Math.Abs(this.Speed - float.MaxValue) > float.Epsilon)
+            {
+                time += 1000 * unit.Distance(this.From) / this.Speed;
+            }
+            return Health.GetPrediction(unit, (int)time);
         }
 
         /// <summary>

@@ -20,6 +20,7 @@ namespace LeagueSharp.SDK
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers.Damages;
 
@@ -72,8 +73,7 @@ namespace LeagueSharp.SDK
         public static Obj_AI_Base GetAggroTurret(Obj_AI_Minion minion)
         {
             var activeTurret =
-                ActiveAttacks.Values.FirstOrDefault(
-                    m => (m.Source is Obj_AI_Turret) && m.Target.NetworkId == minion.NetworkId);
+                ActiveAttacks.Values.FirstOrDefault(m => m.Source is Obj_AI_Turret && m.Target.Compare(minion));
             return activeTurret?.Source;
         }
 
@@ -107,7 +107,7 @@ namespace LeagueSharp.SDK
         /// </returns>
         public static bool HasMinionAggro(Obj_AI_Minion minion)
         {
-            return ActiveAttacks.Values.Any(m => (m.Source is Obj_AI_Minion) && m.Target.NetworkId == minion.NetworkId);
+            return ActiveAttacks.Values.Any(m => m.Source is Obj_AI_Minion && m.Target.Compare(minion));
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace LeagueSharp.SDK
         /// </returns>
         public static bool HasTurretAggro(Obj_AI_Minion minion)
         {
-            return ActiveAttacks.Values.Any(m => (m.Source is Obj_AI_Turret) && m.Target.NetworkId == minion.NetworkId);
+            return ActiveAttacks.Values.Any(m => m.Source is Obj_AI_Turret && m.Target.Compare(minion));
         }
 
         /// <summary>
@@ -134,8 +134,7 @@ namespace LeagueSharp.SDK
         public static int TurretAggroStartTick(Obj_AI_Minion minion)
         {
             var activeTurret =
-                ActiveAttacks.Values.FirstOrDefault(
-                    m => (m.Source is Obj_AI_Turret) && m.Target.NetworkId == minion.NetworkId);
+                ActiveAttacks.Values.FirstOrDefault(m => m.Source is Obj_AI_Turret && m.Target.Compare(minion));
             return activeTurret?.StartTick ?? 0;
         }
 
@@ -161,15 +160,17 @@ namespace LeagueSharp.SDK
         private static float GetPredictionDefault(Obj_AI_Base unit, int time, int delay = 70)
         {
             var predictedDamage = 0f;
-            foreach (var attack in ActiveAttacks.Values)
+            foreach (var attack in ActiveAttacks.Values.Where(i => i.Target.Compare(unit) && !i.Processed))
             {
                 var attackDamage = 0f;
-                if (!attack.Processed && attack.Source.IsValidTarget(float.MaxValue, false)
-                    && attack.Target.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
+                if (attack.Source.IsValidTarget(float.MaxValue, false) && attack.Target.IsValidTarget())
                 {
                     var landTime = attack.StartTick + attack.Delay
-                                   + (1000 * Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
-                                      / attack.ProjectileSpeed) + delay;
+                                   + 1000
+                                   * (attack.Source.IsMelee
+                                          ? 0
+                                          : Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
+                                            / attack.ProjectileSpeed) + delay;
                     if (landTime < Variables.TickCount + time)
                     {
                         attackDamage = attack.Damage;
@@ -197,21 +198,22 @@ namespace LeagueSharp.SDK
         private static float GetPredictionSimulated(Obj_AI_Base unit, int time)
         {
             var predictedDamage = 0f;
-            foreach (var attack in ActiveAttacks.Values)
+            foreach (var attack in ActiveAttacks.Values.Where(i => i.Target.Compare(unit)))
             {
                 var n = 0;
                 if (Variables.TickCount - 100 <= attack.StartTick + attack.AnimationTime
-                    && attack.Target.IsValidTarget(float.MaxValue, false)
-                    && attack.Source.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
+                    && attack.Source.IsValidTarget(float.MaxValue, false) && attack.Target.IsValidTarget())
                 {
                     var fromT = attack.StartTick;
                     var toT = Variables.TickCount + time;
                     while (fromT < toT)
                     {
                         if (fromT >= Variables.TickCount
-                            && (fromT + attack.Delay
-                                + (Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
-                                   / attack.ProjectileSpeed) < toT))
+                            && fromT + attack.Delay / 1000
+                            + (attack.Source.IsMelee
+                                   ? 0
+                                   : Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
+                                     / attack.ProjectileSpeed) < toT)
                         {
                             n++;
                         }
@@ -242,16 +244,29 @@ namespace LeagueSharp.SDK
                 return;
             }
 
+            var aiBase = sender as Obj_AI_Base;
+            if (aiBase != null)
+            {
+                var objNetworkId = aiBase.NetworkId;
+                if (ActiveAttacks.ContainsKey(objNetworkId))
+                {
+                    ActiveAttacks.Remove(objNetworkId);
+                    return;
+                }
+                foreach (var activeAttack in ActiveAttacks.Values.Where(i => i.Target.Compare(aiBase)))
+                {
+                    ActiveAttacks.Remove(activeAttack.Source.NetworkId);
+                }
+                return;
+            }
+
             var missile = sender as MissileClient;
             if (missile?.SpellCaster != null)
             {
                 var casterNetworkId = missile.SpellCaster.NetworkId;
-                foreach (var activeAttack in ActiveAttacks)
+                if (ActiveAttacks.ContainsKey(casterNetworkId))
                 {
-                    if (activeAttack.Key == casterNetworkId)
-                    {
-                        ActiveAttacks[casterNetworkId].Processed = true;
-                    }
+                    ActiveAttacks[casterNetworkId].Processed = true;
                 }
             }
         }
@@ -288,9 +303,13 @@ namespace LeagueSharp.SDK
         /// </param>
         private static void OnObjAiBaseDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (ActiveAttacks.ContainsKey(sender.NetworkId) && sender.IsMelee)
+            if (sender.IsValid && sender.IsMelee)
             {
-                ActiveAttacks[sender.NetworkId].Processed = true;
+                var casterNetworkId = sender.NetworkId;
+                if (ActiveAttacks.ContainsKey(casterNetworkId))
+                {
+                    ActiveAttacks[casterNetworkId].Processed = true;
+                }
             }
         }
 
@@ -301,24 +320,34 @@ namespace LeagueSharp.SDK
         /// <param name="args">Processed Spell Cast Data</param>
         private static void OnObjAiBaseProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsValidTarget(3000, false) || sender.Team != ObjectManager.Player.Team || sender is Obj_AI_Hero
-                || !AutoAttack.IsAutoAttack(args.SData.Name) || !(args.Target is Obj_AI_Base))
+            if (!sender.IsValidTarget(2000, false) || !AutoAttack.IsAutoAttack(args.SData.Name) || !sender.IsAlly)
             {
                 return;
             }
 
-            var target = (Obj_AI_Base)args.Target;
-            ActiveAttacks.Remove(sender.NetworkId);
+            if (!(sender is Obj_AI_Minion) && !(sender is Obj_AI_Turret))
+            {
+                return;
+            }
 
-            var attackData = new PredictedDamage(
-                sender,
-                target,
-                Variables.TickCount - (Game.Ping / 2),
-                sender.AttackCastDelay * 1000,
-                (sender.AttackDelay * 1000) - (sender is Obj_AI_Turret ? 70 : 0),
-                sender.IsMelee ? int.MaxValue : (int)args.SData.MissileSpeed,
-                (float)sender.GetAutoAttackDamage(target));
-            ActiveAttacks.Add(sender.NetworkId, attackData);
+            var target = args.Target as Obj_AI_Minion;
+
+            if (target == null)
+            {
+                return;
+            }
+
+            ActiveAttacks.Remove(sender.NetworkId);
+            ActiveAttacks.Add(
+                sender.NetworkId,
+                new PredictedDamage(
+                    sender,
+                    target,
+                    Variables.TickCount - (Game.Ping / 2),
+                    sender.AttackCastDelay * 1000,
+                    (sender.AttackDelay * 1000) - (sender is Obj_AI_Turret ? 70 : 0),
+                    sender.IsMelee ? int.MaxValue : (int)args.SData.MissileSpeed,
+                    (float)sender.GetAutoAttackDamage(target)));
         }
 
         /// <summary>
@@ -330,11 +359,12 @@ namespace LeagueSharp.SDK
         /// <param name="args">Spell-book Stop Cast Data</param>
         private static void OnSpellbookStopCast(Spellbook sender, SpellbookStopCastEventArgs args)
         {
-            if (sender.Owner.IsValid && args.StopAnimation)
+            if (sender.Owner.IsValid && args.StopAnimation && args.DestroyMissile)
             {
-                if (ActiveAttacks.ContainsKey(sender.Owner.NetworkId))
+                var casterNetworkId = sender.Owner.NetworkId;
+                if (ActiveAttacks.ContainsKey(casterNetworkId))
                 {
-                    ActiveAttacks.Remove(sender.Owner.NetworkId);
+                    ActiveAttacks.Remove(casterNetworkId);
                 }
             }
         }

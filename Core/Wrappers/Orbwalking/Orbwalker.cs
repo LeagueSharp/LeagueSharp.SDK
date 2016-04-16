@@ -431,7 +431,7 @@ namespace LeagueSharp.SDK
                 if (this.Menu["drawings"]["drawAARange"].GetValue<MenuBool>().Value
                     && GameObjects.Player.Position.IsOnScreen(GameObjects.Player.GetRealAutoAttackRange()))
                 {
-                    Drawing.DrawCircle(
+                    Render.Circle.DrawCircle(
                         GameObjects.Player.Position,
                         GameObjects.Player.GetRealAutoAttackRange(),
                         Color.Blue);
@@ -440,7 +440,7 @@ namespace LeagueSharp.SDK
                 if (this.Menu["drawings"]["drawExtraHoldPosition"].GetValue<MenuBool>().Value
                     && GameObjects.Player.Position.IsOnScreen())
                 {
-                    Drawing.DrawCircle(
+                    Render.Circle.DrawCircle(
                         GameObjects.Player.Position,
                         GameObjects.Player.BoundingRadius
                         + this.Menu["advanced"]["movementExtraHold"].GetValue<MenuSlider>().Value,
@@ -454,7 +454,10 @@ namespace LeagueSharp.SDK
                     GameObjects.EnemyHeroes.Where(
                         e => e.IsValidTarget() && e.Position.IsOnScreen(e.GetRealAutoAttackRange(GameObjects.Player))))
                 {
-                    Drawing.DrawCircle(enemy.Position, enemy.GetRealAutoAttackRange(GameObjects.Player), Color.Blue);
+                    Render.Circle.DrawCircle(
+                        enemy.Position,
+                        enemy.GetRealAutoAttackRange(GameObjects.Player),
+                        Color.Blue);
                 }
             }
 
@@ -472,7 +475,7 @@ namespace LeagueSharp.SDK
                         var value = 255 - (minion.Health * 2);
                         value = value > 255 ? 255 : value < 0 ? 0 : value;
 
-                        Drawing.DrawCircle(
+                        Render.Circle.DrawCircle(
                             minion.Position,
                             minion.BoundingRadius * 2f,
                             Color.FromArgb(255, 0, 255, (byte)(255 - value)));
@@ -485,7 +488,10 @@ namespace LeagueSharp.SDK
                             .Where(m => m.Position.IsOnScreen() && m.Health < GameObjects.Player.GetAutoAttackDamage(m));
                     foreach (var minion in minions)
                     {
-                        Drawing.DrawCircle(minion.Position, minion.BoundingRadius * 2f, Color.FromArgb(255, 0, 255, 0));
+                        Render.Circle.DrawCircle(
+                            minion.Position,
+                            minion.BoundingRadius * 2f,
+                            Color.FromArgb(255, 0, 255, 0));
                     }
                 }
             }

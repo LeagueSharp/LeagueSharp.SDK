@@ -20,6 +20,7 @@ namespace LeagueSharp.SDK
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
@@ -578,9 +579,7 @@ namespace LeagueSharp.SDK
         {
             get
             {
-                return this.rangeCheckFrom.IsValid()
-                           ? this.rangeCheckFrom
-                           : (this.From.IsValid() ? this.From : ObjectManager.Player.ServerPosition);
+                return this.rangeCheckFrom.IsValid() ? this.rangeCheckFrom : this.From;
             }
 
             set
@@ -665,9 +664,7 @@ namespace LeagueSharp.SDK
         {
             get
             {
-                return this.castPosition.IsValid() && this.castPosition.IsValid()
-                           ? this.castPosition.SetZ()
-                           : this.Input.Unit.ServerPosition;
+                return this.castPosition.IsValid() ? this.castPosition.SetZ() : this.Input.Unit.ServerPosition;
             }
 
             set

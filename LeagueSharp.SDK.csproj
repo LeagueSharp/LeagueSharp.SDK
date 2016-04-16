@@ -266,6 +266,7 @@
     <Compile Include="Core\Utils\MathUtils.cs" />
     <Compile Include="Core\Utils\Minion.cs" />
     <Compile Include="Core\Utils\Performance.cs" />
+    <Compile Include="Core\Utils\Render.cs" />
     <Compile Include="Core\Utils\ResourceFactory.cs" />
     <Compile Include="Core\Utils\ResourceImportAttribute.cs" />
     <Compile Include="Core\Utils\ResourceLoader.cs" />
@@ -391,7 +392,7 @@
     <EmbeddedResource Include="Resources\Data\InterruptableSpells.json" />
     <EmbeddedResource Include="Resources\Data\Map.json" />
     <EmbeddedResource Include="Resources\Data\Priority.json" />
-    <None Include="Resources\Data\6.6.json" />
+    <None Include="Resources\Data\6.7.json" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />

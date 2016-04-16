@@ -20,7 +20,7 @@ namespace LeagueSharp.SDK
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    
+
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers.Damages;
@@ -162,11 +162,6 @@ namespace LeagueSharp.SDK
                     {
                         return minion;
                     }
-                    var time =
-                        (int)
-                        ((GameObjects.Player.AttackCastDelay * 1000) + (Game.Ping / 2f)
-                         + (1000 * Math.Max(0, GameObjects.Player.Distance(minion) - GameObjects.Player.BoundingRadius)
-                            / GameObjects.Player.GetProjectileSpeed()));
                     if (minion.MaxHealth <= 10)
                     {
                         if (minion.Health <= 1)
@@ -176,7 +171,7 @@ namespace LeagueSharp.SDK
                     }
                     else
                     {
-                        var predHealth = Health.GetPrediction(minion, time, this.FarmDelay);
+                        var predHealth = Health.GetPrediction(minion, (int)minion.GetTimeToHit(), this.FarmDelay);
                         if (predHealth <= 0)
                         {
                             this.orbwalker.InvokeAction(
@@ -187,7 +182,7 @@ namespace LeagueSharp.SDK
                                     });
                         }
 
-                        if (predHealth > 0 && predHealth <= GameObjects.Player.GetAutoAttackDamage(minion))
+                        if (predHealth > 0 && predHealth < GameObjects.Player.GetAutoAttackDamage(minion))
                         {
                             return minion;
                         }
@@ -313,15 +308,7 @@ namespace LeagueSharp.SDK
                                                                  + (int)(GameObjects.Player.AttackDelay * 1000)
                                                                  - (Variables.TickCount + (Game.Ping / 2) + 25)
                                                                : 0;
-                                var timeToLandAttack = GameObjects.Player.IsMelee
-                                                           ? GameObjects.Player.AttackCastDelay * 1000
-                                                           : (GameObjects.Player.AttackCastDelay * 1000)
-                                                             + (1000
-                                                                * Math.Max(
-                                                                    0,
-                                                                    turretMinion.Distance(GameObjects.Player)
-                                                                    - GameObjects.Player.BoundingRadius)
-                                                                / GameObjects.Player.BasicAttack.MissileSpeed);
+                                var timeToLandAttack = turretMinion.GetTimeToHit();
                                 if (hits >= 1
                                     && (hits * GameObjects.Player.AttackDelay * 1000) + timeUntilAttackReady
                                     + timeToLandAttack < timeBeforeDie)
@@ -435,9 +422,7 @@ namespace LeagueSharp.SDK
             // Special Minions if no enemy is near
             if (mode == OrbwalkingMode.Combo)
             {
-                if (minions.Any()
-                    && !GameObjects.EnemyHeroes.Any(
-                        e => e.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange(e) * 2f)))
+                if (minions.Any() && !GameObjects.EnemyHeroes.Any(e => e.IsValidTarget(e.GetRealAutoAttackRange() * 2f)))
                 {
                     return minions.FirstOrDefault();
                 }
@@ -462,7 +447,7 @@ namespace LeagueSharp.SDK
                             m,
                             (int)(GameObjects.Player.AttackDelay * 1000 * LaneClearWaitTime),
                             this.FarmDelay,
-                            HealthPredictionType.Simulated) <= GameObjects.Player.GetAutoAttackDamage(m));
+                            HealthPredictionType.Simulated) < GameObjects.Player.GetAutoAttackDamage(m));
         }
 
         /// <summary>
@@ -486,12 +471,31 @@ namespace LeagueSharp.SDK
                             m,
                             (int)((GameObjects.Player.AttackDelay * 1000) + m.GetTimeToHit()),
                             this.FarmDelay,
-                            HealthPredictionType.Simulated) <= GameObjects.Player.GetAutoAttackDamage(m));
+                            HealthPredictionType.Simulated) < GameObjects.Player.GetAutoAttackDamage(m));
         }
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        ///     Orders the enemy minions.
+        /// </summary>
+        /// <param name="minions">
+        ///     The minions.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="List{T}" /> of <see cref="Obj_AI_Minion" />.
+        /// </returns>
+        private static List<Obj_AI_Minion> OrderEnemyMinions(IEnumerable<Obj_AI_Minion> minions)
+        {
+            return
+                minions?.OrderByDescending(minion => minion.GetMinionType().HasFlag(MinionTypes.Siege))
+                    .ThenBy(minion => minion.GetMinionType().HasFlag(MinionTypes.Super))
+                    .ThenBy(minion => minion.Health)
+                    .ThenByDescending(minion => minion.MaxHealth)
+                    .ToList();
+        }
 
         /// <summary>
         ///     Returns possible minions based on settings.
@@ -607,25 +611,6 @@ namespace LeagueSharp.SDK
             var minion = unit as Obj_AI_Minion;
             return unit.IsValidTarget(range > 0 ? range : unit.GetRealAutoAttackRange())
                    && (minion == null || minion.IsHPBarRendered);
-        }
-
-        /// <summary>
-        ///     Orders the enemy minions.
-        /// </summary>
-        /// <param name="minions">
-        ///     The minions.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="List{T}" /> of <see cref="Obj_AI_Minion" />.
-        /// </returns>
-        private static List<Obj_AI_Minion> OrderEnemyMinions(IEnumerable<Obj_AI_Minion> minions)
-        {
-            return
-                minions?.OrderByDescending(minion => minion.GetMinionType().HasFlag(MinionTypes.Siege))
-                    .ThenBy(minion => minion.GetMinionType().HasFlag(MinionTypes.Super))
-                    .ThenBy(minion => minion.Health)
-                    .ThenByDescending(minion => minion.MaxHealth)
-                    .ToList();
         }
 
         /// <summary>

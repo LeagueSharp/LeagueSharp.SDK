@@ -329,6 +329,10 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             /// </summary>
             public DamageType DamageType { get; set; }
 
+            public bool IsApplyOnHit { get; set; }
+
+            public bool IsModifiedDamage { get; set; }
+
             public List<int> MaxDamageOnMinion { get; set; }
 
             public double ScalePerTargetMissHealth { get; set; }
