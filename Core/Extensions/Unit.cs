@@ -464,7 +464,7 @@ namespace LeagueSharp.SDK
             bool checkTeam = true,
             Vector3 from = default(Vector3))
         {
-            if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable
+            if (unit == null || !unit.IsValid || !unit.IsVisible || unit.IsDead || !unit.IsTargetable
                 || unit.IsInvulnerable)
             {
                 return false;
@@ -482,11 +482,9 @@ namespace LeagueSharp.SDK
                 return false;
             }
 
-            var unitPosition = @base?.ServerPosition ?? unit.Position;
-
-            return @from.IsValid()
-                       ? @from.DistanceSquared(unitPosition) < range * range
-                       : GameObjects.Player.DistanceSquared(unitPosition) < range * range;
+            return
+                (@from.IsValid() ? @from : GameObjects.Player.ServerPosition).DistanceSquared(
+                    @base?.ServerPosition ?? unit.Position) < range * range;
         }
 
         #endregion

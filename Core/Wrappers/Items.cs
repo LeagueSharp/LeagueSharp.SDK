@@ -80,7 +80,7 @@ namespace LeagueSharp.SDK
         /// </returns>
         public static InventorySlot GetWardSlot()
         {
-            var wardIds = new[] { 3340, 3363, 2049, 2045, 2301, 2302, 2303, 3711, 1408, 1409, 1410, 1411, 3932, 2043 };
+            var wardIds = new[] { 2049, 2045, 2301, 2302, 2303, 3711, 1408, 1409, 1410, 1411, 3932, 3340, 2043 };
             return (from wardId in wardIds
                     where CanUseItem(wardId)
                     select GameObjects.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId)wardId))
@@ -200,7 +200,7 @@ namespace LeagueSharp.SDK
         /// </returns>
         public static bool UseItem(int id, Vector3 position)
         {
-            return position != Vector3.Zero
+            return position.IsValid()
                    && GameObjects.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id)
                           .Select(slot => GameObjects.Player.Spellbook.CastSpell(slot.SpellSlot, position))
                           .FirstOrDefault();
@@ -459,7 +459,7 @@ namespace LeagueSharp.SDK
             /// </returns>
             public bool IsInRange(Vector3 position)
             {
-                return GameObjects.Player.ServerPosition.DistanceSquared(position) < this.RangeSqr;
+                return GameObjects.Player.DistanceSquared(position) < this.RangeSqr;
             }
 
             /// <summary>

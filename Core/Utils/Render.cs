@@ -621,7 +621,7 @@
                 Vector3 position,
                 float radius,
                 Color color,
-                int width = 5,
+                int width = 3,
                 bool zDeep = false)
             {
                 try

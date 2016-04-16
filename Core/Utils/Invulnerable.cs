@@ -24,8 +24,6 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Collections.ObjectModel;
     using System.Linq;
 
-    using LeagueSharp.SDK;
-
     #endregion
 
     /// <summary>
@@ -57,21 +55,23 @@ namespace LeagueSharp.SDK.Core.Utils
                                 ChampionName = "Alistar",
                                 CheckFunction =
                                     (target, type) =>
-                                    GameObjects.Player.CountEnemyHeroesInRange(GameObjects.Player.GetRealAutoAttackRange()) > 1
+                                    GameObjects.Player.CountEnemyHeroesInRange(
+                                        GameObjects.Player.GetRealAutoAttackRange()) > 1
                             },
                         new InvulnerableEntry("Meditate")
                             {
                                 ChampionName = "MasterYi",
                                 CheckFunction =
                                     (target, type) =>
-                                    GameObjects.Player.CountEnemyHeroesInRange(GameObjects.Player.GetRealAutoAttackRange()) > 1
+                                    GameObjects.Player.CountEnemyHeroesInRange(
+                                        GameObjects.Player.GetRealAutoAttackRange()) > 1
                             },
                         new InvulnerableEntry("UndyingRage")
                             {
                                 ChampionName = "Tryndamere", MinHealthPercent = 1,
                                 CheckFunction = (target, type) => target.HealthPercent <= 5
                             },
-                        new InvulnerableEntry("Kayle") { ChampionName = "JudicatorIntervention", IsShield = true },
+                        new InvulnerableEntry("JudicatorIntervention") { IsShield = true },
                         new InvulnerableEntry("fizztrickslamsounddummy") { ChampionName = "Fizz" },
                         new InvulnerableEntry("VladimirSanguinePool") { ChampionName = "Vladimir" },
                         new InvulnerableEntry("FioraW") { ChampionName = "Fiora" },
@@ -79,11 +79,13 @@ namespace LeagueSharp.SDK.Core.Utils
                             { ChampionName = "Jax", DamageType = DamageType.Physical },
                         new InvulnerableEntry("BlackShield") { IsShield = true, DamageType = DamageType.Magical },
                         new InvulnerableEntry("BansheesVeil") { IsShield = true, DamageType = DamageType.Magical },
-                        new InvulnerableEntry("SivirE")
-                            { ChampionName = "Sivir", IsShield = true, MinHealthPercent = 0 },
-                        new InvulnerableEntry("ShroudofDarkness") { ChampionName = "Nocturne", IsShield = true },
+                        new InvulnerableEntry("SivirE") { ChampionName = "Sivir", IsShield = true },
+                        new InvulnerableEntry("NocturneShroudofDarkness") { ChampionName = "Nocturne", IsShield = true },
                         new InvulnerableEntry("KindredrNoDeathBuff")
-                            { MinHealthPercent = 10, CheckFunction = (target, type) => target.HealthPercent <= 10 }
+                            {
+                                ChampionName = "Kindred", MinHealthPercent = 10,
+                                CheckFunction = (target, type) => target.HealthPercent <= 10
+                            }
                     });
         }
 

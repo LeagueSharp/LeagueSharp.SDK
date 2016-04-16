@@ -183,7 +183,7 @@ namespace LeagueSharp.SDK
         {
             get
             {
-                return !this.@from.ToVector2().IsValid() ? GameObjects.Player.ServerPosition : this.@from;
+                return !this.@from.IsValid() ? GameObjects.Player.ServerPosition : this.@from;
             }
 
             set
@@ -276,9 +276,7 @@ namespace LeagueSharp.SDK
         {
             get
             {
-                return !this.rangeCheckFrom.ToVector2().IsValid()
-                           ? GameObjects.Player.ServerPosition
-                           : this.rangeCheckFrom;
+                return !this.rangeCheckFrom.IsValid() ? GameObjects.Player.ServerPosition : this.rangeCheckFrom;
             }
 
             set
@@ -888,7 +886,7 @@ namespace LeagueSharp.SDK
             Obj_AI_Base unit,
             bool aoe = false,
             float overrideRange = -1,
-            CollisionableObjects collisionable = CollisionableObjects.Heroes | CollisionableObjects.Minions)
+            CollisionableObjects collisionable = CollisionableObjects.Minions | CollisionableObjects.YasuoWall)
         {
             return
                 Movement.GetPrediction(

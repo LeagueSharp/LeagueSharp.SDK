@@ -31,6 +31,11 @@
   },
   "Elise": {
     "SkillType": "Targeted",
+    "Slot": "Q",
+    "SpellName": "elisespiderqcast"
+  },
+  "Elise": {
+    "SkillType": "Targeted",
     "Slot": "E",
     "SpellName": "elisespideredescent"
   },
@@ -48,6 +53,11 @@
     "SkillType": "Skillshot",
     "Slot": "E",
     "SpellName": "gnare"
+  },
+  "Gnar": {
+    "SkillType": "Skillshot",
+    "Slot": "E",
+    "SpellName": "gnarbige"
   },
   "Gragas": {
     "SkillType": "Skillshot",
@@ -97,7 +107,17 @@
   "Khazix": {
     "SkillType": "Skillshot",
     "Slot": "E",
+    "SpellName": "khazixe"
+  },
+  "Khazix": {
+    "SkillType": "Skillshot",
+    "Slot": "E",
     "SpellName": "khazixelong"
+  },
+  "LeBlanc": {
+    "SkillType": "Skillshot",
+    "Slot": "W",
+    "SpellName": "leblancslide"
   },
   "LeBlanc": {
     "SkillType": "Skillshot",
@@ -133,6 +153,11 @@
     "SkillType": "Targeted",
     "Slot": "E",
     "SpellName": "monkeykingnimbus"
+  },
+  "Pantheon": {
+    "SkillType": "Targeted",
+    "Slot": "W",
+    "SpellName": "pantheon_leapbash"
   },
   "Pantheon": {
     "SkillType": "Skillshot",
@@ -204,9 +229,9 @@
     "Slot": "E",
     "SpellName": "zace"
   },
-  "Ziggs": {
-    "SkillType": "Skillshot",
-    "Slot": "W",
-    "SpellName": "ziggswtoggle"
+  "Zed": {
+    "SkillType": "Targeted",
+    "Slot": "R",
+    "SpellName": "zedr"
   }
 }

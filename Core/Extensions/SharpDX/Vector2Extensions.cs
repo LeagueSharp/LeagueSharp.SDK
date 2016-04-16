@@ -636,32 +636,6 @@ namespace LeagueSharp.SDK
         }
 
         /// <summary>
-        ///     Transforms an extended Vector2 into a Vector4.
-        /// </summary>
-        /// <param name="vector2">SharpDX Vector2</param>
-        /// <param name="z">Float Z-axis (default = 0f)</param>
-        /// <param name="w">Float W-axis (default = 0f)</param>
-        /// <returns>The <see cref="Vector4" /></returns>
-        public static Vector4 ToVector4(this Vector2 vector2, float z = 0f, float w = 1f)
-        {
-            return new Vector4(vector2, z, w);
-        }
-
-        /// <summary>
-        ///     Transforms an extended Vector2 List into a Vector4 List.
-        /// </summary>
-        /// <param name="path">
-        ///     The path.
-        /// </param>
-        /// <returns>
-        ///     Vector4 List
-        /// </returns>
-        public static List<Vector4> ToVector4(this List<Vector2> path)
-        {
-            return path.Select(point => point.ToVector4()).ToList();
-        }
-
-        /// <summary>
         ///     Calculates movement collision between two vectors points.
         /// </summary>
         /// <param name="pointStartA">

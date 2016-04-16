@@ -32,7 +32,7 @@ namespace LeagueSharp.SDK
         #region Static Fields
 
         [ResourceImport("Data.Map.json")]
-        private static Dictionary<int, Map> MapById = new Dictionary<int, Map>();
+        private static readonly Dictionary<int, Map> MapById = new Dictionary<int, Map>();
 
         /// <summary>
         ///     Map by ID list.

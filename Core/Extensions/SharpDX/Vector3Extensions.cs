@@ -254,7 +254,7 @@ namespace LeagueSharp.SDK
         /// </returns>
         public static bool IsValid(this Vector3 vector3)
         {
-            return vector3 != Vector3.Zero;
+            return vector3.ToVector2().IsValid();
         }
 
         /// <summary>
@@ -402,31 +402,6 @@ namespace LeagueSharp.SDK
         public static List<Vector2> ToVector2(this List<Vector3> path)
         {
             return path.Select(point => point.ToVector2()).ToList();
-        }
-
-        /// <summary>
-        ///     Transforms an extended Vector3 into a Vector4.
-        /// </summary>
-        /// <param name="vector3">SharpDX Vector3</param>
-        /// <param name="w">Float W-axis (default = 0f)</param>
-        /// <returns>The <see cref="Vector4" /></returns>
-        public static Vector4 ToVector4(this Vector3 vector3, float w = 1f)
-        {
-            return new Vector4(vector3, w);
-        }
-
-        /// <summary>
-        ///     Transforms an extended Vector3 List into a Vector4 List.
-        /// </summary>
-        /// <param name="path">
-        ///     The path.
-        /// </param>
-        /// <returns>
-        ///     Vector4 List
-        /// </returns>
-        public static List<Vector4> ToVector4(this List<Vector3> path)
-        {
-            return path.Select(point => point.ToVector4()).ToList();
         }
 
         #endregion

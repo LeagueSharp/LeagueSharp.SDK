@@ -76,12 +76,7 @@ namespace LeagueSharp.SDK
         public static bool IsDashing(this Obj_AI_Base unit)
         {
             DashArgs value;
-            if (DetectedDashes.TryGetValue(unit.NetworkId, out value) && unit.Path.Length != 0)
-            {
-                return value.EndTick != 0;
-            }
-
-            return false;
+            return DetectedDashes.TryGetValue(unit.NetworkId, out value) && unit.Path.Length != 0 && value.EndTick != 0;
         }
 
         #endregion

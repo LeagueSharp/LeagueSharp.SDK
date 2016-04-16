@@ -36,9 +36,9 @@ namespace LeagueSharp.SDK
         /// <param name="flags">Centered Flags</param>
         /// <returns>Vector2 center position of the rendering object on the rectangle.</returns>
         public static Vector2 GetCenter(
-            this SharpDX.Rectangle rectangle,
+            this Rectangle rectangle,
             Sprite sprite,
-            SharpDX.Rectangle dimensions,
+            Rectangle dimensions,
             CenteredFlags flags)
         {
             var x = 0;
@@ -81,11 +81,7 @@ namespace LeagueSharp.SDK
         /// <param name="text">The Text</param>
         /// <param name="flags">Centered Flags</param>
         /// <returns>Returns the center position of the text on the rectangle.</returns>
-        public static Vector2 GetCenteredText(
-            this SharpDX.Rectangle rectangle,
-            Sprite sprite,
-            string text,
-            CenteredFlags flags)
+        public static Vector2 GetCenteredText(this Rectangle rectangle, Sprite sprite, string text, CenteredFlags flags)
         {
             return rectangle.GetCenter(sprite, Constants.LeagueSharpFont.MeasureText(sprite, text, 0), flags);
         }
@@ -100,7 +96,7 @@ namespace LeagueSharp.SDK
         /// <param name="flags">Centered Flags</param>
         /// <returns>Returns the center position of the text on the rectangle.</returns>
         public static Vector2 GetCenteredText(
-            this SharpDX.Rectangle rectangle,
+            this Rectangle rectangle,
             Sprite sprite,
             Font font,
             string text,
