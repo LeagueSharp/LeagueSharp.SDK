@@ -92,6 +92,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
             this.MinValue = minValue;
             this.MaxValue = maxValue;
             this.SValue = value;
+            this.BValue = bValue;
             this.original = value;
             this.bOriginal = bValue;
         }
