@@ -66,7 +66,7 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             return ToDelimitedStringImpl(source, delimiter, (sb, e) => sb.Append(e));
         }

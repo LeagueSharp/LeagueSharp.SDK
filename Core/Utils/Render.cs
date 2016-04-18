@@ -8,6 +8,9 @@
     using System.Linq;
     using System.Threading;
 
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+
     using SharpDX;
     using SharpDX.Direct3D9;
 

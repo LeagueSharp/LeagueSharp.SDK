@@ -21,6 +21,7 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Windows.Forms;
 
     using LeagueSharp.SDK;
+    using LeagueSharp.SDK.Core.Enumerations;
 
     using SharpDX;
 

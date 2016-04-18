@@ -24,6 +24,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     using System.Windows.Forms;
     using Core.Utils;
     using LeagueSharp.SDK;
+    using LeagueSharp.SDK.Core.Enumerations;
+
     using SharpDX.Direct3D9;
     using Skins;
 

@@ -15,13 +15,16 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Core.Extensions.SharpDX
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using SharpDX;
+    using global::SharpDX;
+
+    using LeagueSharp.SDK.Core;
+    using LeagueSharp.SDK.Core.Extensions;
 
     /// <summary>
     ///     SharpDX/Vector3 Extensions

@@ -133,13 +133,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         /// <summary>
         ///     Gets the Slider Value if Button is active.
         /// </summary>
-        public int Value
-        {
-            get
-            {
-                return this.SValue != this.MinValue && this.BValue ? this.value : -1;
-            }
-        }
+        public int Value => this.SValue != this.MinValue && this.BValue ? this.value : -1;
 
         /// <summary>
         ///     Gets or sets the Slider Current Value.

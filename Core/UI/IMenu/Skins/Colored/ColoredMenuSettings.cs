@@ -35,16 +35,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
     {
         #region Static Fields
 
-        /// <summary>
-        ///     Local Caption Font.
-        /// </summary>
-        private static Font fontCaption;
-
-        /// <summary>
-        ///     Local Caption Font.
-        /// </summary>
-        private static Font fontMenuSymbol;
-
         #endregion
 
         #region Constructors and Destructors
@@ -97,34 +87,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
         /// <summary>
         ///     Gets or sets the Global Caption Font.
         /// </summary>
-        public static Font FontCaption
-        {
-            get
-            {
-                return fontCaption;
-            }
-
-            set
-            {
-                fontCaption = value;
-            }
-        }
+        public static Font FontCaption { get; set; }
 
         /// <summary>
         ///     Gets or sets the Global Symbol Menu Font.
         /// </summary>
-        public static Font FontMenuSymbol
-        {
-            get
-            {
-                return fontMenuSymbol;
-            }
-
-            set
-            {
-                fontMenuSymbol = value;
-            }
-        }
+        public static Font FontMenuSymbol { get; set; }
 
         /// <summary>
         ///     Gets or sets the Global Text Caption Color.

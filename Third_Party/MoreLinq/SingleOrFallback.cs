@@ -55,11 +55,11 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (fallback == null)
             {
-                throw new ArgumentNullException("fallback");
+                throw new ArgumentNullException(nameof(fallback));
             }
 
             var list = source as IList<TSource>;

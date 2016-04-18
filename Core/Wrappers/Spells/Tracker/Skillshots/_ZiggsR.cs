@@ -1,5 +1,8 @@
-﻿namespace LeagueSharp.SDK.Core.Wrappers.Spells.Tracker.Skillshots
+﻿namespace LeagueSharp.SDK.Core.Wrappers.Tracker.Skillshots
 {
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Wrappers.SpellTypes;
+
     public class _ZiggsR : Skillshot
     {
         #region Constructors and Destructors

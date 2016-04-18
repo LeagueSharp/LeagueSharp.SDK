@@ -21,9 +21,13 @@ namespace LeagueSharp.SDK
     using System.Security.Permissions;
     using System.Threading;
 
+    using LeagueSharp.SDK.Core;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.UI;
     using LeagueSharp.SDK.Core.UI.IMenu;
     using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
     using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Core.Wrappers;
     using LeagueSharp.SDK.Core.Wrappers.Damages;
 
     /// <summary>

@@ -15,11 +15,13 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Core.Events
 {
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+
+    using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
     ///     Teleport class, contains Teleport even which is triggered on recalls, teleports and shen or twisted fate

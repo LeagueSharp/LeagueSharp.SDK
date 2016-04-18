@@ -23,6 +23,7 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Runtime.Caching;
 
     using LeagueSharp.SDK;
+    using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
     ///     Provides an implementation of ObjectCache, for any object. Check <see cref="DefaultCacheCapabilities" /> for

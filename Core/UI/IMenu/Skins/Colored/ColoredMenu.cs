@@ -24,6 +24,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
     using System.Linq;
 
     using LeagueSharp.SDK;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
     using LeagueSharp.SDK.Core.Utils;
 
@@ -135,37 +138,29 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                     .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
                     .Y;
 
-            if (this.Component.Toggled)
-            {
-                MenuSettings.Font.DrawText(
-                    MenuManager.Instance.Sprite,
-                    this.Component.DisplayName,
-                    (int)(position.X + MenuSettings.ContainerTextOffset),
-                    centerY,
-                    new ColorBGRA(237, 245, 254, 255));
-            }
-            else
-            {
-                MenuSettings.Font.DrawText(
-                    MenuManager.Instance.Sprite,
-                    this.Component.DisplayName,
-                    (int)(position.X + MenuSettings.ContainerTextOffset),
-                    centerY,
-                    MenuSettings.TextColor);
-            }
+            MenuSettings.Font.DrawText(
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
+                (int)(position.X + MenuSettings.ContainerTextOffset),
+                centerY,
+                this.Component.Toggled ? new ColorBGRA(237, 245, 254, 255) : MenuSettings.TextColor);
 
             MenuManager.Instance.DrawDelayed(
-                delegate
+                () =>
                     {
                         var symbolCenterY =
-                                        (int)
-                                        ColoredUtilities.GetContainerRectangle(this.Component)
-                                            .GetCenteredText(null, ColoredMenuSettings.FontMenuSymbol, this.Component.DisplayName, CenteredFlags.VerticalCenter)
-                                            .Y;
+                            (int)
+                            ColoredUtilities.GetContainerRectangle(this.Component)
+                                .GetCenteredText(
+                                    null,
+                                    ColoredMenuSettings.FontMenuSymbol,
+                                    this.Component.DisplayName,
+                                    CenteredFlags.VerticalCenter)
+                                .Y;
 
                         Utils.DrawCircleFilled(
                             (position.X + this.Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
-                                - MenuSettings.ContainerTextMarkOffset) + 4,
+                             - MenuSettings.ContainerTextMarkOffset) + 4,
                             symbolCenterY + 11,
                             6,
                             0,
@@ -178,9 +173,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                             "›",
                             (int)
                             (position.X + this.Component.MenuWidth - MenuSettings.ContainerTextMarkWidth
-                                - MenuSettings.ContainerTextMarkOffset) + 1,
+                             - MenuSettings.ContainerTextMarkOffset) + 1,
                             symbolCenterY,
-                            this.Component.Components.Count > 0 ? ColoredMenuSettings.TextCaptionColor : MenuSettings.ContainerSeparatorColor);
+                            this.Component.Components.Count > 0
+                                ? ColoredMenuSettings.TextCaptionColor
+                                : MenuSettings.ContainerSeparatorColor);
                     });
 
             if (this.Component.Toggled)

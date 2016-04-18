@@ -21,6 +21,8 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Collections.Generic;
     using System.Linq;
 
+    using LeagueSharp.SDK.Core.Extensions;
+
     /// <summary>
     ///     Weighted Random, contains useful extensions for randomizer.
     /// </summary>

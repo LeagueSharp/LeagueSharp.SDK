@@ -15,11 +15,13 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Core.Math.Prediction
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
 
     using SharpDX;
 

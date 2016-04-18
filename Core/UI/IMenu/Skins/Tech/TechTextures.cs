@@ -19,13 +19,11 @@
 //   A custom implementation of <see cref="ADrawable{MenuTexture}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-using System.Collections.Generic;
-using System.Linq;
-
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
 {
+    using System.Collections.Generic;
     using System.Drawing;
-
+    using System.Linq;
     using LeagueSharp.SDK.Properties;
     using SharpDX.Direct3D9;
 
@@ -53,13 +51,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
             }
         }
 
-        public TechTextureWrapper this[TechTexture textureType]
-        {
-            get
-            {
-                return this.textures[textureType];
-            }
-        }
+        public TechTextureWrapper this[TechTexture textureType] => this.textures[textureType];
 
         private TechTextureWrapper BuildTexture(Image bmp, int height, int width)
         {

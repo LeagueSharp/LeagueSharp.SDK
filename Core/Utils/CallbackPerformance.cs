@@ -22,6 +22,7 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Runtime.CompilerServices;
 
     using LeagueSharp.SDK;
+    using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
     ///     Performance class, measures how much time does a function takes to execute.

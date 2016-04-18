@@ -19,6 +19,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
 {
     using Core.Utils;
     using LeagueSharp.SDK;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Math;
+
     using Values;
 
     /// <summary>

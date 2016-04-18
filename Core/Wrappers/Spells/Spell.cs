@@ -15,16 +15,22 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Core.Wrappers
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using LeagueSharp.Data.Enumerations;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Math.Prediction;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers.Damages;
 
     using SharpDX;
+
 
     /// <summary>
     ///     Spell Container
@@ -350,10 +356,10 @@ namespace LeagueSharp.SDK
         /// </summary>
         /// <param name="unit">The Target</param>
         /// <param name="stage">
-        ///     The <see cref="Damage.DamageStage" /> of the spell.
+        ///     The <see cref="Data.Enumerations.DamageStage" /> of the spell.
         /// </param>
         /// <returns>Can spell kill target</returns>
-        public bool CanKill(Obj_AI_Base unit, Damage.DamageStage stage = Damage.DamageStage.Default)
+        public bool CanKill(Obj_AI_Base unit, DamageStage stage = DamageStage.Default)
         {
             return unit.IsValidTarget() && this.GetDamage(unit, stage) > unit.Health;
         }
@@ -758,7 +764,7 @@ namespace LeagueSharp.SDK
         /// </returns>
         public List<Obj_AI_Base> GetCollision(Vector2 fromVector2, List<Vector2> to, float delayOverride = -1)
         {
-            return SDK.Collision.GetCollision(
+            return Core.Math.Collision.GetCollision(
                 to.Select(h => h.ToVector3()).ToList(),
                 new PredictionInput
                     {
@@ -774,12 +780,12 @@ namespace LeagueSharp.SDK
         ///     The <see cref="Obj_AI_Hero" /> target.
         /// </param>
         /// <param name="stage">
-        ///     The <see cref="Damage.DamageStage" /> of the spell.
+        ///     The <see cref="Data.Enumerations.DamageStage" /> of the spell.
         /// </param>
         /// <returns>
         ///     The damage value to target unit.
         /// </returns>
-        public float GetDamage(Obj_AI_Base target, Damage.DamageStage stage = Damage.DamageStage.Default)
+        public float GetDamage(Obj_AI_Base target, DamageStage stage = DamageStage.Default)
         {
             return (float)GameObjects.Player.GetSpellDamage(target, this.Slot, stage);
         }

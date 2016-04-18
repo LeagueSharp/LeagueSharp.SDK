@@ -53,13 +53,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             }
         }
 
-        public BlueTextureWrapper this[BlueTexture textureType]
-        {
-            get
-            {
-                return this.textures[textureType];
-            }
-        }
+        public BlueTextureWrapper this[BlueTexture textureType] => this.textures[textureType];
 
         private BlueTextureWrapper BuildTexture(Image bmp, int height, int width)
         {

@@ -1,4 +1,4 @@
-﻿namespace LeagueSharp.SDK
+﻿namespace LeagueSharp.SDK.Core.Enumerations
 {
     public enum SkillshotDetectionType
     {

@@ -15,9 +15,9 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Core.UI
 {
-    using Core.Utils;
+    using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
 

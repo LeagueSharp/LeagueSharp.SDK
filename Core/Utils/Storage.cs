@@ -26,6 +26,7 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Runtime.Serialization;
 
     using LeagueSharp.SDK;
+    using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
     ///     The storage, main purpose is to save share-able settings between assemblies.

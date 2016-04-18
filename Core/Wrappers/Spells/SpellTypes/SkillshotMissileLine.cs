@@ -1,13 +1,7 @@
-﻿namespace LeagueSharp.SDK
+﻿namespace LeagueSharp.SDK.Core.Wrappers.SpellTypes
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-
-    using LeagueSharp.SDK.Clipper;
-    using LeagueSharp.SDK.Core.Utils;
-
-    using SharpDX;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Math.Polygons;
 
     public class SkillshotMissileLine : SkillshotMissile
     {

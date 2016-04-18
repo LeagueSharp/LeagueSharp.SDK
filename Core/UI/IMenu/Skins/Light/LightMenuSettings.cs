@@ -35,11 +35,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
     {
         #region Static Fields
 
-        /// <summary>
-        ///     Local Caption Font.
-        /// </summary>
-        private static Font fontCaption;
-
         #endregion
 
         #region Constructors and Destructors
@@ -80,18 +75,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         /// <summary>
         ///     Gets or sets the Global Caption Font.
         /// </summary>
-        public static Font FontCaption
-        {
-            get
-            {
-                return fontCaption;
-            }
-
-            set
-            {
-                fontCaption = value;
-            }
-        }
+        public static Font FontCaption { get; set; }
 
         /// <summary>
         ///     Gets or sets the Global Text Caption Color.

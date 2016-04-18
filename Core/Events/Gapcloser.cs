@@ -15,14 +15,18 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Core.Events
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.Data;
+    using LeagueSharp.Data.DataTypes;
+    using LeagueSharp.Data.Enumerations;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions;
 
     using SharpDX;
 
@@ -39,10 +43,9 @@ namespace LeagueSharp.SDK
         private static readonly List<GapCloserEventArgs> ActiveSpellsList = new List<GapCloserEventArgs>();
 
         /// <summary>
-        ///     Gets or sets the spells.
+        ///     Gets the spell list.
         /// </summary>
-        [ResourceImport("Data.Gapclosers.json")]
-        private static readonly Dictionary<string, GapCloser> SpellsList = new Dictionary<string, GapCloser>();
+        private static IReadOnlyDictionary<string, GapcloserDataEntry> SpellsList => Data.Get<GapcloserData>().SpellsList;
 
         #endregion
 
@@ -65,7 +68,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Gets the spells.
         /// </summary>
-        public static IEnumerable<GapCloser> GapCloserSpells => SpellsList.Values;
+        public static IEnumerable<GapcloserDataEntry> GapCloserSpells => SpellsList.Values;
 
         #endregion
 
@@ -128,31 +131,6 @@ namespace LeagueSharp.SDK
         }
 
         #endregion
-
-        /// <summary>
-        ///     GapCloser Data Container
-        /// </summary>
-        public struct GapCloser
-        {
-            #region Fields
-
-            /// <summary>
-            ///     Spell Type
-            /// </summary>
-            public GapcloserType SkillType { get; set; }
-
-            /// <summary>
-            ///     Spell Slot
-            /// </summary>
-            public SpellSlot Slot { get; set; }
-
-            /// <summary>
-            ///     Spell Name
-            /// </summary>
-            public string SpellName { get; set; }
-
-            #endregion
-        }
 
         /// <summary>
         ///     GapCloser Data Container

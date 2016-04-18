@@ -61,11 +61,11 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (transformation == null)
             {
-                throw new ArgumentNullException("transformation");
+                throw new ArgumentNullException(nameof(transformation));
             }
             return ScanImpl(source, transformation);
         }
@@ -97,11 +97,11 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (transformation == null)
             {
-                throw new ArgumentNullException("transformation");
+                throw new ArgumentNullException(nameof(transformation));
             }
             return ScanImpl(source, seed, transformation);
         }

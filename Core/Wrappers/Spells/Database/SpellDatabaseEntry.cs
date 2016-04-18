@@ -15,8 +15,11 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Core.Wrappers
 {
+    using LeagueSharp.Data.Enumerations;
+    using LeagueSharp.SDK.Core.Enumerations;
+
     /// <summary>
     ///     The spell database entry.
     /// </summary>

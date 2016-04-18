@@ -51,8 +51,11 @@
     <Reference Include="LeagueSharp">
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>packages\Newtonsoft.Json.8.0.1-beta4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="LeagueSharp.Data">
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SharpDX">
@@ -79,12 +82,8 @@
     <Compile Include="Core\Bootstrap.cs" />
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\Enumerations\CastStates.cs" />
-    <Compile Include="Core\Enumerations\CastTypes.cs" />
     <Compile Include="Core\Enumerations\CenteredFlags.cs" />
-    <Compile Include="Core\Enumerations\CollisionableObjects.cs" />
-    <Compile Include="Core\Enumerations\DangerLevel.cs" />
     <Compile Include="Core\Enumerations\DrawType.cs" />
-    <Compile Include="Core\Enumerations\GapcloserType.cs" />
     <Compile Include="Core\Enumerations\HealthPredictionType.cs" />
     <Compile Include="Core\Enumerations\HitChance.cs" />
     <Compile Include="Core\Enumerations\JungleType.cs" />
@@ -97,8 +96,6 @@
     <Compile Include="Core\Enumerations\PerformanceType.cs" />
     <Compile Include="Core\Enumerations\SkillshotDetectionType.cs" />
     <Compile Include="Core\Enumerations\SkillshotType.cs" />
-    <Compile Include="Core\Enumerations\SpellTags.cs" />
-    <Compile Include="Core\Enumerations\SpellType.cs" />
     <Compile Include="Core\Enumerations\TeleportStatus.cs" />
     <Compile Include="Core\Enumerations\TeleportType.cs" />
     <Compile Include="Core\Enumerations\TurretType.cs" />
@@ -276,7 +273,6 @@
     <Compile Include="Core\Utils\WindowsKeys.cs" />
     <Compile Include="Core\Variables.cs" />
     <Compile Include="Core\Wrappers\Damages\Damage.cs" />
-    <Compile Include="Core\Wrappers\Damages\DamageJson.cs" />
     <Compile Include="Core\Wrappers\Damages\DamageLibrary.cs" />
     <Compile Include="Core\Wrappers\Damages\DamageMastery.cs" />
     <Compile Include="Core\Wrappers\Damages\DamagePassives.cs" />
@@ -309,7 +305,6 @@
     <Compile Include="Core\Wrappers\TargetSelector\HeroVisibleEntry.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\ITargetSelectorMode.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\Modes\IWeightItem.cs" />
-    <Compile Include="Core\Wrappers\TargetSelector\Modes\PriorityCategory.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\Modes\WeightItemWrapper.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\TargetSelectorDrawing.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\TargetSelectorHumanizer.cs" />
@@ -385,13 +380,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="LeagueSharp.SDK.snk" />
-    <None Include="packages.config" />
     <EmbeddedResource Include="Resources\Data\Gapclosers.json" />
     <EmbeddedResource Include="Resources\Data\Database.json" />
     <EmbeddedResource Include="Resources\Data\GlobalInterruptableSpellsList.json" />
     <EmbeddedResource Include="Resources\Data\InterruptableSpells.json" />
     <EmbeddedResource Include="Resources\Data\Map.json" />
     <EmbeddedResource Include="Resources\Data\Priority.json" />
+    <None Include="packages.config" />
     <None Include="Resources\Data\6.7.json" />
   </ItemGroup>
   <ItemGroup>
@@ -414,6 +409,11 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <!--<ItemGroup>
     <Analyzer Include="packages\StyleCop.Analyzers.1.0.0-rc2\analyzers\dotnet\cs\Newtonsoft.Json.dll" />

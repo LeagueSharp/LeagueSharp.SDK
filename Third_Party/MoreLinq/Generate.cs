@@ -47,7 +47,7 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (generator == null)
             {
-                throw new ArgumentNullException("generator");
+                throw new ArgumentNullException(nameof(generator));
             }
             return GenerateImpl(initial, generator);
         }

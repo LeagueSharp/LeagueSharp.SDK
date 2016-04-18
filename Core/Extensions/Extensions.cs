@@ -15,11 +15,13 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Core.Extensions
 {
     using System.IO;
     using System.Runtime.Serialization.Json;
     using System.Text;
+
+    using LeagueSharp.SDK.Core;
 
     public static partial class Extensions
     {

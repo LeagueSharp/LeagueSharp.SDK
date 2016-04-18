@@ -20,6 +20,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
     using Abstracts;
     using Core.Utils;
     using LeagueSharp.SDK;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Math;
+
     using SharpDX;
     using SharpDX.Direct3D9;
     using Values;

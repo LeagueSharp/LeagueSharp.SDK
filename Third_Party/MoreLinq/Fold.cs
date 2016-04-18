@@ -42,7 +42,7 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (count == 1 && folder1 == null || count == 2 && folder2 == null || count == 3 && folder3 == null
                 || count == 4 && folder4 == null)

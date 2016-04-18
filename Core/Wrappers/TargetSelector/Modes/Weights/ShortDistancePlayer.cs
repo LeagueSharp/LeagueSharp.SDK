@@ -15,8 +15,10 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Modes.Weights
+namespace LeagueSharp.SDK.Core.Wrappers.Modes.Weights
 {
+    using LeagueSharp.SDK.Core.Extensions;
+
     /// <summary>
     ///     Short Distance to Player
     /// </summary>

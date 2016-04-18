@@ -1,17 +1,16 @@
-﻿using System;
-
-namespace LeagueSharp.SDK.Core.UI.IMenu
+﻿namespace LeagueSharp.SDK.Core.UI.IMenu
 {
+    using System;
     using System.Drawing;
 
-    using LeagueSharp.SDK;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
 
     using Color = System.Drawing.Color;
-    using Math = System.Math;
 
     internal class ColorSpectrum
     {
@@ -84,9 +83,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Constructors and Destructors
 
         /// <summary>
-        /// Init the ColorBox
+        /// Initializes a new instance of the <see cref="ColorBox" /> class.
         /// </summary>
         /// <param name="size">The size of the new ColorBox</param>
+        /// <param name="disabled">if set to <c>true</c> the ColorBox will be disabled.</param>
         public ColorBox(Size size, bool disabled = false)
         {
             this.mHsl = new Hsl { H = 1, S = 1, L = 1 };
@@ -168,7 +168,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             /// Vertical Orientation
             /// </summary>
             Vertical
-        };
+        }
 
         #endregion
 
@@ -262,18 +262,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 {
                     x = 0;
                 }
+
                 if (x > (this.mWidth - 4))
                 {
-                    x = (this.mWidth - 4);
+                    x = this.mWidth - 4;
                 }
 
                 if (y < 0)
                 {
                     y = 0;
                 }
+
                 if (y > (this.mHeight - 4))
                 {
-                    y = (this.mHeight - 4);
+                    y = this.mHeight - 4;
                 }
 
                 this.mMarkerX = x;
@@ -284,10 +286,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.ResetHslrgb();
                 // Reset the color
 
-                if (this.ColorBoxScrolled != null)
-                {
-                    this.ColorBoxScrolled();
-                }
+                this.ColorBoxScrolled?.Invoke();
             }
         }
 
@@ -306,18 +305,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 {
                     x = 0;
                 }
+
                 if (x > (this.mWidth - 4))
                 {
-                    x = (this.mWidth - 4);
+                    x = this.mWidth - 4;
                 }
 
                 if (y < 0)
                 {
                     y = 0;
                 }
+
                 if (y > (this.mHeight - 4))
                 {
-                    y = (this.mHeight - 4);
+                    y = this.mHeight - 4;
                 }
 
                 this.mMarkerX = x;
@@ -328,10 +329,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.ResetHslrgb();
                 // Reset the color
 
-                if (this.ColorBoxScrolled != null)
-                {
-                    this.ColorBoxScrolled();
-                }
+                this.ColorBoxScrolled?.Invoke();
             }
         }
 
@@ -351,18 +349,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 {
                     x = 0;
                 }
+
                 if (x > (this.mWidth - 4))
                 {
-                    x = (this.mWidth - 4);
+                    x = this.mWidth - 4;
                 }
 
                 if (y < 0)
                 {
                     y = 0;
                 }
+
                 if (y > (this.mHeight - 4))
                 {
-                    y = (this.mHeight - 4);
+                    y = this.mHeight - 4;
                 }
 
                 this.mMarkerX = x;
@@ -373,10 +373,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.ResetHslrgb();
                 // Reset the color
 
-                if (this.ColorBoxScrolled != null)
-                {
-                    this.ColorBoxScrolled();
-                }
+                this.ColorBoxScrolled?.Invoke();
             }
         }
 
@@ -522,12 +519,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         {
             var hslStart = new Hsl();
             var hslEnd = new Hsl();
-            if ((this.mHsl == null))
+            if (this.mHsl == null)
             {
-                this.mHsl = new Hsl();
-                this.mHsl.H = 1;
-                this.mHsl.S = 1;
-                this.mHsl.L = 1;
+                this.mHsl = new Hsl { H = 1, S = 1, L = 1 };
                 this.mRgb = Utilities.HslToRgb(this.mHsl);
             }
 
@@ -713,18 +707,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             {
                 x = 0;
             }
+
             if (x > (this.mWidth - 4))
             {
-                x = (this.mWidth - 4);
+                x = this.mWidth - 4;
             }
 
             if (y < 0)
             {
                 x = 0;
             }
+
             if (y > (this.mHeight - 4))
             {
-                y = (this.mHeight - 4);
+                y = this.mHeight - 4;
             }
 
             if (this.mMarkerY == y & this.mMarkerX == x & !unconditional)
@@ -744,14 +740,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
             else if ((hsl.H < Convert.ToDouble(26d / 360d)) | (hsl.H > Convert.ToDouble(200d / 360d)))
             {
-                if (hsl.S > Convert.ToDouble(70d / 255d))
-                {
-                    this.mMarkerColor = Color.White;
-                }
-                else
-                {
-                    this.mMarkerColor = Color.Black;
-                }
+                this.mMarkerColor = hsl.S > Convert.ToDouble(70d / 255d) ? Color.White : Color.Black;
             }
             else
             {
@@ -947,7 +936,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     The line.
         /// </summary>
-        private static readonly SharpDX.Direct3D9.Line Line = new SharpDX.Direct3D9.Line(Drawing.Direct3DDevice) { GLLines = true };
+        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
 
         #endregion
 
@@ -993,16 +982,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Constructors and Destructors
 
         /// <summary>
-        /// Init the VerticalColorSlider
+        /// Initializes a new instance of the <see cref="VerticalColorSlider"/> class.
         /// </summary>
-        /// <param name="size"></param>
-        /// <param name="disabled"></param>
+        /// <param name="size">The size.</param>
+        /// <param name="disabled">if set to <c>true</c> the VerticalColorSlider will be disabled.</param>
         public VerticalColorSlider(Size size, bool disabled = false)
         {
-            this.mHsl = new Hsl();
-            this.mHsl.H = 1;
-            this.mHsl.S = 1;
-            this.mHsl.L = 1;
+            this.mHsl = new Hsl { H = 1, S = 1, L = 1 };
 
             this.mRgb = Utilities.HslToRgb(this.mHsl);
             this.mEDrawStyle = EDrawStyle.Hue;
@@ -1158,92 +1144,94 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// Gets fired when the left mouse button is pressed
         /// </summary>
         /// <param name="args">Keys</param>
-        public void VerticalColorSlider_MouseDown(WindowsKeys args)
+        public void VerticalColorSliderMouseDown(WindowsKeys args)
         {
-            if (args.Msg == WindowsMessages.LBUTTONDOWN && !this.mDisabled)
+            if (args.Msg != WindowsMessages.LBUTTONDOWN || this.mDisabled)
             {
-                this.mDragging = true;
-
-                var y = (int)args.Cursor.Y - (int)this.Position.Y;
-                y -= 4;
-                if (y < 0)
-                {
-                    y = 0;
-                }
-                if (y > (this.mHeight - 9))
-                {
-                    y = (this.mHeight - 9);
-                }
-
-                this.ArrowPos = y;
-
-                this.DrawSlider(y, false);
-                this.ResetHslrgb();
-                if (this.ColorSliderScroll != null)
-                {
-                    this.ColorSliderScroll();
-                }
+                return;
             }
+
+            this.mDragging = true;
+
+            var y = (int)args.Cursor.Y - (int)this.Position.Y;
+            y -= 4;
+
+            if (y < 0)
+            {
+                y = 0;
+            }
+
+            if (y > (this.mHeight - 9))
+            {
+                y = this.mHeight - 9;
+            }
+
+            this.ArrowPos = y;
+
+            this.DrawSlider(y, false);
+            this.ResetHslrgb();
+            this.ColorSliderScroll?.Invoke();
         }
 
         /// <summary>
         /// Gets fired when the mouse is moved and pressed before
         /// </summary>
         /// <param name="args">Keys</param>
-        public void VerticalColorSlider_MouseMove(WindowsKeys args)
+        public void VerticalColorSliderMouseMove(WindowsKeys args)
         {
-            if (this.mDragging && args.Msg == WindowsMessages.MOUSEMOVE && !this.mDisabled)
+            if (!this.mDragging || args.Msg != WindowsMessages.MOUSEMOVE || this.mDisabled)
             {
-                var y = (int)args.Cursor.Y - (int)this.Position.Y;
-                y -= 4;
-                if (y < 0)
-                {
-                    y = 0;
-                }
-                if (y > (this.mHeight - 9))
-                {
-                    y = (this.mHeight - 9);
-                }
-
-                this.ArrowPos = y;
-                this.DrawSlider(y, false);
-                this.ResetHslrgb();
-                if (this.ColorSliderScroll != null)
-                {
-                    this.ColorSliderScroll();
-                }
+                return;
             }
+
+            var y = (int)args.Cursor.Y - (int)this.Position.Y;
+            y -= 4;
+
+            if (y < 0)
+            {
+                y = 0;
+            }
+
+            if (y > (this.mHeight - 9))
+            {
+                y = this.mHeight - 9;
+            }
+
+            this.ArrowPos = y;
+            this.DrawSlider(y, false);
+            this.ResetHslrgb();
+            this.ColorSliderScroll?.Invoke();
         }
 
         /// <summary>
         /// Gets fired when the mouse is released and pressed before
         /// </summary>
         /// <param name="args">Keys</param>
-        public void VerticalColorSlider_MouseUp(WindowsKeys args)
+        public void VerticalColorSliderMouseUp(WindowsKeys args)
         {
-            if (this.mDragging && args.Msg == WindowsMessages.LBUTTONUP && !this.mDisabled)
+            if (!this.mDragging || args.Msg != WindowsMessages.LBUTTONUP || this.mDisabled)
             {
-                this.mDragging = false;
-
-                var y = (int)args.Cursor.Y - (int)this.Position.Y;
-                y -= 4;
-                if (y < 0)
-                {
-                    y = 0;
-                }
-                if (y > (this.mHeight - 9))
-                {
-                    y = (this.mHeight - 9);
-                }
-
-                this.ArrowPos = y;
-                this.DrawSlider(y, false);
-                this.ResetHslrgb();
-                if (this.ColorSliderScroll != null)
-                {
-                    this.ColorSliderScroll();
-                }
+                return;
             }
+
+            this.mDragging = false;
+
+            var y = (int)args.Cursor.Y - (int)this.Position.Y;
+            y -= 4;
+            if (y < 0)
+            {
+                y = 0;
+            }
+
+            if (y > (this.mHeight - 9))
+            {
+                y = this.mHeight - 9;
+            }
+
+            this.ArrowPos = y;
+            this.DrawSlider(y, false);
+            this.ResetHslrgb();
+            this.ColorSliderScroll?.Invoke();
         }
 
         #endregion
@@ -1269,6 +1257,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                         },
                     col.ToSharpDxColor());
             }
+
             Line.End();
         }
 
@@ -1291,6 +1280,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                         },
                     col.ToSharpDxColor());
             }
+
             Line.End();
         }
 
@@ -1299,10 +1289,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private void DrawStyleHue()
         {
-            var hsl = new Hsl();
+            var hsl = new Hsl { S = 1, L = 1 };
 
-            hsl.S = 1;
-            hsl.L = 1;
             Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
@@ -1317,6 +1305,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                         },
                     col.ToSharpDxColor());
             }
+
             Line.End();
         }
 
@@ -1325,10 +1314,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private void DrawStyleLuminance()
         {
-            var hsl = new Hsl();
+            var hsl = new Hsl { H = this.mHsl.H, S = this.mHsl.S };
 
-            hsl.H = this.mHsl.H;
-            hsl.S = this.mHsl.S;
             Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
@@ -1343,6 +1330,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                         },
                     col.ToSharpDxColor());
             }
+
             Line.End();
         }
 
@@ -1365,6 +1353,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                         },
                     col.ToSharpDxColor());
             }
+
             Line.End();
         }
 
@@ -1373,10 +1362,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private void DrawStyleSaturation()
         {
-            var hsl = new Hsl();
+            var hsl = new Hsl { H = this.mHsl.H, L = this.mHsl.L };
 
-            hsl.H = this.mHsl.H;
-            hsl.L = this.mHsl.L;
             Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
@@ -1391,6 +1378,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                         },
                     col.ToSharpDxColor());
             }
+
             Line.End();
         }
 
@@ -1476,9 +1464,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             {
                 position = 0;
             }
+
             if (position > (this.mHeight - 9))
             {
-                position = (this.mHeight - 9);
+                position = this.mHeight - 9;
             }
 
             if (this.ArrowPos == position & !unconditional)
@@ -1610,7 +1599,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     The line.
         /// </summary>
-        private static readonly SharpDX.Direct3D9.Line Line = new SharpDX.Direct3D9.Line(Drawing.Direct3DDevice) { GLLines = true };
+        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
 
         #endregion
 
@@ -1624,7 +1613,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         /// Defines the Display Style
         /// </summary>
-        private EDrawStyle mEDrawStyle = EDrawStyle.Brightness;
+        private EDrawStyle mEDrawStyle;
 
         /// <summary>
         /// Height of the ColorBox
@@ -1656,15 +1645,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Constructors and Destructors
 
         /// <summary>
-        /// Init the VerticalAlphaSlider
+        /// Initializes a new instance of the <see cref="VerticalAlphaSlider"/> class.
         /// </summary>
-        /// <param name="size"></param>
+        /// <param name="size">The size.</param>
+        /// <param name="disabled">if set to <c>true</c> the VerticalAlphaSlider will be disabled.</param>
         public VerticalAlphaSlider(Size size, bool disabled = false)
         {
-            this.mHsl = new Hsl();
-            this.mHsl.H = 1;
-            this.mHsl.S = 0;
-            this.mHsl.L = 1;
+            this.mHsl = new Hsl { H = 1, S = 0, L = 1 };
 
             this.mRgb = Utilities.HslToRgb(this.mHsl);
             this.mEDrawStyle = EDrawStyle.Brightness;
@@ -1790,6 +1777,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             {
                 return this.mRgb;
             }
+
             set
             {
                 this.mRgb = value;
@@ -1821,70 +1809,71 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// Gets fired when the left mouse button is pressed
         /// </summary>
         /// <param name="args">Keys</param>
-        public void VerticalAlphaSlider_MouseDown(WindowsKeys args)
+        public void VerticalAlphaSliderMouseDown(WindowsKeys args)
         {
-            if (args.Msg == WindowsMessages.LBUTTONDOWN && !mDisabled)
+            if (args.Msg != WindowsMessages.LBUTTONDOWN || this.mDisabled)
             {
-                this.mBDragging = true;
-
-                var y = (int)args.Cursor.Y - (int)this.Position.Y;
-                y -= 4;
-                if (y < 0)
-                {
-                    y = 0;
-                }
-                if (y > (this.mHeight - 9))
-                {
-                    y = (this.mHeight - 9);
-                }
-
-                this.ArrowPos = y;
-
-                this.DrawSlider(y, false);
-                this.ResetHslrgb();
-                if (this.AlphaSliderScroll != null)
-                {
-                    this.AlphaSliderScroll();
-                }
+                return;
             }
+
+            this.mBDragging = true;
+
+            var y = (int)args.Cursor.Y - (int)this.Position.Y;
+            y -= 4;
+            if (y < 0)
+            {
+                y = 0;
+            }
+
+            if (y > (this.mHeight - 9))
+            {
+                y = this.mHeight - 9;
+            }
+
+            this.ArrowPos = y;
+
+            this.DrawSlider(y, false);
+            this.ResetHslrgb();
+            this.AlphaSliderScroll?.Invoke();
         }
 
         /// <summary>
         /// Gets fired when the mouse is moved and pressed before
         /// </summary>
         /// <param name="args">Keys</param>
-        public void VerticalAlphaSlider_MouseMove(WindowsKeys args)
+        public void VerticalAlphaSliderMouseMove(WindowsKeys args)
         {
-            if (this.mBDragging && args.Msg == WindowsMessages.MOUSEMOVE && !mDisabled)
+            if (!this.mBDragging || args.Msg != WindowsMessages.MOUSEMOVE || this.mDisabled)
             {
-                var y = (int)args.Cursor.Y - (int)this.Position.Y;
-                y -= 4;
-                if (y < 0)
-                {
-                    y = 0;
-                }
-                if (y > (this.mHeight - 9))
-                {
-                    y = (this.mHeight - 9);
-                }
-
-                this.ArrowPos = y;
-                this.DrawSlider(y, false);
-                this.ResetHslrgb();
-                if (this.AlphaSliderScroll != null)
-                {
-                    this.AlphaSliderScroll();
-                }
+                return;
             }
+
+            var y = (int)args.Cursor.Y - (int)this.Position.Y;
+            y -= 4;
+
+            if (y < 0)
+            {
+                y = 0;
+            }
+
+            if (y > (this.mHeight - 9))
+            {
+                y = this.mHeight - 9;
+            }
+
+            this.ArrowPos = y;
+            this.DrawSlider(y, false);
+            this.ResetHslrgb();
+            this.AlphaSliderScroll?.Invoke();
         }
 
         /// <summary>
         /// Gets fired when the mouse is released and pressed before
         /// </summary>
         /// <param name="args">Keys</param>
-        public void VerticalAlphaSlider_MouseUp(WindowsKeys args)
+        public void VerticalAlphaSliderMouseUp(WindowsKeys args)
         {
-            if (this.mBDragging && args.Msg == WindowsMessages.LBUTTONUP && !mDisabled)
+            if (this.mBDragging && args.Msg == WindowsMessages.LBUTTONUP && !this.mDisabled)
             {
                 this.mBDragging = false;
 
@@ -1894,18 +1883,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 {
                     y = 0;
                 }
+
                 if (y > (this.mHeight - 9))
                 {
-                    y = (this.mHeight - 9);
+                    y = this.mHeight - 9;
                 }
 
                 this.ArrowPos = y;
                 this.DrawSlider(y, false);
                 this.ResetHslrgb();
-                if (this.AlphaSliderScroll != null)
-                {
-                    this.AlphaSliderScroll();
-                }
+                this.AlphaSliderScroll?.Invoke();
             }
         }
 
@@ -1932,6 +1919,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                         },
                     col.ToSharpDxColor());
             }
+
             Line.End();
         }
 
@@ -1954,6 +1942,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                         },
                     col.ToSharpDxColor());
             }
+
             Line.End();
         }
 
@@ -1962,10 +1951,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private void DrawStyleHue()
         {
-            var hsl = new Hsl();
+            var hsl = new Hsl { S = 1, L = 1 };
 
-            hsl.S = 1;
-            hsl.L = 1;
             Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
@@ -1980,6 +1967,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                         },
                     col.ToSharpDxColor());
             }
+
             Line.End();
         }
 
@@ -1988,10 +1976,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private void DrawStyleLuminance()
         {
-            var hsl = new Hsl();
+            var hsl = new Hsl { H = this.mHsl.H, S = this.mHsl.S };
 
-            hsl.H = this.mHsl.H;
-            hsl.S = this.mHsl.S;
             Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
@@ -2006,6 +1992,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                         },
                     col.ToSharpDxColor());
             }
+
             Line.End();
         }
 
@@ -2028,6 +2015,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                         },
                     col.ToSharpDxColor());
             }
+
             Line.End();
         }
 
@@ -2036,10 +2024,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         private void DrawStyleSaturation()
         {
-            var hsl = new Hsl();
+            var hsl = new Hsl { H = this.mHsl.H, L = this.mHsl.L };
 
-            hsl.H = this.mHsl.H;
-            hsl.L = this.mHsl.L;
             Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
@@ -2054,6 +2040,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                         },
                     col.ToSharpDxColor());
             }
+
             Line.End();
         }
 
@@ -2139,9 +2126,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             {
                 position = 0;
             }
+
             if (position > (this.mHeight - 9))
             {
-                position = (this.mHeight - 9);
+                position = this.mHeight - 9;
             }
 
             if (this.ArrowPos == position & !unconditional)
@@ -2317,8 +2305,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <returns>New color</returns>
         public Color SetBrightness(Color c, double brightness)
         {
-            var hsl = new Hsl();
-            hsl.L = brightness;
+            var hsl = new Hsl { L = brightness };
             return Utilities.HslToRgb(hsl);
         }
 
@@ -2330,8 +2317,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <returns>New color</returns>
         public Color SetHue(Color c, double hue)
         {
-            var hsl = new Hsl();
-            hsl.H = hue;
+            var hsl = new Hsl { H = hue };
             return Utilities.HslToRgb(hsl);
         }
 
@@ -2343,8 +2329,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <returns>New color</returns>
         public Color SetSaturation(Color c, double saturation)
         {
-            var hsl = new Hsl();
-            hsl.S = saturation;
+            var hsl = new Hsl { S = saturation };
             return Utilities.HslToRgb(hsl);
         }
 
@@ -2585,22 +2570,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         /// Converts the CMYK color format to RGB
         /// </summary>
-        /// <param name="cmyk"></param>
-        /// <returns>Converted color</returns>
+        /// <param name="cmyk">The cmyk.</param>
+        /// <returns>
+        /// Converted color
+        /// </returns>
         public static Color CmykToRgb(Cmyk cmyk)
         {
-            var red = 0;
-            var green = 0;
-            var blue = 0;
-
             // To convert CMYK to RGB we first have to convert CMYK to CMY
             var cyan = (cmyk.C * (1 - cmyk.K)) + cmyk.K;
             var magenta = (cmyk.M * (1 - cmyk.K)) + cmyk.K;
             var yellow = (cmyk.Y * (1 - cmyk.K)) + cmyk.K;
 
-            red = Convert.ToInt32(Math.Round(cyan * 255d));
-            green = Convert.ToInt32(Math.Round(magenta * 255d));
-            blue = Convert.ToInt32(Math.Round(yellow * 255d));
+            var red = Convert.ToInt32(Math.Round(cyan * 255d));
+            var green = Convert.ToInt32(Math.Round(magenta * 255d));
+            var blue = Convert.ToInt32(Math.Round(yellow * 255d));
 
             return Color.FromArgb(red, green, blue);
         }
@@ -2608,57 +2591,64 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         /// Converts the HSL color format to RGB
         /// </summary>
-        /// <param name="hsl"></param>
-        /// <returns>Converted color</returns>
+        /// <param name="hsl">The HSL.</param>
+        /// <returns>
+        /// Converted color
+        /// </returns>
         public static Color HslToRgb(Hsl hsl)
         {
-            var max = 0;
-            var min = 0;
-            var mid = 0;
-            double q = 0;
+            int mid;
 
-            max = Convert.ToInt32(Math.Round(hsl.L * 255d));
-            min = Convert.ToInt32(Math.Round((1.0d - hsl.S) * (hsl.L / 1.0d) * 255d));
-            q = Convert.ToDouble((max - min) / 255d);
+            var max = Convert.ToInt32(Math.Round(hsl.L * 255d));
+            var min = Convert.ToInt32(Math.Round((1.0d - hsl.S) * (hsl.L / 1.0d) * 255d));
+            var q = Convert.ToDouble((max - min) / 255d);
 
             if (hsl.H >= 0 & hsl.H <= (1d / 6d))
             {
-                mid = Convert.ToInt32(Math.Round(((hsl.H - 0d) * q) * 1530 + min));
+                mid = Convert.ToInt32(Math.Round((((hsl.H - 0d) * q) * 1530) + min));
                 return Color.FromArgb(max, mid, min);
             }
+
             if (hsl.H <= (1d / 3d))
             {
-                mid = Convert.ToInt32(Math.Round(-((hsl.H - Convert.ToDouble(1d / 6d)) * q) * 1530 + max));
+                mid = Convert.ToInt32(Math.Round((-((hsl.H - Convert.ToDouble(1d / 6d)) * q) * 1530) + max));
                 return Color.FromArgb(mid, max, min);
             }
+
             if (hsl.H <= 0.5)
             {
-                mid = Convert.ToInt32(Math.Round(((hsl.H - Convert.ToDouble(1d / 3d)) * q) * 1530 + min));
+                mid = Convert.ToInt32(Math.Round((((hsl.H - Convert.ToDouble(1d / 3d)) * q) * 1530) + min));
                 return Color.FromArgb(min, max, mid);
             }
+
             if (hsl.H <= (2d / 3d))
             {
-                mid = Convert.ToInt32(Math.Round(-((hsl.H - 0.5d) * q) * 1530 + max));
+                mid = Convert.ToInt32(Math.Round((-((hsl.H - 0.5d) * q) * 1530) + max));
                 return Color.FromArgb(min, mid, max);
             }
+
             if (hsl.H <= (5d / 6d))
             {
-                mid = Convert.ToInt32(Math.Round(((hsl.H - Convert.ToDouble(2d / 3d)) * q) * 1530 + min));
+                mid = Convert.ToInt32(Math.Round((((hsl.H - Convert.ToDouble(2d / 3d)) * q) * 1530) + min));
                 return Color.FromArgb(mid, min, max);
             }
-            if (hsl.H <= 1.0)
+
+            if (!(hsl.H <= 1.0))
             {
-                mid = Convert.ToInt32(Math.Round(-((hsl.H - (5d / 6d)) * q) * 1530 + max));
-                return Color.FromArgb(max, min, mid);
+                return Color.FromArgb(0, 0, 0);
             }
-            return Color.FromArgb(0, 0, 0);
+
+            mid = Convert.ToInt32(Math.Round((-((hsl.H - (5d / 6d)) * q) * 1530) + max));
+            return Color.FromArgb(max, min, mid);
         }
 
         /// <summary>
         /// Converts the RGB color format to CMYK
         /// </summary>
-        /// <param name="c"></param>
-        /// <returns>Converted color</returns>
+        /// <param name="c">The color.</param>
+        /// <returns>
+        /// Converted color
+        /// </returns>
         public static Cmyk RgbToCmyk(Color c)
         {
             var cmyk = new Cmyk();
@@ -2693,16 +2683,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         /// Converts the RGB color format to HSL
         /// </summary>
-        /// <param name="c"></param>
+        /// <param name="c">The color</param>
         /// <returns>Converted color</returns>
         public static Hsl RgbToHsl(Color c)
         {
             var hsl = new Hsl();
 
-            var max = 0;
-            var min = 0;
-            var diff = 0;
-            var sum = 0;
+            int max;
+            int min;
 
             // Of the RBG Values - assign the highest value to _Max and the lowest to _min
             if (c.R > c.G)
@@ -2715,44 +2703,30 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 max = c.G;
                 min = c.R;
             }
+
             if (c.B > max)
             {
                 max = c.B;
             }
+
             if (c.B < min)
             {
                 min = c.B;
             }
 
-            diff = max - min;
-            sum = max + min;
+            var diff = max - min;
 
             // Luminance (aka Brightness)
             hsl.L = Convert.ToDouble(max / 255d);
 
             // Saturation
-            if (max == 0)
-            {
-                hsl.S = 0;
-            }
-            else
-            {
-                hsl.S = Convert.ToDouble(diff / (double)max);
-            }
+            hsl.S = max == 0 ? 0 : Convert.ToDouble(diff / (double)max);
 
             // Hue
             // R is situated at the angle of 360 eller noll degrees
             // G vid 120 degrees
             // B vid 240 degrees
-            double q = 0;
-            if (diff == 0)
-            {
-                q = 0;
-            }
-            else
-            {
-                q = Convert.ToDouble(60d / diff);
-            }
+            var q = diff == 0 ? 0 : Convert.ToDouble(60d / diff);
 
             if (max == Convert.ToInt32(c.R))
             {

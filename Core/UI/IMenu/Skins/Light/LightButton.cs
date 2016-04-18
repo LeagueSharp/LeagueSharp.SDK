@@ -22,6 +22,9 @@
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
 {
     using LeagueSharp.SDK;
+    using LeagueSharp.SDK.Core.Enumerations;
+    using LeagueSharp.SDK.Core.Extensions.SharpDX;
+    using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
 
@@ -167,9 +170,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
             if (args.Cursor.IsUnderRectangle(rect.X, rect.Y, rect.Width, rect.Height))
             {
                 this.Component.Hovering = true;
-                if (args.Msg == WindowsMessages.LBUTTONDOWN && this.Component.Action != null)
+                if (args.Msg == WindowsMessages.LBUTTONDOWN)
                 {
-                    this.Component.Action();
+                    this.Component.Action?.Invoke();
                 }
             }
             else
