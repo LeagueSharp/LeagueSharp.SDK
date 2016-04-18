@@ -81,11 +81,11 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (width < 0)
             {
-                throw new ArgumentException(null, nameof(width));
+                throw new ArgumentException(null, "width");
             }
             return PadImpl(source, width, padding, null);
         }
@@ -120,15 +120,15 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (paddingSelector == null)
             {
-                throw new ArgumentNullException(nameof(paddingSelector));
+                throw new ArgumentNullException("paddingSelector");
             }
             if (width < 0)
             {
-                throw new ArgumentException(null, nameof(width));
+                throw new ArgumentException(null, "width");
             }
             return PadImpl(source, width, default(TSource), paddingSelector);
         }

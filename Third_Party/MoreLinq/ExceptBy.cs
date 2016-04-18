@@ -91,15 +91,15 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (first == null)
             {
-                throw new ArgumentNullException(nameof(first));
+                throw new ArgumentNullException("first");
             }
             if (second == null)
             {
-                throw new ArgumentNullException(nameof(second));
+                throw new ArgumentNullException("second");
             }
             if (keySelector == null)
             {
-                throw new ArgumentNullException(nameof(keySelector));
+                throw new ArgumentNullException("keySelector");
             }
             return ExceptByImpl(first, second, keySelector, keyComparer);
         }

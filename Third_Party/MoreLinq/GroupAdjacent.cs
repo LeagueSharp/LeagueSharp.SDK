@@ -107,11 +107,11 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (keySelector == null)
             {
-                throw new ArgumentNullException(nameof(keySelector));
+                throw new ArgumentNullException("keySelector");
             }
 
             return GroupAdjacent(source, keySelector, e => e, comparer);
@@ -214,15 +214,15 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (keySelector == null)
             {
-                throw new ArgumentNullException(nameof(keySelector));
+                throw new ArgumentNullException("keySelector");
             }
             if (elementSelector == null)
             {
-                throw new ArgumentNullException(nameof(elementSelector));
+                throw new ArgumentNullException("elementSelector");
             }
 
             return GroupAdjacentImpl(source, keySelector, elementSelector, comparer ?? EqualityComparer<TKey>.Default);

@@ -15,10 +15,8 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Math
+namespace LeagueSharp.SDK
 {
-    using LeagueSharp.SDK.Core.Enumerations;
-
     using SharpDX;
     using SharpDX.Direct3D9;
 

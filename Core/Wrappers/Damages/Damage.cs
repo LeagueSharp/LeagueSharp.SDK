@@ -21,11 +21,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System.Linq;
     using System.Text.RegularExpressions;
 
-    using LeagueSharp.Data.DataTypes;
-    using LeagueSharp.Data.Enumerations;
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-
     using Utils;
 
     /// <summary>

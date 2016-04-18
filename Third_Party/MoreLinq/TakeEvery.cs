@@ -47,11 +47,11 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (step <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(step));
+                throw new ArgumentOutOfRangeException("step");
             }
             return source.Where((e, i) => i % step == 0);
         }

@@ -21,7 +21,6 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Text.RegularExpressions;
 
     using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
     ///     The jungle utility class, provides utils for jungle related items.

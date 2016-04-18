@@ -15,12 +15,11 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core
+namespace LeagueSharp.SDK
 {
     using System;
 
     using LeagueSharp.SDK.Core.UI.IMenu;
-    using LeagueSharp.SDK.Core.Wrappers;
 
     /// <summary>
     ///     Variables of the LeagueSharp development kit.

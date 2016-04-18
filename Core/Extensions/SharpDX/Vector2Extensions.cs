@@ -15,14 +15,13 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Extensions.SharpDX
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Core;
-    using Core.Extensions;
-    using global::SharpDX;
+
+    using SharpDX;
 
     /// <summary>
     ///     SharpDX/Vector2 Extensions.
@@ -892,7 +891,7 @@ namespace LeagueSharp.SDK.Core.Extensions.SharpDX
     }
 
     /// <summary>
-    ///     Holds info for the <see cref="Core.Extensions.Extensions.Intersection" /> method.
+    ///     Holds info for the <see cref="Extensions.Intersection" /> method.
     /// </summary>
     public struct IntersectionResult
     {

@@ -65,7 +65,7 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
 
             return TraceImpl(
@@ -95,11 +95,11 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (formatter == null)
             {
-                throw new ArgumentNullException(nameof(formatter));
+                throw new ArgumentNullException("formatter");
             }
             return TraceImpl(source, formatter);
         }

@@ -36,11 +36,11 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (action == null)
             {
-                throw new ArgumentNullException(nameof(action));
+                throw new ArgumentNullException("action");
             }
 
             foreach (var element in source)
@@ -63,11 +63,11 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (action == null)
             {
-                throw new ArgumentNullException(nameof(action));
+                throw new ArgumentNullException("action");
             }
 
             var index = 0;

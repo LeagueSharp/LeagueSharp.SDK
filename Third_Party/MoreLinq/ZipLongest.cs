@@ -57,15 +57,15 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (first == null)
             {
-                throw new ArgumentNullException(nameof(first));
+                throw new ArgumentNullException("first");
             }
             if (second == null)
             {
-                throw new ArgumentNullException(nameof(second));
+                throw new ArgumentNullException("second");
             }
             if (resultSelector == null)
             {
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw new ArgumentNullException("resultSelector");
             }
 
             return ZipLongestImpl(first, second, resultSelector);

@@ -60,11 +60,11 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (resultSelector == null)
             {
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw new ArgumentNullException("resultSelector");
             }
             return PairwiseImpl(source, resultSelector);
         }

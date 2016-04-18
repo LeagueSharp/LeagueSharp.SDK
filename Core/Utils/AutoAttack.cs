@@ -20,8 +20,6 @@ namespace LeagueSharp.SDK.Core.Utils
     using System;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Extensions;
-
     /// <summary>
     ///     AutoAttack utility class.
     /// </summary>

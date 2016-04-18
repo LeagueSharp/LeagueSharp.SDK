@@ -23,7 +23,6 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Reflection.Emit;
 
     using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.Enumerations;
 
     #endregion
 

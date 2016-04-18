@@ -23,8 +23,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
     using System.Windows.Forms;
     using Core.Utils;
     using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.Enumerations;
-
     using Skins;
     using MenuItem = MenuItem;
 

@@ -345,7 +345,15 @@
         /// <param name="ccolor">Corner Color</param>
         public static void DrawBoxRounded(float x, float y, float w, float h, float radius, bool smoothing, Color color, Color bcolor, Color? ccolor = null)
         {
-            var cornerColor = ccolor ?? bcolor;
+            Color cornerColor;
+            if (!ccolor.HasValue)
+            {
+                cornerColor = bcolor;
+            }
+            else
+            {
+                cornerColor = ccolor.Value;
+            }
 
             DrawBoxFilled(x + radius, y + radius, w - 2 * radius - 1, h - 2 * radius - 1, color);   // Center rect.
             DrawBoxFilled(x + radius, y, w - 2 * radius - 1, radius, color);            // Top rect.

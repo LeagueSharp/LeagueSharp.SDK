@@ -15,15 +15,10 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Extensions
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Linq;
-
-    using global::SharpDX;
-
-    using LeagueSharp.SDK.Core;
-    using LeagueSharp.SDK.Core.Enumerations;
 
     using SharpDX;
 

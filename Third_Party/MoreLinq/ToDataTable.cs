@@ -51,11 +51,11 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (table == null)
             {
-                throw new ArgumentNullException(nameof(table));
+                throw new ArgumentNullException("table");
             }
 
             var members = PrepareMemberInfos(expressions).ToArray();
@@ -190,15 +190,19 @@ namespace LeagueSharp.SDK.MoreLinq
                     if (column == null)
                     {
                         throw new ArgumentException(
-                            $"Column named '{member.Name}' is missing.",
-                            nameof(table));
+                            string.Format("Column named '{0}' is missing.", member.Name),
+                            "table");
                     }
 
                     if (info.Type != column.DataType)
                     {
                         throw new ArgumentException(
-                            $"Column named '{member.Name}' has wrong data type. It should be {info.Type} when it is {column.DataType}.",
-                            nameof(table));
+                            string.Format(
+                                "Column named '{0}' has wrong data type. It should be {1} when it is {2}.",
+                                member.Name,
+                                info.Type,
+                                column.DataType),
+                            "table");
                     }
 
                     members[column.Ordinal] = member;
@@ -252,7 +256,7 @@ namespace LeagueSharp.SDK.MoreLinq
             var memberExpression = body as MemberExpression;
             if ((memberExpression == null) || (memberExpression.Expression.NodeType != ExpressionType.Parameter))
             {
-                throw new ArgumentException($"Illegal expression: {lambda}", nameof(lambda));
+                throw new ArgumentException(string.Format("Illegal expression: {0}", lambda), "lambda");
             }
 
             return memberExpression.Member;
@@ -281,7 +285,7 @@ namespace LeagueSharp.SDK.MoreLinq
 
             if (expressions.Any(e => e == null))
             {
-                throw new ArgumentException("One of the supplied expressions was null.", nameof(expressions));
+                throw new ArgumentException("One of the supplied expressions was null.", "expressions");
             }
 
             try
@@ -290,7 +294,7 @@ namespace LeagueSharp.SDK.MoreLinq
             }
             catch (ArgumentException e)
             {
-                throw new ArgumentException("One of the supplied expressions is not allowed.", nameof(expressions), e);
+                throw new ArgumentException("One of the supplied expressions is not allowed.", "expressions", e);
             }
         }
 

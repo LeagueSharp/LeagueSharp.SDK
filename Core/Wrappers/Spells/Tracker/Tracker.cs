@@ -1,12 +1,12 @@
-﻿namespace LeagueSharp.SDK.Core.Wrappers.Tracker
+﻿namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
+    using System.Runtime.Remoting.Messaging;
+    using System.Security.Permissions;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
     using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Core.Wrappers.SpellTypes;
 
     public class Tracker
     {

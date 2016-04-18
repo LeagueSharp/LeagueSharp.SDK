@@ -22,8 +22,6 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Linq;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-
     internal static class ResourceLoader
     {
         public static void Initialize()

@@ -40,7 +40,7 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (tail == null)
             {
-                throw new ArgumentNullException(nameof(tail));
+                throw new ArgumentNullException("tail");
             }
             return tail.Prepend(head);
         }
@@ -57,7 +57,7 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (head == null)
             {
-                throw new ArgumentNullException(nameof(head));
+                throw new ArgumentNullException("head");
             }
             return LinqEnumerable.Concat(head, LinqEnumerable.Repeat(tail, 1));
         }

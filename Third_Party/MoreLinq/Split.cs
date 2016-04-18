@@ -128,15 +128,15 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (count <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw new ArgumentOutOfRangeException("count");
             }
             if (resultSelector == null)
             {
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw new ArgumentNullException("resultSelector");
             }
             return SplitImpl(source, separator, comparer ?? EqualityComparer<TSource>.Default, count, resultSelector);
         }
@@ -187,19 +187,19 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (separatorFunc == null)
             {
-                throw new ArgumentNullException(nameof(separatorFunc));
+                throw new ArgumentNullException("separatorFunc");
             }
             if (count <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw new ArgumentOutOfRangeException("count");
             }
             if (resultSelector == null)
             {
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw new ArgumentNullException("resultSelector");
             }
             return SplitImpl(source, separatorFunc, count, resultSelector);
         }

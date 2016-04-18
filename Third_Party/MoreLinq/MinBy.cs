@@ -75,11 +75,11 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (selector == null)
             {
-                throw new ArgumentNullException(nameof(selector));
+                throw new ArgumentNullException("selector");
             }
             comparer = comparer ?? Comparer<TKey>.Default;
 

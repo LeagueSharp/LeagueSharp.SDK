@@ -22,7 +22,6 @@ namespace LeagueSharp.SDK.Core.Utils
     using System.Runtime.CompilerServices;
 
     using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.Enumerations;
 
     /// <summary>
     ///     Logging class for LeagueSharp.SDK, used to log output data into a file and the console.

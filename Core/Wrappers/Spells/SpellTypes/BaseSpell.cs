@@ -1,10 +1,6 @@
-﻿namespace LeagueSharp.SDK.Core.Wrappers.SpellTypes
+﻿namespace LeagueSharp.SDK
 {
     using System;
-
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
 
     using SharpDX;
 

@@ -53,7 +53,13 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             }
         }
 
-        public ColoredTextureWrapper this[ColoredTexture textureType] => this.textures[textureType];
+        public ColoredTextureWrapper this[ColoredTexture textureType]
+        {
+            get
+            {
+                return this.textures[textureType];
+            }
+        }
 
         private ColoredTextureWrapper BuildTexture(Image bmp, int height, int width)
         {

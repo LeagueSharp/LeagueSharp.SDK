@@ -52,7 +52,7 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             return LinqEnumerable.Concat(LinqEnumerable.Repeat(value, 1), source);
         }

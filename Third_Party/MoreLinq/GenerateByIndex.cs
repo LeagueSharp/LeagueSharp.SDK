@@ -43,7 +43,7 @@ namespace LeagueSharp.SDK.MoreLinq
             // include int.MaxValue. Picky, I know...
             if (generator == null)
             {
-                throw new ArgumentNullException(nameof(generator));
+                throw new ArgumentNullException("generator");
             }
             return GenerateByIndexImpl(generator);
         }

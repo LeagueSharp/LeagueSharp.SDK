@@ -15,11 +15,9 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Math.Polygons
+namespace LeagueSharp.SDK
 {
     using System;
-
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
 
     using SharpDX;
 

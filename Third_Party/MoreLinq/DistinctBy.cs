@@ -83,11 +83,11 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (keySelector == null)
             {
-                throw new ArgumentNullException(nameof(keySelector));
+                throw new ArgumentNullException("keySelector");
             }
             return DistinctByImpl(source, keySelector, comparer);
         }

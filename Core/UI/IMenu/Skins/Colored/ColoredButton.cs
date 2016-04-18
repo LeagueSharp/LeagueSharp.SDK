@@ -22,9 +22,6 @@
 namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
 {
     using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
 

@@ -24,9 +24,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
     using System.Linq;
 
     using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
     using LeagueSharp.SDK.Core.UI.IMenu.Skins.Light;
     using LeagueSharp.SDK.Core.Utils;

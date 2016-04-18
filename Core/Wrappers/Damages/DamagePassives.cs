@@ -20,8 +20,6 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Data.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.

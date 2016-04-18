@@ -61,11 +61,11 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (predicate == null)
             {
-                throw new ArgumentNullException(nameof(predicate));
+                throw new ArgumentNullException("predicate");
             }
             return SkipUntilImpl(source, predicate);
         }

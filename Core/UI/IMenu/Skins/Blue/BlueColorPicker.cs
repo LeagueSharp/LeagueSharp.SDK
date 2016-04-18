@@ -24,9 +24,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
     using System.Drawing;
 
     using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
     using LeagueSharp.SDK.Core.UI.IMenu.Values;
     using LeagueSharp.SDK.Core.Utils;
@@ -383,11 +380,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                     }
                     else if (this.InteractingVerticalColorSlider)
                     {
-                        this.verticalColorSlider.VerticalColorSliderMouseMove(args);
+                        this.verticalColorSlider.VerticalColorSlider_MouseMove(args);
                     }
                     else if (this.InteractingVerticalAlphaSlider)
                     {
-                        this.verticalAlphaSlider.VerticalAlphaSliderMouseMove(args);
+                        this.verticalAlphaSlider.VerticalAlphaSlider_MouseMove(args);
                     }
                 }
             }
@@ -402,12 +399,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 if (this.InteractingVerticalColorSlider)
                 {
                     this.InteractingVerticalColorSlider = false;
-                    this.verticalColorSlider.VerticalColorSliderMouseUp(args);
+                    this.verticalColorSlider.VerticalColorSlider_MouseUp(args);
                 }
                 if (this.InteractingVerticalAlphaSlider)
                 {
                     this.InteractingVerticalAlphaSlider = false;
-                    this.verticalAlphaSlider.VerticalAlphaSliderMouseUp(args);
+                    this.verticalAlphaSlider.VerticalAlphaSlider_MouseUp(args);
                 }
             }
 
@@ -436,7 +433,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                         this.VerticalColorSliderBoundaries().Height))
                     {
                         this.InteractingVerticalColorSlider = true;
-                        this.verticalColorSlider.VerticalColorSliderMouseDown(args);
+                        this.verticalColorSlider.VerticalColorSlider_MouseDown(args);
                     }
                     else if (args.Cursor.IsUnderRectangle(
                         this.VerticalAlphaSliderBoundaries().X,
@@ -445,7 +442,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                         this.VerticalAlphaSliderBoundaries().Height))
                     {
                         this.InteractingVerticalAlphaSlider = true;
-                        this.verticalAlphaSlider.VerticalAlphaSliderMouseDown(args);
+                        this.verticalAlphaSlider.VerticalAlphaSlider_MouseDown(args);
                     }
                     else if (args.Cursor.IsUnderRectangle(
                         this.ApplyButtonBoundaries().X,

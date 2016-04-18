@@ -58,15 +58,15 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (size <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(size));
+                throw new ArgumentOutOfRangeException("size");
             }
             if (resultSelector == null)
             {
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw new ArgumentNullException("resultSelector");
             }
             return BatchImpl(source, size, resultSelector);
         }

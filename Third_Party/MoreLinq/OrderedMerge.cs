@@ -129,7 +129,7 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (keySelector == null)
             {
-                throw new ArgumentNullException(nameof(keySelector)); // Argument name changes to 'firstKeySelector'
+                throw new ArgumentNullException("keySelector"); // Argument name changes to 'firstKeySelector'
             }
             return OrderedMerge(
                 first,
@@ -199,31 +199,31 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (first == null)
             {
-                throw new ArgumentNullException(nameof(first));
+                throw new ArgumentNullException("first");
             }
             if (second == null)
             {
-                throw new ArgumentNullException(nameof(second));
+                throw new ArgumentNullException("second");
             }
             if (firstKeySelector == null)
             {
-                throw new ArgumentNullException(nameof(firstKeySelector));
+                throw new ArgumentNullException("firstKeySelector");
             }
             if (secondKeySelector == null)
             {
-                throw new ArgumentNullException(nameof(secondKeySelector));
+                throw new ArgumentNullException("secondKeySelector");
             }
             if (firstSelector == null)
             {
-                throw new ArgumentNullException(nameof(firstSelector));
+                throw new ArgumentNullException("firstSelector");
             }
             if (bothSelector == null)
             {
-                throw new ArgumentNullException(nameof(bothSelector));
+                throw new ArgumentNullException("bothSelector");
             }
             if (secondSelector == null)
             {
-                throw new ArgumentNullException(nameof(secondSelector));
+                throw new ArgumentNullException("secondSelector");
             }
 
             return OrderedMergeImpl(

@@ -62,11 +62,11 @@ namespace LeagueSharp.SDK.MoreLinq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException("source");
             }
             if (transformation == null)
             {
-                throw new ArgumentNullException(nameof(transformation));
+                throw new ArgumentNullException("transformation");
             }
             return PreScanImpl(source, transformation, identity);
         }

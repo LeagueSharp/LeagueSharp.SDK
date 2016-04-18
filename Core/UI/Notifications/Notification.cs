@@ -15,15 +15,12 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.UI
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Drawing;
 
-    using LeagueSharp.SDK.Core.Enumerations;
-    using LeagueSharp.SDK.Core.Extensions.SharpDX;
-    using LeagueSharp.SDK.Core.Math;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Properties;
 
