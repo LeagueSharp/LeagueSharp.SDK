@@ -434,7 +434,7 @@ namespace LeagueSharp.SDK
                     Render.Circle.DrawCircle(
                         GameObjects.Player.Position,
                         GameObjects.Player.GetRealAutoAttackRange(),
-                        Color.Blue);
+                        Color.PaleGreen);
                 }
 
                 if (this.Menu["drawings"]["drawExtraHoldPosition"].GetValue<MenuBool>().Value
@@ -457,7 +457,7 @@ namespace LeagueSharp.SDK
                     Render.Circle.DrawCircle(
                         enemy.Position,
                         enemy.GetRealAutoAttackRange(GameObjects.Player),
-                        Color.Blue);
+                        Color.PaleVioletRed);
                 }
             }
 
