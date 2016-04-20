@@ -22,13 +22,37 @@ namespace LeagueSharp.SDK
     using System.Linq;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.Data;
+    using LeagueSharp.Data.DataTypes;
+    using LeagueSharp.Data.Enumerations;
 
     /// <summary>
     ///     Provides events for interrupting spells.
     /// </summary>
     public static partial class Events
     {
+        #region Static Fields
+
+        /// <summary>
+        ///     Gets the global interruptable spells.
+        /// </summary>
+        public static readonly IReadOnlyList<InterruptableSpellDataEntry> GlobalInterruptableSpells =
+            Data.Get<InterruptableSpellData>().GlobalInterruptableSpells;
+
+        /// <summary>
+        ///     Gets the interruptable spells.
+        /// </summary>
+        public static readonly IReadOnlyDictionary<string, List<InterruptableSpellDataEntry>> InterruptableSpells =
+            Data.Get<InterruptableSpellData>().InterruptableSpells;
+
+        /// <summary>
+        ///     Gets the casting interruptable spells.
+        /// </summary>
+        private static readonly Dictionary<int, InterruptableSpellDataEntry> CastingInterruptableSpellDictionary =
+            new Dictionary<int, InterruptableSpellDataEntry>();
+
+        #endregion
+
         #region Public Events
 
         /// <summary>
@@ -43,43 +67,8 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Gets the casting interruptible spell dictionary.
         /// </summary>
-        public static IReadOnlyDictionary<int, InterruptableSpellData> CastingInterruptableSpell
+        public static IReadOnlyDictionary<int, InterruptableSpellDataEntry> CastingInterruptableSpell
             => CastingInterruptableSpellDictionary;
-
-        /// <summary>
-        ///     Gets the interruptible spells dictionary.
-        /// </summary>
-        public static IReadOnlyList<InterruptableSpellData> GlobalInterruptableSpells => GlobalInterruptableSpellsList;
-
-        /// <summary>
-        ///     Gets the interruptible spells dictionary.
-        /// </summary>
-        public static IReadOnlyDictionary<string, List<InterruptableSpellData>> InterruptableSpells
-            => InterruptableSpellsDictionary;
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        ///     Gets or sets the casting interrupt-able spell.
-        /// </summary>
-        private static Dictionary<int, InterruptableSpellData> CastingInterruptableSpellDictionary { get; set; } =
-            new Dictionary<int, InterruptableSpellData>();
-
-        /// <summary>
-        ///     Gets or sets the interrupt-able spells.
-        /// </summary>
-        [ResourceImport("Data.InterruptableSpells.json")]
-        private static Dictionary<string, List<InterruptableSpellData>> InterruptableSpellsDictionary { get; set; } =
-            new Dictionary<string, List<InterruptableSpellData>>();
-
-        /// <summary>
-        ///     Gets the global interruptable spells list.
-        /// </summary>
-        [ResourceImport("Data.GlobalInterruptableSpellsList.json")]
-        private static List<InterruptableSpellData> GlobalInterruptableSpellsList { get; set; } =
-            new List<InterruptableSpellData>();
 
         #endregion
 
@@ -101,17 +90,14 @@ namespace LeagueSharp.SDK
                 return null;
             }
 
-            InterruptableSpellData value;
-            if (CastingInterruptableSpellDictionary.TryGetValue(target.NetworkId, out value))
-            {
-                return new InterruptableTargetEventArgs(
-                    target,
-                    value.DangerLevel,
-                    target.Spellbook.CastEndTime,
-                    value.MovementInterrupts);
-            }
-
-            return null;
+            InterruptableSpellDataEntry value;
+            return CastingInterruptableSpellDictionary.TryGetValue(target.NetworkId, out value)
+                       ? new InterruptableTargetEventArgs(
+                             target,
+                             value.DangerLevel,
+                             target.Spellbook.CastEndTime,
+                             value.MovementInterrupts)
+                       : null;
         }
 
         /// <summary>
@@ -174,24 +160,26 @@ namespace LeagueSharp.SDK
         private static void EventInterruptableSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             var target = sender as Obj_AI_Hero;
+
             if (target == null || CastingInterruptableSpellDictionary.ContainsKey(target.NetworkId))
             {
                 return;
             }
 
             var globalInterruptSpell = GlobalInterruptableSpells.FirstOrDefault(s => s.Name.Equals(args.SData.Name));
+
             if (globalInterruptSpell != null)
             {
                 CastingInterruptableSpellDictionary.Add(target.NetworkId, globalInterruptSpell);
                 return;
             }
 
-            if (!InterruptableSpellsDictionary.ContainsKey(target.ChampionName))
+            if (!InterruptableSpells.ContainsKey(target.ChampionName))
             {
                 return;
             }
 
-            var spell = InterruptableSpellsDictionary[target.ChampionName].Find(
+            var spell = InterruptableSpells[target.ChampionName].Find(
                 s =>
                     {
                         var firstOrDefault = target.Spellbook.Spells.FirstOrDefault(
@@ -227,93 +215,6 @@ namespace LeagueSharp.SDK
         }
 
         #endregion
-
-        /// <summary>
-        ///     Interrupt-able Spell Data
-        /// </summary>
-        public class InterruptableSpellData
-        {
-            #region Constructors and Destructors
-
-            /// <summary>
-            ///     Initializes a new instance of the <see cref="InterruptableSpellData" /> class.
-            /// </summary>
-            public InterruptableSpellData()
-            {
-            }
-
-            /// <summary>
-            ///     Initializes a new instance of the <see cref="InterruptableSpellData" /> class.
-            /// </summary>
-            /// <param name="slot">
-            ///     Spell Slot
-            /// </param>
-            /// <param name="dangerLevel">
-            ///     Danger Level
-            /// </param>
-            /// <param name="movementInterrupts">
-            ///     Does movement interrupt the spell
-            /// </param>
-            public InterruptableSpellData(SpellSlot slot, DangerLevel dangerLevel, bool movementInterrupts = true)
-            {
-                this.Slot = slot;
-                this.DangerLevel = dangerLevel;
-                this.MovementInterrupts = movementInterrupts;
-            }
-
-            /// <summary>
-            ///     Initializes a new instance of the <see cref="InterruptableSpellData" /> class.
-            /// </summary>
-            /// <param name="name">
-            ///     Spell Name
-            /// </param>
-            /// <param name="dangerLevel">
-            ///     Danger Level
-            /// </param>
-            /// <param name="slot">
-            ///     The slot.
-            /// </param>
-            /// <param name="movementInterrupts">
-            ///     Does movement interrupt the spell
-            /// </param>
-            public InterruptableSpellData(
-                string name,
-                DangerLevel dangerLevel,
-                SpellSlot slot = SpellSlot.Unknown,
-                bool movementInterrupts = true)
-            {
-                this.Name = name;
-                this.DangerLevel = dangerLevel;
-                this.Slot = slot;
-                this.MovementInterrupts = movementInterrupts;
-            }
-
-            #endregion
-
-            #region Public Properties
-
-            /// <summary>
-            ///     Gets the danger level.
-            /// </summary>
-            public DangerLevel DangerLevel { get; set; }
-
-            /// <summary>
-            ///     Gets a value indicating whether movement interrupts.
-            /// </summary>
-            public bool MovementInterrupts { get; set; }
-
-            /// <summary>
-            ///     Gets the name.
-            /// </summary>
-            public string Name { get; set; }
-
-            /// <summary>
-            ///     Gets the slot.
-            /// </summary>
-            public SpellSlot Slot { get; set; }
-
-            #endregion
-        }
 
         /// <summary>
         ///     Class that represents the event arguments for <see cref="OnInterruptableTarget" />

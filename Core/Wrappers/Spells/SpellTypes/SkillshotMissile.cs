@@ -1,11 +1,8 @@
 ﻿namespace LeagueSharp.SDK
 {
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
 
-    using LeagueSharp.SDK.Clipper;
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.Data.DataTypes;
 
     using SharpDX;
 
@@ -25,16 +22,12 @@
 
         #endregion
 
-        public override string ToString()
-        {
-            return "SkillshotMissile: Champion=" + this.SData.ChampionName + " SpellType=" + this.SData.SpellType + " SpellName=" + this.SData.SpellName;
-        }
-
         #region Public Properties
 
         public MissileClient Missile { get; set; }
-        
+
         public bool MissileDestroyed { get; set; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -54,23 +47,22 @@
             else
             {
                 var t1 = (this.SData.MissileAccel > 0
-                    ? this.SData.MissileMaxSpeed
-                    : this.SData.MissileMinSpeed - this.SData.MissileSpeed) * 1000f / this.SData.MissileAccel;
+                              ? this.SData.MissileMaxSpeed
+                              : this.SData.MissileMinSpeed - this.SData.MissileSpeed) * 1000f / this.SData.MissileAccel;
 
                 if (t <= t1)
                 {
                     x =
                         (int)
-                            (t * this.SData.MissileSpeed / 1000d + 0.5d * this.SData.MissileAccel * Math.Pow(t / 1000d, 2));
+                        (t * this.SData.MissileSpeed / 1000d + 0.5d * this.SData.MissileAccel * Math.Pow(t / 1000d, 2));
                 }
                 else
                 {
                     x =
                         (int)
-                            (t1 * this.SData.MissileSpeed / 1000d +
-                             0.5d * this.SData.MissileAccel * Math.Pow(t1 / 1000d, 2) +
-                             (t - t1) / 1000d *
-                             (this.SData.MissileAccel < 0 ? this.SData.MissileMaxSpeed : this.SData.MissileMinSpeed));
+                        (t1 * this.SData.MissileSpeed / 1000d + 0.5d * this.SData.MissileAccel * Math.Pow(t1 / 1000d, 2)
+                         + (t - t1) / 1000d
+                         * (this.SData.MissileAccel < 0 ? this.SData.MissileMaxSpeed : this.SData.MissileMinSpeed));
                 }
             }
 
@@ -80,6 +72,12 @@
             t = x;
 
             return this.StartPosition + this.Direction * t;
+        }
+
+        public override string ToString()
+        {
+            return "SkillshotMissile: Champion=" + this.SData.ChampionName + " SpellType=" + this.SData.SpellType
+                   + " SpellName=" + this.SData.SpellName;
         }
 
         #endregion

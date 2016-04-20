@@ -20,10 +20,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.UI.Skins.Blue
 {
-    using LeagueSharp.SDK.Core.UI.IMenu.Abstracts;
-
     using SharpDX;
 
     /// <summary>
@@ -65,9 +63,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         public static Rectangle GetContainerRectangle(AMenuComponent component)
         {
             return new Rectangle(
-                (int)component.Position.X, 
-                (int)component.Position.Y, 
-                component.MenuWidth, 
+                (int)component.Position.X,
+                (int)component.Position.Y,
+                component.MenuWidth,
                 MenuSettings.ContainerHeight);
         }
 

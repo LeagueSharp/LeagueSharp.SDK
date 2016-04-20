@@ -21,12 +21,12 @@ namespace LeagueSharp.SDK
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.Data;
+    using LeagueSharp.Data.DataTypes;
 
     /// <summary>
     ///     The spell database.
     /// </summary>
-    [ResourceImport]
     public static class SpellDatabase
     {
         #region Static Fields
@@ -34,10 +34,8 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     A list of all the entries in the SpellDatabase.
         /// </summary>
-        public static IReadOnlyList<SpellDatabaseEntry> Spells => SpellsList;
-
-        [ResourceImport("Data.Database.json")]
-        private static List<SpellDatabaseEntry> SpellsList = new List<SpellDatabaseEntry>();
+        public static IReadOnlyList<SpellDatabaseEntry> Spells =
+            Data.Get<LeagueSharp.Data.DataTypes.SpellDatabase>().Spells;
 
         #endregion
 
@@ -90,10 +88,19 @@ namespace LeagueSharp.SDK
                     spellData.SpellName.ToLower() == spellName || spellData.ExtraSpellNames.Contains(spellName));
         }
 
+        /// <summary>
+        ///     Queries a search through the spell collection by object name.
+        /// </summary>
+        /// <param name="objectName">The object name.</param>
+        /// <returns>
+        ///     The <see cref="SpellDatabaseEntry" />
+        /// </returns>
         public static SpellDatabaseEntry GetBySourceObjectName(string objectName)
         {
             objectName = objectName.ToLowerInvariant();
-            return Spells.Where(spellData => spellData.SourceObjectName.Length != 0).FirstOrDefault(spellData => objectName.Contains(spellData.SourceObjectName));
+            return
+                Spells.Where(spellData => spellData.SourceObjectName.Length != 0)
+                    .FirstOrDefault(spellData => objectName.Contains(spellData.SourceObjectName));
         }
 
         #endregion

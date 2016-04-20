@@ -19,13 +19,13 @@
 //   A custom implementation of an <see cref="ADrawable{MenuSlider}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
+
+namespace LeagueSharp.SDK.UI.Skins.Blue2
 {
     using System.Globalization;
 
-    using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.UI.Skins.Blue;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -84,25 +84,25 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
             Line.Width = 3;
             Line.Begin();
             Line.Draw(
-                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) }, 
+                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) },
                 this.Component.Interacting ? new ColorBGRA(90, 129, 144, 255) : new ColorBGRA(0, 74, 103, 255));
             Line.End();
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)(position.X + MenuSettings.ContainerTextOffset), 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
+                (int)(position.X + MenuSettings.ContainerTextOffset),
                 centeredY,
                 MenuSettings.TextColor);
 
             var measureText = MenuSettings.Font.MeasureText(
-                null, 
-                this.Component.Value.ToString(CultureInfo.InvariantCulture), 
+                null,
+                this.Component.Value.ToString(CultureInfo.InvariantCulture),
                 0);
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.Value.ToString(CultureInfo.InvariantCulture), 
-                (int)(position.X + this.Component.MenuWidth - 5 - measureText.Width), 
+                MenuManager.Instance.Sprite,
+                this.Component.Value.ToString(CultureInfo.InvariantCulture),
+                (int)(position.X + this.Component.MenuWidth - 5 - measureText.Width),
                 centeredY,
                 MenuSettings.TextColor);
 

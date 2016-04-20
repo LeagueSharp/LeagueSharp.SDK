@@ -22,9 +22,9 @@
 
 //Concept by User Vasconcellos
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
+namespace LeagueSharp.SDK.UI.Skins.Light2
 {
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Light;
+    using LeagueSharp.SDK.UI.Skins.Light;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -67,41 +67,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
 
         #endregion
 
-        #region Static Fields
-
-        /// <summary>
-        ///     Local Caption Font.
-        /// </summary>
-        private static Font fontCaption;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
         ///     Gets or sets the Global Caption Font.
         /// </summary>
-        public static Font FontCaption
-        {
-            get
-            {
-                return fontCaption;
-            }
-
-            set
-            {
-                fontCaption = value;
-            }
-        }
-
-        /// <summary>
-        ///     Gets or sets the Global Text Caption Color.
-        /// </summary>
-        public static ColorBGRA TextCaptionColor { get; set; }
+        public static Font FontCaption { get; set; }
 
         /// <summary>
         ///     Gets or sets the Global KeyBind Color.
@@ -112,6 +83,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
         ///     Gets or sets the Global Slider Color.
         /// </summary>
         public static ColorBGRA SliderColor { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the Global Text Caption Color.
+        /// </summary>
+        public static ColorBGRA TextCaptionColor { get; set; }
 
         #endregion
 
@@ -126,6 +102,5 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
         }
 
         #endregion
-
     }
 }

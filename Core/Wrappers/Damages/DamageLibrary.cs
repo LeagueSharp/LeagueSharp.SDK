@@ -15,19 +15,14 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.Damages
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Security.Permissions;
-    using System.Text;
 
-    using Utils;
-    using Properties;
-
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
+    using LeagueSharp.Data;
+    using LeagueSharp.Data.DataTypes;
+    using LeagueSharp.Data.Enumerations;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -37,19 +32,9 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         #region Static Fields
 
         /// <summary>
-        ///     The damage version files.
-        /// </summary>
-        private static readonly IDictionary<string, byte[]> DamageFiles = new Dictionary<string, byte[]>
-                                                                              { { "6.7", Resources._6_7 } };
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
         ///     Gets the Damage Collection.
         /// </summary>
-        internal static IDictionary<string, ChampionDamage> DamageCollection { get; } =
+        internal static IReadOnlyDictionary<string, ChampionDamage> DamageCollection =
             new Dictionary<string, ChampionDamage>();
 
         #endregion
@@ -59,51 +44,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
         /// <summary>
         ///     Initializes a new instance of the <see cref="Damage" /> class.
         /// </summary>
-        /// <param name="gameVersion">
-        ///     The client version.
-        /// </param>
-        internal static void Initialize(Version gameVersion)
+        internal static void Initialize()
         {
             Events.OnLoad += (sender, args) =>
                 {
-                    OnLoad(gameVersion);
+                    DamageCollection = Data.Get<DamageDatabase>().Damage;
                     CreatePassives();
                 };
-        }
-
-        /// <summary>
-        ///     Creates the damage collection.
-        /// </summary>
-        /// <param name="damages">
-        ///     The converted <see cref="byte" />s of damages into a dictionary collection.
-        /// </param>
-        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        private static void CreateDamages(IDictionary<string, JToken> damages)
-        {
-            foreach (var champion in GameObjects.Heroes.Select(h => h.ChampionName).Distinct())
-            {
-                JToken value;
-                if (damages.TryGetValue(champion, out value))
-                {
-                    DamageCollection.Add(champion, JsonConvert.DeserializeObject<ChampionDamage>(value.ToString()));
-                }
-            }
-        }
-
-        private static void OnLoad(Version version)
-        {
-            var versionString = $"{version.Major}.{version.Minor}";
-
-            var fileBytes = DamageFiles.ContainsKey(versionString)
-                                ? DamageFiles[versionString]
-                                : DamageFiles.OrderByDescending(o => o.Key).FirstOrDefault().Value;
-            if (fileBytes != null)
-            {
-                CreateDamages(JObject.Parse(Encoding.Default.GetString(fileBytes)));
-                return;
-            }
-
-            Logging.Write()(LogLevel.Fatal, "No suitable damage library is available.");
         }
 
         /// <summary>

@@ -21,10 +21,9 @@ namespace LeagueSharp.SDK
     using System.Security.Permissions;
     using System.Threading;
 
-    using LeagueSharp.SDK.Core.UI.IMenu;
-    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
-    using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Core.Wrappers.Damages;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.UI;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     Bootstrap is an initialization pointer for the AppDomainManager to initialize the library correctly once loaded in
@@ -93,7 +92,7 @@ namespace LeagueSharp.SDK
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Notifications Initialized.");
 
             // Load Damages.
-            Damage.Initialize(Variables.GameVersion);
+            Damage.Initialize();
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Damage Library Initialized.");
 
             // Final notification.

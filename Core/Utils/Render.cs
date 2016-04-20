@@ -1,4 +1,4 @@
-﻿namespace LeagueSharp.SDK.Core.Utils
+﻿namespace LeagueSharp.SDK.Utils
 {
     using System;
     using System.Collections.Generic;
@@ -7,6 +7,8 @@
     using System.IO;
     using System.Linq;
     using System.Threading;
+
+    using LeagueSharp.SDK.Enumerations;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -704,6 +706,8 @@
 
             private static void CircleDispose(object sender, EventArgs e)
             {
+                Render.OnPreReset(EventArgs.Empty);
+
                 if (effect != null && !effect.IsDisposed)
                 {
                     effect.Dispose();
@@ -840,6 +844,8 @@
             /// </summary>
             public override void Dispose()
             {
+                this.OnPreReset();
+
                 if (!this.line.IsDisposed)
                 {
                     this.line.Dispose();
@@ -995,6 +1001,8 @@
             /// </summary>
             public override void Dispose()
             {
+                this.OnPreReset();
+
                 if (!this.line.IsDisposed)
                 {
                     this.line.Dispose();
@@ -1415,7 +1423,9 @@
             /// </summary>
             public override void Dispose()
             {
+                this.OnPreReset();
                 Game.OnUpdate -= this.SpriteOnUpdate;
+
                 if (!this.sprite.IsDisposed)
                 {
                     this.sprite.Dispose();
@@ -1912,6 +1922,8 @@
             public override void Dispose()
             {
                 Game.OnUpdate -= this.TextOnUpdate;
+                this.OnPreReset();
+
                 if (!this.textFont.IsDisposed)
                 {
                     this.textFont.Dispose();

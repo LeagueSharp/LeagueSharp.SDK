@@ -22,9 +22,10 @@ namespace LeagueSharp.SDK
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Reflection;
-    using LeagueSharp.SDK.Core.UI.IMenu;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
+
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.UI;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     The mode menu for the TargetSelector
@@ -66,7 +67,9 @@ namespace LeagueSharp.SDK
 
             this.pEntries = this.pEntries.OrderBy(p => p.DisplayName).ToList();
 
-            this.menu.Add(new MenuList<string>("mode", "Mode", this.pEntries.Select(e => e.DisplayName)) { SelectedValue = "Weight" });
+            this.menu.Add(
+                new MenuList<string>("mode", "Mode", this.pEntries.Select(e => e.DisplayName))
+                    { SelectedValue = "Weight" });
 
             this.menu.MenuValueChanged += (sender, args) =>
                 {

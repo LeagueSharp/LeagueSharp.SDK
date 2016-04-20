@@ -15,12 +15,12 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Modes
+namespace LeagueSharp.SDK.TSModes
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.UI.IMenu;
+    using LeagueSharp.SDK.UI;
 
     /// <summary>
     ///     The most attack damage Mode.

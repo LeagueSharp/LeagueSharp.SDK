@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Enumerations
 {
     using System;
 
@@ -28,32 +28,32 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     None Flag
         /// </summary>
-        None = 0, 
+        None = 0,
 
         /// <summary>
         ///     Center Horizontally Left.
         /// </summary>
-        HorizontalLeft = 1 << 0, 
+        HorizontalLeft = 1 << 0,
 
         /// <summary>
         ///     Center Horizontally.
         /// </summary>
-        HorizontalCenter = 1 << 1, 
+        HorizontalCenter = 1 << 1,
 
         /// <summary>
         ///     Center Horizontally Right.
         /// </summary>
-        HorizontalRight = 1 << 2, 
+        HorizontalRight = 1 << 2,
 
         /// <summary>
         ///     Center Vertically Up.
         /// </summary>
-        VerticalUp = 1 << 3, 
+        VerticalUp = 1 << 3,
 
         /// <summary>
         ///     Center Vertically.
         /// </summary>
-        VerticalCenter = 1 << 4, 
+        VerticalCenter = 1 << 4,
 
         /// <summary>
         ///     Center Vertically Down.

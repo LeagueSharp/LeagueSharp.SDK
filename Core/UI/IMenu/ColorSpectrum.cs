@@ -1,92 +1,91 @@
-﻿using System;
-
-namespace LeagueSharp.SDK.Core.UI.IMenu
+﻿namespace LeagueSharp.SDK.UI
 {
+    using System;
     using System.Drawing;
 
-    using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
 
     using Color = System.Drawing.Color;
-    using Math = System.Math;
 
     internal class ColorSpectrum
     {
     }
 
     /// <summary>
-    /// The ColorBox
+    ///     The ColorBox
     /// </summary>
     public class ColorBox
     {
         #region Fields
 
         /// <summary>
-        /// Is User dragging the slider
-        /// </summary>
-        private bool mDragging;
-
-        /// <summary>
-        /// Defines the Display Style
-        /// </summary>
-        private EDrawStyle mEDrawStyle;
-
-        /// <summary>
-        /// Height of the ColorBox
+        ///     Height of the ColorBox
         /// </summary>
         private readonly int mHeight;
 
         /// <summary>
-        /// Width of the ColorBox
+        ///     Width of the ColorBox
         /// </summary>
         private readonly int mWidth;
 
         /// <summary>
-        /// Hue, Saturation, Lightness 
+        ///     Colorbox disabled
+        /// </summary>
+        private bool mDisabled;
+
+        /// <summary>
+        ///     Is User dragging the slider
+        /// </summary>
+        private bool mDragging;
+
+        /// <summary>
+        ///     Defines the Display Style
+        /// </summary>
+        private EDrawStyle mEDrawStyle;
+
+        /// <summary>
+        ///     Hue, Saturation, Lightness
         /// </summary>
         private Hsl mHsl;
 
         /// <summary>
-        /// Reg, Green, Blue
-        /// </summary>
-        private Color mRgb;
-
-        /// <summary>
-        /// Marker X Position
-        /// </summary>
-        private int mMarkerX;
-
-        /// <summary>
-        /// Marker Y Position
-        /// </summary>
-        private int mMarkerY;
-
-        /// <summary>
-        /// Marker Color
+        ///     Marker Color
         /// </summary>
         private Color mMarkerColor;
 
         /// <summary>
-        /// Position on the Screen
+        ///     Marker X Position
+        /// </summary>
+        private int mMarkerX;
+
+        /// <summary>
+        ///     Marker Y Position
+        /// </summary>
+        private int mMarkerY;
+
+        /// <summary>
+        ///     Position on the Screen
         /// </summary>
         private Vector2 mPos;
 
         /// <summary>
-        /// Colorbox disabled
+        ///     Reg, Green, Blue
         /// </summary>
-        private bool mDisabled;
+        private Color mRgb;
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        /// Init the ColorBox
+        ///     Init the ColorBox
         /// </summary>
         /// <param name="size">The size of the new ColorBox</param>
+        /// <param name="disabled"></param>
         public ColorBox(Size size, bool disabled = false)
         {
             this.mHsl = new Hsl { H = 1, S = 1, L = 1 };
@@ -107,7 +106,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Delegates
 
         /// <summary>
-        /// EventHandler for the event <see cref="ColorBox.ColorBoxScrolled" />
+        ///     EventHandler for the event <see cref="ColorBox.ColorBoxScrolled" />
         /// </summary>
         public delegate void ColorBoxScrolledEventHandler();
 
@@ -116,7 +115,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Public Events
 
         /// <summary>
-        /// The event which gets fired when the color get changed
+        ///     The event which gets fired when the color get changed
         /// </summary>
         public event ColorBoxScrolledEventHandler ColorBoxScrolled;
 
@@ -125,47 +124,53 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Enums
 
         /// <summary>
-        /// The DrawStyle enum
+        ///     The DrawStyle enum
         /// </summary>
         public enum EDrawStyle
         {
             /// <summary>
-            /// Hue Style
+            ///     Hue Style
             /// </summary>
             Hue,
+
             /// <summary>
-            /// Saturation Style
+            ///     Saturation Style
             /// </summary>
             Saturation,
+
             /// <summary>
-            /// Brightness Style
+            ///     Brightness Style
             /// </summary>
             Brightness,
+
             /// <summary>
-            /// Red Style
+            ///     Red Style
             /// </summary>
             Red,
+
             /// <summary>
-            /// Green Style
+            ///     Green Style
             /// </summary>
             Green,
+
             /// <summary>
-            /// Blue Style
+            ///     Blue Style
             /// </summary>
             Blue
         }
 
         /// <summary>
-        /// The Orientation enum for the Gradient to draw
+        ///     The Orientation enum for the Gradient to draw
         /// </summary>
         public enum Orientation
         {
             /// <summary>
-            /// Horizontal Orientation
+            ///     Horizontal Orientation
             /// </summary>
             Horizontal,
+
             /// <summary>
-            /// Vertical Orientation
+            ///     Vertical Orientation
             /// </summary>
             Vertical
         };
@@ -175,7 +180,24 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Public Properties
 
         /// <summary>
-        /// Hue, Saturation, Lightness Property
+        ///     The DrawStyle Property
+        /// </summary>
+        public EDrawStyle DrawStyle
+        {
+            get
+            {
+                return this.mEDrawStyle;
+            }
+            set
+            {
+                this.mEDrawStyle = value;
+
+                this.ResetMarker(true);
+            }
+        }
+
+        /// <summary>
+        ///     Hue, Saturation, Lightness Property
         /// </summary>
         public Hsl Hsl
         {
@@ -193,7 +215,22 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Red, Green, Blue Property
+        ///     The MarkerColor Property
+        /// </summary>
+        public Color MarkerColor
+        {
+            get
+            {
+                return this.mMarkerColor;
+            }
+            set
+            {
+                this.mMarkerColor = value;
+            }
+        }
+
+        /// <summary>
+        ///     Red, Green, Blue Property
         /// </summary>
         public Color Rgb
         {
@@ -210,44 +247,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
-        /// <summary>
-        /// The DrawStyle Property
-        /// </summary>
-        public EDrawStyle DrawStyle
-        {
-            get
-            {
-                return this.mEDrawStyle;
-            }
-            set
-            {
-                this.mEDrawStyle = value;
-
-                this.ResetMarker(true);
-            }
-        }
-
-        /// <summary>
-        /// The MarkerColor Property
-        /// </summary>
-        public Color MarkerColor
-        {
-            get
-            {
-                return this.mMarkerColor;
-            }
-            set
-            {
-                this.mMarkerColor = value;
-            }
-        }
-
         #endregion
 
         #region Public Methods and Operators
 
         /// <summary>
-        /// Gets fired when the left mouse button is pressed
+        ///     Gets fired when the left mouse button is pressed
         /// </summary>
         /// <param name="args">Keys</param>
         public void ColorBoxMouseDown(WindowsKeys args)
@@ -284,15 +289,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.ResetHslrgb();
                 // Reset the color
 
-                if (this.ColorBoxScrolled != null)
-                {
-                    this.ColorBoxScrolled();
-                }
+                this.ColorBoxScrolled?.Invoke();
             }
         }
 
         /// <summary>
-        /// Gets fired when the mouse is moved and pressed before
+        ///     Gets fired when the mouse is moved and pressed before
         /// </summary>
         /// <param name="args">Keys</param>
         public void ColorBoxMouseMove(WindowsKeys args)
@@ -328,15 +330,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.ResetHslrgb();
                 // Reset the color
 
-                if (this.ColorBoxScrolled != null)
-                {
-                    this.ColorBoxScrolled();
-                }
+                this.ColorBoxScrolled?.Invoke();
             }
         }
 
         /// <summary>
-        /// Gets fired when the mouse is released and pressed before
+        ///     Gets fired when the mouse is released and pressed before
         /// </summary>
         /// <param name="args">Keys</param>
         public void ColorBoxMouseUp(WindowsKeys args)
@@ -373,15 +372,28 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.ResetHslrgb();
                 // Reset the color
 
-                if (this.ColorBoxScrolled != null)
-                {
-                    this.ColorBoxScrolled();
-                }
+                this.ColorBoxScrolled?.Invoke();
             }
         }
 
         /// <summary>
-        /// Draws a Gradient.
+        ///     Draws the ColorBox
+        /// </summary>
+        /// <param name="newPos">Sets a new Position</param>
+        public void DrawControl(Vector2 newPos = new Vector2())
+        {
+            if (!newPos.IsZero)
+            {
+                this.mPos = newPos;
+            }
+
+            this.DrawBorder();
+            this.DrawContent();
+            this.DrawMarker(this.mMarkerX, this.mMarkerY, true);
+        }
+
+        /// <summary>
+        ///     Draws a Gradient.
         /// </summary>
         /// <param name="x">Position X</param>
         /// <param name="y">Position Y</param>
@@ -449,202 +461,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             vertices.Dispose();
         }
 
-        /// <summary>
-        /// Draws the ColorBox
-        /// </summary>
-        /// <param name="newPos">Sets a new Position</param>
-        public void DrawControl(Vector2 newPos = new Vector2())
-        {
-            if (!newPos.IsZero)
-            {
-                this.mPos = newPos;
-            }
-
-            this.DrawBorder();
-            this.DrawContent();
-            this.DrawMarker(this.mMarkerX, this.mMarkerY, true);
-        }
-
         #endregion
 
         #region Methods
 
         /// <summary>
-        /// Draws in Blue Style
-        /// </summary>
-        private void DrawStyleBlue()
-        {
-            int blue = this.mRgb.B;
-
-            for (var i = 0; i <= this.mHeight - 4; i++)
-            {
-                // Calculate Green at this line (Red and Blue are constant)
-                var green = Convert.ToInt32(Math.Round(255 - (255 * Convert.ToDouble(i / (this.mHeight - 4d)))));
-
-                this.GradientRect(
-                    this.mPos.X,
-                    i + this.mPos.Y,
-                    this.mWidth - 4,
-                    2,
-                    Color.FromArgb(0, green, blue).ToSharpDxColor(),
-                    Color.FromArgb(255, green, blue).ToSharpDxColor(),
-                    Orientation.Vertical);
-            }
-        }
-
-        /// <summary>
-        /// Draws in Green Style
-        /// </summary>
-        private void DrawStyleGreen()
-        {
-            int green = this.mRgb.G;
-
-            for (var i = 0; i <= this.mHeight - 4; i++)
-            {
-                // Calculate Red at this line (Green and Blue are constant)
-                var red = Convert.ToInt32(Math.Round(255 - (255 * Convert.ToDouble(i / (this.mHeight - 4d)))));
-
-                this.GradientRect(
-                    this.mPos.X,
-                    i + this.mPos.Y,
-                    this.mWidth - 4,
-                    2,
-                    Color.FromArgb(red, green, 0).ToSharpDxColor(),
-                    Color.FromArgb(red, green, 255).ToSharpDxColor(),
-                    Orientation.Vertical);
-            }
-        }
-
-        /// <summary>
-        /// Draws in Hue Style
-        /// </summary>
-        private void DrawStyleHue()
-        {
-            var hslStart = new Hsl();
-            var hslEnd = new Hsl();
-            if ((this.mHsl == null))
-            {
-                this.mHsl = new Hsl();
-                this.mHsl.H = 1;
-                this.mHsl.S = 1;
-                this.mHsl.L = 1;
-                this.mRgb = Utilities.HslToRgb(this.mHsl);
-            }
-
-            hslStart.H = this.mHsl.H;
-            hslEnd.H = this.mHsl.H;
-            hslStart.S = 0.0;
-            hslEnd.S = 1.0;
-
-            for (var i = 0; i <= this.mHeight - 4; i = i + 2)
-            {
-                hslStart.L = 1.0 - Convert.ToDouble(i / (this.mHeight - 4d));
-                // Calculate luminance at this line (Hue and Saturation are constant)
-                hslEnd.L = hslStart.L;
-
-                var colorStart = Utilities.HslToRgb(hslStart);
-                var colorEnd = Utilities.HslToRgb(hslEnd);
-
-                this.GradientRect(
-                    this.mPos.X,
-                    i + this.mPos.Y,
-                    this.mWidth - 4,
-                    2,
-                    colorStart.ToSharpDxColor(),
-                    colorEnd.ToSharpDxColor(),
-                    Orientation.Vertical);
-            }
-        }
-
-        /// <summary>
-        /// Draws in Luminance Style
-        /// </summary>
-        private void DrawStyleLuminance()
-        {
-            var hslStart = new Hsl();
-            var hslEnd = new Hsl();
-            hslStart.L = this.mHsl.L;
-            hslEnd.L = this.mHsl.L;
-            hslStart.S = 1.0;
-            hslEnd.S = 0.0;
-
-            for (var i = 0; i <= this.mWidth - 4; i++)
-            {
-                hslStart.H = Convert.ToDouble(i / (this.mWidth - 4d));
-                // Calculate Hue at this line (Saturation and Luminance are constant)
-                hslEnd.H = hslStart.H;
-
-                var colorStart = Utilities.HslToRgb(hslStart);
-                var colorEnd = Utilities.HslToRgb(hslEnd);
-
-                this.GradientRect(
-                    i + this.mPos.X,
-                    this.mPos.Y,
-                    2,
-                    this.mHeight - 4,
-                    colorStart.ToSharpDxColor(),
-                    colorEnd.ToSharpDxColor(),
-                    Orientation.Horizontal);
-            }
-        }
-
-        /// <summary>
-        /// Draws in Red Style
-        /// </summary>
-        private void DrawStyleRed()
-        {
-            int red = this.mRgb.R;
-
-            for (var i = 0; i <= this.mHeight - 4; i++)
-            {
-                // Calculate Green at this line (Red and Blue are constant)
-                var green = Convert.ToInt32(Math.Round(255 - (255 * Convert.ToDouble(i / (this.mHeight - 4d)))));
-
-                this.GradientRect(
-                    this.mPos.X,
-                    i + this.mPos.Y,
-                    this.mWidth - 4,
-                    2,
-                    Color.FromArgb(red, green, 0).ToSharpDxColor(),
-                    Color.FromArgb(red, green, 255).ToSharpDxColor(),
-                    Orientation.Vertical);
-            }
-        }
-
-        /// <summary>
-        /// Draws in Saturation Style
-        /// </summary>
-        private void DrawStyleSaturation()
-        {
-            var hslStart = new Hsl();
-            var hslEnd = new Hsl();
-            hslStart.S = this.mHsl.S;
-            hslEnd.S = this.mHsl.S;
-            hslStart.L = 1.0;
-            hslEnd.L = 0.0;
-
-            for (var i = 0; i <= this.mWidth - 4; i++)
-            {
-                hslStart.H = Convert.ToDouble(i / (this.mWidth - 4d));
-                // Calculate Hue at this line (Saturation and Luminance are constant)
-                hslEnd.H = hslStart.H;
-
-                var colorStart = Utilities.HslToRgb(hslStart);
-                var colorEnd = Utilities.HslToRgb(hslEnd);
-
-                this.GradientRect(
-                    i + this.mPos.X,
-                    this.mPos.Y,
-                    2,
-                    this.mHeight - 4,
-                    colorStart.ToSharpDxColor(),
-                    colorEnd.ToSharpDxColor(),
-                    Orientation.Horizontal);
-            }
-        }
-
-        /// <summary>
-        /// Draws the Border around the ColorBox
+        ///     Draws the Border around the ColorBox
         /// </summary>
         private void DrawBorder()
         {
@@ -671,7 +493,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Draws in Content of the ColorBox
+        ///     Draws in Content of the ColorBox
         /// </summary>
         private void DrawContent()
         {
@@ -705,7 +527,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Draws the Marker
+        ///     Draws the Marker
         /// </summary>
         private void DrawMarker(int x, int y, bool unconditional)
         {
@@ -744,14 +566,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
             else if ((hsl.H < Convert.ToDouble(26d / 360d)) | (hsl.H > Convert.ToDouble(200d / 360d)))
             {
-                if (hsl.S > Convert.ToDouble(70d / 255d))
-                {
-                    this.mMarkerColor = Color.White;
-                }
-                else
-                {
-                    this.mMarkerColor = Color.Black;
-                }
+                this.mMarkerColor = hsl.S > Convert.ToDouble(70d / 255d) ? Color.White : Color.Black;
             }
             else
             {
@@ -770,7 +585,178 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Gets the Color of the given Position
+        ///     Draws in Blue Style
+        /// </summary>
+        private void DrawStyleBlue()
+        {
+            int blue = this.mRgb.B;
+
+            for (var i = 0; i <= this.mHeight - 4; i++)
+            {
+                // Calculate Green at this line (Red and Blue are constant)
+                var green = Convert.ToInt32(Math.Round(255 - (255 * Convert.ToDouble(i / (this.mHeight - 4d)))));
+
+                this.GradientRect(
+                    this.mPos.X,
+                    i + this.mPos.Y,
+                    this.mWidth - 4,
+                    2,
+                    Color.FromArgb(0, green, blue).ToSharpDxColor(),
+                    Color.FromArgb(255, green, blue).ToSharpDxColor(),
+                    Orientation.Vertical);
+            }
+        }
+
+        /// <summary>
+        ///     Draws in Green Style
+        /// </summary>
+        private void DrawStyleGreen()
+        {
+            int green = this.mRgb.G;
+
+            for (var i = 0; i <= this.mHeight - 4; i++)
+            {
+                // Calculate Red at this line (Green and Blue are constant)
+                var red = Convert.ToInt32(Math.Round(255 - (255 * Convert.ToDouble(i / (this.mHeight - 4d)))));
+
+                this.GradientRect(
+                    this.mPos.X,
+                    i + this.mPos.Y,
+                    this.mWidth - 4,
+                    2,
+                    Color.FromArgb(red, green, 0).ToSharpDxColor(),
+                    Color.FromArgb(red, green, 255).ToSharpDxColor(),
+                    Orientation.Vertical);
+            }
+        }
+
+        /// <summary>
+        ///     Draws in Hue Style
+        /// </summary>
+        private void DrawStyleHue()
+        {
+            var hslStart = new Hsl();
+            var hslEnd = new Hsl();
+            if ((this.mHsl == null))
+            {
+                this.mHsl = new Hsl { H = 1, S = 1, L = 1 };
+                this.mRgb = Utilities.HslToRgb(this.mHsl);
+            }
+
+            hslStart.H = this.mHsl.H;
+            hslEnd.H = this.mHsl.H;
+            hslStart.S = 0.0;
+            hslEnd.S = 1.0;
+
+            for (var i = 0; i <= this.mHeight - 4; i = i + 2)
+            {
+                hslStart.L = 1.0 - Convert.ToDouble(i / (this.mHeight - 4d));
+                // Calculate luminance at this line (Hue and Saturation are constant)
+                hslEnd.L = hslStart.L;
+
+                var colorStart = Utilities.HslToRgb(hslStart);
+                var colorEnd = Utilities.HslToRgb(hslEnd);
+
+                this.GradientRect(
+                    this.mPos.X,
+                    i + this.mPos.Y,
+                    this.mWidth - 4,
+                    2,
+                    colorStart.ToSharpDxColor(),
+                    colorEnd.ToSharpDxColor(),
+                    Orientation.Vertical);
+            }
+        }
+
+        /// <summary>
+        ///     Draws in Luminance Style
+        /// </summary>
+        private void DrawStyleLuminance()
+        {
+            var hslStart = new Hsl();
+            var hslEnd = new Hsl();
+            hslStart.L = this.mHsl.L;
+            hslEnd.L = this.mHsl.L;
+            hslStart.S = 1.0;
+            hslEnd.S = 0.0;
+
+            for (var i = 0; i <= this.mWidth - 4; i++)
+            {
+                hslStart.H = Convert.ToDouble(i / (this.mWidth - 4d));
+                // Calculate Hue at this line (Saturation and Luminance are constant)
+                hslEnd.H = hslStart.H;
+
+                var colorStart = Utilities.HslToRgb(hslStart);
+                var colorEnd = Utilities.HslToRgb(hslEnd);
+
+                this.GradientRect(
+                    i + this.mPos.X,
+                    this.mPos.Y,
+                    2,
+                    this.mHeight - 4,
+                    colorStart.ToSharpDxColor(),
+                    colorEnd.ToSharpDxColor(),
+                    Orientation.Horizontal);
+            }
+        }
+
+        /// <summary>
+        ///     Draws in Red Style
+        /// </summary>
+        private void DrawStyleRed()
+        {
+            int red = this.mRgb.R;
+
+            for (var i = 0; i <= this.mHeight - 4; i++)
+            {
+                // Calculate Green at this line (Red and Blue are constant)
+                var green = Convert.ToInt32(Math.Round(255 - (255 * Convert.ToDouble(i / (this.mHeight - 4d)))));
+
+                this.GradientRect(
+                    this.mPos.X,
+                    i + this.mPos.Y,
+                    this.mWidth - 4,
+                    2,
+                    Color.FromArgb(red, green, 0).ToSharpDxColor(),
+                    Color.FromArgb(red, green, 255).ToSharpDxColor(),
+                    Orientation.Vertical);
+            }
+        }
+
+        /// <summary>
+        ///     Draws in Saturation Style
+        /// </summary>
+        private void DrawStyleSaturation()
+        {
+            var hslStart = new Hsl();
+            var hslEnd = new Hsl();
+            hslStart.S = this.mHsl.S;
+            hslEnd.S = this.mHsl.S;
+            hslStart.L = 1.0;
+            hslEnd.L = 0.0;
+
+            for (var i = 0; i <= this.mWidth - 4; i++)
+            {
+                hslStart.H = Convert.ToDouble(i / (this.mWidth - 4d));
+                // Calculate Hue at this line (Saturation and Luminance are constant)
+                hslEnd.H = hslStart.H;
+
+                var colorStart = Utilities.HslToRgb(hslStart);
+                var colorEnd = Utilities.HslToRgb(hslEnd);
+
+                this.GradientRect(
+                    i + this.mPos.X,
+                    this.mPos.Y,
+                    2,
+                    this.mHeight - 4,
+                    colorStart.ToSharpDxColor(),
+                    colorEnd.ToSharpDxColor(),
+                    Orientation.Horizontal);
+            }
+        }
+
+        /// <summary>
+        ///     Gets the Color of the given Position
         /// </summary>
         /// <param name="x">Position X</param>
         /// <param name="y">Position Y</param>
@@ -832,54 +818,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Resets the Marker
-        /// </summary>
-        /// <param name="redraw">Force Redraw</param>
-        private void ResetMarker(bool redraw)
-        {
-            switch (this.mEDrawStyle)
-            {
-                case EDrawStyle.Hue:
-                    this.mMarkerX = Convert.ToInt32(Math.Round((this.mWidth - 4d) * this.mHsl.S));
-                    this.mMarkerY = Convert.ToInt32(Math.Round((this.mHeight - 4d) * (1.0 - this.mHsl.L)));
-                    break;
-                case EDrawStyle.Saturation:
-                    this.mMarkerX = Convert.ToInt32(Math.Round((this.mWidth - 4d) * this.mHsl.H));
-                    this.mMarkerY = Convert.ToInt32(Math.Round((this.mHeight - 4d) * (1.0 - this.mHsl.L)));
-                    break;
-                case EDrawStyle.Brightness:
-                    this.mMarkerX = Convert.ToInt32(Math.Round((this.mWidth - 4d) * this.mHsl.H));
-                    this.mMarkerY = Convert.ToInt32(Math.Round((this.mHeight - 4d) * (1.0 - this.mHsl.S)));
-                    break;
-                case EDrawStyle.Red:
-                    this.mMarkerX =
-                        Convert.ToInt32(Math.Round((this.mWidth - 4d) * Convert.ToDouble(this.mRgb.B / 255d)));
-                    this.mMarkerY =
-                        Convert.ToInt32(Math.Round((this.mHeight - 4d) * (1.0 - Convert.ToDouble(this.mRgb.G / 255d))));
-                    break;
-                case EDrawStyle.Green:
-                    this.mMarkerX =
-                        Convert.ToInt32(Math.Round((this.mWidth - 4d) * Convert.ToDouble(this.mRgb.B / 255d)));
-                    this.mMarkerY =
-                        Convert.ToInt32(Math.Round((this.mHeight - 4d) * (1.0 - Convert.ToDouble(this.mRgb.R / 255d))));
-                    break;
-                case EDrawStyle.Blue:
-                    this.mMarkerX =
-                        Convert.ToInt32(Math.Round((this.mWidth - 4d) * Convert.ToDouble(this.mRgb.R / 255d)));
-                    this.mMarkerY =
-                        Convert.ToInt32(Math.Round((this.mHeight - 4d) * (1.0 - Convert.ToDouble(this.mRgb.G / 255d))));
-
-                    break;
-            }
-
-            if (redraw)
-            {
-                this.DrawMarker(this.mMarkerX, this.mMarkerY, true);
-            }
-        }
-
-        /// <summary>
-        /// Resets the Color
+        ///     Resets the Color
         /// </summary>
         private void ResetHslrgb()
         {
@@ -934,11 +873,58 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
+        /// <summary>
+        ///     Resets the Marker
+        /// </summary>
+        /// <param name="redraw">Force Redraw</param>
+        private void ResetMarker(bool redraw)
+        {
+            switch (this.mEDrawStyle)
+            {
+                case EDrawStyle.Hue:
+                    this.mMarkerX = Convert.ToInt32(Math.Round((this.mWidth - 4d) * this.mHsl.S));
+                    this.mMarkerY = Convert.ToInt32(Math.Round((this.mHeight - 4d) * (1.0 - this.mHsl.L)));
+                    break;
+                case EDrawStyle.Saturation:
+                    this.mMarkerX = Convert.ToInt32(Math.Round((this.mWidth - 4d) * this.mHsl.H));
+                    this.mMarkerY = Convert.ToInt32(Math.Round((this.mHeight - 4d) * (1.0 - this.mHsl.L)));
+                    break;
+                case EDrawStyle.Brightness:
+                    this.mMarkerX = Convert.ToInt32(Math.Round((this.mWidth - 4d) * this.mHsl.H));
+                    this.mMarkerY = Convert.ToInt32(Math.Round((this.mHeight - 4d) * (1.0 - this.mHsl.S)));
+                    break;
+                case EDrawStyle.Red:
+                    this.mMarkerX =
+                        Convert.ToInt32(Math.Round((this.mWidth - 4d) * Convert.ToDouble(this.mRgb.B / 255d)));
+                    this.mMarkerY =
+                        Convert.ToInt32(Math.Round((this.mHeight - 4d) * (1.0 - Convert.ToDouble(this.mRgb.G / 255d))));
+                    break;
+                case EDrawStyle.Green:
+                    this.mMarkerX =
+                        Convert.ToInt32(Math.Round((this.mWidth - 4d) * Convert.ToDouble(this.mRgb.B / 255d)));
+                    this.mMarkerY =
+                        Convert.ToInt32(Math.Round((this.mHeight - 4d) * (1.0 - Convert.ToDouble(this.mRgb.R / 255d))));
+                    break;
+                case EDrawStyle.Blue:
+                    this.mMarkerX =
+                        Convert.ToInt32(Math.Round((this.mWidth - 4d) * Convert.ToDouble(this.mRgb.R / 255d)));
+                    this.mMarkerY =
+                        Convert.ToInt32(Math.Round((this.mHeight - 4d) * (1.0 - Convert.ToDouble(this.mRgb.G / 255d))));
+
+                    break;
+            }
+
+            if (redraw)
+            {
+                this.DrawMarker(this.mMarkerX, this.mMarkerY, true);
+            }
+        }
+
         #endregion
     }
 
     /// <summary>
-    /// The VerticalColorSlider
+    ///     The VerticalColorSlider
     /// </summary>
     public class VerticalColorSlider
     {
@@ -947,62 +933,59 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     The line.
         /// </summary>
-        private static readonly SharpDX.Direct3D9.Line Line = new SharpDX.Direct3D9.Line(Drawing.Direct3DDevice) { GLLines = true };
+        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
 
         #endregion
 
         #region Fields
 
         /// <summary>
-        /// Is User dragging the slider
-        /// </summary>
-        private bool mDragging;
-
-        /// <summary>
-        /// Defines the Display Style
-        /// </summary>
-        private EDrawStyle mEDrawStyle;
-
-        /// <summary>
-        /// Height of the ColorBox
+        ///     Height of the ColorBox
         /// </summary>
         private readonly int mHeight;
 
         /// <summary>
-        /// Width of the ColorBox
+        ///     Width of the ColorBox
         /// </summary>
         private readonly int mWidth;
 
         /// <summary>
-        /// Hue, Saturation, Lightness 
+        ///     VerticalColorSlider disabled
+        /// </summary>
+        private bool mDisabled;
+
+        /// <summary>
+        ///     Is User dragging the slider
+        /// </summary>
+        private bool mDragging;
+
+        /// <summary>
+        ///     Defines the Display Style
+        /// </summary>
+        private EDrawStyle mEDrawStyle;
+
+        /// <summary>
+        ///     Hue, Saturation, Lightness
         /// </summary>
         private Hsl mHsl;
 
         /// <summary>
-        /// Reg, Green, Blue
+        ///     Reg, Green, Blue
         /// </summary>
         private Color mRgb;
-
-        /// <summary>
-        /// VerticalColorSlider disabled
-        /// </summary>
-        private bool mDisabled;
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        /// Init the VerticalColorSlider
+        ///     Init the VerticalColorSlider
         /// </summary>
         /// <param name="size"></param>
         /// <param name="disabled"></param>
         public VerticalColorSlider(Size size, bool disabled = false)
         {
-            this.mHsl = new Hsl();
-            this.mHsl.H = 1;
-            this.mHsl.S = 1;
-            this.mHsl.L = 1;
+            this.mHsl = new Hsl { H = 1, S = 1, L = 1 };
 
             this.mRgb = Utilities.HslToRgb(this.mHsl);
             this.mEDrawStyle = EDrawStyle.Hue;
@@ -1020,15 +1003,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Delegates
 
         /// <summary>
-        /// EventHandler for the event <see cref="VerticalColorSlider.ColorSliderScroll" />
+        ///     EventHandler for the event <see cref="VerticalColorSlider.ColorSliderScroll" />
         /// </summary>
         public delegate void ColorSliderScrollEventHandler();
 
         #endregion
 
         #region Public Events
+
         /// <summary>
-        /// The event which gets fired when the color get changed
+        ///     The event which gets fired when the color get changed
         /// </summary>
         public event ColorSliderScrollEventHandler ColorSliderScroll;
 
@@ -1037,32 +1021,37 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Enums
 
         /// <summary>
-        /// The DrawStyle enum
+        ///     The DrawStyle enum
         /// </summary>
         public enum EDrawStyle
         {
             /// <summary>
-            /// Hue Style
+            ///     Hue Style
             /// </summary>
             Hue,
+
             /// <summary>
-            /// Saturation Style
+            ///     Saturation Style
             /// </summary>
             Saturation,
+
             /// <summary>
-            /// Brightness Style
+            ///     Brightness Style
             /// </summary>
             Brightness,
+
             /// <summary>
-            /// Red Style
+            ///     Red Style
             /// </summary>
             Red,
+
             /// <summary>
-            /// Green Style
+            ///     Green Style
             /// </summary>
             Green,
+
             /// <summary>
-            /// Blue Style
+            ///     Blue Style
             /// </summary>
             Blue
         }
@@ -1072,12 +1061,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Public Properties
 
         /// <summary>
-        /// Position of the two Arrows
+        ///     Position of the two Arrows
         /// </summary>
         public int ArrowPos { get; private set; }
 
         /// <summary>
-        /// Hue, Saturation, Lightness Property
+        ///     Hue, Saturation, Lightness Property
         /// </summary>
         public Hsl CbHsl
         {
@@ -1096,7 +1085,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// The DrawStyle Property
+        ///     The DrawStyle Property
         /// </summary>
         public EDrawStyle DrawStyle
         {
@@ -1114,12 +1103,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Position of the ColorSlider
+        ///     Position of the ColorSlider
         /// </summary>
         public Vector2 Position { get; set; }
 
         /// <summary>
-        /// Red, Green, Blue Property
+        ///     Red, Green, Blue Property
         /// </summary>
         public Color Rgb
         {
@@ -1142,7 +1131,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Public Methods and Operators
 
         /// <summary>
-        /// Draws the ColorSlider
+        ///     Draws the ColorSlider
         /// </summary>
         /// <param name="newPos">Sets a new Position</param>
         public void DrawControl(Vector2 newPos = new Vector2())
@@ -1155,10 +1144,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Gets fired when the left mouse button is pressed
+        ///     Gets fired when the left mouse button is pressed
         /// </summary>
         /// <param name="args">Keys</param>
-        public void VerticalColorSlider_MouseDown(WindowsKeys args)
+        public void VerticalColorSliderMouseDown(WindowsKeys args)
         {
             if (args.Msg == WindowsMessages.LBUTTONDOWN && !this.mDisabled)
             {
@@ -1179,18 +1168,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 
                 this.DrawSlider(y, false);
                 this.ResetHslrgb();
-                if (this.ColorSliderScroll != null)
-                {
-                    this.ColorSliderScroll();
-                }
+                this.ColorSliderScroll?.Invoke();
             }
         }
 
         /// <summary>
-        /// Gets fired when the mouse is moved and pressed before
+        ///     Gets fired when the mouse is moved and pressed before
         /// </summary>
         /// <param name="args">Keys</param>
-        public void VerticalColorSlider_MouseMove(WindowsKeys args)
+        public void VerticalColorSliderMouseMove(WindowsKeys args)
         {
             if (this.mDragging && args.Msg == WindowsMessages.MOUSEMOVE && !this.mDisabled)
             {
@@ -1208,18 +1194,15 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.ArrowPos = y;
                 this.DrawSlider(y, false);
                 this.ResetHslrgb();
-                if (this.ColorSliderScroll != null)
-                {
-                    this.ColorSliderScroll();
-                }
+                this.ColorSliderScroll?.Invoke();
             }
         }
 
         /// <summary>
-        /// Gets fired when the mouse is released and pressed before
+        ///     Gets fired when the mouse is released and pressed before
         /// </summary>
         /// <param name="args">Keys</param>
-        public void VerticalColorSlider_MouseUp(WindowsKeys args)
+        public void VerticalColorSliderMouseUp(WindowsKeys args)
         {
             if (this.mDragging && args.Msg == WindowsMessages.LBUTTONUP && !this.mDisabled)
             {
@@ -1239,10 +1222,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.ArrowPos = y;
                 this.DrawSlider(y, false);
                 this.ResetHslrgb();
-                if (this.ColorSliderScroll != null)
-                {
-                    this.ColorSliderScroll();
-                }
+                this.ColorSliderScroll?.Invoke();
             }
         }
 
@@ -1251,151 +1231,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Methods
 
         /// <summary>
-        /// Draws in Blue Style
-        /// </summary>
-        private void DrawStyleBlue()
-        {
-            Line.Begin();
-            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
-            {
-                var blue = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
-                var col = Color.FromArgb(this.mRgb.R, this.mRgb.G, blue);
-
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
-                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
-                        },
-                    col.ToSharpDxColor());
-            }
-            Line.End();
-        }
-
-        /// <summary>
-        /// Draws in Green Style
-        /// </summary>
-        private void DrawStyleGreen()
-        {
-            Line.Begin();
-            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
-            {
-                var green = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
-                var col = Color.FromArgb(this.mRgb.R, green, this.mRgb.B);
-
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
-                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
-                        },
-                    col.ToSharpDxColor());
-            }
-            Line.End();
-        }
-
-        /// <summary>
-        /// Draws in Hue Style
-        /// </summary>
-        private void DrawStyleHue()
-        {
-            var hsl = new Hsl();
-
-            hsl.S = 1;
-            hsl.L = 1;
-            Line.Begin();
-            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
-            {
-                hsl.H = 1.0d - Convert.ToDouble(iCx / (this.mHeight - 9d));
-                var col = Utilities.HslToRgb(hsl);
-
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
-                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
-                        },
-                    col.ToSharpDxColor());
-            }
-            Line.End();
-        }
-
-        /// <summary>
-        /// Draws in Luminance Style
-        /// </summary>
-        private void DrawStyleLuminance()
-        {
-            var hsl = new Hsl();
-
-            hsl.H = this.mHsl.H;
-            hsl.S = this.mHsl.S;
-            Line.Begin();
-            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
-            {
-                hsl.L = 1.0 - Convert.ToDouble(iCx / (this.mHeight - 9d));
-                var col = Utilities.HslToRgb(hsl);
-
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
-                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
-                        },
-                    col.ToSharpDxColor());
-            }
-            Line.End();
-        }
-
-        /// <summary>
-        /// Draws in Red Style
-        /// </summary>
-        private void DrawStyleRed()
-        {
-            Line.Begin();
-            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
-            {
-                var red = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
-                var col = Color.FromArgb(red, this.mRgb.G, this.mRgb.B);
-
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
-                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
-                        },
-                    col.ToSharpDxColor());
-            }
-            Line.End();
-        }
-
-        /// <summary>
-        /// Draws in Saturation Style
-        /// </summary>
-        private void DrawStyleSaturation()
-        {
-            var hsl = new Hsl();
-
-            hsl.H = this.mHsl.H;
-            hsl.L = this.mHsl.L;
-            Line.Begin();
-            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
-            {
-                hsl.S = 1.0 - Convert.ToDouble(iCx / (this.mHeight - 9d));
-                var col = Utilities.HslToRgb(hsl);
-
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
-                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
-                        },
-                    col.ToSharpDxColor());
-            }
-            Line.End();
-        }
-
-        /// <summary>
-        /// Draws the Border around the ColorSlider
+        ///     Draws the Border around the ColorSlider
         /// </summary>
         private void DrawBorder()
         {
@@ -1434,7 +1270,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Draws in Content of the ColorSlider
+        ///     Draws in Content of the ColorSlider
         /// </summary>
         private void DrawContent()
         {
@@ -1468,7 +1304,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Draws the Arrows
+        ///     Draws the Arrows
         /// </summary>
         private void DrawSlider(int position, bool unconditional)
         {
@@ -1502,53 +1338,145 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Resets the Arrows
+        ///     Draws in Blue Style
         /// </summary>
-        /// <param name="redraw">Force Redraw</param>
-        private void ResetSlider(bool redraw)
+        private void DrawStyleBlue()
         {
-            switch (this.mEDrawStyle)
+            Line.Begin();
+            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
-                case EDrawStyle.Hue:
-                    this.ArrowPos = (this.mHeight - 8) - Convert.ToInt32(Math.Round((this.mHeight - 8d) * this.mHsl.H));
+                var blue = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
+                var col = Color.FromArgb(this.mRgb.R, this.mRgb.G, blue);
 
-                    break;
-                case EDrawStyle.Saturation:
-                    this.ArrowPos = (this.mHeight - 8) - Convert.ToInt32(Math.Round((this.mHeight - 8d) * this.mHsl.S));
-
-                    break;
-                case EDrawStyle.Brightness:
-                    this.ArrowPos = (this.mHeight - 8) - Convert.ToInt32(Math.Round((this.mHeight - 8d) * this.mHsl.L));
-
-                    break;
-                case EDrawStyle.Red:
-                    this.ArrowPos = (this.mHeight - 8)
-                                    - Convert.ToInt32(
-                                        Math.Round((this.mHeight - 8d) * Convert.ToDouble(this.mRgb.R / 255d)));
-
-                    break;
-                case EDrawStyle.Green:
-                    this.ArrowPos = (this.mHeight - 8)
-                                    - Convert.ToInt32(
-                                        Math.Round((this.mHeight - 8d) * Convert.ToDouble(this.mRgb.G / 255d)));
-
-                    break;
-                case EDrawStyle.Blue:
-                    this.ArrowPos = (this.mHeight - 8)
-                                    - Convert.ToInt32(
-                                        Math.Round((this.mHeight - 8d) * Convert.ToDouble(this.mRgb.B / 255d)));
-
-                    break;
+                Line.Draw(
+                    new[]
+                        {
+                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
+                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
+                        },
+                    col.ToSharpDxColor());
             }
-
-            if (redraw)
-            {
-                this.DrawSlider(this.ArrowPos, true);
-            }
+            Line.End();
         }
 
         /// <summary>
-        /// Resets the Color
+        ///     Draws in Green Style
+        /// </summary>
+        private void DrawStyleGreen()
+        {
+            Line.Begin();
+            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
+            {
+                var green = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
+                var col = Color.FromArgb(this.mRgb.R, green, this.mRgb.B);
+
+                Line.Draw(
+                    new[]
+                        {
+                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
+                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
+                        },
+                    col.ToSharpDxColor());
+            }
+            Line.End();
+        }
+
+        /// <summary>
+        ///     Draws in Hue Style
+        /// </summary>
+        private void DrawStyleHue()
+        {
+            var hsl = new Hsl { S = 1, L = 1 };
+
+            Line.Begin();
+            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
+            {
+                hsl.H = 1.0d - Convert.ToDouble(iCx / (this.mHeight - 9d));
+                var col = Utilities.HslToRgb(hsl);
+
+                Line.Draw(
+                    new[]
+                        {
+                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
+                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
+                        },
+                    col.ToSharpDxColor());
+            }
+            Line.End();
+        }
+
+        /// <summary>
+        ///     Draws in Luminance Style
+        /// </summary>
+        private void DrawStyleLuminance()
+        {
+            var hsl = new Hsl { H = this.mHsl.H, S = this.mHsl.S };
+
+            Line.Begin();
+            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
+            {
+                hsl.L = 1.0 - Convert.ToDouble(iCx / (this.mHeight - 9d));
+                var col = Utilities.HslToRgb(hsl);
+
+                Line.Draw(
+                    new[]
+                        {
+                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
+                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
+                        },
+                    col.ToSharpDxColor());
+            }
+            Line.End();
+        }
+
+        /// <summary>
+        ///     Draws in Red Style
+        /// </summary>
+        private void DrawStyleRed()
+        {
+            Line.Begin();
+            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
+            {
+                var red = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
+                var col = Color.FromArgb(red, this.mRgb.G, this.mRgb.B);
+
+                Line.Draw(
+                    new[]
+                        {
+                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
+                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
+                        },
+                    col.ToSharpDxColor());
+            }
+            Line.End();
+        }
+
+        /// <summary>
+        ///     Draws in Saturation Style
+        /// </summary>
+        private void DrawStyleSaturation()
+        {
+            var hsl = new Hsl { H = this.mHsl.H, L = this.mHsl.L };
+
+            Line.Begin();
+            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
+            {
+                hsl.S = 1.0 - Convert.ToDouble(iCx / (this.mHeight - 9d));
+                var col = Utilities.HslToRgb(hsl);
+
+                Line.Draw(
+                    new[]
+                        {
+                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
+                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
+                        },
+                    col.ToSharpDxColor());
+            }
+            Line.End();
+        }
+
+        /// <summary>
+        ///     Resets the Color
         /// </summary>
         private void ResetHslrgb()
         {
@@ -1597,11 +1525,57 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
+        /// <summary>
+        ///     Resets the Arrows
+        /// </summary>
+        /// <param name="redraw">Force Redraw</param>
+        private void ResetSlider(bool redraw)
+        {
+            switch (this.mEDrawStyle)
+            {
+                case EDrawStyle.Hue:
+                    this.ArrowPos = (this.mHeight - 8) - Convert.ToInt32(Math.Round((this.mHeight - 8d) * this.mHsl.H));
+
+                    break;
+                case EDrawStyle.Saturation:
+                    this.ArrowPos = (this.mHeight - 8) - Convert.ToInt32(Math.Round((this.mHeight - 8d) * this.mHsl.S));
+
+                    break;
+                case EDrawStyle.Brightness:
+                    this.ArrowPos = (this.mHeight - 8) - Convert.ToInt32(Math.Round((this.mHeight - 8d) * this.mHsl.L));
+
+                    break;
+                case EDrawStyle.Red:
+                    this.ArrowPos = (this.mHeight - 8)
+                                    - Convert.ToInt32(
+                                        Math.Round((this.mHeight - 8d) * Convert.ToDouble(this.mRgb.R / 255d)));
+
+                    break;
+                case EDrawStyle.Green:
+                    this.ArrowPos = (this.mHeight - 8)
+                                    - Convert.ToInt32(
+                                        Math.Round((this.mHeight - 8d) * Convert.ToDouble(this.mRgb.G / 255d)));
+
+                    break;
+                case EDrawStyle.Blue:
+                    this.ArrowPos = (this.mHeight - 8)
+                                    - Convert.ToInt32(
+                                        Math.Round((this.mHeight - 8d) * Convert.ToDouble(this.mRgb.B / 255d)));
+
+                    break;
+            }
+
+            if (redraw)
+            {
+                this.DrawSlider(this.ArrowPos, true);
+            }
+        }
+
         #endregion
     }
 
     /// <summary>
-    /// The VerticalAlphaSlider
+    ///     The VerticalAlphaSlider
     /// </summary>
     public class VerticalAlphaSlider
     {
@@ -1610,61 +1584,59 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// <summary>
         ///     The line.
         /// </summary>
-        private static readonly SharpDX.Direct3D9.Line Line = new SharpDX.Direct3D9.Line(Drawing.Direct3DDevice) { GLLines = true };
+        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
 
         #endregion
 
         #region Fields
 
         /// <summary>
-        /// Is User dragging the slider
+        ///     Is User dragging the slider
         /// </summary>
         private bool mBDragging;
 
         /// <summary>
-        /// Defines the Display Style
+        ///     VerticalAlphaSlider disabled
         /// </summary>
-        private EDrawStyle mEDrawStyle = EDrawStyle.Brightness;
+        private bool mDisabled;
 
         /// <summary>
-        /// Height of the ColorBox
+        ///     Defines the Display Style
+        /// </summary>
+        private EDrawStyle mEDrawStyle;
+
+        /// <summary>
+        ///     Height of the ColorBox
         /// </summary>
         private int mHeight;
 
         /// <summary>
-        /// Width of the ColorBox
-        /// </summary>
-        private int mWidth;
-
-        /// <summary>
-        /// Hue, Saturation, Lightness 
+        ///     Hue, Saturation, Lightness
         /// </summary>
         private Hsl mHsl;
 
         /// <summary>
-        /// Reg, Green, Blue
+        ///     Reg, Green, Blue
         /// </summary>
         private Color mRgb;
 
         /// <summary>
-        /// VerticalAlphaSlider disabled
+        ///     Width of the ColorBox
         /// </summary>
-        private bool mDisabled;
+        private int mWidth;
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        /// Init the VerticalAlphaSlider
+        ///     Init the VerticalAlphaSlider
         /// </summary>
         /// <param name="size"></param>
+        /// <param name="disabled"></param>
         public VerticalAlphaSlider(Size size, bool disabled = false)
         {
-            this.mHsl = new Hsl();
-            this.mHsl.H = 1;
-            this.mHsl.S = 0;
-            this.mHsl.L = 1;
+            this.mHsl = new Hsl { H = 1, S = 0, L = 1 };
 
             this.mRgb = Utilities.HslToRgb(this.mHsl);
             this.mEDrawStyle = EDrawStyle.Brightness;
@@ -1682,7 +1654,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Delegates
 
         /// <summary>
-        /// EventHandler for the event <see cref="VerticalAlphaSlider.AlphaSliderScroll" />
+        ///     EventHandler for the event <see cref="VerticalAlphaSlider.AlphaSliderScroll" />
         /// </summary>
         public delegate void AlphaSliderScrollEventHandler();
 
@@ -1691,7 +1663,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Public Events
 
         /// <summary>
-        /// The event which gets fired when the color get changed
+        ///     The event which gets fired when the color get changed
         /// </summary>
         public event AlphaSliderScrollEventHandler AlphaSliderScroll;
 
@@ -1700,32 +1672,37 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Enums
 
         /// <summary>
-        /// The DrawStyle enum
+        ///     The DrawStyle enum
         /// </summary>
         public enum EDrawStyle
         {
             /// <summary>
-            /// Hue Style
+            ///     Hue Style
             /// </summary>
             Hue,
+
             /// <summary>
-            /// Saturation Style
+            ///     Saturation Style
             /// </summary>
             Saturation,
+
             /// <summary>
-            /// Brightness Style
+            ///     Brightness Style
             /// </summary>
             Brightness,
+
             /// <summary>
-            /// Red Style
+            ///     Red Style
             /// </summary>
             Red,
+
             /// <summary>
-            /// Green Style
+            ///     Green Style
             /// </summary>
             Green,
+
             /// <summary>
-            /// Blue Style
+            ///     Blue Style
             /// </summary>
             Blue
         }
@@ -1735,12 +1712,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Public Properties
 
         /// <summary>
-        /// Position of the two Arrows
+        ///     Position of the two Arrows
         /// </summary>
         public int ArrowPos { get; private set; }
 
         /// <summary>
-        /// Hue, Saturation, Lightness Property
+        ///     Hue, Saturation, Lightness Property
         /// </summary>
         public Hsl CbHsl
         {
@@ -1759,7 +1736,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// The DrawStyle Property
+        ///     The DrawStyle Property
         /// </summary>
         public EDrawStyle DrawStyle
         {
@@ -1777,12 +1754,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Position of the ColorSlider
+        ///     Position of the ColorSlider
         /// </summary>
         public Vector2 Position { get; set; }
 
         /// <summary>
-        /// Red, Green, Blue Property
+        ///     Red, Green, Blue Property
         /// </summary>
         public Color Rgb
         {
@@ -1805,7 +1782,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Public Methods and Operators
 
         /// <summary>
-        /// Draws the AlphaSlider
+        ///     Draws the AlphaSlider
         /// </summary>
         /// <param name="newPos">Sets a new Position</param>
         public void DrawControl(Vector2 newPos = new Vector2())
@@ -1818,12 +1795,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Gets fired when the left mouse button is pressed
+        ///     Gets fired when the left mouse button is pressed
         /// </summary>
         /// <param name="args">Keys</param>
-        public void VerticalAlphaSlider_MouseDown(WindowsKeys args)
+        public void VerticalAlphaSliderMouseDown(WindowsKeys args)
         {
-            if (args.Msg == WindowsMessages.LBUTTONDOWN && !mDisabled)
+            if (args.Msg == WindowsMessages.LBUTTONDOWN && !this.mDisabled)
             {
                 this.mBDragging = true;
 
@@ -1842,20 +1819,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
 
                 this.DrawSlider(y, false);
                 this.ResetHslrgb();
-                if (this.AlphaSliderScroll != null)
-                {
-                    this.AlphaSliderScroll();
-                }
+                this.AlphaSliderScroll?.Invoke();
             }
         }
 
         /// <summary>
-        /// Gets fired when the mouse is moved and pressed before
+        ///     Gets fired when the mouse is moved and pressed before
         /// </summary>
         /// <param name="args">Keys</param>
-        public void VerticalAlphaSlider_MouseMove(WindowsKeys args)
+        public void VerticalAlphaSliderMouseMove(WindowsKeys args)
         {
-            if (this.mBDragging && args.Msg == WindowsMessages.MOUSEMOVE && !mDisabled)
+            if (this.mBDragging && args.Msg == WindowsMessages.MOUSEMOVE && !this.mDisabled)
             {
                 var y = (int)args.Cursor.Y - (int)this.Position.Y;
                 y -= 4;
@@ -1871,20 +1845,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.ArrowPos = y;
                 this.DrawSlider(y, false);
                 this.ResetHslrgb();
-                if (this.AlphaSliderScroll != null)
-                {
-                    this.AlphaSliderScroll();
-                }
+                this.AlphaSliderScroll?.Invoke();
             }
         }
 
         /// <summary>
-        /// Gets fired when the mouse is released and pressed before
+        ///     Gets fired when the mouse is released and pressed before
         /// </summary>
         /// <param name="args">Keys</param>
-        public void VerticalAlphaSlider_MouseUp(WindowsKeys args)
+        public void VerticalAlphaSliderMouseUp(WindowsKeys args)
         {
-            if (this.mBDragging && args.Msg == WindowsMessages.LBUTTONUP && !mDisabled)
+            if (this.mBDragging && args.Msg == WindowsMessages.LBUTTONUP && !this.mDisabled)
             {
                 this.mBDragging = false;
 
@@ -1902,10 +1873,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 this.ArrowPos = y;
                 this.DrawSlider(y, false);
                 this.ResetHslrgb();
-                if (this.AlphaSliderScroll != null)
-                {
-                    this.AlphaSliderScroll();
-                }
+                this.AlphaSliderScroll?.Invoke();
             }
         }
 
@@ -1914,151 +1882,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Methods
 
         /// <summary>
-        /// Draws in Blue Style
-        /// </summary>
-        private void DrawStyleBlue()
-        {
-            Line.Begin();
-            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
-            {
-                var blue = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
-                var col = Color.FromArgb(this.mRgb.R, this.mRgb.G, blue);
-
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
-                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
-                        },
-                    col.ToSharpDxColor());
-            }
-            Line.End();
-        }
-
-        /// <summary>
-        /// Draws in Green Style
-        /// </summary>
-        private void DrawStyleGreen()
-        {
-            Line.Begin();
-            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
-            {
-                var green = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
-                var col = Color.FromArgb(this.mRgb.R, green, this.mRgb.B);
-
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
-                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
-                        },
-                    col.ToSharpDxColor());
-            }
-            Line.End();
-        }
-
-        /// <summary>
-        /// Draws in Hue Style
-        /// </summary>
-        private void DrawStyleHue()
-        {
-            var hsl = new Hsl();
-
-            hsl.S = 1;
-            hsl.L = 1;
-            Line.Begin();
-            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
-            {
-                hsl.H = 1.0d - Convert.ToDouble(iCx / (this.mHeight - 9d));
-                var col = Utilities.HslToRgb(hsl);
-
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
-                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
-                        },
-                    col.ToSharpDxColor());
-            }
-            Line.End();
-        }
-
-        /// <summary>
-        /// Draws in Luminance Style
-        /// </summary>
-        private void DrawStyleLuminance()
-        {
-            var hsl = new Hsl();
-
-            hsl.H = this.mHsl.H;
-            hsl.S = this.mHsl.S;
-            Line.Begin();
-            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
-            {
-                hsl.L = 1.0 - Convert.ToDouble(iCx / (this.mHeight - 9d));
-                var col = Utilities.HslToRgb(hsl);
-
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
-                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
-                        },
-                    col.ToSharpDxColor());
-            }
-            Line.End();
-        }
-
-        /// <summary>
-        /// Draws in Red Style
-        /// </summary>
-        private void DrawStyleRed()
-        {
-            Line.Begin();
-            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
-            {
-                var red = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
-                var col = Color.FromArgb(red, this.mRgb.G, this.mRgb.B);
-
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
-                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
-                        },
-                    col.ToSharpDxColor());
-            }
-            Line.End();
-        }
-
-        /// <summary>
-        /// Draws in Saturation Style
-        /// </summary>
-        private void DrawStyleSaturation()
-        {
-            var hsl = new Hsl();
-
-            hsl.H = this.mHsl.H;
-            hsl.L = this.mHsl.L;
-            Line.Begin();
-            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
-            {
-                hsl.S = 1.0 - Convert.ToDouble(iCx / (this.mHeight - 9d));
-                var col = Utilities.HslToRgb(hsl);
-
-                Line.Draw(
-                    new[]
-                        {
-                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
-                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
-                        },
-                    col.ToSharpDxColor());
-            }
-            Line.End();
-        }
-
-        /// <summary>
-        /// Draws the Border around the AlphaSlider
+        ///     Draws the Border around the AlphaSlider
         /// </summary>
         private void DrawBorder()
         {
@@ -2097,7 +1921,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Draws in Content of the AlphaSlider
+        ///     Draws in Content of the AlphaSlider
         /// </summary>
         private void DrawContent()
         {
@@ -2131,7 +1955,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Draws the Arrows
+        ///     Draws the Arrows
         /// </summary>
         private void DrawSlider(int position, bool unconditional)
         {
@@ -2165,53 +1989,145 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Resets the Arrows
+        ///     Draws in Blue Style
         /// </summary>
-        /// <param name="redraw">Force Redraw</param>
-        private void ResetSlider(bool redraw)
+        private void DrawStyleBlue()
         {
-            switch (this.mEDrawStyle)
+            Line.Begin();
+            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
-                case EDrawStyle.Hue:
-                    this.ArrowPos = (this.mHeight - 8) - Convert.ToInt32(Math.Round((this.mHeight - 8d) * this.mHsl.H));
+                var blue = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
+                var col = Color.FromArgb(this.mRgb.R, this.mRgb.G, blue);
 
-                    break;
-                case EDrawStyle.Saturation:
-                    this.ArrowPos = (this.mHeight - 8) - Convert.ToInt32(Math.Round((this.mHeight - 8d) * this.mHsl.S));
-
-                    break;
-                case EDrawStyle.Brightness:
-                    this.ArrowPos = (this.mHeight - 8) - Convert.ToInt32(Math.Round((this.mHeight - 8d) * this.mHsl.L));
-
-                    break;
-                case EDrawStyle.Red:
-                    this.ArrowPos = (this.mHeight - 8)
-                                    - Convert.ToInt32(
-                                        Math.Round((this.mHeight - 8d) * Convert.ToDouble(this.mRgb.R / 255d)));
-
-                    break;
-                case EDrawStyle.Green:
-                    this.ArrowPos = (this.mHeight - 8)
-                                    - Convert.ToInt32(
-                                        Math.Round((this.mHeight - 8d) * Convert.ToDouble(this.mRgb.G / 255d)));
-
-                    break;
-                case EDrawStyle.Blue:
-                    this.ArrowPos = (this.mHeight - 8)
-                                    - Convert.ToInt32(
-                                        Math.Round((this.mHeight - 8d) * Convert.ToDouble(this.mRgb.B / 255d)));
-
-                    break;
+                Line.Draw(
+                    new[]
+                        {
+                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
+                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
+                        },
+                    col.ToSharpDxColor());
             }
-
-            if (redraw)
-            {
-                this.DrawSlider(this.ArrowPos, true);
-            }
+            Line.End();
         }
 
         /// <summary>
-        /// Resets the Color
+        ///     Draws in Green Style
+        /// </summary>
+        private void DrawStyleGreen()
+        {
+            Line.Begin();
+            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
+            {
+                var green = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
+                var col = Color.FromArgb(this.mRgb.R, green, this.mRgb.B);
+
+                Line.Draw(
+                    new[]
+                        {
+                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
+                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
+                        },
+                    col.ToSharpDxColor());
+            }
+            Line.End();
+        }
+
+        /// <summary>
+        ///     Draws in Hue Style
+        /// </summary>
+        private void DrawStyleHue()
+        {
+            var hsl = new Hsl { S = 1, L = 1 };
+
+            Line.Begin();
+            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
+            {
+                hsl.H = 1.0d - Convert.ToDouble(iCx / (this.mHeight - 9d));
+                var col = Utilities.HslToRgb(hsl);
+
+                Line.Draw(
+                    new[]
+                        {
+                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
+                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
+                        },
+                    col.ToSharpDxColor());
+            }
+            Line.End();
+        }
+
+        /// <summary>
+        ///     Draws in Luminance Style
+        /// </summary>
+        private void DrawStyleLuminance()
+        {
+            var hsl = new Hsl { H = this.mHsl.H, S = this.mHsl.S };
+
+            Line.Begin();
+            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
+            {
+                hsl.L = 1.0 - Convert.ToDouble(iCx / (this.mHeight - 9d));
+                var col = Utilities.HslToRgb(hsl);
+
+                Line.Draw(
+                    new[]
+                        {
+                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
+                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
+                        },
+                    col.ToSharpDxColor());
+            }
+            Line.End();
+        }
+
+        /// <summary>
+        ///     Draws in Red Style
+        /// </summary>
+        private void DrawStyleRed()
+        {
+            Line.Begin();
+            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
+            {
+                var red = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
+                var col = Color.FromArgb(red, this.mRgb.G, this.mRgb.B);
+
+                Line.Draw(
+                    new[]
+                        {
+                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
+                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
+                        },
+                    col.ToSharpDxColor());
+            }
+            Line.End();
+        }
+
+        /// <summary>
+        ///     Draws in Saturation Style
+        /// </summary>
+        private void DrawStyleSaturation()
+        {
+            var hsl = new Hsl { H = this.mHsl.H, L = this.mHsl.L };
+
+            Line.Begin();
+            for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
+            {
+                hsl.S = 1.0 - Convert.ToDouble(iCx / (this.mHeight - 9d));
+                var col = Utilities.HslToRgb(hsl);
+
+                Line.Draw(
+                    new[]
+                        {
+                            new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
+                            new Vector2(this.Position.X + this.mWidth - 11, this.Position.Y + iCx + 4)
+                        },
+                    col.ToSharpDxColor());
+            }
+            Line.End();
+        }
+
+        /// <summary>
+        ///     Resets the Color
         /// </summary>
         private void ResetHslrgb()
         {
@@ -2260,18 +2176,64 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
             }
         }
 
+        /// <summary>
+        ///     Resets the Arrows
+        /// </summary>
+        /// <param name="redraw">Force Redraw</param>
+        private void ResetSlider(bool redraw)
+        {
+            switch (this.mEDrawStyle)
+            {
+                case EDrawStyle.Hue:
+                    this.ArrowPos = (this.mHeight - 8) - Convert.ToInt32(Math.Round((this.mHeight - 8d) * this.mHsl.H));
+
+                    break;
+                case EDrawStyle.Saturation:
+                    this.ArrowPos = (this.mHeight - 8) - Convert.ToInt32(Math.Round((this.mHeight - 8d) * this.mHsl.S));
+
+                    break;
+                case EDrawStyle.Brightness:
+                    this.ArrowPos = (this.mHeight - 8) - Convert.ToInt32(Math.Round((this.mHeight - 8d) * this.mHsl.L));
+
+                    break;
+                case EDrawStyle.Red:
+                    this.ArrowPos = (this.mHeight - 8)
+                                    - Convert.ToInt32(
+                                        Math.Round((this.mHeight - 8d) * Convert.ToDouble(this.mRgb.R / 255d)));
+
+                    break;
+                case EDrawStyle.Green:
+                    this.ArrowPos = (this.mHeight - 8)
+                                    - Convert.ToInt32(
+                                        Math.Round((this.mHeight - 8d) * Convert.ToDouble(this.mRgb.G / 255d)));
+
+                    break;
+                case EDrawStyle.Blue:
+                    this.ArrowPos = (this.mHeight - 8)
+                                    - Convert.ToInt32(
+                                        Math.Round((this.mHeight - 8d) * Convert.ToDouble(this.mRgb.B / 255d)));
+
+                    break;
+            }
+
+            if (redraw)
+            {
+                this.DrawSlider(this.ArrowPos, true);
+            }
+        }
+
         #endregion
     }
 
     /// <summary>
-    /// Adobe Color Utitlies for HSL
+    ///     Adobe Color Utitlies for HSL
     /// </summary>
     public class AdobeColors
     {
         #region Public Methods and Operators
 
         /// <summary>
-        /// Modifies brightness of c by brightness
+        ///     Modifies brightness of c by brightness
         /// </summary>
         /// <param name="c"></param>
         /// <param name="brightness"></param>
@@ -2284,7 +2246,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Modifies hue of c by hue
+        ///     Modifies hue of c by hue
         /// </summary>
         /// <param name="c"></param>
         /// <param name="hue"></param>
@@ -2297,7 +2259,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Modifies saturation of c by saturation
+        ///     Modifies saturation of c by saturation
         /// </summary>
         /// <param name="c"></param>
         /// <param name="saturation"></param>
@@ -2310,41 +2272,38 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Sets brightness of c by brightness
+        ///     Sets brightness of c by brightness
         /// </summary>
         /// <param name="c"></param>
         /// <param name="brightness"></param>
         /// <returns>New color</returns>
         public Color SetBrightness(Color c, double brightness)
         {
-            var hsl = new Hsl();
-            hsl.L = brightness;
+            var hsl = new Hsl { L = brightness };
             return Utilities.HslToRgb(hsl);
         }
 
         /// <summary>
-        /// Sets hue of c by hue
+        ///     Sets hue of c by hue
         /// </summary>
         /// <param name="c"></param>
         /// <param name="hue"></param>
         /// <returns>New color</returns>
         public Color SetHue(Color c, double hue)
         {
-            var hsl = new Hsl();
-            hsl.H = hue;
+            var hsl = new Hsl { H = hue };
             return Utilities.HslToRgb(hsl);
         }
 
         /// <summary>
-        /// Sets saturation of c by saturation
+        ///     Sets saturation of c by saturation
         /// </summary>
         /// <param name="c"></param>
         /// <param name="saturation"></param>
         /// <returns>New color</returns>
         public Color SetSaturation(Color c, double saturation)
         {
-            var hsl = new Hsl();
-            hsl.S = saturation;
+            var hsl = new Hsl { S = saturation };
             return Utilities.HslToRgb(hsl);
         }
 
@@ -2352,29 +2311,29 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     }
 
     /// <summary>
-    /// Color spectrum CMYK
+    ///     Color spectrum CMYK
     /// </summary>
     public class Cmyk
     {
         #region Fields
 
         /// <summary>
-        /// Cyan
+        ///     Cyan
         /// </summary>
         private double c;
 
         /// <summary>
-        /// Key plate (black)
+        ///     Key plate (black)
         /// </summary>
         private double k;
 
         /// <summary>
-        /// Magenta
+        ///     Magenta
         /// </summary>
         private double m;
 
         /// <summary>
-        /// Yellow
+        ///     Yellow
         /// </summary>
         private double y;
 
@@ -2383,7 +2342,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Public Properties
 
         /// <summary>
-        /// Cyan
+        ///     Cyan
         /// </summary>
         public double C
         {
@@ -2406,7 +2365,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Key plate (black)
+        ///     Key plate (black)
         /// </summary>
         public double K
         {
@@ -2429,7 +2388,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Magenta
+        ///     Magenta
         /// </summary>
         public double M
         {
@@ -2452,7 +2411,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Yellow
+        ///     Yellow
         /// </summary>
         public double Y
         {
@@ -2478,24 +2437,24 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     }
 
     /// <summary>
-    /// Color spectrum HSL
+    ///     Color spectrum HSL
     /// </summary>
     public class Hsl
     {
         #region Fields
 
         /// <summary>
-        /// Hue
+        ///     Hue
         /// </summary>
         private double h;
 
         /// <summary>
-        /// Lightness
+        ///     Lightness
         /// </summary>
         private double l;
 
         /// <summary>
-        /// Saturation
+        ///     Saturation
         /// </summary>
         private double s;
 
@@ -2504,7 +2463,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         #region Public Properties
 
         /// <summary>
-        /// Hue
+        ///     Hue
         /// </summary>
         public double H
         {
@@ -2527,7 +2486,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Lightness
+        ///     Lightness
         /// </summary>
         public double L
         {
@@ -2550,7 +2509,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Saturation
+        ///     Saturation
         /// </summary>
         public double S
         {
@@ -2576,50 +2535,43 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     }
 
     /// <summary>
-    /// Color Utilities
+    ///     Color Utilities
     /// </summary>
     internal static class Utilities
     {
         #region Public Methods and Operators
 
         /// <summary>
-        /// Converts the CMYK color format to RGB
+        ///     Converts the CMYK color format to RGB
         /// </summary>
         /// <param name="cmyk"></param>
         /// <returns>Converted color</returns>
         public static Color CmykToRgb(Cmyk cmyk)
         {
-            var red = 0;
-            var green = 0;
-            var blue = 0;
-
             // To convert CMYK to RGB we first have to convert CMYK to CMY
             var cyan = (cmyk.C * (1 - cmyk.K)) + cmyk.K;
             var magenta = (cmyk.M * (1 - cmyk.K)) + cmyk.K;
             var yellow = (cmyk.Y * (1 - cmyk.K)) + cmyk.K;
 
-            red = Convert.ToInt32(Math.Round(cyan * 255d));
-            green = Convert.ToInt32(Math.Round(magenta * 255d));
-            blue = Convert.ToInt32(Math.Round(yellow * 255d));
+            var red = Convert.ToInt32(Math.Round(cyan * 255d));
+            var green = Convert.ToInt32(Math.Round(magenta * 255d));
+            var blue = Convert.ToInt32(Math.Round(yellow * 255d));
 
             return Color.FromArgb(red, green, blue);
         }
 
         /// <summary>
-        /// Converts the HSL color format to RGB
+        ///     Converts the HSL color format to RGB
         /// </summary>
         /// <param name="hsl"></param>
         /// <returns>Converted color</returns>
         public static Color HslToRgb(Hsl hsl)
         {
-            var max = 0;
-            var min = 0;
-            var mid = 0;
-            double q = 0;
+            int mid;
 
-            max = Convert.ToInt32(Math.Round(hsl.L * 255d));
-            min = Convert.ToInt32(Math.Round((1.0d - hsl.S) * (hsl.L / 1.0d) * 255d));
-            q = Convert.ToDouble((max - min) / 255d);
+            var max = Convert.ToInt32(Math.Round(hsl.L * 255d));
+            var min = Convert.ToInt32(Math.Round((1.0d - hsl.S) * (hsl.L / 1.0d) * 255d));
+            var q = Convert.ToDouble((max - min) / 255d);
 
             if (hsl.H >= 0 & hsl.H <= (1d / 6d))
             {
@@ -2655,7 +2607,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Converts the RGB color format to CMYK
+        ///     Converts the RGB color format to CMYK
         /// </summary>
         /// <param name="c"></param>
         /// <returns>Converted color</returns>
@@ -2691,7 +2643,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         }
 
         /// <summary>
-        /// Converts the RGB color format to HSL
+        ///     Converts the RGB color format to HSL
         /// </summary>
         /// <param name="c"></param>
         /// <returns>Converted color</returns>
@@ -2699,10 +2651,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         {
             var hsl = new Hsl();
 
-            var max = 0;
-            var min = 0;
-            var diff = 0;
-            var sum = 0;
+            int max;
+            int min;
 
             // Of the RBG Values - assign the highest value to _Max and the lowest to _min
             if (c.R > c.G)
@@ -2724,35 +2674,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 min = c.B;
             }
 
-            diff = max - min;
-            sum = max + min;
+            var diff = max - min;
 
             // Luminance (aka Brightness)
             hsl.L = Convert.ToDouble(max / 255d);
 
             // Saturation
-            if (max == 0)
-            {
-                hsl.S = 0;
-            }
-            else
-            {
-                hsl.S = Convert.ToDouble(diff / (double)max);
-            }
+            hsl.S = max == 0 ? 0 : Convert.ToDouble(diff / (double)max);
 
             // Hue
             // R is situated at the angle of 360 eller noll degrees
             // G vid 120 degrees
             // B vid 240 degrees
-            double q = 0;
-            if (diff == 0)
-            {
-                q = 0;
-            }
-            else
-            {
-                q = Convert.ToDouble(60d / diff);
-            }
+            var q = diff == 0 ? 0 : Convert.ToDouble(60d / diff);
 
             if (max == Convert.ToInt32(c.R))
             {

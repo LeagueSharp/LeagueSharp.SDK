@@ -19,14 +19,14 @@
 //   A custom implementation of an <see cref="ADrawable{MenuSliderButton}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
+
+namespace LeagueSharp.SDK.UI.Skins.Light
 {
     using System;
     using System.Globalization;
 
-    using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -68,20 +68,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Returns the Rectangle that defines the Slider
-        /// </summary>
-        /// <param name="component">The <see cref="MenuSliderButton" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        public Rectangle SliderBoundaries(MenuSliderButton component)
-        {
-            return new Rectangle(
-                (int)component.Position.X + Offset,
-                (int)component.Position.Y,
-                component.MenuWidth - MenuSettings.ContainerHeight - Offset,
-                MenuSettings.ContainerHeight);
-        }
-
-        /// <summary>
         ///     Returns the Rectangle that defines the on/off Button
         /// </summary>
         /// <param name="component">The <see cref="MenuSliderButton" /></param>
@@ -118,30 +104,31 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
                     .Y;
             var percent = (this.Component.SValue - this.Component.MinValue)
                           / (float)(this.Component.MaxValue - this.Component.MinValue);
-            var x = position.X + Offset + (percent * (this.Component.MenuWidth - Offset * 2 - MenuSettings.ContainerHeight / 2));
+            var x = position.X + Offset
+                    + (percent * (this.Component.MenuWidth - Offset * 2 - MenuSettings.ContainerHeight / 2));
 
             Line.Width = 3;
             Line.Begin();
             Line.Draw(
-                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) }, 
+                new[] { new Vector2(x, position.Y + 1), new Vector2(x, position.Y + MenuSettings.ContainerHeight) },
                 this.Component.Interacting ? new ColorBGRA(90, 129, 144, 255) : new ColorBGRA(94, 170, 246, 255));
             Line.End();
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)(position.X + MenuSettings.ContainerTextOffset), 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
+                (int)(position.X + MenuSettings.ContainerTextOffset),
                 centeredY,
                 MenuSettings.TextColor);
 
             var measureText = MenuSettings.Font.MeasureText(
-                null, 
-                this.Component.SValue.ToString(CultureInfo.InvariantCulture), 
+                null,
+                this.Component.SValue.ToString(CultureInfo.InvariantCulture),
                 0);
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.SValue.ToString(CultureInfo.InvariantCulture), 
-                (int)(position.X + this.Component.MenuWidth - 5 - measureText.Width - MenuSettings.ContainerHeight), 
+                MenuManager.Instance.Sprite,
+                this.Component.SValue.ToString(CultureInfo.InvariantCulture),
+                (int)(position.X + this.Component.MenuWidth - 5 - measureText.Width - MenuSettings.ContainerHeight),
                 centeredY,
                 MenuSettings.TextColor);
 
@@ -234,6 +221,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
             {
                 this.Component.Interacting = false;
             }
+        }
+
+        /// <summary>
+        ///     Returns the Rectangle that defines the Slider
+        /// </summary>
+        /// <param name="component">The <see cref="MenuSliderButton" /></param>
+        /// <returns>The <see cref="Rectangle" /></returns>
+        public Rectangle SliderBoundaries(MenuSliderButton component)
+        {
+            return new Rectangle(
+                (int)component.Position.X + Offset,
+                (int)component.Position.Y,
+                component.MenuWidth - MenuSettings.ContainerHeight - Offset,
+                MenuSettings.ContainerHeight);
         }
 
         /// <summary>

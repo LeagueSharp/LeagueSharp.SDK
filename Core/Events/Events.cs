@@ -19,12 +19,9 @@ namespace LeagueSharp.SDK
 {
     using System;
 
-    using LeagueSharp.SDK.Core.Utils;
-
     /// <summary>
     ///     The provided events by the kit.
     /// </summary>
-    [ResourceImport]
     public static partial class Events
     {
         #region Constructors and Destructors

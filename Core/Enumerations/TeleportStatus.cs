@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Enumerations
 {
     /// <summary>
     ///     The teleport status.
@@ -25,17 +25,17 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The start status.
         /// </summary>
-        Start, 
+        Start,
 
         /// <summary>
         ///     The abort status.
         /// </summary>
-        Abort, 
+        Abort,
 
         /// <summary>
         ///     The finish status.
         /// </summary>
-        Finish, 
+        Finish,
 
         /// <summary>
         ///     The unknown status.

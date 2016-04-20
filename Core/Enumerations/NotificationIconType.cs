@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Enumerations
 {
     /// <summary>
     ///     The notification icon type.
@@ -25,22 +25,22 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     No Icon.
         /// </summary>
-        None = 0, 
+        None = 0,
 
         /// <summary>
         ///     Error Icon.
         /// </summary>
-        Error = 1, 
+        Error = 1,
 
         /// <summary>
         ///     Warning Icon.
         /// </summary>
-        Warning = 2, 
+        Warning = 2,
 
         /// <summary>
         ///     Check Icon.
         /// </summary>
-        Check = 3, 
+        Check = 3,
 
         /// <summary>
         ///     Select Icon.

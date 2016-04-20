@@ -61,32 +61,12 @@ namespace LeagueSharp.SDK.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] _6_7 {
-            get {
-                object obj = ResourceManager.GetObject("_6_7", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap cursor_drag {
             get {
                 object obj = ResourceManager.GetObject("cursor_drag", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] Gapclosers {
-            get {
-                object obj = ResourceManager.GetObject("Gapclosers", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         

@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Enumerations
 {
     /// <summary>
     ///     Performance Type to log.
@@ -25,12 +25,12 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Logs the Tick Count(CPU Ticks).
         /// </summary>
-        TickCount, 
+        TickCount,
 
         /// <summary>
         ///     Logs the number of milliseconds.
         /// </summary>
-        Milliseconds, 
+        Milliseconds,
 
         /// <summary>
         ///     Logs the time spanned in TimeSpam format.

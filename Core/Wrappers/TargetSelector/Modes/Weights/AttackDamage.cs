@@ -15,14 +15,10 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Modes.Weights
+namespace LeagueSharp.SDK.TSModes.Weights
 {
-    #region
-
     using System.Collections.Generic;
     using System.Linq;
-
-    #endregion
 
     /// <summary>
     ///     Attack Damage

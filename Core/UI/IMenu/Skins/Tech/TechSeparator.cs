@@ -19,12 +19,12 @@
 //   Implements <see cref="ADrawable{MenuSeperator}" /> as a custom skin.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
-{
 
-    using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
+namespace LeagueSharp.SDK.UI.Skins.Tech
+{
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
+
     using SharpDX.Direct3D9;
 
     /// <summary>
@@ -32,7 +32,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
     /// </summary>
     public class TechSeparator : ADrawable<MenuSeparator>
     {
-
         #region Static Fields
 
         /// <summary>

@@ -19,14 +19,15 @@
 //   A custom implementation of <see cref="ADrawable{MenuTexture}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-using System.Collections.Generic;
-using System.Linq;
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+namespace LeagueSharp.SDK.UI.Skins.Blue
 {
+    using System.Collections.Generic;
     using System.Drawing;
+    using System.Linq;
 
     using LeagueSharp.SDK.Properties;
+
     using SharpDX.Direct3D9;
 
     internal enum BlueTexture
@@ -36,35 +37,58 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
 
     internal class BlueTextures
     {
-
-        private readonly Dictionary<BlueTexture, BlueTextureWrapper> textures = new Dictionary<BlueTexture, BlueTextureWrapper>();
+        #region Static Fields
 
         public static readonly BlueTextures Instance = new BlueTextures();
 
+        #endregion
+
+        #region Fields
+
+        private readonly Dictionary<BlueTexture, BlueTextureWrapper> textures =
+            new Dictionary<BlueTexture, BlueTextureWrapper>();
+
+        #endregion
+
+        #region Constructors and Destructors
+
         private BlueTextures()
         {
-            this.textures[BlueTexture.Dragging] = BuildTexture(Resources.cursor_drag, 16, 16);
+            this.textures[BlueTexture.Dragging] = this.BuildTexture(Resources.cursor_drag, 16, 16);
         }
 
         ~BlueTextures()
         {
-            foreach (var entry in this.textures.Where(entry => !entry.Value.Texture.IsDisposed)) {
+            foreach (var entry in this.textures.Where(entry => !entry.Value.Texture.IsDisposed))
+            {
                 entry.Value.Texture.Dispose();
             }
         }
 
-        public BlueTextureWrapper this[BlueTexture textureType]
+        #endregion
+
+        #region Public Indexers
+
+        public BlueTextureWrapper this[BlueTexture textureType] => this.textures[textureType];
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public BlueTextureWrapper AddTexture(Image bmp, int width, int height, BlueTexture textureType)
         {
-            get
-            {
-                return this.textures[textureType];
-            }
+            this.textures[textureType] = this.BuildTexture(bmp, height, width);
+            return this.textures[textureType];
         }
+
+        #endregion
+
+        #region Methods
 
         private BlueTextureWrapper BuildTexture(Image bmp, int height, int width)
         {
             var resized = new Bitmap(bmp, width, height);
-            var texture =  Texture.FromMemory(
+            var texture = Texture.FromMemory(
                 Drawing.Direct3DDevice,
                 (byte[])new ImageConverter().ConvertTo(resized, typeof(byte[])),
                 resized.Width,
@@ -81,19 +105,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             return new BlueTextureWrapper(texture, width, height);
         }
 
-        public BlueTextureWrapper AddTexture(Image bmp, int width, int height, BlueTexture textureType)
-        {
-            this.textures[textureType] = BuildTexture(bmp, height, width);
-            return this.textures[textureType];
-        }
-        
+        #endregion
     }
 
     internal class BlueTextureWrapper
     {
-        public Texture Texture { get; private set; }
-        public int Width { get; private set; }
-        public int Height { get; private set; }
+        #region Constructors and Destructors
 
         public BlueTextureWrapper(Texture texture, int width, int height)
         {
@@ -101,6 +118,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             this.Width = width;
             this.Height = height;
         }
-        
+
+        #endregion
+
+        #region Public Properties
+
+        public int Height { get; private set; }
+
+        public Texture Texture { get; }
+
+        public int Width { get; private set; }
+
+        #endregion
     }
 }

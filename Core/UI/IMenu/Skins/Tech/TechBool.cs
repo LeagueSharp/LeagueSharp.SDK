@@ -19,11 +19,11 @@
 //   A custom implementation of a <see cref="ADrawable{MenuBool}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
+
+namespace LeagueSharp.SDK.UI.Skins.Tech
 {
-    using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -67,7 +67,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
         public Rectangle ButtonBoundaries(MenuBool component)
         {
             return new Rectangle(
-                (int)(component.Position.X + component.MenuWidth - MenuSettings.ContainerHeight), 
+                (int)(component.Position.X + component.MenuWidth - MenuSettings.ContainerHeight),
                 (int)component.Position.Y,
                 MenuSettings.ContainerHeight,
                 MenuSettings.ContainerHeight);
@@ -93,30 +93,44 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
                     .Y;
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset), 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
+                (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
                 centerY,
                 MenuSettings.TextColor);
 
             var centerX =
                 (int)
                 new Rectangle(
-                    (int)(this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight), 
+                    (int)(this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight),
                     (int)this.Component.Position.Y,
                     MenuSettings.ContainerHeight,
                     MenuSettings.ContainerHeight).GetCenteredText(
-                        null, 
-                        MenuSettings.Font, 
-                        this.Component.Value ? "On" : "Off", 
+                        null,
+                        MenuSettings.Font,
+                        this.Component.Value ? "On" : "Off",
                         CenteredFlags.HorizontalCenter).X - 5;
 
             //Left
-            Utils.DrawCircle(centerX, this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 7, 270, Utils.CircleType.Half, true, 32,
+            Utils.DrawCircle(
+                centerX,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                7,
+                270,
+                Utils.CircleType.Half,
+                true,
+                32,
                 this.Component.Value ? new Color(75, 215, 128, 255) : new Color(36, 204, 205, 255));
 
             //Right
-            Utils.DrawCircle(centerX + 15, this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 7, 90, Utils.CircleType.Half, true, 32,
+            Utils.DrawCircle(
+                centerX + 15,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                7,
+                90,
+                Utils.CircleType.Half,
+                true,
+                32,
                 this.Component.Value ? new Color(75, 215, 128, 255) : new Color(36, 204, 205, 255));
 
             //Top
@@ -144,8 +158,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
             Line.End();
 
             //FullCircle
-            Utils.DrawCircleFilled(this.Component.Value ? centerX + 14 : centerX + 1, 
-                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 6, 0, Utils.CircleType.Full, true, 32,
+            Utils.DrawCircleFilled(
+                this.Component.Value ? centerX + 14 : centerX + 1,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                6,
+                0,
+                Utils.CircleType.Full,
+                true,
+                32,
                 this.Component.Value ? new Color(73, 227, 139, 255) : new Color(17, 65, 65, 255));
         }
 

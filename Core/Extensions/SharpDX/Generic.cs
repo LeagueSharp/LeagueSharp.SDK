@@ -17,7 +17,7 @@
 
 namespace LeagueSharp.SDK
 {
-    using global::SharpDX;
+    using SharpDX;
 
     /// <summary>
     ///     The generic SharpDX extensions.

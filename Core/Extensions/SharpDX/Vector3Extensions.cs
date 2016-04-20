@@ -264,7 +264,7 @@ namespace LeagueSharp.SDK
         /// <returns>Is Vector3 position a wall position</returns>
         public static bool IsWall(this Vector3 vector3)
         {
-            return NavMesh.GetCollisionFlags(vector3).HasFlag(CollisionFlags.Wall);
+            return vector3.ToVector2().IsWall();
         }
 
         /// <summary>
@@ -300,6 +300,7 @@ namespace LeagueSharp.SDK
         public static float PathLength(this List<Vector3> path)
         {
             var distance = 0f;
+
             for (var i = 0; i < path.Count - 1; i++)
             {
                 distance += path[i].Distance(path[i + 1]);
@@ -368,14 +369,7 @@ namespace LeagueSharp.SDK
         /// <returns>Modified Vector3.</returns>
         public static Vector3 SetZ(this Vector3 v, float? value = null)
         {
-            if (value == null)
-            {
-                v.Z = Game.CursorPos.Z;
-            }
-            else
-            {
-                v.Z = (float)value;
-            }
+            v.Z = value ?? Game.CursorPos.Z;
 
             return v;
         }

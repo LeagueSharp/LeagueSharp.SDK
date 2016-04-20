@@ -19,7 +19,7 @@ namespace LeagueSharp.SDK
 {
     using System;
 
-    using LeagueSharp.SDK.Core.UI.IMenu;
+    using LeagueSharp.SDK.UI;
 
     /// <summary>
     ///     Variables of the LeagueSharp development kit.
@@ -31,7 +31,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The game version.
         /// </summary>
-        public static readonly Version GameVersion = new Version("6.7");
+        public static readonly Version GameVersion = new Version("6.8");
 
         /// <summary>
         ///     The kit version.

@@ -1,13 +1,7 @@
 ﻿namespace LeagueSharp.SDK
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-
-    using LeagueSharp.SDK.Clipper;
-    using LeagueSharp.SDK.Core.Utils;
-
-    using SharpDX;
+    using LeagueSharp.Data.DataTypes;
+    using LeagueSharp.SDK.Polygons;
 
     public class SkillshotMissileArc : SkillshotMissile
     {
@@ -25,18 +19,28 @@
 
         #endregion
 
-        public override string ToString()
-        {
-            return "SkillshotMissileArc: Champion=" + this.SData.ChampionName + " SpellType=" + this.SData.SpellType + " SpellName=" + this.SData.SpellName;
-        }
-
-        #region Public Properties
+        #region Properties
 
         internal ArcPoly Arc { get; set; }
 
         #endregion
 
         #region Public Methods and Operators
+
+        public override string ToString()
+        {
+            return "SkillshotMissileArc: Champion=" + this.SData.ChampionName + " SpellType=" + this.SData.SpellType
+                   + " SpellName=" + this.SData.SpellName;
+        }
+
+        #endregion
+
+        #region Methods
+
+        internal override void UpdatePath()
+        {
+            this.Path = this.Arc.ToClipperPath();
+        }
 
         internal override void UpdatePolygon()
         {
@@ -45,11 +49,6 @@
                 this.Arc = new ArcPoly(this.StartPosition, this.EndPosition, this.SData.ArcAngle, this.SData.Radius, 20);
                 this.UpdatePath();
             }
-        }
-
-        internal override void UpdatePath()
-        {
-            this.Path = this.Arc.ToClipperPath();
         }
 
         #endregion

@@ -15,15 +15,19 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Utils
+namespace LeagueSharp.SDK.Utils
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
 
+    using LeagueSharp.SDK.Enumerations;
+
     internal static class ResourceLoader
     {
+        #region Public Methods and Operators
+
         public static void Initialize()
         {
             var importClasses =
@@ -42,7 +46,9 @@ namespace LeagueSharp.SDK.Core.Utils
 
                         if (import.Filter != null)
                         {
-                            if (!import.Filter.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IFilter<>)))
+                            if (
+                                !import.Filter.GetInterfaces()
+                                     .Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IFilter<>)))
                             {
                                 throw new Exception($"{nameof(import.Filter)} does not implement {nameof(IFilter)}");
                             }
@@ -63,6 +69,17 @@ namespace LeagueSharp.SDK.Core.Utils
             }
         }
 
+        #endregion
+
+        #region Methods
+
+        private static IEnumerable<MemberInfo> GetFieldsAndProperties(
+            Type type,
+            BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
+        {
+            return type.GetMembers(flags).Where(m => m.IsDefined(typeof(ResourceImportAttribute), false));
+        }
+
         private static Type GetMemberType(this MemberInfo member)
         {
             switch (member.MemberType)
@@ -74,7 +91,9 @@ namespace LeagueSharp.SDK.Core.Utils
                     return ((PropertyInfo)member).PropertyType;
 
                 default:
-                    throw new ArgumentException($"{nameof(MemberInfo)} must be if type {nameof(FieldInfo)} or {nameof(PropertyInfo)}", nameof(member));
+                    throw new ArgumentException(
+                        $"{nameof(MemberInfo)} must be if type {nameof(FieldInfo)} or {nameof(PropertyInfo)}",
+                        nameof(member));
             }
         }
 
@@ -91,15 +110,12 @@ namespace LeagueSharp.SDK.Core.Utils
                     break;
 
                 default:
-                    throw new ArgumentException($"{nameof(MemberInfo)} must be if type {nameof(FieldInfo)} or {nameof(PropertyInfo)}", nameof(member));
+                    throw new ArgumentException(
+                        $"{nameof(MemberInfo)} must be if type {nameof(FieldInfo)} or {nameof(PropertyInfo)}",
+                        nameof(member));
             }
         }
 
-        private static IEnumerable<MemberInfo> GetFieldsAndProperties(
-            Type type,
-            BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
-        {
-            return type.GetMembers(flags).Where(m => m.IsDefined(typeof(ResourceImportAttribute), false));
-        }
+        #endregion
     }
 }

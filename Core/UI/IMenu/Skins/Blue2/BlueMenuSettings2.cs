@@ -22,9 +22,9 @@
 
 //Concept by User Vasconcellos
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
+namespace LeagueSharp.SDK.UI.Skins.Blue2
 {
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue;
+    using LeagueSharp.SDK.UI.Skins.Blue;
 
     using SharpDX;
 
@@ -46,10 +46,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
 
         #endregion
 
+        #region Public Properties
+
         /// <summary>
         ///     Gets or sets the Global Container Selected Color.
         /// </summary>
         public static ColorBGRA ContainerSelectedColor { get; set; }
+
+        #endregion
 
         #region Public Methods and Operators
 
@@ -62,6 +66,5 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
         }
 
         #endregion
-
     }
 }

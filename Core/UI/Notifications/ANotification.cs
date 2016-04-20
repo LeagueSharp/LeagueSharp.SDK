@@ -17,7 +17,7 @@
 
 namespace LeagueSharp.SDK
 {
-    using Core.Utils;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
 

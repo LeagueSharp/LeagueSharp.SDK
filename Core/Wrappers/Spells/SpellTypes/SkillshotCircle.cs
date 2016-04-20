@@ -1,13 +1,7 @@
 ﻿namespace LeagueSharp.SDK
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-
-    using LeagueSharp.SDK.Clipper;
-    using LeagueSharp.SDK.Core.Utils;
-
-    using SharpDX;
+    using LeagueSharp.Data.DataTypes;
+    using LeagueSharp.SDK.Polygons;
 
     public class SkillshotCircle : Skillshot
     {
@@ -25,18 +19,28 @@
 
         #endregion
 
-        public override string ToString()
-        {
-            return "SkillshotCircle: Champion=" + this.SData.ChampionName + " SpellType=" + this.SData.SpellType + " SpellName=" + this.SData.SpellName;
-        }
-
-        #region Public Properties
+        #region Properties
 
         internal CirclePoly Circle { get; set; }
 
         #endregion
 
         #region Public Methods and Operators
+
+        public override string ToString()
+        {
+            return "SkillshotCircle: Champion=" + this.SData.ChampionName + " SpellType=" + this.SData.SpellType
+                   + " SpellName=" + this.SData.SpellName;
+        }
+
+        #endregion
+
+        #region Methods
+
+        internal override void UpdatePath()
+        {
+            this.Path = this.Circle.ToClipperPath();
+        }
 
         internal override void UpdatePolygon()
         {
@@ -45,11 +49,6 @@
                 this.Circle = new CirclePoly(this.EndPosition, this.SData.Radius, 20);
                 this.UpdatePath();
             }
-        }
-
-        internal override void UpdatePath()
-        {
-            this.Path = this.Circle.ToClipperPath();
         }
 
         #endregion

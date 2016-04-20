@@ -15,11 +15,13 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.Damages
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using LeagueSharp.Data.Enumerations;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -159,7 +161,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 string.Empty,
                 (hero, @base) => hero.HasBuff("Mastery6261") && @base is Obj_AI_Hero,
                 DamageType.Magical,
-                (hero, @base) => (hero.IsMelee() ? 0.03 : 0.015) * hero.MaxHealth);
+                (hero, @base) => (hero.IsMelee() ? 0.025 : 0.0125) * hero.MaxHealth);
 
             var excluded = new List<string>();
             foreach (var name in GameObjects.Heroes.Select(h => h.ChampionName).Where(name => !excluded.Contains(name)))
@@ -301,7 +303,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             DamageType.Physical,
                             (hero, @base) =>
                             ((9 + hero.Level + (hero.FlatPhysicalDamageMod * 0.3))
-                             * Math.Min(Math.Max(@base.GetBuffCount("dariushemo"), 0) + 1, 5))
+                             * Math.Min(Math.Max(0, @base.GetBuffCount("dariushemo")) + 1, 5))
                             * (@base is Obj_AI_Minion ? 0.25 : 1));
                         AddPassiveAttack(
                             "Darius",
@@ -733,7 +735,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             DamageType.Physical,
                             (hero, @base) =>
                             hero.GetSpellDamage(@base, SpellSlot.Q) * hero.GetCritMultiplier(true)
-                            + Math.Max(hero.GetBuffCount("nasusqstacks"), 0),
+                            + Math.Max(0, hero.GetBuffCount("nasusqstacks")),
                             true);
                         break;
                     case "Nautilus":
@@ -1094,7 +1096,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                             (hero.Level < 5
                                  ? 12
                                  : (hero.Level < 9 ? 18 : (hero.Level < 13 ? 24 : (hero.Level < 17 ? 30 : 36))))
-                            * Math.Min(Math.Max(@base.GetBuffCount("twitchdeadlyvenom"), 0) + 1, 6)
+                            * Math.Min(Math.Max(0, @base.GetBuffCount("twitchdeadlyvenom")) + 1, 6)
                             / (@base is Obj_AI_Minion ? 1 : 6d));
                         break;
                     case "Udyr":

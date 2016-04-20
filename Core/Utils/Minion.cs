@@ -15,12 +15,12 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Utils
+namespace LeagueSharp.SDK.Utils
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK;
+    using LeagueSharp.SDK.Enumerations;
 
     using SharpDX;
 
@@ -247,7 +247,7 @@ namespace LeagueSharp.SDK.Core.Utils
             SkillshotType stype,
             Vector3 rangeCheckFrom = default(Vector3))
         {
-            from = from.ToVector2().IsValid() ? from : ObjectManager.Player.ServerPosition;
+            from = from.IsValid() ? from : ObjectManager.Player.ServerPosition;
 
             return (from minion in minions
                     select

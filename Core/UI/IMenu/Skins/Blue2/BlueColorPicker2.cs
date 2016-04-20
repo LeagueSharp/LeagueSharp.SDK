@@ -19,10 +19,10 @@
 //   A custom implementation of <see cref="ADrawable{MenuColorPicker}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
+
+namespace LeagueSharp.SDK.UI.Skins.Blue2
 {
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.UI.Skins.Blue;
 
     internal class BlueColorPicker2 : BlueColorPicker
     {
@@ -37,7 +37,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
         public BlueColorPicker2(MenuColor component)
             : base(component)
         {
-
         }
 
         #endregion

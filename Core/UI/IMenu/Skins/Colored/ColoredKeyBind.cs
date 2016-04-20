@@ -20,13 +20,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
+namespace LeagueSharp.SDK.UI.Skins.Colored
 {
     using System.Windows.Forms;
 
-    using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -127,10 +126,26 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                         CenteredFlags.HorizontalCenter).X - 5;
 
             //Left
-            Utils.DrawCircle(centerX, this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 7, 270, Utils.CircleType.Half, true, 32, MenuSettings.TextColor);
+            Utils.DrawCircle(
+                centerX,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                7,
+                270,
+                Utils.CircleType.Half,
+                true,
+                32,
+                MenuSettings.TextColor);
 
             //Right
-            Utils.DrawCircle(centerX + 15, this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 7, 90, Utils.CircleType.Half, true, 32, MenuSettings.TextColor);
+            Utils.DrawCircle(
+                centerX + 15,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                7,
+                90,
+                Utils.CircleType.Half,
+                true,
+                32,
+                MenuSettings.TextColor);
 
             //Top
             Line.Width = 1;
@@ -157,8 +172,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             Line.End();
 
             //FullCircle
-            Utils.DrawCircleFilled(this.Component.Active ? centerX + 14 : centerX + 1,
-                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 6, 0, Utils.CircleType.Full, true, 32,
+            Utils.DrawCircleFilled(
+                this.Component.Active ? centerX + 14 : centerX + 1,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                6,
+                0,
+                Utils.CircleType.Full,
+                true,
+                32,
                 this.Component.Active ? MenuSettings.ContainerSelectedColor : MenuSettings.TextColor);
         }
 

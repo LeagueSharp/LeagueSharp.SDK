@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Utils
+namespace LeagueSharp.SDK.Utils
 {
     using System;
     using System.IO;
@@ -26,16 +26,7 @@ namespace LeagueSharp.SDK.Core.Utils
 
     public static class ResourceFactory
     {
-        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        public static string StringResource(string file, Assembly assembly = null)
-        {
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
-
-            return Encoding.Default.GetString(ByteResource(file, assembly));
-        }
+        #region Public Methods and Operators
 
         [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
         public static byte[] ByteResource(string file, Assembly assembly = null)
@@ -62,5 +53,18 @@ namespace LeagueSharp.SDK.Core.Utils
                 return ms.ToArray();
             }
         }
+
+        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
+        public static string StringResource(string file, Assembly assembly = null)
+        {
+            if (file == null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            return Encoding.Default.GetString(ByteResource(file, assembly));
+        }
+
+        #endregion
     }
 }

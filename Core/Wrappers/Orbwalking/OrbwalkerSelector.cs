@@ -21,9 +21,9 @@ namespace LeagueSharp.SDK
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Core.Wrappers.Damages;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.UI;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     The target selecting system for <c>Orbwalker</c>.
@@ -122,7 +122,7 @@ namespace LeagueSharp.SDK
         {
             return
                 GameObjects.EnemyMinions.Where(
-                    m => this.IsValidUnit(m, range) && !this.ignoreMinions.Any(b => b.Equals(m.CharData.BaseSkinName)))
+                    m => IsValidUnit(m, range) && !this.ignoreMinions.Any(b => b.Equals(m.CharData.BaseSkinName)))
                     .ToList();
         }
 
@@ -479,6 +479,23 @@ namespace LeagueSharp.SDK
         #region Methods
 
         /// <summary>
+        ///     Determines whether the unit is valid.
+        /// </summary>
+        /// <param name="unit">
+        ///     The unit.
+        /// </param>
+        /// <param name="range">
+        ///     The range.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
+        private static bool IsValidUnit(AttackableUnit unit, float range = 0f)
+        {
+            return unit.IsValidTarget(range > 0 ? range : unit.GetRealAutoAttackRange());
+        }
+
+        /// <summary>
         ///     Orders the enemy minions.
         /// </summary>
         /// <param name="minions">
@@ -521,7 +538,7 @@ namespace LeagueSharp.SDK
             var cloneList = new List<Obj_AI_Minion>();
             var wardList = new List<Obj_AI_Minion>();
             foreach (var minion in
-                GameObjects.EnemyMinions.Where(m => this.IsValidUnit(m)))
+                GameObjects.EnemyMinions.Where(m => IsValidUnit(m)))
             {
                 var baseName = minion.CharData.BaseSkinName.ToLower();
                 if (minions && minion.IsMinion())
@@ -544,12 +561,12 @@ namespace LeagueSharp.SDK
                 minionList.AddRange(
                     this.OrderJungleMinions(
                         GameObjects.Jungle.Where(
-                            j => this.IsValidUnit(j) && !j.CharData.BaseSkinName.Equals("gangplankbarrel")).ToList()));
+                            j => IsValidUnit(j) && !j.CharData.BaseSkinName.Equals("gangplankbarrel")).ToList()));
             }
 
             if (attackWards)
             {
-                wardList.AddRange(GameObjects.EnemyWards.Where(w => this.IsValidUnit(w)));
+                wardList.AddRange(GameObjects.EnemyWards.Where(w => IsValidUnit(w)));
             }
 
             var finalMinionList = new List<Obj_AI_Minion>();
@@ -582,7 +599,7 @@ namespace LeagueSharp.SDK
             {
                 finalMinionList.AddRange(
                     GameObjects.Jungle.Where(
-                        j => this.IsValidUnit(j) && j.Health <= 1 && j.CharData.BaseSkinName.Equals("gangplankbarrel"))
+                        j => IsValidUnit(j) && j.Health <= 1 && j.CharData.BaseSkinName.Equals("gangplankbarrel"))
                         .ToList());
             }
 
@@ -592,25 +609,6 @@ namespace LeagueSharp.SDK
             }
 
             return finalMinionList.Where(m => !this.ignoreMinions.Any(b => b.Equals(m.CharData.BaseSkinName))).ToList();
-        }
-
-        /// <summary>
-        ///     Determines whether the unit is valid.
-        /// </summary>
-        /// <param name="unit">
-        ///     The unit.
-        /// </param>
-        /// <param name="range">
-        ///     The range.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="bool" />.
-        /// </returns>
-        private bool IsValidUnit(AttackableUnit unit, float range = 0f)
-        {
-            var minion = unit as Obj_AI_Minion;
-            return unit.IsValidTarget(range > 0 ? range : unit.GetRealAutoAttackRange())
-                   && (minion == null || minion.IsHPBarRendered);
         }
 
         /// <summary>

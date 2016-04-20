@@ -21,8 +21,9 @@ namespace LeagueSharp.SDK
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Core.Wrappers.Damages;
+    using LeagueSharp.Data.Enumerations;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
 
@@ -350,10 +351,10 @@ namespace LeagueSharp.SDK
         /// </summary>
         /// <param name="unit">The Target</param>
         /// <param name="stage">
-        ///     The <see cref="Damage.DamageStage" /> of the spell.
+        ///     The <see cref="DamageStage" /> of the spell.
         /// </param>
         /// <returns>Can spell kill target</returns>
-        public bool CanKill(Obj_AI_Base unit, Damage.DamageStage stage = Damage.DamageStage.Default)
+        public bool CanKill(Obj_AI_Base unit, DamageStage stage = DamageStage.Default)
         {
             return unit.IsValidTarget() && this.GetDamage(unit, stage) > unit.Health;
         }
@@ -774,12 +775,12 @@ namespace LeagueSharp.SDK
         ///     The <see cref="Obj_AI_Hero" /> target.
         /// </param>
         /// <param name="stage">
-        ///     The <see cref="Damage.DamageStage" /> of the spell.
+        ///     The <see cref="DamageStage" /> of the spell.
         /// </param>
         /// <returns>
         ///     The damage value to target unit.
         /// </returns>
-        public float GetDamage(Obj_AI_Base target, Damage.DamageStage stage = Damage.DamageStage.Default)
+        public float GetDamage(Obj_AI_Base target, DamageStage stage = DamageStage.Default)
         {
             return (float)GameObjects.Player.GetSpellDamage(target, this.Slot, stage);
         }

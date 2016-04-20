@@ -20,10 +20,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue2
+namespace LeagueSharp.SDK.UI.Skins.Blue2
 {
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.UI.Skins.Blue;
 
     /// <summary>
     ///     A default implementation of <see cref="ADrawable{MenuKeyBind}" />

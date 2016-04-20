@@ -21,14 +21,16 @@ namespace LeagueSharp.SDK
     using System.Collections.Generic;
     using System.Drawing;
 
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Properties;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
 
     using Color = SharpDX.Color;
     using Font = SharpDX.Direct3D9.Font;
+    using Rectangle = SharpDX.Rectangle;
 
     /// <summary>
     ///     The notification.
@@ -102,8 +104,8 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The line.
         /// </summary>
-        private static readonly SharpDX.Direct3D9.Line Line = new SharpDX.Direct3D9.Line(Drawing.Direct3DDevice)
-                                                                  { Antialias = true, GLLines = true, Width = 300f };
+        private static readonly Line Line = new Line(Drawing.Direct3DDevice)
+                                                { Antialias = true, GLLines = true, Width = 300f };
 
         /// <summary>
         ///     The sprite.
@@ -638,7 +640,7 @@ namespace LeagueSharp.SDK
                     Sprite.Draw(
                         HideTexture,
                         Color.White,
-                        new SharpDX.Rectangle(0, 0, HideBitmap.Width, (int)this.DrawFooterHeight));
+                        new Rectangle(0, 0, HideBitmap.Width, (int)this.DrawFooterHeight));
                 }
 
                 Sprite.Transform = matrix;
@@ -760,14 +762,14 @@ namespace LeagueSharp.SDK
         /// <returns>
         ///     The <see cref="SharpDX.Rectangle" />.
         /// </returns>
-        private SharpDX.Rectangle GetBodyRectangle(Vector2 basePosition)
+        private Rectangle GetBodyRectangle(Vector2 basePosition)
         {
             const int BaseLeftPosition = 144;
 
             var x = basePosition.X - (this.Width / 2f) - BaseLeftPosition;
             var y = basePosition.Y + this.HeaderHeight + 2f;
 
-            return new SharpDX.Rectangle((int)x, (int)y, (int)this.Width, (int)this.DrawBodyHeight);
+            return new Rectangle((int)x, (int)y, (int)this.Width, (int)this.DrawBodyHeight);
         }
 
         /// <summary>
@@ -777,20 +779,20 @@ namespace LeagueSharp.SDK
         ///     The base Position.
         /// </param>
         /// <returns>
-        ///     The <see cref="Rectangle" />.
+        ///     The <see cref="System.Drawing.Rectangle" />.
         /// </returns>
-        private SharpDX.Rectangle GetHeaderRectangle(Vector2 basePosition)
+        private Rectangle GetHeaderRectangle(Vector2 basePosition)
         {
             const int BaseLeftPosition = 140;
 
             var x = basePosition.X - (this.Width / 2f) - BaseLeftPosition;
             var y = basePosition.Y
-                    + new SharpDX.Rectangle(0, 0, 0, (int)this.HeaderHeight).GetCenteredText(
+                    + new Rectangle(0, 0, 0, (int)this.HeaderHeight).GetCenteredText(
                         Sprite,
                         this.Header,
                         CenteredFlags.VerticalCenter).Y;
 
-            return new SharpDX.Rectangle((int)x, (int)y, (int)this.Width, (int)this.HeaderHeight);
+            return new Rectangle((int)x, (int)y, (int)this.Width, (int)this.HeaderHeight);
         }
 
         #endregion

@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Enumerations
 {
     using System;
 
@@ -28,12 +28,12 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The OnBeginScene drawing type.
         /// </summary>
-        OnBeginScene, 
+        OnBeginScene,
 
         /// <summary>
         ///     The OnDraw drawing type.
         /// </summary>
-        OnDraw, 
+        OnDraw,
 
         /// <summary>
         ///     The OnEndScene drawing type.

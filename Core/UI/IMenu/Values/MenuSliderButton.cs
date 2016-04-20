@@ -15,13 +15,14 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Values
+namespace LeagueSharp.SDK.UI
 {
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    using Core.Utils;
-    using Skins;
+
+    using LeagueSharp.SDK.UI.Skins;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     Menu Slider.
@@ -32,24 +33,24 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         #region Fields
 
         /// <summary>
-        ///     The original.
-        /// </summary>
-        private readonly int original;
-
-        /// <summary>
         ///     The boriginal.
         /// </summary>
         private readonly bool bOriginal;
 
         /// <summary>
-        ///     The value.
+        ///     The original.
         /// </summary>
-        private int value;
+        private readonly int original;
 
         /// <summary>
         ///     The Button value.
         /// </summary>
         private bool bValue;
+
+        /// <summary>
+        ///     The value.
+        /// </summary>
+        private int value;
 
         #endregion
 
@@ -80,10 +81,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     String used in saving settings
         /// </param>
         public MenuSliderButton(
-            string name, 
-            string displayName, 
-            int value = 0, 
-            int minValue = 0, 
+            string name,
+            string displayName,
+            int value = 0,
+            int minValue = 0,
             int maxValue = 100,
             bool bValue = false,
             string uniqueString = "")
@@ -113,6 +114,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         #region Public Properties
 
         /// <summary>
+        ///     Gets or sets a value indicating whether the boolean value is true or false.
+        /// </summary>
+        public bool BValue { get; set; }
+
+        /// <summary>
         ///     Gets or sets a value indicating whether this <see cref="MenuSlider" /> is interacting.
         /// </summary>
         /// <value>
@@ -129,17 +135,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     Gets or sets the Slider Minimum Value.
         /// </summary>
         public int MinValue { get; set; }
-
-        /// <summary>
-        ///     Gets the Slider Value if Button is active.
-        /// </summary>
-        public int Value
-        {
-            get
-            {
-                return this.SValue != this.MinValue && this.BValue ? this.value : -1;
-            }
-        }
 
         /// <summary>
         ///     Gets or sets the Slider Current Value.
@@ -169,9 +164,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         }
 
         /// <summary>
-        ///     Gets or sets a value indicating whether the boolean value is true or false.
+        ///     Gets the Slider Value if Button is active.
         /// </summary>
-        public bool BValue { get; set; }
+        public int Value => this.SValue != this.MinValue && this.BValue ? this.value : -1;
 
         /// <summary>
         ///     Slider Item Width.

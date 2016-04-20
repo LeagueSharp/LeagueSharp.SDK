@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Enumerations
 {
     /// <summary>
     ///     Name enumerations of health prediction types
@@ -25,7 +25,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Default Prediction
         /// </summary>
-        Default, 
+        Default,
 
         /// <summary>
         ///     Simulated Prediction

@@ -17,16 +17,11 @@
 
 namespace LeagueSharp.SDK
 {
-    #region
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.UI.IMenu;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-
-    #endregion
+    using LeagueSharp.SDK.UI;
 
     /// <summary>
     ///     Humanize the target selector process

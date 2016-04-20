@@ -1,13 +1,12 @@
 ﻿namespace LeagueSharp.SDK
 {
     using System;
-    using System.Collections.Generic;
-    using System.Runtime.CompilerServices;
-    using System.Runtime.Remoting.Messaging;
     using System.Security.Permissions;
 
-    using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Core.Wrappers.Spells.SpellTypes;
+    using LeagueSharp.Data.DataTypes;
+    using LeagueSharp.Data.Enumerations;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
 
@@ -18,8 +17,8 @@
         static Detector()
         {
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
-            MissileClient.OnCreate +=MissileClient_OnCreate;
-            GameObject.OnCreate +=GameObject_OnCreate;
+            GameObject.OnCreate += MissileClient_OnCreate;
+            GameObject.OnCreate += GameObject_OnCreate;
         }
 
         #endregion
@@ -30,29 +29,17 @@
 
         #endregion
 
-        #region Public Events
+        #region Events
 
         internal static event OnDetectSkillshotH OnDetectSkillshot;
 
         #endregion
 
         #region Methods
-       
-        private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            var spellDatabaseEntry = SpellDatabase.GetByName(args.SData.Name);
-
-            if (spellDatabaseEntry == null)
-            {
-                return;
-            }
-
-            TriggerOnDetectSkillshot(spellDatabaseEntry, sender, SkillshotDetectionType.ProcessSpell, args.Start.ToVector2(), args.End.ToVector2(),  Variables.TickCount - Game.Ping / 2);
-        }
 
         static void GameObject_OnCreate(GameObject sender, EventArgs args)
         {
- 	       var spellDatabaseEntry = SpellDatabase.GetBySourceObjectName(sender.Name);
+            var spellDatabaseEntry = SpellDatabase.GetBySourceObjectName(sender.Name);
 
             if (spellDatabaseEntry == null)
             {
@@ -61,7 +48,9 @@
 
             TriggerOnDetectSkillshot(
                 spellDatabaseEntry,
-                GameObjects.Heroes.MinOrDefault(h => h.IsAlly || h.ChampionName != spellDatabaseEntry.ChampionName ? 1 : 0), //Since we can't really know the owner of the object we just assume is enemy :kappa:
+                GameObjects.Heroes.MinOrDefault(
+                    h => h.IsAlly || h.ChampionName != spellDatabaseEntry.ChampionName ? 1 : 0),
+                //Since we can't really know the owner of the object we just assume is enemy :kappa:
                 SkillshotDetectionType.CreateObject,
                 sender.Position.ToVector2(),
                 sender.Position.ToVector2(),
@@ -82,12 +71,9 @@
             {
                 return;
             }
-            
+
             //Looks useless, but it's not :nerd:
-            DelayAction.Add(0, delegate
-            {
-                MissileClient_OnCreate_Delayed(missile, spellDatabaseEntry);
-            });
+            DelayAction.Add(0, delegate { MissileClient_OnCreate_Delayed(missile, spellDatabaseEntry); });
         }
 
         static void MissileClient_OnCreate_Delayed(MissileClient missile, SpellDatabaseEntry spellDatabaseEntry)
@@ -97,14 +83,48 @@
                 return;
             }
 
-            var castTime = Variables.TickCount - Game.Ping / 2 - (spellDatabaseEntry.MissileDelayed ? 0 : spellDatabaseEntry.Delay) -
-                           (int)(1000f * missile.Position.Distance(missile.StartPosition) / spellDatabaseEntry.MissileSpeed);
+            var castTime = Variables.TickCount - Game.Ping / 2
+                           - (spellDatabaseEntry.MissileDelayed ? 0 : spellDatabaseEntry.Delay)
+                           - (int)
+                             (1000f * missile.Position.Distance(missile.StartPosition) / spellDatabaseEntry.MissileSpeed);
 
-            TriggerOnDetectSkillshot(spellDatabaseEntry, missile.SpellCaster, SkillshotDetectionType.MissileCreate, missile.StartPosition.ToVector2(), missile.EndPosition.ToVector2(), castTime, missile);
+            TriggerOnDetectSkillshot(
+                spellDatabaseEntry,
+                missile.SpellCaster,
+                SkillshotDetectionType.MissileCreate,
+                missile.StartPosition.ToVector2(),
+                missile.EndPosition.ToVector2(),
+                castTime,
+                missile);
         }
-        
+
+        private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            var spellDatabaseEntry = SpellDatabase.GetByName(args.SData.Name);
+
+            if (spellDatabaseEntry == null)
+            {
+                return;
+            }
+
+            TriggerOnDetectSkillshot(
+                spellDatabaseEntry,
+                sender,
+                SkillshotDetectionType.ProcessSpell,
+                args.Start.ToVector2(),
+                args.End.ToVector2(),
+                Variables.TickCount - Game.Ping / 2);
+        }
+
         [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        private static void TriggerOnDetectSkillshot(SpellDatabaseEntry spellDatabaseEntry, Obj_AI_Base caster, SkillshotDetectionType detectionType, Vector2 start, Vector2 end, int time, MissileClient missile = null)
+        private static void TriggerOnDetectSkillshot(
+            SpellDatabaseEntry spellDatabaseEntry,
+            Obj_AI_Base caster,
+            SkillshotDetectionType detectionType,
+            Vector2 start,
+            Vector2 end,
+            int time,
+            MissileClient missile = null)
         {
             Skillshot skillshot = null;
 
@@ -132,15 +152,15 @@
                     skillshot = new SkillshotRing(spellDatabaseEntry);
                     break;
             }
-            
+
             if (skillshot == null)
             {
                 return;
             }
 
             var type =
-                    Type.GetType(
-                        $"LeagueSharp.SDK.Core.Wrappers.Spells.Detector.Skillshots_{skillshot.SData.ChampionName}{skillshot.SData.Slot}");
+                Type.GetType(
+                    $"LeagueSharp.SDK.Core.Wrappers.Spells.Detector.Skillshots_{skillshot.SData.ChampionName}{skillshot.SData.Slot}");
             if (type != null)
             {
                 skillshot = (Skillshot)Activator.CreateInstance(type);
@@ -158,11 +178,13 @@
                 {
                     ((SkillshotMissile)skillshot).Missile = missile;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Logging.Write()(LogLevel.Warn, "Wrong SpellType for Skillshot {0}, a Missile Type was expected", skillshot.SData.SpellName);
+                    Logging.Write()(
+                        LogLevel.Warn,
+                        "Wrong SpellType for Skillshot {0}, a Missile Type was expected",
+                        skillshot.SData.SpellName);
                 }
-                
             }
 
             if (!skillshot.Process())
@@ -174,7 +196,8 @@
         }
 
         /// <summary>
-        /// Gets called when a skillshot is detected, take into account that it can trigger twice for the same skillshot, one when OnProcessSpellCast is called and another when OnMissileCreate is called.
+        ///     Gets called when a skillshot is detected, take into account that it can trigger twice for the same skillshot, one
+        ///     when OnProcessSpellCast is called and another when OnMissileCreate is called.
         /// </summary>
         /// <param name="skillshot">The detected skillshot</param>
         private static void TriggerOnDetectSkillshot(Skillshot skillshot)

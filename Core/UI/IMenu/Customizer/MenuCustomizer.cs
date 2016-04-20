@@ -15,12 +15,12 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Customizer
+namespace LeagueSharp.SDK.UI
 {
+    using LeagueSharp.SDK.UI.Skins;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using Skins;
-    using Values;
 
     /// <summary>
     ///     This menu allows the user to modify several properties in <see cref="MenuSettings" />.

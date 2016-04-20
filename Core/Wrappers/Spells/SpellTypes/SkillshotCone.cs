@@ -1,13 +1,9 @@
 ﻿namespace LeagueSharp.SDK
 {
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
 
-    using LeagueSharp.SDK.Clipper;
-    using LeagueSharp.SDK.Core.Utils;
-
-    using SharpDX;
+    using LeagueSharp.Data.DataTypes;
+    using LeagueSharp.SDK.Polygons;
 
     public class SkillshotCone : SkillshotMissile
     {
@@ -25,12 +21,7 @@
 
         #endregion
 
-        public override string ToString()
-        {
-            return "SkillshotCone: Champion=" + this.SData.ChampionName + " SpellType=" + this.SData.SpellType + " SpellName=" + this.SData.SpellName;
-        }
-
-        #region Public Properties
+        #region Properties
 
         internal SectorPoly Sector { get; set; }
 
@@ -38,18 +29,33 @@
 
         #region Public Methods and Operators
 
-        internal override void UpdatePolygon()
+        public override string ToString()
         {
-            if (this.Sector == null)
-            {
-                this.Sector = new SectorPoly(this.StartPosition, this.EndPosition, (float) (this.SData.Angle * Math.PI / 180), this.SData.Range, 20);
-                this.UpdatePath();
-            }
+            return "SkillshotCone: Champion=" + this.SData.ChampionName + " SpellType=" + this.SData.SpellType
+                   + " SpellName=" + this.SData.SpellName;
         }
+
+        #endregion
+
+        #region Methods
 
         internal override void UpdatePath()
         {
             this.Path = this.Sector.ToClipperPath();
+        }
+
+        internal override void UpdatePolygon()
+        {
+            if (this.Sector == null)
+            {
+                this.Sector = new SectorPoly(
+                    this.StartPosition,
+                    this.EndPosition,
+                    (float)(this.SData.Angle * Math.PI / 180),
+                    this.SData.Range,
+                    20);
+                this.UpdatePath();
+            }
         }
 
         #endregion

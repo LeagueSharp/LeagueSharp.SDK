@@ -19,7 +19,7 @@ namespace LeagueSharp.SDK
 {
     using System.Collections.Generic;
 
-    using LeagueSharp.SDK.Core.UI.IMenu;
+    using LeagueSharp.SDK.UI;
 
     /// <summary>
     ///     Interface for modes.

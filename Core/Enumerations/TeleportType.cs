@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Enumerations
 {
     /// <summary>
     ///     The teleport type.
@@ -25,22 +25,22 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The recall type.
         /// </summary>
-        Recall, 
+        Recall,
 
         /// <summary>
         ///     The teleport type.
         /// </summary>
-        Teleport, 
+        Teleport,
 
         /// <summary>
         ///     The twisted fate type.
         /// </summary>
-        TwistedFate, 
+        TwistedFate,
 
         /// <summary>
         ///     The <c>shen</c> type.
         /// </summary>
-        Shen, 
+        Shen,
 
         /// <summary>
         ///     The unknown type.

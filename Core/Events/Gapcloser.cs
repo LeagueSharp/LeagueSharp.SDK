@@ -22,7 +22,9 @@ namespace LeagueSharp.SDK
     using System.Linq;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.Data;
+    using LeagueSharp.Data.DataTypes;
+    using LeagueSharp.Data.Enumerations;
 
     using SharpDX;
 
@@ -39,10 +41,10 @@ namespace LeagueSharp.SDK
         private static readonly List<GapCloserEventArgs> ActiveSpellsList = new List<GapCloserEventArgs>();
 
         /// <summary>
-        ///     Gets or sets the spells.
+        ///     Gets the spells.
         /// </summary>
-        [ResourceImport("Data.Gapclosers.json")]
-        private static readonly Dictionary<string, GapCloser> SpellsList = new Dictionary<string, GapCloser>();
+        private static readonly IReadOnlyDictionary<string, GapcloserDataEntry> SpellsList =
+            Data.Get<GapcloserData>().SpellsList;
 
         #endregion
 
@@ -65,7 +67,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Gets the spells.
         /// </summary>
-        public static IEnumerable<GapCloser> GapCloserSpells => SpellsList.Values;
+        public static IEnumerable<GapcloserDataEntry> GapCloserSpells => SpellsList.Values;
 
         #endregion
 
@@ -78,30 +80,33 @@ namespace LeagueSharp.SDK
         /// <param name="args">Process Spell Cast Data</param>
         private static void EventGapcloser(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (SpellsList.All(spell => spell.Value.SpellName != args.SData.Name.ToLower()))
+            if (SpellsList.Values.All(spell => spell.SpellName != args.SData.Name.ToLower()))
             {
                 return;
             }
 
             var hero = sender as Obj_AI_Hero;
-            var player = GameObjects.Player;
-            if (hero != null)
+
+            if (hero == null)
             {
-                ActiveSpellsList.Add(
-                    new GapCloserEventArgs
-                        {
-                            Start = args.Start, End = args.End, Sender = hero, TickCount = Variables.TickCount,
-                            SkillType =
-                                (args.Target != null && args.Target.IsValid)
-                                    ? GapcloserType.Targeted
-                                    : GapcloserType.Skillshot,
-                            Slot = args.Slot,
-                            IsDirectedToPlayer =
-                                (args.Target != null && args.Target.IsValid && args.Target.IsMe)
-                                || player.Distance(args.End) < player.Distance(args.Start) || sender.IsFacing(player),
-                            SpellName = args.SData.Name
-                        });
+                return;
             }
+
+            ActiveSpellsList.Add(
+                new GapCloserEventArgs
+                    {
+                        Start = args.Start, End = args.End, Sender = hero, TickCount = Variables.TickCount,
+                        SkillType =
+                            (args.Target != null && args.Target.IsValid)
+                                ? GapcloserType.Targeted
+                                : GapcloserType.Skillshot,
+                        Slot = args.Slot,
+                        IsDirectedToPlayer =
+                            (args.Target != null && args.Target.IsValid && args.Target.IsMe)
+                            || args.End.DistanceToPlayer() < args.Start.DistanceToPlayer()
+                            || sender.IsFacing(GameObjects.Player),
+                        SpellName = args.SData.Name
+                    });
         }
 
         /// <summary>
@@ -110,6 +115,7 @@ namespace LeagueSharp.SDK
         private static void EventGapcloser()
         {
             ActiveSpellsList.RemoveAll(entry => Variables.TickCount > entry.TickCount + 900);
+
             if (OnGapCloser == null)
             {
                 return;
@@ -128,31 +134,6 @@ namespace LeagueSharp.SDK
         }
 
         #endregion
-
-        /// <summary>
-        ///     GapCloser Data Container
-        /// </summary>
-        public struct GapCloser
-        {
-            #region Fields
-
-            /// <summary>
-            ///     Spell Type
-            /// </summary>
-            public GapcloserType SkillType { get; set; }
-
-            /// <summary>
-            ///     Spell Slot
-            /// </summary>
-            public SpellSlot Slot { get; set; }
-
-            /// <summary>
-            ///     Spell Name
-            /// </summary>
-            public string SpellName { get; set; }
-
-            #endregion
-        }
 
         /// <summary>
         ///     GapCloser Data Container

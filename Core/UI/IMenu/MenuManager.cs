@@ -15,17 +15,19 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.UI.IMenu
+namespace LeagueSharp.SDK.UI
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Windows.Forms;
-    using Core.Utils;
-    using LeagueSharp.SDK;
+
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.UI.Skins;
+    using LeagueSharp.SDK.Utils;
+
     using SharpDX.Direct3D9;
-    using Skins;
 
     /// <summary>
     ///     Menu Interface class, used to control the menu.
@@ -39,7 +41,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         /// </summary>
         public static readonly DirectoryInfo ConfigFolder =
             Directory.CreateDirectory(
-                System.IO.Path.Combine(
+                Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                     "LS" + Environment.UserName.GetHashCode().ToString("X"),
                     "MenuConfigSDK"));
@@ -180,7 +182,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
         ///     Gets the <see cref="Menu" /> with the specified name.
         /// </summary>
         /// <value>
-        ///     The <see cref="IMenu.Menu" />.
+        ///     The <see cref="Menu" />.
         /// </value>
         /// <param name="name">The name.</param>
         /// <returns>The requested menu</returns>

@@ -15,13 +15,14 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Values
+namespace LeagueSharp.SDK.UI
 {
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    using Core.Utils;
-    using Skins;
+
+    using LeagueSharp.SDK.UI.Skins;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     Menu Slider.
@@ -67,11 +68,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Values
         ///     String used in saving settings
         /// </param>
         public MenuSlider(
-            string name, 
-            string displayName, 
-            int value = 0, 
-            int minValue = 0, 
-            int maxValue = 100, 
+            string name,
+            string displayName,
+            int value = 0,
+            int minValue = 0,
+            int maxValue = 100,
             string uniqueString = "")
             : base(name, displayName, uniqueString)
         {

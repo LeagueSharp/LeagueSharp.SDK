@@ -22,9 +22,8 @@
 
 //Concept by User Vasconcellos
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
+namespace LeagueSharp.SDK.UI.Skins.Light
 {
-
     using SharpDX;
     using SharpDX.Direct3D9;
 
@@ -33,15 +32,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
     /// </summary>
     public class LightMenuSettings : MenuSettings
     {
-        #region Static Fields
-
-        /// <summary>
-        ///     Local Caption Font.
-        /// </summary>
-        private static Font fontCaption;
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -66,7 +56,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
                 FontQuality.ClearType,
                 FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative | FontPitchAndFamily.Modern,
                 "Tahoma");
-            
+
             TextColor = new ColorBGRA(17, 17, 17, 255);
             TextCaptionColor = new ColorBGRA(72, 157, 248, 255);
             KeyBindColor = new ColorBGRA(67, 159, 255, 255);
@@ -80,23 +70,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         /// <summary>
         ///     Gets or sets the Global Caption Font.
         /// </summary>
-        public static Font FontCaption
-        {
-            get
-            {
-                return fontCaption;
-            }
-
-            set
-            {
-                fontCaption = value;
-            }
-        }
-
-        /// <summary>
-        ///     Gets or sets the Global Text Caption Color.
-        /// </summary>
-        public static ColorBGRA TextCaptionColor { get; set; }
+        public static Font FontCaption { get; set; }
 
         /// <summary>
         ///     Gets or sets the Global KeyBind Color.
@@ -108,6 +82,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         /// </summary>
         public static ColorBGRA SliderColor { get; set; }
 
+        /// <summary>
+        ///     Gets or sets the Global Text Caption Color.
+        /// </summary>
+        public static ColorBGRA TextCaptionColor { get; set; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -117,7 +96,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light
         /// </summary>
         public static void LoadSettings()
         {
-            
         }
 
         #endregion

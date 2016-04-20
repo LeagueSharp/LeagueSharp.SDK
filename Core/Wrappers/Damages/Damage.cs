@@ -15,13 +15,16 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Wrappers.Damages
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Linq;
     using System.Text.RegularExpressions;
 
-    using Utils;
+    using LeagueSharp.Data.DataTypes;
+    using LeagueSharp.Data.Enumerations;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.
@@ -208,7 +211,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     }
 
                     // Fervor Of Battle
-                    if (hero.GetFerocity(DamageMastery.Ferocity.FervorofBattle).IsValid())
+                    if (hero.GetFerocity(Ferocity.FervorofBattle).IsValid())
                     {
                         var fervorBuffCount = hero.GetBuffCount("MasteryOnHitDamageStacker");
                         if (fervorBuffCount > 0)
@@ -222,7 +225,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                 else if (target is Obj_AI_Minion)
                 {
                     // Savagery
-                    var savagery = hero.GetCunning(DamageMastery.Cunning.Savagery);
+                    var savagery = hero.GetCunning(Cunning.Savagery);
                     if (savagery.IsValid())
                     {
                         dmgPhysical += savagery.Points;
@@ -354,7 +357,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     }
                     else if (targetMinion != null)
                     {
-                        var savagery = source.GetCunning(DamageMastery.Cunning.Savagery);
+                        var savagery = source.GetCunning(Cunning.Savagery);
                         if (savagery.IsValid())
                         {
                             dmgBase += savagery.Points;
@@ -395,7 +398,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         }
                         else if (targetMinion == null)
                         {
-                            var savagery = source.GetCunning(DamageMastery.Cunning.Savagery);
+                            var savagery = source.GetCunning(Cunning.Savagery);
                             if (savagery.IsValid())
                             {
                                 dmg += savagery.Points;
@@ -438,7 +441,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                         {
                             dmgReduce *= 0.9;
                         }
-                        if (source.GetFerocity(DamageMastery.Ferocity.FervorofBattle).IsValid())
+                        if (source.GetFerocity(Ferocity.FervorofBattle).IsValid())
                         {
                             var fervorBuffCount = source.GetBuffCount("MasteryOnHitDamageStacker");
                             if (fervorBuffCount > 0)
@@ -704,7 +707,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             if (targetHero != null)
             {
                 // Bond Of Stone
-                if (targetHero.GetResolve(DamageMastery.Resolve.BondofStone).IsValid())
+                if (targetHero.GetResolve(Resolve.BondofStone).IsValid())
                 {
                     amount *= 0.96;
                 }
@@ -816,7 +819,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             var targetHero = target as Obj_AI_Hero;
 
             // ToughSkin
-            if (targetHero != null && targetHero.GetResolve(DamageMastery.Resolve.ToughSkin).IsValid()
+            if (targetHero != null && targetHero.GetResolve(Resolve.ToughSkin).IsValid()
                 && (source is Obj_AI_Hero || (source is Obj_AI_Minion && source.Team == GameObjectTeam.Neutral)))
             {
                 value -= 2;
@@ -874,13 +877,13 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
             if (hero != null)
             {
                 // DoubleEdgedSword
-                if (damageType != DamageType.True && hero.GetFerocity(DamageMastery.Ferocity.DoubleEdgedSword).IsValid())
+                if (damageType != DamageType.True && hero.GetFerocity(Ferocity.DoubleEdgedSword).IsValid())
                 {
                     amount *= hero.IsMelee() ? 1.03 : 1.02;
                 }
 
                 // Oppressor
-                if (hero.GetFerocity(DamageMastery.Ferocity.Oppressor).IsValid() && target.IsMoveImpaired())
+                if (hero.GetFerocity(Ferocity.Oppressor).IsValid() && target.IsMoveImpaired())
                 {
                     amount *= 1.025;
                 }
@@ -896,7 +899,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     }
 
                     // Assassin
-                    if (hero.GetCunning(DamageMastery.Cunning.Assassin).IsValid()
+                    if (hero.GetCunning(Cunning.Assassin).IsValid()
                         && !GameObjects.Heroes.Any(
                             h => h.Team == hero.Team && !h.Compare(hero) && h.Distance(hero) < 800))
                     {
@@ -904,7 +907,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
                     }
 
                     // Merciless
-                    var merciless = hero.GetCunning(DamageMastery.Cunning.Merciless);
+                    var merciless = hero.GetCunning(Cunning.Merciless);
                     if (merciless.IsValid() && targetHero.HealthPercent < 40)
                     {
                         amount *= 1 + (merciless.Points / 100);
@@ -923,7 +926,7 @@ namespace LeagueSharp.SDK.Core.Wrappers.Damages
 
             // DoubleEdgedSword
             if (targetHero != null && damageType != DamageType.True
-                && targetHero.GetFerocity(DamageMastery.Ferocity.DoubleEdgedSword).IsValid())
+                && targetHero.GetFerocity(Ferocity.DoubleEdgedSword).IsValid())
             {
                 amount *= targetHero.IsMelee() ? 1.015 : 1.02;
             }

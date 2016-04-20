@@ -19,14 +19,14 @@
 //   A custom implementation of an <see cref="ADrawable{MenuSliderButton}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
+
+namespace LeagueSharp.SDK.UI.Skins.Colored
 {
     using System;
     using System.Globalization;
 
-    using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -68,20 +68,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Returns the Rectangle that defines the Slider
-        /// </summary>
-        /// <param name="component">The <see cref="MenuSliderButton" /></param>
-        /// <returns>The <see cref="Rectangle" /></returns>
-        public Rectangle SliderBoundaries(MenuSliderButton component)
-        {
-            return new Rectangle(
-                (int)component.Position.X + Offset,
-                (int)component.Position.Y,
-                component.MenuWidth - MenuSettings.ContainerHeight - Offset,
-                MenuSettings.ContainerHeight);
-        }
-
-        /// <summary>
         ///     Returns the Rectangle that defines the on/off Button
         /// </summary>
         /// <param name="component">The <see cref="MenuSliderButton" /></param>
@@ -118,7 +104,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                     .Y;
             var percent = (this.Component.SValue - this.Component.MinValue)
                           / (float)(this.Component.MaxValue - this.Component.MinValue);
-            var x = position.X + Offset + (percent * (this.Component.MenuWidth - Offset * 2 - MenuSettings.ContainerHeight));
+            var x = position.X + Offset
+                    + (percent * (this.Component.MenuWidth - Offset * 2 - MenuSettings.ContainerHeight));
             var maxX = position.X + Offset + ((this.Component.MenuWidth - Offset * 2 - MenuSettings.ContainerHeight));
 
             MenuManager.Instance.DrawDelayed(
@@ -136,20 +123,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                     });
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
                 (int)(position.X + MenuSettings.ContainerTextOffset),
                 (int)(position.Y + (centeredY - position.Y) / 2),
                 MenuSettings.TextColor);
 
             var measureText = MenuSettings.Font.MeasureText(
-                null, 
-                this.Component.SValue.ToString(CultureInfo.InvariantCulture), 
+                null,
+                this.Component.SValue.ToString(CultureInfo.InvariantCulture),
                 0);
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.SValue.ToString(CultureInfo.InvariantCulture), 
-                (int)(position.X +   this.Component.MenuWidth - measureText.Width - Offset - MenuSettings.ContainerHeight),
+                MenuManager.Instance.Sprite,
+                this.Component.SValue.ToString(CultureInfo.InvariantCulture),
+                (int)(position.X + this.Component.MenuWidth - measureText.Width - Offset - MenuSettings.ContainerHeight),
                 (int)(position.Y + (centeredY - position.Y) / 2),
                 MenuSettings.TextColor);
 
@@ -190,10 +177,26 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
                         CenteredFlags.HorizontalCenter).X - 5;
 
             //Left
-            Utils.DrawCircle(centerX, this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 7, 270, Utils.CircleType.Half, true, 32, MenuSettings.TextColor);
+            Utils.DrawCircle(
+                centerX,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                7,
+                270,
+                Utils.CircleType.Half,
+                true,
+                32,
+                MenuSettings.TextColor);
 
             //Right
-            Utils.DrawCircle(centerX + 15, this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 7, 90, Utils.CircleType.Half, true, 32, MenuSettings.TextColor);
+            Utils.DrawCircle(
+                centerX + 15,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                7,
+                90,
+                Utils.CircleType.Half,
+                true,
+                32,
+                MenuSettings.TextColor);
 
             //Top
             Line.Width = 1;
@@ -220,8 +223,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             Line.End();
 
             //FullCircle
-            Utils.DrawCircleFilled(this.Component.BValue ? centerX + 14 : centerX + 1,
-                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 6, 0, Utils.CircleType.Full, true, 32,
+            Utils.DrawCircleFilled(
+                this.Component.BValue ? centerX + 14 : centerX + 1,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                6,
+                0,
+                Utils.CircleType.Full,
+                true,
+                32,
                 this.Component.BValue ? MenuSettings.ContainerSelectedColor : MenuSettings.TextColor);
         }
 
@@ -265,6 +274,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Colored
             {
                 this.Component.Interacting = false;
             }
+        }
+
+        /// <summary>
+        ///     Returns the Rectangle that defines the Slider
+        /// </summary>
+        /// <param name="component">The <see cref="MenuSliderButton" /></param>
+        /// <returns>The <see cref="Rectangle" /></returns>
+        public Rectangle SliderBoundaries(MenuSliderButton component)
+        {
+            return new Rectangle(
+                (int)component.Position.X + Offset,
+                (int)component.Position.Y,
+                component.MenuWidth - MenuSettings.ContainerHeight - Offset,
+                MenuSettings.ContainerHeight);
         }
 
         /// <summary>

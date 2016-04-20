@@ -236,6 +236,7 @@ namespace LeagueSharp.SDK
             public Item(int id, float range)
             {
                 var item = ItemData.Entries.FirstOrDefault(i => (int)i.Id == id);
+
                 if (item == null)
                 {
                     throw new MissingMemberException($"Unable to find item with the id {id}");
@@ -260,6 +261,7 @@ namespace LeagueSharp.SDK
             public Item(ItemId id, float range)
             {
                 var item = ItemData.Entries.FirstOrDefault(x => x.Id == id);
+
                 if (item == null)
                 {
                     throw new MissingMemberException($"Unable to find item with the id {id}");

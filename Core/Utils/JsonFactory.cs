@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Utils
+namespace LeagueSharp.SDK.Utils
 {
     using System;
     using System.IO;
@@ -38,28 +38,74 @@ namespace LeagueSharp.SDK.Core.Utils
     /// </remarks>
     public static class JsonFactory
     {
-        /// <summary>
-        ///     Default JsonSerializerSettings
-        /// </summary>
-        public static JsonSerializerSettings DefaultSettings { get; set; }
+        #region Constructors and Destructors
 
         static JsonFactory()
         {
             DefaultSettings = new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                DefaultValueHandling = DefaultValueHandling.Include,
-                NullValueHandling = NullValueHandling.Include
-            };
+                                  {
+                                      Formatting = Formatting.Indented,
+                                      ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                                      DefaultValueHandling = DefaultValueHandling.Include,
+                                      NullValueHandling = NullValueHandling.Include
+                                  };
             DefaultSettings.Converters.Add(new StringEnumConverter());
             DefaultSettings.Converters.Add(new VersionConverter());
 
             JsonConvert.DefaultSettings = () => DefaultSettings;
         }
 
+        #endregion
+
+        #region Public Properties
+
         /// <summary>
-        /// Deserialize Object from Resource
+        ///     Default JsonSerializerSettings
+        /// </summary>
+        public static JsonSerializerSettings DefaultSettings { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Deserialize Object from File
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="file"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
+        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
+        public static T JsonFile<T>(string file, JsonSerializerSettings settings = null)
+        {
+            if (file == null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            return JsonConvert.DeserializeObject<T>(File.ReadAllText(file), settings);
+        }
+
+        /// <summary>
+        ///     Deserialize Object from File
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="type"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
+        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
+        public static object JsonFile(string file, Type type = null, JsonSerializerSettings settings = null)
+        {
+            if (file == null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            return JsonConvert.DeserializeObject(File.ReadAllText(file), type, settings);
+        }
+
+        /// <summary>
+        ///     Deserialize Object from Resource
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="file"></param>
@@ -78,7 +124,7 @@ namespace LeagueSharp.SDK.Core.Utils
         }
 
         /// <summary>
-        /// Deserialize Object from Resource
+        ///     Deserialize Object from Resource
         /// </summary>
         /// <param name="file"></param>
         /// <param name="type"></param>
@@ -86,7 +132,11 @@ namespace LeagueSharp.SDK.Core.Utils
         /// <param name="settings"></param>
         /// <returns></returns>
         [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        public static object JsonResource(string file, Type type = null, Assembly assembly = null, JsonSerializerSettings settings = null)
+        public static object JsonResource(
+            string file,
+            Type type = null,
+            Assembly assembly = null,
+            JsonSerializerSettings settings = null)
         {
             if (file == null)
             {
@@ -97,43 +147,7 @@ namespace LeagueSharp.SDK.Core.Utils
         }
 
         /// <summary>
-        /// Deserialize Object from File
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="file"></param>
-        /// <param name="settings"></param>
-        /// <returns></returns>
-        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        public static T JsonFile<T>(string file, JsonSerializerSettings settings = null)
-        {
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
-
-            return JsonConvert.DeserializeObject<T>(File.ReadAllText(file), settings);
-        }
-
-        /// <summary>
-        /// Deserialize Object from File
-        /// </summary>
-        /// <param name="file"></param>
-        /// <param name="type"></param>
-        /// <param name="settings"></param>
-        /// <returns></returns>
-        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        public static object JsonFile(string file, Type type = null, JsonSerializerSettings settings = null)
-        {
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
-
-            return JsonConvert.DeserializeObject(File.ReadAllText(file), type, settings);
-        }
-
-        /// <summary>
-        /// Deserialize Object from String
+        ///     Deserialize Object from String
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="s"></param>
@@ -151,7 +165,7 @@ namespace LeagueSharp.SDK.Core.Utils
         }
 
         /// <summary>
-        /// Deserialize Object from String
+        ///     Deserialize Object from String
         /// </summary>
         /// <param name="s"></param>
         /// <param name="type"></param>
@@ -169,7 +183,7 @@ namespace LeagueSharp.SDK.Core.Utils
         }
 
         /// <summary>
-        /// Serialize Object to File
+        ///     Serialize Object to File
         /// </summary>
         /// <param name="file"></param>
         /// <param name="obj"></param>
@@ -191,7 +205,7 @@ namespace LeagueSharp.SDK.Core.Utils
         }
 
         /// <summary>
-        /// Serialize Object to String
+        ///     Serialize Object to String
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="settings"></param>
@@ -206,5 +220,7 @@ namespace LeagueSharp.SDK.Core.Utils
 
             return JsonConvert.SerializeObject(obj, settings);
         }
+
+        #endregion
     }
 }

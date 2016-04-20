@@ -20,6 +20,8 @@ namespace LeagueSharp.SDK
     using System.Collections.Generic;
     using System.Linq;
 
+    using LeagueSharp.SDK.Enumerations;
+
     using SharpDX;
 
     /// <summary>
@@ -67,15 +69,23 @@ namespace LeagueSharp.SDK
         internal static List<PossibleTarget> GetPossibleTargets(PredictionInput input)
         {
             var result = new List<PossibleTarget>();
-            var originalUnit = input.Unit;
+
             foreach (var enemy in
                 GameObjects.EnemyHeroes.Where(
                     h =>
-                    h.NetworkId != originalUnit.NetworkId
+                    !h.Compare(input.Unit)
                     && h.IsValidTarget(input.Range + 200 + input.RealRadius, true, input.RangeCheckFrom)))
             {
-                input.Unit = enemy;
-                var prediction = Movement.GetPrediction(input, false, false);
+                var inputs = input.Clone() as PredictionInput;
+
+                if (inputs == null)
+                {
+                    continue;
+                }
+
+                inputs.Unit = enemy;
+                var prediction = Movement.GetPrediction(inputs, false, true);
+
                 if (prediction.Hitchance >= HitChance.High)
                 {
                     result.Add(new PossibleTarget { Position = prediction.UnitPosition.ToVector2(), Unit = enemy });
@@ -143,6 +153,7 @@ namespace LeagueSharp.SDK
                     for (var i = 1; i < posibleTargets.Count; i++)
                     {
                         var distance = posibleTargets[i].Position.DistanceSquared(posibleTargets[0].Position);
+
                         if (distance > maxdist || maxdist.CompareTo(-1) == 0)
                         {
                             maxdistindex = i;
@@ -209,6 +220,7 @@ namespace LeagueSharp.SDK
                             if (i != j)
                             {
                                 var p = (posibleTargets[i].Position + posibleTargets[j].Position) * 0.5f;
+
                                 if (!candidates.Contains(p))
                                 {
                                     candidates.Add(p);
@@ -224,6 +236,7 @@ namespace LeagueSharp.SDK
                     foreach (var candidate in candidates)
                     {
                         var hits = GetHits(candidate, input.Range, input.Radius, positionsList);
+
                         if (hits > bestCandidateHits)
                         {
                             bestCandidate = candidate;
@@ -298,6 +311,7 @@ namespace LeagueSharp.SDK
                                                      Unit = input.Unit
                                                  }
                                          };
+
                 if (mainTargetPrediction.Hitchance >= HitChance.Medium)
                 {
                     // Add the posible targets  in range:
@@ -331,6 +345,7 @@ namespace LeagueSharp.SDK
                         {
                             var hits = GetHits(input.From.ToVector2(), candidate, input.Radius, positionsList).ToList();
                             var hitsCount = hits.Count;
+
                             if (hitsCount >= bestCandidateHits)
                             {
                                 bestCandidateHits = hitsCount;
@@ -356,6 +371,7 @@ namespace LeagueSharp.SDK
                                 var proj2 = positionsList[j].ProjectOn(startP, endP);
                                 var dist = bestCandidateHitPoints[i].DistanceSquared(proj1.LinePoint)
                                            + bestCandidateHitPoints[j].DistanceSquared(proj2.LinePoint);
+
                                 if (dist >= maxDistance
                                     && (proj1.LinePoint - positionsList[i]).AngleBetween(
                                         proj2.LinePoint - positionsList[j]) > 90)

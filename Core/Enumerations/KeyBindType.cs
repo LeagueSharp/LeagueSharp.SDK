@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Enumerations
 {
     /// <summary>
     ///     Key Bind Type for Menu.
@@ -25,7 +25,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Toggle Key Bind.
         /// </summary>
-        Toggle, 
+        Toggle,
 
         /// <summary>
         ///     Press Key Bind

@@ -19,54 +19,22 @@ namespace LeagueSharp.SDK
 {
     using System.Collections.Generic;
 
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.Data;
+    using LeagueSharp.Data.DataTypes;
 
     using SharpDX;
 
     /// <summary>
     ///     Utility for the Maps in League of Legends.
     /// </summary>
-    [ResourceImport]
     public class Map
     {
         #region Static Fields
 
-        [ResourceImport("Data.Map.json")]
-        private static readonly Dictionary<int, Map> MapById = new Dictionary<int, Map>();
-
         /// <summary>
         ///     Map by ID list.
         /// </summary>
-        public static IReadOnlyDictionary<int, Map> Maps => MapById;
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        ///     Gets the Grid of the Map
-        /// </summary>
-        public Vector2 Grid { get; set; }
-
-        /// <summary>
-        ///     Gets the MapType
-        /// </summary>
-        public GameMapId MapId { get; set; }
-
-        /// <summary>
-        ///     Gets the name of the map
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        ///     Gets the short name of the map.
-        /// </summary>
-        public string ShortName { get; set; }
-
-        /// <summary>
-        ///     Gets the level the players start at
-        /// </summary>
-        public int StartingLevel { get; set; }
+        public static IReadOnlyDictionary<int, MapDataEntry> Maps = Data.Get<MapData>().Maps;
 
         #endregion
 
@@ -78,14 +46,14 @@ namespace LeagueSharp.SDK
         /// <returns>
         ///     The current map information.
         /// </returns>
-        public static Map GetMap()
+        public static MapDataEntry GetMap()
         {
-            if (MapById.ContainsKey((int)Game.MapId))
+            if (Maps.ContainsKey((int)Game.MapId))
             {
-                return MapById[(int)Game.MapId];
+                return Maps[(int)Game.MapId];
             }
 
-            return new Map
+            return new MapDataEntry
                        {
                            Name = "Unknown", ShortName = "unknown", MapId = 0, Grid = new Vector2(0, 0), StartingLevel = 1
                        };

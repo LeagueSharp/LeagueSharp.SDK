@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.UI.IMenu
+namespace LeagueSharp.SDK.UI
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
@@ -24,8 +24,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
 
-    using Abstracts;
-    using Core.Utils;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
 
@@ -101,7 +100,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu
                 {
                     return
                         System.IO.Path.Combine(
-                            MenuManager.ConfigFolder.CreateSubdirectory(this.AssemblyName).FullName, 
+                            MenuManager.ConfigFolder.CreateSubdirectory(this.AssemblyName).FullName,
                             fileName);
                 }
 

@@ -39,6 +39,7 @@ namespace LeagueSharp.SDK
         public static float AngleBetween(this Vector2 vector2, Vector2 toVector2)
         {
             var theta = vector2.Polar() - toVector2.Polar();
+
             if (theta < 0)
             {
                 theta = theta + 360;
@@ -107,6 +108,7 @@ namespace LeagueSharp.SDK
             foreach (var vector in array)
             {
                 var temporaryDistance = vector2.Distance(vector);
+
                 if (distance < temporaryDistance)
                 {
                     distance = temporaryDistance;
@@ -131,6 +133,7 @@ namespace LeagueSharp.SDK
             foreach (var vector in array)
             {
                 var temporaryDistance = vector2.Distance(vector);
+
                 if (distance < temporaryDistance)
                 {
                     distance = temporaryDistance;
@@ -361,12 +364,14 @@ namespace LeagueSharp.SDK
             }
 
             var r = numerator / denominator;
+
             if (r < 0 || r > 1)
             {
                 return default(IntersectionResult);
             }
 
             var s = ((deltaACy * deltaBAx) - (deltaACx * deltaBAy)) / denominator;
+
             if (s < 0 || s > 1)
             {
                 return default(IntersectionResult);
@@ -476,7 +481,7 @@ namespace LeagueSharp.SDK
         /// <returns>Is Vector2 position a wall position</returns>
         public static bool IsWall(this Vector2 vector2)
         {
-            return vector2.ToVector3().IsWall();
+            return NavMesh.GetCollisionFlags(vector2.X, vector2.Y).HasFlag(CollisionFlags.Wall);
         }
 
         /// <summary>
@@ -512,6 +517,7 @@ namespace LeagueSharp.SDK
         public static float PathLength(this List<Vector2> path)
         {
             var distance = 0f;
+
             for (var i = 0; i < path.Count - 1; i++)
             {
                 distance += path[i].Distance(path[i + 1]);
@@ -544,6 +550,7 @@ namespace LeagueSharp.SDK
             }
 
             var theta = (float)(Math.Atan(vector2.Y / vector2.X) * (180 / Math.PI));
+
             if (vector2.X < 0)
             {
                 theta += 180;
@@ -576,6 +583,7 @@ namespace LeagueSharp.SDK
                      / ((float)Math.Pow(bx - ax, 2) + (float)Math.Pow(by - ay, 2));
             var pointLine = new Vector2(ax + (rL * (bx - ax)), ay + (rL * (by - ay)));
             float rS;
+
             if (rL < 0)
             {
                 rS = 0;
@@ -752,6 +760,7 @@ namespace LeagueSharp.SDK
                     else
                     {
                         var sqr = (b * b) - (a * c);
+
                         if (sqr >= 0)
                         {
                             var nom = (float)Math.Sqrt(sqr);
@@ -782,7 +791,7 @@ namespace LeagueSharp.SDK
 
             return new MovementCollisionInfo(
                 t1,
-                (!float.IsNaN(t1)) ? new Vector2(sP1X + (s * t1), sP1Y + (k * t1)) : default(Vector2));
+                !float.IsNaN(t1) ? new Vector2(sP1X + (s * t1), sP1Y + (k * t1)) : default(Vector2));
         }
 
         #endregion

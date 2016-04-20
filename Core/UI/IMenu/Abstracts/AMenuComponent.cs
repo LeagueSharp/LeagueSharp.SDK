@@ -15,15 +15,16 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Abstracts
+namespace LeagueSharp.SDK.UI
 {
     using System;
     using System.Dynamic;
     using System.Linq;
-    using Core.Utils;
+
+    using LeagueSharp.SDK.UI.Skins;
+    using LeagueSharp.SDK.Utils;
+
     using SharpDX;
-    using Skins;
-    using Values;
 
     /// <summary>
     ///     Abstract build of a menu component.

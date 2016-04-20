@@ -15,20 +15,19 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Modes
+namespace LeagueSharp.SDK.TSModes
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.UI.IMenu;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.Data;
+    using LeagueSharp.Data.DataTypes;
+    using LeagueSharp.SDK.UI;
 
     /// <summary>
     ///     The priority Mode.
     /// </summary>
-    [ResourceImport]
     public class Priority : ITargetSelectorMode
     {
         #region Constants
@@ -50,10 +49,8 @@ namespace LeagueSharp.SDK.Modes
         /// <summary>
         ///     The priority categories
         /// </summary>
-        public static IReadOnlyList<PriorityCategory> PriorityCategories => PriorityCategoriesList;
-
-        [ResourceImport("Data.Priority.json")]
-        private static List<PriorityCategory> PriorityCategoriesList = new List<PriorityCategory>();
+        public static readonly IReadOnlyList<ChampionPriorityDataEntry> PriorityCategories =
+            Data.Get<ChampionPriorityData>().PriorityCategories;
 
         #endregion
 

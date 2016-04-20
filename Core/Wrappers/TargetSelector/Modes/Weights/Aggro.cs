@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Modes.Weights
+namespace LeagueSharp.SDK.TSModes.Weights
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -58,7 +58,8 @@ namespace LeagueSharp.SDK.Modes.Weights
         /// <summary>
         ///     Gets the sender items.
         /// </summary>
-        /// <param name="sender">The sender.
+        /// <param name="sender">
+        ///     The sender.
         /// </param>
         /// <returns>
         ///     The <see cref="IEnumerable{T}" /> of <see cref="AggroEntry" />.
@@ -71,9 +72,11 @@ namespace LeagueSharp.SDK.Modes.Weights
         /// <summary>
         ///     Gets the sender target item.
         /// </summary>
-        /// <param name="sender">The sender.
+        /// <param name="sender">
+        ///     The sender.
         /// </param>
-        /// <param name="target">The target.
+        /// <param name="target">
+        ///     The target.
         /// </param>
         /// <returns>
         ///     The <see cref="AggroEntry" />.
@@ -86,7 +89,8 @@ namespace LeagueSharp.SDK.Modes.Weights
         /// <summary>
         ///     Gets the target items.
         /// </summary>
-        /// <param name="target">The target.
+        /// <param name="target">
+        ///     The target.
         /// </param>
         /// <returns>
         ///     The <see cref="IEnumerable{T}" /> of <see cref="AggroEntry" />.
@@ -118,6 +122,7 @@ namespace LeagueSharp.SDK.Modes.Weights
 
             var hero = sender as Obj_AI_Hero;
             var target = GameObjects.EnemyHeroes.FirstOrDefault(h => h.NetworkId == args.NetworkId);
+
             if (hero != null && target != null)
             {
                 AggroEntry aggro;

@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Utils
+namespace LeagueSharp.SDK.Utils
 {
     using System;
     using System.Linq;
@@ -143,15 +143,19 @@ namespace LeagueSharp.SDK.Core.Utils
         /// </returns>
         public static float GetRealAutoAttackRange(this Obj_AI_Base sender, AttackableUnit target)
         {
-            if (sender == null)
+            if (!sender.IsValid())
             {
                 return 0;
             }
-            var result = sender.AttackRange + sender.BoundingRadius + (target?.BoundingRadius ?? 0);
+
+            var result = sender.AttackRange + sender.BoundingRadius
+                         + (target != null && target.IsValid ? target.BoundingRadius : 0);
             var heroSource = sender as Obj_AI_Hero;
+
             if (heroSource != null && heroSource.ChampionName == "Caitlyn")
             {
                 var aiBaseTarget = target as Obj_AI_Base;
+
                 if (aiBaseTarget != null && aiBaseTarget.HasBuff("caitlynyordletrapinternal"))
                 {
                     result += 650;
@@ -168,15 +172,17 @@ namespace LeagueSharp.SDK.Core.Utils
         public static float GetTimeToHit(this AttackableUnit target)
         {
             var time = (GameObjects.Player.AttackCastDelay * 1000) - 100 + (Game.Ping / 2f);
+
             if (Math.Abs(GameObjects.Player.GetProjectileSpeed() - float.MaxValue) > float.Epsilon)
             {
                 var aiBaseTarget = target as Obj_AI_Base;
                 time += 1000
                         * Math.Max(
-                            0,
                             GameObjects.Player.Distance(aiBaseTarget?.ServerPosition ?? target.Position)
-                            - GameObjects.Player.BoundingRadius) / GameObjects.Player.BasicAttack.MissileSpeed;
+                            - GameObjects.Player.BoundingRadius,
+                            0) / GameObjects.Player.BasicAttack.MissileSpeed;
             }
+
             return time;
         }
 

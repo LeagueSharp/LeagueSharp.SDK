@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Polygons
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -128,7 +128,7 @@ namespace LeagueSharp.SDK
         public bool IsOutside(Vector2 point)
         {
             var p = new IntPoint(point.X, point.Y);
-            return Clipper.Clipper.PointInPolygon(p, this.ToClipperPath()) != 1;
+            return Clipper.PointInPolygon(p, this.ToClipperPath()) != 1;
         }
 
         /// <summary>

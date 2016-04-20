@@ -19,10 +19,10 @@
 //   A custom implementation of <see cref="ADrawable{MenuButton}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
+
+namespace LeagueSharp.SDK.UI.Skins.Light2
 {
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Light;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+    using LeagueSharp.SDK.UI.Skins.Light;
 
     /// <summary>
     ///     A default implementation of <see cref="ADrawable{MenuButton}" />

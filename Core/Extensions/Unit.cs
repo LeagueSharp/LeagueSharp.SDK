@@ -20,6 +20,8 @@ namespace LeagueSharp.SDK
     using System;
     using System.Linq;
 
+    using LeagueSharp.SDK.Enumerations;
+
     using SharpDX;
 
     /// <summary>
@@ -317,23 +319,23 @@ namespace LeagueSharp.SDK
         public static TurretType GetTurretType(this Obj_AI_Turret turret)
         {
             var name = turret.CharData.BaseSkinName;
+
             if (TurretsTierOne.Contains(name))
             {
                 return TurretType.TierOne;
             }
+
             if (TurretsTierTwo.Contains(name))
             {
-                return TurretType.TierOne;
+                return TurretType.TierTwo;
             }
+
             if (TurretsTierThree.Contains(name))
             {
-                return TurretType.TierOne;
+                return TurretType.TierThree;
             }
-            if (TurretsTierFour.Contains(name))
-            {
-                return TurretType.TierOne;
-            }
-            return TurretType.Unknown;
+
+            return TurretsTierFour.Contains(name) ? TurretType.TierFour : TurretType.Unknown;
         }
 
         /// <summary>
@@ -344,6 +346,7 @@ namespace LeagueSharp.SDK
         public static bool InFountain(this Obj_AI_Hero hero)
         {
             float fountainRange = 562500; // 750 * 750
+
             if (Game.MapId == GameMapId.SummonersRift)
             {
                 fountainRange = 1102500; // 1050 * 1050
@@ -382,7 +385,7 @@ namespace LeagueSharp.SDK
         /// <returns>Returns if the source is facing the target (boolean)</returns>
         public static bool IsFacing(this Obj_AI_Base source, Obj_AI_Base target)
         {
-            return (source.IsValid() && target.IsValid())
+            return source.IsValid() && target.IsValid()
                    && source.Direction.AngleBetween(target.Position - source.Position) < 90;
         }
 

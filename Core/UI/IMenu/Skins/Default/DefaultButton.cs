@@ -15,13 +15,13 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
+namespace LeagueSharp.SDK.UI.Skins.Default
 {
-    using Core.Utils;
-    using LeagueSharp.SDK;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using Values;
 
     /// <summary>
     ///     A default implementation of <see cref="ADrawable{MenuButton}" />
@@ -89,9 +89,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
             var buttonTextWidth =
                 MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, component.ButtonText, 0).Width;
             return new Rectangle(
-                (int)(component.Position.X + component.MenuWidth - buttonTextWidth - (2 * TextGap)), 
-                (int)component.Position.Y, 
-                (2 * TextGap) + buttonTextWidth, 
+                (int)(component.Position.X + component.MenuWidth - buttonTextWidth - (2 * TextGap)),
+                (int)component.Position.Y,
+                (2 * TextGap) + buttonTextWidth,
                 MenuSettings.ContainerHeight);
         }
 
@@ -112,10 +112,10 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset), 
-                (int)rectangleName.Y, 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
+                (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
+                (int)rectangleName.Y,
                 MenuSettings.TextColor);
 
             var buttonTextWidth =
@@ -127,12 +127,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 new[]
                     {
                         new Vector2(
-                            this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - (2 * TextGap), 
-                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
+                            this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - (2 * TextGap),
+                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)),
                         new Vector2(
-                            this.Component.Position.X + this.Component.MenuWidth, 
-                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
-                    }, 
+                            this.Component.Position.X + this.Component.MenuWidth,
+                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)),
+                    },
                 MenuSettings.HoverColor);
             Line.End();
             Line.Width = MenuSettings.ContainerHeight - 5;
@@ -141,20 +141,20 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Default
                 new[]
                     {
                         new Vector2(
-                            this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - (2 * TextGap) + 2, 
-                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
+                            this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - (2 * TextGap) + 2,
+                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)),
                         new Vector2(
-                            this.Component.Position.X + this.Component.MenuWidth - 2, 
-                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
-                    }, 
+                            this.Component.Position.X + this.Component.MenuWidth - 2,
+                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)),
+                    },
                 this.Component.Hovering ? this.buttonHoverColor : this.buttonColor);
             Line.End();
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.ButtonText, 
-                (int)(this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - TextGap), 
-                (int)rectangleName.Y, 
+                MenuManager.Instance.Sprite,
+                this.Component.ButtonText,
+                (int)(this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - TextGap),
+                (int)rectangleName.Y,
                 MenuSettings.TextColor);
         }
 

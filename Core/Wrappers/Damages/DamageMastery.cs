@@ -1,8 +1,8 @@
-﻿namespace LeagueSharp.SDK.Core.Wrappers.Damages
+﻿namespace LeagueSharp.SDK
 {
     using System.Linq;
 
-    public static class DamageMastery
+    public static partial class Damage
     {
         #region Enums
 

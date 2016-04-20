@@ -21,11 +21,12 @@ namespace LeagueSharp.SDK
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.UI.IMenu;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.UI;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
+    using SharpDX.Direct3D9;
 
     /// <summary>
     ///     The notifications main handler.
@@ -42,7 +43,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The line.
         /// </summary>
-        private static SharpDX.Direct3D9.Line line;
+        private static Line line;
 
         #endregion
 
@@ -65,7 +66,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Gets the line.
         /// </summary>
-        private static SharpDX.Direct3D9.Line Line
+        private static Line Line
         {
             get
             {
@@ -74,7 +75,7 @@ namespace LeagueSharp.SDK
                     return line;
                 }
 
-                return line = new SharpDX.Direct3D9.Line(Drawing.Direct3DDevice) { Antialias = false, GLLines = true };
+                return line = new Line(Drawing.Direct3DDevice) { Antialias = false, GLLines = true };
             }
         }
 

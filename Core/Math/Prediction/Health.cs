@@ -21,8 +21,8 @@ namespace LeagueSharp.SDK
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Core.Utils;
-    using LeagueSharp.SDK.Core.Wrappers.Damages;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     Health Prediction class for prediction of health of units.
@@ -160,17 +160,20 @@ namespace LeagueSharp.SDK
         private static float GetPredictionDefault(Obj_AI_Base unit, int time, int delay = 70)
         {
             var predictedDamage = 0f;
+
             foreach (var attack in ActiveAttacks.Values.Where(i => i.Target.Compare(unit) && !i.Processed))
             {
                 var attackDamage = 0f;
+
                 if (attack.Source.IsValidTarget(float.MaxValue, false) && attack.Target.IsValidTarget())
                 {
                     var landTime = attack.StartTick + attack.Delay
                                    + 1000
                                    * (attack.Source.IsMelee
                                           ? 0
-                                          : Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
+                                          : Math.Max(unit.Distance(attack.Source) - attack.Source.BoundingRadius, 0)
                                             / attack.ProjectileSpeed) + delay;
+
                     if (landTime < Variables.TickCount + time)
                     {
                         attackDamage = attack.Damage;
@@ -198,21 +201,24 @@ namespace LeagueSharp.SDK
         private static float GetPredictionSimulated(Obj_AI_Base unit, int time)
         {
             var predictedDamage = 0f;
+
             foreach (var attack in ActiveAttacks.Values.Where(i => i.Target.Compare(unit)))
             {
                 var n = 0;
+
                 if (Variables.TickCount - 100 <= attack.StartTick + attack.AnimationTime
                     && attack.Source.IsValidTarget(float.MaxValue, false) && attack.Target.IsValidTarget())
                 {
                     var fromT = attack.StartTick;
                     var toT = Variables.TickCount + time;
+
                     while (fromT < toT)
                     {
                         if (fromT >= Variables.TickCount
                             && fromT + attack.Delay / 1000
                             + (attack.Source.IsMelee
                                    ? 0
-                                   : Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
+                                   : Math.Max(unit.Distance(attack.Source) - attack.Source.BoundingRadius, 0)
                                      / attack.ProjectileSpeed) < toT)
                         {
                             n++;
@@ -245,14 +251,17 @@ namespace LeagueSharp.SDK
             }
 
             var aiBase = sender as Obj_AI_Base;
+
             if (aiBase != null)
             {
                 var objNetworkId = aiBase.NetworkId;
+
                 if (ActiveAttacks.ContainsKey(objNetworkId))
                 {
                     ActiveAttacks.Remove(objNetworkId);
                     return;
                 }
+
                 foreach (var activeAttack in ActiveAttacks.Values.Where(i => i.Target.Compare(aiBase)))
                 {
                     ActiveAttacks.Remove(activeAttack.Source.NetworkId);
@@ -261,9 +270,11 @@ namespace LeagueSharp.SDK
             }
 
             var missile = sender as MissileClient;
+
             if (missile?.SpellCaster != null)
             {
                 var casterNetworkId = missile.SpellCaster.NetworkId;
+
                 if (ActiveAttacks.ContainsKey(casterNetworkId))
                 {
                     ActiveAttacks[casterNetworkId].Processed = true;
@@ -306,6 +317,7 @@ namespace LeagueSharp.SDK
             if (sender.IsValid && sender.IsMelee)
             {
                 var casterNetworkId = sender.NetworkId;
+
                 if (ActiveAttacks.ContainsKey(casterNetworkId))
                 {
                     ActiveAttacks[casterNetworkId].Processed = true;
@@ -362,6 +374,7 @@ namespace LeagueSharp.SDK
             if (sender.Owner.IsValid && args.StopAnimation && args.DestroyMissile)
             {
                 var casterNetworkId = sender.Owner.NetworkId;
+
                 if (ActiveAttacks.ContainsKey(casterNetworkId))
                 {
                     ActiveAttacks.Remove(casterNetworkId);

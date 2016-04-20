@@ -15,13 +15,15 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Utils
+namespace LeagueSharp.SDK.Utils
 {
     using System;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Field | AttributeTargets.Property)]
     internal class ResourceImportAttribute : Attribute
     {
+        #region Constructors and Destructors
+
         public ResourceImportAttribute()
         {
         }
@@ -36,8 +38,14 @@ namespace LeagueSharp.SDK.Core.Utils
             this.File = file;
         }
 
+        #endregion
+
+        #region Public Properties
+
         public string File { get; set; }
 
         public Type Filter { get; set; }
+
+        #endregion
     }
 }

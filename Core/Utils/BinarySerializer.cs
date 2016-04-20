@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Utils
+namespace LeagueSharp.SDK.Utils
 {
     using System.IO;
     using System.Runtime.Serialization;
@@ -44,7 +44,7 @@ namespace LeagueSharp.SDK.Core.Utils
         {
             using (
                 var reader = XmlDictionaryReader.CreateBinaryReader(
-                    new MemoryStream(data), 
+                    new MemoryStream(data),
                     XmlDictionaryReaderQuotas.Max))
             {
                 return (T)new DataContractSerializer(typeof(T)).ReadObject(reader);

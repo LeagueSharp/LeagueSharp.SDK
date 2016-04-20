@@ -19,11 +19,11 @@
 //   A custom implementation of <see cref="ADrawable{MenuButton}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+
+namespace LeagueSharp.SDK.UI.Skins.Blue
 {
-    using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -94,8 +94,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
             var buttonTextWidth =
                 MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, component.ButtonText, 0).Width;
             return new Rectangle(
-                (int)(component.Position.X + component.MenuWidth - buttonTextWidth - (2 * TextGap)), 
-                (int)component.Position.Y, 
+                (int)(component.Position.X + component.MenuWidth - buttonTextWidth - (2 * TextGap)),
+                (int)component.Position.Y,
                 (2 * TextGap) + buttonTextWidth,
                 MenuSettings.ContainerHeight);
         }
@@ -117,9 +117,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset), 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
+                (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
                 (int)rectangleName.Y,
                 MenuSettings.TextColor);
 
@@ -146,19 +146,19 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                 new[]
                     {
                         new Vector2(
-                            this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - (2 * TextGap) + 2, 
-                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
+                            this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - (2 * TextGap) + 2,
+                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)),
                         new Vector2(
-                            this.Component.Position.X + this.Component.MenuWidth - 2, 
-                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)), 
-                    }, 
+                            this.Component.Position.X + this.Component.MenuWidth - 2,
+                            this.Component.Position.Y + (MenuSettings.ContainerHeight / 2f)),
+                    },
                 this.Component.Hovering ? this.buttonHoverColor : this.buttonColor);
             Line.End();
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.ButtonText, 
-                (int)(this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - TextGap), 
+                MenuManager.Instance.Sprite,
+                this.Component.ButtonText,
+                (int)(this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - TextGap),
                 (int)rectangleName.Y,
                 MenuSettings.TextColor);
         }

@@ -22,9 +22,8 @@
 
 //Concept by User Vasconcellos
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
+namespace LeagueSharp.SDK.UI.Skins.Tech
 {
-
     using SharpDX;
     using SharpDX.Direct3D9;
 
@@ -33,20 +32,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
     /// </summary>
     public class TechMenuSettings : MenuSettings
     {
-        #region Static Fields
-
-        /// <summary>
-        ///     Local Caption Font.
-        /// </summary>
-        private static Font fontCaption;
-
-        /// <summary>
-        ///     Local Caption Font.
-        /// </summary>
-        private static Font fontMenuSymbol;
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -110,39 +95,12 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
         /// <summary>
         ///     Gets or sets the Global Caption Font.
         /// </summary>
-        public static Font FontCaption
-        {
-            get
-            {
-                return fontCaption;
-            }
-
-            set
-            {
-                fontCaption = value;
-            }
-        }
+        public static Font FontCaption { get; set; }
 
         /// <summary>
         ///     Gets or sets the Global Symbol Menu Font.
         /// </summary>
-        public static Font FontMenuSymbol
-        {
-            get
-            {
-                return fontMenuSymbol;
-            }
-
-            set
-            {
-                fontMenuSymbol = value;
-            }
-        }
-
-        /// <summary>
-        ///     Gets or sets the Global Text Caption Color.
-        /// </summary>
-        public static ColorBGRA TextCaptionColor { get; set; }
+        public static Font FontMenuSymbol { get; set; }
 
         /// <summary>
         ///     Gets or sets the Global KeyBind Color.
@@ -154,6 +112,11 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
         /// </summary>
         public static ColorBGRA SliderColor { get; set; }
 
+        /// <summary>
+        ///     Gets or sets the Global Text Caption Color.
+        /// </summary>
+        public static ColorBGRA TextCaptionColor { get; set; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -163,7 +126,6 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
         /// </summary>
         public static void LoadSettings()
         {
-            
         }
 
         #endregion

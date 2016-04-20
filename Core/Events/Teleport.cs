@@ -21,6 +21,8 @@ namespace LeagueSharp.SDK
     using System.Collections.Generic;
     using System.Reflection;
 
+    using LeagueSharp.SDK.Enumerations;
+
     /// <summary>
     ///     Teleport class, contains Teleport even which is triggered on recalls, teleports and shen or twisted fate
     ///     ultimates.

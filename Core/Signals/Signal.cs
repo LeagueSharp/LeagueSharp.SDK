@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Signals
+namespace LeagueSharp.SDK.Signals
 {
     using System;
     using System.Collections.Generic;
@@ -44,9 +44,9 @@ namespace LeagueSharp.SDK.Core.Signals
         ///     The properties
         /// </param>
         private Signal(
-            OnRaisedDelegate signalRaised, 
-            SignalWaverDelegate signalWaver, 
-            DateTimeOffset expiration, 
+            OnRaisedDelegate signalRaised,
+            SignalWaverDelegate signalWaver,
+            DateTimeOffset expiration,
             IDictionary<string, object> properties)
         {
             if (signalRaised != null)
@@ -198,9 +198,9 @@ namespace LeagueSharp.SDK.Core.Signals
         /// <param name="defaultProperties">A dictionary that contents will be dumped into <see cref="Properties" /></param>
         /// <returns>The <see cref="Signal" /></returns>
         public static Signal Create(
-            OnRaisedDelegate onRaised = null, 
-            SignalWaverDelegate signalWaver = null, 
-            DateTimeOffset expiration = default(DateTimeOffset), 
+            OnRaisedDelegate onRaised = null,
+            SignalWaverDelegate signalWaver = null,
+            DateTimeOffset expiration = default(DateTimeOffset),
             IDictionary<string, object> defaultProperties = null)
         {
             if (expiration == default(DateTimeOffset))
@@ -209,9 +209,9 @@ namespace LeagueSharp.SDK.Core.Signals
             }
 
             var signal = new Signal(
-                onRaised, 
-                signalWaver, 
-                expiration, 
+                onRaised,
+                signalWaver,
+                expiration,
                 defaultProperties ?? new Dictionary<string, object>());
 
             SignalManager.AddSignal(signal);

@@ -20,13 +20,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
+namespace LeagueSharp.SDK.UI.Skins.Tech
 {
     using System.Windows.Forms;
 
-    using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -110,12 +109,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
                 Line.Draw(
                     new[]
                         {
-                        new Vector2((this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight
-                     - TechUtilities.CalcWidthText(keyString) / 2 - MenuSettings.ContainerTextOffset),
-                    centerY - 2),
-                        new Vector2((this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight
-                     - TechUtilities.CalcWidthText(keyString) / 2 - MenuSettings.ContainerTextOffset),
-                    centerY + TechUtilities.MeasureString(keyString).Height + 2)
+                            new Vector2(
+                                (this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight
+                                 - TechUtilities.CalcWidthText(keyString) / 2f - MenuSettings.ContainerTextOffset),
+                                centerY - 2),
+                            new Vector2(
+                                (this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight
+                                 - TechUtilities.CalcWidthText(keyString) / 2f - MenuSettings.ContainerTextOffset),
+                                centerY + TechUtilities.MeasureString(keyString).Height + 2)
                         },
                     new Color(17, 32, 27, 255));
                 Line.End();
@@ -143,11 +144,25 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
                         CenteredFlags.HorizontalCenter).X - 5;
 
             //Left
-            Utils.DrawCircle(centerX, this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 7, 270, Utils.CircleType.Half, true, 32,
+            Utils.DrawCircle(
+                centerX,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                7,
+                270,
+                Utils.CircleType.Half,
+                true,
+                32,
                 this.Component.Active ? new Color(75, 215, 128, 255) : new Color(36, 204, 205, 255));
 
             //Right
-            Utils.DrawCircle(centerX + 15, this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 7, 90, Utils.CircleType.Half, true, 32,
+            Utils.DrawCircle(
+                centerX + 15,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                7,
+                90,
+                Utils.CircleType.Half,
+                true,
+                32,
                 this.Component.Active ? new Color(75, 215, 128, 255) : new Color(36, 204, 205, 255));
 
             //Top
@@ -175,8 +190,14 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Tech
             Line.End();
 
             //FullCircle
-            Utils.DrawCircleFilled(this.Component.Active ? centerX + 14 : centerX + 1,
-                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f, 6, 0, Utils.CircleType.Full, true, 32,
+            Utils.DrawCircleFilled(
+                this.Component.Active ? centerX + 14 : centerX + 1,
+                this.Component.Position.Y + MenuSettings.ContainerHeight / 2f,
+                6,
+                0,
+                Utils.CircleType.Full,
+                true,
+                32,
                 this.Component.Active ? new Color(73, 227, 139, 255) : new Color(17, 65, 65, 255));
         }
 

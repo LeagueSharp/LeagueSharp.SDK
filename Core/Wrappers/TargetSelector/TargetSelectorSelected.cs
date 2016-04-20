@@ -18,9 +18,9 @@
 namespace LeagueSharp.SDK
 {
     using System.Linq;
-    
-    using LeagueSharp.SDK.Core.UI.IMenu;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
+
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.UI;
 
     /// <summary>
     ///     Manages the selection of targets

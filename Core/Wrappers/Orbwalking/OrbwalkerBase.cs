@@ -20,7 +20,8 @@ namespace LeagueSharp.SDK
     using System;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
 
@@ -56,6 +57,7 @@ namespace LeagueSharp.SDK
             }
 
             var enumValues = Enum.GetValues(typeof(TK));
+
             if (enumValues.Length <= 0)
             {
                 throw new ArgumentException("TK must contain at least one value.");
@@ -345,7 +347,7 @@ namespace LeagueSharp.SDK
         /// </param>
         public virtual void Orbwalk(T target = null, Vector3? position = null)
         {
-            if (this.CanAttack() && this.AttackState)
+            if (this.CanAttack() && this.AttackState && !GameObjects.Player.IsCastingInterruptableSpell())
             {
                 var gTarget = target ?? this.GetTarget();
                 if (gTarget.InAutoAttackRange())
@@ -354,7 +356,7 @@ namespace LeagueSharp.SDK
                 }
             }
 
-            if (this.CanMove() && this.MovementState)
+            if (this.CanMove() && this.MovementState && !GameObjects.Player.IsCastingInterruptableSpell(true))
             {
                 this.Move(position.HasValue && position.Value.IsValid() ? position.Value : Game.CursorPos);
             }
@@ -428,7 +430,8 @@ namespace LeagueSharp.SDK
             {
                 return;
             }
-            if (args.Buff.DisplayName == "PoppyPassiveBuff" || args.Buff.DisplayName == "SonaPassiveReady")
+
+            if (args.Buff.DisplayName == "SonaPassiveReady")
             {
                 this.ResetSwingTimer();
             }
@@ -442,8 +445,7 @@ namespace LeagueSharp.SDK
         /// </param>
         private void OnGameUpdate(EventArgs args)
         {
-            if (GameObjects.Player == null || !GameObjects.Player.IsValid || GameObjects.Player.IsDead
-                || GameObjects.Player.IsCastingInterruptableSpell(true))
+            if (GameObjects.Player == null || !GameObjects.Player.IsValid || GameObjects.Player.IsDead)
             {
                 return;
             }

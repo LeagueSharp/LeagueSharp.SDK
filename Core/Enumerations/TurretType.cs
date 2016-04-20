@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Enumerations
 {
     /// <summary>
     ///     The turret type.
@@ -25,22 +25,22 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The unknown tier.
         /// </summary>
-        Unknown, 
+        Unknown,
 
         /// <summary>
         ///     The tier one.
         /// </summary>
-        TierOne, 
+        TierOne,
 
         /// <summary>
         ///     The tier two.
         /// </summary>
-        TierTwo, 
+        TierTwo,
 
         /// <summary>
         ///     The tier three.
         /// </summary>
-        TierThree, 
+        TierThree,
 
         /// <summary>
         ///     The tier four.

@@ -1,13 +1,7 @@
 ﻿namespace LeagueSharp.SDK
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-
-    using LeagueSharp.SDK.Clipper;
-    using LeagueSharp.SDK.Core.Utils;
-
-    using SharpDX;
+    using LeagueSharp.Data.DataTypes;
+    using LeagueSharp.SDK.Polygons;
 
     public class SkillshotMissileLine : SkillshotMissile
     {
@@ -25,18 +19,23 @@
 
         #endregion
 
-        public override string ToString()
-        {
-            return "SkillshotMissileLine: Champion=" + this.SData.ChampionName + " SpellType=" + this.SData.SpellType + " SpellName=" + this.SData.SpellName;
-        }
-
-        #region Public Properties
+        #region Properties
 
         internal RectanglePoly Rectangle { get; set; }
 
         #endregion
 
         #region Public Methods and Operators
+
+        public override string ToString()
+        {
+            return "SkillshotMissileLine: Champion=" + this.SData.ChampionName + " SpellType=" + this.SData.SpellType
+                   + " SpellName=" + this.SData.SpellName;
+        }
+
+        #endregion
+
+        #region Methods
 
         internal override void Game_OnUpdate()
         {
@@ -47,6 +46,11 @@
             }
 
             this.UpdatePolygon();
+        }
+
+        internal override void UpdatePath()
+        {
+            this.Path = this.Rectangle.ToClipperPath();
         }
 
         internal override void UpdatePolygon()
@@ -61,11 +65,6 @@
             this.Rectangle.UpdatePolygon();
 
             this.UpdatePath();
-        }
-
-        internal override void UpdatePath()
-        {
-            this.Path = this.Rectangle.ToClipperPath();
         }
 
         #endregion

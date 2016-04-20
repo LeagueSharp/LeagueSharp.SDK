@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Enumerations
 {
     /// <summary>
     ///     Cast States
@@ -71,6 +71,5 @@ namespace LeagueSharp.SDK
         ///     Failed Condition
         /// </summary>
         FailedCondition
-
     }
 }

@@ -19,11 +19,11 @@
 //   A custom implementation of a <see cref="ADrawable{MenuBool}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
+
+namespace LeagueSharp.SDK.UI.Skins.Blue
 {
-    using LeagueSharp.SDK;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using LeagueSharp.SDK.Core.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
@@ -67,7 +67,7 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
         public Rectangle ButtonBoundaries(MenuBool component)
         {
             return new Rectangle(
-                (int)(component.Position.X + component.MenuWidth - MenuSettings.ContainerHeight), 
+                (int)(component.Position.X + component.MenuWidth - MenuSettings.ContainerHeight),
                 (int)component.Position.Y,
                 MenuSettings.ContainerHeight,
                 MenuSettings.ContainerHeight);
@@ -93,9 +93,9 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                     .Y;
 
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.DisplayName, 
-                (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset), 
+                MenuManager.Instance.Sprite,
+                this.Component.DisplayName,
+                (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
                 centerY,
                 MenuSettings.TextColor);
 
@@ -106,31 +106,31 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Blue
                     {
                         new Vector2(
                             (this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight - 1)
-                            + MenuSettings.ContainerHeight / 2f, 
-                            this.Component.Position.Y + 1 + 3), 
+                            + MenuSettings.ContainerHeight / 2f,
+                            this.Component.Position.Y + 1 + 3),
                         new Vector2(
                             (this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight - 1)
-                            + MenuSettings.ContainerHeight / 2f, 
+                            + MenuSettings.ContainerHeight / 2f,
                             this.Component.Position.Y + MenuSettings.ContainerHeight - 3)
-                    }, 
+                    },
                 this.Component.Value ? new ColorBGRA(0, 186, 255, 255) : new ColorBGRA(36, 36, 36, 255));
             Line.End();
 
             var centerX =
                 (int)
                 new Rectangle(
-                    (int)(this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight), 
+                    (int)(this.Component.Position.X + this.Component.MenuWidth - MenuSettings.ContainerHeight),
                     (int)this.Component.Position.Y,
                     MenuSettings.ContainerHeight,
                     MenuSettings.ContainerHeight).GetCenteredText(
-                        null, 
-                        MenuSettings.Font, 
-                        this.Component.Value ? "On" : "Off", 
+                        null,
+                        MenuSettings.Font,
+                        this.Component.Value ? "On" : "Off",
                         CenteredFlags.HorizontalCenter).X;
             MenuSettings.Font.DrawText(
-                MenuManager.Instance.Sprite, 
-                this.Component.Value ? "On" : "Off", 
-                centerX, 
+                MenuManager.Instance.Sprite,
+                this.Component.Value ? "On" : "Off",
+                centerX,
                 centerY,
                 this.Component.Value ? new ColorBGRA(0, 27, 41, 255) : MenuSettings.TextColor);
         }

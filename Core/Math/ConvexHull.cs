@@ -188,7 +188,7 @@ namespace LeagueSharp.SDK
 
             // Start wrapping up the other points.
             float sweepAngle = 0;
-            for (; ;)
+            for (;;)
             {
                 // If all of the points are on the hull, we're done.
                 if (points.Count == 0)
@@ -298,11 +298,11 @@ namespace LeagueSharp.SDK
         /// <param name="skip3">Skip certain point 3</param>
         /// <returns>The <see cref="bool" /></returns>
         private static bool CircleEnclosesPoints(
-            Vector2 center, 
-            float radius2, 
-            IEnumerable<Vector2> points, 
-            int skip1, 
-            int skip2, 
+            Vector2 center,
+            float radius2,
+            IEnumerable<Vector2> points,
+            int skip1,
+            int skip2,
             int skip3)
         {
             return (from point in points.Where((t, i) => (i != skip1) && (i != skip2) && (i != skip3))
@@ -334,7 +334,8 @@ namespace LeagueSharp.SDK
             var dx2 = -(c.Y - b.Y);
 
             // See where the lines intersect.
-            var cx = ((y1 * dx1 * dx2) + (x2 * dx1 * dy2) - (x1 * dy1 * dx2) - (y2 * dx1 * dx2)) / ((dx1 * dy2) - (dy1 * dx2));
+            var cx = ((y1 * dx1 * dx2) + (x2 * dx1 * dy2) - (x1 * dy1 * dx2) - (y2 * dx1 * dx2))
+                     / ((dx1 * dy2) - (dy1 * dx2));
             var cy = ((cx - x1) * dy1 / dx1) + y1;
             center = new Vector2(cx, cy);
 
@@ -414,10 +415,10 @@ namespace LeagueSharp.SDK
         ///     The <see cref="Vector2" /> list.
         /// </returns>
         private static MinMaxCornersInfo GetMinMaxCorners(
-            IEnumerable<Vector2> points, 
-            Vector2 upperLeft, 
-            Vector2 upperRight, 
-            Vector2 lowerLeft, 
+            IEnumerable<Vector2> points,
+            Vector2 upperLeft,
+            Vector2 upperRight,
+            Vector2 lowerLeft,
             Vector2 lowerRight)
         {
             // Search the other points.

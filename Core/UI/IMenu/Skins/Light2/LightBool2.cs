@@ -19,26 +19,16 @@
 //   A custom implementation of a <see cref="ADrawable{MenuBool}" />
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins.Light2
+
+namespace LeagueSharp.SDK.UI.Skins.Light2
 {
-    using LeagueSharp.SDK.Core.UI.IMenu.Skins.Light;
-    using LeagueSharp.SDK.Core.UI.IMenu.Values;
-    using SharpDX.Direct3D9;
+    using LeagueSharp.SDK.UI.Skins.Light;
 
     /// <summary>
     ///     A blue implementation of a <see cref="ADrawable{MenuBool}" />
     /// </summary>
     public class LightBool2 : LightBool
     {
-        #region Static Fields
-
-        /// <summary>
-        ///     The line.
-        /// </summary>
-        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>

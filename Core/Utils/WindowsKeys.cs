@@ -15,12 +15,12 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Core.Utils
+namespace LeagueSharp.SDK.Utils
 {
     using System;
     using System.Windows.Forms;
 
-    using LeagueSharp.SDK;
+    using LeagueSharp.SDK.Enumerations;
 
     using SharpDX;
 

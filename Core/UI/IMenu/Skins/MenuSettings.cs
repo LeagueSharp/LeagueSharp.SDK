@@ -19,11 +19,9 @@
 //   Default Skin Settings.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
+
+namespace LeagueSharp.SDK.UI.Skins
 {
-
-    using LeagueSharp.SDK.Core.UI.IMenu.Customizer;
-
     using SharpDX;
     using SharpDX.Direct3D9;
 
@@ -38,7 +36,8 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         ///     Local Font.
         /// </summary>
         private static Font font;
-        
+
+        private static Vector2 position;
 
         #endregion
 
@@ -56,16 +55,16 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
             Position = new Vector2(30, 30);
             ContainerWidth = 200f;
             Font = new Font(
-                Drawing.Direct3DDevice, 
-                14, 
-                0, 
-                FontWeight.DoNotCare, 
-                0, 
-                false, 
+                Drawing.Direct3DDevice,
+                14,
+                0,
+                FontWeight.DoNotCare,
+                0,
+                false,
                 FontCharacterSet.Default,
                 FontPrecision.TrueType,
                 FontQuality.ClearTypeNatural,
-                FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative | FontPitchAndFamily.Modern, 
+                FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative | FontPitchAndFamily.Modern,
                 "Tahoma");
             ContainerTextMarkOffset = 8f;
             ContainerTextOffset = 15f;
@@ -135,19 +134,17 @@ namespace LeagueSharp.SDK.Core.UI.IMenu.Skins
         /// </summary>
         public static ColorBGRA HoverColor { get; set; }
 
-        private static Vector2 position;
-
         /// <summary>
         ///     Gets or sets the default menu zero-position.
         /// </summary>
-        public static Vector2 Position {
+        public static Vector2 Position
+        {
             get
             {
                 return position;
             }
             set
             {
-                
                 if (MenuCustomizer.Instance != null)
                 {
                     position = value;

@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDK.Polygons
 {
     using System;
 
@@ -92,14 +92,14 @@ namespace LeagueSharp.SDK
         public Vector2 Center { get; set; }
 
         /// <summary>
-        ///     Gets or sets the ring width
-        /// </summary>
-        public float Width { get; set; }
-
-        /// <summary>
         ///     Gets or sets the outer radius.
         /// </summary>
         public float OuterRadius { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the ring width
+        /// </summary>
+        public float Width { get; set; }
 
         #endregion
 
