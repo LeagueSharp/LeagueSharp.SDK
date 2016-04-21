@@ -104,7 +104,7 @@ namespace LeagueSharp.SDK
                         IsDirectedToPlayer =
                             (args.Target != null && args.Target.IsValid && args.Target.IsMe)
                             || args.End.DistanceToPlayer() < args.Start.DistanceToPlayer()
-                            || sender.IsFacing(GameObjects.Player),
+                            || hero.IsFacing(GameObjects.Player),
                         SpellName = args.SData.Name
                     });
         }

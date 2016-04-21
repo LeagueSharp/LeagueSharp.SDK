@@ -191,7 +191,8 @@ namespace LeagueSharp.SDK
 
             inputSub.Unit = collision;
             var predPos = Movement.GetPrediction(inputSub, false, false).UnitPosition.ToVector2();
-            return predPos.Distance(input.From) < input.Radius - 10 || predPos.Distance(pos) < input.Radius - 10
+            return predPos.Distance(input.From) < input.Radius + input.Unit.BoundingRadius / 2
+                   || predPos.Distance(pos) < input.Radius + input.Unit.BoundingRadius / 2
                    || predPos.DistanceSquared(input.From.ToVector2(), pos.ToVector2(), true)
                    <= Math.Pow(input.Radius + input.Unit.BoundingRadius + extraRadius, 2);
         }

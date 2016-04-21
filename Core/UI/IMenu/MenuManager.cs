@@ -23,6 +23,7 @@ namespace LeagueSharp.SDK.UI
     using System.Linq;
     using System.Windows.Forms;
 
+    using LeagueSharp.Sandbox;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI.Skins;
     using LeagueSharp.SDK.Utils;
@@ -51,6 +52,16 @@ namespace LeagueSharp.SDK.UI
         /// </summary>
         public static readonly MenuManager Instance = new MenuManager();
 
+        /// <summary>
+        ///     The show menu hotkey
+        /// </summary>
+        private static Keys menuPressKeybind = Keys.None;
+
+        /// <summary>
+        ///     The show menu toggle hotkey
+        /// </summary>
+        private static Keys menuToggleKeybind = Keys.None;
+
         #endregion
 
         #region Fields
@@ -59,11 +70,6 @@ namespace LeagueSharp.SDK.UI
         ///     The delayed draw actions.
         /// </summary>
         private readonly Queue<Action> delayedDrawActions = new Queue<Action>();
-
-        /// <summary>
-        ///     The menus list.
-        /// </summary>
-        private readonly List<Menu> menus = new List<Menu>();
 
         /// <summary>
         ///     The forced open.
@@ -144,7 +150,7 @@ namespace LeagueSharp.SDK.UI
         /// <value>
         ///     The menus.
         /// </value>
-        public List<Menu> Menus => this.menus;
+        public List<Menu> Menus { get; } = new List<Menu>();
 
         /// <summary>
         ///     Gets or sets a value indicating whether the menu is visible.
@@ -158,11 +164,10 @@ namespace LeagueSharp.SDK.UI
             {
                 return this.menuVisible;
             }
-
             set
             {
                 this.menuVisible = value;
-                foreach (var menu in this.menus)
+                foreach (var menu in this.Menus)
                 {
                     menu.Visible = value;
                 }
@@ -176,6 +181,60 @@ namespace LeagueSharp.SDK.UI
 
         #endregion
 
+        #region Properties
+
+        private static Keys MenuPressKeybind
+        {
+            get
+            {
+                if (menuPressKeybind == Keys.None)
+                {
+                    try
+                    {
+                        menuPressKeybind = (Keys)SandboxConfig.MenuKey;
+                        if (menuPressKeybind == Keys.None)
+                        {
+                            menuPressKeybind = Keys.ShiftKey;
+                        }
+                        menuPressKeybind = FixVirtualKey(menuPressKeybind);
+                    }
+                    catch
+                    {
+                        menuPressKeybind = Keys.ShiftKey;
+                    }
+                }
+
+                return menuPressKeybind;
+            }
+        }
+
+        private static Keys MenuToggleKeybind
+        {
+            get
+            {
+                if (menuToggleKeybind == Keys.None)
+                {
+                    try
+                    {
+                        menuToggleKeybind = (Keys)SandboxConfig.MenuToggleKey;
+                        if (menuToggleKeybind == Keys.None)
+                        {
+                            menuToggleKeybind = Keys.F9;
+                        }
+                        menuToggleKeybind = FixVirtualKey(menuToggleKeybind);
+                    }
+                    catch
+                    {
+                        menuToggleKeybind = Keys.F9;
+                    }
+                }
+
+                return menuToggleKeybind;
+            }
+        }
+
+        #endregion
+
         #region Public Indexers
 
         /// <summary>
@@ -186,13 +245,7 @@ namespace LeagueSharp.SDK.UI
         /// </value>
         /// <param name="name">The name.</param>
         /// <returns>The requested menu</returns>
-        public Menu this[string name]
-        {
-            get
-            {
-                return this.menus.FirstOrDefault(menu => menu.Name.Equals(name));
-            }
-        }
+        public Menu this[string name] => this.Menus.FirstOrDefault(menu => menu.Name.Equals(name));
 
         #endregion
 
@@ -204,9 +257,9 @@ namespace LeagueSharp.SDK.UI
         /// <param name="menu">The menu.</param>
         public void Add(Menu menu)
         {
-            if (!this.menus.Contains(menu))
+            if (!this.Menus.Contains(menu))
             {
-                this.menus.Add(menu);
+                this.Menus.Add(menu);
             }
         }
 
@@ -248,6 +301,21 @@ namespace LeagueSharp.SDK.UI
         protected virtual void FireOnOpen()
         {
             this.OnOpen?.Invoke(this, EventArgs.Empty);
+        }
+
+        private static Keys FixVirtualKey(Keys key)
+        {
+            switch (key)
+            {
+                case Keys.LShiftKey:
+                case Keys.RShiftKey:
+                    return Keys.ShiftKey;
+                case Keys.LControlKey:
+                case Keys.RControlKey:
+                    return Keys.ControlKey;
+                default:
+                    return key;
+            }
         }
 
         /// <summary>
@@ -317,9 +385,10 @@ namespace LeagueSharp.SDK.UI
             }
 
             var keys = new WindowsKeys(args);
+
             if (!this.ForcedOpen)
             {
-                if (keys.SingleKey == Keys.ShiftKey || keys.Key == (Keys.Return | Keys.Shift))
+                if (keys.SingleKey == MenuPressKeybind)
                 {
                     var keyDown = keys.Msg == WindowsMessages.KEYDOWN;
                     var keyUp = keys.Msg == WindowsMessages.KEYUP || keys.Msg == WindowsMessages.CHAR;
@@ -341,9 +410,10 @@ namespace LeagueSharp.SDK.UI
                         }
                     }
                 }
-                else if (keys.SingleKey == Keys.CapsLock && keys.Msg == WindowsMessages.KEYDOWN)
+                else if (keys.SingleKey == MenuToggleKeybind && keys.Msg == WindowsMessages.KEYDOWN)
                 {
                     this.MenuVisible = !this.MenuVisible;
+
                     if (this.MenuVisible)
                     {
                         this.FireOnOpen();
@@ -355,7 +425,7 @@ namespace LeagueSharp.SDK.UI
                 }
             }
 
-            foreach (var component in this.menus)
+            foreach (var component in this.Menus)
             {
                 component.OnWndProc(keys);
             }
@@ -366,7 +436,7 @@ namespace LeagueSharp.SDK.UI
         /// </summary>
         private void SaveSettings()
         {
-            foreach (var menu in this.menus)
+            foreach (var menu in this.Menus)
             {
                 try
                 {

@@ -23,6 +23,7 @@ namespace LeagueSharp.SDK
 
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI;
+    using LeagueSharp.SDK.UI.Skins;
     using LeagueSharp.SDK.Utils;
 
     /// <summary>
@@ -90,6 +91,10 @@ namespace LeagueSharp.SDK
             // Load the Notifications
             Notifications.Initialize(Variables.LeagueSharpMenu);
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Notifications Initialized.");
+
+            // Load the ThemeManager
+            ThemeManager.Initialize(Variables.LeagueSharpMenu);
+            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] ThemeManager Initialized.");
 
             // Load Damages.
             Damage.Initialize();

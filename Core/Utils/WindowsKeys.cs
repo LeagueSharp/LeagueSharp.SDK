@@ -71,22 +71,10 @@ namespace LeagueSharp.SDK.Utils
         ///     Gets the full name of the mapped key.
         /// </summary>
         public Keys Key
-        {
-            get
-            {
-                Keys keyData;
-                if ((Keys)((int)this.args.WParam) != Control.ModifierKeys)
-                {
-                    keyData = (Keys)((int)this.args.WParam) | Control.ModifierKeys;
-                }
-                else
-                {
-                    keyData = (Keys)((int)this.args.WParam);
-                }
-
-                return keyData;
-            }
-        }
+            =>
+                (Keys)((int)this.args.WParam) != Control.ModifierKeys
+                    ? (Keys)((int)this.args.WParam) | Control.ModifierKeys
+                    : (Keys)((int)this.args.WParam);
 
         /// <summary>
         ///     Gets the message of the key.
@@ -117,10 +105,12 @@ namespace LeagueSharp.SDK.Utils
             get
             {
                 var bytes = BitConverter.GetBytes(this.args.WParam);
+
                 if (bytes.Length > 2)
                 {
                     int buttonId = bytes[2];
                     var sideButton = Keys.None;
+
                     if (buttonId == 1)
                     {
                         sideButton = Keys.XButton1;

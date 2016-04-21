@@ -37,7 +37,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     The menu.
         /// </summary>
-        private readonly Menu menu = new Menu("targetselector", "TargetSelector");
+        private readonly Menu menu = new Menu("targetselector", "Target Selector");
 
         #endregion
 
