@@ -24,6 +24,7 @@ namespace LeagueSharp.SDK
 
     using LeagueSharp.Data.Enumerations;
     using LeagueSharp.SDK.Polygons;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
 
@@ -84,12 +85,14 @@ namespace LeagueSharp.SDK
                 if (input.CollisionObjects.HasFlag(CollisionableObjects.Minions))
                 {
                     result.AddRange(
-                        GameObjects.EnemyMinions.Where(
-                            minion =>
-                            minion.IsValidTarget(
-                                Math.Min(input.Range + input.Radius + 100, 2000),
-                                true,
-                                input.RangeCheckFrom) && IsHitCollision(minion, input, position, 20)));
+                        GameObjects.EnemyMinions.Where(i => i.IsMinion() || i.IsPet())
+                            .Concat(GameObjects.Jungle)
+                            .Where(
+                                minion =>
+                                minion.IsValidTarget(
+                                    Math.Min(input.Range + input.Radius + 100, 2000),
+                                    true,
+                                    input.RangeCheckFrom) && IsHitCollision(minion, input, position, 20)));
                 }
 
                 if (input.CollisionObjects.HasFlag(CollisionableObjects.Heroes))

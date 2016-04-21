@@ -388,7 +388,8 @@ namespace LeagueSharp.SDK.UI
 
             if (!this.ForcedOpen)
             {
-                if (keys.SingleKey == MenuPressKeybind)
+                if (keys.SingleKey == MenuPressKeybind
+                    || (MenuPressKeybind == Keys.ShiftKey && keys.Key == (Keys.Return | Keys.Shift)))
                 {
                     var keyDown = keys.Msg == WindowsMessages.KEYDOWN;
                     var keyUp = keys.Msg == WindowsMessages.KEYUP || keys.Msg == WindowsMessages.CHAR;
