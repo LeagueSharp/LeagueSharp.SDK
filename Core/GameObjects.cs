@@ -566,6 +566,7 @@ namespace LeagueSharp.SDK
                 }
                 else if (minion.Name != "WardCorpse")
                 {
+                    JungleList.Add(minion);
                     switch (minion.GetJungleType())
                     {
                         case JungleType.Small:
@@ -578,8 +579,6 @@ namespace LeagueSharp.SDK
                             JungleLegendaryList.Add(minion);
                             break;
                     }
-
-                    JungleList.Add(minion);
                 }
 
                 return;
@@ -589,6 +588,7 @@ namespace LeagueSharp.SDK
             if (particle != null)
             {
                 ParticleEmittersList.Add(particle);
+
                 return;
             }
 
@@ -610,36 +610,6 @@ namespace LeagueSharp.SDK
                 return;
             }
 
-            var shop = sender as Obj_Shop;
-            if (shop != null)
-            {
-                ShopsList.Add(shop);
-                if (shop.IsAlly)
-                {
-                    AllyShopsList.Add(shop);
-                }
-                else
-                {
-                    EnemyShopsList.Add(shop);
-                }
-
-                return;
-            }
-
-            var spawnPoint = sender as Obj_SpawnPoint;
-            if (spawnPoint != null)
-            {
-                SpawnPointsList.Add(spawnPoint);
-                if (spawnPoint.IsAlly)
-                {
-                    AllySpawnPointsList.Add(spawnPoint);
-                }
-                else
-                {
-                    EnemySpawnPointsList.Add(spawnPoint);
-                }
-            }
-
             var inhibitor = sender as Obj_BarracksDampener;
             if (inhibitor != null)
             {
@@ -651,20 +621,6 @@ namespace LeagueSharp.SDK
                 else
                 {
                     EnemyInhibitorsList.Add(inhibitor);
-                }
-            }
-
-            var nexus = sender as Obj_HQ;
-            if (nexus != null)
-            {
-                NexusList.Add(nexus);
-                if (nexus.IsAlly)
-                {
-                    AllyNexus = nexus;
-                }
-                else
-                {
-                    EnemyNexus = nexus;
                 }
             }
         }
@@ -685,9 +641,13 @@ namespace LeagueSharp.SDK
                 GameObjectsList.Remove(gameObject);
             }
 
-            foreach (var attackableUnitObject in AttackableUnitsList.Where(a => a.Compare(sender)).ToList())
+            var attackableUnit = sender as AttackableUnit;
+            if (attackableUnit != null)
             {
-                AttackableUnitsList.Remove(attackableUnitObject);
+                foreach (var attackableUnitObject in AttackableUnitsList.Where(a => a.Compare(attackableUnit)).ToList())
+                {
+                    AttackableUnitsList.Remove(attackableUnitObject);
+                }
             }
 
             var hero = sender as Obj_AI_Hero;
@@ -718,16 +678,16 @@ namespace LeagueSharp.SDK
                 {
                     if (minion.GetMinionType().HasFlag(MinionTypes.Ward))
                     {
-                        foreach (var ward in WardsList.Where(w => w.Compare(minion)).ToList())
+                        foreach (var wardObject in WardsList.Where(w => w.Compare(minion)).ToList())
                         {
-                            WardsList.Remove(ward);
+                            WardsList.Remove(wardObject);
                             if (minion.IsEnemy)
                             {
-                                EnemyWardsList.Remove(ward);
+                                EnemyWardsList.Remove(wardObject);
                             }
                             else
                             {
-                                AllyWardsList.Remove(ward);
+                                AllyWardsList.Remove(wardObject);
                             }
                         }
                     }
@@ -753,6 +713,7 @@ namespace LeagueSharp.SDK
                 {
                     foreach (var jungleObject in JungleList.Where(j => j.Compare(minion)).ToList())
                     {
+                        JungleList.Remove(jungleObject);
                         switch (jungleObject.GetJungleType())
                         {
                             case JungleType.Small:
@@ -765,8 +726,6 @@ namespace LeagueSharp.SDK
                                 JungleLegendaryList.Remove(jungleObject);
                                 break;
                         }
-
-                        JungleList.Remove(jungleObject);
                     }
                 }
 
@@ -776,7 +735,11 @@ namespace LeagueSharp.SDK
             var particle = sender as Obj_GeneralParticleEmitter;
             if (particle != null)
             {
-                ParticleEmittersList.Remove(particle);
+                foreach (var particleObject in ParticleEmittersList.Where(a => a.Compare(particle)).ToList())
+                {
+                    ParticleEmittersList.Remove(particleObject);
+                }
+
                 return;
             }
 
@@ -801,42 +764,6 @@ namespace LeagueSharp.SDK
                 return;
             }
 
-            var shop = sender as Obj_Shop;
-            if (shop != null)
-            {
-                foreach (var shopObject in ShopsList.Where(s => s.Compare(shop)).ToList())
-                {
-                    ShopsList.Remove(shopObject);
-                    if (shop.IsAlly)
-                    {
-                        AllyShopsList.Remove(shopObject);
-                    }
-                    else
-                    {
-                        EnemyShopsList.Remove(shopObject);
-                    }
-                }
-
-                return;
-            }
-
-            var spawnPoint = sender as Obj_SpawnPoint;
-            if (spawnPoint != null)
-            {
-                foreach (var spawnPointObject in SpawnPointsList.Where(s => s.Compare(spawnPoint)).ToList())
-                {
-                    SpawnPointsList.Remove(spawnPointObject);
-                    if (spawnPoint.IsAlly)
-                    {
-                        AllySpawnPointsList.Remove(spawnPointObject);
-                    }
-                    else
-                    {
-                        EnemySpawnPointsList.Remove(spawnPointObject);
-                    }
-                }
-            }
-
             var inhibitor = sender as Obj_BarracksDampener;
             if (inhibitor != null)
             {
@@ -850,23 +777,6 @@ namespace LeagueSharp.SDK
                     else
                     {
                         EnemyInhibitorsList.Remove(inhibitorObject);
-                    }
-                }
-            }
-
-            var nexus = sender as Obj_HQ;
-            if (nexus != null)
-            {
-                foreach (var nexusObject in NexusList.Where(n => n.Compare(nexus)).ToList())
-                {
-                    NexusList.Remove(nexusObject);
-                    if (nexusObject.IsAlly)
-                    {
-                        AllyNexus = null;
-                    }
-                    else
-                    {
-                        EnemyNexus = null;
                     }
                 }
             }
