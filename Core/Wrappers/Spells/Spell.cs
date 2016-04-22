@@ -707,7 +707,7 @@ namespace LeagueSharp.SDK
         /// <returns>
         ///     Farm Location. <seealso cref="FarmLocation" />
         /// </returns>
-        public FarmLocation GetCircularFarmLocation(List<Obj_AI_Base> minions, float overrideWidth = -1)
+        public FarmLocation GetCircularFarmLocation(List<Obj_AI_Minion> minions, float overrideWidth = -1)
         {
             var positions = Minion.GetMinionsPredictedPositions(
                 minions,
@@ -830,7 +830,7 @@ namespace LeagueSharp.SDK
         /// <returns>
         ///     Farm Location. <seealso cref="FarmLocation" />
         /// </returns>
-        public FarmLocation GetLineFarmLocation(List<Obj_AI_Base> minionPositions, float overrideWidth = -1)
+        public FarmLocation GetLineFarmLocation(List<Obj_AI_Minion> minionPositions, float overrideWidth = -1)
         {
             var positions = Minion.GetMinionsPredictedPositions(
                 minionPositions,
