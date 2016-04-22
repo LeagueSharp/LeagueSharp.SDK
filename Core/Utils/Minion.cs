@@ -237,7 +237,7 @@ namespace LeagueSharp.SDK.Utils
         ///     List of Points in <see cref="Vector2" /> type
         /// </returns>
         public static List<Vector2> GetMinionsPredictedPositions(
-            List<Obj_AI_Base> minions,
+            List<Obj_AI_Minion> minions,
             float delay,
             float width,
             float speed,
