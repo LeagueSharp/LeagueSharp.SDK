@@ -29,7 +29,7 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
 
     using SharpDX;
     using SharpDX.Direct3D9;
-
+    using Core.Utils;
     /// <summary>
     ///     A default implementation of <see cref="ADrawable{MenuKeyBind}" />
     /// </summary>
@@ -91,11 +91,11 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
             var centerY =
                 (int)
                 BlueUtilities.GetContainerRectangle(this.Component)
-                    .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
+                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter)
                     .Y;
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.Interacting ? "Press a key" : this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.Interacting ? "Press a key" : this.Component.DisplayName),
                 (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
                 centerY,
                 MenuSettings.TextColor);
@@ -139,11 +139,11 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
                     MenuSettings.ContainerHeight).GetCenteredText(
                         null,
                         MenuSettings.Font,
-                        this.Component.Active ? "On" : "Off",
+                        MultiLanguage.Translation(this.Component.Active ? "On" : "Off"),
                         CenteredFlags.HorizontalCenter).X;
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.Active ? "On" : "Off",
+                MultiLanguage.Translation(this.Component.Active ? "On" : "Off"),
                 centerX,
                 centerY,
                 this.Component.Active ? new ColorBGRA(0, 27, 41, 255) : MenuSettings.TextColor);

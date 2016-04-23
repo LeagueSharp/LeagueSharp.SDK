@@ -22,9 +22,9 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Tech
 {
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
-
     using SharpDX;
     using SharpDX.Direct3D9;
 
@@ -89,12 +89,12 @@ namespace LeagueSharp.SDK.UI.Skins.Tech
             var centerY =
                 (int)
                 TechUtilities.GetContainerRectangle(this.Component)
-                    .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
+                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter)
                     .Y;
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
                 centerY,
                 MenuSettings.TextColor);
@@ -108,7 +108,7 @@ namespace LeagueSharp.SDK.UI.Skins.Tech
                     MenuSettings.ContainerHeight).GetCenteredText(
                         null,
                         MenuSettings.Font,
-                        this.Component.Value ? "On" : "Off",
+                        MultiLanguage.Translation(this.Component.Value ? "On" : "Off"),
                         CenteredFlags.HorizontalCenter).X - 5;
 
             //Left

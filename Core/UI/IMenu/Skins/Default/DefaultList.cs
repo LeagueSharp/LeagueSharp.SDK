@@ -17,13 +17,12 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Default
 {
-    using System.Collections.Generic;
-
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
-
     using SharpDX;
     using SharpDX.Direct3D9;
+    using System.Collections.Generic;
 
     /// <summary>
     ///     A default implementation of a <see cref="ADrawable{MenuList}" />
@@ -97,11 +96,11 @@ namespace LeagueSharp.SDK.UI.Skins.Default
             var dropdownMenuWidth = this.dropDownButtonWidth + (2 * TextSpacing) + this.Component.MaxStringWidth;
             var position = this.Component.Position;
             var rectangleName = DefaultUtilities.GetContainerRectangle(this.Component)
-                .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter);
+                .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)(position.X + MenuSettings.ContainerTextOffset),
                 (int)rectangleName.Y,
                 MenuSettings.TextColor);
@@ -156,7 +155,7 @@ namespace LeagueSharp.SDK.UI.Skins.Default
             Line.End();
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.SelectedValueAsObject.ToString(),
+                MultiLanguage.Translation(this.Component.SelectedValueAsObject.ToString()),
                 (int)position.X + this.Component.MenuWidth - this.dropDownButtonWidth - TextSpacing
                 - this.Component.MaxStringWidth,
                 (int)rectangleName.Y,
@@ -246,7 +245,7 @@ namespace LeagueSharp.SDK.UI.Skins.Default
                                 y += MenuSettings.ContainerHeight;
                                 MenuSettings.Font.DrawText(
                                     MenuManager.Instance.Sprite,
-                                    valueStrings[i],
+                                    MultiLanguage.Translation(valueStrings[i]),
                                     x,
                                     y,
                                     MenuSettings.TextColor);

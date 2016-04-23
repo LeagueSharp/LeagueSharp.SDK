@@ -22,13 +22,12 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Light2
 {
-    using System.Globalization;
-
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI.Skins.Light;
-
     using SharpDX;
     using SharpDX.Direct3D9;
+    using System.Globalization;
 
     /// <summary>
     ///     A default implementation of an <see cref="ADrawable{MenuSlider}" />
@@ -75,7 +74,7 @@ namespace LeagueSharp.SDK.UI.Skins.Light2
             var centeredY =
                 (int)
                 LightUtilities.GetContainerRectangle(this.Component)
-                    .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
+                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter)
                     .Y;
             var percent = (this.Component.Value - this.Component.MinValue)
                           / (float)(this.Component.MaxValue - this.Component.MinValue);
@@ -90,7 +89,7 @@ namespace LeagueSharp.SDK.UI.Skins.Light2
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)(position.X + MenuSettings.ContainerTextOffset),
                 centeredY,
                 MenuSettings.TextColor);
@@ -101,7 +100,7 @@ namespace LeagueSharp.SDK.UI.Skins.Light2
                 0);
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.Value.ToString(CultureInfo.InvariantCulture),
+                MultiLanguage.Translation(this.Component.Value.ToString(CultureInfo.InvariantCulture)),
                 (int)(position.X + this.Component.MenuWidth - 5 - measureText.Width),
                 centeredY,
                 MenuSettings.TextColor);

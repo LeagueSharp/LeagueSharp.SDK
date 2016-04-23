@@ -30,7 +30,7 @@ namespace LeagueSharp.SDK.UI.Skins.Light2
 
     using SharpDX;
     using SharpDX.Direct3D9;
-
+    using Core.Utils;
     /// <summary>
     ///     Provides a default implementation of <see cref="ADrawable{Menu}" />
     /// </summary>
@@ -126,14 +126,14 @@ namespace LeagueSharp.SDK.UI.Skins.Light2
             var centerY =
                 (int)
                 LightUtilities.GetContainerRectangle(this.Component)
-                    .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
+                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter)
                     .Y;
 
             if (this.Component.Toggled)
             {
                 MenuSettings.Font.DrawText(
                     MenuManager.Instance.Sprite,
-                    this.Component.DisplayName,
+                    MultiLanguage.Translation(this.Component.DisplayName),
                     (int)(position.X + MenuSettings.ContainerTextOffset),
                     centerY,
                     new ColorBGRA(237, 245, 254, 255));
@@ -153,7 +153,7 @@ namespace LeagueSharp.SDK.UI.Skins.Light2
             {
                 MenuSettings.Font.DrawText(
                     MenuManager.Instance.Sprite,
-                    this.Component.DisplayName,
+                    MultiLanguage.Translation(this.Component.DisplayName),
                     (int)(position.X + MenuSettings.ContainerTextOffset),
                     centerY,
                     new ColorBGRA(62, 151, 251, 255));

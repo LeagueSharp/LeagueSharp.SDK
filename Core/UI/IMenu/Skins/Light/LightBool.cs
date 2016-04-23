@@ -22,9 +22,9 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Light
 {
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
-
     using SharpDX;
     using SharpDX.Direct3D9;
 
@@ -89,12 +89,12 @@ namespace LeagueSharp.SDK.UI.Skins.Light
             var centerY =
                 (int)
                 LightUtilities.GetContainerRectangle(this.Component)
-                    .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
+                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter)
                     .Y;
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
                 centerY,
                 MenuSettings.TextColor);
@@ -129,7 +129,7 @@ namespace LeagueSharp.SDK.UI.Skins.Light
                         CenteredFlags.HorizontalCenter).X;
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.Value ? "On" : "Off",
+                MultiLanguage.Translation(this.Component.Value ? "On" : "Off"),
                 centerX,
                 centerY,
                 new ColorBGRA(221, 233, 255, 255));

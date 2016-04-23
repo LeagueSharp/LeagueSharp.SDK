@@ -22,13 +22,12 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Blue2
 {
-    using System.Globalization;
-
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI.Skins.Blue;
-
     using SharpDX;
     using SharpDX.Direct3D9;
+    using System.Globalization;
 
     /// <summary>
     ///     A default implementation of an <see cref="ADrawable{MenuSlider}" />
@@ -90,7 +89,7 @@ namespace LeagueSharp.SDK.UI.Skins.Blue2
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)(position.X + MenuSettings.ContainerTextOffset),
                 centeredY,
                 MenuSettings.TextColor);
@@ -101,7 +100,7 @@ namespace LeagueSharp.SDK.UI.Skins.Blue2
                 0);
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.Value.ToString(CultureInfo.InvariantCulture),
+                MultiLanguage.Translation(this.Component.Value.ToString(CultureInfo.InvariantCulture)),
                 (int)(position.X + this.Component.MenuWidth - 5 - measureText.Width),
                 centeredY,
                 MenuSettings.TextColor);

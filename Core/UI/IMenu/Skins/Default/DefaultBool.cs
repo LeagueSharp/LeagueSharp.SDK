@@ -17,11 +17,12 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Default
 {
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
-
     using SharpDX;
     using SharpDX.Direct3D9;
+
 
     /// <summary>
     ///     A default implementation of a <see cref="ADrawable{MenuBool}" />
@@ -84,12 +85,12 @@ namespace LeagueSharp.SDK.UI.Skins.Default
             var centerY =
                 (int)
                 DefaultUtilities.GetContainerRectangle(this.Component)
-                    .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
+                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter)
                     .Y;
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
                 centerY,
                 MenuSettings.TextColor);
@@ -124,7 +125,7 @@ namespace LeagueSharp.SDK.UI.Skins.Default
                         CenteredFlags.HorizontalCenter).X;
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.Value ? "ON" : "OFF",
+                MultiLanguage.Translation(this.Component.Value ? "ON" : "OFF"),
                 centerX,
                 centerY,
                 MenuSettings.TextColor);

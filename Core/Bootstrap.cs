@@ -17,14 +17,14 @@
 
 namespace LeagueSharp.SDK
 {
-    using System.Globalization;
-    using System.Security.Permissions;
-    using System.Threading;
-
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.UI.Skins;
     using LeagueSharp.SDK.Utils;
+    using System.Globalization;
+    using System.Security.Permissions;
+    using System.Threading;
 
     /// <summary>
     ///     Bootstrap is an initialization pointer for the AppDomainManager to initialize the library correctly once loaded in
@@ -99,6 +99,10 @@ namespace LeagueSharp.SDK
             // Load Damages.
             Damage.Initialize();
             Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Damage Library Initialized.");
+
+            // Load Language
+            MultiLanguage.LoadTranslation();
+            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] MultiLanguage Initialized");
 
             // Final notification.
             Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");

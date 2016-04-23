@@ -22,6 +22,7 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Blue
 {
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
 
@@ -64,12 +65,12 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
                 .GetCenteredText(
                     null,
                     BlueMenuSettings.FontCaption,
-                    this.Component.DisplayName,
+                    MultiLanguage.Translation(this.Component.DisplayName),
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
             BlueMenuSettings.FontCaption.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)centerY.X,
                 (int)centerY.Y,
                 BlueMenuSettings.TextCaptionColor);

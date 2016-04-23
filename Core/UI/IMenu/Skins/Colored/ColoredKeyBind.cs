@@ -22,13 +22,12 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Colored
 {
-    using System.Windows.Forms;
-
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
-
     using SharpDX;
     using SharpDX.Direct3D9;
+    using System.Windows.Forms;
 
     /// <summary>
     ///     A default implementation of <see cref="ADrawable{MenuKeyBind}" />
@@ -95,7 +94,7 @@ namespace LeagueSharp.SDK.UI.Skins.Colored
                     .Y;
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.Interacting ? "Press a key" : this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.Interacting ? "Press a key" : this.Component.DisplayName),
                 (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
                 centerY,
                 MenuSettings.TextColor);

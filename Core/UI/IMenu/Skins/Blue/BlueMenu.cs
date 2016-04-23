@@ -22,13 +22,12 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Blue
 {
-    using System.Linq;
-
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
-
     using SharpDX;
     using SharpDX.Direct3D9;
+    using System.Linq;
 
     /// <summary>
     ///     Provides a default implementation of <see cref="ADrawable{Menu}" />
@@ -130,7 +129,7 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)(position.X + MenuSettings.ContainerTextOffset),
                 centerY,
                 MenuSettings.TextColor);
