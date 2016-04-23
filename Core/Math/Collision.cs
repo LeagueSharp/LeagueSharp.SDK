@@ -20,15 +20,12 @@ namespace LeagueSharp.SDK
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text.RegularExpressions;
 
     using LeagueSharp.Data.Enumerations;
     using LeagueSharp.SDK.Polygons;
     using LeagueSharp.SDK.Utils;
 
     using SharpDX;
-
-    using Color = System.Drawing.Color;
 
     /// <summary>
     ///     Collision class, calculates collision for moving objects.
@@ -37,15 +34,9 @@ namespace LeagueSharp.SDK
     {
         #region Static Fields
 
-        /// <summary>
-        ///     Wall Cast Tick (for <c>Yasuo</c>)
-        /// </summary>
-        private static int wallCastT;
+        private static MissileClient yasuoWallLeft, yasuoWallRight;
 
-        /// <summary>
-        ///     <c>Yasuo</c>'s wall position in Vector2 format.
-        /// </summary>
-        private static Vector2 yasuoWallCastedPos;
+        private static RectanglePoly yasuoWallPoly;
 
         #endregion
 
@@ -57,7 +48,51 @@ namespace LeagueSharp.SDK
         /// </summary>
         static Collision()
         {
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
+            GameObject.OnCreate += (sender, args) =>
+                {
+                    var missile = sender as MissileClient;
+                    var spellCaster = missile?.SpellCaster as Obj_AI_Hero;
+
+                    if (spellCaster == null || spellCaster.ChampionName != "Yasuo"
+                        || spellCaster.Team == GameObjects.Player.Team)
+                    {
+                        return;
+                    }
+
+                    switch (missile.SData.Name)
+                    {
+                        case "YasuoWMovingWallMisL":
+                            yasuoWallLeft = missile;
+                            Game.PrintChat("1");
+                            break;
+                        case "YasuoWMovingWallMisR":
+                            yasuoWallRight = missile;
+                            Game.PrintChat("2");
+                            break;
+                        case "YasuoWMovingWallMisVis":
+                            yasuoWallRight = missile;
+                            Game.PrintChat("3");
+                            break;
+                    }
+                };
+            GameObject.OnDelete += (sender, args) =>
+                {
+                    var missile = sender as MissileClient;
+
+                    if (missile == null)
+                    {
+                        return;
+                    }
+
+                    if (missile.Compare(yasuoWallLeft))
+                    {
+                        yasuoWallLeft = null;
+                    }
+                    else if (missile.Compare(yasuoWallRight))
+                    {
+                        yasuoWallRight = null;
+                    }
+                };
         }
 
         #endregion
@@ -120,45 +155,19 @@ namespace LeagueSharp.SDK
 
                 if (input.CollisionObjects.HasFlag(CollisionableObjects.YasuoWall))
                 {
-                    /*if (Variables.TickCount - wallCastT > 4000)
-                    {
-                        continue;
-                    }*/
-
-                    var wall =
-                        GameObjects.AllGameObjects.FirstOrDefault(
-                            gameObject =>
-                            gameObject.IsValid
-                            && Regex.IsMatch(gameObject.Name, "_w_windwall_enemy_0.\\.troy", RegexOptions.IgnoreCase));
-
-                    if (wall == null)
+                    if (yasuoWallLeft == null || yasuoWallRight == null)
                     {
                         continue;
                     }
-                    Game.PrintChat(wall.Name + " => " + wall.Type + " | " + wall.Team);
 
-                    var level = wall.Name.Substring(wall.Name.Length - 6, 1);
-                    var wallWidth = 300 + (50 * Convert.ToInt32(level));
+                    yasuoWallPoly = new RectanglePoly(yasuoWallLeft.Position, yasuoWallRight.Position, 75);
 
-                    var wallDirection =
-                        (wall.Position.ToVector2() - wall.Orientation.ToVector2()).Normalized().Perpendicular();
-                    var wallStart = wall.Position.ToVector2() + (wallWidth / 2f * wallDirection);
-                    var wallEnd = wallStart - (wallWidth * wallDirection);
-
-                    /*var wallIntersect = wallStart.Intersection(wallEnd, position.ToVector2(), input.From.ToVector2());
-
-                    if (wallIntersect.Intersects)
-                    {
-                        result.Add(GameObjects.Player);
-                    }*/
-
-                    var wallPolygon = new RectanglePoly(wallStart, wallEnd, 75);
                     var intersections = new List<Vector2>();
-                    for (var i = 0; i < wallPolygon.Points.Count; i++)
+                    for (var i = 0; i < yasuoWallPoly.Points.Count; i++)
                     {
                         var inter =
-                            wallPolygon.Points[i].Intersection(
-                                wallPolygon.Points[i != wallPolygon.Points.Count - 1 ? i + 1 : 0],
+                            yasuoWallPoly.Points[i].Intersection(
+                                yasuoWallPoly.Points[i != yasuoWallPoly.Points.Count - 1 ? i + 1 : 0],
                                 input.From.ToVector2(),
                                 position.ToVector2());
 
@@ -167,7 +176,6 @@ namespace LeagueSharp.SDK
                             intersections.Add(inter.Point);
                         }
                     }
-                    wallPolygon.Draw(Color.Red);
 
                     if (intersections.Count > 0)
                     {
@@ -198,20 +206,6 @@ namespace LeagueSharp.SDK
                    || predPos.Distance(pos) < input.Radius + input.Unit.BoundingRadius / 2
                    || predPos.DistanceSquared(input.From.ToVector2(), pos.ToVector2(), true)
                    <= Math.Pow(input.Radius + input.Unit.BoundingRadius + extraRadius, 2);
-        }
-
-        /// <summary>
-        ///     Processed Casted Spell subscribed event function
-        /// </summary>
-        /// <param name="sender"><see cref="Obj_AI_Base" /> sender.</param>
-        /// <param name="args">Processed Spell Cast Data</param>
-        private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            if (sender.IsValid && sender.Team != GameObjects.Player.Team && args.SData.Name == "YasuoWMovingWall")
-            {
-                wallCastT = Variables.TickCount;
-                yasuoWallCastedPos = sender.ServerPosition.ToVector2();
-            }
         }
 
         #endregion
