@@ -22,14 +22,12 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Colored
 {
-    using System.Drawing;
-
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
-
     using SharpDX;
     using SharpDX.Direct3D9;
-
+    using System.Drawing;
     using Color = SharpDX.Color;
     using Rectangle = SharpDX.Rectangle;
     using Utilities = LeagueSharp.SDK.UI.Utilities;
@@ -220,7 +218,7 @@ namespace LeagueSharp.SDK.UI.Skins.Colored
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
                 (int)rectangleName.Y,
                 MenuSettings.TextColor);

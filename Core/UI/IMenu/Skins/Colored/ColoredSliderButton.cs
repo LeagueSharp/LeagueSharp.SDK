@@ -22,14 +22,13 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Colored
 {
-    using System;
-    using System.Globalization;
-
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
-
     using SharpDX;
     using SharpDX.Direct3D9;
+    using System;
+    using System.Globalization;
 
     /// <summary>
     ///     A default implementation of an <see cref="ADrawable{MenuSliderButton}" />
@@ -100,7 +99,7 @@ namespace LeagueSharp.SDK.UI.Skins.Colored
             var centeredY =
                 (int)
                 ColoredUtilities.GetContainerRectangle(this.Component)
-                    .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter)
+                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter)
                     .Y;
             var percent = (this.Component.SValue - this.Component.MinValue)
                           / (float)(this.Component.MaxValue - this.Component.MinValue);
@@ -124,7 +123,7 @@ namespace LeagueSharp.SDK.UI.Skins.Colored
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)(position.X + MenuSettings.ContainerTextOffset),
                 (int)(position.Y + (centeredY - position.Y) / 2),
                 MenuSettings.TextColor);
@@ -135,7 +134,7 @@ namespace LeagueSharp.SDK.UI.Skins.Colored
                 0);
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.SValue.ToString(CultureInfo.InvariantCulture),
+                MultiLanguage.Translation(this.Component.SValue.ToString(CultureInfo.InvariantCulture)),
                 (int)(position.X + this.Component.MenuWidth - measureText.Width - Offset - MenuSettings.ContainerHeight),
                 (int)(position.Y + (centeredY - position.Y) / 2),
                 MenuSettings.TextColor);

@@ -22,6 +22,7 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Tech
 {
+    using Core.Utils;
     using SharpDX;
 
     /// <summary>
@@ -38,7 +39,7 @@ namespace LeagueSharp.SDK.UI.Skins.Tech
         /// <returns>The width</returns>
         public static int CalcWidthItem(MenuItem menuItem)
         {
-            return (int)(MeasureString(menuItem.DisplayName).Width + (MenuSettings.ContainerTextOffset * 2));
+            return (int)(MeasureString(MultiLanguage.Translation(menuItem.DisplayName)).Width + (MenuSettings.ContainerTextOffset * 2));
         }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace LeagueSharp.SDK.UI.Skins.Tech
         /// <returns>The <see cref="int" /></returns>
         public static int CalcWidthText(string text)
         {
-            return MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, text, 0).Width;
+            return MenuSettings.Font.MeasureText(MenuManager.Instance.Sprite, MultiLanguage.Translation(text), 0).Width;
         }
 
         /// <summary>

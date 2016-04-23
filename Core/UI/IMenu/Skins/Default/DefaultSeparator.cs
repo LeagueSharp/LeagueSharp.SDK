@@ -17,6 +17,7 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Default
 {
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
 
@@ -59,12 +60,12 @@ namespace LeagueSharp.SDK.UI.Skins.Default
                 .GetCenteredText(
                     null,
                     MenuSettings.Font,
-                    this.Component.DisplayName,
+                    MultiLanguage.Translation(this.Component.DisplayName),
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)centerY.X,
                 (int)centerY.Y,
                 MenuSettings.TextColor);

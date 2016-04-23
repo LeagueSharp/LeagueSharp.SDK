@@ -17,11 +17,12 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Default
 {
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
-
     using SharpDX;
     using SharpDX.Direct3D9;
+
 
     /// <summary>
     ///     A default implementation of an <see cref="ADrawable{MenuColor}" />
@@ -136,7 +137,7 @@ namespace LeagueSharp.SDK.UI.Skins.Default
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
                 (int)rectangleName.Y,
                 MenuSettings.TextColor);
@@ -221,7 +222,7 @@ namespace LeagueSharp.SDK.UI.Skins.Default
                                         CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
                             MenuSettings.Font.DrawText(
                                 MenuManager.Instance.Sprite,
-                                detail,
+                                MultiLanguage.Translation(detail),
                                 (int)rectanglePreview.X,
                                 (int)rectanglePreview.Y,
                                 new ColorBGRA(
@@ -248,7 +249,7 @@ namespace LeagueSharp.SDK.UI.Skins.Default
                             {
                                 MenuSettings.Font.DrawText(
                                     MenuManager.Instance.Sprite,
-                                    lineNames[i],
+                                    MultiLanguage.Translation(lineNames[i]),
                                     this.pickerX + BorderOffset,
                                     textY + (i * (SliderOffset + SliderHeight)),
                                     Color.White);

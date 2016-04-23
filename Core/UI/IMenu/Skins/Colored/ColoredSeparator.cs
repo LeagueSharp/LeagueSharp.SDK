@@ -22,13 +22,12 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Colored
 {
-    using System;
-
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
-
     using SharpDX;
     using SharpDX.Direct3D9;
+    using System;
 
     /// <summary>
     ///     Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.
@@ -83,12 +82,12 @@ namespace LeagueSharp.SDK.UI.Skins.Colored
                 .GetCenteredText(
                     null,
                     ColoredMenuSettings.FontCaption,
-                    this.Component.DisplayName.ToUpper(),
+                    MultiLanguage.Translation(this.Component.DisplayName),
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
             ColoredMenuSettings.FontCaption.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName.ToUpper(),
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)centerY.X,
                 (int)centerY.Y,
                 ColoredMenuSettings.TextCaptionColor);

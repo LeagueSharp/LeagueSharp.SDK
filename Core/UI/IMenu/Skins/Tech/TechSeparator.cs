@@ -22,9 +22,9 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Tech
 {
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
-
     using SharpDX.Direct3D9;
 
     /// <summary>
@@ -80,12 +80,12 @@ namespace LeagueSharp.SDK.UI.Skins.Tech
                 .GetCenteredText(
                     null,
                     TechMenuSettings.FontCaption,
-                    this.Component.DisplayName.ToUpper(),
+                    MultiLanguage.Translation(this.Component.DisplayName),
                     CenteredFlags.VerticalCenter | CenteredFlags.HorizontalCenter);
 
             TechMenuSettings.FontCaption.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName.ToUpper(),
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)centerY.X,
                 (int)centerY.Y,
                 TechMenuSettings.TextCaptionColor);

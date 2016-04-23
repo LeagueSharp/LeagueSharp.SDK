@@ -22,9 +22,9 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Tech
 {
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
-
     using SharpDX;
     using SharpDX.Direct3D9;
 
@@ -114,11 +114,11 @@ namespace LeagueSharp.SDK.UI.Skins.Tech
         public override void Draw()
         {
             var rectangleName = TechUtilities.GetContainerRectangle(this.Component)
-                .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter);
+                .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
                 (int)rectangleName.Y,
                 MenuSettings.TextColor);
@@ -139,7 +139,7 @@ namespace LeagueSharp.SDK.UI.Skins.Tech
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.ButtonText,
+                MultiLanguage.Translation(this.Component.ButtonText),
                 (int)(this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - TextGap),
                 (int)rectangleName.Y,
                 MenuSettings.TextColor);

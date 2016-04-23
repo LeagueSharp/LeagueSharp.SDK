@@ -22,9 +22,9 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Colored
 {
+    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
-
     using SharpDX;
 
     /// <summary>
@@ -99,11 +99,11 @@ namespace LeagueSharp.SDK.UI.Skins.Colored
         public override void Draw()
         {
             var rectangleName = ColoredUtilities.GetContainerRectangle(this.Component)
-                .GetCenteredText(null, MenuSettings.Font, this.Component.DisplayName, CenteredFlags.VerticalCenter);
+                .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.DisplayName,
+                MultiLanguage.Translation(this.Component.DisplayName),
                 (int)(this.Component.Position.X + MenuSettings.ContainerTextOffset),
                 (int)rectangleName.Y,
                 MenuSettings.TextColor);
@@ -124,7 +124,7 @@ namespace LeagueSharp.SDK.UI.Skins.Colored
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
-                this.Component.ButtonText,
+                MultiLanguage.Translation(this.Component.ButtonText),
                 (int)(this.Component.Position.X + this.Component.MenuWidth - buttonTextWidth - TextGap),
                 (int)rectangleName.Y,
                 MenuSettings.TextColor);
