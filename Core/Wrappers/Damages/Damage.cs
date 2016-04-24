@@ -201,6 +201,12 @@ namespace LeagueSharp.SDK
                     }
                 }
 
+                // Devourer Stacks
+                if (hero.HasBuff("enchantment_slayer_stacks"))
+                {
+                    dmgMagical += hero.GetBuffCount("enchantment_slayer_stacks");
+                }
+
                 if (targetHero != null)
                 {
                     // Dorans Shield
@@ -232,8 +238,7 @@ namespace LeagueSharp.SDK
                     }
 
                     // RiftHerald P
-                    if (!hero.IsMelee() && target.Team == GameObjectTeam.Neutral
-                        && Regex.IsMatch(target.Name, "SRU_RiftHerald"))
+                    if (!hero.IsMelee() && target.Name.Equals("SRU_RiftHerald"))
                     {
                         dmgReduce *= 0.65;
                     }
