@@ -32,12 +32,21 @@ namespace LeagueSharp.SDK
     /// </summary>
     public sealed class TargetSelector
     {
+        #region Static Fields
+
+        /// <summary>
+        ///     Initialized flag.
+        /// </summary>
+        public static bool Initialized = false;
+
+        #endregion
+
         #region Fields
 
         /// <summary>
         ///     The menu.
         /// </summary>
-        private readonly Menu menu = new Menu("targetselector", "Target Selector");
+        private readonly Menu menu = new Menu("targetselector", "TargetSelector");
 
         #endregion
 
@@ -51,21 +60,26 @@ namespace LeagueSharp.SDK
         /// </param>
         public TargetSelector(Menu menu)
         {
-            Events.OnLoad += (sender, args) =>
-                {
-                    menu.Add(this.menu);
+            if (!Initialized)
+            {
+                Events.OnLoad += (sender, args) =>
+                    {
+                        menu.Add(this.menu);
 
-                    this.Selected = new TargetSelectorSelected(this.menu);
-                    this.Humanizer = new TargetSelectorHumanizer(this.menu);
-                    this.Mode = new TargetSelectorMode(this.menu);
-                    this.Drawing = new TargetSelectorDrawing(this.menu, this.Selected, this.Mode);
+                        this.Selected = new TargetSelectorSelected(this.menu);
+                        this.Humanizer = new TargetSelectorHumanizer(this.menu);
+                        this.Mode = new TargetSelectorMode(this.menu);
+                        this.Drawing = new TargetSelectorDrawing(this.menu, this.Selected, this.Mode);
+                        this.Locked = new TargetSelectorLockTarget(this.menu);
 
-                    // Keep submenus at top
-                    this.menu.Components =
-                        this.menu.Components.OrderByDescending(c => c.Value is Menu && c.Key.Equals("drawing"))
-                            .ThenByDescending(c => c.Value is Menu)
-                            .ToDictionary(p => p.Key, p => p.Value);
-                };
+                        // Keep submenus at top
+                        this.menu.Components =
+                            this.menu.Components.OrderByDescending(c => c.Value is Menu && c.Key.Equals("drawing"))
+                                .ThenByDescending(c => c.Value is Menu)
+                                .ToDictionary(p => p.Key, p => p.Value);
+                    };
+            }
+            Initialized = true;
         }
 
         #endregion
@@ -86,6 +100,11 @@ namespace LeagueSharp.SDK
         ///     Gets the selected instance.
         /// </summary>
         public TargetSelectorSelected Selected { get; private set; }
+
+        /// <summary>
+        ///     Gets the locked instance.
+        /// </summary>
+        public TargetSelectorLockTarget Locked { get; private set; }
 
         #endregion
 
@@ -108,7 +127,7 @@ namespace LeagueSharp.SDK
         /// </returns>
         public Obj_AI_Hero GetSelectedTarget()
         {
-            return this.Selected.Target;
+            return this.Locked.LockedTarget ?? this.Selected.Target;
         }
 
         /// <summary>
@@ -226,6 +245,11 @@ namespace LeagueSharp.SDK
             Vector3 from = default(Vector3),
             IEnumerable<Obj_AI_Hero> ignoreChampions = null)
         {
+            if (this.Locked.Enabled && this.Locked.LockedTarget != null)
+            {
+                return new List<Obj_AI_Hero> { this.Locked.LockedTarget };
+            }
+
             if (this.Selected.Focus && this.Selected.Force)
             {
                 if (IsValidTarget(this.Selected.Target, float.MaxValue, damageType, ignoreShields, from))

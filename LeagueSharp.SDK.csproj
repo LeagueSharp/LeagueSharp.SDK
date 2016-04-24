@@ -49,23 +49,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>D:\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>C:\L3\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Data">
-      <HintPath>D:\LeagueSharp\System\LeagueSharp.Data.dll</HintPath>
+      <HintPath>C:\L3\System\LeagueSharp.Data.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Sandbox">
-      <HintPath>D:\LeagueSharp\System\LeagueSharp.Sandbox.dll</HintPath>
+      <HintPath>C:\L3\System\LeagueSharp.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>D:\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
+      <HintPath>C:\L3\System\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>D:\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>C:\L3\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>D:\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>C:\L3\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -307,6 +307,7 @@
     <Compile Include="Core\Wrappers\Spells\Tracker\Tracker.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\HeroVisibleEntry.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\ITargetSelectorMode.cs" />
+    <Compile Include="Core\Wrappers\TargetSelector\TargetSelectorLockTarget.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\Modes\IWeightItem.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\Modes\WeightItemWrapper.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\TargetSelectorDrawing.cs" />
