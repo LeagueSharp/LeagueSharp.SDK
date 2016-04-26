@@ -70,7 +70,7 @@ namespace LeagueSharp.SDK
                     damage = source.CalculateMixedDamage(target, damage / 2, damage / 2);
                     break;
                 case DamageType.True:
-                    damage = Math.Floor(source.PassivePercentMod(target, Math.Max(amount, 0), DamageType.True));
+                    damage = Math.Max(amount, 0);
                     break;
             }
 

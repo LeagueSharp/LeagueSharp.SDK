@@ -470,14 +470,14 @@ namespace LeagueSharp.SDK
                                 && i.Distance(@base) < 800 && (i.IsHPBarRendered || i.HasBuff("illaoir2"))),
                             true);
                         break;
-                    /*case "Irelia":
+                    case "Irelia":
                         AddPassiveAttack(
                             "Irelia",
                             (hero, @base) => hero.HasBuff("ireliahitenstylecharged"),
                             DamageType.True,
                             (hero, @base) => hero.GetSpellDamage(@base, SpellSlot.W),
                             true);
-                        break;*/
+                        break;
                     case "JarvanIV":
                         AddPassiveAttack(
                             "JarvanIV",
