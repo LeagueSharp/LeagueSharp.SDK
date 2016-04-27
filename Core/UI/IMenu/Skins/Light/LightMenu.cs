@@ -349,7 +349,7 @@ namespace LeagueSharp.SDK.UI.Skins.Light
         {
             return
                 (int)
-                (LightUtilities.MeasureString(this.Component.DisplayName + " »").Width
+                (LightUtilities.MeasureString(MultiLanguage.Translation(this.Component.DisplayName) + " »").Width
                  + (MenuSettings.ContainerTextOffset * 2) + MenuSettings.ContainerTextMarkWidth);
         }
 

@@ -337,7 +337,7 @@ namespace LeagueSharp.SDK.UI.Skins.Light2
         {
             return
                 (int)
-                (LightUtilities.MeasureString(this.Component.DisplayName + " \u25B6").Width
+                (LightUtilities.MeasureString(MultiLanguage.Translation(this.Component.DisplayName) + " \u25B6").Width
                  + (MenuSettings.ContainerTextOffset * 2) + MenuSettings.ContainerTextMarkWidth);
         }
 

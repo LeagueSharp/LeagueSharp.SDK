@@ -481,7 +481,7 @@ namespace LeagueSharp.SDK.UI.Skins.Colored
         {
             return
                 (int)
-                (ColoredUtilities.MeasureString(this.Component.DisplayName + " »").Width
+                (ColoredUtilities.MeasureString(MultiLanguage.Translation(this.Component.DisplayName) + " »").Width
                  + (MenuSettings.ContainerTextOffset * 2) + MenuSettings.ContainerTextMarkWidth);
         }
 
