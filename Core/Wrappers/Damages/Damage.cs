@@ -680,7 +680,7 @@ namespace LeagueSharp.SDK
             if (source is Obj_AI_Hero)
             {
                 // Exhaust
-                if (source.HasBuff("summonerexhaustslow"))
+                if (source.HasBuff("SummonerExhaust"))
                 {
                     amount *= 0.6;
                 }
