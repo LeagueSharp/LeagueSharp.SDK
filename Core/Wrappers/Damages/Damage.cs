@@ -682,7 +682,7 @@ namespace LeagueSharp.SDK
                 // Exhaust
                 if (source.HasBuff("Exhaust"))
                 {
-                    amount *= 0.6;
+                    amount *= 0.50;
                 }
 
                 // Urgot P
