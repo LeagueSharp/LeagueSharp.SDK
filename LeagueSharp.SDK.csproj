@@ -49,23 +49,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>C:\L3\System\LeagueSharp.dll</HintPath>
+      <HintPath>D:\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Data">
-      <HintPath>C:\L3\System\LeagueSharp.Data.dll</HintPath>
+      <HintPath>D:\LeagueSharp\System\LeagueSharp.Data.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Sandbox">
-      <HintPath>C:\L3\System\LeagueSharp.Sandbox.dll</HintPath>
+      <HintPath>D:\LeagueSharp\System\LeagueSharp.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>C:\L3\System\Newtonsoft.Json.dll</HintPath>
+      <HintPath>D:\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\L3\System\SharpDX.dll</HintPath>
+      <HintPath>D:\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>C:\L3\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>D:\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -134,7 +134,7 @@
     <Compile Include="Core\Math\Prediction\GamePath.cs" />
     <Compile Include="Core\Signals\Signal.cs" />
     <Compile Include="Core\Signals\SignalManager.cs" />
-	<Compile Include="Core\UI\Animations\AnimationEase.cs" />
+    <Compile Include="Core\UI\Animations\AnimationEase.cs" />
     <Compile Include="Core\UI\Animations\AnimationFade.cs" />
     <Compile Include="Core\UI\Animations\Animation.cs" />
     <Compile Include="Core\UI\IMenu\Abstracts\AMenuComponent.cs" />

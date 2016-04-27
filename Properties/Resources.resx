@@ -1008,7 +1008,11 @@
 	"LaneClear Setting": "清线设置",
 	"JungleClear Setting": "清野设置",
 	"Anti GapCloser": "反突进",
-	"HitChance: 0 = low, 3 = VeryHigh": "命中率: 0为最低, 3为非常高"
+	"HitChance: 0 = low, 3 = VeryHigh": "命中率: 0为最低, 3为非常高",
+  "Lock target": "锁定目标",
+  "Lock target on MIA (ms)": "锁定目标时间",
+  "Show countdown": "显示倒计时",
+  "Show notification": "显示通知"
 }
     </value>
   </data>

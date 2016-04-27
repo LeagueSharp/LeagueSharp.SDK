@@ -519,7 +519,7 @@ namespace LeagueSharp.SDK.UI.Skins.Tech
         {
             return
                 (int)
-                (TechUtilities.MeasureString(this.Component.DisplayName + " »").Width
+                (TechUtilities.MeasureString(MultiLanguage.Translation(this.Component.DisplayName) + " »").Width
                  + (MenuSettings.ContainerTextOffset * 2) + MenuSettings.ContainerTextMarkWidth);
         }
 
