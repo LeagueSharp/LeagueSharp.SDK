@@ -307,7 +307,7 @@ namespace LeagueSharp.SDK
         }
 
         /// <summary>
-        ///     Gets the player's range.
+        ///     Gets the target's AA range.
         /// </summary>
         /// <param name="target">
         ///     The target.
@@ -315,9 +315,31 @@ namespace LeagueSharp.SDK
         /// <returns>
         ///     The range.
         /// </returns>
-        public float GetMyRange(T target)
+        public float GetAutoAttackRange(T target)
         {
             return target.GetRealAutoAttackRange();
+        }
+
+        /// <summary>
+        /// Returns wether the target is in AutoAttack range or not.
+        /// </summary>
+        /// <param name="target">The target</param>
+        /// <returns>Wether you can attack the target or not</returns>
+        public bool InAutoAttackRange(AttackableUnit target)
+        {
+            var baseTarget = (Obj_AI_Base)target;
+            var myRange = ObjectManager.Player.GetRealAutoAttackRange();
+            if (baseTarget != null)
+            {
+                return baseTarget.IsHPBarRendered
+                       && Vector2.DistanceSquared(
+                           baseTarget.ServerPosition.ToVector2(),
+                           ObjectManager.Player.ServerPosition.ToVector2()) <= myRange * myRange;
+            }
+            return target.IsValidTarget()
+                   && Vector2.DistanceSquared(
+                       target.Position.ToVector2(),
+                       ObjectManager.Player.ServerPosition.ToVector2()) <= myRange * myRange;
         }
 
         /// <summary>
