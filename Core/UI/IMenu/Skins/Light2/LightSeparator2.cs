@@ -22,9 +22,10 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Light2
 {
-    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI.Skins.Light;
+    using LeagueSharp.SDK.Utils;
+
     using SharpDX;
 
     /// <summary>

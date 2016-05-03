@@ -17,12 +17,13 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Default
 {
-    using Core.Utils;
+    using System.Windows.Forms;
+
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using System.Windows.Forms;
 
     /// <summary>
     ///     A default implementation of <see cref="ADrawable{MenuKeyBind}" />

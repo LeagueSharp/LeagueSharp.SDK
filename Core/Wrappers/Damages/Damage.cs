@@ -19,7 +19,6 @@ namespace LeagueSharp.SDK
 {
     using System;
     using System.Linq;
-    using System.Text.RegularExpressions;
 
     using LeagueSharp.Data.DataTypes;
     using LeagueSharp.Data.Enumerations;
@@ -70,7 +69,7 @@ namespace LeagueSharp.SDK
                     damage = source.CalculateMixedDamage(target, damage / 2, damage / 2);
                     break;
                 case DamageType.True:
-                    damage = Math.Max(amount, 0);
+                    damage = Math.Max(Math.Floor(amount), 0);
                     break;
             }
 
@@ -202,9 +201,10 @@ namespace LeagueSharp.SDK
                 }
 
                 // Devourer Stacks
-                if (hero.HasBuff("enchantment_slayer_stacks"))
+                var buffDevourer = hero.GetBuffCount("enchantment_slayer_stacks");
+                if (buffDevourer > 0)
                 {
-                    dmgMagical += hero.GetBuffCount("enchantment_slayer_stacks");
+                    dmgMagical += buffDevourer;
                 }
 
                 if (targetHero != null)
@@ -238,7 +238,7 @@ namespace LeagueSharp.SDK
                     }
 
                     // RiftHerald P
-                    if (!hero.IsMelee() && target.Name.Equals("SRU_RiftHerald"))
+                    if (!hero.IsMelee() && target.Team == GameObjectTeam.Neutral && target.Name == "SRU_RiftHerald")
                     {
                         dmgReduce *= 0.65;
                     }

@@ -22,12 +22,13 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Colored
 {
-    using Core.Utils;
+    using System;
+
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using System;
 
     /// <summary>
     ///     Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.

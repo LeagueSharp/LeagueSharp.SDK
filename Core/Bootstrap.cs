@@ -17,14 +17,14 @@
 
 namespace LeagueSharp.SDK
 {
-    using Core.Utils;
+    using System.Globalization;
+    using System.Security.Permissions;
+    using System.Threading;
+
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.UI.Skins;
     using LeagueSharp.SDK.Utils;
-    using System.Globalization;
-    using System.Security.Permissions;
-    using System.Threading;
 
     /// <summary>
     ///     Bootstrap is an initialization pointer for the AppDomainManager to initialize the library correctly once loaded in

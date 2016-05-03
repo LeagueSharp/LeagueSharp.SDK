@@ -17,12 +17,11 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Default
 {
-    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-
 
     /// <summary>
     ///     A default implementation of an <see cref="ADrawable{MenuColor}" />

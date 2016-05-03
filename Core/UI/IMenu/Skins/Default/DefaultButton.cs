@@ -17,7 +17,6 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Default
 {
-    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
 
@@ -110,7 +109,11 @@ namespace LeagueSharp.SDK.UI.Skins.Default
         public override void Draw()
         {
             var rectangleName = DefaultUtilities.GetContainerRectangle(this.Component)
-                .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter);
+                .GetCenteredText(
+                    null,
+                    MenuSettings.Font,
+                    MultiLanguage.Translation(this.Component.DisplayName),
+                    CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,

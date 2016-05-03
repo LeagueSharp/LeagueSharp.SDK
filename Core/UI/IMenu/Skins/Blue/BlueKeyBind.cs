@@ -29,7 +29,7 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
 
     using SharpDX;
     using SharpDX.Direct3D9;
-    using Core.Utils;
+
     /// <summary>
     ///     A default implementation of <see cref="ADrawable{MenuKeyBind}" />
     /// </summary>
@@ -91,7 +91,11 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
             var centerY =
                 (int)
                 BlueUtilities.GetContainerRectangle(this.Component)
-                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter)
+                    .GetCenteredText(
+                        null,
+                        MenuSettings.Font,
+                        MultiLanguage.Translation(this.Component.DisplayName),
+                        CenteredFlags.VerticalCenter)
                     .Y;
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,

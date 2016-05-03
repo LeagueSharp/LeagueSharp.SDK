@@ -1,8 +1,5 @@
-﻿namespace LeagueSharp.SDK.Core.Utils
+﻿namespace LeagueSharp.SDK.Utils
 {
-    using Enumerations;
-    using Properties;
-    using SDK.Utils;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -10,48 +7,66 @@
     using System.Security.Cryptography;
     using System.Text;
 
+    using LeagueSharp.Sandbox;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Properties;
+
+    using Newtonsoft.Json;
+
     /// <summary>
-    /// Provides multi-lingual strings.
+    ///     Provides multi-lingual strings.
     /// </summary>
     public static class MultiLanguage
     {
-        /// <summary>
-        /// The translations
-        /// </summary>
-        private static Dictionary<string, string> Translations = new Dictionary<string, string>();
+        #region Static Fields
 
         /// <summary>
-        /// Translates the text into the loaded language.
+        ///     The translations
         /// </summary>
-        /// <param name="textToTranslate">The text to translate.</param>
-        /// <returns>System.String.</returns>
-        public static string Translation(string textToTranslate)
+        private static Dictionary<string, string> translations = new Dictionary<string, string>();
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Loads the translation.
+        /// </summary>
+        /// <param name="languageName">Name of the language.</param>
+        /// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise false.</returns>
+        public static bool LoadLanguage(string languageName)
         {
-            var textToTranslateToLower = textToTranslate.ToLower();
-            if (Translations.ContainsKey(textToTranslateToLower))
+            try
             {
-                return Translations[textToTranslateToLower];
+                var languageStrings =
+                    new ResourceManager("LeagueSharp.SDK.Properties.Resources", typeof(Resources).Assembly).GetString(
+                        languageName + "Json");
+
+                if (string.IsNullOrEmpty(languageStrings))
+                {
+                    return false;
+                }
+
+                translations = JsonConvert.DeserializeObject<Dictionary<string, string>>(languageStrings);
+                return true;
             }
-            else if (Translations.ContainsKey(textToTranslate))
+            catch (Exception ex)
             {
-                return Translations[textToTranslate];
-            }
-            else
-            {
-                return textToTranslate;
+                Logging.Write()(LogLevel.Error, $"[MultiLanguage] Load Language Catch Exception：{ex.Message}");
+                return false;
             }
         }
 
         /// <summary>
-        /// judge the select language
+        ///     judge the select language
         /// </summary>
         public static void LoadTranslation()
         {
             try
             {
-                var SelectLanguage = Sandbox.SandboxConfig.SelectedLanguage;
+                var selectLanguage = SandboxConfig.SelectedLanguage;
 
-                if (SelectLanguage == "Chinese")
+                if (selectLanguage == "Chinese")
                 {
                     LoadLanguage("Chinese");
                 }
@@ -67,40 +82,36 @@
         }
 
         /// <summary>
-        /// Loads the translation.
+        ///     Translates the text into the loaded language.
         /// </summary>
-        /// <param name="languageName">Name of the language.</param>
-        /// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise false.</returns>
-        public static bool LoadLanguage(string languageName)
+        /// <param name="textToTranslate">The text to translate.</param>
+        /// <returns>System.String.</returns>
+        public static string Translation(string textToTranslate)
         {
-            try
-            {
-                var languageStrings = new ResourceManager("LeagueSharp.SDK.Properties.Resources", typeof(Resources).Assembly).GetString(languageName + "Json");
-                if (string.IsNullOrEmpty(languageStrings))
-                {
-                    return false;
-                }
-                Translations = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(languageStrings);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logging.Write()(LogLevel.Error, $"[MultiLanguage] Load Language Catch Exception：{ex.Message}");
-                return false;
-            }
+            var textToTranslateToLower = textToTranslate.ToLower();
+
+            return translations.ContainsKey(textToTranslateToLower)
+                       ? translations[textToTranslateToLower]
+                       : (translations.ContainsKey(textToTranslate) ? translations[textToTranslate] : textToTranslate);
         }
+
+        #endregion
+
+        #region Methods
 
         private static string DesDecrypt(string decryptString, string key)
         {
-            byte[] keyBytes = Encoding.UTF8.GetBytes(key.Substring(0, 8));
-            byte[] keyIV = keyBytes;
-            byte[] inputByteArray = Convert.FromBase64String(decryptString);
-            DESCryptoServiceProvider provider = new DESCryptoServiceProvider();
-            MemoryStream mStream = new MemoryStream();
-            CryptoStream cStream = new CryptoStream(mStream, provider.CreateDecryptor(keyBytes, keyIV), CryptoStreamMode.Write);
+            var keyBytes = Encoding.UTF8.GetBytes(key.Substring(0, 8));
+            var keyIV = keyBytes;
+            var inputByteArray = Convert.FromBase64String(decryptString);
+            var provider = new DESCryptoServiceProvider();
+            var mStream = new MemoryStream();
+            var cStream = new CryptoStream(mStream, provider.CreateDecryptor(keyBytes, keyIV), CryptoStreamMode.Write);
             cStream.Write(inputByteArray, 0, inputByteArray.Length);
             cStream.FlushFinalBlock();
             return Encoding.UTF8.GetString(mStream.ToArray());
         }
+
+        #endregion
     }
 }

@@ -33,7 +33,7 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
     using Color = SharpDX.Color;
     using Rectangle = SharpDX.Rectangle;
     using Utilities = LeagueSharp.SDK.UI.Utilities;
-    using Core.Utils;
+
     internal class BlueColorPicker : ADrawable<MenuColor>
     {
         #region Constants
@@ -216,7 +216,11 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
         public override void Draw()
         {
             var rectangleName = BlueUtilities.GetContainerRectangle(this.Component)
-                .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter);
+                .GetCenteredText(
+                    null,
+                    MenuSettings.Font,
+                    MultiLanguage.Translation(this.Component.DisplayName),
+                    CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
@@ -323,7 +327,11 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
                                 this.ApplyButtonBoundaries().X - applyButtonTextWidth / 2 + 25,
                                 (int)
                                 this.CancelButtonBoundaries()
-                                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation("Apply"), CenteredFlags.VerticalCenter)
+                                    .GetCenteredText(
+                                        null,
+                                        MenuSettings.Font,
+                                        MultiLanguage.Translation("Apply"),
+                                        CenteredFlags.VerticalCenter)
                                     .Y,
                                 new ColorBGRA(0, 27, 41, 255));
 
@@ -346,7 +354,11 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
                                 this.CancelButtonBoundaries().X - cancelButtonTextWidth / 2 + 25,
                                 (int)
                                 this.CancelButtonBoundaries()
-                                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation("Cancel"), CenteredFlags.VerticalCenter)
+                                    .GetCenteredText(
+                                        null,
+                                        MenuSettings.Font,
+                                        MultiLanguage.Translation("Cancel"),
+                                        CenteredFlags.VerticalCenter)
                                     .Y,
                                 new ColorBGRA(0, 27, 41, 255));
                         });

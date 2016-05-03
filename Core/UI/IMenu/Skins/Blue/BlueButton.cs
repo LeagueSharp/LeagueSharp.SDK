@@ -22,9 +22,9 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Blue
 {
-    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
 
@@ -114,7 +114,11 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
         public override void Draw()
         {
             var rectangleName = BlueUtilities.GetContainerRectangle(this.Component)
-                .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter);
+                .GetCenteredText(
+                    null,
+                    MenuSettings.Font,
+                    MultiLanguage.Translation(this.Component.DisplayName),
+                    CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,

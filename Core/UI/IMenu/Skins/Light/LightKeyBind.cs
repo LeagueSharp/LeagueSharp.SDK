@@ -22,12 +22,13 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Light
 {
-    using Core.Utils;
+    using System.Windows.Forms;
+
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using System.Windows.Forms;
 
     /// <summary>
     ///     A default implementation of <see cref="ADrawable{MenuKeyBind}" />
@@ -90,7 +91,11 @@ namespace LeagueSharp.SDK.UI.Skins.Light
             var centerY =
                 (int)
                 LightUtilities.GetContainerRectangle(this.Component)
-                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter)
+                    .GetCenteredText(
+                        null,
+                        MenuSettings.Font,
+                        MultiLanguage.Translation(this.Component.DisplayName),
+                        CenteredFlags.VerticalCenter)
                     .Y;
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,

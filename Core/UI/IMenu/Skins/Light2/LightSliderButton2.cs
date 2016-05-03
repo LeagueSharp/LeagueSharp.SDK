@@ -22,12 +22,14 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Light2
 {
-    using Core.Utils;
+    using System.Globalization;
+
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI.Skins.Light;
+    using LeagueSharp.SDK.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using System.Globalization;
 
     /// <summary>
     ///     A default implementation of an <see cref="ADrawable{MenuSliderButton}" />

@@ -22,12 +22,14 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Light2
 {
-    using Core.Utils;
+    using System.Globalization;
+
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI.Skins.Light;
+    using LeagueSharp.SDK.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using System.Globalization;
 
     /// <summary>
     ///     A default implementation of an <see cref="ADrawable{MenuSlider}" />
@@ -74,7 +76,11 @@ namespace LeagueSharp.SDK.UI.Skins.Light2
             var centeredY =
                 (int)
                 LightUtilities.GetContainerRectangle(this.Component)
-                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter)
+                    .GetCenteredText(
+                        null,
+                        MenuSettings.Font,
+                        MultiLanguage.Translation(this.Component.DisplayName),
+                        CenteredFlags.VerticalCenter)
                     .Y;
             var percent = (this.Component.Value - this.Component.MinValue)
                           / (float)(this.Component.MaxValue - this.Component.MinValue);

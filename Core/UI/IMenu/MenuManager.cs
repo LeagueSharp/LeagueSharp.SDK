@@ -379,7 +379,7 @@ namespace LeagueSharp.SDK.UI
         /// </param>
         private void Game_OnWndProc(WndEventArgs args)
         {
-            if (MenuGUI.IsChatOpen)
+            if (MenuGUI.IsChatOpen || MenuGUI.IsShopOpen)
             {
                 return;
             }

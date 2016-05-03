@@ -22,13 +22,14 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Blue
 {
-    using Core.Utils;
-    using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.Utils;
-    using SharpDX;
-    using SharpDX.Direct3D9;
     using System;
     using System.Globalization;
+
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
+
+    using SharpDX;
+    using SharpDX.Direct3D9;
 
     /// <summary>
     ///     A default implementation of an <see cref="ADrawable{MenuSliderButton}" />
@@ -99,7 +100,11 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
             var centeredY =
                 (int)
                 BlueUtilities.GetContainerRectangle(this.Component)
-                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter)
+                    .GetCenteredText(
+                        null,
+                        MenuSettings.Font,
+                        MultiLanguage.Translation(this.Component.DisplayName),
+                        CenteredFlags.VerticalCenter)
                     .Y;
             var percent = (this.Component.SValue - this.Component.MinValue)
                           / (float)(this.Component.MaxValue - this.Component.MinValue);

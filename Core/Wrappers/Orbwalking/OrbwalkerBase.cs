@@ -321,28 +321,6 @@ namespace LeagueSharp.SDK
         }
 
         /// <summary>
-        /// Returns wether the target is in AutoAttack range or not.
-        /// </summary>
-        /// <param name="target">The target</param>
-        /// <returns>Wether you can attack the target or not</returns>
-        public bool InAutoAttackRange(AttackableUnit target)
-        {
-            var baseTarget = (Obj_AI_Base)target;
-            var myRange = ObjectManager.Player.GetRealAutoAttackRange();
-            if (baseTarget != null)
-            {
-                return baseTarget.IsHPBarRendered
-                       && Vector2.DistanceSquared(
-                           baseTarget.ServerPosition.ToVector2(),
-                           ObjectManager.Player.ServerPosition.ToVector2()) <= myRange * myRange;
-            }
-            return target.IsValidTarget()
-                   && Vector2.DistanceSquared(
-                       target.Position.ToVector2(),
-                       ObjectManager.Player.ServerPosition.ToVector2()) <= myRange * myRange;
-        }
-
-        /// <summary>
         ///     Gets the target.
         /// </summary>
         /// <returns>

@@ -21,9 +21,8 @@ namespace LeagueSharp.SDK
     using System.Drawing;
     using System.Linq;
 
-
-	using LeagueSharp.SDK.Enumerations;
-	using LeagueSharp.SDK.UI;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.Utils;
 
     using static Drawing;
@@ -61,25 +60,25 @@ namespace LeagueSharp.SDK
 
         /// <summary>
         ///     Internal field that represents the menu:
-        ///         Target Selector >> Lock target >> Enabled
+        ///     Target Selector >> Lock target >> Enabled
         /// </summary>
         private MenuBool menuItemEnabled;
 
         /// <summary>
         ///     Internal field that represents the menu:
-        ///         Target Selector >> Lock target >> Show notification
+        ///     Target Selector >> Lock target >> Show notification
         /// </summary>
         private MenuBool menuItemNotifications;
 
         /// <summary>
         ///     Internal field that represents the menu:
-        ///         Target Selector >> Lock target >> Show countdown
+        ///     Target Selector >> Lock target >> Show countdown
         /// </summary>
         private MenuBool menuItemShowCountdown;
 
         /// <summary>
         ///     Internal field that represents the menu:
-        ///         Target Selector >> Lock target >> Lock target on MIA (ms)
+        ///     Target Selector >> Lock target >> Lock target on MIA (ms)
         /// </summary>
         private MenuSlider menuItemTime;
 
@@ -111,7 +110,7 @@ namespace LeagueSharp.SDK
 
         /// <summary>
         ///     Gets the value setted on menu:
-        ///         Target Selector >> Lock target >> Enabled
+        ///     Target Selector >> Lock target >> Enabled
         /// </summary>
         public bool Enabled => this.menuItemEnabled.Value;
 
@@ -144,19 +143,19 @@ namespace LeagueSharp.SDK
 
         /// <summary>
         ///     Gets the value setted on menu:
-        ///         Target Selector >> Lock target >> Show countdown
+        ///     Target Selector >> Lock target >> Show countdown
         /// </summary>
         public bool ShowCountdown => this.menuItemShowCountdown.Value;
 
         /// <summary>
         ///     Gets the value setted on menu:
-        ///         Target Selector >> Lock target >> Show notification
+        ///     Target Selector >> Lock target >> Show notification
         /// </summary>
         public bool ShowNotification => this.menuItemNotifications.Value;
 
         /// <summary>
         ///     Gets the value setted on menu:
-        ///         Target Selector >> Lock target >> Lock target on MIA (ms)
+        ///     Target Selector >> Lock target >> Lock target on MIA (ms)
         /// </summary>
         public int Time => this.menuItemTime.Value;
 
@@ -186,7 +185,7 @@ namespace LeagueSharp.SDK
         private void Drawing_OnDraw_Countdown(EventArgs args)
         {
             if (!this.ShowCountdown || this.LockedTarget == null || this.LockedTarget.IsDead
-                || this.lockedTil == ClearTime)
+                || this.lockedTil.Equals(ClearTime))
             {
                 return;
             }
@@ -239,36 +238,12 @@ namespace LeagueSharp.SDK
         }
 
         /// <summary>
-        ///     Triggers the lock event.
-        /// </summary>
-        /// <param name="args"></param>
-        private void Game_OnUpdate_Trigger(EventArgs args)
-        {
-            if (this.LockedTarget == null)
-            {
-                return;
-            }
-
-            if (this.lockedTil == ClearTime
-                && (!this.LockedTarget.IsVisible || GameObjects.Player.Distance(this.lockedTarget) > MaxRange))
-            {
-                this.lockedTil = Game.Time + ((double)this.Time / 1000);
-                Game.OnUpdate += this.Game_OnUpdate_CheckTargeted;
-            }
-            else if (this.LockedTarget.IsVisible && GameObjects.Player.Distance(this.lockedTarget) <= MaxRange)
-            {
-                Game.OnUpdate -= this.Game_OnUpdate_CheckTargeted;
-                this.lockedTil = ClearTime;
-            }
-        }
-
-        /// <summary>
         ///     Checks if the targeted champion is MIA or out of range.
         /// </summary>
         /// <param name="args"></param>
         private void Game_OnUpdate_CheckTargeted(EventArgs args)
         {
-            if (this.LockedTarget != null && this.lockedTil != ClearTime && Game.Time > this.lockedTil)
+            if (this.LockedTarget != null && !this.lockedTil.Equals(ClearTime) && Game.Time > this.lockedTil)
             {
                 var championName = this.LockedTarget.ChampionName;
                 Game.OnUpdate -= this.Game_OnUpdate_CheckTargeted;
@@ -291,6 +266,30 @@ namespace LeagueSharp.SDK
             {
                 this.lockedTil = ClearTime;
                 this.LockTarget(null, false);
+            }
+        }
+
+        /// <summary>
+        ///     Triggers the lock event.
+        /// </summary>
+        /// <param name="args"></param>
+        private void Game_OnUpdate_Trigger(EventArgs args)
+        {
+            if (this.LockedTarget == null)
+            {
+                return;
+            }
+
+            if (this.lockedTil.Equals(ClearTime)
+                && (!this.LockedTarget.IsVisible || GameObjects.Player.Distance(this.lockedTarget) > MaxRange))
+            {
+                this.lockedTil = Game.Time + ((double)this.Time / 1000);
+                Game.OnUpdate += this.Game_OnUpdate_CheckTargeted;
+            }
+            else if (this.LockedTarget.IsVisible && GameObjects.Player.Distance(this.lockedTarget) <= MaxRange)
+            {
+                Game.OnUpdate -= this.Game_OnUpdate_CheckTargeted;
+                this.lockedTil = ClearTime;
             }
         }
 

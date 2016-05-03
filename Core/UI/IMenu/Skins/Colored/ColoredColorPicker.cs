@@ -22,12 +22,14 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Colored
 {
-    using Core.Utils;
+    using System.Drawing;
+
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using System.Drawing;
+
     using Color = SharpDX.Color;
     using Rectangle = SharpDX.Rectangle;
     using Utilities = LeagueSharp.SDK.UI.Utilities;

@@ -54,8 +54,7 @@ namespace LeagueSharp.SDK.Utils
                 "caitlynheadshotmissile", "kennenmegaproc", "masteryidoublestrike",
                 "quinnwenhanced", "renektonexecute", "renektonsuperexecute",
                 /*"rengarnewpassivebuffdash",*/ "trundleq", "viktorqbuff",
-                "xenzhaothrust", "xenzhaothrust2", "xenzhaothrust3",
-				"lucianpassiveshot"
+                "xenzhaothrust", "xenzhaothrust2", "xenzhaothrust3"
             };
 
         /// <summary>

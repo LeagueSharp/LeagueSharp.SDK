@@ -37,7 +37,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Initialized flag.
         /// </summary>
-        public static bool Initialized = false;
+        private static bool initialized;
 
         #endregion
 
@@ -60,26 +60,29 @@ namespace LeagueSharp.SDK
         /// </param>
         public TargetSelector(Menu menu)
         {
-            if (!Initialized)
+            if (initialized)
             {
-                Events.OnLoad += (sender, args) =>
-                    {
-                        menu.Add(this.menu);
-
-                        this.Selected = new TargetSelectorSelected(this.menu);
-                        this.Humanizer = new TargetSelectorHumanizer(this.menu);
-                        this.Mode = new TargetSelectorMode(this.menu);
-                        this.Drawing = new TargetSelectorDrawing(this.menu, this.Selected, this.Mode);
-                        this.Locked = new TargetSelectorLockTarget(this.menu);
-
-                        // Keep submenus at top
-                        this.menu.Components =
-                            this.menu.Components.OrderByDescending(c => c.Value is Menu && c.Key.Equals("drawing"))
-                                .ThenByDescending(c => c.Value is Menu)
-                                .ToDictionary(p => p.Key, p => p.Value);
-                    };
+                return;
             }
-            Initialized = true;
+
+            initialized = true;
+
+            Events.OnLoad += (sender, args) =>
+                {
+                    menu.Add(this.menu);
+
+                    this.Selected = new TargetSelectorSelected(this.menu);
+                    this.Humanizer = new TargetSelectorHumanizer(this.menu);
+                    this.Mode = new TargetSelectorMode(this.menu);
+                    this.Drawing = new TargetSelectorDrawing(this.menu, this.Selected, this.Mode);
+                    this.Locked = new TargetSelectorLockTarget(this.menu);
+
+                    // Keep submenus at top
+                    this.menu.Components =
+                        this.menu.Components.OrderByDescending(c => c.Value is Menu && c.Key.Equals("drawing"))
+                            .ThenByDescending(c => c.Value is Menu)
+                            .ToDictionary(p => p.Key, p => p.Value);
+                };
         }
 
         #endregion
@@ -92,6 +95,11 @@ namespace LeagueSharp.SDK
         public TargetSelectorHumanizer Humanizer { get; private set; }
 
         /// <summary>
+        ///     Gets the locked instance.
+        /// </summary>
+        public TargetSelectorLockTarget Locked { get; private set; }
+
+        /// <summary>
         ///     Gets the mode instance.
         /// </summary>
         public TargetSelectorMode Mode { get; private set; }
@@ -100,11 +108,6 @@ namespace LeagueSharp.SDK
         ///     Gets the selected instance.
         /// </summary>
         public TargetSelectorSelected Selected { get; private set; }
-
-        /// <summary>
-        ///     Gets the locked instance.
-        /// </summary>
-        public TargetSelectorLockTarget Locked { get; private set; }
 
         #endregion
 

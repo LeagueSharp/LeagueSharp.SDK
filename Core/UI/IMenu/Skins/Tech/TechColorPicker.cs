@@ -22,12 +22,14 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Tech
 {
-    using Core.Utils;
+    using System.Drawing;
+
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using System.Drawing;
+
     using Color = SharpDX.Color;
     using Rectangle = SharpDX.Rectangle;
     using Utilities = LeagueSharp.SDK.UI.Utilities;
@@ -214,7 +216,11 @@ namespace LeagueSharp.SDK.UI.Skins.Tech
         public override void Draw()
         {
             var rectangleName = TechUtilities.GetContainerRectangle(this.Component)
-                .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter);
+                .GetCenteredText(
+                    null,
+                    MenuSettings.Font,
+                    MultiLanguage.Translation(this.Component.DisplayName),
+                    CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,
@@ -321,7 +327,11 @@ namespace LeagueSharp.SDK.UI.Skins.Tech
                                 this.ApplyButtonBoundaries().X - applyButtonTextWidth / 2 + 25,
                                 (int)
                                 this.CancelButtonBoundaries()
-                                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation("Apply"), CenteredFlags.VerticalCenter)
+                                    .GetCenteredText(
+                                        null,
+                                        MenuSettings.Font,
+                                        MultiLanguage.Translation("Apply"),
+                                        CenteredFlags.VerticalCenter)
                                     .Y,
                                 new ColorBGRA(221, 233, 255, 255));
 
@@ -344,7 +354,11 @@ namespace LeagueSharp.SDK.UI.Skins.Tech
                                 this.CancelButtonBoundaries().X - cancelButtonTextWidth / 2 + 25,
                                 (int)
                                 this.CancelButtonBoundaries()
-                                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation("Cancel"), CenteredFlags.VerticalCenter)
+                                    .GetCenteredText(
+                                        null,
+                                        MenuSettings.Font,
+                                        MultiLanguage.Translation("Cancel"),
+                                        CenteredFlags.VerticalCenter)
                                     .Y,
                                 new ColorBGRA(221, 233, 255, 255));
                         });

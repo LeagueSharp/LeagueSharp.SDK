@@ -22,12 +22,13 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Colored
 {
-    using Core.Utils;
+    using System.Linq;
+
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using System.Linq;
 
     /// <summary>
     ///     Provides a default implementation of <see cref="ADrawable{Menu}" />
@@ -292,14 +293,18 @@ namespace LeagueSharp.SDK.UI.Skins.Colored
             var centerY =
                 (int)
                 ColoredUtilities.GetContainerRectangle(this.Component)
-                    .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter)
+                    .GetCenteredText(
+                        null,
+                        MenuSettings.Font,
+                        MultiLanguage.Translation(this.Component.DisplayName),
+                        CenteredFlags.VerticalCenter)
                     .Y;
 
             if (this.Component.Toggled)
             {
                 MenuSettings.Font.DrawText(
                     MenuManager.Instance.Sprite,
-                MultiLanguage.Translation(this.Component.DisplayName),
+                    MultiLanguage.Translation(this.Component.DisplayName),
                     (int)(position.X + MenuSettings.ContainerTextOffset),
                     centerY,
                     new ColorBGRA(237, 245, 254, 255));

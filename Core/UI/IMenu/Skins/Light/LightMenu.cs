@@ -22,12 +22,13 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Light
 {
-    using Core.Utils;
+    using System.Linq;
+
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using System.Linq;
 
     /// <summary>
     ///     Provides a default implementation of <see cref="ADrawable{Menu}" />

@@ -22,9 +22,9 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Tech
 {
-    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
+
     using SharpDX.Direct3D9;
 
     /// <summary>

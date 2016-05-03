@@ -22,13 +22,14 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Blue2
 {
-    using Core.Utils;
+    using System.Collections.Generic;
+
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI.Skins.Blue;
     using LeagueSharp.SDK.Utils;
+
     using SharpDX;
     using SharpDX.Direct3D9;
-    using System.Collections.Generic;
 
     /// <summary>
     ///     A default implementation of a <see cref="ADrawable{MenuList}" />
@@ -102,7 +103,11 @@ namespace LeagueSharp.SDK.UI.Skins.Blue2
             var dropdownMenuWidth = this.dropDownButtonWidth + (2 * TextSpacing) + this.Component.MaxStringWidth;
             var position = this.Component.Position;
             var rectangleName = BlueUtilities.GetContainerRectangle(this.Component)
-                .GetCenteredText(null, MenuSettings.Font, MultiLanguage.Translation(this.Component.DisplayName), CenteredFlags.VerticalCenter);
+                .GetCenteredText(
+                    null,
+                    MenuSettings.Font,
+                    MultiLanguage.Translation(this.Component.DisplayName),
+                    CenteredFlags.VerticalCenter);
 
             MenuSettings.Font.DrawText(
                 MenuManager.Instance.Sprite,

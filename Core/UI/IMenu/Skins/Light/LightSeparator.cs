@@ -22,7 +22,6 @@
 
 namespace LeagueSharp.SDK.UI.Skins.Light
 {
-    using Core.Utils;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
 
