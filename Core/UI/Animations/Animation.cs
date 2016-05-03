@@ -85,6 +85,18 @@ namespace LeagueSharp.SDK.Core.UI.Animations
             return endVal * curTime / dur + startVal;
         }
 
+        /// <summary>
+        /// Calculates in a inverse linear manner
+        /// </summary>
+        /// <param name="curTime">Current Time (seconds)</param>
+        /// <param name="startVal">Start Value</param>
+        /// <param name="dur">Duration of the animation</param>
+        /// <returns>New calculated value</returns>
+        protected double InverseLinear(double curTime, double startVal, double dur)
+        {
+            return startVal - (curTime / dur) * startVal;
+        }
+
         #endregion
 
     }

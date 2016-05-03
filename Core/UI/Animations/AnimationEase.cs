@@ -23,7 +23,7 @@ namespace LeagueSharp.SDK.Core.UI.Animations
     /// <summary>
     /// A implementation of a <see cref="Animation" />
     /// </summary>
-    class AnimationEase : Animation
+    public class AnimationEase : Animation
     {
         #region Fields
 
@@ -51,56 +51,179 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         /// </summary>
         public enum Mode
         {
+            /// <summary>
+            /// Linear calculation
+            /// </summary>
             Linear,
 
+            /// <summary>
+            /// BackEaseIn calculation
+            /// </summary>
             BackEaseIn,
+            /// <summary>
+            /// BackEaseOut calculation
+            /// </summary>
             BackEaseOut,
+            /// <summary>
+            /// BackEaseInOut calculation
+            /// </summary>
             BackEaseInOut,
+            /// <summary>
+            /// BackEaseOutIn calculation
+            /// </summary>
             BackEaseOutIn,
 
+            /// <summary>
+            /// BounceEaseIn calculation
+            /// </summary>
             BounceEaseIn,
+            /// <summary>
+            /// BounceEaseOut calculation
+            /// </summary>
             BounceEaseOut,
+            /// <summary>
+            /// BounceEaseInOut calculation
+            /// </summary>
             BounceEaseInOut,
+            /// <summary>
+            /// BounceEaseOutIn calculation
+            /// </summary>
             BounceEaseOutIn,
 
+            /// <summary>
+            /// CircEaseIn calculation
+            /// </summary>
             CircEaseIn,
+            /// <summary>
+            /// CircEaseOut calculation
+            /// </summary>
             CircEaseOut,
+            /// <summary>
+            /// CircEaseInOut calculation
+            /// </summary>
             CircEaseInOut,
+            /// <summary>
+            /// CircEaseOutIn calculation
+            /// </summary>
             CircEaseOutIn,
 
+            /// <summary>
+            /// CubicEaseIn calculation
+            /// </summary>
             CubicEaseIn,
+            /// <summary>
+            /// CubicEaseOut calculation
+            /// </summary>
             CubicEaseOut,
+            /// <summary>
+            /// CubicEaseInOut calculation
+            /// </summary>
             CubicEaseInOut,
+            /// <summary>
+            /// CubicEaseOutIn calculation
+            /// </summary>
             CubicEaseOutIn,
 
+            /// <summary>
+            /// ElasticEaseIn calculation
+            /// </summary>
             ElasticEaseIn,
+            /// <summary>
+            /// ElasticEaseOut calculation
+            /// </summary>
             ElasticEaseOut,
+            /// <summary>
+            /// ElasticEaseInOut calculation
+            /// </summary>
             ElasticEaseInOut,
+            /// <summary>
+            /// ElasticEaseOutIn calculation
+            /// </summary>
             ElasticEaseOutIn,
 
+            /// <summary>
+            /// ExpoEaseIn calculation
+            /// </summary>
             ExpoEaseIn,
+            /// <summary>
+            /// ExpoEaseOut calculation
+            /// </summary>
             ExpoEaseOut,
+            /// <summary>
+            /// ExpoEaseInOut calculation
+            /// </summary>
             ExpoEaseInOut,
+            /// <summary>
+            /// ExpoEaseOutIn calculation
+            /// </summary>
             ExpoEaseOutIn,
 
+            /// <summary>
+            /// QuadEaseIn calculation
+            /// </summary>
             QuadEaseIn,
+            /// <summary>
+            /// QuadEaseOut calculation
+            /// </summary>
             QuadEaseOut,
+            /// <summary>
+            /// QuadEaseInOut calculation
+            /// </summary>
             QuadEaseInOut,
+            /// <summary>
+            /// QuadEaseOutIn calculation
+            /// </summary>
             QuadEaseOutIn,
 
+            /// <summary>
+            /// QuartEaseIn calculation
+            /// </summary>
             QuartEaseIn,
+            /// <summary>
+            /// QuartEaseOut calculation
+            /// </summary>
             QuartEaseOut,
+            /// <summary>
+            /// QuartEaseInOut calculation
+            /// </summary>
             QuartEaseInOut,
+            /// <summary>
+            /// QuartEaseOutIn calculation
+            /// </summary>
             QuartEaseOutIn,
 
+            /// <summary>
+            /// QuintEaseIn calculation
+            /// </summary>
             QuintEaseIn,
+            /// <summary>
+            /// QuintEaseOut calculation
+            /// </summary>
             QuintEaseOut,
+            /// <summary>
+            /// QuintEaseInOut calculation
+            /// </summary>
             QuintEaseInOut,
+            /// <summary>
+            /// QuintEaseOutIn calculation
+            /// </summary>
             QuintEaseOutIn,
 
+            /// <summary>
+            /// SineEaseIn calculation
+            /// </summary>
             SineEaseIn,
+            /// <summary>
+            /// SineEaseOut calculation
+            /// </summary>
             SineEaseOut,
+            /// <summary>
+            /// SineEaseInOut calculation
+            /// </summary>
             SineEaseInOut,
+            /// <summary>
+            /// SineEaseOutIn calculation
+            /// </summary>
             SineEaseOutIn,
         }
 

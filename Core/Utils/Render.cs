@@ -1499,7 +1499,10 @@
             /// </summary>
             public override void OnPostReset()
             {
-                this.sprite.OnResetDevice();
+                if (this.sprite != null && !this.sprite.IsDisposed)
+                {
+                    this.sprite?.OnResetDevice();
+                }
             }
 
             /// <summary>
@@ -1507,7 +1510,10 @@
             /// </summary>
             public override void OnPreReset()
             {
-                this.sprite.OnLostDevice();
+                if (this.sprite != null && !this.sprite.IsDisposed)
+                {
+                    this.sprite?.OnLostDevice();
+                }
             }
 
             /// <summary>

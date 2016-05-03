@@ -1,4 +1,4 @@
-﻿// <copyright file="AnimationFade.cs" company="LeagueSharp">
+﻿// <copyright file="AnimationPulsate.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
 // 
 //    This program is free software: you can redistribute it and/or modify
@@ -22,69 +22,50 @@ namespace LeagueSharp.SDK.Core.UI.Animations
     /// <summary>
     /// A implementation of a <see cref="Animation" />
     /// </summary>
-    public class AnimationFade : Animation
+    public class AnimationPulsate : Animation
     {
         #region Fields
 
         /// <summary>
-        /// Start Color of the element which will get faded
+        /// Start Color of the element which will get pulsated
         /// </summary>
         private ColorBGRA startValue;
 
         /// <summary>
-        /// Final Color of the element which will get faded
+        /// Final Color of the element which will get pulsated
         /// </summary>
         private ColorBGRA? endValue;
 
         /// <summary>
-        /// Defines which Fade method will be used to calculate the new element color
+        /// How many times it should pulsate
         /// </summary>
-        private readonly Mode mode;
-
-        #endregion
-
-        #region Enums
-
-        /// <summary>
-        /// Contains 2 Modes
-        /// </summary>
-        public enum Mode
-        {
-            /// <summary>
-            /// FadeIn Transparency 100%
-            /// </summary>
-            FadeIn,
-            /// <summary>
-            /// FadeIn Transparency 0%
-            /// </summary>
-            FadeOut
-        }
+        private readonly int pulsateTimes;
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationFade" /> class.
+        /// Initializes a new instance of the <see cref="AnimationPulsate" /> class.
         /// </summary>
-        /// <param name="mode">Selected mode for calculation</param>
+        /// <param name="pulsateTimes">Pulsationtimes</param>
         /// <param name="duration">Selected duration for the defined animation</param>
-        public AnimationFade(Mode mode, float duration)
+        public AnimationPulsate(int pulsateTimes, float duration)
             : base(duration)
         {
-            this.mode = mode;
+            this.pulsateTimes = pulsateTimes;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationFade" /> class.
+        /// Initializes a new instance of the <see cref="AnimationPulsate" /> class.
         /// </summary>
-        /// <param name="mode">Selected mode for calculation</param>
+        /// <param name="pulsateTimes">Pulsationtimes</param>
         /// <param name="duration">Selected duration for the defined animation</param>
         /// <param name="defaultCol">Default Color of the element</param>
-        public AnimationFade(Mode mode, float duration, ColorBGRA defaultCol)
+        public AnimationPulsate(int pulsateTimes, float duration, ColorBGRA defaultCol)
             : base(duration)
         {
-            this.mode = mode;
+            this.pulsateTimes = pulsateTimes;
             this.startValue = defaultCol;
         }
 
@@ -101,34 +82,26 @@ namespace LeagueSharp.SDK.Core.UI.Animations
             {
                 return this.endValue ?? this.startValue;
             }
-            return this.Calculate(Game.ClockTime - this.startTime, this.startValue, this.duration);
+            return this.Calculate(Game.ClockTime - this.startTime, this.pulsateTimes, this.startValue, this.duration);
         }
 
         /// <summary>
-        /// Calculates the value of the specified mode
+        /// Calculates the value
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
+        /// <param name="times">Pulsate times</param>
         /// <param name="startVal">Start Value</param>
         /// <param name="dur">Duration of the animation</param>
-        /// <returns>Returns the calculated value of the specified mode</returns>
-        private ColorBGRA Calculate(double curTime, ColorBGRA startVal, double dur)
+        /// <returns>Returns the calculated value</returns>
+        private ColorBGRA Calculate(double curTime, int times, ColorBGRA startVal, double dur)
         {
-            switch (this.mode)
-            {
-                case Mode.FadeIn:
-                    this.endValue = this.FadeIn(curTime, startVal, dur);
-                    break;
-
-                case Mode.FadeOut:
-                    this.endValue = this.FadeOut(curTime, startVal, dur);
-                    break;
-            }
+            this.endValue = this.Pulsate(curTime, times, startVal, dur);
             return this.endValue ?? this.startValue;
         }
 
         /// <summary>
         /// Starts the animation
-        /// After start you can get the current value in <see cref="AnimationFade.GetCurrentValue" /> method
+        /// After start you can get the current value in <see cref="AnimationPulsate.GetCurrentValue" /> method
         /// </summary>
         /// <param name="startVal">Starting Color of the element</param>
         public void Start(ColorBGRA startVal)
@@ -144,30 +117,19 @@ namespace LeagueSharp.SDK.Core.UI.Animations
 
         #endregion
 
-        #region Fade Methods
+        #region Pulsate Methods
 
         /// <summary>
         /// Changes the transparency of a color to 100%
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
+        /// <param name="times">Pulsate times</param>
         /// <param name="val">Color</param>
         /// <param name="dur">Duration</param>
         /// <returns>New calculated color</returns>
-        private ColorBGRA FadeIn(double curTime, ColorBGRA val, double dur)
+        private ColorBGRA Pulsate(double curTime, int times, ColorBGRA val, double dur)
         {
-            return new ColorBGRA(val.B, val.G, val.R, (byte)this.Linear(curTime, val.A, 255 - val.A, dur));
-        }
-
-        /// <summary>
-        /// Changes the transparency of a color to 0%
-        /// </summary>
-        /// <param name="curTime">Current Time (seconds)</param>
-        /// <param name="val">Color</param>
-        /// <param name="dur">Duration</param>
-        /// <returns>New calculated color</returns>
-        private ColorBGRA FadeOut(double curTime, ColorBGRA val, double dur)
-        {
-            return new ColorBGRA(val.B, val.G, val.R, (byte)(this.InverseLinear(curTime, val.A, dur)));
+            return (curTime % (dur / times) < (dur / times) / 2) ? new ColorBGRA(val.B, val.G, val.R, 0) : val;
         }
 
         #endregion

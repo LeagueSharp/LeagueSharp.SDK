@@ -1,4 +1,4 @@
-﻿// <copyright file="AnimationFade.cs" company="LeagueSharp">
+﻿// <copyright file="AnimationScale.cs" company="LeagueSharp">
 //    Copyright (c) 2015 LeagueSharp.
 // 
 //    This program is free software: you can redistribute it and/or modify
@@ -22,22 +22,22 @@ namespace LeagueSharp.SDK.Core.UI.Animations
     /// <summary>
     /// A implementation of a <see cref="Animation" />
     /// </summary>
-    public class AnimationFade : Animation
+    public class AnimationScale : Animation
     {
         #region Fields
 
         /// <summary>
-        /// Start Color of the element which will get faded
+        /// Start Rectangle of the element which will get scaled
         /// </summary>
-        private ColorBGRA startValue;
+        private Rectangle startValue;
 
         /// <summary>
-        /// Final Color of the element which will get faded
+        /// Final Rectangle of the element which will get scaled
         /// </summary>
-        private ColorBGRA? endValue;
+        private Rectangle? endValue;
 
         /// <summary>
-        /// Defines which Fade method will be used to calculate the new element color
+        /// Defines which Clip method will be used to calculate the new element rectangle
         /// </summary>
         private readonly Mode mode;
 
@@ -51,13 +51,13 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         public enum Mode
         {
             /// <summary>
-            /// FadeIn Transparency 100%
+            /// Decrease height / width to 0
             /// </summary>
-            FadeIn,
+            ScaleDecrease,
             /// <summary>
-            /// FadeIn Transparency 0%
+            /// Increase height / width to max height / width
             /// </summary>
-            FadeOut
+            ScaleIncrease,
         }
 
         #endregion
@@ -65,27 +65,27 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationFade" /> class.
+        /// Initializes a new instance of the <see cref="AnimationScale" /> class.
         /// </summary>
         /// <param name="mode">Selected mode for calculation</param>
         /// <param name="duration">Selected duration for the defined animation</param>
-        public AnimationFade(Mode mode, float duration)
+        public AnimationScale(Mode mode, float duration)
             : base(duration)
         {
             this.mode = mode;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationFade" /> class.
+        /// Initializes a new instance of the <see cref="AnimationScale" /> class.
         /// </summary>
         /// <param name="mode">Selected mode for calculation</param>
         /// <param name="duration">Selected duration for the defined animation</param>
-        /// <param name="defaultCol">Default Color of the element</param>
-        public AnimationFade(Mode mode, float duration, ColorBGRA defaultCol)
+        /// <param name="defaultRect">Default Rectangle of the element</param>
+        public AnimationScale(Mode mode, float duration, Rectangle defaultRect)
             : base(duration)
         {
             this.mode = mode;
-            this.startValue = defaultCol;
+            this.startValue = defaultRect;
         }
 
         #endregion
@@ -93,9 +93,9 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         #region Methods
 
         /// <summary>
-        /// Returns the current color of the element
+        /// Returns the current rectangle of the element
         /// </summary>
-        public ColorBGRA GetCurrentValue()
+        public Rectangle GetCurrentValue()
         {
             if (!this.IsWorking)
             {
@@ -111,16 +111,16 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         /// <param name="startVal">Start Value</param>
         /// <param name="dur">Duration of the animation</param>
         /// <returns>Returns the calculated value of the specified mode</returns>
-        private ColorBGRA Calculate(double curTime, ColorBGRA startVal, double dur)
+        private Rectangle Calculate(double curTime, Rectangle startVal, double dur)
         {
             switch (this.mode)
             {
-                case Mode.FadeIn:
-                    this.endValue = this.FadeIn(curTime, startVal, dur);
+                case Mode.ScaleDecrease:
+                    this.endValue = this.ScaleDecrease(curTime, startVal, dur);
                     break;
 
-                case Mode.FadeOut:
-                    this.endValue = this.FadeOut(curTime, startVal, dur);
+                case Mode.ScaleIncrease:
+                    this.endValue = this.ScaleIncrease(curTime, startVal, dur);
                     break;
             }
             return this.endValue ?? this.startValue;
@@ -128,10 +128,10 @@ namespace LeagueSharp.SDK.Core.UI.Animations
 
         /// <summary>
         /// Starts the animation
-        /// After start you can get the current value in <see cref="AnimationFade.GetCurrentValue" /> method
+        /// After start you can get the current value in <see cref="AnimationScale.GetCurrentValue" /> method
         /// </summary>
-        /// <param name="startVal">Starting Color of the element</param>
-        public void Start(ColorBGRA startVal)
+        /// <param name="startVal">Starting Rectangle of the element</param>
+        public void Start(Rectangle startVal)
         {
             if (this.IsWorking)
             {
@@ -144,30 +144,38 @@ namespace LeagueSharp.SDK.Core.UI.Animations
 
         #endregion
 
-        #region Fade Methods
+        #region Scale Methods
 
         /// <summary>
-        /// Changes the transparency of a color to 100%
+        /// Decreases the Width / Height until it reaches 0
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
-        /// <param name="val">Color</param>
+        /// <param name="val">Rectangle</param>
         /// <param name="dur">Duration</param>
-        /// <returns>New calculated color</returns>
-        private ColorBGRA FadeIn(double curTime, ColorBGRA val, double dur)
+        /// <returns>New calculated rectangle</returns>
+        private Rectangle ScaleDecrease(double curTime, Rectangle val, double dur)
         {
-            return new ColorBGRA(val.B, val.G, val.R, (byte)this.Linear(curTime, val.A, 255 - val.A, dur));
+            val.X = (int)this.Linear(curTime, 0, (double)val.Width / 2, dur) + 1;
+            val.Width = val.Width - (int)this.Linear(curTime, 0, val.Width, dur) - 1;
+            val.Y = (int)this.Linear(curTime, 0, (double)val.Height / 2, dur) + 1;
+            val.Height = val.Height - (int)this.Linear(curTime, 0, val.Height, dur) - 1;
+            return val;
         }
 
         /// <summary>
-        /// Changes the transparency of a color to 0%
+        /// Increases the Width / Height from 0 to specified width / height
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
-        /// <param name="val">Color</param>
+        /// <param name="val">Rectangle</param>
         /// <param name="dur">Duration</param>
-        /// <returns>New calculated color</returns>
-        private ColorBGRA FadeOut(double curTime, ColorBGRA val, double dur)
+        /// <returns>New calculated rectangle</returns>
+        private Rectangle ScaleIncrease(double curTime, Rectangle val, double dur)
         {
-            return new ColorBGRA(val.B, val.G, val.R, (byte)(this.InverseLinear(curTime, val.A, dur)));
+            val.X = val.Width / 2 - (int)this.Linear(curTime, 0, (double)val.Width / 2, dur) - 1;
+            val.Width = (int)this.Linear(curTime, 0, val.Width, dur) + 1;
+            val.Y = val.Height / 2 - (int)this.Linear(curTime, 0, (double)val.Height / 2, dur) - 1;
+            val.Height = (int)this.Linear(curTime, 0, val.Height, dur) + 1;
+            return val;
         }
 
         #endregion

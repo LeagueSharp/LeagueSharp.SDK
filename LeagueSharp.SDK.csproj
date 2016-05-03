@@ -134,7 +134,15 @@
     <Compile Include="Core\Math\Prediction\GamePath.cs" />
     <Compile Include="Core\Signals\Signal.cs" />
     <Compile Include="Core\Signals\SignalManager.cs" />
+    <Compile Include="Core\UI\Animations\AnimationSlide.cs" />
+    <Compile Include="Core\UI\Animations\AnimationBlind.cs" />
+    <Compile Include="Core\UI\Animations\AnimationResize.cs" />
+    <Compile Include="Core\UI\Animations\AnimationShake.cs" />
+    <Compile Include="Core\UI\Animations\AnimationScale.cs" />
+    <Compile Include="Core\UI\Animations\AnimationClip.cs" />
+    <Compile Include="Core\UI\Animations\AnimationDrop.cs" />
     <Compile Include="Core\UI\Animations\AnimationEase.cs" />
+    <Compile Include="Core\UI\Animations\AnimationPulsate.cs" />
     <Compile Include="Core\UI\Animations\AnimationFade.cs" />
     <Compile Include="Core\UI\Animations\Animation.cs" />
     <Compile Include="Core\UI\IMenu\Abstracts\AMenuComponent.cs" />
