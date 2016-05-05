@@ -445,7 +445,7 @@ namespace LeagueSharp.SDK
         /// </param>
         private void OnGameUpdate(EventArgs args)
         {
-            if (GameObjects.Player == null || !GameObjects.Player.IsValid || GameObjects.Player.IsDead)
+            if (GameObjects.Player == null || !GameObjects.Player.IsValid || GameObjects.Player.IsDead || MenuGUI.IsShopOpen)
             {
                 return;
             }
