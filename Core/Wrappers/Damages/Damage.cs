@@ -659,17 +659,7 @@ namespace LeagueSharp.SDK
             DamageType damageType)
         {
             var targetHero = target as Obj_AI_Hero;
-
-            // Dragon Buff
-            if (source is Obj_AI_Turret && targetHero != null)
-            {
-                var dragonBuff = targetHero.GetBuffCount("s5test_dragonslayerbuff");
-                if (dragonBuff >= 4)
-                {
-                    amount *= dragonBuff == 5 ? 0.6 : 0.8;
-                }
-            }
-
+            
             if (source is Obj_AI_Hero)
             {
                 // Exhaust
