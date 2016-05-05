@@ -135,9 +135,9 @@ namespace LeagueSharp.SDK
                     });
             AddPassiveAttack(
                 string.Empty,
-                (hero, @base) => hero.GetBuffCount("rageblade") == 8,
+                (hero, @base) => Items.HasItem(3124, hero),
                 DamageType.Magical,
-                (hero, @base) => 20 + (0.15 * hero.FlatPhysicalDamageMod) + (0.075 * hero.TotalMagicalDamage));
+                (hero, @base) => 15);
             /*AddPassiveAttack(
                 string.Empty,
                 (hero, @base) => hero.HasBuff("Sheen"),
@@ -299,12 +299,11 @@ namespace LeagueSharp.SDK
                     case "Darius":
                         AddPassiveAttack(
                             "Darius",
-                            (hero, @base) => true,
+                            (hero, @base) => @base is Obj_AI_Hero,
                             DamageType.Physical,
                             (hero, @base) =>
                             ((9 + hero.Level + (hero.FlatPhysicalDamageMod * 0.3))
-                             * Math.Min(Math.Max(0, @base.GetBuffCount("dariushemo")) + 1, 5))
-                            * (@base is Obj_AI_Minion ? 0.25 : 1));
+                             * Math.Min(Math.Max(0, @base.GetBuffCount("dariushemo")) + 1, 5)));
                         AddPassiveAttack(
                             "Darius",
                             (hero, @base) => hero.HasBuff("DariusNoxianTacticsONH"),
@@ -387,7 +386,7 @@ namespace LeagueSharp.SDK
                     case "Fizz":
                         AddPassiveAttack(
                             "Fizz",
-                            (hero, @base) => hero.Spellbook.GetSpell(SpellSlot.W).Level > 0,
+                            (hero, @base) => hero.Spellbook.GetSpell(SpellSlot.W).Level > 0 && @base is Obj_AI_Hero,
                             DamageType.Magical,
                             (hero, @base) => hero.GetSpellDamage(@base, SpellSlot.W) * 0.5 / 3,
                             true);
@@ -401,7 +400,7 @@ namespace LeagueSharp.SDK
                     case "Gangplank":
                         AddPassiveAttack(
                             "Gangplank",
-                            (hero, @base) => hero.HasBuff("gangplankpassiveattack"),
+                            (hero, @base) => hero.HasBuff("gangplankpassiveattack") && @base is Obj_AI_Hero,
                             DamageType.True,
                             (hero, @base) => 20 + (10 * hero.Level) + hero.FlatPhysicalDamageMod);
                         break;
@@ -746,9 +745,9 @@ namespace LeagueSharp.SDK
                             (hero, @base) => 2 + (6 * hero.Level));
                         AddPassiveAttack(
                             "Nautilus",
-                            (hero, @base) => hero.HasBuff("nautiluspiercinggazeshield"),
+                            (hero, @base) => hero.HasBuff("nautiluspiercinggazeshield") && @base is Obj_AI_Hero,
                             DamageType.Magical,
-                            (hero, @base) => hero.GetSpellDamage(@base, SpellSlot.W) / (@base is Obj_AI_Hero ? 1 : 2),
+                            (hero, @base) => hero.GetSpellDamage(@base, SpellSlot.W),
                             true);
                         break;
                     case "Nidalee":
@@ -1014,8 +1013,9 @@ namespace LeagueSharp.SDK
                             DamageType.Magical,
                             (hero, @base) =>
                             hero.GetSpellDamage(@base, SpellSlot.E)
-                            + (hero.GetSpellDamage(@base, SpellSlot.E, DamageStage.DamagePerSecond)
-                               / (@base is Obj_AI_Hero ? 1 : 4)),
+                            + (@base is Obj_AI_Hero
+                                   ? hero.GetSpellDamage(@base, SpellSlot.E, DamageStage.DamagePerSecond)
+                                   : 0),
                             true);
                         break;
                     case "Thresh":
@@ -1090,14 +1090,13 @@ namespace LeagueSharp.SDK
                     case "Twitch":
                         AddPassiveAttack(
                             "Twitch",
-                            (hero, @base) => true,
+                            (hero, @base) => @base is Obj_AI_Hero,
                             DamageType.True,
                             (hero, @base) =>
                             (hero.Level < 5
                                  ? 12
                                  : (hero.Level < 9 ? 18 : (hero.Level < 13 ? 24 : (hero.Level < 17 ? 30 : 36))))
-                            * Math.Min(Math.Max(0, @base.GetBuffCount("twitchdeadlyvenom")) + 1, 6)
-                            / (@base is Obj_AI_Minion ? 1 : 6d));
+                            * Math.Min(Math.Max(0, @base.GetBuffCount("twitchdeadlyvenom")) + 1, 6));
                         break;
                     case "Udyr":
                         AddPassiveAttack(
@@ -1247,8 +1246,7 @@ namespace LeagueSharp.SDK
                                 {
                                     var level = hero.Level;
                                     var dmg = (16 + ((level < 7 ? 4 : (level < 13 ? 8 : 12)) * level))
-                                              + (hero.TotalMagicalDamage
-                                                 * (level < 7 ? 0.25 : (level < 13 ? 0.3 : 0.35)));
+                                              + (hero.TotalMagicalDamage * (level < 7 ? 0.3 : (level < 13 ? 0.4 : 0.5)));
                                     return dmg;
                                 });
                         break;

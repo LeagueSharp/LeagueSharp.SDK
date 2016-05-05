@@ -232,10 +232,7 @@ namespace LeagueSharp.SDK
                         return new PredictionOutput
                                    {
                                        Input = input, CastPosition = cp.ToVector3(), UnitPosition = p.ToVector3(),
-                                       Hitchance =
-                                           GamePath.PathTracker.GetCurrentPath(input.Unit).Time < 0.1d
-                                               ? HitChance.VeryHigh
-                                               : HitChance.High
+                                       Hitchance = HitChance.High
                                    };
                     }
 
@@ -294,10 +291,7 @@ namespace LeagueSharp.SDK
                         return new PredictionOutput
                                    {
                                        Input = input, CastPosition = pos.ToVector3(), UnitPosition = p.ToVector3(),
-                                       Hitchance =
-                                           GamePath.PathTracker.GetCurrentPath(input.Unit).Time < 0.1d
-                                               ? HitChance.VeryHigh
-                                               : HitChance.High
+                                       Hitchance = HitChance.High
                                    };
                     }
 

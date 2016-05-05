@@ -200,13 +200,6 @@ namespace LeagueSharp.SDK
                     }
                 }
 
-                // Devourer Stacks
-                var buffDevourer = hero.GetBuffCount("enchantment_slayer_stacks");
-                if (buffDevourer > 0)
-                {
-                    dmgMagical += buffDevourer;
-                }
-
                 if (targetHero != null)
                 {
                     // Dorans Shield
