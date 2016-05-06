@@ -63,15 +63,12 @@ namespace LeagueSharp.SDK
                     {
                         case "YasuoWMovingWallMisL":
                             yasuoWallLeft = missile;
-                            Game.PrintChat("1");
                             break;
                         case "YasuoWMovingWallMisR":
                             yasuoWallRight = missile;
-                            Game.PrintChat("2");
                             break;
                         case "YasuoWMovingWallMisVis":
                             yasuoWallRight = missile;
-                            Game.PrintChat("3");
                             break;
                     }
                 };
