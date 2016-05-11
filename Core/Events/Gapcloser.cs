@@ -87,7 +87,7 @@ namespace LeagueSharp.SDK
 
             var hero = sender as Obj_AI_Hero;
 
-            if (hero == null)
+            if (hero == null || hero.IsAlly)
             {
                 return;
             }
@@ -95,16 +95,17 @@ namespace LeagueSharp.SDK
             ActiveSpellsList.Add(
                 new GapCloserEventArgs
                     {
-                        Start = args.Start, End = args.End, Sender = hero, TickCount = Variables.TickCount,
+                        Start = args.Start, End = args.End, Target = args.Target,
+                        Sender = hero, TickCount = Variables.TickCount,
                         SkillType =
                             (args.Target != null && args.Target.IsValid)
                                 ? GapcloserType.Targeted
                                 : GapcloserType.Skillshot,
                         Slot = args.Slot,
-                        IsDirectedToPlayer =
-                            (args.Target != null && args.Target.IsValid && args.Target.IsMe)
+                        IsDirectedToPlayer = (hero.Distance(ObjectManager.Player) < 1500 || args.End.Distance(ObjectManager.Player) < 800) &&
+                            ((args.Target != null && args.Target.IsValid && args.Target.IsMe)
                             || args.End.DistanceToPlayer() < args.Start.DistanceToPlayer()
-                            || hero.IsFacing(GameObjects.Player),
+                            || hero.IsFacing(GameObjects.Player)),
                         SpellName = args.SData.Name
                     });
         }
@@ -143,9 +144,13 @@ namespace LeagueSharp.SDK
             #region Public Properties
 
             /// <summary>
-            ///     Gets or sets the end.
+            ///     Gets or sets the position at which the enemy will be upon spell completion.
             /// </summary>
             public Vector3 End { get; set; }
+            
+            /// <summary>
+            ///     Gets or sets the target of the gapcloser spell. It can be null!
+            public Obj_AI_Hero Target { get; set; }
 
             /// <summary>
             ///     Gets or sets a value indicating whether is directed to player.
