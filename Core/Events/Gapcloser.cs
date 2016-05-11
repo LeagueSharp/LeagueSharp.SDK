@@ -102,7 +102,7 @@ namespace LeagueSharp.SDK
                                 ? GapcloserType.Targeted
                                 : GapcloserType.Skillshot,
                         Slot = args.Slot,
-                        IsDirectedToPlayer = (hero.Distance(ObjectManager.Player) < 1500 || args.End.Distance(ObjectManager.Player) < 800) &&
+                        IsDirectedToPlayer = (hero.Distance(ObjectManager.Player) < 1500 || args.End.Distance(ObjectManager.Player.Position) < 800) &&
                             ((args.Target != null && args.Target.IsValid && args.Target.IsMe)
                             || args.End.DistanceToPlayer() < args.Start.DistanceToPlayer()
                             || hero.IsFacing(GameObjects.Player)),
@@ -150,7 +150,7 @@ namespace LeagueSharp.SDK
             
             /// <summary>
             ///     Gets or sets the target of the gapcloser spell. It can be null!
-            public Obj_AI_Hero Target { get; set; }
+            public GameObject Target { get; set; }
 
             /// <summary>
             ///     Gets or sets a value indicating whether is directed to player.
