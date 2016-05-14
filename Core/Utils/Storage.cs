@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Utils
+namespace LeagueSharp.SDKEx.Utils
 {
     using System;
     using System.Collections;
@@ -25,7 +25,7 @@ namespace LeagueSharp.SDK.Utils
     using System.Reflection;
     using System.Runtime.Serialization;
 
-    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDKEx.Enumerations;
 
     /// <summary>
     ///     The storage, main purpose is to save share-able settings between assemblies.

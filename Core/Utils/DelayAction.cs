@@ -15,13 +15,13 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Utils
+namespace LeagueSharp.SDKEx.Utils
 {
     using System;
     using System.Collections.Generic;
     using System.Threading;
 
-    using LeagueSharp.SDK.Signals;
+    using LeagueSharp.SDKEx.Signals;
 
     /// <summary>
     ///     Delays actions by a set time.

@@ -20,10 +20,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDK.UI.Skins.Light
+namespace LeagueSharp.SDKEx.UI.Skins.Light
 {
-    using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.Utils;
+    using LeagueSharp.SDKEx.Enumerations;
+    using LeagueSharp.SDKEx.Utils;
 
     /// <summary>
     ///     Implements <see cref="ADrawable{MenuSeperator}" /> as a default skin.

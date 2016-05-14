@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.UI.Skins
+namespace LeagueSharp.SDKEx.UI.Skins
 {
     /// <summary>
     ///     Defines a Theme used to draw components of the menu.

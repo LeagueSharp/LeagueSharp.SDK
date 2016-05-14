@@ -15,12 +15,12 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.TSModes
+namespace LeagueSharp.SDKEx.TSModes
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.UI;
+    using LeagueSharp.SDKEx.UI;
 
     /// <summary>
     ///     The less attacks to kill Mode.

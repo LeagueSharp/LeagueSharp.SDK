@@ -15,9 +15,9 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.UI.Skins
+namespace LeagueSharp.SDKEx.UI.Skins
 {
-    using LeagueSharp.SDK.Utils;
+    using LeagueSharp.SDKEx.Utils;
 
     /// <summary>
     ///     Defines a handler which is responsible for the drawing and interactions of an <see cref="AMenuComponent" />.

@@ -20,9 +20,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDK.UI.Skins.Light2
+namespace LeagueSharp.SDKEx.UI.Skins.Light2
 {
-    using LeagueSharp.SDK.UI.Skins.Light;
+    using LeagueSharp.SDKEx.UI.Skins.Light;
 
     /// <summary>
     ///     A default implementation of <see cref="ADrawable{MenuButton}" />

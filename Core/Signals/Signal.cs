@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Signals
+namespace LeagueSharp.SDKEx.Signals
 {
     using System;
     using System.Collections.Generic;

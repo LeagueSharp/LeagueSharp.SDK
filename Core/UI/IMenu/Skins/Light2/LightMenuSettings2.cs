@@ -22,9 +22,9 @@
 
 //Concept by User Vasconcellos
 
-namespace LeagueSharp.SDK.UI.Skins.Light2
+namespace LeagueSharp.SDKEx.UI.Skins.Light2
 {
-    using LeagueSharp.SDK.UI.Skins.Light;
+    using LeagueSharp.SDKEx.UI.Skins.Light;
 
     using SharpDX;
     using SharpDX.Direct3D9;

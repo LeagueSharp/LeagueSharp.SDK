@@ -15,14 +15,14 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDKEx
 {
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
 
-    using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.Properties;
+    using LeagueSharp.SDKEx.Enumerations;
+    using LeagueSharp.SDKEx.Properties;
 
     using SharpDX.Direct3D9;
 

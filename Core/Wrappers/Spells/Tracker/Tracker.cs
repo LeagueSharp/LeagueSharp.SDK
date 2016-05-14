@@ -1,10 +1,10 @@
-﻿namespace LeagueSharp.SDK
+﻿namespace LeagueSharp.SDKEx
 {
     using System;
     using System.Collections.Generic;
 
-    using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.Utils;
+    using LeagueSharp.SDKEx.Enumerations;
+    using LeagueSharp.SDKEx.Utils;
 
     public class Tracker
     {

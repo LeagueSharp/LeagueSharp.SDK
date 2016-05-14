@@ -17,7 +17,7 @@
 
 #endregion
 
-namespace LeagueSharp.SDK.MoreLinq
+namespace LeagueSharp.SDKEx.MoreLinq
 {
     #region Imports
 

@@ -20,13 +20,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDK.UI.Skins.Light
+namespace LeagueSharp.SDKEx.UI.Skins.Light
 {
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
 
-    using LeagueSharp.SDK.Properties;
+    using LeagueSharp.SDKEx.Properties;
 
     using SharpDX.Direct3D9;
 

@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.TSModes.Weights
+namespace LeagueSharp.SDKEx.TSModes.Weights
 {
     /// <summary>
     ///     Low Resists

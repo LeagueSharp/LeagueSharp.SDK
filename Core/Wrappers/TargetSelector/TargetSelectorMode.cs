@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDKEx
 {
     using System;
     using System.Collections.Generic;
@@ -23,9 +23,9 @@ namespace LeagueSharp.SDK
     using System.Linq;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.UI;
-    using LeagueSharp.SDK.Utils;
+    using LeagueSharp.SDKEx.Enumerations;
+    using LeagueSharp.SDKEx.UI;
+    using LeagueSharp.SDKEx.Utils;
 
     /// <summary>
     ///     The mode menu for the TargetSelector

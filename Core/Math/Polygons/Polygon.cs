@@ -15,12 +15,12 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Polygons
+namespace LeagueSharp.SDKEx.Polygons
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDK.Clipper;
+    using LeagueSharp.SDKEx.Clipper;
 
     using SharpDX;
 

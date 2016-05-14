@@ -20,12 +20,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDK.UI.Skins.Colored
+namespace LeagueSharp.SDKEx.UI.Skins.Colored
 {
     using System.Collections.Generic;
 
-    using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.Utils;
+    using LeagueSharp.SDKEx.Enumerations;
+    using LeagueSharp.SDKEx.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;

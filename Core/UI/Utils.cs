@@ -1,4 +1,4 @@
-﻿namespace LeagueSharp.SDK.UI
+﻿namespace LeagueSharp.SDKEx.UI
 {
     using System;
     using System.Collections.Generic;

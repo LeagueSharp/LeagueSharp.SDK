@@ -15,14 +15,14 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Utils
+namespace LeagueSharp.SDKEx.Utils
 {
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
 
-    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDKEx.Enumerations;
 
     /// <summary>
     ///     Invulnerable utility class

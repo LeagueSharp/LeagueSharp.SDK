@@ -20,20 +20,20 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDK.UI.Skins.Light2
+namespace LeagueSharp.SDKEx.UI.Skins.Light2
 {
     using System.Drawing;
 
-    using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.UI.Skins.Light;
-    using LeagueSharp.SDK.Utils;
+    using LeagueSharp.SDKEx.Enumerations;
+    using LeagueSharp.SDKEx.UI.Skins.Light;
+    using LeagueSharp.SDKEx.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;
 
     using Color = SharpDX.Color;
     using Rectangle = SharpDX.Rectangle;
-    using Utilities = LeagueSharp.SDK.UI.Utilities;
+    using Utilities = LeagueSharp.SDKEx.UI.Utilities;
 
     internal class LightColorPicker2 : LightColorPicker
     {

@@ -19,7 +19,7 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("LeagueSharp.SDK")]
+[assembly: AssemblyTitle("LeagueSharp.SDKEx")]
 [assembly: AssemblyDescription("LeagueSharp Software Development Kit")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("LeagueSharp")]
@@ -29,6 +29,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("e4860c36-20f0-4ca9-ad94-aa71eae94e8e")]
-[assembly: AssemblyVersion("1.2.0.1")]
-[assembly: AssemblyFileVersion("1.2.0.1")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]
 [assembly: NeutralResourcesLanguage("en")]

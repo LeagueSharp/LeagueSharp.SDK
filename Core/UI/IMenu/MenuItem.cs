@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.UI
+namespace LeagueSharp.SDKEx.UI
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
@@ -24,7 +24,7 @@ namespace LeagueSharp.SDK.UI
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
 
-    using LeagueSharp.SDK.Utils;
+    using LeagueSharp.SDKEx.Utils;
 
     using SharpDX;
 

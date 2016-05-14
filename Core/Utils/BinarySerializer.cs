@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Utils
+namespace LeagueSharp.SDKEx.Utils
 {
     using System.IO;
     using System.Runtime.Serialization;

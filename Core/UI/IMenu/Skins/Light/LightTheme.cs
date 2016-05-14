@@ -20,7 +20,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDK.UI.Skins.Light
+namespace LeagueSharp.SDKEx.UI.Skins.Light
 {
     using System.Linq;
 

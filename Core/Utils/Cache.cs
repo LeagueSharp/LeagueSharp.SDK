@@ -15,14 +15,14 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Utils
+namespace LeagueSharp.SDKEx.Utils
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Caching;
 
-    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDKEx.Enumerations;
 
     /// <summary>
     ///     Provides an implementation of ObjectCache, for any object. Check <see cref="DefaultCacheCapabilities" /> for

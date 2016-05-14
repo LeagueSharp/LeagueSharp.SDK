@@ -15,15 +15,15 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.UI.Skins
+namespace LeagueSharp.SDKEx.UI.Skins
 {
-    using LeagueSharp.SDK.UI.Skins.Blue;
-    using LeagueSharp.SDK.UI.Skins.Blue2;
-    using LeagueSharp.SDK.UI.Skins.Colored;
-    using LeagueSharp.SDK.UI.Skins.Default;
-    using LeagueSharp.SDK.UI.Skins.Light;
-    using LeagueSharp.SDK.UI.Skins.Light2;
-    using LeagueSharp.SDK.UI.Skins.Tech;
+    using LeagueSharp.SDKEx.UI.Skins.Blue;
+    using LeagueSharp.SDKEx.UI.Skins.Blue2;
+    using LeagueSharp.SDKEx.UI.Skins.Colored;
+    using LeagueSharp.SDKEx.UI.Skins.Default;
+    using LeagueSharp.SDKEx.UI.Skins.Light;
+    using LeagueSharp.SDKEx.UI.Skins.Light2;
+    using LeagueSharp.SDKEx.UI.Skins.Tech;
 
     /// <summary>
     ///     Manages themes.

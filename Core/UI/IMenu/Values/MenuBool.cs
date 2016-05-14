@@ -15,14 +15,14 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.UI
+namespace LeagueSharp.SDKEx.UI
 {
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
 
-    using LeagueSharp.SDK.UI.Skins;
-    using LeagueSharp.SDK.Utils;
+    using LeagueSharp.SDKEx.UI.Skins;
+    using LeagueSharp.SDKEx.Utils;
 
     /// <summary>
     ///     Menu boolean.

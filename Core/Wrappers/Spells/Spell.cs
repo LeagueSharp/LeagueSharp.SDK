@@ -15,15 +15,15 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDKEx
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using LeagueSharp.Data.Enumerations;
-    using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.Utils;
+    using LeagueSharp.SDKEx.Enumerations;
+    using LeagueSharp.SDKEx.Utils;
 
     using SharpDX;
 
@@ -759,7 +759,7 @@ namespace LeagueSharp.SDK
         /// </returns>
         public List<Obj_AI_Base> GetCollision(Vector2 fromVector2, List<Vector2> to, float delayOverride = -1)
         {
-            return SDK.Collision.GetCollision(
+            return SDKEx.Collision.GetCollision(
                 to.Select(h => h.ToVector3()).ToList(),
                 new PredictionInput
                     {

@@ -20,13 +20,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDK.UI.Skins.Blue
+namespace LeagueSharp.SDKEx.UI.Skins.Blue
 {
     using System;
     using System.Globalization;
 
-    using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.Utils;
+    using LeagueSharp.SDKEx.Enumerations;
+    using LeagueSharp.SDKEx.Utils;
 
     using SharpDX;
     using SharpDX.Direct3D9;

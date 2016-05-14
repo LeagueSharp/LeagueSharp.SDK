@@ -20,7 +20,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDK.UI.Skins
+namespace LeagueSharp.SDKEx.UI.Skins
 {
     using SharpDX;
     using SharpDX.Direct3D9;

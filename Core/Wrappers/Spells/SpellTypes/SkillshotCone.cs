@@ -1,9 +1,9 @@
-﻿namespace LeagueSharp.SDK
+﻿namespace LeagueSharp.SDKEx
 {
     using System;
 
     using LeagueSharp.Data.DataTypes;
-    using LeagueSharp.SDK.Polygons;
+    using LeagueSharp.SDKEx.Polygons;
 
     public class SkillshotCone : SkillshotMissile
     {

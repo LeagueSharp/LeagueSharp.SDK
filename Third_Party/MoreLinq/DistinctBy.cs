@@ -22,7 +22,7 @@
 using System.Linq;
 #endif
 
-namespace LeagueSharp.SDK.MoreLinq
+namespace LeagueSharp.SDKEx.MoreLinq
 {
     using System;
     using System.Collections.Generic;

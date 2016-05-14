@@ -15,13 +15,13 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK.Utils
+namespace LeagueSharp.SDKEx.Utils
 {
     using System;
     using System.Diagnostics;
     using System.Runtime.CompilerServices;
 
-    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDKEx.Enumerations;
 
     /// <summary>
     ///     Performance block class, for block method performance logging.

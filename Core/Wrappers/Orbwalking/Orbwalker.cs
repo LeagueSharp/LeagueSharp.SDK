@@ -15,20 +15,20 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDK
+namespace LeagueSharp.SDKEx
 {
     using System;
     using System.Linq;
     using System.Windows.Forms;
 
-    using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.UI;
-    using LeagueSharp.SDK.Utils;
+    using LeagueSharp.SDKEx.Enumerations;
+    using LeagueSharp.SDKEx.UI;
+    using LeagueSharp.SDKEx.Utils;
 
     using SharpDX;
 
     using Color = System.Drawing.Color;
-    using Menu = LeagueSharp.SDK.UI.Menu;
+    using Menu = LeagueSharp.SDKEx.UI.Menu;
 
     /// <summary>
     ///     The <c>Orbwalker</c> system.

@@ -1,4 +1,4 @@
-﻿namespace LeagueSharp.SDK.Core.Wrappers.Spells.SpellTypes
+﻿namespace LeagueSharp.SDKEx.Core.Wrappers.Spells.SpellTypes
 {
     class Targeted
     {

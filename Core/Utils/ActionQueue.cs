@@ -1,11 +1,11 @@
-﻿namespace LeagueSharp.SDK.Utils
+﻿namespace LeagueSharp.SDKEx.Utils
 {
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDKEx.Enumerations;
 
     /// <summary>
     ///     Queues actions.

@@ -1,12 +1,12 @@
-﻿namespace LeagueSharp.SDK
+﻿namespace LeagueSharp.SDKEx
 {
     using System;
     using System.Collections.Generic;
 
     using LeagueSharp.Data.DataTypes;
-    using LeagueSharp.SDK.Clipper;
-    using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.Utils;
+    using LeagueSharp.SDKEx.Clipper;
+    using LeagueSharp.SDKEx.Enumerations;
+    using LeagueSharp.SDKEx.Utils;
 
     using SharpDX;
 
