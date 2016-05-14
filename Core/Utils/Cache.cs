@@ -19,145 +19,84 @@ namespace LeagueSharp.SDK.Utils
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Runtime.Caching;
 
-    using LeagueSharp.SDK.Enumerations;
-
     /// <summary>
-    ///     Provides an implementation of ObjectCache, for any object. Check <see cref="DefaultCacheCapabilities" /> for
-    ///     implemented abilities.
+    ///     Represents the type that implements an in-memory cache.
     /// </summary>
     public class Cache : ObjectCache
     {
+        #region Constants
+
+        /// <summary>
+        ///     The default cache region name.
+        /// </summary>
+        public const string DefaultCacheRegionName = "Default";
+
+        #endregion
+
         #region Static Fields
 
         /// <summary>
-        ///     The instance.
+        ///     The instance
         /// </summary>
         private static Cache instance;
-
-        #endregion
-
-        #region Fields
-
-        /// <summary>
-        ///     Main Cache.
-        /// </summary>
-        internal readonly Dictionary<string, Dictionary<string, object>> InternalCache;
-
-        /// <summary>
-        ///     Holds callbacks that are called before cached item is removed.
-        /// </summary>
-        private readonly SortedDictionary<string, CacheEntryUpdateCallback> cacheEntryUpdateCallbacks;
-
-        /// <summary>
-        ///     Holds callbacks that are called after cached item is removed.
-        /// </summary>
-        private readonly SortedDictionary<string, CacheEntryRemovedCallback> cacheRemovedCallbacks;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Prevents a default instance of the <see cref="Cache" /> class from being created.
-        /// </summary>
-        private Cache()
-        {
-            this.InternalCache = new Dictionary<string, Dictionary<string, object>>();
-            this.CreateRegion("Default");
-
-            this.cacheEntryUpdateCallbacks = new SortedDictionary<string, CacheEntryUpdateCallback>();
-            this.cacheRemovedCallbacks = new SortedDictionary<string, CacheEntryRemovedCallback>();
-        }
-
-        #endregion
-
-        #region Delegates
-
-        /// <summary>
-        ///     Delegate when a value is added.
-        /// </summary>
-        /// <param name="sender">The Sender</param>
-        /// <param name="e">Passed Arguments Container</param>
-        public delegate void OnEntryAddedDelegate(object sender, EntryAddedArgs e);
-
-        /// <summary>
-        ///     Delegate for <see cref="OnValueChanged" />.
-        /// </summary>
-        /// <param name="sender">The Sender</param>
-        /// <param name="e">The Arguments</param>
-        public delegate void OnValueChangedDelegate(object sender, ValueChangedArgs e);
-
-        #endregion
-
-        #region Public Events
-
-        /// <summary>
-        ///     Gets called when a new value is added to the InternalCache.
-        /// </summary>
-        public static event OnEntryAddedDelegate OnEntryAdded;
-
-        /// <summary>
-        ///     Called when an entry in the InternalCache is modified.
-        /// </summary>
-        public static event OnValueChangedDelegate OnValueChanged;
 
         #endregion
 
         #region Public Properties
 
         /// <summary>
-        ///     Gets the instance of Cache
+        ///     Gets the instance.
         /// </summary>
-        public static Cache Instance
-        {
-            get
-            {
-                if (instance != null)
-                {
-                    return instance;
-                }
+        /// <value>
+        ///     The instance.
+        /// </value>
+        public static Cache Instance => instance ?? (instance = new Cache());
 
-                instance = new Cache();
-                return instance;
-            }
-        }
-
-        /// <summary>
-        ///     The capabilities of this implementation of ObjectCache.
-        /// </summary>
+        /// <summary>Gets a description of the features that a cache implementation provides.</summary>
+        /// <returns>A bitwise combination of flags that indicate the default capabilities of a cache implementation.</returns>
         public override DefaultCacheCapabilities DefaultCacheCapabilities
             =>
-                DefaultCacheCapabilities.AbsoluteExpirations | DefaultCacheCapabilities.CacheRegions
-                | DefaultCacheCapabilities.CacheEntryRemovedCallback | DefaultCacheCapabilities.CacheEntryUpdateCallback
-            ;
+                DefaultCacheCapabilities.AbsoluteExpirations | DefaultCacheCapabilities.CacheEntryRemovedCallback
+                | DefaultCacheCapabilities.CacheEntryUpdateCallback | DefaultCacheCapabilities.CacheRegions
+                | DefaultCacheCapabilities.InMemoryProvider;
+
+        /// <summary>Gets the name of a specific <see cref="T:System.Runtime.Caching.ObjectCache" /> instance. </summary>
+        /// <returns>The name of a specific cache instance.</returns>
+        public override string Name => "SDK-Cache";
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
-        ///     Returns the name of the Cache.
+        ///     Gets or sets the internal cache.
         /// </summary>
-        public override string Name => "SDK Cache";
+        /// <value>
+        ///     The internal cache.
+        /// </value>
+        private Dictionary<string, Dictionary<string, CacheEntryItem>> InternalCache { get; } =
+            new Dictionary<string, Dictionary<string, CacheEntryItem>>();
 
         #endregion
 
         #region Public Indexers
 
-        /// <summary>
-        ///     Gets/Sets the value of a key in the Cache, using the default region name.
-        /// </summary>
-        /// <param name="key">The Key</param>
-        /// <returns>Value matching the key</returns>
+        /// <summary>Gets or sets the default indexer for the <see cref="T:System.Runtime.Caching.ObjectCache" /> class.</summary>
+        /// <returns>A key that serves as an indexer into the cache instance.</returns>
+        /// <param name="key">A unique identifier for a cache entry in the cache. </param>
         public override object this[string key]
         {
             get
             {
-                return this.InternalCache["Default"][key];
+                return this.Get(key);
             }
-
             set
             {
-                this.InternalCache["Default"][key] = value;
+                this.Set(key, value, new CacheItemPolicy());
             }
         }
 
@@ -166,541 +105,582 @@ namespace LeagueSharp.SDK.Utils
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Adds or Gets an existing key/value, executing the function if the key does not exist.
+        ///     Tries to insert a cache entry into the cache as a <see cref="T:System.Runtime.Caching.CacheItem" /> instance,
+        ///     and adds details about how the entry should be evicted.
         /// </summary>
-        /// <param name="key">The Key</param>
-        /// <param name="function">Function that will get the value</param>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
-        /// <returns>The Object of the given function</returns>
-        public object AddOrGetExisting(string key, Func<object> function, string regionName = null)
+        /// <returns>
+        ///     true if insertion succeeded, or false if there is an already an entry in the cache that has the same key as
+        ///     <paramref name="item" />.
+        /// </returns>
+        /// <param name="item">The object to add.</param>
+        /// <param name="policy">
+        ///     An object that contains eviction details for the cache entry. This object provides more options
+        ///     for eviction than a simple absolute expiration.
+        /// </param>
+        public override bool Add(CacheItem item, CacheItemPolicy policy)
         {
-            regionName = regionName ?? "Default";
-
-            object cachedObject;
-            var contains = this.InternalCache[regionName].TryGetValue(key, out cachedObject);
-
-            if (contains)
+            if (item == null)
             {
-                return cachedObject;
+                throw new ArgumentNullException(nameof(item));
             }
 
-            var result = function();
-            this.InternalCache[regionName].Add(key, result);
+            if (policy == null)
+            {
+                throw new ArgumentNullException(nameof(policy));
+            }
 
-            OnEntryAdded?.Invoke(this, new EntryAddedArgs { Key = key, Value = result, RegionName = regionName });
+            var cacheRegion = this.AddOrGetExistingCacheRegion(item);
 
-            return result;
+            if (cacheRegion.ContainsKey(item.Key))
+            {
+                return false;
+            }
+
+            var entryItem = new CacheEntryItem(item, policy);
+            cacheRegion.Add(item.Key, entryItem);
+
+            this.ValidatePolicy(entryItem);
+
+            return true;
         }
 
-        /// <summary>
-        ///     Adds a key and a value, in the InternalCache region. However, if the item exists, it will return the cached item.
-        ///     This
-        ///     KeyValuePair does not expire.
-        /// </summary>
-        /// <param name="key">The Key</param>
-        /// <param name="value">The Value</param>
-        /// <param name="regionName">The name of the region in the InternalCache.</param>
-        /// <returns>The cached value.</returns>
-        public object AddOrGetExisting(string key, object value, string regionName = "Default")
+        /// <summary>Inserts a cache entry into the cache without overwriting any existing cache entry. </summary>
+        /// <returns>
+        ///     true if insertion succeeded, or false if there is an already an entry in the cache that has the same key as
+        ///     <paramref name="key" />.
+        /// </returns>
+        /// <param name="key">A unique identifier for the cache entry.</param>
+        /// <param name="value">The object to insert. </param>
+        /// <param name="absoluteExpiration">
+        ///     The fixed date and time at which the cache entry will expire. This parameter is
+        ///     required when the <see cref="ObjectCache.Add(string,object,System.DateTimeOffset,string)" /> method is called.
+        /// </param>
+        /// <param name="regionName">
+        ///     Optional. A named region in the cache to which the cache entry can be added, if regions are
+        ///     implemented. Because regions are not implemented in .NET Framework 4, the default value is null.
+        /// </param>
+        public override bool Add(string key, object value, DateTimeOffset absoluteExpiration, string regionName = null)
         {
-            return this.AddOrGetExisting(key, value, InfiniteAbsoluteExpiration, regionName);
+            return this.Add(
+                new CacheItem(key, value),
+                new CacheItemPolicy() { AbsoluteExpiration = absoluteExpiration });
+        }
+
+        /// <summary>Inserts a cache entry into the cache, specifying information about how the entry will be evicted.</summary>
+        /// <returns>
+        ///     true if the insertion try succeeds, or false if there is an already an entry in the cache with the same key as
+        ///     <paramref name="key" />.
+        /// </returns>
+        /// <param name="key">A unique identifier for the cache entry. </param>
+        /// <param name="value">The object to insert. </param>
+        /// <param name="policy">
+        ///     An object that contains eviction details for the cache entry. This object provides more options
+        ///     for eviction than a simple absolute expiration.
+        /// </param>
+        /// <param name="regionName">
+        ///     Optional. A named region in the cache to which the cache entry can be added, if regions are
+        ///     implemented. The default value for the optional parameter is null.
+        /// </param>
+        public override bool Add(string key, object value, CacheItemPolicy policy, string regionName = null)
+        {
+            return this.Add(new CacheItem(key, value, regionName), policy);
         }
 
         /// <summary>
-        ///     Adds a key, a value, and an expiration to the InternalCache, returns the value if the key exists.
+        ///     Inserts a cache entry into the cache, by using a key, an object for the
+        ///     cache entry, an absolute expiration value, and an optional region to add the cache into.
         /// </summary>
-        /// <param name="key">The Key</param>
-        /// <param name="value">The Value</param>
-        /// <param name="absoluteExpiration">Time the KeyPair expires</param>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
-        /// <returns>The object stored in the InternalCache</returns>
+        /// <returns>If a cache entry with the same key exists, the specified cache entry's value; otherwise, null.</returns>
+        /// <param name="key">A unique identifier for the cache entry. </param>
+        /// <param name="value">The object to insert. </param>
+        /// <param name="absoluteExpiration">The fixed date and time at which the cache entry will expire. </param>
+        /// <param name="regionName">
+        ///     Optional. A named region in the cache to which the cache entry can be added, if regions are
+        ///     implemented. The default value for the optional parameter is null.
+        /// </param>
         public override object AddOrGetExisting(
             string key,
             object value,
             DateTimeOffset absoluteExpiration,
             string regionName = null)
         {
-            regionName = regionName ?? "Default";
+            return
+                this.AddOrGetExisting(
+                    new CacheItem(key, value, regionName),
+                    new CacheItemPolicy() { AbsoluteExpiration = absoluteExpiration }).Value;
+        }
 
-            object internalValue;
-            var contains = this.InternalCache[regionName].TryGetValue(key, out internalValue);
+        /// <summary>
+        ///     Inserts the specified <see cref="T:System.Runtime.Caching.CacheItem" />
+        ///     object into the cache, specifying information about how the entry will be evicted.
+        /// </summary>
+        /// <returns>If a cache entry with the same key exists, the specified cache entry; otherwise, null.</returns>
+        /// <param name="value">The object to insert. </param>
+        /// <param name="policy">
+        ///     An object that contains eviction details for the cache entry. This object provides more options
+        ///     for eviction than a simple absolute expiration.
+        /// </param>
+        public override CacheItem AddOrGetExisting(CacheItem value, CacheItemPolicy policy)
+        {
+            var cacheRegion = this.AddOrGetExistingCacheRegion(value);
 
-            if (contains)
+            if (cacheRegion.ContainsKey(value.Key))
             {
-                return internalValue;
+                return new CacheItem(value.Key, this.Get(value.Key, value.RegionName), value.RegionName);
             }
 
-            OnEntryAdded?.Invoke(this, new EntryAddedArgs { Key = key, Value = value, RegionName = regionName });
-
-            this.InternalCache[regionName].Add(key, value);
-
-            DelayAction.Add(
-                (int)(absoluteExpiration - DateTime.Now).TotalMilliseconds,
-                () =>
-                    {
-                        if (!this.InternalCache[regionName].ContainsKey(key))
-                        {
-                            return;
-                        }
-
-                        var cacheValue = this.InternalCache[regionName][key];
-
-                        this.CallEntryUpdates(key, CacheEntryRemovedReason.Expired, regionName);
-                        this.InternalCache[regionName].Remove(key);
-                        this.CallEntryRemoved(key, cacheValue, CacheEntryRemovedReason.Expired, regionName);
-                    });
-
+            this.Add(value, policy);
             return value;
         }
 
         /// <summary>
-        ///     Adds a CacheItem following the policy provided to the InternalCache, but returns the CacheItem if it exists.
+        ///     Inserts a cache entry into the cache, specifying a key and a value for the
+        ///     cache entry, and information about how the entry will be evicted.
         /// </summary>
-        /// <param name="value">The Value</param>
-        /// <param name="policy">The Policy</param>
-        /// <returns>The CacheItem in the InternalCache</returns>
-        public override CacheItem AddOrGetExisting(CacheItem value, CacheItemPolicy policy)
-        {
-            var regionName = value.RegionName ?? "Default";
-
-            object internalValue;
-            var contains = this.InternalCache[regionName].TryGetValue(value.Key, out internalValue);
-
-            if (contains)
-            {
-                return new CacheItem(value.Key, internalValue, regionName);
-            }
-
-            OnEntryAdded?.Invoke(
-                this,
-                new EntryAddedArgs { Key = value.Key, Value = value.Value, RegionName = regionName });
-
-            this.InternalCache[regionName].Add(value.Key, value.Value);
-
-            this.cacheEntryUpdateCallbacks[value.Key + value.RegionName] = policy.UpdateCallback;
-            this.cacheRemovedCallbacks[value.Key + value.RegionName] = policy.RemovedCallback;
-
-            DelayAction.Add(
-                (int)(policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds,
-                () =>
-                    {
-                        if (!this.InternalCache[regionName].ContainsKey(value.Key))
-                        {
-                            return;
-                        }
-
-                        var cachedValue = this.InternalCache[regionName][value.Key];
-
-                        this.CallEntryUpdates(value.Key, CacheEntryRemovedReason.Expired, value.RegionName);
-                        this.InternalCache[regionName].Remove(value.Key);
-                        this.CallEntryRemoved(value.Key, cachedValue, CacheEntryRemovedReason.Expired, value.RegionName);
-                    });
-
-            return new CacheItem(value.Key, value.Value, regionName);
-        }
-
-        /// <summary>
-        ///     Adds a key and a value to the InternalCache, following the policy, returns the cached value if it exists.
-        /// </summary>
-        /// <param name="key">The Key</param>
-        /// <param name="value">The Value</param>
-        /// <param name="policy">The Policy</param>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
-        /// <returns>Cached value</returns>
+        /// <returns>If a cache entry with the same key exists, the specified cache entry's value; otherwise, null.</returns>
+        /// <param name="key">A unique identifier for the cache entry. </param>
+        /// <param name="value">The object to insert.</param>
+        /// <param name="policy">
+        ///     An object that contains eviction details for the cache entry. This object provides more options
+        ///     for eviction than a simple absolute expiration.
+        /// </param>
+        /// <param name="regionName">
+        ///     Optional. A named region in the cache to which the cache entry can be added, if regions are
+        ///     implemented. The default value for the optional parameter is null.
+        /// </param>
         public override object AddOrGetExisting(
             string key,
             object value,
             CacheItemPolicy policy,
             string regionName = null)
         {
-            regionName = regionName ?? "Default";
-
-            object internalValue;
-            var contains = this.InternalCache[regionName].TryGetValue(key, out internalValue);
-
-            if (contains)
-            {
-                return internalValue;
-            }
-
-            OnEntryAdded?.Invoke(this, new EntryAddedArgs { Key = key, Value = value, RegionName = regionName });
-
-            this.InternalCache[regionName].Add(key, value);
-
-            this.cacheEntryUpdateCallbacks[key + regionName] = policy.UpdateCallback;
-            this.cacheRemovedCallbacks[key + regionName] = policy.RemovedCallback;
-
-            DelayAction.Add(
-                (int)(policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds,
-                () =>
-                    {
-                        if (!this.InternalCache[regionName].ContainsKey(key))
-                        {
-                            return;
-                        }
-
-                        var cachedValue = this.InternalCache[regionName][key];
-
-                        this.CallEntryUpdates(key, CacheEntryRemovedReason.Expired, regionName);
-                        this.InternalCache[regionName].Remove(key);
-                        this.CallEntryRemoved(key, cachedValue, CacheEntryRemovedReason.Expired, regionName);
-                    });
-
-            return value;
+            return this.AddOrGetExisting(new CacheItem(key, value, regionName), policy);
         }
 
-        /// <summary>
-        ///     Checks if the InternalCache contains the key.
-        /// </summary>
-        /// <param name="key">The Key</param>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
-        /// <returns>Whether the key is in the InternalCache</returns>
+        /// <summary>Checks whether the cache entry already exists in the cache.</summary>
+        /// <returns>true if the cache contains a cache entry with the same key value as <paramref name="key" />; otherwise, false. </returns>
+        /// <param name="key">A unique identifier for the cache entry. </param>
+        /// <param name="regionName">
+        ///     Optional. A named region in the cache where the cache can be found, if regions are
+        ///     implemented. The default value for the optional parameter is null.
+        /// </param>
         public override bool Contains(string key, string regionName = null)
         {
-            regionName = regionName ?? "Default";
-            return this.InternalCache[regionName].ContainsKey(key);
+            return this.InternalCache[regionName ?? DefaultCacheRegionName].ContainsKey(key);
         }
 
         /// <summary>
-        ///     Not supported. Please use the events.
+        ///     Creates a <see cref="T:System.Runtime.Caching.CacheEntryChangeMonitor" />
+        ///     object that can trigger events in response to changes to specified cache entries.
         /// </summary>
-        /// <param name="keys">The Keys</param>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
-        /// <returns><see cref="CacheEntryChangeMonitor" /> instance</returns>
+        /// <returns>A change monitor that monitors cache entries in the cache. </returns>
+        /// <param name="keys">The unique identifiers for cache entries to monitor. </param>
+        /// <param name="regionName">
+        ///     Optional. A named region in the cache where the cache keys in the <paramref name="keys" />
+        ///     parameter exist, if regions are implemented. The default value for the optional parameter is null.
+        /// </param>
         public override CacheEntryChangeMonitor CreateCacheEntryChangeMonitor(
             IEnumerable<string> keys,
             string regionName = null)
         {
-            throw new NotSupportedException("CacheEntryChangeMonitors are not implemented.");
+            if (keys == null)
+            {
+                throw new ArgumentNullException(nameof(keys));
+            }
+
+            var keyList = keys as IList<string> ?? keys.ToList();
+
+            if (keyList.Any(key => key == null))
+            {
+                throw new ArgumentException("Collection contains a null element.");
+            }
+
+            return new CacheEntryChangeMonitorImpl(
+                Guid.NewGuid().ToString(),
+                new ReadOnlyCollection<string>(keyList),
+                DateTime.Now,
+                regionName ?? DefaultCacheRegionName);
         }
 
-        /// <summary>
-        ///     Creates a new region to use. The default region is automatically created.
-        /// </summary>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
-        public void CreateRegion(string regionName)
-        {
-            this.InternalCache.Add(regionName, new Dictionary<string, object>());
-        }
-
-        /// <summary>
-        ///     Gets a value in the InternalCache by the key.
-        /// </summary>
-        /// <param name="key">The Key</param>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
-        /// <returns>The object the key pairs with</returns>
+        /// <summary>Gets the specified cache entry from the cache as an object.</summary>
+        /// <returns>The cache entry that is identified by <paramref name="key" />. </returns>
+        /// <param name="key">A unique identifier for the cache entry to get. </param>
+        /// <param name="regionName">
+        ///     Optional. A named region in the cache to which the cache entry was added, if regions are
+        ///     implemented. The default value for the optional parameter is null.
+        /// </param>
         public override object Get(string key, string regionName = null)
         {
-            regionName = regionName ?? "Default";
-            return this.InternalCache[regionName][key];
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            return this.GetCacheItem(key, regionName)?.Value;
         }
 
         /// <summary>
-        ///     Gets a value from the InternalCache, and casts it to the type.
+        ///     Gets the specified cache entry from the cache as a
+        ///     <see cref="T:System.Runtime.Caching.CacheItem" /> instance.
         /// </summary>
-        /// <typeparam name="T">Type to cast to</typeparam>
-        /// <param name="key">The Key</param>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
-        /// <returns>The object casted into T</returns>
-        public T Get<T>(string key, string regionName = null)
-        {
-            regionName = regionName ?? "Default";
-
-            var value = this.InternalCache[regionName][key];
-            return value is T ? (T)value : default(T);
-        }
-
-        /// <summary>
-        ///     Gets the CacheItem from the Key.
-        /// </summary>
-        /// <param name="key">The Key</param>
-        /// <param name="regionName">The Region Name</param>
-        /// <returns>CacheItem in the InternalCache</returns>
+        /// <returns>The cache entry that is identified by <paramref name="key" />.</returns>
+        /// <param name="key">A unique identifier for the cache entry to get. </param>
+        /// <param name="regionName">
+        ///     Optional. A named region in the cache to which the cache was added, if regions are
+        ///     implemented. Because regions are not implemented in .NET Framework 4, the default is null.
+        /// </param>
         public override CacheItem GetCacheItem(string key, string regionName = null)
         {
-            regionName = regionName ?? "Default";
-            return new CacheItem(key, this.InternalCache[regionName][key], regionName);
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            var item = this.AddOrGetExistingCacheRegion(regionName)[key];
+            this.ValidatePolicy(item);
+
+            return item.ToCacheItem();
         }
 
-        /// <summary>
-        ///     Gets the count of KeyPairs in the Cache.
-        /// </summary>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
-        /// <returns>Count of KeyPairs in the Cache</returns>
+        /// <summary>Gets the total number of cache entries in the cache. </summary>
+        /// <returns>
+        ///     The number of cache entries in the cache. If <paramref name="regionName" /> is not null, the count indicates
+        ///     the number of entries that are in the specified cache region.
+        /// </returns>
+        /// <param name="regionName">
+        ///     Optional. A named region in the cache for which the cache entry count should be computed, if
+        ///     regions are implemented. The default value for the optional parameter is null.
+        /// </param>
         public override long GetCount(string regionName = null)
         {
-            regionName = regionName ?? "Default";
-            return this.InternalCache[regionName].Count;
+            return this.AddOrGetExistingCacheRegion(regionName).Count;
         }
 
-        /// <summary>
-        ///     Gets the values of all the keys provided.
-        /// </summary>
-        /// <param name="keys">Keys to get the values of</param>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
-        /// <returns>Dictionary of all the keys, with the perspective values.</returns>
+        /// <summary>Gets a set of cache entries that correspond to the specified keys.</summary>
+        /// <returns>A dictionary of key/value pairs that represent cache entries. </returns>
+        /// <param name="keys">A collection of unique identifiers for the cache entries to get. </param>
+        /// <param name="regionName">
+        ///     Optional. A named region in the cache to which the cache entry or entries were added, if
+        ///     regions are implemented. The default value for the optional parameter is null.
+        /// </param>
         public override IDictionary<string, object> GetValues(IEnumerable<string> keys, string regionName = null)
         {
-            regionName = regionName ?? "Default";
-            return keys.Where(x => this.InternalCache[regionName].ContainsKey(x))
-                .ToDictionary(x => x, x => this.InternalCache[regionName][x]);
+            var cacheRegion = this.AddOrGetExistingCacheRegion(regionName);
+            var values = keys.Where(x => cacheRegion.ContainsKey(x)).ToDictionary(x => x, x => cacheRegion[x]);
+
+            foreach (var item in values.Values)
+            {
+                this.ValidatePolicy(item);
+            }
+
+            return values.ToDictionary(x => x.Key, x => x.Value.Value);
         }
 
-        /// <summary>
-        ///     Removes KeyPair by the key in the InternalCache.
-        /// </summary>
-        /// <param name="key">The Key</param>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
-        /// <returns>The value of the key being removed</returns>
+        /// <summary>Gets a set of cache entries that correspond to the specified keys.</summary>
+        /// <returns>A dictionary of key/value pairs that represent cache entries. </returns>
+        /// <param name="regionName">
+        ///     Optional. A named region in the cache to which the cache entry or entries were added, if
+        ///     regions are implemented. Because regions are not implemented in .NET Framework 4, the default is null.
+        /// </param>
+        /// <param name="keys">A collection of unique identifiers for the cache entries to get. </param>
+        public override IDictionary<string, object> GetValues(string regionName, params string[] keys)
+        {
+            return this.GetValues(keys, regionName);
+        }
+
+        /// <summary>Removes the cache entry from the cache.</summary>
+        /// <returns>
+        ///     An object that represents the value of the removed cache entry that was specified by the key, or null if the
+        ///     specified entry was not found.
+        /// </returns>
+        /// <param name="key">A unique identifier for the cache entry. </param>
+        /// <param name="regionName">
+        ///     Optional. A named region in the cache to which the cache entry was added, if regions are
+        ///     implemented. The default value for the optional parameter is null.
+        /// </param>
         public override object Remove(string key, string regionName = null)
         {
-            regionName = regionName ?? "Default";
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
 
-            if (!this.InternalCache[regionName].ContainsKey(key))
+            CacheEntryItem item;
+            var cacheRegion = this.AddOrGetExistingCacheRegion(regionName);
+
+            if (!cacheRegion.TryGetValue(key, out item))
             {
                 return null;
             }
 
-            if (this.cacheEntryUpdateCallbacks.ContainsKey(key + regionName))
-            {
-                this.cacheEntryUpdateCallbacks[key + regionName].Invoke(
-                    new CacheEntryUpdateArguments(this, CacheEntryRemovedReason.Removed, key, regionName));
-            }
+            item.EntryRemovedCallback(
+                new CacheEntryRemovedArguments(this, CacheEntryRemovedReason.Removed, item.ToCacheItem()));
+            item.EntryUpdateCallback(
+                new CacheEntryUpdateArguments(this, CacheEntryRemovedReason.Removed, item.Key, item.RegionName));
 
-            var value = this.InternalCache[regionName][key];
-            this.InternalCache[regionName].Remove(key);
+            cacheRegion.Remove(key);
 
-            if (this.cacheRemovedCallbacks.ContainsKey(key + regionName))
-            {
-                this.cacheRemovedCallbacks[key + regionName].Invoke(
-                    new CacheEntryRemovedArguments(
-                        this,
-                        CacheEntryRemovedReason.Removed,
-                        new CacheItem(key, value, regionName)));
-            }
-
-            return value;
+            return item.Value;
         }
 
         /// <summary>
-        ///     Sets the value of a key in the InternalCache, and expires at a set time. The key does not have to be created.
+        ///     Inserts a cache entry into the cache, specifying time-based expiration
+        ///     details.
         /// </summary>
-        /// <param name="key">The Key</param>
-        /// <param name="value">The Value</param>
-        /// <param name="absoluteExpiration">The Expiration</param>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
+        /// <param name="key">A unique identifier for the cache entry. </param>
+        /// <param name="value">The object to insert.</param>
+        /// <param name="absoluteExpiration">The fixed date and time at which the cache entry will expire.</param>
+        /// <param name="regionName">
+        ///     Optional. A named region in the cache to which the cache entry can be added, if regions are
+        ///     implemented. The default value for the optional parameter is null.
+        /// </param>
         public override void Set(string key, object value, DateTimeOffset absoluteExpiration, string regionName = null)
         {
-            regionName = regionName ?? "Default";
-
-            if (OnValueChanged != null && this.InternalCache[regionName].ContainsKey(key))
-            {
-                OnValueChanged(this, new ValueChangedArgs(key, this.InternalCache[regionName][key], value, regionName));
-            }
-
-            this.InternalCache[regionName][key] = value;
-
-            DelayAction.Add(
-                (int)(absoluteExpiration - DateTime.Now).TotalMilliseconds,
-                () =>
-                    {
-                        if (!this.InternalCache[regionName].ContainsKey(key))
-                        {
-                            return;
-                        }
-
-                        var cachedValue = this.InternalCache[regionName][key];
-
-                        this.CallEntryUpdates(key, CacheEntryRemovedReason.Expired, regionName);
-                        this.InternalCache[regionName].Remove(key);
-                        this.CallEntryRemoved(key, cachedValue, CacheEntryRemovedReason.Expired, regionName);
-                    });
+            this.Set(
+                new CacheItem(key, value, regionName),
+                new CacheItemPolicy() { AbsoluteExpiration = absoluteExpiration });
         }
 
         /// <summary>
-        ///     Sets the value of a key by the CacheItem, following the policy provided.
+        ///     Inserts the cache entry into the cache as a
+        ///     <see cref="T:System.Runtime.Caching.CacheItem" /> instance, specifying information about how the entry will be
+        ///     evicted.
         /// </summary>
-        /// <param name="item">The Item</param>
-        /// <param name="policy">The Policy</param>
+        /// <param name="item">The cache item to add.</param>
+        /// <param name="policy">
+        ///     An object that contains eviction details for the cache entry. This object provides more options
+        ///     for eviction than a simple absolute expiration.
+        /// </param>
         public override void Set(CacheItem item, CacheItemPolicy policy)
         {
-            var regionName = item.RegionName ?? "Default";
-
-            if (OnValueChanged != null && this.InternalCache[regionName].ContainsKey(item.Key))
+            if (item == null)
             {
-                OnValueChanged(
-                    this,
-                    new ValueChangedArgs(item.Key, this.InternalCache[regionName][item.Key], item.Value, regionName));
+                throw new ArgumentNullException(nameof(item));
             }
 
-            this.InternalCache[regionName][item.Key] = item.Value;
+            if (policy == null)
+            {
+                throw new ArgumentNullException(nameof(policy));
+            }
 
-            DelayAction.Add(
-                (int)(policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds,
-                () =>
-                    {
-                        if (!this.InternalCache[regionName].ContainsKey(item.Key))
-                        {
-                            return;
-                        }
+            CacheEntryItem entry;
+            var cacheRegion = this.AddOrGetExistingCacheRegion(item.RegionName);
 
-                        var cachedValue = this.InternalCache[regionName][item.Key];
-
-                        this.CallEntryUpdates(item.Key, CacheEntryRemovedReason.Expired, item.RegionName);
-                        this.InternalCache[regionName].Remove(item.Key);
-                        this.CallEntryRemoved(item.Key, cachedValue, CacheEntryRemovedReason.Expired, item.RegionName);
-                    });
+            if (!cacheRegion.TryGetValue(item.Key, out entry))
+            {
+                this.Add(item, policy);
+            }
+            else
+            {
+                cacheRegion[item.Key] = new CacheEntryItem(item, policy);
+                this.ValidatePolicy(cacheRegion[item.Key]);
+            }
         }
 
-        /// <summary>
-        ///     Sets the value of a key, following the policy provided.
-        /// </summary>
-        /// <param name="key">The Key</param>
-        /// <param name="value">The Value</param>
-        /// <param name="policy">The Policy</param>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
+        /// <summary>Inserts a cache entry into the cache. </summary>
+        /// <param name="key">A unique identifier for the cache entry. </param>
+        /// <param name="value">The object to insert.</param>
+        /// <param name="policy">
+        ///     An object that contains eviction details for the cache entry. This object provides more options
+        ///     for eviction than a simple absolute expiration.
+        /// </param>
+        /// <param name="regionName">
+        ///     Optional. A named region in the cache to which the cache entry can be added, if regions are
+        ///     implemented. The default value for the optional parameter is null.
+        /// </param>
         public override void Set(string key, object value, CacheItemPolicy policy, string regionName = null)
         {
-            regionName = regionName ?? "Default";
-
-            if (OnValueChanged != null && this.InternalCache[regionName].ContainsKey(key))
-            {
-                OnValueChanged(this, new ValueChangedArgs(key, this.InternalCache[regionName][key], value, regionName));
-            }
-
-            this.InternalCache[regionName][key] = value;
-
-            DelayAction.Add(
-                (int)(policy.AbsoluteExpiration - DateTime.Now).TotalMilliseconds,
-                () =>
-                    {
-                        if (!this.InternalCache[regionName].ContainsKey(key))
-                        {
-                            return;
-                        }
-
-                        var cachedValue = this.InternalCache[regionName][key];
-
-                        this.CallEntryUpdates(key, CacheEntryRemovedReason.Expired, regionName);
-                        this.InternalCache[regionName].Remove(key);
-                        this.CallEntryRemoved(key, cachedValue, CacheEntryRemovedReason.Expired, regionName);
-                    });
+            this.Set(new CacheItem(key, value, regionName), policy);
         }
-
-        /// <summary>
-        ///     Tries to get the value, returns false if the InternalCache does not contain that key.
-        /// </summary>
-        /// <param name="key">The Key</param>
-        /// <param name="value">Value(Null if doesn't exist)</param>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
-        /// <returns>If the InternalCache contains the value</returns>
-        public bool TryGetValue(string key, out object value, string regionName = null)
-            => this.InternalCache[regionName ?? "Default"].TryGetValue(key, out value);
 
         #endregion
 
         #region Methods
 
         /// <summary>
-        ///     Gets the enumerator of the default internal InternalCache.
+        ///     Creates an enumerator that can be used to iterate through a collection of
+        ///     cache entries.
         /// </summary>
-        /// <returns>Enumerator of InternalCache</returns>
+        /// <returns>The enumerator object that provides access to the cache entries in the cache.</returns>
         protected override IEnumerator<KeyValuePair<string, object>> GetEnumerator()
-            => this.InternalCache["Default"].GetEnumerator();
-
-        /// <summary>
-        ///     Calls the <see cref="CacheEntryRemovedCallback" /> for the selected key.
-        /// </summary>
-        /// <param name="key">The Key</param>
-        /// <param name="value">The Value</param>
-        /// <param name="reason">Reason why the value was removed</param>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
-        private void CallEntryRemoved(
-            string key,
-            object value,
-            CacheEntryRemovedReason reason = CacheEntryRemovedReason.Removed,
-            string regionName = null)
         {
-            CacheEntryRemovedCallback callback;
-            var contains = this.cacheRemovedCallbacks.TryGetValue(key + regionName, out callback);
-
-            if (!contains)
-            {
-                return;
-            }
-
-            try
-            {
-                callback.Invoke(new CacheEntryRemovedArguments(this, reason, new CacheItem(key, value, regionName)));
-            }
-            catch (Exception e)
-            {
-                Logging.Write()(
-                    LogLevel.Error,
-                    "An exception occured while invoking the CacheEntryRemovedCallback: {0}",
-                    e);
-            }
+            return
+                this.InternalCache[DefaultCacheRegionName].ToDictionary(x => x.Key, x => x.Value.Value).GetEnumerator();
         }
 
-        /// <summary>
-        ///     Calls the <see cref="CacheEntryUpdateCallback" /> for the selected key.
-        /// </summary>
-        /// <param name="key">The Key</param>
-        /// <param name="reason">Reason why the value was removed</param>
-        /// <param name="regionName">The name of the region in the InternalCache</param>
-        private void CallEntryUpdates(
-            string key,
-            CacheEntryRemovedReason reason = CacheEntryRemovedReason.Removed,
-            string regionName = null)
+        private Dictionary<string, CacheEntryItem> AddOrGetExistingCacheRegion(CacheItem item)
         {
-            CacheEntryUpdateCallback callback;
-            var contains = this.cacheEntryUpdateCallbacks.TryGetValue(key + regionName, out callback);
+            return this.AddOrGetExistingCacheRegion(item.RegionName);
+        }
 
-            if (!contains)
+        private Dictionary<string, CacheEntryItem> AddOrGetExistingCacheRegion(string regionName)
+        {
+            Dictionary<string, CacheEntryItem> cacheRegion;
+
+            if (this.InternalCache.TryGetValue(regionName ?? DefaultCacheRegionName, out cacheRegion))
             {
+                return cacheRegion;
+            }
+
+            cacheRegion = new Dictionary<string, CacheEntryItem>();
+            this.InternalCache[regionName ?? DefaultCacheRegionName] = cacheRegion;
+
+            return cacheRegion;
+        }
+
+        private void ValidatePolicy(CacheEntryItem item)
+        {
+            if (DateTime.Now - item.LastAccessed < item.SlidingExpiration
+                && item.Expiration.Ticks - DateTime.Now.Ticks > 0)
+            {
+                item.LastAccessed = DateTime.Now;
                 return;
             }
 
-            try
-            {
-                callback.Invoke(new CacheEntryUpdateArguments(this, reason, key, regionName));
-            }
-            catch (Exception e)
-            {
-                Logging.Write()(LogLevel.Error, "An exception occured while invoking the EntryUpdateCallbacks: {0}", e);
-            }
+            item.EntryRemovedCallback(
+                new CacheEntryRemovedArguments(this, CacheEntryRemovedReason.Expired, item.ToCacheItem()));
+            this.InternalCache[item.RegionName].Remove(item.Key);
         }
 
         #endregion
     }
 
     /// <summary>
-    ///     Arguments for the <see cref="Cache.OnValueChanged" /> event.
+    ///     An entry in the cache.
     /// </summary>
-    public class ValueChangedArgs : EventArgs
+    internal class CacheEntryItem
+    {
+        #region Constructors and Destructors
+
+        public CacheEntryItem(CacheItem item, CacheItemPolicy policy)
+        {
+            this.Key = item.Key;
+            this.Value = item.Value;
+            this.RegionName = item.RegionName;
+
+            this.Expiration = policy.AbsoluteExpiration;
+            this.ChangeMonitors = policy.ChangeMonitors;
+            this.EntryRemovedCallback = policy.RemovedCallback;
+            this.EntryUpdateCallback = policy.UpdateCallback;
+            this.SlidingExpiration = policy.SlidingExpiration;
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets or sets the change monitors.
+        /// </summary>
+        /// <value>
+        ///     The change monitors.
+        /// </value>
+        public Collection<ChangeMonitor> ChangeMonitors { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the entry removed callback.
+        /// </summary>
+        /// <value>
+        ///     The entry removed callback.
+        /// </value>
+        public CacheEntryRemovedCallback EntryRemovedCallback { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the entry update callback.
+        /// </summary>
+        /// <value>
+        ///     The entry update callback.
+        /// </value>
+        public CacheEntryUpdateCallback EntryUpdateCallback { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the expiration.
+        /// </summary>
+        /// <value>
+        ///     The expiration.
+        /// </value>
+        public DateTimeOffset Expiration { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the key.
+        /// </summary>
+        /// <value>
+        ///     The key.
+        /// </value>
+        public string Key { get; }
+
+        /// <summary>
+        ///     Gets or sets the last accessed.
+        /// </summary>
+        /// <value>
+        ///     The last accessed.
+        /// </value>
+        public DateTime LastAccessed { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the name of the region.
+        /// </summary>
+        /// <value>
+        ///     The name of the region.
+        /// </value>
+        public string RegionName { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the sliding expiration.
+        /// </summary>
+        /// <value>
+        ///     The sliding expiration.
+        /// </value>
+        public TimeSpan SlidingExpiration { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the value.
+        /// </summary>
+        /// <value>
+        ///     The value.
+        /// </value>
+        public object Value { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Converts this instance into a <see cref="CacheItem" />
+        /// </summary>
+        /// <returns></returns>
+        public CacheItem ToCacheItem()
+        {
+            return new CacheItem(this.Key, this.Value, this.RegionName);
+        }
+
+        #endregion
+    }
+
+    /// <summary>
+    ///     The <see cref="CacheEntryChangeMonitor" /> implemenation for the <see cref="Cache" /> class.
+    /// </summary>
+    /// <seealso cref="System.Runtime.Caching.CacheEntryChangeMonitor" />
+    public class CacheEntryChangeMonitorImpl : CacheEntryChangeMonitor
     {
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ValueChangedArgs" /> class.
+        ///     Initializes a new instance of the <see cref="CacheEntryChangeMonitorImpl" /> class.
         /// </summary>
-        /// <param name="key">
-        ///     The key
-        /// </param>
-        /// <param name="oldValue">
-        ///     The old value
-        /// </param>
-        /// <param name="newValue">
-        ///     The new value
-        /// </param>
-        /// <param name="regionName">
-        ///     The region name
-        /// </param>
-        internal ValueChangedArgs(string key, object oldValue, object newValue, string regionName)
+        /// <param name="uniqueId">The unique identifier.</param>
+        /// <param name="cacheKeys">The cache keys.</param>
+        /// <param name="lastModified">The last modified.</param>
+        /// <param name="regionName">Name of the region.</param>
+        internal CacheEntryChangeMonitorImpl(
+            string uniqueId,
+            ReadOnlyCollection<string> cacheKeys,
+            DateTimeOffset lastModified,
+            string regionName)
         {
-            this.Key = key;
-            this.OldValue = oldValue;
-            this.NewValue = newValue;
+            this.UniqueId = uniqueId;
+            this.CacheKeys = cacheKeys;
+            this.LastModified = lastModified;
             this.RegionName = regionName;
         }
 
@@ -708,50 +688,41 @@ namespace LeagueSharp.SDK.Utils
 
         #region Public Properties
 
-        /// <summary>
-        ///     Gets or sets the Key.
-        /// </summary>
-        public string Key { get; set; }
+        /// <summary>Gets a collection of cache keys that are monitored for changes. </summary>
+        /// <returns>A collection of cache keys.</returns>
+        public override ReadOnlyCollection<string> CacheKeys { get; }
 
-        /// <summary>
-        ///     Gets or sets the new value after it was changed.
-        /// </summary>
-        public object NewValue { get; set; }
+        /// <summary>Gets a value that indicates the latest time (in UTC time) that the monitored cache entry was changed.</summary>
+        /// <returns>The elapsed time.</returns>
+        public override DateTimeOffset LastModified { get; }
 
-        /// <summary>
-        ///     Gets or sets the old value prior to changing.
-        /// </summary>
-        public object OldValue { get; set; }
+        /// <summary>Gets the name of a region of the cache.</summary>
+        /// <returns>The name of a region in the cache. </returns>
+        public override string RegionName { get; }
 
-        /// <summary>
-        ///     Gets or sets the name of the region in the InternalCache.
-        /// </summary>
-        public string RegionName { get; set; }
+        /// <summary>Gets a value that represents the <see cref="T:System.Runtime.Caching.ChangeMonitor" /> class instance.</summary>
+        /// <returns>The identifier for a change-monitor instance.</returns>
+        public override string UniqueId { get; }
 
         #endregion
-    }
 
-    /// <summary>
-    ///     Arguments for the <see cref="Cache.OnEntryAddedDelegate" /> event.
-    /// </summary>
-    public class EntryAddedArgs : EventArgs
-    {
-        #region Public Properties
+        #region Methods
 
         /// <summary>
-        ///     Gets or sets the Key.
+        ///     Releases all managed and unmanaged resources and any references to the
+        ///     <see cref="T:System.Runtime.Caching.ChangeMonitor" /> instance. This overload must be implemented by derived
+        ///     change-monitor classes.
         /// </summary>
-        public string Key { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the name of the region in the InternalCache.
-        /// </summary>
-        public string RegionName { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the Value.
-        /// </summary>
-        public object Value { get; set; }
+        /// <param name="disposing">
+        ///     true to release managed and unmanaged resources and any references to a
+        ///     <see cref="T:System.Runtime.Caching.ChangeMonitor" /> instance; false to release only unmanaged resources. When
+        ///     false is passed, the <see cref="M:System.Runtime.Caching.ChangeMonitor.Dispose(System.Boolean)" /> method is called
+        ///     by a finalizer thread and any external managed references are likely no longer valid because they have already been
+        ///     garbage collected.
+        /// </param>
+        protected override void Dispose(bool disposing)
+        {
+        }
 
         #endregion
     }
