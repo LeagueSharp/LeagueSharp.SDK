@@ -17,7 +17,7 @@
 
 #endregion
 
-namespace LeagueSharp.SDKEx.MoreLinq
+namespace LeagueSharp.SDK.MoreLinq
 {
     using System;
     using System.Collections.Generic;

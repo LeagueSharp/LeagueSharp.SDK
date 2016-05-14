@@ -15,9 +15,9 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx.UI.Skins
+namespace LeagueSharp.SDK.UI.Skins
 {
-    using LeagueSharp.SDKEx.Utils;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     Provides an implementation of <see cref="ADrawable" /> that does nothing. This is used to prevent exceptions when

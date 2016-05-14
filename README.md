@@ -20,12 +20,12 @@ Contributing
 ===================
 We love pull requests! Here's a simple guide on how to get started.
 
- 1. Fork and clone LeagueSharp.SDKEx
+ 1. Fork and clone LeagueSharp.SDK
  
-  `git clone git@github.com:LeagueSharp/LeagueSharp.SDKEx.git`
+  `git clone git@github.com:LeagueSharp/LeagueSharp.SDK.git`
   
   
- 2.  Push to your fork, and [submit a PR](https://github.com/LeagueSharp/LeagueSharp.SDKEx/compare)("pull request")
+ 2.  Push to your fork, and [submit a PR](https://github.com/LeagueSharp/LeagueSharp.SDK/compare)("pull request")
 
 
 Here are some tips to get your pull request accepted.

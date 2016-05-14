@@ -15,14 +15,14 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp.SDKEx.Enumerations;
-    using LeagueSharp.SDKEx.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     A static (stack) class which contains a sort-of cached versions of the important game objects.

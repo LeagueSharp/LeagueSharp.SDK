@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx.TSModes
+namespace LeagueSharp.SDK.TSModes
 {
     /// <summary>
     ///     Interface for weight item

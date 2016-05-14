@@ -15,15 +15,15 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx
+namespace LeagueSharp.SDK
 {
     using System;
     using System.Linq;
 
     using LeagueSharp.Data.DataTypes;
     using LeagueSharp.Data.Enumerations;
-    using LeagueSharp.SDKEx.Enumerations;
-    using LeagueSharp.SDKEx.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     Damage wrapper class, contains functions to calculate estimated damage to a unit and also provides damage details.

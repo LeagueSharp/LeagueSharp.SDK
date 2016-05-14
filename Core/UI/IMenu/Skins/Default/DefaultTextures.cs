@@ -15,13 +15,13 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx.UI.Skins.Default
+namespace LeagueSharp.SDK.UI.Skins.Default
 {
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
 
-    using LeagueSharp.SDKEx.Properties;
+    using LeagueSharp.SDK.Properties;
 
     using SharpDX.Direct3D9;
 

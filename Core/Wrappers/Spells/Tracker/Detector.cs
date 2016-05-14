@@ -1,12 +1,12 @@
-﻿namespace LeagueSharp.SDKEx
+﻿namespace LeagueSharp.SDK
 {
     using System;
     using System.Security.Permissions;
 
     using LeagueSharp.Data.DataTypes;
     using LeagueSharp.Data.Enumerations;
-    using LeagueSharp.SDKEx.Enumerations;
-    using LeagueSharp.SDKEx.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
 
@@ -160,7 +160,7 @@
 
             var type =
                 Type.GetType(
-                    $"LeagueSharp.SDKEx.Core.Wrappers.Spells.Detector.Skillshots_{skillshot.SData.ChampionName}{skillshot.SData.Slot}");
+                    $"LeagueSharp.SDK.Core.Wrappers.Spells.Detector.Skillshots_{skillshot.SData.ChampionName}{skillshot.SData.Slot}");
             if (type != null)
             {
                 skillshot = (Skillshot)Activator.CreateInstance(type);

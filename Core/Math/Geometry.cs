@@ -15,9 +15,9 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx
+namespace LeagueSharp.SDK
 {
-    using LeagueSharp.SDKEx.Enumerations;
+    using LeagueSharp.SDK.Enumerations;
 
     using SharpDX;
     using SharpDX.Direct3D9;

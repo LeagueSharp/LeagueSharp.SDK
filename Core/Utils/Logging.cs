@@ -15,16 +15,16 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx.Utils
+namespace LeagueSharp.SDK.Utils
 {
     using System;
     using System.IO;
     using System.Runtime.CompilerServices;
 
-    using LeagueSharp.SDKEx.Enumerations;
+    using LeagueSharp.SDK.Enumerations;
 
     /// <summary>
-    ///     Logging class for LeagueSharp.SDKEx, used to log output data into a file and the console.
+    ///     Logging class for LeagueSharp.SDK, used to log output data into a file and the console.
     /// </summary>
     public class Logging
     {

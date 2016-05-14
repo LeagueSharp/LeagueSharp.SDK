@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx
+namespace LeagueSharp.SDK
 {
     /// <summary>
     ///     Holds information about the last casted spell a unit did.

@@ -1,9 +1,9 @@
-﻿namespace LeagueSharp.SDKEx
+﻿namespace LeagueSharp.SDK
 {
     using System;
 
     using LeagueSharp.Data.DataTypes;
-    using LeagueSharp.SDKEx.Enumerations;
+    using LeagueSharp.SDK.Enumerations;
 
     using SharpDX;
 

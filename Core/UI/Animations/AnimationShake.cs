@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx.Core.UI.Animations
+namespace LeagueSharp.SDK.Core.UI.Animations
 {
     using System;
 

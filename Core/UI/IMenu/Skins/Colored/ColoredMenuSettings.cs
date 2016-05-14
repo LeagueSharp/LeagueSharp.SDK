@@ -22,7 +22,7 @@
 
 //Concept by User Vasconcellos
 
-namespace LeagueSharp.SDKEx.UI.Skins.Colored
+namespace LeagueSharp.SDK.UI.Skins.Colored
 {
     using SharpDX;
     using SharpDX.Direct3D9;

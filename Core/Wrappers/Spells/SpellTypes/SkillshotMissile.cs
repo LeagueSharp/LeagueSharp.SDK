@@ -1,4 +1,4 @@
-﻿namespace LeagueSharp.SDKEx
+﻿namespace LeagueSharp.SDK
 {
     using System;
 

@@ -1,4 +1,4 @@
-﻿namespace LeagueSharp.SDKEx.Utils
+﻿namespace LeagueSharp.SDK.Utils
 {
     using System;
     using System.Collections.Generic;
@@ -8,7 +8,7 @@
     using System.Linq;
     using System.Threading;
 
-    using LeagueSharp.SDKEx.Enumerations;
+    using LeagueSharp.SDK.Enumerations;
 
     using SharpDX;
     using SharpDX.Direct3D9;

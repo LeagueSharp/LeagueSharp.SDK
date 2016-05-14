@@ -15,12 +15,12 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx.Utils
+namespace LeagueSharp.SDK.Utils
 {
     using System.Linq;
     using System.Text.RegularExpressions;
 
-    using LeagueSharp.SDKEx.Enumerations;
+    using LeagueSharp.SDK.Enumerations;
 
     /// <summary>
     ///     The jungle utility class, provides utils for jungle related items.

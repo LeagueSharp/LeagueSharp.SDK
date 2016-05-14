@@ -15,11 +15,11 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx
+namespace LeagueSharp.SDK
 {
     using System;
 
-    using LeagueSharp.SDKEx.UI;
+    using LeagueSharp.SDK.UI;
 
     /// <summary>
     ///     Variables of the LeagueSharp development kit.

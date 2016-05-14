@@ -1,4 +1,4 @@
-﻿namespace LeagueSharp.SDKEx.Utils
+﻿namespace LeagueSharp.SDK.Utils
 {
     using System;
     using System.Collections.Generic;
@@ -8,8 +8,8 @@
     using System.Text;
 
     using LeagueSharp.Sandbox;
-    using LeagueSharp.SDKEx.Enumerations;
-    using LeagueSharp.SDKEx.Properties;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Properties;
 
     using Newtonsoft.Json;
 
@@ -39,7 +39,7 @@
             try
             {
                 var languageStrings =
-                    new ResourceManager("LeagueSharp.SDKEx.Properties.Resources", typeof(Resources).Assembly).GetString(
+                    new ResourceManager("LeagueSharp.SDK.Properties.Resources", typeof(Resources).Assembly).GetString(
                         languageName + "Json");
 
                 if (string.IsNullOrEmpty(languageStrings))

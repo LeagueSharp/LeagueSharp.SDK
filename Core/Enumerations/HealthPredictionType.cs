@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx.Enumerations
+namespace LeagueSharp.SDK.Enumerations
 {
     /// <summary>
     ///     Name enumerations of health prediction types

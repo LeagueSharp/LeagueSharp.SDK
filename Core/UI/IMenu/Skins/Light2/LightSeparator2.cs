@@ -20,11 +20,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDKEx.UI.Skins.Light2
+namespace LeagueSharp.SDK.UI.Skins.Light2
 {
-    using LeagueSharp.SDKEx.Enumerations;
-    using LeagueSharp.SDKEx.UI.Skins.Light;
-    using LeagueSharp.SDKEx.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.UI.Skins.Light;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
 

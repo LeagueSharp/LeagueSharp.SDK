@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx.UI
+namespace LeagueSharp.SDK.UI
 {
     using System;
     using System.Collections.Generic;
@@ -23,8 +23,8 @@ namespace LeagueSharp.SDKEx.UI
     using System.Linq;
     using System.Reflection;
 
-    using LeagueSharp.SDKEx.UI.Skins;
-    using LeagueSharp.SDKEx.Utils;
+    using LeagueSharp.SDK.UI.Skins;
+    using LeagueSharp.SDK.Utils;
 
     using SharpDX;
 

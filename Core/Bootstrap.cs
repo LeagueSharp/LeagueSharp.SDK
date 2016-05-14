@@ -15,16 +15,16 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx
+namespace LeagueSharp.SDK
 {
     using System.Globalization;
     using System.Security.Permissions;
     using System.Threading;
 
-    using LeagueSharp.SDKEx.Enumerations;
-    using LeagueSharp.SDKEx.UI;
-    using LeagueSharp.SDKEx.UI.Skins;
-    using LeagueSharp.SDKEx.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.UI;
+    using LeagueSharp.SDK.UI.Skins;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     Bootstrap is an initialization pointer for the AppDomainManager to initialize the library correctly once loaded in

@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx.TSModes
+namespace LeagueSharp.SDK.TSModes
 {
     using System;
     using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace LeagueSharp.SDKEx.TSModes
 
     using LeagueSharp.Data;
     using LeagueSharp.Data.DataTypes;
-    using LeagueSharp.SDKEx.UI;
+    using LeagueSharp.SDK.UI;
 
     /// <summary>
     ///     The priority Mode.

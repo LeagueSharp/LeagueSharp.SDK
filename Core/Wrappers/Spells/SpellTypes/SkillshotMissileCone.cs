@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LeagueSharp.SDKEx.Core.Wrappers.Spells.SpellTypes
+namespace LeagueSharp.SDK.Core.Wrappers.Spells.SpellTypes
 {
     class SkillshotMissileCone
     {

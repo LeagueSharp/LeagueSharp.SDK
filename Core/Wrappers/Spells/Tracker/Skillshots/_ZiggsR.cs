@@ -1,4 +1,4 @@
-﻿namespace LeagueSharp.SDKEx.Core.Wrappers.Spells.Tracker.Skillshots
+﻿namespace LeagueSharp.SDK.Core.Wrappers.Spells.Tracker.Skillshots
 {
     public class _ZiggsR : Skillshot
     {

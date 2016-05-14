@@ -15,16 +15,16 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx.UI
+namespace LeagueSharp.SDK.UI
 {
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using System.Windows.Forms;
 
-    using LeagueSharp.SDKEx.Enumerations;
-    using LeagueSharp.SDKEx.UI.Skins;
-    using LeagueSharp.SDKEx.Utils;
+    using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.UI.Skins;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     Menu KeyBind.

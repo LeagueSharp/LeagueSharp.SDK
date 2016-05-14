@@ -20,7 +20,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace LeagueSharp.SDKEx.UI.Skins.Blue2
+namespace LeagueSharp.SDK.UI.Skins.Blue2
 {
     using SharpDX;
 

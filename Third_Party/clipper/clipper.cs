@@ -60,7 +60,7 @@
 //   #define use_deprecated
 // </summary>
 
-namespace LeagueSharp.SDKEx.Clipper
+namespace LeagueSharp.SDK.Clipper
 {
 #if use_int32
     using cInt = Int32;

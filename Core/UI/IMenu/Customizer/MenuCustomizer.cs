@@ -15,9 +15,9 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx.UI
+namespace LeagueSharp.SDK.UI
 {
-    using LeagueSharp.SDKEx.UI.Skins;
+    using LeagueSharp.SDK.UI.Skins;
 
     using SharpDX;
     using SharpDX.Direct3D9;

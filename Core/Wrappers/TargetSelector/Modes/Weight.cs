@@ -15,7 +15,7 @@
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
 
-namespace LeagueSharp.SDKEx.TSModes
+namespace LeagueSharp.SDK.TSModes
 {
     using System;
     using System.Collections.Generic;
@@ -24,10 +24,10 @@ namespace LeagueSharp.SDKEx.TSModes
     using System.Reflection;
     using System.Windows.Forms;
 
-    using LeagueSharp.SDKEx.UI;
-    using LeagueSharp.SDKEx.Utils;
+    using LeagueSharp.SDK.UI;
+    using LeagueSharp.SDK.Utils;
 
-    using Menu = LeagueSharp.SDKEx.UI.Menu;
+    using Menu = LeagueSharp.SDK.UI.Menu;
 
     /// <summary>
     ///     The weight Mode.

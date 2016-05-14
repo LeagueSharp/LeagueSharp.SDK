@@ -7,8 +7,8 @@
     <ProjectGuid>{84C40F29-82FB-42CC-9E75-A229D875DC40}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LeagueSharp.SDKEx</RootNamespace>
-    <AssemblyName>LeagueSharp.SDKEx</AssemblyName>
+    <RootNamespace>LeagueSharp.SDK</RootNamespace>
+    <AssemblyName>LeagueSharp.SDK</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -27,8 +27,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
-    <DocumentationFile>bin\Debug\LeagueSharp.SDKEx.XML</DocumentationFile>
-    <CodeAnalysisRuleSet>LeagueSharp.SDKEx.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Debug\LeagueSharp.SDK.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>LeagueSharp.SDK.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,35 +37,35 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\LeagueSharp.SDKEx.XML</DocumentationFile>
-    <CodeAnalysisRuleSet>LeagueSharp.SDKEx.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Release\LeagueSharp.SDK.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>LeagueSharp.SDK.ruleset</CodeAnalysisRuleSet>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>LeagueSharp.SDKEx.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>LeagueSharp.SDK.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>C:\L\System\LeagueSharp.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Data">
-      <HintPath>C:\L\System\LeagueSharp.Data.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.Data.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Sandbox">
-      <HintPath>C:\L\System\LeagueSharp.Sandbox.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>C:\L\System\Newtonsoft.Json.dll</HintPath>
+      <HintPath>packages\Newtonsoft.Json.8.0.1-beta4\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\L\System\SharpDX.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>C:\L\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -394,7 +394,7 @@
     <Compile Include="Third_Party\MoreLinq\ZipLongest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="LeagueSharp.SDKEx.snk" />
+    <None Include="LeagueSharp.SDK.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
