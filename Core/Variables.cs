@@ -29,11 +29,6 @@ namespace LeagueSharp.SDK
         #region Static Fields
 
         /// <summary>
-        ///     The game version.
-        /// </summary>
-        public static readonly Version GameVersion = new Version("6.8");
-
-        /// <summary>
         ///     The kit version.
         /// </summary>
         public static readonly Version KitVersion = typeof(Bootstrap).Assembly.GetName().Version;

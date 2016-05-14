@@ -38,11 +38,8 @@
         static Render()
         {
             Drawing.OnEndScene += OnEndScene;
-            Drawing.OnPreReset += OnPreReset;
-            Drawing.OnPostReset += OnPostReset;
             Drawing.OnDraw += OnDraw;
-            AppDomain.CurrentDomain.DomainUnload += OnDomainUnload;
-            AppDomain.CurrentDomain.ProcessExit += OnDomainUnload;
+
             var thread = new Thread(PrepareObjects);
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
@@ -104,12 +101,6 @@
 
         #region Methods
 
-        private static void OnDomainUnload(object sender, EventArgs eventArgs)
-        {
-            cancelThread = true;
-            RenderObjects.ForEach(i => i.Dispose());
-        }
-
         private static void OnDraw(EventArgs args)
         {
             if (Device == null || Device.IsDisposed)
@@ -129,16 +120,6 @@
 
             Device.SetRenderState(RenderState.AlphaBlendEnable, true);
             renderVisibleObjects.ForEach(i => i.OnEndScene());
-        }
-
-        private static void OnPostReset(EventArgs args)
-        {
-            RenderObjects.ForEach(i => i.OnPostReset());
-        }
-
-        private static void OnPreReset(EventArgs args)
-        {
-            RenderObjects.ForEach(i => i.OnPreReset());
         }
 
         private static void PrepareObjects()
@@ -205,6 +186,7 @@
                 this.Radius = radius;
                 this.Width = width;
                 this.ZDeep = zDeep;
+                this.SubscribeToResetEvents();
             }
 
             /// <summary>
@@ -224,6 +206,7 @@
                 this.Width = width;
                 this.ZDeep = zDeep;
                 this.Offset = offset;
+                this.SubscribeToResetEvents();
             }
 
             /// <summary>
@@ -249,6 +232,7 @@
                 this.Width = width;
                 this.ZDeep = zDeep;
                 this.Offset = offset;
+                this.SubscribeToResetEvents();
             }
 
             /// <summary>
@@ -266,6 +250,7 @@
                 this.Radius = radius;
                 this.Width = width;
                 this.ZDeep = zDeep;
+                this.SubscribeToResetEvents();
             }
 
             #endregion
@@ -706,7 +691,7 @@
 
             private static void CircleDispose(object sender, EventArgs e)
             {
-                Render.OnPreReset(EventArgs.Empty);
+                CircleOnPreReset(EventArgs.Empty);
 
                 if (effect != null && !effect.IsDisposed)
                 {
@@ -778,6 +763,7 @@
                 this.Start = start;
                 this.End = end;
                 Game.OnUpdate += this.LineOnUpdate;
+                this.SubscribeToResetEvents();
             }
 
             #endregion
@@ -946,6 +932,7 @@
                 this.Color = color;
                 this.line = new SharpDX.Direct3D9.Line(Device) { Width = height };
                 Game.OnUpdate += this.RectangleOnUpdate;
+                this.SubscribeToResetEvents();
             }
 
             #endregion
@@ -1094,6 +1081,15 @@
 
             #endregion
 
+            #region Constructors and Destructors
+
+            ~RenderObject()
+            {
+                this.OnPreReset();
+            }
+
+            #endregion
+
             #region Delegates
 
             /// <summary>
@@ -1166,6 +1162,17 @@
             /// </summary>
             public virtual void OnPreReset()
             {
+            }
+
+            #endregion
+
+            #region Methods
+
+            internal void SubscribeToResetEvents()
+            {
+                Drawing.OnPreReset += delegate { this.OnPreReset(); };
+                Drawing.OnPostReset += delegate { this.OnPostReset(); };
+                AppDomain.CurrentDomain.DomainUnload += delegate { this.OnPreReset(); };
             }
 
             #endregion
@@ -1257,6 +1264,7 @@
             private Sprite()
             {
                 Game.OnUpdate += this.SpriteOnUpdate;
+                this.SubscribeToResetEvents();
             }
 
             #endregion
@@ -1797,6 +1805,7 @@
                 this.Color = color;
                 this.TextString = text;
                 Game.OnUpdate += this.TextOnUpdate;
+                this.SubscribeToResetEvents();
             }
 
             #endregion
