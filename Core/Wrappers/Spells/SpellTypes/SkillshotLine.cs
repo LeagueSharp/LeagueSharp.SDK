@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
 
+    using LeagueSharp.Data.DataTypes;
     using LeagueSharp.SDK.Clipper;
     using LeagueSharp.SDK.Core.Utils;
 
