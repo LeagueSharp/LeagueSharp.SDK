@@ -777,7 +777,7 @@ namespace LeagueSharp.SDK
         ///     The base Position.
         /// </param>
         /// <returns>
-        ///     The <see cref="Rectangle" />.
+        ///     The <see cref="Render.Rectangle" />.
         /// </returns>
         private SharpDX.Rectangle GetHeaderRectangle(Vector2 basePosition)
         {
