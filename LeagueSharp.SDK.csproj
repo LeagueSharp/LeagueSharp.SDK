@@ -304,6 +304,15 @@
     <Compile Include="Core\Wrappers\Spells\SpellTypes\Skillshot.cs" />
     <Compile Include="Core\Wrappers\Spells\SpellTypes\SkillshotMissile.cs" />
     <Compile Include="Core\Wrappers\Spells\SpellTypes\SkillshotMissileLine.cs" />
+    <Compile Include="Core\Wrappers\Spells\Tracker\Skillshots\_AlZaharCalloftheVoid.cs" />
+    <Compile Include="Core\Wrappers\Spells\Tracker\Skillshots\_DianaArc.cs" />
+    <Compile Include="Core\Wrappers\Spells\Tracker\Skillshots\_JarvanIVEQ.cs" />
+    <Compile Include="Core\Wrappers\Spells\Tracker\Skillshots\_OriannaQEnd.cs" />
+    <Compile Include="Core\Wrappers\Spells\Tracker\Skillshots\_SionR.cs" />
+    <Compile Include="Core\Wrappers\Spells\Tracker\Skillshots\_SyndraE.cs" />
+    <Compile Include="Core\Wrappers\Spells\Tracker\Skillshots\_syndrae5.cs" />
+    <Compile Include="Core\Wrappers\Spells\Tracker\Skillshots\_UFSlash.cs" />
+    <Compile Include="Core\Wrappers\Spells\Tracker\Skillshots\_VelkozQSplit.cs" />
     <Compile Include="Core\Wrappers\Spells\Tracker\Skillshots\_ZiggsR.cs" />
     <Compile Include="Core\Wrappers\Spells\Tracker\Tracker.cs" />
     <Compile Include="Core\Wrappers\TargetSelector\HeroVisibleEntry.cs" />

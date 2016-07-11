@@ -1,13 +1,13 @@
 ﻿namespace LeagueSharp.SDK.Core.Wrappers.Spells.Tracker.Skillshots
 {
-    public class _ZiggsR : Skillshot
+    public class _OriannaQEnd : Skillshot
     {
         private CirclePoly Circle;
 
         #region Constructors and Destructors
 
-        public _ZiggsR()
-            : base("ZiggsR")
+        public _OriannaQEnd()
+            : base("OriannasQ")
         {
         }
 
@@ -15,7 +15,7 @@
 
         #region Public Properties
 
-        public new int Delay => (int)(1500 + 1500 * this.EndPosition.Distance(this.StartPosition) / this.SData.Range);
+        public new int Delay => this.SData.Delay + (int)this.StartPosition.Distance(this.EndPosition) / this.SData.MissileSpeed;
 
         #endregion
 
@@ -23,7 +23,7 @@
 
         internal override void UpdatePolygon()
         {
-            Circle = new CirclePoly(this.EndPosition, this.SData.Radius);
+            Circle = new CirclePoly(this.EndPosition, 80);
             this.UpdatePath();
         }
 
