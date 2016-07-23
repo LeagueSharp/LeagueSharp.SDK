@@ -6,6 +6,8 @@
     using System.Runtime.Remoting.Messaging;
     using System.Security.Permissions;
 
+    using LeagueSharp.Data.DataTypes;
+    using LeagueSharp.Data.Enumerations;
     using LeagueSharp.SDK.Core.Utils;
     using LeagueSharp.SDK.Core.Wrappers.Spells.SpellTypes;
 

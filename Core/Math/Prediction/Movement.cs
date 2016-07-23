@@ -21,6 +21,7 @@ namespace LeagueSharp.SDK
     using System.Collections.Generic;
     using System.Linq;
 
+    using LeagueSharp.Data.Enumerations;
     using LeagueSharp.SDK.Core.Utils;
 
     using SharpDX;

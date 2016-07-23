@@ -22,6 +22,8 @@ namespace LeagueSharp.SDK
     using System.Linq;
     using System.Text.RegularExpressions;
 
+    using LeagueSharp.Data.Enumerations;
+
     using SharpDX;
 
     /// <summary>

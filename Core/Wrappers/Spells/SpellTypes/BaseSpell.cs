@@ -2,6 +2,8 @@
 {
     using System;
 
+    using LeagueSharp.Data.DataTypes;
+
     using SharpDX;
 
     using Color = System.Drawing.Color;
